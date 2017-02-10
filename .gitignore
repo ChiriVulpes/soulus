@@ -10,6 +10,7 @@ gradlew
 gradlew.bat
 *.log
 *.log.lck
+*.iml
 
 .gradle
 build/
