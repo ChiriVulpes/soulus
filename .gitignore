@@ -1,3 +1,16 @@
+.idea/
+.settings/
+.vscode/
+bin/
+gradle/
+run/
+.classpath
+.project
+gradlew
+gradlew.bat
+*.log
+*.log.lck
+
 .gradle
 build/
 

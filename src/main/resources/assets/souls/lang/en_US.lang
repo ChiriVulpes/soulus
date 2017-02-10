@@ -1,0 +1,38 @@
+itemGroup.souls=Souls
+
+item.souls:boneChunk.name=Bone Chunk
+item.souls:darkBone.name=Necrotic Bone
+item.souls:darkBoneChunk.name=Necrotic Bone Chunk
+item.souls:darkmeal.name=Necrotic Bone Meal
+item.souls:vibratingBone.name=Vibrating Bone
+item.souls:vibratingBoneChunk.name=Vibrating Bone Chunk
+item.souls:enderDust.name=Ender Dust
+
+item.souls:ironDust.name=Iron Dust
+item.souls:enderIronDust.name=Ender-Iron Dust Blend
+item.souls:endersteel.name=Endersteel Ingot
+
+item.souls:sledgehammer.name=Sledgehammer
+item.souls:soulbook.name=Soulbook
+
+item.souls:essence.unfocused.name=Unfocused Essence
+item.souls:essence.minecraft:cow.name=Cow Essence
+item.souls:essence.minecraft:sheep.name=Sheep Essence
+item.souls:essence.minecraft:chicken.name=Chicken Essence
+item.souls:essence.minecraft:pig.name=Pig Essence
+item.souls:essence.minecraft:horse.name=Horse Essence
+item.souls:essence.minecraft:wolf.name=Wolf Essence
+item.souls:essence.minecraft:polar_bear.name=Polar Bear Essence
+item.souls:essence.minecraft:rabbit.name=Rabbit Essence
+item.souls:essence.minecraft:mooshroom.name=Mooshroom Essence
+item.souls:essence.minecraft:ocelot.name=Ocelot Essence
+item.souls:essence.minecraft:skeleton.name=Skeleton Essence
+item.souls:essence.minecraft:zombie.name=Zombie Essence
+item.souls:essence.minecraft:witch.name=Witch Essence
+item.souls:essence.minecraft:villager.name=Villager Essence
+
+tile.souls:endersteelBlock.name=Block of Endersteel
+tile.souls:endersteelBars.name=Endersteel Bars
+tile.souls:blankSpawner.name=Empty Summoner
+tile.souls:dirtFossil.name=Dirt with Fossils
+tile.souls:dirtFossilVibrating.name=Dirt with Vibrating Fossils
