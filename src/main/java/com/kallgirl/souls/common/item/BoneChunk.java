@@ -2,6 +2,7 @@ package com.kallgirl.souls.common.item;
 
 import com.kallgirl.souls.common.ModObjects;
 import com.kallgirl.souls.common.Recipes;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -14,14 +15,34 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE;
 
 public class BoneChunk extends Item {
 	List<Tuple<Integer, Object>> drops = new ArrayList<>();
+
+	private static Map<String, Integer> spawnMap = new HashMap<>();
+	static {
+		// passive mobs
+		spawnMap.put("Pig", 10);
+		spawnMap.put("Chicken", 10);
+		spawnMap.put("Sheep", 8);
+		spawnMap.put("Cow", 8);
+		spawnMap.put("Ocelot", 4);
+		spawnMap.put("Rabbit", 4);
+		spawnMap.put("Villager", 4);
+		spawnMap.put("MushroomCow", 1);
+
+		// neutral mobs
+		spawnMap.put("Wolf", 6);
+		spawnMap.put("PolarBear", 4);
+
+		// aggressive mobs
+		spawnMap.put("Zombie", 2);
+		spawnMap.put("Skeleton", 3);
+		spawnMap.put("Witch", 1);
+	}
 
 	public BoneChunk () {
 		super("boneChunk");
@@ -33,24 +54,11 @@ public class BoneChunk extends Item {
 		);
 		Essence essence = (Essence) ModObjects.getItem("essence");
 
-		// passive mobs
-		drops.add(new Tuple<>(10, essence.getStack("minecraft:pig")));
-		drops.add(new Tuple<>(10, essence.getStack("minecraft:chicken")));
-		drops.add(new Tuple<>(8, essence.getStack("minecraft:cow")));
-		drops.add(new Tuple<>(8, essence.getStack("minecraft:sheep")));
-		drops.add(new Tuple<>(4, essence.getStack("minecraft:ocelot")));
-		drops.add(new Tuple<>(4, essence.getStack("minecraft:rabbit")));
-		drops.add(new Tuple<>(4, essence.getStack("minecraft:villager")));
-		drops.add(new Tuple<>(1, essence.getStack("minecraft:mooshroom")));
-
-		// neutral mobs
-		drops.add(new Tuple<>(6, essence.getStack("minecraft:wolf")));
-		drops.add(new Tuple<>(4, essence.getStack("minecraft:polar_bear")));
-
-		// aggressive mobs
-		drops.add(new Tuple<>(2, essence.getStack("minecraft:zombie")));
-		drops.add(new Tuple<>(3, essence.getStack("minecraft:skeleton")));
-		drops.add(new Tuple<>(1, essence.getStack("minecraft:witch")));
+		spawnMap.forEach((key, spawnChance) -> {
+			if (EntityList.ENTITY_EGGS.containsKey(key)) {
+				drops.add(new Tuple<>(spawnChance, essence.getStack(key)));
+			}
+		});
 	}
 
 	@Nonnull

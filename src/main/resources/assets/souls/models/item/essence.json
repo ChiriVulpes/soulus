@@ -1,0 +1,7 @@
+{
+	"parent": "minecraft:item/generated",
+	"textures": {
+		"layer0": "souls:items/essence_bg",
+		"layer1": "souls:items/essence_fg"
+	}
+}
