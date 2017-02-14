@@ -7,7 +7,7 @@ public class FossilGenerator extends WorldGenerator {
 	public FossilGenerator() {
 		super(
 			new OreVein(ModObjects.getBlock("dirtFossil"), Blocks.DIRT).setSize(3, 7).setChances(300),
-			new OreVein(ModObjects.getBlock("dirtFossilVibrating"), Blocks.DIRT).setSize(2, 5).setChances(100)
+			new OreVein(ModObjects.getBlock("dirtFossilEnder"), Blocks.DIRT).setSize(2, 5).setChances(100)
 		);
 	}
 }

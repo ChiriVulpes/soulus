@@ -4,8 +4,8 @@ item.souls:boneChunk.name=Bone Chunk
 item.souls:darkBone.name=Necrotic Bone
 item.souls:darkBoneChunk.name=Necrotic Bone Chunk
 item.souls:darkmeal.name=Necrotic Bone Meal
-item.souls:vibratingBone.name=Vibrating Bone
-item.souls:vibratingBoneChunk.name=Vibrating Bone Chunk
+item.souls:enderBone.name=Ender Bone
+item.souls:enderBoneChunk.name=Ender Bone Chunk
 item.souls:enderDust.name=Ender Dust
 
 item.souls:ironDust.name=Iron Dust
@@ -31,8 +31,24 @@ item.souls:essence.Zombie.name=Zombie Essence
 item.souls:essence.Witch.name=Witch Essence
 item.souls:essence.Villager.name=Villager Essence
 
+item.souls:soulbook.unfocused.name=Soulbook
+item.souls:soulbook.Cow.name=Soulbook of Cow
+item.souls:soulbook.Sheep.name=Soulbook of Sheep
+item.souls:soulbook.Chicken.name=Soulbook of Chicken
+item.souls:soulbook.Pig.name=Soulbook of Pig
+item.souls:soulbook.Horse.name=Soulbook of Horse
+item.souls:soulbook.Wolf.name=Soulbook of Wolf
+item.souls:soulbook.PolarBear.name=Polar Soulbook of Bear
+item.souls:soulbook.Rabbit.name=Soulbook of Rabbit
+item.souls:soulbook.MushroomCow.name=Soulbook of Mooshroom
+item.souls:soulbook.Ocelot.name=Soulbook of Ocelot
+item.souls:soulbook.Skeleton.name=Soulbook of Skeleton
+item.souls:soulbook.Zombie.name=Soulbook of Zombie
+item.souls:soulbook.Witch.name=Soulbook of Witch
+item.souls:soulbook.Villager.name=Soulbook of Villager
+
 tile.souls:endersteelBlock.name=Block of Endersteel
 tile.souls:endersteelBars.name=Endersteel Bars
 tile.souls:blankSpawner.name=Empty Summoner
 tile.souls:dirtFossil.name=Dirt with Fossils
-tile.souls:dirtFossilVibrating.name=Dirt with Vibrating Fossils
+tile.souls:dirtFossilEnder.name=Dirt with Glowing Fossils

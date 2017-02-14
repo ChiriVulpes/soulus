@@ -38,8 +38,8 @@ public class Item extends net.minecraft.item.Item implements IModItem, IModelReg
 
 	@Nonnull
 	@Override
-	public String getUnlocalizedNameInefficiently(@Nonnull ItemStack par1ItemStack) {
-		return super.getUnlocalizedNameInefficiently(par1ItemStack)
+	public String getUnlocalizedNameInefficiently(@Nonnull ItemStack stack) {
+		return super.getUnlocalizedNameInefficiently(stack)
 			.replaceAll("item\\.", "item." + ResourceMap.PREFIX_MOD);
 	}
 
@@ -54,7 +54,7 @@ public class Item extends net.minecraft.item.Item implements IModItem, IModelReg
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean hasEffect(ItemStack par1ItemStack) {
+	public boolean hasEffect(ItemStack stack) {
 		return glint;
 	}
 }

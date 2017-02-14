@@ -10,7 +10,7 @@ public class EnderDust extends Item {
 		glint = true;
 		addOreDict("dustEnder");
 		addRecipeShapeless(
-			ModObjects.get("vibratingBoneChunk"),
+			ModObjects.get("enderBoneChunk"),
 			ModObjects.get("sledgehammer").getItemStack(1, WILDCARD_VALUE)
 		);
 	}

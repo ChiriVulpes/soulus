@@ -14,10 +14,10 @@ import net.minecraftforge.event.LootTableLoadEvent;
 
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class VibratingBone extends Item {
+public class EnderBone extends Item {
 
-	public VibratingBone() {
-		super("vibratingBone");
+	public EnderBone () {
+		super("enderBone");
 		glint = true;
 		addOreDict("boneEnder");
 	}

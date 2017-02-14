@@ -30,17 +30,17 @@ public class Essence extends Item {
 
 	@Nonnull
 	@Override
-	public String getUnlocalizedNameInefficiently (@Nonnull ItemStack par1ItemStack) {
-		String essenceType = "unfocused";
-		NBTTagCompound tag = par1ItemStack.getTagCompound();
+	public String getUnlocalizedNameInefficiently (@Nonnull ItemStack stack) {
+		String mobTarget = "unfocused";
+		NBTTagCompound tag = stack.getTagCompound();
 		if (tag != null && tag.hasKey("EntityTag", 10)) {
 			tag = tag.getCompoundTag("EntityTag");
 			if (tag.hasKey("id", 8)) {
-				essenceType = tag.getString("id");
+				mobTarget = tag.getString("id");
 			}
 		}
-		return super.getUnlocalizedNameInefficiently(par1ItemStack).replace(
-			":essence", ":essence." + essenceType
+		return super.getUnlocalizedNameInefficiently(stack).replace(
+			":essence", ":essence." + mobTarget
 		);
 	}
 

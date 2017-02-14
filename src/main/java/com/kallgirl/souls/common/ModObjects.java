@@ -16,8 +16,8 @@ public final class ModObjects {
 
 		// items
 		objects.put("essence", new Essence());
-		objects.put("vibratingBone", new VibratingBone());
-		objects.put("vibratingBoneChunk", new VibratingBoneChunk());
+		objects.put("enderBone", new EnderBone());
+		objects.put("enderBoneChunk", new EnderBoneChunk());
 		objects.put("soulbook", new Soulbook());
 		objects.put("sledgehammer", new Sledgehammer());
 		objects.put("boneChunk", new BoneChunk());
@@ -34,7 +34,7 @@ public final class ModObjects {
 		objects.put("endersteelBars", new EndersteelBars());
 		objects.put("blankSpawner", new BlankSpawner());
 		objects.put("dirtFossil", new DirtFossil());
-		objects.put("dirtFossilVibrating", new DirtFossilVibrating());
+		objects.put("dirtFossilEnder", new DirtFossilEnder());
 
 		// generation
 		objects.put("fossilGeneration", new FossilGenerator());

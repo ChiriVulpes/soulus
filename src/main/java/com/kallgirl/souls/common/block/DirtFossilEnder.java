@@ -5,7 +5,6 @@ import com.kallgirl.souls.common.ModObjects;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -15,9 +14,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collections;
 import java.util.List;
 
-public class DirtFossilVibrating extends Block {
-	public DirtFossilVibrating () {
-		super("dirtFossilVibrating", new Material(MapColor.DIRT).setToolNotRequired());
+public class DirtFossilEnder extends Block {
+	public DirtFossilEnder () {
+		super("dirtFossilEnder", new Material(MapColor.DIRT).setToolNotRequired());
 		setHasItem();
 		setHardness(0.5F);
 		setResistance(2.5F);
@@ -29,7 +28,7 @@ public class DirtFossilVibrating extends Block {
 	@Nonnull
 	@Override
 	public List<ItemStack> getDrops (IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		ItemStack boneChunk = ModObjects.get("vibratingBoneChunk").getItemStack(4);
+		ItemStack boneChunk = ModObjects.get("enderBoneChunk").getItemStack(4);
 		return Collections.singletonList(boneChunk);
 	}
 }
