@@ -1,6 +1,8 @@
 package com.kallgirl.souls.common;
 
 import com.kallgirl.souls.common.block.*;
+import com.kallgirl.souls.common.block.Summoner.EmptySummoner;
+import com.kallgirl.souls.common.block.Summoner.Summoner;
 import com.kallgirl.souls.common.item.*;
 import com.kallgirl.souls.common.world.FossilGenerator;
 import net.minecraftforge.common.MinecraftForge;
@@ -32,7 +34,8 @@ public final class ModObjects {
 		// blocks
 		objects.put("endersteelBlock", new EndersteelBlock());
 		objects.put("endersteelBars", new EndersteelBars());
-		objects.put("blankSpawner", new BlankSpawner());
+		objects.put("emptySummoner", new EmptySummoner());
+		objects.put("summoner", new Summoner());
 		objects.put("dirtFossil", new DirtFossil());
 		objects.put("dirtFossilEnder", new DirtFossilEnder());
 
@@ -70,4 +73,5 @@ public final class ModObjects {
 		if (block instanceof Block) return (Block)block;
 		else throw new IllegalArgumentException(String.format("'%s' is not a valid block", name));
 	}
+
 }

@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 public class Soulbook extends Item {
-	private static String getMobTarget(ItemStack stack) {
+	public static String getMobTarget(ItemStack stack) {
 		NBTTagCompound tag = stack.getTagCompound();
 		if (tag != null && tag.hasKey("EntityTag", 10)) {
 			tag = tag.getCompoundTag("EntityTag");
@@ -26,7 +26,7 @@ public class Soulbook extends Item {
 		}
 		return null;
 	}
-	private static ItemStack setMobTarget(ItemStack stack, String mobTarget) {
+	public static ItemStack setMobTarget(ItemStack stack, String mobTarget) {
 		NBTTagCompound tag = stack.getTagCompound();
 		if (tag == null) {
 			tag = new NBTTagCompound();
@@ -42,14 +42,14 @@ public class Soulbook extends Item {
 		tag.setString("id", mobTarget);
 		return stack;
 	}
-	private static int getContainedEssence(ItemStack stack) {
+	public static int getContainedEssence(ItemStack stack) {
 		NBTTagCompound tag = stack.getTagCompound();
 		if (tag != null && tag.hasKey("ContainedEssence", 1)) {
 			return tag.getByte("ContainedEssence") - Byte.MIN_VALUE;
 		}
 		return 0;
 	}
-	private static ItemStack setContainedEssence(ItemStack stack, int count) {
+	public static ItemStack setContainedEssence(ItemStack stack, int count) {
 		NBTTagCompound tag = stack.getTagCompound();
 		if (tag == null) {
 			tag = new NBTTagCompound();

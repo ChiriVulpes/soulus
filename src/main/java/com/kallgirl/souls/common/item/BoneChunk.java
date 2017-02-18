@@ -52,6 +52,7 @@ public class BoneChunk extends Item {
 	private ItemStack getDrop () {
 		int chanceTotal = 0;
 		for (Tuple<Integer, Object> drop : drops) {
+
 			chanceTotal += drop.getFirst();
 		}
 		int choice = new Random().nextInt(chanceTotal);
