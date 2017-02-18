@@ -39,7 +39,7 @@ public class Summoner extends BlockMobSpawner implements IModItem {
 		GameRegistry.register(this, new ResourceLocation(ModInfo.MODID, name));
 		TileEntity.addMapping(TileEntity.class, "SummonerTileEntity");
 	}
-	
+
 	@Nonnull
 	@Override
 	public String getUnlocalizedName() {
