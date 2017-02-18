@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -31,13 +32,14 @@ import java.util.List;
 public class Summoner extends BlockMobSpawner implements IModItem {
 
 	public Summoner() {
+		super();
 		setHardness(5.0F);
 		setSoundType(SoundType.METAL);
 		disableStats();
 		String name = "summoner";
 		setUnlocalizedName(name);
 		GameRegistry.register(this, new ResourceLocation(ModInfo.MODID, name));
-		TileEntity.addMapping(TileEntity.class, "SummonerTileEntity");
+		GameRegistry.registerTileEntity(TileEntitySummoner.class, "Souls:Summoner");
 	}
 
 	@Nonnull
@@ -47,7 +49,7 @@ public class Summoner extends BlockMobSpawner implements IModItem {
 			       .replaceAll("tile\\.", "tile." + ResourceMap.PREFIX_MOD);
 	}
 
-	public class TileEntity extends TileEntityMobSpawner {
+	public static class TileEntitySummoner extends TileEntityMobSpawner {
 		private final SummonerLogic summonerLogic = new SummonerLogic() {
 			@Nonnull
 			@Override
@@ -81,7 +83,7 @@ public class Summoner extends BlockMobSpawner implements IModItem {
 
 		@Override
 		public void readFromNBT(NBTTagCompound compound) {
-			super.readFromNBT(compound);
+			super.readFromNBT(compound.copy());
 			summonerLogic.readFromNBT(compound);
 		}
 
@@ -114,7 +116,7 @@ public class Summoner extends BlockMobSpawner implements IModItem {
 
 		drops.add(ModObjects.getBlock("emptySummoner").getItemStack());
 
-		TileEntity tileEntity = (TileEntity) world.getTileEntity(pos);
+		TileEntitySummoner tileEntity = (TileEntitySummoner) world.getTileEntity(pos);
 		String mobTarget = Summoner.getSpawnerMobTarget(tileEntity);
 		ItemStack soulbook = ModObjects.getItem("soulbook").getItemStack();
 		Soulbook.setMobTarget(soulbook, mobTarget);
@@ -126,14 +128,14 @@ public class Summoner extends BlockMobSpawner implements IModItem {
 
 	@Override
 	@Nonnull
-	public net.minecraft.tileentity.TileEntity createNewTileEntity (World worldIn, int meta) {
-		return new TileEntity();
+	public TileEntity createNewTileEntity (World worldIn, int meta) {
+		return new TileEntitySummoner();
 	}
 
 	@Override
 	public boolean onBlockActivated (World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) {
-			TileEntity mobSpawner = (TileEntity)world.getTileEntity(pos);
+			TileEntitySummoner mobSpawner = (TileEntitySummoner)world.getTileEntity(pos);
 			String mobTarget = Summoner.getSpawnerMobTarget(mobSpawner);
 			ItemStack soulbook = ModObjects.getItem("soulbook").getItemStack();
 			Soulbook.setMobTarget(soulbook, mobTarget);

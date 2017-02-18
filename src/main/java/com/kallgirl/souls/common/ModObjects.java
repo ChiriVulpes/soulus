@@ -5,7 +5,6 @@ import com.kallgirl.souls.common.block.Summoner.EmptySummoner;
 import com.kallgirl.souls.common.block.Summoner.Summoner;
 import com.kallgirl.souls.common.item.*;
 import com.kallgirl.souls.common.world.FossilGenerator;
-import net.minecraftforge.common.MinecraftForge;
 
 import java.util.Hashtable;
 
@@ -44,7 +43,6 @@ public final class ModObjects {
 
 		objects.forEach((name, item) -> {
 			item.preinit();
-			MinecraftForge.EVENT_BUS.register(item);
 		});
 	}
 

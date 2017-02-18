@@ -20,9 +20,15 @@ public class NoMobSpawning {
 		Entity entity = event.getEntity();
 		if (entity == null || !(entity instanceof EntityLiving)) return;
 		NBTTagCompound entityData = entity.getEntityData();
-		if (!entityData.hasKey("souls:spawned-by-souls", 1)) {
-			System.out.println("cancelled spawn: " + event.getEntity().getName());
-			event.setCanceled(true);
+		if (entityData.hasKey("souls:spawned-by-souls", 1)) {
+			if (event.getWorld().isRemote) {
+				entityData.removeTag("souls:spawned-by-souls");
+			}
+			System.out.println("successful souls spawn: " + event.getEntity().getName());
+		} else {
+			//event.setCanceled(true);
+			new RuntimeException().printStackTrace();
+			System.out.println("should have cancelled spawn: " + event.getEntity().getName());
 		}
 	}
 }

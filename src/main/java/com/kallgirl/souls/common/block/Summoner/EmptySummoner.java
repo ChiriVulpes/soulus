@@ -45,7 +45,7 @@ public class EmptySummoner extends Block {
 		if (mobTarget == null || containedEssence < SpawnMap.map.get(mobTarget).required) return false;
 		IBlockState mobSpawner = ((Summoner) ModObjects.get("summoner")).getDefaultState();
 		worldIn.setBlockState(pos, mobSpawner);
-		Summoner.TileEntity tileEntity = (Summoner.TileEntity) worldIn.getTileEntity(pos);
+		Summoner.TileEntitySummoner tileEntity = (Summoner.TileEntitySummoner) worldIn.getTileEntity(pos);
 		if (tileEntity == null)
 			throw new RuntimeException("Mob spawner tile entity was not created. Something went wrong.");
 		SummonerLogic logic = (SummonerLogic)tileEntity.getSpawnerBaseLogic();
