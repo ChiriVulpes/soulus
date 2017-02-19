@@ -7,7 +7,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.StringUtils;
 import net.minecraft.util.WeightedRandom;
@@ -23,7 +22,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-public abstract class SummonerLogic extends MobSpawnerBaseLogic {
+public abstract class SummonerLogic {
 
 	@Nonnull
 	public abstract World getSpawnerWorld();
@@ -32,7 +31,6 @@ public abstract class SummonerLogic extends MobSpawnerBaseLogic {
 	public abstract BlockPos getSpawnerPosition();
 
 	@ParametersAreNonnullByDefault
-	@Override
 	public void setNextSpawnData(WeightedSpawnerEntity spawnerEntity) {
 		randomEntity = spawnerEntity;
 		World world = getSpawnerWorld();
@@ -66,7 +64,6 @@ public abstract class SummonerLogic extends MobSpawnerBaseLogic {
 	}
 
 	@ParametersAreNonnullByDefault
-	@Override
 	public void setEntityName(String name) {
 		randomEntity.getNbt().setString("id", name);
 	}
@@ -79,7 +76,6 @@ public abstract class SummonerLogic extends MobSpawnerBaseLogic {
 		return getSpawnerWorld().isAnyPlayerWithinRangeAt(blockpos.getX() + 0.5D, blockpos.getY() + 0.5D, blockpos.getZ() + 0.5D, activatingRangeFromPlayer);
 	}
 
-	@Override
 	public void updateSpawner() {
 		if (!isActivated()) {
 			prevMobRotation = mobRotation;
@@ -180,12 +176,10 @@ public abstract class SummonerLogic extends MobSpawnerBaseLogic {
 		broadcastEvent(1);
 	}
 
-	@Override
 	public void broadcastEvent(int id) {
 		getSpawnerWorld().addBlockEvent(getSpawnerPosition(), (Summoner)ModObjects.get("summoner"), id, 0);
 	}
 
-	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		spawnDelay = nbt.getShort("Delay");
 		minecartToSpawn.clear();
@@ -201,6 +195,7 @@ public abstract class SummonerLogic extends MobSpawnerBaseLogic {
 		NBTTagCompound spawnData = nbt.getCompoundTag("SpawnData");
 
 		if (!spawnData.hasKey("id", 8)) {
+			System.out.println("reading nbt: has no mob id set");
 			spawnData.setString("id", "Pig");
 		}
 
@@ -220,13 +215,10 @@ public abstract class SummonerLogic extends MobSpawnerBaseLogic {
 		if (nbt.hasKey("SpawnRange", 99)) {
 			spawnRange = nbt.getShort("SpawnRange");
 		}
-
-		cachedEntity = null;
 	}
 
 	@Nonnull
 	@ParametersAreNonnullByDefault
-	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound p_189530_1_) {
 		String s = getEntityNameToSpawn();
 
@@ -259,7 +251,6 @@ public abstract class SummonerLogic extends MobSpawnerBaseLogic {
 	/**
 	 * Sets the delay to minDelay if parameter given is 1, else return false.
 	 */
-	@Override
 	public boolean setDelayToMin(int delay) {
 		if (delay == 1 && getSpawnerWorld().isRemote) {
 			spawnDelay = minSpawnDelay;
@@ -271,7 +262,6 @@ public abstract class SummonerLogic extends MobSpawnerBaseLogic {
 
 	@Nonnull
 	@SideOnly (Side.CLIENT)
-	@Override
 	public Entity getCachedEntity() {
 		if (cachedEntity == null) {
 			cachedEntity = AnvilChunkLoader.readWorldEntity(randomEntity.getNbt(), getSpawnerWorld(), false);
@@ -284,13 +274,11 @@ public abstract class SummonerLogic extends MobSpawnerBaseLogic {
 		return cachedEntity;
 	}
 
-	@Override
 	@SideOnly(Side.CLIENT)
 	public double getMobRotation() {
 		return mobRotation;
 	}
 
-	@Override
 	@SideOnly(Side.CLIENT)
 	public double getPrevMobRotation() {
 		return prevMobRotation;

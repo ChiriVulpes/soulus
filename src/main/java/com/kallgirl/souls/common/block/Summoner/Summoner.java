@@ -3,97 +3,64 @@ package com.kallgirl.souls.common.block.Summoner;
 import com.kallgirl.souls.ModInfo;
 import com.kallgirl.souls.client.ResourceMap;
 import com.kallgirl.souls.common.IModItem;
+import com.kallgirl.souls.common.Material;
 import com.kallgirl.souls.common.ModObjects;
 import com.kallgirl.souls.common.SpawnMap;
 import com.kallgirl.souls.common.item.Soulbook;
-import net.minecraft.block.BlockMobSpawner;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityMobSpawner;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Summoner extends BlockMobSpawner implements IModItem {
+public class Summoner extends BlockContainer implements IModItem {
 
 	public Summoner() {
-		super();
-		setHardness(5.0F);
+		super(new Material(MapColor.STONE).setTransparent());
+		setHardness(5F);
+		setResistance(30F);
+		setHarvestLevel("pickaxe", 1);
 		setSoundType(SoundType.METAL);
 		disableStats();
 		String name = "summoner";
 		setUnlocalizedName(name);
 		GameRegistry.register(this, new ResourceLocation(ModInfo.MODID, name));
-		GameRegistry.registerTileEntity(TileEntitySummoner.class, "Souls:Summoner");
+		GameRegistry.registerTileEntity(SummonerTileEntity.class, "Souls:Summoner");
+		isBlockContainer = true;
+	}
+
+	@Nonnull
+	public EnumBlockRenderType getRenderType(IBlockState state) {
+		return EnumBlockRenderType.MODEL;
+	}
+
+	@SideOnly (Side.CLIENT)
+	@Nonnull
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.CUTOUT;
 	}
 
 	@Nonnull
 	@Override
 	public String getUnlocalizedName() {
-		return super.getUnlocalizedName()
-			       .replaceAll("tile\\.", "tile." + ResourceMap.PREFIX_MOD);
-	}
-
-	public static class TileEntitySummoner extends TileEntityMobSpawner {
-		private final SummonerLogic summonerLogic = new SummonerLogic() {
-			@Nonnull
-			@Override
-			public World getSpawnerWorld () {
-				return worldObj;
-			}
-
-			@Nonnull
-			@Override
-			public BlockPos getSpawnerPosition () {
-				return pos;
-			}
-		};
-
-		@Nonnull
-		@Override
-		public MobSpawnerBaseLogic getSpawnerBaseLogic () {
-			return summonerLogic;
-		}
-
-		@Override
-		public boolean receiveClientEvent(int id, int type) {
-			return summonerLogic.setDelayToMin(id);
-		}
-
-		@Override
-		public void update()
-		{
-			summonerLogic.updateSpawner();
-		}
-
-		@Override
-		public void readFromNBT(NBTTagCompound compound) {
-			super.readFromNBT(compound.copy());
-			summonerLogic.readFromNBT(compound);
-		}
-
-		@Nonnull
-		@Override
-		public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-			super.writeToNBT(compound);
-			summonerLogic.writeToNBT(compound);
-			return compound;
-		}
+		return super.getUnlocalizedName().replaceAll("tile\\.", "tile." + ResourceMap.PREFIX_MOD);
 	}
 
 	@Override
@@ -101,8 +68,8 @@ public class Summoner extends BlockMobSpawner implements IModItem {
 		return 0;
 	}
 
-	private static String getSpawnerMobTarget(TileEntityMobSpawner mobSpawnerTileEntity) {
-		NBTTagCompound mobData = mobSpawnerTileEntity.getSpawnerBaseLogic().writeToNBT(new NBTTagCompound());
+	private static String getSpawnerMobTarget(SummonerTileEntity mobSpawnerTileEntity) {
+		NBTTagCompound mobData = mobSpawnerTileEntity.getLogic().writeToNBT(new NBTTagCompound());
 		if (!mobData.hasKey("SpawnData", 10)) throw new RuntimeException("Spawner has no SpawnData");
 		NBTTagCompound spawnData = mobData.getCompoundTag("SpawnData");
 		if (!spawnData.hasKey("id", 8)) throw new RuntimeException("Spawner SpawnData has no mob id");
@@ -116,7 +83,7 @@ public class Summoner extends BlockMobSpawner implements IModItem {
 
 		drops.add(ModObjects.getBlock("emptySummoner").getItemStack());
 
-		TileEntitySummoner tileEntity = (TileEntitySummoner) world.getTileEntity(pos);
+		SummonerTileEntity tileEntity = (SummonerTileEntity) world.getTileEntity(pos);
 		String mobTarget = Summoner.getSpawnerMobTarget(tileEntity);
 		ItemStack soulbook = ModObjects.getItem("soulbook").getItemStack();
 		Soulbook.setMobTarget(soulbook, mobTarget);
@@ -128,14 +95,15 @@ public class Summoner extends BlockMobSpawner implements IModItem {
 
 	@Override
 	@Nonnull
+	@ParametersAreNonnullByDefault
 	public TileEntity createNewTileEntity (World worldIn, int meta) {
-		return new TileEntitySummoner();
+		return new SummonerTileEntity();
 	}
 
 	@Override
 	public boolean onBlockActivated (World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) {
-			TileEntitySummoner mobSpawner = (TileEntitySummoner)world.getTileEntity(pos);
+			SummonerTileEntity mobSpawner = (SummonerTileEntity)world.getTileEntity(pos);
 			String mobTarget = Summoner.getSpawnerMobTarget(mobSpawner);
 			ItemStack soulbook = ModObjects.getItem("soulbook").getItemStack();
 			Soulbook.setMobTarget(soulbook, mobTarget);

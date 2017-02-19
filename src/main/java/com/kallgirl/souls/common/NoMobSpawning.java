@@ -27,7 +27,6 @@ public class NoMobSpawning {
 			System.out.println("successful souls spawn: " + event.getEntity().getName());
 		} else {
 			//event.setCanceled(true);
-			new RuntimeException().printStackTrace();
 			System.out.println("should have cancelled spawn: " + event.getEntity().getName());
 		}
 	}

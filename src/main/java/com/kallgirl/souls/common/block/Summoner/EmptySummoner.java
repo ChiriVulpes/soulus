@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 
 public class EmptySummoner extends Block {
 	public EmptySummoner () {
-		super("emptySummoner", new Material(MapColor.BLACK).setTransparent());
+		super("emptySummoner", new Material(MapColor.STONE).setTransparent());
 		setHasItem();
 		setHardness(5F);
 		setResistance(30F);
@@ -45,10 +45,10 @@ public class EmptySummoner extends Block {
 		if (mobTarget == null || containedEssence < SpawnMap.map.get(mobTarget).required) return false;
 		IBlockState mobSpawner = ((Summoner) ModObjects.get("summoner")).getDefaultState();
 		worldIn.setBlockState(pos, mobSpawner);
-		Summoner.TileEntitySummoner tileEntity = (Summoner.TileEntitySummoner) worldIn.getTileEntity(pos);
+		SummonerTileEntity tileEntity = (SummonerTileEntity) worldIn.getTileEntity(pos);
 		if (tileEntity == null)
 			throw new RuntimeException("Mob spawner tile entity was not created. Something went wrong.");
-		SummonerLogic logic = (SummonerLogic)tileEntity.getSpawnerBaseLogic();
+		SummonerLogic logic = (SummonerLogic)tileEntity.getLogic();
 		logic.setEntityName(mobTarget);
 		playerIn.inventory.removeStackFromSlot(playerIn.inventory.currentItem);
 		return true;

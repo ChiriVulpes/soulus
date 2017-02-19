@@ -1,5 +1,6 @@
 package com.kallgirl.souls.common;
 
+import com.kallgirl.souls.client.render.TileEntitySummonerRenderer;
 import com.kallgirl.souls.common.block.*;
 import com.kallgirl.souls.common.block.Summoner.EmptySummoner;
 import com.kallgirl.souls.common.block.Summoner.Summoner;
@@ -40,6 +41,9 @@ public final class ModObjects {
 
 		// generation
 		objects.put("fossilGeneration", new FossilGenerator());
+
+		// renderers
+		objects.put("summonerRenderer", new TileEntitySummonerRenderer());
 
 		objects.forEach((name, item) -> {
 			item.preinit();
