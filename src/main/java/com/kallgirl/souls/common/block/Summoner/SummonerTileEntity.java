@@ -9,6 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class SummonerTileEntity extends TileEntity implements ITickable {
 	private final SummonerLogic summonerLogic = new SummonerLogic() {
@@ -50,6 +51,18 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 		super.writeToNBT(compound);
 		summonerLogic.writeToNBT(compound);
 		return compound;
+	}
+
+	@Nullable
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		return new SPacketUpdateTileEntity(this.pos, 1, getUpdateTag());
+	}
+
+	@Nonnull
+	public NBTTagCompound getUpdateTag() {
+		NBTTagCompound nbt = writeToNBT(new NBTTagCompound());
+		nbt.removeTag("SpawnPotentials");
+		return nbt;
 	}
 
 	@Override
