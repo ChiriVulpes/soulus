@@ -18,18 +18,6 @@ public class Souls {
     @EventHandler
     public void init(FMLInitializationEvent event) {
         ModObjects.init();
-        /*
-        // disable natural mob spawning
-		for (BiomeDictionary.Type type : BiomeDictionary.Type.values()) {
-		    Biome[] biomes = BiomeDictionary.getBiomesForType(type);
-		    for (Biome biome : biomes) {
-		        for (EnumCreatureType creatureType : EnumCreatureType.values()) {
-			        List<Biome.SpawnListEntry> spawnableList = biome.getSpawnableList(creatureType);
-			        spawnableList.clear();
-		        }
-		    }
-		}
-		*/
     }
 
     @EventHandler

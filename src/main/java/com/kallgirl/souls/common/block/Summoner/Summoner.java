@@ -46,6 +46,12 @@ public class Summoner extends BlockContainer implements IModItem {
 		isBlockContainer = true;
 	}
 
+	@Override
+	@SuppressWarnings("deprecation")
+	public boolean isOpaqueCube (IBlockState state) {
+		return false;
+	}
+
 	@Nonnull
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;

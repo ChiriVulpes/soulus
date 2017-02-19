@@ -41,6 +41,7 @@ public class Block extends net.minecraft.block.Block implements IModItem, IModel
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean isOpaqueCube (IBlockState state) {
 		return blockMaterial.isOpaque() && blockMaterial.blocksLight();
 	}
