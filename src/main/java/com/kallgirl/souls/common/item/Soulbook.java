@@ -56,7 +56,6 @@ public class Soulbook extends Item {
 			stack.setTagCompound(tag);
 		}
 		tag.setByte("ContainedEssence", (byte)(count + Byte.MIN_VALUE));
-		System.out.println("cast: " + (byte)(count + Byte.MIN_VALUE));
 		return stack;
 	}
 	public Soulbook() {
@@ -97,7 +96,6 @@ public class Soulbook extends Item {
 					}
 					return false;
 				}
-				System.out.println("Target: " + target + ", hasSoulbook: " + hasSoulbook + ", essence: " + essenceCount);
 				return hasSoulbook && essenceCount > 0 && containedEssence + essenceCount <= SpawnMap.map.get(target).required;
 			}
 
@@ -134,15 +132,12 @@ public class Soulbook extends Item {
 					}
 					return null;
 				}
-				System.out.println("Target: " + target + ", hasSoulbook: " + soulbook + ", essence: " + essenceCount);
 				if (soulbook != null && essenceCount > 0 && containedEssence + essenceCount <= SpawnMap.map.get(target).required) {
 					ItemStack newStack = soulbook.copy();
 					Soulbook.setMobTarget(newStack, target);
 					Soulbook.setContainedEssence(newStack, containedEssence + essenceCount);
-					System.out.println("new essencecount: " + Soulbook.getContainedEssence(newStack) + ", target: " + Soulbook.getMobTarget(newStack));
 					return newStack;
 				}
-				System.out.println("null");
 				return null;
 			}
 

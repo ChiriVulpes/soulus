@@ -137,7 +137,6 @@ public abstract class SummonerLogic {
 						// custom data so we know the mob was spawned by souls
 						NBTTagCompound entityData = entity.getEntityData();
 						entityData.setByte("souls:spawned-by-souls", (byte)1);
-						System.out.println("set entity data");
 
 						if (randomEntity.getNbt().getSize() == 1 && randomEntity.getNbt().hasKey("id", 8) && entity instanceof EntityLiving) {
 							if (!net.minecraftforge.event.ForgeEventFactory.doSpecialSpawn(entityliving, getSpawnerWorld(), (float)entity.posX, (float)entity.posY, (float)entity.posZ))

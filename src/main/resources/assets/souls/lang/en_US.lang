@@ -50,6 +50,7 @@ item.souls:soulbook.Villager.name=Soulbook of Villager
 tile.souls:endersteelBlock.name=Block of Endersteel
 tile.souls:endersteelBars.name=Endersteel Bars
 tile.souls:emptySummoner.name=Empty Summoner
+tile.souls:summoner.name=Summoner
 tile.souls:dirtFossil.name=Dirt with Fossils
 tile.souls:dirtFossilEnder.name=Dirt with Glowing Fossils
 

@@ -103,7 +103,6 @@ public class Block extends net.minecraft.block.Block implements IModItem, IModel
 	@Override
 	public void registerModels() {
 		if (hasItem) {
-			System.out.println("Registered block model " + getRegistryName());
 			ModelLoader.setCustomModelResourceLocation(this.getItemBlock(), 0,
 				new ModelResourceLocation(getRegistryName(), "inventory")
 			);

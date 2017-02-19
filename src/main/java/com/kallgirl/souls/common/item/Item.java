@@ -46,7 +46,6 @@ public class Item extends net.minecraft.item.Item implements IModItem, IModelReg
 	@SideOnly (Side.CLIENT)
 	@Override
 	public void registerModels() {
-		System.out.println("Registered item model " + getRegistryName());
 		ModelLoader.setCustomModelResourceLocation(this, 0,
 			new ModelResourceLocation(getRegistryName(), "inventory")
 		);

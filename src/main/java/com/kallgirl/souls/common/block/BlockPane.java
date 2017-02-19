@@ -77,8 +77,7 @@ public class BlockPane extends net.minecraft.block.BlockPane implements IModItem
 	@Nonnull
 	@Override
 	public String getUnlocalizedName() {
-		return super.getUnlocalizedName()
-			       .replaceAll("tile\\.", "tile." + ResourceMap.PREFIX_MOD);
+		return super.getUnlocalizedName().replaceAll("tile\\.", "tile." + ResourceMap.PREFIX_MOD);
 	}
 
 
@@ -86,7 +85,6 @@ public class BlockPane extends net.minecraft.block.BlockPane implements IModItem
 	@Override
 	public void registerModels() {
 		if (hasItem) {
-			System.out.println("Registered block model " + getRegistryName());
 			ModelLoader.setCustomModelResourceLocation(this.getItemBlock(), 0,
 				new ModelResourceLocation(getRegistryName(), "inventory")
 			);

@@ -41,7 +41,6 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		System.out.println(worldObj);
 		summonerLogic.readFromNBT(compound);
 	}
 
