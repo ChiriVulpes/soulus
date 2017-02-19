@@ -24,20 +24,10 @@ import java.util.List;
 
 public abstract class SummonerLogic {
 
-	@Nonnull
 	public abstract World getSpawnerWorld();
 
 	@Nonnull
 	public abstract BlockPos getSpawnerPosition();
-
-	@ParametersAreNonnullByDefault
-	public void setNextSpawnData(WeightedSpawnerEntity spawnerEntity) {
-		randomEntity = spawnerEntity;
-		World world = getSpawnerWorld();
-		BlockPos pos = getSpawnerPosition();
-		IBlockState blockState = world.getBlockState(pos);
-		world.notifyBlockUpdate(pos, blockState, blockState, 4);
-	}
 
 	/** The delay to spawn. */
 	private int spawnDelay = 20;
@@ -66,6 +56,17 @@ public abstract class SummonerLogic {
 	@ParametersAreNonnullByDefault
 	public void setEntityName(String name) {
 		randomEntity.getNbt().setString("id", name);
+	}
+
+	@ParametersAreNonnullByDefault
+	public void setNextSpawnData(WeightedSpawnerEntity spawnerEntity) {
+		randomEntity = spawnerEntity;
+		World world = getSpawnerWorld();
+		if (world != null) {
+			BlockPos pos = getSpawnerPosition();
+			IBlockState blockState = world.getBlockState(pos);
+			world.notifyBlockUpdate(pos, blockState, blockState, 4);
+		}
 	}
 
 	/**
@@ -195,7 +196,6 @@ public abstract class SummonerLogic {
 		NBTTagCompound spawnData = nbt.getCompoundTag("SpawnData");
 
 		if (!spawnData.hasKey("id", 8)) {
-			System.out.println("reading nbt: has no mob id set");
 			spawnData.setString("id", "Pig");
 		}
 
@@ -214,6 +214,10 @@ public abstract class SummonerLogic {
 
 		if (nbt.hasKey("SpawnRange", 99)) {
 			spawnRange = nbt.getShort("SpawnRange");
+		}
+
+		if (getSpawnerWorld() != null) {
+			cachedEntity = null;
 		}
 	}
 
