@@ -1,7 +1,8 @@
 package com.kallgirl.souls.common.item;
 
 import com.kallgirl.souls.common.ModObjects;
-import com.kallgirl.souls.common.SpawnMap;
+import com.kallgirl.souls.common.Config;
+import com.kallgirl.souls.common.util.MobTarget;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -16,32 +17,6 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 public class Soulbook extends Item {
-	public static String getMobTarget(ItemStack stack) {
-		NBTTagCompound tag = stack.getTagCompound();
-		if (tag != null && tag.hasKey("EntityTag", 10)) {
-			tag = tag.getCompoundTag("EntityTag");
-			if (tag.hasKey("id", 8)) {
-				return tag.getString("id");
-			}
-		}
-		return null;
-	}
-	public static ItemStack setMobTarget(ItemStack stack, String mobTarget) {
-		NBTTagCompound tag = stack.getTagCompound();
-		if (tag == null) {
-			tag = new NBTTagCompound();
-			stack.setTagCompound(tag);
-		}
-		if (tag.hasKey("EntityTag", 10)) {
-			tag = tag.getCompoundTag("EntityTag");
-		} else {
-			NBTTagCompound entityTag = new NBTTagCompound();
-			tag.setTag("EntityTag", entityTag);
-			tag = entityTag;
-		}
-		tag.setString("id", mobTarget);
-		return stack;
-	}
 	public static int getContainedEssence(ItemStack stack) {
 		NBTTagCompound tag = stack.getTagCompound();
 		if (tag != null && tag.hasKey("ContainedEssence", 1)) {
@@ -77,7 +52,7 @@ public class Soulbook extends Item {
 					if (stack == null) continue;
 					if (stack.getItem() == self) {
 						if (hasSoulbook) return false;
-						String itemTarget = Soulbook.getMobTarget(stack);
+						String itemTarget = MobTarget.getMobTarget(stack);
 						if (itemTarget != null) {
 							if (target != null && !itemTarget.equals(target))
 								return false;
@@ -87,7 +62,7 @@ public class Soulbook extends Item {
 						hasSoulbook = true;
 						continue;
 					} else if (stack.getItem() == ModObjects.getItem("essence")) {
-						String itemTarget = Soulbook.getMobTarget(stack);
+						String itemTarget = MobTarget.getMobTarget(stack);
 						if (itemTarget == null || (target != null && !itemTarget.equals(target)))
 							return false;
 						target = itemTarget;
@@ -96,7 +71,7 @@ public class Soulbook extends Item {
 					}
 					return false;
 				}
-				return hasSoulbook && essenceCount > 0 && containedEssence + essenceCount <= SpawnMap.map.get(target).required;
+				return hasSoulbook && essenceCount > 0 && containedEssence + essenceCount <= Config.getSoulInfo(target).neededForSoul;
 			}
 
 			@ParametersAreNonnullByDefault
@@ -113,7 +88,7 @@ public class Soulbook extends Item {
 					if (stack == null) continue;
 					if (stack.getItem() == self) {
 						if (soulbook != null) return null;
-						String itemTarget = Soulbook.getMobTarget(stack);
+						String itemTarget = MobTarget.getMobTarget(stack);
 						if (itemTarget != null) {
 							if (target != null && !itemTarget.equals(target))
 								return null;
@@ -123,7 +98,7 @@ public class Soulbook extends Item {
 						soulbook = stack;
 						continue;
 					} else if (stack.getItem() == ModObjects.getItem("essence")) {
-						String itemTarget = Soulbook.getMobTarget(stack);
+						String itemTarget = MobTarget.getMobTarget(stack);
 						if (itemTarget == null || (target != null && !itemTarget.equals(target)))
 							return null;
 						target = itemTarget;
@@ -132,9 +107,9 @@ public class Soulbook extends Item {
 					}
 					return null;
 				}
-				if (soulbook != null && essenceCount > 0 && containedEssence + essenceCount <= SpawnMap.map.get(target).required) {
+				if (soulbook != null && essenceCount > 0 && containedEssence + essenceCount <= Config.getSoulInfo(target).neededForSoul) {
 					ItemStack newStack = soulbook.copy();
-					Soulbook.setMobTarget(newStack, target);
+					MobTarget.setMobTarget(newStack, target);
 					Soulbook.setContainedEssence(newStack, containedEssence + essenceCount);
 					return newStack;
 				}
@@ -165,41 +140,39 @@ public class Soulbook extends Item {
 	}
 	public ItemStack getStack(String mobTarget, Integer count) {
 		ItemStack stack = new ItemStack(this, count);
-		Soulbook.setMobTarget(stack, mobTarget);
+		MobTarget.setMobTarget(stack, mobTarget);
 		Soulbook.setContainedEssence(stack, 0);
 		return stack;
 	}
 
 	@Override
 	public boolean hasEffect (ItemStack stack) {
-		return Soulbook.getMobTarget(stack) != null;
+		return MobTarget.getMobTarget(stack) != null;
 	}
 
 	@Nonnull
 	@Override
 	public String getUnlocalizedNameInefficiently (@Nonnull ItemStack stack) {
-		String mobTarget = Soulbook.getMobTarget(stack);
+		String mobTarget = MobTarget.getMobTarget(stack);
 		if (mobTarget == null) mobTarget = "unfocused";
 		return super.getUnlocalizedNameInefficiently(stack).replace(
-			":soulbook", ":soulbook." + mobTarget
+			":soulbook", ":soulbook." + MobTarget.fixMobTarget(mobTarget)
 		);
 	}
 
 	@Override
 	public boolean showDurabilityBar (ItemStack stack) {
-		String mobTarget = Soulbook.getMobTarget(stack);
+		String mobTarget = MobTarget.getMobTarget(stack);
 		if (mobTarget == null) return true;
 		int containedEssence = Soulbook.getContainedEssence(stack);
-		SpawnMap.SpawnInfo target = SpawnMap.map.get(mobTarget);
-		return containedEssence < target.required;
+		return containedEssence < Config.getSoulInfo(mobTarget).neededForSoul;
 	}
 
 	@Override
 	public double getDurabilityForDisplay (ItemStack stack) {
-		String mobTarget = Soulbook.getMobTarget(stack);
+		String mobTarget = MobTarget.getMobTarget(stack);
 		if (mobTarget == null) return 1;
 		int containedEssence = Soulbook.getContainedEssence(stack);
-		SpawnMap.SpawnInfo target = SpawnMap.map.get(mobTarget);
-		return (1 - containedEssence / (double)target.required);
+		return (1 - containedEssence / (double)Config.getSoulInfo(mobTarget).neededForSoul);
 	}
 }

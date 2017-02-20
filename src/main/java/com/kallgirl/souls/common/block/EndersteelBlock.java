@@ -1,8 +1,8 @@
 package com.kallgirl.souls.common.block;
 
-import com.kallgirl.souls.common.Material;
+import com.kallgirl.souls.common.util.Material;
 import com.kallgirl.souls.common.ModObjects;
-import com.kallgirl.souls.common.Recipes;
+import com.kallgirl.souls.common.util.Recipes;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 

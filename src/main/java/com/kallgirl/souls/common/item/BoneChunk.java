@@ -1,72 +1,68 @@
 package com.kallgirl.souls.common.item;
 
+import com.kallgirl.souls.common.BoneType;
+import com.kallgirl.souls.common.Config;
 import com.kallgirl.souls.common.ModObjects;
-import com.kallgirl.souls.common.Recipes;
-import com.kallgirl.souls.common.SpawnMap;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.*;
-
-import static net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 public class BoneChunk extends Item {
-	List<Tuple<Integer, Object>> drops = new ArrayList<>();
+	private Map<Object, Integer> drops = new HashMap<>();
+	private int chanceTotal = 0;
 
-	private static Map<String, Integer> spawnMap = new HashMap<>();
-	static {
-		SpawnMap.map.forEach((name, spawnInfo) -> {
-			if (spawnInfo.boneType == SpawnMap.BoneType.NORMAL)
-				spawnMap.put(name, spawnInfo.chance);
-		});
-	}
+	public BoneChunk (String name, BoneType boneType) {
+		super(name);
 
-	public BoneChunk () {
-		super("boneChunk");
-		Recipes.remove(new ItemStack(Items.DYE, WILDCARD_VALUE, 15));
-		addRecipeShapeless(3, Items.BONE);
-		Recipes.addShapeless(new ItemStack(Items.DYE, 1, 15),
-			this,
-			ModObjects.get("sledgehammer").getItemStack(1, WILDCARD_VALUE)
-		);
+		// initialize drops
 		Essence essence = (Essence) ModObjects.getItem("essence");
+		Config.spawnMap.get(boneType).forEach((entityName, spawnInfo) -> {
+			if (entityName.equals("none")) {
+				drops.put(null, spawnInfo.dropChance);
+			} else {
+				// fix entity names so they match the actual entity ids
+				String fixed = Config.EntityIdMap.get(entityName);
+				if (fixed != null) entityName = fixed;
 
-		spawnMap.forEach((key, spawnChance) -> {
-			if (EntityList.ENTITY_EGGS.containsKey(key)) {
-				drops.add(new Tuple<>(spawnChance, essence.getStack(key)));
-			}
-		});
-	}
-
-	@Nonnull
-	private ItemStack getDrop () {
-		int chanceTotal = 0;
-		for (Tuple<Integer, Object> drop : drops) {
-
-			chanceTotal += drop.getFirst();
-		}
-		int choice = new Random().nextInt(chanceTotal);
-		for (Tuple<Integer, Object> drop : drops) {
-			choice -= drop.getFirst();
-			if (choice < 0) {
-				if (drop.getSecond() instanceof Item) {
-					return ((Item) drop.getSecond()).getItemStack(1);
+				if (EntityList.ENTITY_EGGS.containsKey(entityName) || spawnInfo.colourInfo != null) {
+					drops.put(essence.getStack(entityName), spawnInfo.dropChance);
 				} else {
-					return (ItemStack) drop.getSecond();
+					System.out.println(String.format("Colour entry missing for %s:%s", boneType.name(), entityName));
 				}
 			}
+		});
+
+		for (Map.Entry<Object, Integer> drop : drops.entrySet()) {
+			chanceTotal += drop.getValue();
 		}
-		throw new RuntimeException(String.format("Didn't work remaining: %d total: %d", chanceTotal, choice));
+	}
+
+	@Nullable
+	private ItemStack getDrop () {
+		int choice = new Random().nextInt(chanceTotal);
+		for (Map.Entry<Object, Integer> dropInfo : drops.entrySet()) {
+			choice -= dropInfo.getValue();
+			if (choice < 0) {
+				Object drop = dropInfo.getKey();
+				if (drop != null) {
+					return drop instanceof Item ? ((Item) drop).getItemStack() : ((ItemStack) drop).copy();
+				}
+				return null;
+			}
+		}
+		throw new RuntimeException("Bonechunk drop failed!");
 	}
 
 	@ParametersAreNonnullByDefault
@@ -74,9 +70,12 @@ public class BoneChunk extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick (ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
 		if (!worldIn.isRemote) {
-			EntityItem dropItem = new EntityItem(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, getDrop().copy());
-			dropItem.setNoPickupDelay();
-			worldIn.spawnEntityInWorld(dropItem);
+			ItemStack drop = getDrop();
+			if (drop != null) {
+				EntityItem dropEntity = new EntityItem(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, drop);
+				dropEntity.setNoPickupDelay();
+				worldIn.spawnEntityInWorld(dropEntity);
+			}
 		}
 		itemStackIn.stackSize--;
 		return new ActionResult<>(EnumActionResult.PASS, itemStackIn);

@@ -1,10 +1,11 @@
 package com.kallgirl.souls.common.block.Summoner;
 
-import com.kallgirl.souls.common.Material;
+import com.kallgirl.souls.common.util.Material;
 import com.kallgirl.souls.common.ModObjects;
-import com.kallgirl.souls.common.SpawnMap;
+import com.kallgirl.souls.common.Config;
 import com.kallgirl.souls.common.block.Block;
 import com.kallgirl.souls.common.item.Soulbook;
+import com.kallgirl.souls.common.util.MobTarget;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
@@ -82,8 +83,8 @@ public class Summoner extends Block {
 		String mobTarget = Summoner.getSpawnerMobTarget(lastBrokenSummoner);
 		lastBrokenSummoner = null; // gc last broken summoner tile entity as it's unused now
 		ItemStack soulbook = ModObjects.getItem("soulbook").getItemStack();
-		Soulbook.setMobTarget(soulbook, mobTarget);
-		Soulbook.setContainedEssence(soulbook, SpawnMap.map.get(mobTarget).required);
+		MobTarget.setMobTarget(soulbook, mobTarget);
+		Soulbook.setContainedEssence(soulbook, Config.getSoulInfo(mobTarget).neededForSoul);
 		drops.add(soulbook);
 
 		return drops;
@@ -95,13 +96,13 @@ public class Summoner extends Block {
 			SummonerTileEntity mobSpawner = (SummonerTileEntity)world.getTileEntity(pos);
 			String mobTarget = Summoner.getSpawnerMobTarget(mobSpawner);
 			ItemStack soulbook = ModObjects.getItem("soulbook").getItemStack();
-			Soulbook.setMobTarget(soulbook, mobTarget);
-			Soulbook.setContainedEssence(soulbook, SpawnMap.map.get(mobTarget).required);
+			MobTarget.setMobTarget(soulbook, mobTarget);
+			Soulbook.setContainedEssence(soulbook, Config.getSoulInfo(mobTarget).neededForSoul);
 			EntityItem dropItem = new EntityItem(world, player.posX, player.posY, player.posZ, soulbook);
 			dropItem.setNoPickupDelay();
 			world.spawnEntityInWorld(dropItem);
 		}
-		world.setBlockState(pos, ModObjects.getBlock("emptySummoner").getDefaultState());
+		world.setBlockState(pos, ModObjects.getBlock("summonerEmpty").getDefaultState());
 		return true;
 	}
 }

@@ -4,7 +4,7 @@ import com.kallgirl.souls.ModInfo;
 import com.kallgirl.souls.client.ResourceMap;
 import com.kallgirl.souls.client.render.IModelRegister;
 import com.kallgirl.souls.common.CreativeTab;
-import com.kallgirl.souls.common.IModItem;
+import com.kallgirl.souls.common.util.IModItem;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;

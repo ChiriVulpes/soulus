@@ -1,6 +1,6 @@
 package com.kallgirl.souls.common.world;
 
-import com.kallgirl.souls.common.IModItem;
+import com.kallgirl.souls.common.util.IModItem;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;

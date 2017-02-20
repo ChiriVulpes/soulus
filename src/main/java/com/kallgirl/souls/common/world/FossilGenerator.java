@@ -7,14 +7,14 @@ import net.minecraft.world.DimensionType;
 public class FossilGenerator extends WorldGenerator {
 	public FossilGenerator() {
 		super(
-			new OreVein(ModObjects.getBlock("dirtFossil"), Blocks.DIRT)
+			new OreVein(ModObjects.getBlock("fossilDirt"), Blocks.DIRT)
 				.setSize(3, 7).setChances(300),
-			new OreVein(ModObjects.getBlock("dirtFossilEnder"), Blocks.DIRT)
+			new OreVein(ModObjects.getBlock("fossilDirtEnder"), Blocks.DIRT)
 				.setSize(2, 5).setChances(100),
-			new OreVein(ModObjects.getBlock("netherrackFossil"), Blocks.NETHERRACK)
+			new OreVein(ModObjects.getBlock("fossilNetherrack"), Blocks.NETHERRACK)
 				.setDimension(DimensionType.NETHER).setSize(3, 7).setChances(300),
-			new OreVein(ModObjects.getBlock("netherrackFossilEnder"), Blocks.NETHERRACK)
-				.setDimension(DimensionType.NETHER).setSize(2, 5).setChances(100)
+			new OreVein(ModObjects.getBlock("fossilNetherrackEnder"), Blocks.NETHERRACK)
+				.setDimension(DimensionType.NETHER).setSize(2, 5).setChances(10)
 		);
 	}
 }

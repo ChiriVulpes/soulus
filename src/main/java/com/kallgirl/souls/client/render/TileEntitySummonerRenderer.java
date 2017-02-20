@@ -1,6 +1,6 @@
 package com.kallgirl.souls.client.render;
 
-import com.kallgirl.souls.common.IModObject;
+import com.kallgirl.souls.common.util.IModObject;
 import com.kallgirl.souls.common.block.Summoner.SummonerLogic;
 import com.kallgirl.souls.common.block.Summoner.SummonerTileEntity;
 import net.minecraft.client.Minecraft;

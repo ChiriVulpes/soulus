@@ -1,14 +1,13 @@
 package com.kallgirl.souls.common.item;
 
+import com.kallgirl.souls.common.Config;
+import com.kallgirl.souls.common.util.MobTarget;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.EntityList;
-import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 public class Essence extends Item {
 	public Essence () {
@@ -40,19 +39,24 @@ public class Essence extends Item {
 			}
 		}
 		return super.getUnlocalizedNameInefficiently(stack).replace(
-			":essence", ":essence." + mobTarget
+			":essence", ":essence." + MobTarget.fixMobTarget(mobTarget)
 		);
 	}
 
 	@Override
 	public void init () {
-		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor() {
-			@ParametersAreNonnullByDefault
-			@Override
-			public int getColorFromItemstack (ItemStack stack, int tintIndex) {
-				EntityList.EntityEggInfo eggInfo = EntityList.ENTITY_EGGS.get(ItemMonsterPlacer.getEntityIdFromItem(stack));
-				return eggInfo == null ? -1 : (tintIndex == 0 ? eggInfo.primaryColor : eggInfo.secondaryColor);
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler((ItemStack stack, int tintIndex) -> {
+			String mobTarget = MobTarget.getMobTarget(stack);
+			if (mobTarget == null) return -1;
+			Config.SoulInfo soulInfo = Config.getSoulInfo(mobTarget, false);
+			if (soulInfo == null) return -1;
+			Config.ColourInfo colourInfo = soulInfo.colourInfo;
+			if (colourInfo == null) {
+				EntityList.EntityEggInfo eggInfo = EntityList.ENTITY_EGGS.get(mobTarget);
+				if (eggInfo == null) return -1;
+				colourInfo = new Config.ColourInfo(eggInfo);
 			}
+			return tintIndex == 0 ? colourInfo.primaryColour : colourInfo.secondaryColour;
 		}, this);
 	}
 }

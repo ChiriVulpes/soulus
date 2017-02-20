@@ -23,7 +23,7 @@ public class SummonerReplacer {
 					BlockPos pos = new BlockPos(cX + iX, y, cZ + iZ);
 					IBlockState blockState = world.getBlockState(pos);
 					if (blockState.getBlock() == Blocks.MOB_SPAWNER) {
-						world.setBlockState(pos, ModObjects.getBlock("emptySummoner").getDefaultState());
+						world.setBlockState(pos, ModObjects.getBlock("summonerEmpty").getDefaultState());
 					}
 				}
 			}
