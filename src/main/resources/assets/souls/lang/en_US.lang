@@ -53,5 +53,7 @@ tile.souls:emptySummoner.name=Empty Summoner
 tile.souls:summoner.name=Summoner
 tile.souls:dirtFossil.name=Dirt with Fossils
 tile.souls:dirtFossilEnder.name=Dirt with Glowing Fossils
+tile.souls:netherrackFossil.name=Netherrack with Fossils
+tile.souls:netherrackFossilEnder.name=Netherrack with Glowing Fossils
 
 tile.mobSpawner.name=Summoner

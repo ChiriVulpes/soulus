@@ -38,6 +38,8 @@ public final class ModObjects {
 		objects.put("summoner", new Summoner());
 		objects.put("dirtFossil", new DirtFossil());
 		objects.put("dirtFossilEnder", new DirtFossilEnder());
+		objects.put("netherrackFossil", new NetherrackFossil());
+		objects.put("netherrackFossilEnder", new NetherrackFossilEnder());
 
 		// generation
 		objects.put("fossilGeneration", new FossilGenerator());
