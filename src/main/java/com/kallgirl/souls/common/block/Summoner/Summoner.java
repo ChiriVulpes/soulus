@@ -67,7 +67,9 @@ public class Summoner extends Block {
 
 	@SubscribeEvent
 	public static void onSummonerBreak(BlockEvent.BreakEvent event) {
-		lastBrokenSummoner = (SummonerTileEntity) event.getWorld().getTileEntity(event.getPos());
+		if (event.getState().getBlock() == ModObjects.getBlock("summoner")) {
+			lastBrokenSummoner = (SummonerTileEntity) event.getWorld().getTileEntity(event.getPos());
+		}
 	}
 
 	@Nonnull
