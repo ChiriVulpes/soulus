@@ -1,26 +1,22 @@
 package com.kallgirl.souls.common.block.Summoner;
 
-import com.google.common.collect.Lists;
+import com.kallgirl.souls.common.Config;
 import com.kallgirl.souls.common.ModObjects;
+import com.kallgirl.souls.common.util.NBTBuilder;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.StringUtils;
-import net.minecraft.util.WeightedRandom;
-import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.List;
 
 public abstract class SummonerLogic {
 
@@ -31,36 +27,29 @@ public abstract class SummonerLogic {
 
 	/** The delay to spawn. */
 	private int spawnDelay = 20;
-	private final List<WeightedSpawnerEntity> minecartToSpawn = Lists.newArrayList();
-	private WeightedSpawnerEntity randomEntity = new WeightedSpawnerEntity();
+	private String mobName;
 	private double mobRotation;
 	private double prevMobRotation;
 	private int minSpawnDelay = 200;
 	private int maxSpawnDelay = 800;
 	private int spawnCount = 4;
-	/** Cached instance of the entity to render inside the summoner. */
-	private Entity cachedEntity;
+	/** Cached instance of the mobName to render inside the summoner. */
+	private EntityLiving renderMob;
 	private int maxNearbyEntities = 6;
 	/** The distance from which a player activates the summoner. */
 	private int activatingRangeFromPlayer = 16;
 	/** The range coefficient for spawning entities around. */
 	private int spawnRange = 4;
 
-	/**
-	 * Gets the entity name that should be spawned.
-	 */
-	private String getEntityNameToSpawn() {
-		return randomEntity.getNbt().getString("id");
+	public void setMobName (@Nonnull String mobName) {
+		this.mobName = mobName;
+	}
+	public String getMobName() {
+		return mobName;
 	}
 
-	@ParametersAreNonnullByDefault
-	public void setEntityName(String name) {
-		randomEntity.getNbt().setString("id", name);
-	}
-
-	@ParametersAreNonnullByDefault
-	public void setNextSpawnData(WeightedSpawnerEntity spawnerEntity) {
-		randomEntity = spawnerEntity;
+	private void setNextSpawnData(String entity) {
+		this.mobName = entity;
 		World world = getSpawnerWorld();
 		if (world != null) {
 			BlockPos pos = getSpawnerPosition();
@@ -77,18 +66,31 @@ public abstract class SummonerLogic {
 		return getSpawnerWorld().isAnyPlayerWithinRangeAt(blockpos.getX() + 0.5D, blockpos.getY() + 0.5D, blockpos.getZ() + 0.5D, activatingRangeFromPlayer);
 	}
 
-	public void updateSpawner() {
+	public NBTTagCompound getEntityNbt() {
+		if (mobName.equals("none")) {
+			getSpawnerWorld().setBlockState(getSpawnerPosition(), ModObjects.getBlock("summonerEmpty").getDefaultState());
+		}
+		String realMobName = mobName;
+		Config.SoulInfo soulInfo = Config.getSoulInfo(mobName);
+		if (soulInfo.specialSpawnInfo != null) {
+			realMobName = soulInfo.specialSpawnInfo.getEntityName();
+		}
+		return new NBTBuilder().setString("id", realMobName).nbt;
+	}
+
+	public void update () {
 		if (!isActivated()) {
 			prevMobRotation = mobRotation;
 		} else {
+			World world = getSpawnerWorld();
 			BlockPos blockpos = getSpawnerPosition();
 
-			if (getSpawnerWorld().isRemote) {
-				double d3 = (blockpos.getX() + getSpawnerWorld().rand.nextFloat());
-				double d4 = (blockpos.getY() + getSpawnerWorld().rand.nextFloat());
-				double d5 = (blockpos.getZ() + getSpawnerWorld().rand.nextFloat());
-				getSpawnerWorld().spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d3, d4, d5, 0.0D, 0.0D, 0.0D);
-				getSpawnerWorld().spawnParticle(EnumParticleTypes.FLAME, d3, d4, d5, 0.0D, 0.0D, 0.0D);
+			if (world.isRemote) {
+				double d3 = (blockpos.getX() + world.rand.nextFloat());
+				double d4 = (blockpos.getY() + world.rand.nextFloat());
+				double d5 = (blockpos.getZ() + world.rand.nextFloat());
+				world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d3, d4, d5, 0.0D, 0.0D, 0.0D);
+				world.spawnParticle(EnumParticleTypes.FLAME, d3, d4, d5, 0.0D, 0.0D, 0.0D);
 
 				if (spawnDelay > 0) {
 					--spawnDelay;
@@ -106,55 +108,59 @@ public abstract class SummonerLogic {
 					return;
 				}
 
-				boolean flag = false;
+				boolean spawnedEntity = false;
 
 				for (int i = 0; i < spawnCount; ++i) {
-					NBTTagCompound nbttagcompound = randomEntity.getNbt();
-					NBTTagList nbttaglist = nbttagcompound.getTagList("Pos", 6);
-					World world = getSpawnerWorld();
-					int j = nbttaglist.tagCount();
-					double d0 = j >= 1 ? nbttaglist.getDoubleAt(0) : blockpos.getX() + (world.rand.nextDouble() - world.rand.nextDouble()) * spawnRange + 0.5D;
-					double d1 = j >= 2 ? nbttaglist.getDoubleAt(1) : (blockpos.getY() + world.rand.nextInt(3) - 1);
-					double d2 = j >= 3 ? nbttaglist.getDoubleAt(2) : blockpos.getZ() + (world.rand.nextDouble() - world.rand.nextDouble()) * spawnRange + 0.5D;
-					Entity entity = AnvilChunkLoader.readWorldEntityPos(nbttagcompound, world, d0, d1, d2, false);
+					NBTTagCompound entityNbt = getEntityNbt();
+					double x = blockpos.getX() + (world.rand.nextDouble() - world.rand.nextDouble()) * spawnRange + 0.5D;
+					double y = (blockpos.getY() + world.rand.nextInt(3) - 1);
+					double z = blockpos.getZ() + (world.rand.nextDouble() - world.rand.nextDouble()) * spawnRange + 0.5D;
+					EntityLiving entity = (EntityLiving) AnvilChunkLoader.readWorldEntityPos(entityNbt, world, x, y, z, false);
 
-					if (entity == null) {
-						return;
-					}
+					if (entity == null) return;
 
-					int k = world.getEntitiesWithinAABB(entity.getClass(), (new AxisAlignedBB(blockpos.getX(), blockpos.getY(), blockpos.getZ(), (blockpos.getX() + 1), (blockpos.getY() + 1), (blockpos.getZ() + 1))).expandXyz(spawnRange)).size();
+					AxisAlignedBB boundingBox = new AxisAlignedBB(blockpos.getX(), blockpos.getY(), blockpos.getZ(), blockpos.getX() + 1, blockpos.getY() + 1, blockpos.getZ() + 1).expandXyz(spawnRange);
 
-					if (k >= maxNearbyEntities) {
+					if (world.getEntitiesWithinAABB(entity.getClass(), boundingBox).size() >= maxNearbyEntities) {
 						resetTimer();
 						return;
 					}
 
-					EntityLiving entityliving = entity instanceof EntityLiving ? (EntityLiving)entity : null;
 					entity.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, world.rand.nextFloat() * 360.0F, 0.0F);
 
-					if (entityliving == null || net.minecraftforge.event.ForgeEventFactory.canEntitySpawnSpawner(entityliving, getSpawnerWorld(), (float)entity.posX, (float)entity.posY, (float)entity.posZ)) {
+					Config.SoulInfo soulInfo = Config.getSoulInfo(mobName);
+					if (soulInfo.specialSpawnInfo != null) {
+						entity.readFromNBT(
+							new NBTBuilder(entity.writeToNBT(new NBTTagCompound()))
+								.addAll(soulInfo.specialSpawnInfo.getEntityNBT())
+								.nbt
+						);
+					}
+
+					if (ForgeEventFactory.canEntitySpawnSpawner(entity, world, (float)entity.posX, (float)entity.posY, (float)entity.posZ)) {
 
 						// custom data so we know the mob was spawned by souls
 						NBTTagCompound entityData = entity.getEntityData();
 						entityData.setByte("souls:spawned-by-souls", (byte)1);
 
-						if (randomEntity.getNbt().getSize() == 1 && randomEntity.getNbt().hasKey("id", 8) && entity instanceof EntityLiving) {
-							if (!net.minecraftforge.event.ForgeEventFactory.doSpecialSpawn(entityliving, getSpawnerWorld(), (float)entity.posX, (float)entity.posY, (float)entity.posZ))
-								entityliving.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(entity)), null);
+						if (!ForgeEventFactory.doSpecialSpawn(entity, world, (float)entity.posX, (float)entity.posY, (float)entity.posZ)) {
+							entity.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(entity)), null);
+
+							if (soulInfo.specialSpawnInfo != null) {
+								soulInfo.specialSpawnInfo.modifyEntity(entity);
+							}
 						}
 
 						AnvilChunkLoader.spawnEntity(entity, world);
 						world.playEvent(2004, blockpos, 0);
 
-						if (entityliving != null) {
-							entityliving.spawnExplosionParticle();
-						}
+						entity.spawnExplosionParticle();
 
-						flag = true;
+						spawnedEntity = true;
 					}
 				}
 
-				if (flag) {
+				if (spawnedEntity) {
 					resetTimer();
 				}
 			}
@@ -168,10 +174,7 @@ public abstract class SummonerLogic {
 			int i = maxSpawnDelay - minSpawnDelay;
 			spawnDelay = minSpawnDelay + getSpawnerWorld().rand.nextInt(i);
 		}
-
-		if (!minecartToSpawn.isEmpty()) {
-			setNextSpawnData(WeightedRandom.getRandomItem(getSpawnerWorld().rand, minecartToSpawn));
-		}
+		setNextSpawnData(mobName);
 
 		broadcastEvent(1);
 	}
@@ -182,23 +185,13 @@ public abstract class SummonerLogic {
 
 	public void readFromNBT(NBTTagCompound nbt) {
 		spawnDelay = nbt.getShort("Delay");
-		minecartToSpawn.clear();
 
-		if (nbt.hasKey("SpawnPotentials", 9)) {
-			NBTTagList nbttaglist = nbt.getTagList("SpawnPotentials", 10);
-
-			for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-				minecartToSpawn.add(new WeightedSpawnerEntity(nbttaglist.getCompoundTagAt(i)));
-			}
+		if (!nbt.hasKey("SpawnMob", 8)) {
+			System.out.println("Summoner NBT missing mob id");
+			mobName = "none";
+		} else {
+			setNextSpawnData(nbt.getString("SpawnMob"));
 		}
-
-		NBTTagCompound spawnData = nbt.getCompoundTag("SpawnData");
-
-		if (!spawnData.hasKey("id", 8)) {
-			spawnData.setString("id", "Pig");
-		}
-
-		setNextSpawnData(new WeightedSpawnerEntity(1, spawnData));
 
 		if (nbt.hasKey("MinSpawnDelay", 99)) {
 			minSpawnDelay = nbt.getShort("MinSpawnDelay");
@@ -216,39 +209,23 @@ public abstract class SummonerLogic {
 		}
 
 		if (getSpawnerWorld() != null) {
-			cachedEntity = null;
+			renderMob = null;
 		}
 	}
 
 	@Nonnull
 	@ParametersAreNonnullByDefault
-	public NBTTagCompound writeToNBT(NBTTagCompound p_189530_1_) {
-		String s = getEntityNameToSpawn();
-
-		if (StringUtils.isNullOrEmpty(s)) {
-			return p_189530_1_;
-		} else {
-			p_189530_1_.setShort("Delay", (short)spawnDelay);
-			p_189530_1_.setShort("MinSpawnDelay", (short)minSpawnDelay);
-			p_189530_1_.setShort("MaxSpawnDelay", (short)maxSpawnDelay);
-			p_189530_1_.setShort("SpawnCount", (short)spawnCount);
-			p_189530_1_.setShort("MaxNearbyEntities", (short)maxNearbyEntities);
-			p_189530_1_.setShort("RequiredPlayerRange", (short)activatingRangeFromPlayer);
-			p_189530_1_.setShort("SpawnRange", (short)spawnRange);
-			p_189530_1_.setTag("SpawnData", randomEntity.getNbt().copy());
-			NBTTagList nbttaglist = new NBTTagList();
-
-			if (minecartToSpawn.isEmpty()) {
-				nbttaglist.appendTag(randomEntity.toCompoundTag());
-			} else {
-				for (WeightedSpawnerEntity weightedspawnerentity : minecartToSpawn) {
-					nbttaglist.appendTag(weightedspawnerentity.toCompoundTag());
-				}
-			}
-
-			p_189530_1_.setTag("SpawnPotentials", nbttaglist);
-			return p_189530_1_;
-		}
+	public NBTTagCompound writeToNBT(NBTTagCompound nbtIn) {
+		return new NBTBuilder(nbtIn)
+			.setShort("Delay", spawnDelay)
+			.setShort("MinSpawnDelay", minSpawnDelay)
+			.setShort("MaxSpawnDelay", maxSpawnDelay)
+			.setShort("SpawnCount", spawnCount)
+			.setShort("MaxNearbyEntities", maxNearbyEntities)
+			.setShort("RequiredPlayerRange", activatingRangeFromPlayer)
+			.setShort("SpawnRange", spawnRange)
+			.setString("SpawnMob", mobName, true)
+			.nbt;
 	}
 
 	/**
@@ -265,16 +242,33 @@ public abstract class SummonerLogic {
 
 	@Nonnull
 	@SideOnly (Side.CLIENT)
-	public Entity getCachedEntity() {
-		if (cachedEntity == null) {
-			cachedEntity = AnvilChunkLoader.readWorldEntity(randomEntity.getNbt(), getSpawnerWorld(), false);
+	public EntityLiving getCachedMob () {
+		if (renderMob == null) {
+			NBTTagCompound entityNbt = getEntityNbt();
+			World world = getSpawnerWorld();
 
-			if (randomEntity.getNbt().getSize() == 1 && randomEntity.getNbt().hasKey("id", 8) && cachedEntity instanceof EntityLiving) {
-				((EntityLiving)cachedEntity).onInitialSpawn(getSpawnerWorld().getDifficultyForLocation(new BlockPos(cachedEntity)), null);
+			renderMob = (EntityLiving) AnvilChunkLoader.readWorldEntity(entityNbt, world, false);
+
+			if (renderMob == null)
+				throw new RuntimeException("Unable to summon mobName " + mobName);
+
+			Config.SoulInfo soulInfo = Config.getSoulInfo(mobName);
+			if (soulInfo.specialSpawnInfo != null) {
+				renderMob.readFromNBT(
+					new NBTBuilder(renderMob.writeToNBT(new NBTTagCompound()))
+						.addAll(soulInfo.specialSpawnInfo.getEntityNBT())
+						.nbt
+				);
+			}
+
+			renderMob.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(renderMob)), null);
+			
+			if (soulInfo.specialSpawnInfo != null) {
+				soulInfo.specialSpawnInfo.modifyEntity(renderMob);
 			}
 		}
 
-		return cachedEntity;
+		return renderMob;
 	}
 
 	@SideOnly(Side.CLIENT)

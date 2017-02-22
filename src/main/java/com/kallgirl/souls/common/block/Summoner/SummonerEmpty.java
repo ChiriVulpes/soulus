@@ -49,8 +49,7 @@ public class SummonerEmpty extends Block {
 		SummonerTileEntity tileEntity = (SummonerTileEntity) worldIn.getTileEntity(pos);
 		if (tileEntity == null)
 			throw new RuntimeException("Mob spawner tile entity was not created. Something went wrong.");
-		SummonerLogic logic = (SummonerLogic)tileEntity.getLogic();
-		logic.setEntityName(mobTarget);
+		tileEntity.setMob(mobTarget);
 		playerIn.inventory.removeStackFromSlot(playerIn.inventory.currentItem);
 		return true;
 	}

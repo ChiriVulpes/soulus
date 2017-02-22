@@ -1,10 +1,10 @@
 package com.kallgirl.souls.common.block.Summoner;
 
-import com.kallgirl.souls.common.util.Material;
-import com.kallgirl.souls.common.ModObjects;
 import com.kallgirl.souls.common.Config;
+import com.kallgirl.souls.common.ModObjects;
 import com.kallgirl.souls.common.block.Block;
 import com.kallgirl.souls.common.item.Soulbook;
+import com.kallgirl.souls.common.util.Material;
 import com.kallgirl.souls.common.util.MobTarget;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -12,7 +12,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -34,11 +33,7 @@ import java.util.List;
 public class Summoner extends Block {
 
 	private static String getSpawnerMobTarget(SummonerTileEntity summonerTileEntity) {
-		NBTTagCompound mobData = summonerTileEntity.getLogic().writeToNBT(new NBTTagCompound());
-		if (!mobData.hasKey("SpawnData", 10)) throw new RuntimeException("Spawner has no SpawnData");
-		NBTTagCompound spawnData = mobData.getCompoundTag("SpawnData");
-		if (!spawnData.hasKey("id", 8)) throw new RuntimeException("Spawner SpawnData has no mob id");
-		return spawnData.getString("id");
+		return summonerTileEntity.getMob();
 	}
 
 	public Summoner() {
@@ -64,12 +59,14 @@ public class Summoner extends Block {
 		return new SummonerTileEntity();
 	}
 
-	public static SummonerTileEntity lastBrokenSummoner = null;
+	public static String lastBrokenSummonerMobTarget = null;
 
 	@SubscribeEvent
 	public static void onSummonerBreak(BlockEvent.BreakEvent event) {
 		if (event.getState().getBlock() == ModObjects.getBlock("summoner")) {
-			lastBrokenSummoner = (SummonerTileEntity) event.getWorld().getTileEntity(event.getPos());
+			SummonerTileEntity tileEntity = (SummonerTileEntity) event.getWorld().getTileEntity(event.getPos());
+			if (tileEntity == null) throw new RuntimeException("Summoner has no tile entity");
+			lastBrokenSummonerMobTarget = tileEntity.getMob();
 		}
 	}
 
@@ -78,13 +75,11 @@ public class Summoner extends Block {
 	public List<ItemStack> getDrops (IBlockAccess world, BlockPos pos, @Nonnull IBlockState state, int fortune) {
 		List<ItemStack> drops = new ArrayList<>();
 
-		drops.add(ModObjects.getBlock("emptySummoner").getItemStack());
+		drops.add(ModObjects.getBlock("summonerEmpty").getItemStack());
 
-		String mobTarget = Summoner.getSpawnerMobTarget(lastBrokenSummoner);
-		lastBrokenSummoner = null; // gc last broken summoner tile entity as it's unused now
 		ItemStack soulbook = ModObjects.getItem("soulbook").getItemStack();
-		MobTarget.setMobTarget(soulbook, mobTarget);
-		Soulbook.setContainedEssence(soulbook, Config.getSoulInfo(mobTarget).neededForSoul);
+		MobTarget.setMobTarget(soulbook, lastBrokenSummonerMobTarget);
+		Soulbook.setContainedEssence(soulbook, Config.getSoulInfo(lastBrokenSummonerMobTarget).neededForSoul);
 		drops.add(soulbook);
 
 		return drops;

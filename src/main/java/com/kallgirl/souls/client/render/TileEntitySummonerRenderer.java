@@ -27,7 +27,7 @@ public class TileEntitySummonerRenderer extends TileEntitySpecialRenderer<Summon
 	}
 
 	public static void renderMob(SummonerLogic logic, double posX, double posY, double posZ, float partialTicks) {
-		Entity entity = logic.getCachedEntity();
+		Entity entity = logic.getCachedMob();
 
 		float f = 0.53125F;
 		float f1 = Math.max(entity.width, entity.height);

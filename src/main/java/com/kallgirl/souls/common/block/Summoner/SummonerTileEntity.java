@@ -12,7 +12,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class SummonerTileEntity extends TileEntity implements ITickable {
-	private final SummonerLogic summonerLogic = new SummonerLogic() {
+	private final SummonerLogic logic = new SummonerLogic() {
 		@Nonnull
 		@Override
 		public World getSpawnerWorld () {
@@ -28,28 +28,35 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 
 	@Nonnull
 	public SummonerLogic getLogic () {
-		return summonerLogic;
+		return logic;
 	}
 
 	public boolean receiveClientEvent(int id, int type) {
-		return summonerLogic.setDelayToMin(id);
+		return logic.setDelayToMin(id);
 	}
 
 	public void update()
 	{
-		summonerLogic.updateSpawner();
+		logic.update();
 	}
 
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		summonerLogic.readFromNBT(compound);
+		logic.readFromNBT(compound);
+	}
+
+	public String getMob() {
+		return logic.getMobName();
+	}
+	public void setMob(String mobName) {
+		logic.setMobName(mobName);
 	}
 
 	@Nonnull
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
-		summonerLogic.writeToNBT(compound);
+		logic.writeToNBT(compound);
 		return compound;
 	}
 

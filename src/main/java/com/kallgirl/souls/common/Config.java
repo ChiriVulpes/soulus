@@ -1,7 +1,15 @@
 package com.kallgirl.souls.common;
 
 import com.kallgirl.souls.common.util.MobTarget;
+import com.kallgirl.souls.common.util.NBTBuilder;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.SkeletonType;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -9,6 +17,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Config {
+
+	public static abstract class SpecialSpawnInfo {
+		public abstract String getEntityName ();
+		public NBTBuilder getEntityNBT () { return null; }
+		public void modifyEntity (EntityLiving entity) {}
+	}
 
 	public static Map<String, String> EntityIdMap = new HashMap<>();
 	static {
@@ -34,6 +48,7 @@ public class Config {
 		public int dropChance;
 		public int neededForSoul = 16;
 		public ColourInfo colourInfo = null;
+		public SpecialSpawnInfo specialSpawnInfo = null;
 
 		public SoulInfo (int dropChance) {
 			this.dropChance = dropChance;
@@ -42,9 +57,10 @@ public class Config {
 			this(dropChance);
 			this.neededForSoul = neededForSoul;
 		}
-		public SoulInfo (int dropChance, int neededForSoul, ColourInfo colourInfo) {
+		public SoulInfo (int dropChance, int neededForSoul, ColourInfo colourInfo, SpecialSpawnInfo specialSpawnInfo) {
 			this(dropChance, neededForSoul);
 			this.colourInfo = colourInfo;
+			this.specialSpawnInfo = specialSpawnInfo;
 		}
 	}
 
@@ -82,7 +98,23 @@ public class Config {
 		spawnMapNether.put("Spider", new SoulInfo(7, 16));
 		spawnMapNether.put("CaveSpider", new SoulInfo(3, 16));
 		spawnMapNether.put("Blaze", new SoulInfo(3, 16));
-		spawnMapNether.put("WitherSkeleton", new SoulInfo(1, 16, new ColourInfo(0x333030, 0x191313)));
+		spawnMapNether.put("WitherSkeleton", new SoulInfo(
+			1, 16,
+			new ColourInfo(0x333030, 0x191313),
+			new SpecialSpawnInfo(){
+				public String getEntityName () {
+					return "Skeleton";
+				}
+				@Override
+				public void modifyEntity (EntityLiving entityIn) {
+					EntitySkeleton entity = (EntitySkeleton) entityIn;
+					entity.setSkeletonType(SkeletonType.WITHER);
+					entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
+					entity.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
+					entity.setCombatTask();
+				}
+			}
+		));
 		spawnMapNether.put("Witch", new SoulInfo(1, 16));
 		spawnMapNether.put("Ghast", new SoulInfo(1, 16));
 
