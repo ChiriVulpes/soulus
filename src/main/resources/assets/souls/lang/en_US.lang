@@ -15,6 +15,8 @@ item.souls:dustEnderIron.name=Ender-Iron Dust Blend
 
 item.souls:endersteel.name=Endersteel Ingot
 item.souls:sledgehammer.name=Sledgehammer
+item.souls:bloodCrystal.name=Blood Crystal
+item.souls:bloodCrystal.filled.name=Blood Crystal
 
 item.souls:essence.Pig.name=Pig Essence
 item.souls:essence.Chicken.name=Chicken Essence

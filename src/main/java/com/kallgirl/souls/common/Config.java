@@ -1,7 +1,7 @@
 package com.kallgirl.souls.common;
 
 import com.kallgirl.souls.common.util.MobTarget;
-import com.kallgirl.souls.common.util.NBTBuilder;
+import com.kallgirl.souls.common.util.NBTHelper;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -20,11 +20,16 @@ public class Config {
 
 	public static abstract class SpecialSpawnInfo {
 		public abstract String getEntityName ();
-		public NBTBuilder getEntityNBT () { return null; }
-		public void modifyEntity (EntityLiving entity) {}
+
+		public NBTHelper getEntityNBT () {
+			return null;
+		}
+
+		public void modifyEntity (EntityLiving entity) { }
 	}
 
 	public static Map<String, String> EntityIdMap = new HashMap<>();
+
 	static {
 		EntityIdMap.put("ZombiePigman", "PigZombie");
 		EntityIdMap.put("Ocelot", "Ozelot");
@@ -34,11 +39,13 @@ public class Config {
 	public static class ColourInfo {
 		public int primaryColour;
 		public int secondaryColour;
-		public ColourInfo(int primaryColour, int secondaryColour) {
+
+		public ColourInfo (int primaryColour, int secondaryColour) {
 			this.primaryColour = primaryColour;
 			this.secondaryColour = secondaryColour;
 		}
-		public ColourInfo(EntityList.EntityEggInfo eggInfo) {
+
+		public ColourInfo (EntityList.EntityEggInfo eggInfo) {
 			this.primaryColour = eggInfo.primaryColor;
 			this.secondaryColour = eggInfo.secondaryColor;
 		}
@@ -53,10 +60,12 @@ public class Config {
 		public SoulInfo (int dropChance) {
 			this.dropChance = dropChance;
 		}
+
 		public SoulInfo (int dropChance, int neededForSoul) {
 			this(dropChance);
 			this.neededForSoul = neededForSoul;
 		}
+
 		public SoulInfo (int dropChance, int neededForSoul, ColourInfo colourInfo, SpecialSpawnInfo specialSpawnInfo) {
 			this(dropChance, neededForSoul);
 			this.colourInfo = colourInfo;
@@ -65,6 +74,7 @@ public class Config {
 	}
 
 	public static Map<BoneType, Map<String, SoulInfo>> spawnMap = new HashMap<>();
+
 	static {
 
 		// NORMAL
@@ -101,10 +111,12 @@ public class Config {
 		spawnMapNether.put("WitherSkeleton", new SoulInfo(
 			1, 16,
 			new ColourInfo(0x333030, 0x191313),
-			new SpecialSpawnInfo(){
+			new SpecialSpawnInfo() {
+				@Override
 				public String getEntityName () {
 					return "Skeleton";
 				}
+
 				@Override
 				public void modifyEntity (EntityLiving entityIn) {
 					EntitySkeleton entity = (EntitySkeleton) entityIn;
@@ -155,6 +167,7 @@ public class Config {
 		if (result == null) throw new RuntimeException("Mob Target '" + mobTarget + "' is invalid");
 		return result;
 	}
+
 	@Nullable
 	public static SoulInfo getSoulInfo (@Nonnull String mobTarget, boolean err) {
 		mobTarget = MobTarget.fixMobTarget(mobTarget);

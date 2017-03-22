@@ -1,7 +1,7 @@
 package com.kallgirl.souls.common.item;
 
-import com.kallgirl.souls.common.ModObjects;
 import com.kallgirl.souls.common.Config;
+import com.kallgirl.souls.common.ModObjects;
 import com.kallgirl.souls.common.util.MobTarget;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
@@ -17,25 +17,10 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 public class Soulbook extends Item {
-	public static int getContainedEssence(ItemStack stack) {
-		NBTTagCompound tag = stack.getTagCompound();
-		if (tag != null && tag.hasKey("ContainedEssence", 1)) {
-			return tag.getByte("ContainedEssence") - Byte.MIN_VALUE;
-		}
-		return 0;
-	}
-	public static ItemStack setContainedEssence(ItemStack stack, int count) {
-		NBTTagCompound tag = stack.getTagCompound();
-		if (tag == null) {
-			tag = new NBTTagCompound();
-			stack.setTagCompound(tag);
-		}
-		tag.setByte("ContainedEssence", (byte)(count + Byte.MIN_VALUE));
-		return stack;
-	}
-	public Soulbook() {
+
+	public Soulbook () {
 		super("soulbook", 1);
-		glint = true;
+		this.glint = true;
 		addRecipeShapeless("dustEnder", Items.BOOK);
 		Item self = this;
 		GameRegistry.addRecipe(new IRecipe() {
@@ -135,10 +120,12 @@ public class Soulbook extends Item {
 			}
 		});
 	}
-	public ItemStack getStack(String mobTarget) {
+
+	public ItemStack getStack (String mobTarget) {
 		return getStack(mobTarget, 1);
 	}
-	public ItemStack getStack(String mobTarget, Integer count) {
+
+	public ItemStack getStack (String mobTarget, Integer count) {
 		ItemStack stack = new ItemStack(this, count);
 		MobTarget.setMobTarget(stack, mobTarget);
 		Soulbook.setContainedEssence(stack, 0);
@@ -173,6 +160,24 @@ public class Soulbook extends Item {
 		String mobTarget = MobTarget.getMobTarget(stack);
 		if (mobTarget == null) return 1;
 		int containedEssence = Soulbook.getContainedEssence(stack);
-		return (1 - containedEssence / (double)Config.getSoulInfo(mobTarget).neededForSoul);
+		return (1 - containedEssence / (double) Config.getSoulInfo(mobTarget).neededForSoul);
+	}
+
+	public static int getContainedEssence (ItemStack stack) {
+		NBTTagCompound tag = stack.getTagCompound();
+		if (tag != null && tag.hasKey("ContainedEssence", 1)) {
+			return tag.getByte("ContainedEssence") - Byte.MIN_VALUE;
+		}
+		return 0;
+	}
+
+	public static ItemStack setContainedEssence (ItemStack stack, int count) {
+		NBTTagCompound tag = stack.getTagCompound();
+		if (tag == null) {
+			tag = new NBTTagCompound();
+			stack.setTagCompound(tag);
+		}
+		tag.setByte("ContainedEssence", (byte) (count + Byte.MIN_VALUE));
+		return stack;
 	}
 }

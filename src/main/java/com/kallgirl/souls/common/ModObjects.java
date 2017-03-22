@@ -2,8 +2,8 @@ package com.kallgirl.souls.common;
 
 import com.kallgirl.souls.client.render.TileEntitySummonerRenderer;
 import com.kallgirl.souls.common.block.*;
-import com.kallgirl.souls.common.block.Summoner.SummonerEmpty;
 import com.kallgirl.souls.common.block.Summoner.Summoner;
+import com.kallgirl.souls.common.block.Summoner.SummonerEmpty;
 import com.kallgirl.souls.common.item.*;
 import com.kallgirl.souls.common.util.IModItem;
 import com.kallgirl.souls.common.util.IModObject;
@@ -15,7 +15,7 @@ public final class ModObjects {
 
 	static Hashtable<String, IModObject> objects;
 
-	public static void preinit() {
+	public static void preinit () {
 		objects = new Hashtable<>();
 
 		// items
@@ -32,6 +32,7 @@ public final class ModObjects {
 		objects.put("dustIron", new DustIron());
 		objects.put("dustEnderIron", new DustEnderIron());
 		objects.put("endersteel", new Endersteel());
+		objects.put("bloodCrystal", new BloodCrystal());
 
 		// blocks
 		objects.put("endersteelBlock", new EndersteelBlock());
@@ -54,29 +55,31 @@ public final class ModObjects {
 		});
 	}
 
-	public static void init() {
+	public static void init () {
 		objects.forEach((name, item) -> {
 			item.init();
 		});
 	}
 
-	public static void postinit() {
+	public static void postinit () {
 		objects.forEach((name, item) -> item.postinit());
 	}
 
-	public static IModItem get(String name) {
+	public static IModItem get (String name) {
 		IModObject result = objects.get(name);
-		if (result instanceof IModItem) return (IModItem)result;
+		if (result instanceof IModItem) return (IModItem) result;
 		else throw new IllegalArgumentException(String.format("'%s' is not a valid item or block", name));
 	}
-	public static Item getItem(String name) {
+
+	public static Item getItem (String name) {
 		IModObject item = objects.get(name);
-		if (item instanceof Item) return (Item)item;
+		if (item instanceof Item) return (Item) item;
 		else throw new IllegalArgumentException(String.format("'%s' is not a valid item", name));
 	}
-	public static Block getBlock(String name) {
+
+	public static Block getBlock (String name) {
 		IModObject block = objects.get(name);
-		if (block instanceof Block) return (Block)block;
+		if (block instanceof Block) return (Block) block;
 		else throw new IllegalArgumentException(String.format("'%s' is not a valid block", name));
 	}
 
