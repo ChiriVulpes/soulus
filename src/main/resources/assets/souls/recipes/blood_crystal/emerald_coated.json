@@ -1,0 +1,17 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"item": "souls:emerald_drained"
+		},
+		{
+			"item": "souls:glue"
+		},
+		{
+			"item": "minecraft:redstone"
+		}
+	],
+	"result": {
+		"item": "souls:emerald_coated"
+	}
+}

@@ -1,0 +1,11 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"item": "souls:block_endersteel"
+		}
+	],
+	"result": {
+		"item": "souls:ingot_endersteel"
+	}
+}

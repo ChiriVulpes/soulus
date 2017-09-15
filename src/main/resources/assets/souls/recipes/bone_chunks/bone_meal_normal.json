@@ -1,0 +1,17 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"item": "souls:bone_chunk_normal"
+		},
+		{
+			"item": "souls:sledgehammer",
+			"data": 32767
+		}
+	],
+	"result": {
+		"item": "minecraft:dye",
+		"data": 15,
+		"count": 3
+	}
+}

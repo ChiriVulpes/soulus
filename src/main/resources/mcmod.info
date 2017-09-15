@@ -2,5 +2,13 @@
 	"modid": "souls",
 	"name": "Souls",
 	"description": "Makes the world lifeless. To restore life, you must synthesize it.",
-	"authorList": ["Aarilight"]
+	"version": "${version}",
+	"mcversion": "${mcversion}",
+	"url": "",
+	"updateUrl": "",
+	"authorList": ["Aarilight"],
+	"credits": "",
+	"logoFile": "",
+	"screenshots": [],
+	"dependencies": []
 }]
