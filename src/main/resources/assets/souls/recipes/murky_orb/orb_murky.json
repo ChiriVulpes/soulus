@@ -1,0 +1,20 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"sss",
+		"ses",
+		"sss"
+	],
+	"key": {
+		"e": {
+			"item": "souls:dust_ender"
+		},
+		"s": {
+			"type": "forge:ore_dict",
+			"ore": "slimeball"
+		}
+	},
+	"result": {
+		"item": "souls:orb_murky"
+	}
+}

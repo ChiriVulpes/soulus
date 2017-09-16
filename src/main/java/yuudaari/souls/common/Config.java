@@ -136,6 +136,7 @@ public class Config {
 
 	@Nullable
 	public static SoulInfo getSoulInfo(@Nonnull String mobTarget, boolean err) {
+
 		SoulInfo result = spawnMap.get(BoneType.NORMAL).get(mobTarget);
 		if (result == null)
 			result = spawnMap.get(BoneType.NETHER).get(mobTarget);
@@ -143,6 +144,11 @@ public class Config {
 			result = spawnMap.get(BoneType.ENDER).get(mobTarget);
 		if (result == null)
 			result = spawnMap.get(BoneType.SCALE).get(mobTarget);
+
+		// try again but without the prefix
+		if (result == null && mobTarget.startsWith("minecraft:"))
+			result = getSoulInfo(mobTarget.substring(10), err);
+
 		if (result == null && err) {
 			throw new RuntimeException("Mob Target '" + mobTarget + "' is invalid");
 		}

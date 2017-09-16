@@ -5,7 +5,8 @@
 			"item": "souls:emerald_burnt"
 		},
 		{
-			"item": "souls:glue"
+			"type": "forge:ore_dict",
+			"ore": "slimeball"
 		},
 		{
 			"item": "minecraft:redstone"

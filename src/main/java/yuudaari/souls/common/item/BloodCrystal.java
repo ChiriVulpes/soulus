@@ -41,15 +41,18 @@ public class BloodCrystal extends ModItem {
 		return getStack(0);
 	}
 
+	@Override
+	public boolean hasEffect(ItemStack stack) {
+		int containedBlood = getContainedBlood(stack);
+		return containedBlood == requiredBlood;
+	}
+
 	@Nonnull
 	@Override
 	public String getUnlocalizedNameInefficiently(@Nonnull ItemStack stack) {
-		int containedBlood = BloodCrystal.getContainedBlood(stack);
+		int containedBlood = getContainedBlood(stack);
 		String name = super.getUnlocalizedNameInefficiently(stack);
-		if (containedBlood == requiredBlood) {
-			name = name.replace("blood_crystal", "blood_crystal.filled");
-		}
-		return name;
+		return containedBlood == requiredBlood ? name + ".filled" : name;
 	}
 
 	@Override
@@ -74,9 +77,10 @@ public class BloodCrystal extends ModItem {
 				playerIn.attackEntityFrom(DamageSource.GENERIC, 9);
 				playerIn.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 100));
 				playerIn.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 200));
+				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, heldItem);
 			}
 		}
-		return new ActionResult<>(EnumActionResult.PASS, heldItem);
+		return new ActionResult<ItemStack>(EnumActionResult.FAIL, heldItem);
 	}
 
 	public static int getContainedBlood(ItemStack stack) {

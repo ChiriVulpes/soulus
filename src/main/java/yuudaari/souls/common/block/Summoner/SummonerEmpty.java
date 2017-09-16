@@ -28,12 +28,6 @@ public class SummonerEmpty extends ModBlock {
 	}
 
 	@Override
-	public void registerRecipes() {
-		//addRecipeShaped(new String[] { "BBB", "BEB", "BBB" }, 'B', ModObjects.get("endersteel_bars").getItem(), 'E',
-		//		ModObjects.getItem("dust_ender").getItem());
-	}
-
-	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
 			EnumFacing facing, float hitX, float hitY, float hitZ) {
 

@@ -4,15 +4,20 @@ import java.util.List;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import yuudaari.souls.common.recipe.Recipe;
 
-public interface IModItem extends IModObject {
+public interface IModItem {
+	abstract String getName();
+
+	abstract void setName(String name);
 
 	abstract void addOreDict(String name);
 
 	abstract List<String> getOreDicts();
 
-	default void registerRecipes() {
-	}
+	abstract List<Recipe> getRecipes();
+
+	abstract void addRecipe(Recipe recipe);
 
 	default ItemStack getItemStack() {
 		if (this instanceof ModItem)

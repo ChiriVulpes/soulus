@@ -7,7 +7,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
+import yuudaari.souls.Souls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -31,14 +31,12 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 		return logic;
 	}
 
-	public boolean receiveClientEvent(int id, int type) {
-		return logic.setDelayToMin(id);
-	}
-
+	@Override
 	public void update() {
 		logic.update();
 	}
 
+	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		logic.readFromNBT(compound);
@@ -61,19 +59,21 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 	}
 
 	@Nullable
+	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
 		return new SPacketUpdateTileEntity(this.pos, 1, getUpdateTag());
 	}
 
 	@Nonnull
+	@Override
 	public NBTTagCompound getUpdateTag() {
 		NBTTagCompound nbt = writeToNBT(new NBTTagCompound());
-		nbt.removeTag("SpawnPotentials");
 		return nbt;
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		Souls.LOGGER.info("onDataPacket");
 		readFromNBT(pkt.getNbtCompound());
 	}
 }

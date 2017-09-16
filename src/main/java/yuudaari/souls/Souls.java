@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
@@ -112,7 +113,15 @@ public class Souls {
 
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event) {
-        ModBlocks.registerModels();
         ModItems.registerModels();
+        ModBlocks.registerModels();
+    }
+
+    @SubscribeEvent
+    public static void registerRecipes(RegistryEvent.Register<IRecipe> event) {
+        IForgeRegistry<IRecipe> registry = event.getRegistry();
+
+        ModItems.registerRecipes(registry);
+        ModBlocks.registerRecipes(registry);
     }
 }

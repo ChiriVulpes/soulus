@@ -1,0 +1,19 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		" E ",
+		"EgE",
+		" E "
+	],
+	"key": {
+		"E": {
+			"item": "souls:ingot_endersteel"
+		},
+		"g": {
+			"item": "souls:gear_bone_ender"
+		}
+	},
+	"result": {
+		"item": "souls:gear_oscillating"
+	}
+}

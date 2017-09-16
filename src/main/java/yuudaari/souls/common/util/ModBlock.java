@@ -2,6 +2,7 @@ package yuudaari.souls.common.util;
 
 import yuudaari.souls.Souls;
 import yuudaari.souls.common.CreativeTab;
+import yuudaari.souls.common.recipe.Recipe;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.block.Block;
@@ -41,6 +42,16 @@ public class ModBlock extends Block implements IBlock {
 
 	public List<String> getOreDicts() {
 		return oreDicts;
+	}
+
+	protected List<Recipe> recipes = new ArrayList<>();
+
+	public List<Recipe> getRecipes() {
+		return recipes;
+	}
+
+	public void addRecipe(Recipe recipe) {
+		recipes.add(recipe);
 	}
 
 	public void setHasItem() {

@@ -1,5 +1,6 @@
 package yuudaari.souls.common.block.Summoner;
 
+import yuudaari.souls.Souls;
 import yuudaari.souls.common.Config;
 import yuudaari.souls.common.ModBlocks;
 import yuudaari.souls.common.util.NBTHelper;
@@ -30,6 +31,7 @@ public abstract class SummonerLogic {
 	private String mobName;
 
 	public void setMobName(@Nonnull String mobName) {
+		Souls.LOGGER.info("setMobName");
 		this.mobName = mobName;
 	}
 
@@ -59,12 +61,8 @@ public abstract class SummonerLogic {
 	public int upgradeCountSpawnCount = 0;
 	public int upgradeCountRange = 0;
 
-	private void setNextSpawn(String entity) {
-		this.mobName = entity;
-		setNextSpawn();
-	}
-
 	private void setNextSpawn() {
+		Souls.LOGGER.info("setNextSpawn");
 		World world = getSpawnerWorld();
 		if (world != null) {
 			BlockPos pos = getSpawnerPosition();
@@ -83,6 +81,7 @@ public abstract class SummonerLogic {
 	}
 
 	public NBTTagCompound getEntityNbt() {
+		Souls.LOGGER.info("getEntityNbt");
 		if (this.mobName.equals("none")) {
 			getSpawnerWorld().setBlockState(getSpawnerPosition(), ModBlocks.SUMMONER_EMPTY.getDefaultState());
 		}
@@ -95,11 +94,14 @@ public abstract class SummonerLogic {
 	}
 
 	public void update() {
+		Souls.LOGGER.info("update: " + isActivated());
 		if (!isActivated()) {
 			this.prevMobRotation = this.mobRotation;
 		} else {
 			World world = getSpawnerWorld();
 			BlockPos blockpos = getSpawnerPosition();
+
+			Souls.LOGGER.info(world.isRemote);
 
 			if (world.isRemote) {
 				double d3 = (blockpos.getX() + world.rand.nextFloat());
@@ -115,6 +117,7 @@ public abstract class SummonerLogic {
 				this.prevMobRotation = this.mobRotation;
 				this.mobRotation = (this.mobRotation + (1000.0F / (this.timeTillSpawn + 200.0F))) % 360.0D;
 			} else {
+				Souls.LOGGER.info(timeTillSpawn);
 				if (this.timeTillSpawn == -1) {
 					resetTimer();
 				}
@@ -188,44 +191,42 @@ public abstract class SummonerLogic {
 	}
 
 	private void resetTimer() {
+		Souls.LOGGER.info("resetTimer");
 		this.timeTillSpawn = this.spawnDelay.get(getSpawnerWorld().rand);
 
-		setNextSpawn(this.mobName);
-		broadcastEvent(1);
-	}
-
-	public void broadcastEvent(int id) {
-		getSpawnerWorld().addBlockEvent(getSpawnerPosition(), ModBlocks.SUMMONER, id, 0);
+		setNextSpawn();
 	}
 
 	public void setupSpawnData() {
+		Souls.LOGGER.info("setupSpawnData");
 		this.spawnCount = new Range<>(nonUpgradedSpawnCount.getMin() + this.upgradeCountSpawnCount / 3,
 				nonUpgradedSpawnCount.getMax() + Math.min(this.upgradeCountSpawnCount, maximumSpawnCount));
 		this.spawnDelay = new Range<>((int) (nonUpgradedSpawnDelay.getMin() / (1F + this.upgradeCountDelay * 0.8F)),
 				(int) (nonUpgradedSpawnDelay.getMax() / (1F + this.upgradeCountDelay)));
 		this.activatingRange = (int) Math
 				.floor(nonUpgradedActivatingRange * Math.ceil(1F + this.upgradeCountRange / 2F));
-		System.out.println(this.spawnCount.getMin() + ", " + this.spawnCount.getMax());
-		System.out.println(this.spawnDelay.getMin() + ", " + this.spawnDelay.getMax());
-		System.out.println(this.activatingRange);
 	}
 
 	public void readFromNBT(NBTTagCompound nbtIn) {
+		Souls.LOGGER.info("readFromNBT");
 		try {
 			NBTHelper nbt = new NBTHelper(nbtIn);
-			setNextSpawn(nbt.getString("MobName"));
-			this.timeTillSpawn = nbt.getShort("Delay");
-			if (nbt.hasTag("Upgrades", NBTHelper.Tag.COMPOUND)) {
-				NBTTagCompound upgrades = nbt.getTag("Upgrades");
-				this.upgradeCountDelay = upgrades.getByte("Delay");
-				this.upgradeCountSpawnCount = upgrades.getByte("Count");
-				this.upgradeCountRange = upgrades.getByte("Range");
-				setupSpawnData();
+			this.setMobName(nbt.getString("entity_type"));
+			this.timeTillSpawn = nbt.getShort("delay");
+			if (nbt.hasTag("stats", NBTHelper.Tag.COMPOUND)) {
+				NBTTagCompound upgrades = nbt.getTag("stats");
+				this.upgradeCountDelay = upgrades.getByte("delay");
+				this.upgradeCountSpawnCount = upgrades.getByte("count");
+				this.upgradeCountRange = upgrades.getByte("range");
 			}
 		} catch (Exception e) {
 			System.out.println("Summoner NBT missing required tag(s)");
 			this.mobName = "none";
 		}
+
+		setupSpawnData();
+		setNextSpawn();
+		resetTimer();
 
 		if (getSpawnerWorld() != null) {
 			this.renderMob = null;
@@ -235,28 +236,23 @@ public abstract class SummonerLogic {
 	@Nonnull
 	@ParametersAreNonnullByDefault
 	public NBTTagCompound writeToNBT(NBTTagCompound nbtIn) {
-		return new NBTHelper(nbtIn).setShort("Delay", this.timeTillSpawn)
-				.setTag("Upgrades",
-						new NBTHelper().setByte("Delay", this.upgradeCountDelay)
-								.setByte("Count", this.upgradeCountSpawnCount).setByte("Range", this.upgradeCountRange))
-				.setString("MobName", this.mobName, true).nbt;
-	}
+		Souls.LOGGER.info("writeToNBT");
 
-	/**
-	 * Sets the delay to minDelay if parameter given is 1, else return false.
-	 */
-	public boolean setDelayToMin(int delay) {
-		if (delay == 1 && getSpawnerWorld().isRemote) {
-			this.timeTillSpawn = this.spawnDelay.getMin();
-			return true;
-		} else {
-			return false;
-		}
+		setupSpawnData();
+		setNextSpawn();
+		resetTimer();
+
+		return new NBTHelper(nbtIn).setShort("delay", this.timeTillSpawn)
+				.setTag("stats",
+						new NBTHelper().setByte("delay", this.upgradeCountDelay)
+								.setByte("count", this.upgradeCountSpawnCount).setByte("range", this.upgradeCountRange))
+				.setString("entity_type", this.mobName, true).nbt;
 	}
 
 	@Nonnull
 	@SideOnly(Side.CLIENT)
 	public EntityLiving getCachedMob() {
+		Souls.LOGGER.info("getCachedMob");
 		if (this.renderMob == null) {
 			NBTTagCompound entityNbt = getEntityNbt();
 			World world = getSpawnerWorld();

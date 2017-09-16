@@ -30,12 +30,16 @@ public class BoneChunk extends ModItem {
 
 		for (Map.Entry<String, Config.SoulInfo> drop : Config.spawnMap.get(boneType).entrySet()) {
 			String entityName = drop.getKey();
+			if (entityName.indexOf(":") == -1) {
+				entityName = "minecraft:" + entityName;
+			}
+
 			Config.SoulInfo spawnInfo = drop.getValue();
 
 			if (entityName.equals("none")) {
 				drops.put(null, spawnInfo.dropChance);
 			} else {
-				if (ForgeRegistries.ENTITIES.containsKey(new ResourceLocation("minecraft", entityName))
+				if (ForgeRegistries.ENTITIES.containsKey(new ResourceLocation(entityName))
 						|| spawnInfo.colourInfo != null) {
 					drops.put(entityName, spawnInfo.dropChance);
 				} else {

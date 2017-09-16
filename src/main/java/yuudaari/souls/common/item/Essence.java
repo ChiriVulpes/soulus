@@ -5,7 +5,6 @@ import yuudaari.souls.common.util.MobTarget;
 import yuudaari.souls.common.util.ModItem;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
@@ -25,8 +24,8 @@ public class Essence extends ModItem {
 				return -1;
 			Config.ColourInfo colourInfo = soulInfo.colourInfo;
 			if (colourInfo == null) {
-				EntityList.EntityEggInfo eggInfo = ForgeRegistries.ENTITIES
-						.getValue(new ResourceLocation("minecraft", mobTarget)).getEgg();
+				EntityList.EntityEggInfo eggInfo = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(mobTarget))
+						.getEgg();
 				if (eggInfo == null)
 					return -1;
 				colourInfo = new Config.ColourInfo(eggInfo);
@@ -41,11 +40,7 @@ public class Essence extends ModItem {
 
 	public ItemStack getStack(String mobTarget, Integer count) {
 		ItemStack stack = new ItemStack(this, count);
-		NBTTagCompound entityTag = new NBTTagCompound();
-		entityTag.setString("id", mobTarget);
-		NBTTagCompound stackData = new NBTTagCompound();
-		stackData.setTag("EntityTag", entityTag);
-		stack.setTagCompound(stackData);
+		MobTarget.setMobTarget(stack, mobTarget);
 		return stack;
 	}
 
@@ -55,6 +50,6 @@ public class Essence extends ModItem {
 		String mobTarget = MobTarget.getMobTarget(stack);
 		if (mobTarget == null)
 			mobTarget = "unfocused";
-		return super.getUnlocalizedNameInefficiently(stack).replace("essence", "essence." + mobTarget);
+		return super.getUnlocalizedNameInefficiently(stack) + "." + mobTarget;
 	}
 }

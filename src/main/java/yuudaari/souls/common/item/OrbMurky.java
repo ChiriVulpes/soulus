@@ -1,6 +1,5 @@
 package yuudaari.souls.common.item;
 
-import yuudaari.souls.common.Config;
 import yuudaari.souls.common.ModItems;
 import yuudaari.souls.common.util.MobTarget;
 import yuudaari.souls.common.util.ModItem;
@@ -16,13 +15,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-public class Soulbook extends ModItem {
+public class OrbMurky extends ModItem {
 
-	public Soulbook() {
-		super("soulbook", 1);
-		this.glint = true;
+	private int neededEssence = 64;
 
-		Soulbook self = this;
+	public OrbMurky() {
+		super("orb_murky", 1);
+
+		OrbMurky self = this;
 
 		addRecipe(new Recipe(getRegistryName()) {
 
@@ -37,8 +37,7 @@ public class Soulbook extends ModItem {
 			@Override
 			public ItemStack getCraftingResult(InventoryCrafting inv) {
 				int essenceCount = 0;
-				ItemStack soulbook = null;
-				String target = null;
+				ItemStack orb = null;
 				int containedEssence = 0;
 				int inventorySize = inv.getSizeInventory();
 				for (int i = 0; i < inventorySize; i++) {
@@ -47,31 +46,19 @@ public class Soulbook extends ModItem {
 					if (stack == null || stackItem == Items.AIR)
 						continue;
 					if (stackItem == self) {
-						if (soulbook != null)
+						if (orb != null)
 							return null;
-						String itemTarget = MobTarget.getMobTarget(stack);
-						if (itemTarget != null) {
-							if (target != null && !itemTarget.equals(target))
-								return null;
-							target = itemTarget;
-						}
 						containedEssence = getContainedEssence(stack);
-						soulbook = stack;
+						orb = stack;
 						continue;
 					} else if (stackItem == ModItems.ESSENCE) {
-						String itemTarget = MobTarget.getMobTarget(stack);
-						if (itemTarget == null || (target != null && !itemTarget.equals(target)))
-							return null;
-						target = itemTarget;
 						essenceCount++;
 						continue;
 					}
 					return null;
 				}
-				if (soulbook != null && essenceCount > 0
-						&& containedEssence + essenceCount <= Config.getSoulInfo(target).neededForSoul) {
-					ItemStack newStack = soulbook.copy();
-					MobTarget.setMobTarget(newStack, target);
+				if (orb != null && essenceCount > 0 && containedEssence + essenceCount <= neededEssence) {
+					ItemStack newStack = orb.copy();
 					setContainedEssence(newStack, containedEssence + essenceCount);
 					return newStack;
 				}
@@ -93,44 +80,33 @@ public class Soulbook extends ModItem {
 	public ItemStack getStack(String mobTarget, Integer count) {
 		ItemStack stack = new ItemStack(this, count);
 		MobTarget.setMobTarget(stack, mobTarget);
-		setContainedEssence(stack, 0);
+		Soulbook.setContainedEssence(stack, 0);
 		return stack;
 	}
 
 	@Override
 	public boolean hasEffect(ItemStack stack) {
-		String mobTarget = MobTarget.getMobTarget(stack);
-		if (mobTarget == null)
-			return false;
-		int containedEssence = getContainedEssence(stack);
-		return containedEssence == Config.getSoulInfo(mobTarget).neededForSoul;
+		return getContainedEssence(stack) == neededEssence;
 	}
 
 	@Nonnull
 	@Override
 	public String getUnlocalizedNameInefficiently(@Nonnull ItemStack stack) {
-		String mobTarget = MobTarget.getMobTarget(stack);
-		if (mobTarget == null)
-			mobTarget = "unfocused";
-		return super.getUnlocalizedNameInefficiently(stack) + "." + mobTarget;
+		String result = super.getUnlocalizedNameInefficiently(stack);
+		int containedEssence = getContainedEssence(stack);
+		return containedEssence == neededEssence ? result + ".filled" : result;
 	}
 
 	@Override
 	public boolean showDurabilityBar(ItemStack stack) {
-		String mobTarget = MobTarget.getMobTarget(stack);
-		if (mobTarget == null)
-			return true;
 		int containedEssence = getContainedEssence(stack);
-		return containedEssence < Config.getSoulInfo(mobTarget).neededForSoul;
+		return containedEssence < neededEssence;
 	}
 
 	@Override
 	public double getDurabilityForDisplay(ItemStack stack) {
-		String mobTarget = MobTarget.getMobTarget(stack);
-		if (mobTarget == null)
-			return 1;
 		int containedEssence = getContainedEssence(stack);
-		return (1 - containedEssence / (double) Config.getSoulInfo(mobTarget).neededForSoul);
+		return (1 - containedEssence / (double) neededEssence);
 	}
 
 	public static int getContainedEssence(ItemStack stack) {
