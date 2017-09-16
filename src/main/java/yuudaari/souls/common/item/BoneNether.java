@@ -1,5 +1,6 @@
 package yuudaari.souls.common.item;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.storage.loot.LootEntry;
 import net.minecraft.world.storage.loot.LootEntryItem;
@@ -15,29 +16,30 @@ import net.minecraftforge.event.LootTableLoadEvent;
 
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.oredict.OreDictionary;
+import yuudaari.souls.Souls;
+import yuudaari.souls.common.util.ModItem;
 
 @Mod.EventBusSubscriber
-public class BoneNether extends SoulsItem {
+public class BoneNether extends ModItem {
+
+	@ObjectHolder("tconstruct:materials")
+	public static final Item tinkersMaterial = null;
 
 	public BoneNether() {
 		super("bone_nether");
 		addOreDict("boneWither");
-	}
 
-	@ObjectHolder("tconstruct:materials")
-	public static final net.minecraft.item.Item tinkersMaterial = null;
-
-	@Override
-	public void init() {
-		super.init();
-		if (Loader.isModLoaded("tconstruct")) {
-			// add tinkers's necrotic bones to the boneWither ore dictionary
-			ItemStack necroticBone = new ItemStack(tinkersMaterial, 1, 17);
-			OreDictionary.registerOre("bone_wither", necroticBone);
-		}
+		Souls.onInit((FMLInitializationEvent event) -> {
+			if (Loader.isModLoaded("tconstruct")) {
+				// add tinkers's necrotic bones to the boneWither ore dictionary
+				ItemStack necroticBone = new ItemStack(tinkersMaterial, 1, 17);
+				OreDictionary.registerOre("boneWither", necroticBone);
+			}
+		});
 	}
 
 	@SubscribeEvent

@@ -1,6 +1,5 @@
 package yuudaari.souls.common.world;
 
-import yuudaari.souls.common.ModObjects;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -8,6 +7,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import yuudaari.souls.common.ModBlocks;
 
 @Mod.EventBusSubscriber
 public class SummonerReplacer {
@@ -23,7 +23,7 @@ public class SummonerReplacer {
 					BlockPos pos = new BlockPos(cX + iX, y, cZ + iZ);
 					IBlockState blockState = world.getBlockState(pos);
 					if (blockState.getBlock() == Blocks.MOB_SPAWNER) {
-						world.setBlockState(pos, ModObjects.getBlock("summoner_empty").getDefaultState());
+						world.setBlockState(pos, ModBlocks.SUMMONER_EMPTY.getDefaultState());
 					}
 				}
 			}

@@ -1,9 +1,8 @@
 package yuudaari.souls.common.item;
 
 import yuudaari.souls.common.util.Colour;
-import net.minecraft.client.Minecraft;
+import yuudaari.souls.common.util.ModItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,7 +15,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-public class BloodCrystal extends SoulsItem {
+public class BloodCrystal extends ModItem {
 	private static int requiredBlood = 18;
 
 	private static int colourEmpty = 0x281313;
@@ -24,11 +23,11 @@ public class BloodCrystal extends SoulsItem {
 
 	public BloodCrystal() {
 		super("blood_crystal", 1);
-	}
 
-	@Override
-	public void registerRecipes() {
-		addFurnaceRecipe(new ItemStack(Blocks.SOUL_SAND));
+		registerColorHandler((ItemStack stack, int tintIndex) -> {
+			float percentage = getContainedBlood(stack) / (float) requiredBlood;
+			return Colour.mix(colourEmpty, colourFilled, percentage).get();
+		});
 	}
 
 	public ItemStack getStack(int blood) {
@@ -78,14 +77,6 @@ public class BloodCrystal extends SoulsItem {
 			}
 		}
 		return new ActionResult<>(EnumActionResult.PASS, heldItem);
-	}
-
-	@Override
-	public void init() {
-		Minecraft.getMinecraft().getItemColors().registerItemColorHandler((ItemStack stack, int tintIndex) -> {
-			float percentage = getContainedBlood(stack) / (float) requiredBlood;
-			return Colour.mix(colourEmpty, colourFilled, percentage).get();
-		}, this);
 	}
 
 	public static int getContainedBlood(ItemStack stack) {

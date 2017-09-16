@@ -1,28 +1,19 @@
 package yuudaari.souls.client.render;
 
-import yuudaari.souls.common.util.IModObject;
+import yuudaari.souls.client.util.TileEntityRenderer;
 import yuudaari.souls.common.block.Summoner.SummonerLogic;
 import yuudaari.souls.common.block.Summoner.SummonerTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class TileEntitySummonerRenderer extends TileEntitySpecialRenderer<SummonerTileEntity> implements IModObject {
-	public String getName() {
-		return "tileentity_summoner_renderer";
-	}
+public class TileEntitySummonerRenderer extends TileEntityRenderer<SummonerTileEntity> {
 
-	public void setName(String name) {
-	}
-
-	@Override
-	public void init() {
-		TileEntityRendererDispatcher.instance.renderers.put(SummonerTileEntity.class, new TileEntitySummonerRenderer());
+	public Class<SummonerTileEntity> getTileEntityClass() {
+		return SummonerTileEntity.class;
 	}
 
 	public void renderTileEntityAt(SummonerTileEntity tileEntity, double x, double y, double z, float partialTicks,

@@ -5,10 +5,11 @@
 			"taskName": "Test",
 			"type": "shell",
 			"group": {
-				"kind": "test",
+				"kind": "build",
 				"isDefault": true
 			},
-			"command": "\"./gradlew\" runClient"
+			"command": "\"./gradlew\" runClient",
+			"problemMatcher": []
 		}
 	]
 }

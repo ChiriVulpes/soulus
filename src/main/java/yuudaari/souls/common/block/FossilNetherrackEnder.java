@@ -1,7 +1,8 @@
 package yuudaari.souls.common.block;
 
+import yuudaari.souls.common.ModItems;
 import yuudaari.souls.common.util.Material;
-import yuudaari.souls.common.ModObjects;
+import yuudaari.souls.common.util.ModBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
@@ -14,7 +15,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collections;
 import java.util.List;
 
-public class FossilNetherrackEnder extends SoulsBlock {
+public class FossilNetherrackEnder extends ModBlock {
 	public FossilNetherrackEnder() {
 		super("fossil_netherrack_ender", new Material(MapColor.NETHERRACK));
 		setHasItem();
@@ -27,7 +28,7 @@ public class FossilNetherrackEnder extends SoulsBlock {
 	@Nonnull
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		ItemStack boneChunk = ModObjects.get("bone_chunk_ender").getItemStack(4);
+		ItemStack boneChunk = ModItems.BONE_CHUNK_ENDER.getItemStack(4);
 		return Collections.singletonList(boneChunk);
 	}
 }

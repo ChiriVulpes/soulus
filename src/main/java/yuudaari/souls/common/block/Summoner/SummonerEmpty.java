@@ -1,11 +1,12 @@
 package yuudaari.souls.common.block.Summoner;
 
 import yuudaari.souls.common.util.Material;
-import yuudaari.souls.common.ModObjects;
 import yuudaari.souls.common.Config;
-import yuudaari.souls.common.block.SoulsBlock;
+import yuudaari.souls.common.ModBlocks;
+import yuudaari.souls.common.ModItems;
 import yuudaari.souls.common.item.Soulbook;
 import yuudaari.souls.common.util.MobTarget;
+import yuudaari.souls.common.util.ModBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
@@ -16,7 +17,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class SummonerEmpty extends SoulsBlock {
+public class SummonerEmpty extends ModBlock {
 	public SummonerEmpty() {
 		super("summoner_empty", new Material(MapColor.STONE).setTransparent());
 		setHasItem();
@@ -37,7 +38,7 @@ public class SummonerEmpty extends SoulsBlock {
 			EnumFacing facing, float hitX, float hitY, float hitZ) {
 
 		ItemStack heldItem = player.getHeldItem(hand);
-		if (heldItem == null || heldItem.getItem() != ModObjects.getItem("soulbook"))
+		if (heldItem == null || heldItem.getItem() != ModItems.SOULBOOK)
 			return false;
 
 		String mobTarget = MobTarget.getMobTarget(heldItem);
@@ -45,7 +46,7 @@ public class SummonerEmpty extends SoulsBlock {
 		if (mobTarget == null || containedEssence < Config.getSoulInfo(mobTarget).neededForSoul)
 			return false;
 
-		IBlockState mobSpawner = ((Summoner) ModObjects.get("summoner")).getDefaultState();
+		IBlockState mobSpawner = ((Summoner) ModBlocks.SUMMONER).getDefaultState();
 		world.setBlockState(pos, mobSpawner);
 
 		SummonerTileEntity tileEntity = (SummonerTileEntity) world.getTileEntity(pos);

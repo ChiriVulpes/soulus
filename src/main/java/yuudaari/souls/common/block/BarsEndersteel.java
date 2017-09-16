@@ -1,11 +1,11 @@
 package yuudaari.souls.common.block;
 
 import yuudaari.souls.common.util.Material;
-
+import yuudaari.souls.common.util.ModBlockPane;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 
-public class BarsEndersteel extends SoulsBlockPane {
+public class BarsEndersteel extends ModBlockPane {
 	public BarsEndersteel() {
 		super("bars_endersteel", new Material(MapColor.GRASS));
 		setHasItem();

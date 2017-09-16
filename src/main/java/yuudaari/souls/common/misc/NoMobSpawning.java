@@ -1,4 +1,4 @@
-package yuudaari.souls.common;
+package yuudaari.souls.common.misc;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;

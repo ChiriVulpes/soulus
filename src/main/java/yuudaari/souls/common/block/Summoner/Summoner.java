@@ -2,11 +2,12 @@ package yuudaari.souls.common.block.Summoner;
 
 import yuudaari.souls.Souls;
 import yuudaari.souls.common.Config;
-import yuudaari.souls.common.ModObjects;
-import yuudaari.souls.common.block.SoulsBlock;
+import yuudaari.souls.common.ModBlocks;
+import yuudaari.souls.common.ModItems;
 import yuudaari.souls.common.item.Soulbook;
 import yuudaari.souls.common.util.Material;
 import yuudaari.souls.common.util.MobTarget;
+import yuudaari.souls.common.util.ModBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
@@ -31,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Souls.MODID)
-public class Summoner extends SoulsBlock {
+public class Summoner extends ModBlock {
 
 	private static String getSpawnerMobTarget(SummonerTileEntity summonerTileEntity) {
 		return summonerTileEntity.getMob();
@@ -72,7 +73,7 @@ public class Summoner extends SoulsBlock {
 
 	@SubscribeEvent
 	public static void onSummonerBreak(BlockEvent.BreakEvent event) {
-		if (event.getState().getBlock() == ModObjects.getBlock("summoner")) {
+		if (event.getState().getBlock() == ModBlocks.SUMMONER) {
 			SummonerTileEntity tileEntity = (SummonerTileEntity) event.getWorld().getTileEntity(event.getPos());
 			if (tileEntity == null)
 				throw new RuntimeException("Summoner has no tile entity");
@@ -85,9 +86,9 @@ public class Summoner extends SoulsBlock {
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @Nonnull IBlockState state, int fortune) {
 		List<ItemStack> drops = new ArrayList<>();
 
-		drops.add(ModObjects.getBlock("summoner_empty").getItemStack());
+		drops.add(ModBlocks.SUMMONER_EMPTY.getItemStack());
 
-		ItemStack soulbook = ModObjects.getItem("soulbook").getItemStack();
+		ItemStack soulbook = ModItems.SOULBOOK.getItemStack();
 		MobTarget.setMobTarget(soulbook, lastBrokenSummonerMobTarget);
 		Soulbook.setContainedEssence(soulbook, Config.getSoulInfo(lastBrokenSummonerMobTarget).neededForSoul);
 		drops.add(soulbook);
@@ -101,14 +102,14 @@ public class Summoner extends SoulsBlock {
 		if (!world.isRemote) {
 			SummonerTileEntity mobSpawner = (SummonerTileEntity) world.getTileEntity(pos);
 			String mobTarget = Summoner.getSpawnerMobTarget(mobSpawner);
-			ItemStack soulbook = ModObjects.getItem("soulbook").getItemStack();
+			ItemStack soulbook = ModItems.SOULBOOK.getItemStack();
 			MobTarget.setMobTarget(soulbook, mobTarget);
 			Soulbook.setContainedEssence(soulbook, Config.getSoulInfo(mobTarget).neededForSoul);
 			EntityItem dropItem = new EntityItem(world, player.posX, player.posY, player.posZ, soulbook);
 			dropItem.setNoPickupDelay();
 			world.spawnEntity(dropItem);
 		}
-		world.setBlockState(pos, ModObjects.getBlock("summonerEmpty").getDefaultState());
+		world.setBlockState(pos, ModBlocks.SUMMONER_EMPTY.getDefaultState());
 		return true;
 	}
 }

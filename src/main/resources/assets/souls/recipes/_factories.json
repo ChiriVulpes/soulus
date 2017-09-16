@@ -1,6 +1,7 @@
 {
 	"recipes": {
-		"crafting_shaped": "yuudaari.souls.common.util.RecipeShaped$Factory",
-		"crafting_shapeless": "yuudaari.souls.common.util.RecipeShapeless$Factory"
+		"crafting_shaped": "yuudaari.souls.common.recipe.RecipeShaped$Factory",
+		"crafting_shapeless": "yuudaari.souls.common.recipe.RecipeShapeless$Factory",
+		"furnace": "yuudaari.souls.common.recipe.RecipeFurnace$Factory"
 	}
 }

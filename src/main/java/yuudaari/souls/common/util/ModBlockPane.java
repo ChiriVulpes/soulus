@@ -1,26 +1,22 @@
-package yuudaari.souls.common.block;
+package yuudaari.souls.common.util;
 
 import yuudaari.souls.Souls;
 import yuudaari.souls.common.CreativeTab;
-import yuudaari.souls.common.block.IBlock;
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.block.BlockPane;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
 
-import javax.annotation.Nonnull;
-
-public class SoulsBlock extends net.minecraft.block.Block implements IBlock {
+public class ModBlockPane extends BlockPane implements IBlock {
 	private String name;
 	private List<String> oreDicts = new ArrayList<>();
 	private Boolean hasItem = false;
 	private ItemBlock itemBlock;
 
-	public SoulsBlock(String name, Material material) {
-		super(material);
+	public ModBlockPane(String name, Material material) {
+		super(material, true);
 		setName(name);
 		setCreativeTab(CreativeTab.INSTANCE);
 	}
@@ -63,22 +59,5 @@ public class SoulsBlock extends net.minecraft.block.Block implements IBlock {
 
 	public Class<? extends TileEntity> getTileEntityClass() {
 		return null;
-	}
-
-	@Nonnull
-	@Override
-	public BlockRenderLayer getBlockLayer() {
-		Material material = blockMaterial;
-		if (material.isOpaque())
-			return BlockRenderLayer.SOLID;
-		else if (material.blocksLight())
-			return BlockRenderLayer.TRANSLUCENT;
-		else
-			return BlockRenderLayer.CUTOUT;
-	}
-
-	@Override
-	public boolean isOpaqueCube(IBlockState state) {
-		return blockMaterial.isOpaque() && blockMaterial.blocksLight();
 	}
 }

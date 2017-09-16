@@ -1,7 +1,7 @@
 package yuudaari.souls.common.block.Summoner;
 
 import yuudaari.souls.common.Config;
-import yuudaari.souls.common.ModObjects;
+import yuudaari.souls.common.ModBlocks;
 import yuudaari.souls.common.util.NBTHelper;
 import yuudaari.souls.common.util.Range;
 import net.minecraft.block.state.IBlockState;
@@ -84,8 +84,7 @@ public abstract class SummonerLogic {
 
 	public NBTTagCompound getEntityNbt() {
 		if (this.mobName.equals("none")) {
-			getSpawnerWorld().setBlockState(getSpawnerPosition(),
-					ModObjects.getBlock("summoner_empty").getDefaultState());
+			getSpawnerWorld().setBlockState(getSpawnerPosition(), ModBlocks.SUMMONER_EMPTY.getDefaultState());
 		}
 		String realMobName = this.mobName;
 		Config.SoulInfo soulInfo = Config.getSoulInfo(this.mobName);
@@ -196,7 +195,7 @@ public abstract class SummonerLogic {
 	}
 
 	public void broadcastEvent(int id) {
-		getSpawnerWorld().addBlockEvent(getSpawnerPosition(), (Summoner) ModObjects.get("summoner"), id, 0);
+		getSpawnerWorld().addBlockEvent(getSpawnerPosition(), ModBlocks.SUMMONER, id, 0);
 	}
 
 	public void setupSpawnData() {

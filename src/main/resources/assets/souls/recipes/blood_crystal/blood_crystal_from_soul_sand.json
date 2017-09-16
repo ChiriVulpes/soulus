@@ -1,0 +1,9 @@
+{
+	"type": "souls:furnace",
+	"input": {
+		"item": "minecraft:soul_sand"
+	},
+	"result": {
+		"item": "souls:blood_crystal"
+	}
+}

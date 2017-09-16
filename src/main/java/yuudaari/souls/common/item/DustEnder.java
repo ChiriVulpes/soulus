@@ -1,6 +1,8 @@
 package yuudaari.souls.common.item;
 
-public class DustEnder extends SoulsItem {
+import yuudaari.souls.common.util.ModItem;
+
+public class DustEnder extends ModItem {
 	public DustEnder() {
 		super("dust_ender");
 		glint = true;

@@ -1,0 +1,9 @@
+{
+	"type": "souls:furnace",
+	"input": {
+		"item": "souls:dust_ender_iron"
+	},
+	"result": {
+		"item": "souls:ingot_endersteel"
+	}
+}

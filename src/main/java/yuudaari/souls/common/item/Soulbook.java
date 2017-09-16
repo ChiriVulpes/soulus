@@ -1,9 +1,10 @@
 package yuudaari.souls.common.item;
 
 import yuudaari.souls.common.Config;
-import yuudaari.souls.common.ModObjects;
+import yuudaari.souls.common.ModItems;
 import yuudaari.souls.common.util.MobTarget;
-import yuudaari.souls.common.util.Recipe;
+import yuudaari.souls.common.util.ModItem;
+import yuudaari.souls.common.recipe.Recipe;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,7 +17,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-public class Soulbook extends SoulsItem {
+public class Soulbook extends ModItem {
 
 	public Soulbook() {
 		super("soulbook", 1);
@@ -57,7 +58,7 @@ public class Soulbook extends SoulsItem {
 						containedEssence = Soulbook.getContainedEssence(stack);
 						hasSoulbook = true;
 						continue;
-					} else if (stack.getItem() == ModObjects.getItem("essence")) {
+					} else if (stack.getItem() == ModItems.ESSENCE) {
 						String itemTarget = MobTarget.getMobTarget(stack);
 						if (itemTarget == null || (target != null && !itemTarget.equals(target)))
 							return false;
@@ -96,7 +97,7 @@ public class Soulbook extends SoulsItem {
 						containedEssence = Soulbook.getContainedEssence(stack);
 						soulbook = stack;
 						continue;
-					} else if (stack.getItem() == ModObjects.getItem("essence")) {
+					} else if (stack.getItem() == ModItems.ESSENCE) {
 						String itemTarget = MobTarget.getMobTarget(stack);
 						if (itemTarget == null || (target != null && !itemTarget.equals(target)))
 							return null;

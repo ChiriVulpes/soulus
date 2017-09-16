@@ -1,5 +1,6 @@
 package yuudaari.souls.common;
 
+import yuudaari.souls.common.util.BoneType;
 import yuudaari.souls.common.util.NBTHelper;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;

@@ -1,4 +1,4 @@
-package yuudaari.souls.common.util;
+package yuudaari.souls.common.recipe;
 
 import java.util.Iterator;
 import net.minecraft.block.Block;

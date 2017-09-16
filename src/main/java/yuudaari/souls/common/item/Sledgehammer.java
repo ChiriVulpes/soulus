@@ -1,11 +1,12 @@
 package yuudaari.souls.common.item;
 
 import net.minecraft.item.ItemStack;
+import yuudaari.souls.common.util.ModItem;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
 
-public class Sledgehammer extends SoulsItem {
+public class Sledgehammer extends ModItem {
 	private final Random random = new Random();
 
 	public Sledgehammer() {

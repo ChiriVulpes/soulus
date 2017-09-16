@@ -14,9 +14,10 @@ import net.minecraftforge.event.LootTableLoadEvent;
 
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import yuudaari.souls.common.util.ModItem;
 
 @Mod.EventBusSubscriber
-public class BoneEnder extends SoulsItem {
+public class BoneEnder extends ModItem {
 
 	public BoneEnder() {
 		super("bone_ender");

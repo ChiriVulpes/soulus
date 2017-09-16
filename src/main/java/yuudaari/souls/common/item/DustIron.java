@@ -1,6 +1,8 @@
 package yuudaari.souls.common.item;
 
-public class DustIron extends SoulsItem {
+import yuudaari.souls.common.util.ModItem;
+
+public class DustIron extends ModItem {
 	public DustIron() {
 		super("dust_iron");
 		addOreDict("dustIron");

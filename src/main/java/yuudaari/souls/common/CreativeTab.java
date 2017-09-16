@@ -1,8 +1,8 @@
 package yuudaari.souls.common;
 
 import yuudaari.souls.Souls;
-import yuudaari.souls.common.block.SoulsBlock;
-import yuudaari.souls.common.item.SoulsItem;
+import yuudaari.souls.common.util.IBlock;
+import yuudaari.souls.common.util.ModItem;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -19,23 +19,20 @@ public final class CreativeTab extends CreativeTabs {
 	@Nonnull
 	@Override
 	public ItemStack getTabIconItem() {
-		return ModObjects.getItem("soulbook").getItemStack();
+		return ModItems.SOULBOOK.getItemStack();
 	}
 
 	@Override
 	public void displayAllRelevantItems(NonNullList<ItemStack> list) {
-		ModObjects.objects.forEach((name, modObject) -> {
-			if (modObject instanceof SoulsItem) {
-				SoulsItem item = (SoulsItem) modObject;
-				if (item.getCreativeTab() == this) {
-					item.getSubItems(this, list);
-				}
-			} else if (modObject instanceof SoulsBlock) {
-				SoulsBlock block = (SoulsBlock) modObject;
-				if (block.getCreativeTabToDisplayOn() == this) {
-					block.getSubBlocks(this, list);
-				}
+		for (ModItem item : ModItems.items) {
+			if (item.getCreativeTab() == this) {
+				item.getSubItems(this, list);
 			}
-		});
+		}
+		for (IBlock block : ModBlocks.blocks) {
+			if (block.getCreativeTabToDisplayOn() == this) {
+				block.getSubBlocks(this, list);
+			}
+		}
 	}
 }

@@ -1,8 +1,5 @@
 package yuudaari.souls.common.util;
 
-import yuudaari.souls.common.block.SoulsBlock;
-import yuudaari.souls.common.block.SoulsBlockPane;
-import yuudaari.souls.common.item.SoulsItem;
 import java.util.List;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -18,12 +15,12 @@ public interface IModItem extends IModObject {
 	}
 
 	default ItemStack getItemStack() {
-		if (this instanceof SoulsItem)
-			return new ItemStack((SoulsItem) this);
-		else if (this instanceof SoulsBlock)
-			return new ItemStack(((SoulsBlock) this));
-		else if (this instanceof SoulsBlockPane)
-			return new ItemStack(((SoulsBlockPane) this));
+		if (this instanceof ModItem)
+			return new ItemStack((ModItem) this);
+		else if (this instanceof ModBlock)
+			return new ItemStack(((ModBlock) this));
+		else if (this instanceof ModBlockPane)
+			return new ItemStack(((ModBlockPane) this));
 		else
 			throw new IllegalArgumentException("Must be called on a valid Block or Item");
 	}
@@ -42,26 +39,26 @@ public interface IModItem extends IModObject {
 	}
 
 	default net.minecraft.item.Item getItem() {
-		if (this instanceof SoulsItem)
+		if (this instanceof ModItem)
 			return (net.minecraft.item.Item) this;
-		else if (this instanceof SoulsBlock)
-			return (net.minecraft.item.Item) ((SoulsBlock) this).getItemBlock();
-		else if (this instanceof SoulsBlockPane)
-			return (net.minecraft.item.Item) ((SoulsBlockPane) this).getItemBlock();
+		else if (this instanceof ModBlock)
+			return (net.minecraft.item.Item) ((ModBlock) this).getItemBlock();
+		else if (this instanceof ModBlockPane)
+			return (net.minecraft.item.Item) ((ModBlockPane) this).getItemBlock();
 		else
 			throw new IllegalArgumentException("Must be called on a valid Block or Item");
 	}
 
-	default SoulsItem castItem() {
-		if (this instanceof SoulsItem)
-			return (SoulsItem) this;
+	default ModItem castItem() {
+		if (this instanceof ModItem)
+			return (ModItem) this;
 		else
 			throw new IllegalArgumentException("Must be called on a valid Item");
 	}
 
-	default SoulsBlock castBlock() {
-		if (this instanceof SoulsBlock)
-			return (SoulsBlock) this;
+	default ModBlock castBlock() {
+		if (this instanceof ModBlock)
+			return (ModBlock) this;
 		else
 			throw new IllegalArgumentException("Must be called on a valid Block");
 	}
