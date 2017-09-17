@@ -1,8 +1,6 @@
 package yuudaari.souls.common.item;
 
 import yuudaari.souls.common.ModItems;
-import yuudaari.souls.common.util.MobTarget;
-import yuudaari.souls.common.util.ModItem;
 import yuudaari.souls.common.recipe.Recipe;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
@@ -15,12 +13,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-public class OrbMurky extends ModItem {
+public class OrbMurky extends SummonerUpgrade {
 
-	private int neededEssence = 64;
+	private int requiredEssence = 64;
 
 	public OrbMurky() {
-		super("orb_murky", 1);
+		super("orb_murky");
 
 		OrbMurky self = this;
 
@@ -57,7 +55,7 @@ public class OrbMurky extends ModItem {
 					}
 					return null;
 				}
-				if (orb != null && essenceCount > 0 && containedEssence + essenceCount <= neededEssence) {
+				if (orb != null && essenceCount > 0 && containedEssence + essenceCount <= requiredEssence) {
 					ItemStack newStack = orb.copy();
 					setContainedEssence(newStack, containedEssence + essenceCount);
 					return newStack;
@@ -73,20 +71,31 @@ public class OrbMurky extends ModItem {
 		});
 	}
 
-	public ItemStack getStack(String mobTarget) {
-		return getStack(mobTarget, 1);
+	@Override
+	public int getItemStackLimit(ItemStack stack) {
+		// if it's full, allow them to be stacked
+		return getContainedEssence(stack) == requiredEssence ? 16 : 1;
 	}
 
-	public ItemStack getStack(String mobTarget, Integer count) {
-		ItemStack stack = new ItemStack(this, count);
-		MobTarget.setMobTarget(stack, mobTarget);
-		Soulbook.setContainedEssence(stack, 0);
+	@Override
+	public ItemStack getFilledStack() {
+		return getStack(requiredEssence);
+	}
+
+	public ItemStack getStack(int essence) {
+		ItemStack stack = new ItemStack(this);
+		setContainedEssence(stack, essence);
 		return stack;
 	}
 
 	@Override
+	public ItemStack getItemStack() {
+		return getStack(0);
+	}
+
+	@Override
 	public boolean hasEffect(ItemStack stack) {
-		return getContainedEssence(stack) == neededEssence;
+		return getContainedEssence(stack) == requiredEssence;
 	}
 
 	@Nonnull
@@ -94,19 +103,19 @@ public class OrbMurky extends ModItem {
 	public String getUnlocalizedNameInefficiently(@Nonnull ItemStack stack) {
 		String result = super.getUnlocalizedNameInefficiently(stack);
 		int containedEssence = getContainedEssence(stack);
-		return containedEssence == neededEssence ? result + ".filled" : result;
+		return containedEssence == requiredEssence ? result + ".filled" : result;
 	}
 
 	@Override
 	public boolean showDurabilityBar(ItemStack stack) {
 		int containedEssence = getContainedEssence(stack);
-		return containedEssence < neededEssence;
+		return containedEssence < requiredEssence;
 	}
 
 	@Override
 	public double getDurabilityForDisplay(ItemStack stack) {
 		int containedEssence = getContainedEssence(stack);
-		return (1 - containedEssence / (double) neededEssence);
+		return (1 - containedEssence / (double) requiredEssence);
 	}
 
 	public static int getContainedEssence(ItemStack stack) {

@@ -42,7 +42,6 @@ public class Config {
 		public int dropChance;
 		public int neededForSoul = 16;
 		public ColourInfo colourInfo = null;
-		public SpecialSpawnInfo specialSpawnInfo = null;
 
 		public SoulInfo(int dropChance) {
 			this.dropChance = dropChance;
@@ -51,12 +50,6 @@ public class Config {
 		public SoulInfo(int dropChance, int neededForSoul) {
 			this(dropChance);
 			this.neededForSoul = neededForSoul;
-		}
-
-		public SoulInfo(int dropChance, int neededForSoul, ColourInfo colourInfo, SpecialSpawnInfo specialSpawnInfo) {
-			this(dropChance, neededForSoul);
-			this.colourInfo = colourInfo;
-			this.specialSpawnInfo = specialSpawnInfo;
 		}
 	}
 

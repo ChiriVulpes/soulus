@@ -1,7 +1,6 @@
 package yuudaari.souls.common.item;
 
 import yuudaari.souls.common.util.Colour;
-import yuudaari.souls.common.util.ModItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
@@ -15,19 +14,30 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-public class BloodCrystal extends ModItem {
+public class BloodCrystal extends SummonerUpgrade {
 	private static int requiredBlood = 18;
 
 	private static int colourEmpty = 0x281313;
 	private static int colourFilled = 0xBC2044;
 
 	public BloodCrystal() {
-		super("blood_crystal", 1);
+		super("blood_crystal");
 
 		registerColorHandler((ItemStack stack, int tintIndex) -> {
 			float percentage = getContainedBlood(stack) / (float) requiredBlood;
 			return Colour.mix(colourEmpty, colourFilled, percentage).get();
 		});
+	}
+
+	@Override
+	public int getItemStackLimit(ItemStack stack) {
+		// if it's full, allow them to be stacked
+		return getContainedBlood(stack) == requiredBlood ? 16 : 1;
+	}
+
+	@Override
+	public ItemStack getFilledStack() {
+		return getStack(requiredBlood);
 	}
 
 	public ItemStack getStack(int blood) {

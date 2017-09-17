@@ -4,11 +4,11 @@ import java.util.Arrays;
 import java.util.List;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.tileentity.TileEntity;
-import yuudaari.souls.client.render.TileEntitySummonerRenderer;
+import yuudaari.souls.client.render.SummonerRenderer;
 import yuudaari.souls.client.util.TileEntityRenderer;
 
 public class ModRenderers {
-	public static final TileEntitySummonerRenderer SUMMONER_RENDERER = new TileEntitySummonerRenderer();
+	public static final SummonerRenderer SUMMONER_RENDERER = new SummonerRenderer();
 
 	public static final List<TileEntityRenderer<? extends TileEntity>> renderers = Arrays.asList(SUMMONER_RENDERER);
 
