@@ -96,7 +96,7 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 		int countUpgrades = upgradeCounts.get(Upgrade.COUNT);
 		spawnCount = new Range<>(nonUpgradedCount.getMin() + countUpgrades / 3,
 				nonUpgradedCount.getMax() + countUpgrades);
-		spawningRadius = nonUpgradedSpawningRadius + countUpgrades / 3;
+		spawningRadius = nonUpgradedSpawningRadius + countUpgrades / 6;
 
 		int delayUpgrades = upgradeCounts.get(Upgrade.DELAY);
 		spawnDelay = new Range<>((int) (nonUpgradedDelay.getMin() / (1F + delayUpgrades * 0.8F)),
@@ -167,7 +167,7 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 				int signalStrength = (int) Math.floor(16 * getSpawnPercent());
 				if (signalStrength != this.signalStrength) {
 					this.signalStrength = signalStrength;
-					this.blockUpdate();
+					this.markDirty();
 				}
 			}
 
@@ -196,7 +196,6 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 		if (world != null) {
 			IBlockState blockState = world.getBlockState(pos);
 			world.notifyBlockUpdate(pos, blockState, blockState, 7);
-			world.updateComparatorOutputLevel(pos, blockType);
 		}
 	}
 
@@ -250,18 +249,24 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 		readFromNBT(pkt.getNbtCompound());
 	}
 
-	private void updateRenderer() {
-		for (int i = 0; i < 3; i++) {
-			double d3 = (pos.getX() + world.rand.nextFloat());
-			double d4 = (pos.getY() + world.rand.nextFloat());
-			double d5 = (pos.getZ() + world.rand.nextFloat());
-			world.spawnParticle(EnumParticleTypes.PORTAL, d3, d4, d5, (d3 - pos.getX() - 0.5F), -0.3D,
-					(d5 - pos.getZ() - 0.5F));
-		}
+	private boolean isPlayerInRangeForEffects() {
+		return world.isAnyPlayerWithinRangeAt(pos.getX(), pos.getY(), pos.getZ(), 64);
+	}
 
-		double diff = mobRotation - prevMobRotation;
-		prevMobRotation = mobRotation;
-		mobRotation = mobRotation + 1.0F * getSpawnPercent() + diff * 0.8;
+	private void updateRenderer() {
+		if (isPlayerInRangeForEffects()) {
+			for (int i = 0; i < 3; i++) {
+				double d3 = (pos.getX() + world.rand.nextFloat());
+				double d4 = (pos.getY() + world.rand.nextFloat());
+				double d5 = (pos.getZ() + world.rand.nextFloat());
+				world.spawnParticle(EnumParticleTypes.PORTAL, d3, d4, d5, (d3 - pos.getX() - 0.5F), -0.3D,
+						(d5 - pos.getZ() - 0.5F));
+			}
+
+			double diff = mobRotation - prevMobRotation;
+			prevMobRotation = mobRotation;
+			mobRotation = mobRotation + 1.0F * getSpawnPercent() + diff * 0.8;
+		}
 	}
 
 	private int spawn() {
@@ -272,11 +277,9 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 		for (int i = 0; i < spawnCount; i++) {
 			NBTTagCompound entityNbt = getEntityNbt();
 			for (int tries = 0; tries < 5; tries++) {
-				double x = pos.getX() + (world.rand.nextDouble() - world.rand.nextDouble()) * nonUpgradedSpawningRadius
-						+ 0.5D;
-				double y = (pos.getY() + world.rand.nextInt(3) - 1);
-				double z = pos.getZ() + (world.rand.nextDouble() - world.rand.nextDouble()) * nonUpgradedSpawningRadius
-						+ 0.5D;
+				double x = pos.getX() + world.rand.nextDouble() * spawningRadius * 2 + 0.5D - spawningRadius;
+				double y = pos.getY() + world.rand.nextDouble() * spawningRadius / 2 + 0.5D - spawningRadius / 4;
+				double z = pos.getZ() + world.rand.nextDouble() * spawningRadius * 2 + 0.5D - spawningRadius;
 				EntityLiving entity = (EntityLiving) AnvilChunkLoader.readWorldEntityPos(entityNbt, world, x, y, z,
 						false);
 
@@ -314,7 +317,8 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 
 				AnvilChunkLoader.spawnEntity(entity, world);
 
-				explosionParticles(entity);
+				if (isPlayerInRangeForEffects())
+					explosionParticles(entity);
 				world.setEntityState(entity, (byte) 20);
 
 				spawned++;

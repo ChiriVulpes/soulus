@@ -63,10 +63,11 @@ public class SummonerRenderer extends TileEntityRenderer<SummonerTileEntity> {
 		}
 
 		GlStateManager.translate(0.0F, 0.4F, 0.0F);
-		GlStateManager.rotate((float) (prevMobRotation + (mobRotation - prevMobRotation) * partialTicks) * 10.0F, 0.0F,
-				1.0F, 0.0F);
+		float rotate = (float) (prevMobRotation + (mobRotation - prevMobRotation) * partialTicks);
+		GlStateManager.rotate(rotate * 10.0F, 0.0F, 1.0F, 0.0F);
+		GlStateManager.rotate(rotate * 4.0F, 0.0F, 0.0F, 1.0F);
+		GlStateManager.rotate(rotate * 0.5F, 1.0F, 0.0F, 0.0F);
 		GlStateManager.translate(0.0F, -0.2F, 0.0F);
-		GlStateManager.rotate(-5.0F, 0.0F, 0.0F, 0.0F);
 		GlStateManager.scale(f, f, f);
 		renderMob.setLocationAndAngles(posX, posY, posZ, 0.0F, 0.0F);
 		Minecraft.getMinecraft().getRenderManager().doRenderEntity(renderMob, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks,
