@@ -1,6 +1,8 @@
 package yuudaari.souls.common.item;
 
-import yuudaari.souls.common.Config;
+import yuudaari.souls.Souls;
+import yuudaari.souls.common.config.SoulConfig;
+import yuudaari.souls.common.config.ColourConfig;
 import yuudaari.souls.common.util.MobTarget;
 import yuudaari.souls.common.util.ModItem;
 import net.minecraft.entity.EntityList;
@@ -19,16 +21,16 @@ public class Essence extends ModItem {
 			String mobTarget = MobTarget.getMobTarget(stack);
 			if (mobTarget == null)
 				return -1;
-			Config.SoulInfo soulInfo = Config.getSoulInfo(mobTarget, false);
+			SoulConfig soulInfo = Souls.getSoulInfo(mobTarget, false);
 			if (soulInfo == null)
 				return -1;
-			Config.ColourInfo colourInfo = soulInfo.colourInfo;
+			ColourConfig colourInfo = soulInfo.colourInfo;
 			if (colourInfo == null) {
 				EntityList.EntityEggInfo eggInfo = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(mobTarget))
 						.getEgg();
 				if (eggInfo == null)
 					return -1;
-				colourInfo = new Config.ColourInfo(eggInfo);
+				colourInfo = new ColourConfig(eggInfo);
 			}
 			return tintIndex == 0 ? colourInfo.primaryColour : colourInfo.secondaryColour;
 		});

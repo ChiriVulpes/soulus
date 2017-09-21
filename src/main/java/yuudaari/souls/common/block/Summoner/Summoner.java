@@ -1,7 +1,6 @@
 package yuudaari.souls.common.block.Summoner;
 
 import yuudaari.souls.Souls;
-import yuudaari.souls.common.Config;
 import yuudaari.souls.common.ModBlocks;
 import yuudaari.souls.common.ModItems;
 import yuudaari.souls.common.block.Summoner.SummonerTileEntity.Upgrade;
@@ -27,9 +26,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.event.world.BlockEvent.PlaceEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
@@ -129,7 +126,7 @@ public class Summoner extends ModBlock {
 		String entityName = getSummonerEntity(summonerData);
 		ItemStack soulbook = ModItems.SOULBOOK.getItemStack();
 		MobTarget.setMobTarget(soulbook, entityName);
-		Soulbook.setContainedEssence(soulbook, Config.getSoulInfo(entityName).neededForSoul);
+		Soulbook.setContainedEssence(soulbook, Souls.getSoulInfo(entityName).quantity);
 		drops.add(soulbook);
 
 		// upgrades

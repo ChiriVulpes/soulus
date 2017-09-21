@@ -30,8 +30,8 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 
 	/* CONFIGS */
 	private static int nonUpgradedSpawningRadius = 4;
-	private static Range<Integer> nonUpgradedCount = new Range<>(1, 2);
-	private static Range<Integer> nonUpgradedDelay = new Range<>(10000, 20000);
+	private static Range nonUpgradedCount = new Range(1, 2);
+	private static Range nonUpgradedDelay = new Range(10000, 20000);
 	private static int nonUpgradedRange = 4;
 	private static Map<Upgrade, Integer> maxUpgrades = new HashMap<>();
 	static {
@@ -54,8 +54,8 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 
 	private int spawningRadius;
 	private int activatingRange;
-	private Range<Integer> spawnDelay;
-	private Range<Integer> spawnCount;
+	private Range spawnDelay;
+	private Range spawnCount;
 
 	private int signalStrength;
 
@@ -94,13 +94,12 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 
 	private void updateUpgrades(boolean resetTimer) {
 		int countUpgrades = upgradeCounts.get(Upgrade.COUNT);
-		spawnCount = new Range<>(nonUpgradedCount.getMin() + countUpgrades / 3,
-				nonUpgradedCount.getMax() + countUpgrades);
+		spawnCount = new Range(nonUpgradedCount.min + countUpgrades / 3, nonUpgradedCount.max + countUpgrades);
 		spawningRadius = nonUpgradedSpawningRadius + countUpgrades / 6;
 
 		int delayUpgrades = upgradeCounts.get(Upgrade.DELAY);
-		spawnDelay = new Range<>((int) (nonUpgradedDelay.getMin() / (1F + delayUpgrades * 0.8F)),
-				(int) (nonUpgradedDelay.getMax() / (1F + delayUpgrades)));
+		spawnDelay = new Range((int) (nonUpgradedDelay.min / (1F + delayUpgrades * 0.8F)),
+				(int) (nonUpgradedDelay.max / (1F + delayUpgrades)));
 
 		int rangeUpgrades = upgradeCounts.get(Upgrade.RANGE);
 		activatingRange = nonUpgradedRange + nonUpgradedRange * rangeUpgrades;
@@ -185,7 +184,7 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 	}
 
 	private void resetTimer(boolean update) {
-		timeTillSpawn = spawnDelay.get(world.rand);
+		timeTillSpawn = spawnDelay.get(world.rand).intValue();
 		lastTimeTillSpawn = timeTillSpawn;
 
 		if (update)
@@ -271,7 +270,7 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 
 	private int spawn() {
 
-		int spawnCount = this.spawnCount.get(world.rand);
+		int spawnCount = this.spawnCount.get(world.rand).intValue();
 		int spawned = 0;
 
 		for (int i = 0; i < spawnCount; i++) {

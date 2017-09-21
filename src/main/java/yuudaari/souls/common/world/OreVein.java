@@ -5,22 +5,31 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenMinable;
+import yuudaari.souls.common.util.Logger;
+import yuudaari.souls.common.config.FieldSerializer;
+import yuudaari.souls.common.config.Serializer;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+import yuudaari.souls.common.util.Range;
 import java.util.Random;
 
 public class OreVein {
-	final Block block;
-	final Block generateIn;
-	int minSize = 2;
-	int maxSize = 6;
-	int minHeight = 0;
-	int maxHeight = 255;
-	int chances = 4;
-	DimensionType dimension = DimensionType.OVERWORLD;
+	public String block;
+	public String replace;
+	public int chances = 4;
+	public Range size = new Range(2, 6);
+	public Range height = new Range(0, 255);
+	public DimensionType dimension = DimensionType.OVERWORLD;
 
-	public OreVein(Block block, Block generateIn) {
+	public OreVein setBlock(String block) {
 		this.block = block;
-		this.generateIn = generateIn;
+		return this;
+	}
+
+	public OreVein setToReplace(String block) {
+		replace = block;
+		return this;
 	}
 
 	public OreVein setDimension(DimensionType dimension) {
@@ -28,19 +37,8 @@ public class OreVein {
 		return this;
 	}
 
-	public OreVein setMinSize(int minSize) {
-		this.minSize = minSize;
-		return this;
-	}
-
-	public OreVein setMaxSize(int maxSize) {
-		this.maxSize = maxSize;
-		return this;
-	}
-
-	public OreVein setSize(int minSize, int maxSize) {
-		this.minSize = minSize;
-		this.maxSize = maxSize;
+	public OreVein setSize(int min, int max) {
+		this.size = new Range(min, max);
 		return this;
 	}
 
@@ -49,34 +47,46 @@ public class OreVein {
 		return this;
 	}
 
-	public OreVein setMinHeight(int minHeight) {
-		this.minHeight = minHeight;
-		return this;
-	}
-
-	public OreVein setMaxHeight(int maxHeight) {
-		this.maxHeight = maxHeight;
-		return this;
-	}
-
-	public OreVein setHeight(int minHeight, int maxHeight) {
-		this.minHeight = minHeight;
-		this.maxHeight = maxHeight;
+	public OreVein setHeight(int min, int max) {
+		this.height = new Range(min, max);
 		return this;
 	}
 
 	public void generate(World world, Random random, int chunkX, int chunkZ) {
 		if (world.provider.getDimensionType() == dimension) {
-			int vienSize = minSize + random.nextInt(maxSize - minSize);
-			int heightRange = maxHeight - minHeight;
-			WorldGenMinable gen = new WorldGenMinable(block.getDefaultState(), vienSize,
-					blockstate -> blockstate == generateIn.getDefaultState());
+			int veinSize = size.min.intValue() + random.nextInt(size.max.intValue() - size.min.intValue());
+			int heightRange = height.max.intValue() - height.min.intValue();
+
+			WorldGenMinable gen = new WorldGenMinable(Block.getBlockFromName(block).getDefaultState(), veinSize,
+					blockstate -> blockstate.equals(Block.getBlockFromName(replace).getDefaultState()));
 			for (int i = 0; i < chances; i++) {
 				int xRand = chunkX * 16 + random.nextInt(16);
-				int yRand = random.nextInt(heightRange) + minHeight;
+				int yRand = random.nextInt(heightRange) + height.min.intValue();
 				int zRand = chunkZ * 16 + random.nextInt(16);
 				gen.generate(world, random, new BlockPos(xRand, yRand, zRand));
 			}
 		}
+	}
+
+	public static Serializer<OreVein> serializer;
+	static {
+		serializer = new Serializer<>(OreVein.class, "block", "replace", "chances");
+
+		serializer.fieldHandlers.put("dimension",
+				new FieldSerializer<DimensionType>(OreVein::serializeDimension, OreVein::deserializeDimension));
+		serializer.fieldHandlers.put("size", Range.serializer);
+		serializer.fieldHandlers.put("height", Range.serializer);
+	}
+
+	public static JsonElement serializeDimension(Object obj) {
+		return new JsonPrimitive(((DimensionType) obj).getName());
+	}
+
+	public static Object deserializeDimension(JsonElement json, Object current) {
+		if (!json.isJsonPrimitive() || !json.getAsJsonPrimitive().isString()) {
+			Logger.warn("Dimension must be a string identifier");
+			return null;
+		}
+		return DimensionType.byName(json.getAsString());
 	}
 }

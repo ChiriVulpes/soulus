@@ -1,7 +1,7 @@
 package yuudaari.souls.common.block.Summoner;
 
 import yuudaari.souls.common.util.Material;
-import yuudaari.souls.common.Config;
+import yuudaari.souls.Souls;
 import yuudaari.souls.common.ModBlocks;
 import yuudaari.souls.common.ModItems;
 import yuudaari.souls.common.item.Soulbook;
@@ -37,7 +37,7 @@ public class SummonerEmpty extends ModBlock {
 
 		String mobTarget = MobTarget.getMobTarget(heldItem);
 		int containedEssence = Soulbook.getContainedEssence(heldItem);
-		if (mobTarget == null || containedEssence < Config.getSoulInfo(mobTarget).neededForSoul)
+		if (mobTarget == null || containedEssence < Souls.getSoulInfo(mobTarget).quantity)
 			return false;
 
 		IBlockState mobSpawner = ((Summoner) ModBlocks.SUMMONER).getDefaultState();

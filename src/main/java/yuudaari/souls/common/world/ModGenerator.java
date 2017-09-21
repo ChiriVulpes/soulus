@@ -8,7 +8,15 @@ import net.minecraftforge.fml.common.IWorldGenerator;
 import java.util.Random;
 
 public abstract class ModGenerator implements IWorldGenerator {
-	protected OreVein[] veins;
+	private OreVein[] veins;
+
+	public void setVeins(OreVein[] veins) {
+		this.veins = veins;
+	}
+
+	public OreVein[] getVeins() {
+		return veins;
+	}
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator,

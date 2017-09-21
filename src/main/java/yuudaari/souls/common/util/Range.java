@@ -1,34 +1,24 @@
 package yuudaari.souls.common.util;
 
 import java.util.Random;
+import yuudaari.souls.common.config.Serializer;
 
-public class Range <T> {
+public class Range {
 
-	private final T min;
-	public T getMin () {
-		return this.min;
+	public Double min;
+	public Double max;
+
+	public Range() {
 	}
 
-	private final T max;
-	public T getMax () {
-		return this.max;
+	public Range(Number min, Number max) {
+		this.min = min.doubleValue();
+		this.max = max.doubleValue();
 	}
 
-
-	public Range (T min, T max) {
-		this.min = min;
-		this.max = max;
+	public Double get(Random random) {
+		return (Double) random.nextDouble();
 	}
 
-	@SuppressWarnings ("unchecked")
-	public T get (Random random) {
-		if (this.max instanceof Integer) {
-			return (T) (Integer) (int) Math.floor(random.nextFloat() * ((Integer) this.max - (Integer) this.min) + (Integer) this.min);
-		} else if (this.max instanceof Float) {
-			return (T) (Float) (random.nextFloat() * ((Float) this.max - (Float) this.min) + (Float) this.min);
-		} else if (this.max instanceof Double) {
-			return (T) (Double) (random.nextDouble() * ((Double) this.max - (Double) this.min) + (Double) this.min);
-		}
-		throw new RuntimeException("Unsupported range type");
-	}
+	public static final Serializer<Range> serializer = new Serializer<>(Range.class, "min", "max");
 }

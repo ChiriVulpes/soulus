@@ -1,5 +1,17 @@
 package yuudaari.souls.common.util;
 
 public enum BoneType {
-	NORMAL, NETHER, ENDER, SCALE, MISC
+	NORMAL, NETHER, ENDER, SCALE, MISC;
+
+	public static BoneType getBoneType(String type) {
+		for (BoneType boneType : BoneType.values()) {
+			if (boneType.toString().equalsIgnoreCase(type))
+				return boneType;
+		}
+		return null;
+	}
+
+	public static String getString(BoneType type) {
+		return type.toString().toLowerCase();
+	}
 }

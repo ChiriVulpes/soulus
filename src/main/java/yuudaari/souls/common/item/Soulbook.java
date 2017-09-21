@@ -1,6 +1,6 @@
 package yuudaari.souls.common.item;
 
-import yuudaari.souls.common.Config;
+import yuudaari.souls.Souls;
 import yuudaari.souls.common.ModItems;
 import yuudaari.souls.common.util.MobTarget;
 import yuudaari.souls.common.util.ModItem;
@@ -69,7 +69,7 @@ public class Soulbook extends ModItem {
 					return null;
 				}
 				if (soulbook != null && essenceCount > 0
-						&& containedEssence + essenceCount <= Config.getSoulInfo(target).neededForSoul) {
+						&& containedEssence + essenceCount <= Souls.getSoulInfo(target).quantity) {
 					ItemStack newStack = soulbook.copy();
 					MobTarget.setMobTarget(newStack, target);
 					setContainedEssence(newStack, containedEssence + essenceCount);
@@ -103,7 +103,7 @@ public class Soulbook extends ModItem {
 		if (mobTarget == null)
 			return false;
 		int containedEssence = getContainedEssence(stack);
-		return containedEssence == Config.getSoulInfo(mobTarget).neededForSoul;
+		return containedEssence == Souls.getSoulInfo(mobTarget).quantity;
 	}
 
 	@Nonnull
@@ -121,7 +121,7 @@ public class Soulbook extends ModItem {
 		if (mobTarget == null)
 			return true;
 		int containedEssence = getContainedEssence(stack);
-		return containedEssence < Config.getSoulInfo(mobTarget).neededForSoul;
+		return containedEssence < Souls.getSoulInfo(mobTarget).quantity;
 	}
 
 	@Override
@@ -130,7 +130,7 @@ public class Soulbook extends ModItem {
 		if (mobTarget == null)
 			return 1;
 		int containedEssence = getContainedEssence(stack);
-		return (1 - containedEssence / (double) Config.getSoulInfo(mobTarget).neededForSoul);
+		return (1 - containedEssence / (double) Souls.getSoulInfo(mobTarget).quantity);
 	}
 
 	public static int getContainedEssence(ItemStack stack) {

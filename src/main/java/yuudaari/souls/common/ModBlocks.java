@@ -11,7 +11,6 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
-import yuudaari.souls.Souls;
 import yuudaari.souls.common.block.*;
 import yuudaari.souls.common.block.Summoner.Summoner;
 import yuudaari.souls.common.block.Summoner.SummonerEmpty;
@@ -36,7 +35,6 @@ public class ModBlocks {
 	}
 
 	public static void registerItems(IForgeRegistry<Item> registry) {
-		Souls.LOGGER.info(blocks);
 		for (IBlock block : blocks) {
 			if (block.hasItem()) {
 				ItemBlock item = block.getItemBlock();
@@ -49,7 +47,6 @@ public class ModBlocks {
 				GameRegistry.registerTileEntity(block.getTileEntityClass(), "souls:summoner");
 			}
 		}
-		Souls.LOGGER.info(blocks);
 	}
 
 	public static void registerModels() {
