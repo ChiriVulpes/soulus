@@ -6,6 +6,7 @@ import yuudaari.souls.common.util.Logger;
 import yuudaari.souls.common.world.generators.GeneratorFossils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
@@ -16,6 +17,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class Config {
@@ -24,12 +27,20 @@ public class Config {
 
 	public Map<BoneType, Map<String, EssenceDropConfig>> drops = EssenceDropConfig.getDefaultDropMap();
 	public Map<String, SoulConfig> souls = SoulConfig.getDefaultSoulMap();
+	public double spawnChance = 0;
+	public List<String> spawnEntityWhitelist = new ArrayList<>();
+	public List<String> spawnEntityBlacklist = new ArrayList<>();
 
 	/* SERIALIZER */
 
 	private static final Serializer<Config> serializer;
 	static {
-		serializer = new Serializer<>(Config.class);
+		serializer = new Serializer<>(Config.class, "spawnChance");
+
+		serializer.fieldHandlers.put("spawnEntityWhitelist",
+				new FieldSerializer<List<String>>(Config::serializeList, Config::deserializeList));
+		serializer.fieldHandlers.put("spawnEntityBlacklist",
+				new FieldSerializer<List<String>>(Config::serializeList, Config::deserializeList));
 
 		serializer.fieldHandlers.put("drops", new FieldSerializer<Map<BoneType, Map<String, EssenceDropConfig>>>(
 				Config::serializeDrops, Config::deserializeDrops));
@@ -186,6 +197,39 @@ public class Config {
 		}
 
 		return dropMap;
+	}
+
+	private static JsonElement serializeList(Object obj) {
+		@SuppressWarnings("unchecked")
+		List<String> list = (List<String>) obj;
+
+		JsonArray result = new JsonArray();
+		for (String item : list)
+			result.add(item);
+
+		return result;
+	}
+
+	private static List<String> deserializeList(JsonElement listElement, Object currentObject) {
+		@SuppressWarnings("unchecked")
+		List<String> list = (List<String>) currentObject;
+
+		if (listElement == null || !listElement.isJsonArray()) {
+			Logger.warn("Must be a list of strings");
+			return list;
+		}
+		JsonArray jsonList = listElement.getAsJsonArray();
+
+		for (JsonElement item : jsonList) {
+			if (!item.isJsonPrimitive() || !item.getAsJsonPrimitive().isString()) {
+				Logger.warn("Must contain only strings");
+				continue;
+			}
+			list.add(item.getAsString());
+		}
+
+		return list;
+
 	}
 
 }

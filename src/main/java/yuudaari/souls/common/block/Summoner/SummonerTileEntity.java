@@ -14,6 +14,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraftforge.event.ForgeEventFactory;
 import yuudaari.souls.common.ModBlocks;
+import yuudaari.souls.common.util.Logger;
 import yuudaari.souls.common.util.NBTHelper;
 import yuudaari.souls.common.util.Range;
 import java.util.HashMap;
@@ -93,6 +94,7 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 	}
 
 	private void updateUpgrades(boolean resetTimer) {
+
 		int countUpgrades = upgradeCounts.get(Upgrade.COUNT);
 		spawnCount = new Range(nonUpgradedCount.min + countUpgrades / 3, nonUpgradedCount.max + countUpgrades);
 		spawningRadius = nonUpgradedSpawningRadius + countUpgrades / 6;
@@ -109,6 +111,7 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 				resetTimer(false);
 			blockUpdate();
 		}
+
 	}
 
 	public String getMob() {
@@ -307,7 +310,7 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 
 				// custom data so we know the mob was spawned by souls
 				NBTTagCompound entityData = entity.getEntityData();
-				entityData.setByte("souls:spawned_by_souls", (byte) 1);
+				entityData.setByte("spawned_by_souls", (byte) 1);
 
 				if (!ForgeEventFactory.doSpecialSpawn(entity, world, (float) entity.posX, (float) entity.posY,
 						(float) entity.posZ)) {

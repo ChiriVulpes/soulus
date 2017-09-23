@@ -17,8 +17,13 @@ public class Range {
 	}
 
 	public Double get(Random random) {
-		return (Double) random.nextDouble();
+		return random.nextDouble() * (max - min) + min;
 	}
 
 	public static final Serializer<Range> serializer = new Serializer<>(Range.class, "min", "max");
+
+	@Override
+	public String toString() {
+		return "{Range: " + min + " - " + max + "}";
+	}
 }
