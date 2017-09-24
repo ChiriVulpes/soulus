@@ -1,6 +1,7 @@
 package yuudaari.souls.common.item;
 
 import yuudaari.souls.common.ModItems;
+import yuudaari.souls.common.config.Serializer;
 import yuudaari.souls.common.recipe.Recipe;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
@@ -15,7 +16,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 public class OrbMurky extends SummonerUpgrade {
 
-	private int requiredEssence = 64;
+	public static Serializer<OrbMurky> serializer = new Serializer<>(OrbMurky.class, "requiredEssence");
+
+	public int requiredEssence = 64;
 
 	public OrbMurky() {
 		super("orb_murky");

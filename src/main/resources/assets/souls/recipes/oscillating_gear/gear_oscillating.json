@@ -10,7 +10,8 @@
 			"item": "souls:ingot_endersteel"
 		},
 		"g": {
-			"item": "souls:gear_bone_ender"
+			"type": "forge:ore_dict",
+			"ore": "gearBone"
 		}
 	},
 	"result": {

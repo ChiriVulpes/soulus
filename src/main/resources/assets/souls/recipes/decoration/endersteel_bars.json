@@ -10,6 +10,7 @@
 		}
 	},
 	"result": {
-		"item": "souls:bars_endersteel"
+		"item": "souls:bars_endersteel",
+		"count": 16
 	}
 }

@@ -14,9 +14,14 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraftforge.event.ForgeEventFactory;
 import yuudaari.souls.common.ModBlocks;
+import yuudaari.souls.common.config.ManualSerializer;
+import yuudaari.souls.common.config.Serializer;
 import yuudaari.souls.common.util.Logger;
 import yuudaari.souls.common.util.NBTHelper;
 import yuudaari.souls.common.util.Range;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -30,16 +35,100 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 	}
 
 	/* CONFIGS */
-	private static int nonUpgradedSpawningRadius = 4;
-	private static Range nonUpgradedCount = new Range(1, 2);
-	private static Range nonUpgradedDelay = new Range(10000, 20000);
-	private static int nonUpgradedRange = 4;
-	private static Map<Upgrade, Integer> maxUpgrades = new HashMap<>();
-	static {
-		maxUpgrades.put(Upgrade.COUNT, 64);
-		maxUpgrades.put(Upgrade.DELAY, 64);
-		maxUpgrades.put(Upgrade.RANGE, 64);
+	public static class Config {
+		public int nonUpgradedSpawningRadius = 4;
+		public Range nonUpgradedCount = new Range(1, 2);
+		public Range nonUpgradedDelay = new Range(10000, 20000);
+		public int nonUpgradedRange = 4;
+		public Map<Upgrade, Integer> maxUpgrades = new HashMap<>();
+		{
+			maxUpgrades.put(Upgrade.COUNT, 64);
+			maxUpgrades.put(Upgrade.DELAY, 64);
+			maxUpgrades.put(Upgrade.RANGE, 64);
+		}
+		public Range upgradeCountEffectiveness = new Range(0.3, 1);
+		public double upgradeCountRadiusEffectiveness = 0.15;
+		public Range upgradeDelayEffectiveness = new Range(0.8, 1);
+		public int upgradeRangeEffectiveness = 4;
+		public double particleCountActivated = 3;
+		public int particleCountSpawn = 50;
+
+		private static Serializer<Config> serializer;
+		static {
+			serializer = new Serializer<>(Config.class, "nonUpgradedSpawningRadius", "nonUpgradedRange",
+					"upgradeCountRadiusEffectiveness", "upgradeRangeEffectiveness", "particleCountActivated",
+					"particleCountSpawn");
+
+			serializer.fieldHandlers.put("nonUpgradedCount", Range.serializer);
+			serializer.fieldHandlers.put("nonUpgradedDelay", Range.serializer);
+			serializer.fieldHandlers.put("upgradeCountEffectiveness", Range.serializer);
+			serializer.fieldHandlers.put("upgradeDelayEffectiveness", Range.serializer);
+
+			serializer.fieldHandlers.put("maxUpgrades", new ManualSerializer(SummonerTileEntity::serializeMaxUpgrades,
+					SummonerTileEntity::deserializeMaxUpgrades));
+		}
 	}
+
+	private static JsonElement serializeMaxUpgrades(Object from) {
+		@SuppressWarnings("unchecked")
+		Map<Upgrade, Integer> upgrades = (Map<Upgrade, Integer>) from;
+
+		JsonObject result = new JsonObject();
+
+		for (Map.Entry<Upgrade, Integer> upgrade : upgrades.entrySet()) {
+			String key = upgrade.getKey().name().toLowerCase();
+			result.addProperty(key, upgrade.getValue());
+		}
+
+		return result;
+	}
+
+	private static Object deserializeMaxUpgrades(JsonElement from, Object current) {
+		if (from == null || !from.isJsonObject()) {
+			Logger.warn("Max upgrades must be an object");
+			return current;
+		}
+
+		@SuppressWarnings("unchecked")
+		Map<Upgrade, Integer> currentUpgrades = (Map<Upgrade, Integer>) current;
+
+		JsonObject upgrades = from.getAsJsonObject();
+		for (Map.Entry<String, JsonElement> entry : upgrades.entrySet()) {
+			JsonElement val = entry.getValue();
+
+			if (val == null || !val.isJsonPrimitive() || !val.getAsJsonPrimitive().isNumber()) {
+				Logger.warn("Upgrade maximum must be an number");
+				continue;
+			}
+
+			String key = entry.getKey();
+			Upgrade upgrade = null;
+			for (Upgrade checkUpgrade : Upgrade.values()) {
+				if (key.equalsIgnoreCase(checkUpgrade.name())) {
+					upgrade = checkUpgrade;
+				}
+			}
+			if (upgrade == null) {
+				Logger.warn("Upgrade type '" + key + "' is invalid");
+				continue;
+			}
+
+			currentUpgrades.put(upgrade, val.getAsInt());
+		}
+
+		return current;
+	}
+
+	public static JsonElement serialize() {
+		return Config.serializer.serialize(config);
+	}
+
+	public static Object deserialize(JsonElement from) {
+		config = (Config) Config.serializer.deserialize(from, config);
+		return null;
+	}
+
+	private static Config config = new Config();
 
 	/* OTHER */
 	private boolean hasInit = false;
@@ -61,6 +150,7 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 	private int signalStrength;
 
 	/* RENDERER */
+	private double timeTillParticle = 0;
 	public double mobRotation;
 	public double prevMobRotation;
 	public EntityLiving renderMob;
@@ -73,7 +163,7 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 
 	public int addUpgradeStack(Upgrade upgradeType, int count) {
 		int oldCount = upgradeCounts.get(upgradeType);
-		int maximum = maxUpgrades.get(upgradeType);
+		int maximum = config.maxUpgrades.get(upgradeType);
 		int newCount = oldCount + count;
 		if (newCount > maximum)
 			newCount = maximum;
@@ -83,7 +173,7 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 	}
 
 	private void setUpgradeCount(Upgrade upgradeType, int newCount) {
-		int maximum = maxUpgrades.get(upgradeType);
+		int maximum = config.maxUpgrades.get(upgradeType);
 		if (newCount > maximum)
 			newCount = maximum;
 		upgradeCounts.put(upgradeType, newCount);
@@ -96,15 +186,17 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 	private void updateUpgrades(boolean resetTimer) {
 
 		int countUpgrades = upgradeCounts.get(Upgrade.COUNT);
-		spawnCount = new Range(nonUpgradedCount.min + countUpgrades / 3, nonUpgradedCount.max + countUpgrades);
-		spawningRadius = nonUpgradedSpawningRadius + countUpgrades / 6;
+		spawnCount = new Range(config.nonUpgradedCount.min + countUpgrades * config.upgradeCountEffectiveness.min,
+				config.nonUpgradedCount.max + countUpgrades * config.upgradeCountEffectiveness.max);
+		spawningRadius = (int) Math
+				.floor(config.nonUpgradedSpawningRadius + countUpgrades * config.upgradeCountRadiusEffectiveness);
 
 		int delayUpgrades = upgradeCounts.get(Upgrade.DELAY);
-		spawnDelay = new Range((int) (nonUpgradedDelay.min / (1F + delayUpgrades * 0.8F)),
-				(int) (nonUpgradedDelay.max / (1F + delayUpgrades)));
+		spawnDelay = new Range(config.nonUpgradedDelay.min / (1 + delayUpgrades * config.upgradeDelayEffectiveness.min),
+				config.nonUpgradedDelay.max / (1 + delayUpgrades * config.upgradeDelayEffectiveness.max));
 
 		int rangeUpgrades = upgradeCounts.get(Upgrade.RANGE);
-		activatingRange = nonUpgradedRange + nonUpgradedRange * rangeUpgrades;
+		activatingRange = config.nonUpgradedRange + rangeUpgrades * config.upgradeRangeEffectiveness;
 
 		if (world != null && !world.isRemote) {
 			if (resetTimer)
@@ -257,7 +349,16 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 
 	private void updateRenderer() {
 		if (isPlayerInRangeForEffects()) {
-			for (int i = 0; i < 3; i++) {
+			if (config.particleCountActivated < 1) {
+				timeTillParticle += config.particleCountActivated;
+
+				if (timeTillParticle < 1)
+					return;
+			}
+
+			timeTillParticle = 0;
+
+			for (int i = 0; i < config.particleCountActivated; i++) {
 				double d3 = (pos.getX() + world.rand.nextFloat());
 				double d4 = (pos.getY() + world.rand.nextFloat());
 				double d5 = (pos.getZ() + world.rand.nextFloat());
@@ -339,7 +440,7 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 		// this line will crash if this is ever called from the client
 		WorldServer worldServer = world.getMinecraftServer().getWorld(entity.dimension);
 
-		for (int i = 0; i < 50; ++i) {
+		for (int i = 0; i < config.particleCountSpawn; ++i) {
 			double d0 = rand.nextGaussian() * 0.02D;
 			double d1 = rand.nextGaussian() * 0.02D;
 			double d2 = rand.nextGaussian() * 0.02D;

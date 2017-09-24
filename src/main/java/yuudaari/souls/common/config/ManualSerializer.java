@@ -2,7 +2,8 @@ package yuudaari.souls.common.config;
 
 import com.google.gson.JsonElement;
 
-public class FieldSerializer<T> extends Serializer<T> {
+@SuppressWarnings("rawtypes")
+public class ManualSerializer extends Serializer {
 	public static interface SerializeHandler {
 		public JsonElement serialize(Object obj);
 	}
@@ -14,7 +15,7 @@ public class FieldSerializer<T> extends Serializer<T> {
 	public SerializeHandler serializeHandler;
 	public DeserializeHandler deserializeHandler;
 
-	public FieldSerializer(SerializeHandler serializeHandler, DeserializeHandler deserializeHandler) {
+	public ManualSerializer(SerializeHandler serializeHandler, DeserializeHandler deserializeHandler) {
 		this.serializeHandler = serializeHandler;
 		this.deserializeHandler = deserializeHandler;
 	}

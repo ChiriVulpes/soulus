@@ -1,0 +1,17 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		" b ",
+		"b b",
+		" b "
+	],
+	"key": {
+		"b": {
+			"type": "forge:ore_dict",
+			"ore": "boneWithered"
+		}
+	},
+	"result": {
+		"item": "souls:gear_bone_nether"
+	}
+}

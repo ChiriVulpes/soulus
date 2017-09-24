@@ -40,14 +40,14 @@ public class ModItem extends Item implements IModItem {
 	private String name;
 	private List<String> oreDicts = new ArrayList<>();
 	private boolean foodIsFood = false;
-	private boolean foodAlwaysEdible;
-	private int foodDuration = 32;
-	private int foodAmount;
-	private float foodSaturation;
-	private ConsumeHandler foodHandler;
-	private int foodQuantity = 1;
-	private PotionEffect[] foodEffects;
-	private CanConsumeHandler foodCanEatHandler;
+	public boolean foodAlwaysEdible;
+	public int foodDuration = 32;
+	public int foodAmount;
+	public float foodSaturation;
+	public int foodQuantity = 1;
+	public ModPotionEffect[] foodEffects;
+	public ConsumeHandler foodHandler;
+	public CanConsumeHandler foodCanEatHandler;
 
 	public ModItem(String name) {
 		setName(name);
@@ -69,8 +69,9 @@ public class ModItem extends Item implements IModItem {
 		setUnlocalizedName(getRegistryName().toString());
 	}
 
-	public void addOreDict(String name) {
-		oreDicts.add(name);
+	public void addOreDict(String... name) {
+		for (String dict : name)
+			oreDicts.add(dict);
 	}
 
 	public List<String> getOreDicts() {
@@ -104,35 +105,9 @@ public class ModItem extends Item implements IModItem {
 	}
 
 	public void setFood(int amount, float saturation) {
-		setFood(amount, saturation, false, null);
-	}
-
-	public void setFood(int amount, float saturation, boolean alwaysEdible) {
-		setFood(amount, saturation, alwaysEdible, null);
-	}
-
-	public void setFood(int amount, float saturation, boolean alwaysEdible, ConsumeHandler handler) {
 		foodIsFood = true;
 		foodAmount = amount;
 		foodSaturation = saturation;
-		foodAlwaysEdible = alwaysEdible;
-		foodHandler = handler;
-	}
-
-	public void setFoodQuantityToEat(int amount) {
-		foodQuantity = amount;
-	}
-
-	public void setFoodPotionEffects(PotionEffect... effects) {
-		foodEffects = effects;
-	}
-
-	public void setFoodCanEatHandler(CanConsumeHandler handler) {
-		foodCanEatHandler = handler;
-	}
-
-	public void setFoodDuration(int duration) {
-		foodDuration = duration;
 	}
 
 	@Override

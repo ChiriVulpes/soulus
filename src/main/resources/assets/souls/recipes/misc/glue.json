@@ -2,8 +2,8 @@
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
 		{
-			"item": "minecraft:dye",
-			"data": 15
+			"type": "forge:ore_dict",
+			"ore": "bonemeal"
 		},
 		{
 			"item": "minecraft:sugar"

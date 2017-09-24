@@ -6,7 +6,7 @@ import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import yuudaari.souls.common.util.Logger;
-import yuudaari.souls.common.config.FieldSerializer;
+import yuudaari.souls.common.config.ManualSerializer;
 import yuudaari.souls.common.config.Serializer;
 
 import com.google.gson.JsonElement;
@@ -73,7 +73,7 @@ public class OreVein {
 		serializer = new Serializer<>(OreVein.class, "block", "replace", "chances");
 
 		serializer.fieldHandlers.put("dimension",
-				new FieldSerializer<DimensionType>(OreVein::serializeDimension, OreVein::deserializeDimension));
+				new ManualSerializer(OreVein::serializeDimension, OreVein::deserializeDimension));
 		serializer.fieldHandlers.put("size", Range.serializer);
 		serializer.fieldHandlers.put("height", Range.serializer);
 	}

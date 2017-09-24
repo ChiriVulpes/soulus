@@ -8,7 +8,7 @@ item.souls:bone_chunk_nether.name=Necrotic Bone Chunk
 item.souls:bone_chunk_ender.name=Ender Bone Chunk
 item.souls:bone_meal_nether.name=Necrotic Bone Meal
 
-item.souls:dust_ender.name=Ender Dust
+item.souls:dust_ender.name=Ender Bonemeal
 item.souls:dust_iron.name=Iron Dust
 item.souls:dust_ender_iron.name=Ender-Iron Dust Blend
 
@@ -23,8 +23,10 @@ item.souls:emerald_coated.name=Bloody Emerald
 item.souls:blood_crystal.name=Blood Crystal
 item.souls:blood_crystal.filled.name=Blood Crystal
 
-item.souls:gear_pulsating.name=Oscillating Gear
+item.souls:gear_oscillating.name=Oscillating Gear
+item.souls:gear_bone.name=Bone Gear
 item.souls:gear_bone_ender.name=Ender Bone Gear
+item.souls:gear_bone_nether.name=Necrotic Bone Gear
 
 item.souls:orb_murky.name=Strange Sticky Ball
 item.souls:orb_murky.filled.name=Murky Orb

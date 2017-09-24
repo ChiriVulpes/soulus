@@ -1,8 +1,7 @@
 package yuudaari.souls.common.world.generators;
 
 import yuudaari.souls.common.util.Logger;
-import yuudaari.souls.common.config.FieldSerializer;
-import yuudaari.souls.common.config.Serializer;
+import yuudaari.souls.common.config.ManualSerializer;
 import yuudaari.souls.common.world.ModGenerator;
 import yuudaari.souls.common.world.OreVein;
 
@@ -26,7 +25,7 @@ public class GeneratorFossils extends ModGenerator {
 			new OreVein().setBlock("souls:fossil_netherrack_ender").setToReplace("minecraft:netherrack").setSize(2, 5)
 					.setChances(10).setDimension(DimensionType.NETHER) };
 
-	public static final Serializer<GeneratorFossils> serializer = new FieldSerializer<>(GeneratorFossils::serialize,
+	public static final ManualSerializer serializer = new ManualSerializer(GeneratorFossils::serialize,
 			GeneratorFossils::deserialize);
 
 	public static JsonElement serialize(Object obj) {

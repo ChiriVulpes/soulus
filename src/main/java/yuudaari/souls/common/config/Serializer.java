@@ -50,7 +50,7 @@ public class Serializer<T> {
 		for (String fieldName : fields) {
 			Field field;
 			try {
-				field = targetClass.getDeclaredField(fieldName);
+				field = targetClass.getField(fieldName);
 			} catch (NoSuchFieldException e) {
 				Logger.warn("Field '" + fieldName + "' does not exist in class");
 				continue;
@@ -84,7 +84,7 @@ public class Serializer<T> {
 
 			Field field;
 			try {
-				field = targetClass.getDeclaredField(fieldName);
+				field = targetClass.getField(fieldName);
 			} catch (NoSuchFieldException e) {
 				Logger.warn("Field '" + fieldName + "' does not exist in class");
 				continue;
@@ -145,7 +145,7 @@ public class Serializer<T> {
 				for (String fieldName : fields) {
 					Field field;
 					try {
-						field = targetClass.getDeclaredField(fieldName);
+						field = targetClass.getField(fieldName);
 					} catch (NoSuchFieldException e) {
 						Logger.warn("Field '" + fieldName + "' does not exist in class");
 						continue;
@@ -179,7 +179,7 @@ public class Serializer<T> {
 
 					Field field;
 					try {
-						field = targetClass.getDeclaredField(fieldName);
+						field = targetClass.getField(fieldName);
 					} catch (NoSuchFieldException e) {
 						Logger.warn("Field '" + fieldName + "' does not exist in class");
 						continue;
@@ -249,7 +249,7 @@ public class Serializer<T> {
 						if (primitive.isString())
 							return primitive.getAsString();
 
-					} else if (type == Boolean.class) {
+					} else if (type == Boolean.class || type == boolean.class) {
 						if (primitive.isBoolean())
 							return primitive.getAsBoolean();
 

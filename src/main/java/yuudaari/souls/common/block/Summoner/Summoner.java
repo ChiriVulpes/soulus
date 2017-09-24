@@ -12,6 +12,7 @@ import yuudaari.souls.common.util.ModBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -74,6 +75,7 @@ public class Summoner extends ModBlock {
 		setHarvestLevel("pickaxe", 1);
 		setSoundType(SoundType.METAL);
 		disableStats();
+		setCreativeTab(null);
 	}
 
 	@SubscribeEvent
@@ -182,7 +184,9 @@ public class Summoner extends ModBlock {
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
 			EntityPlayer player) {
-		return ModBlocks.SUMMONER_EMPTY.getItemStack();
+		// if they're requesting the block with nbt data, it needs to be this block, not an empty summoner
+		return player.isCreative() && GuiScreen.isCtrlKeyDown() ? getItemStack()
+				: ModBlocks.SUMMONER_EMPTY.getItemStack();
 	}
 
 	@Override

@@ -7,12 +7,16 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import yuudaari.souls.Souls;
 import yuudaari.souls.common.ModBlocks;
 
 @Mod.EventBusSubscriber
 public class SummonerReplacer {
 	@SubscribeEvent
 	public static void populateChunkPost(PopulateChunkEvent.Post event) {
+		if (!Souls.config.replaceSpawnersWithSummoners)
+			return;
+
 		World world = event.getWorld();
 		int cX = event.getChunkX() << 4;
 		int cZ = event.getChunkZ() << 4;

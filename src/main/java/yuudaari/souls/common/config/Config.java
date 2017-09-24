@@ -1,6 +1,12 @@
 package yuudaari.souls.common.config;
 
 import yuudaari.souls.common.ModGenerators;
+import yuudaari.souls.common.ModItems;
+import yuudaari.souls.common.block.Summoner.SummonerTileEntity;
+import yuudaari.souls.common.item.BloodCrystal;
+import yuudaari.souls.common.item.Glue;
+import yuudaari.souls.common.item.OrbMurky;
+import yuudaari.souls.common.item.Sledgehammer;
 import yuudaari.souls.common.util.BoneType;
 import yuudaari.souls.common.util.Logger;
 import yuudaari.souls.common.world.generators.GeneratorFossils;
@@ -28,6 +34,7 @@ public class Config {
 	public Map<BoneType, Map<String, EssenceDropConfig>> drops = EssenceDropConfig.getDefaultDropMap();
 	public Map<String, SoulConfig> souls = SoulConfig.getDefaultSoulMap();
 	public double spawnChance = 0;
+	public boolean replaceSpawnersWithSummoners = true;
 	public List<String> spawnEntityWhitelist = new ArrayList<>();
 	public List<String> spawnEntityBlacklist = new ArrayList<>();
 
@@ -35,23 +42,38 @@ public class Config {
 
 	private static final Serializer<Config> serializer;
 	static {
-		serializer = new Serializer<>(Config.class, "spawnChance");
+		serializer = new Serializer<>(Config.class, "spawnChance", "replaceSpawnersWithSummoners");
 
 		serializer.fieldHandlers.put("spawnEntityWhitelist",
-				new FieldSerializer<List<String>>(Config::serializeList, Config::deserializeList));
+				new ManualSerializer(Config::serializeList, Config::deserializeList));
 		serializer.fieldHandlers.put("spawnEntityBlacklist",
-				new FieldSerializer<List<String>>(Config::serializeList, Config::deserializeList));
+				new ManualSerializer(Config::serializeList, Config::deserializeList));
 
-		serializer.fieldHandlers.put("drops", new FieldSerializer<Map<BoneType, Map<String, EssenceDropConfig>>>(
-				Config::serializeDrops, Config::deserializeDrops));
-		serializer.fieldHandlers.put("souls",
-				new FieldSerializer<Map<String, SoulConfig>>(Config::serializeSouls, Config::deserializeSouls));
+		serializer.fieldHandlers.put("drops", new ManualSerializer(Config::serializeDrops, Config::deserializeDrops));
+		serializer.fieldHandlers.put("souls", new ManualSerializer(Config::serializeSouls, Config::deserializeSouls));
 
-		serializer.otherHandlers.put("fossilVeins", new OtherSerializer(
-				from -> GeneratorFossils.serialize(ModGenerators.GENERATOR_FOSSILS), (from, into) -> {
-					GeneratorFossils.deserialize(from, ModGenerators.GENERATOR_FOSSILS);
-					return null;
-				}));
+		serializer.otherHandlers.put("fossilVeins",
+				new ManualSerializer(from -> GeneratorFossils.serialize(ModGenerators.GENERATOR_FOSSILS),
+						(from, into) -> GeneratorFossils.deserialize(from, ModGenerators.GENERATOR_FOSSILS)));
+
+		serializer.otherHandlers.put("bloodCrystal",
+				new ManualSerializer(from -> BloodCrystal.serializer.serialize(ModItems.BLOOD_CRYSTAL),
+						(from, into) -> BloodCrystal.serializer.deserialize(from, ModItems.BLOOD_CRYSTAL)));
+
+		serializer.otherHandlers.put("murkyOrb",
+				new ManualSerializer(from -> OrbMurky.serializer.serialize(ModItems.ORB_MURKY),
+						(from, into) -> OrbMurky.serializer.deserialize(from, ModItems.ORB_MURKY)));
+
+		serializer.otherHandlers.put("glue", new ManualSerializer(from -> Glue.serializer.serialize(ModItems.GLUE),
+				(from, into) -> Glue.serializer.deserialize(from, ModItems.GLUE)));
+
+		serializer.otherHandlers.put("sledgehammer",
+				new ManualSerializer(from -> Sledgehammer.serializer.serialize(ModItems.SLEDGEHAMMER),
+						(from, into) -> Sledgehammer.serializer.deserialize(from, ModItems.SLEDGEHAMMER)));
+
+		serializer.otherHandlers.put("summoner", new ManualSerializer(from -> SummonerTileEntity.serialize(),
+				(from, into) -> SummonerTileEntity.deserialize(from)));
+
 	}
 
 	/* STATIC METHODS */

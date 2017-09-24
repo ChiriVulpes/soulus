@@ -1,11 +1,12 @@
 package yuudaari.souls.common.item;
 
+import yuudaari.souls.common.config.PotionEffectSerializer;
+import yuudaari.souls.common.config.Serializer;
 import yuudaari.souls.common.util.Colour;
+import yuudaari.souls.common.util.ModPotionEffect;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
@@ -15,10 +16,33 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 public class BloodCrystal extends SummonerUpgrade {
-	private static int requiredBlood = 18;
+	private static int defaultRequiredBlood = 162;
+	private static int defaultPrickAmount = 9;
+	private static int defaultPrickWorth = 9;
+	private static int defaultCreaturePrickRequiredHealth = 1;
+	private static int defaultCreaturePrickAmount = 1;
+	private static int defaultCreaturePrickWorth = 3;
+	private static ModPotionEffect[] defaultPrickEffects = new ModPotionEffect[] { new ModPotionEffect("hunger", 100),
+			new ModPotionEffect("nausea", 200) };
 
 	private static int colourEmpty = 0x281313;
 	private static int colourFilled = 0xBC2044;
+
+	public int requiredBlood = defaultRequiredBlood;
+	public int prickAmount = defaultPrickAmount;
+	public int prickWorth = defaultPrickWorth;
+	public int creaturePrickRequiredHealth = defaultCreaturePrickRequiredHealth;
+	public int creaturePrickAmount = defaultCreaturePrickAmount;
+	public int creaturePrickWorth = defaultCreaturePrickWorth;
+	public ModPotionEffect[] prickEffects = defaultPrickEffects;
+
+	public static Serializer<BloodCrystal> serializer;
+	static {
+		serializer = new Serializer<>(BloodCrystal.class, "requiredBlood", "prickAmount", "prickWorth",
+				"creaturePrickRequiredHealth", "creaturePrickAmount", "creaturePrickWorth");
+
+		serializer.fieldHandlers.put("prickEffects", PotionEffectSerializer.INSTANCE);
+	}
 
 	public BloodCrystal() {
 		super("blood_crystal");
@@ -32,7 +56,7 @@ public class BloodCrystal extends SummonerUpgrade {
 	@Override
 	public int getItemStackLimit(ItemStack stack) {
 		// if it's full, allow them to be stacked
-		return getContainedBlood(stack) == requiredBlood ? 16 : 1;
+		return getContainedBlood(stack) >= requiredBlood ? 16 : 1;
 	}
 
 	@Override
@@ -54,7 +78,7 @@ public class BloodCrystal extends SummonerUpgrade {
 	@Override
 	public boolean hasEffect(ItemStack stack) {
 		int containedBlood = getContainedBlood(stack);
-		return containedBlood == requiredBlood;
+		return containedBlood >= requiredBlood;
 	}
 
 	@Nonnull
@@ -62,7 +86,7 @@ public class BloodCrystal extends SummonerUpgrade {
 	public String getUnlocalizedNameInefficiently(@Nonnull ItemStack stack) {
 		int containedBlood = getContainedBlood(stack);
 		String name = super.getUnlocalizedNameInefficiently(stack);
-		return containedBlood == requiredBlood ? name + ".filled" : name;
+		return containedBlood >= requiredBlood ? name + ".filled" : name;
 	}
 
 	@Override
@@ -72,7 +96,7 @@ public class BloodCrystal extends SummonerUpgrade {
 
 	@Override
 	public double getDurabilityForDisplay(ItemStack stack) {
-		return (1 - getContainedBlood(stack) / (double) requiredBlood);
+		return 1 - Math.min(requiredBlood, getContainedBlood(stack)) / (double) requiredBlood;
 	}
 
 	@ParametersAreNonnullByDefault
@@ -83,10 +107,12 @@ public class BloodCrystal extends SummonerUpgrade {
 		if (!worldIn.isRemote) {
 			int containedBlood = getContainedBlood(heldItem);
 			if (containedBlood < requiredBlood) {
-				setContainedBlood(heldItem, containedBlood + 1);
-				playerIn.attackEntityFrom(DamageSource.GENERIC, 9);
-				playerIn.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 100));
-				playerIn.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 200));
+				setContainedBlood(heldItem, containedBlood + prickAmount);
+				playerIn.attackEntityFrom(DamageSource.GENERIC, prickAmount);
+
+				for (ModPotionEffect effect : prickEffects)
+					playerIn.addPotionEffect(effect);
+
 				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, heldItem);
 			}
 		}
