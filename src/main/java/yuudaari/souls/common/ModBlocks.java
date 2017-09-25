@@ -18,15 +18,21 @@ import yuudaari.souls.common.block.Summoner.SummonerEmpty;
 public class ModBlocks {
 	public static final BlockEndersteel BLOCK_ENDERSTEEL = new BlockEndersteel();
 	public static final FossilDirt FOSSIL_DIRT = new FossilDirt();
+	public static final FossilDirtFrozen FOSSIL_DIRT_FROZEN = new FossilDirtFrozen();
+	public static final FossilDirtFungal FOSSIL_DIRT_FUNGAL = new FossilDirtFungal();
 	public static final FossilDirtEnder FOSSIL_DIRT_ENDER = new FossilDirtEnder();
 	public static final FossilNetherrack FOSSIL_NETHERRACK = new FossilNetherrack();
 	public static final FossilNetherrackEnder FOSSIL_NETHERRACK_ENDER = new FossilNetherrackEnder();
+	public static final FossilSand FOSSIL_SAND = new FossilSand();
+	public static final FossilSandScale FOSSIL_SAND_SCALE = new FossilSandScale();
+	public static final FossilSandEnder FOSSIL_SAND_ENDER = new FossilSandEnder();
 	public static final Summoner SUMMONER = new Summoner();
 	public static final SummonerEmpty SUMMONER_EMPTY = new SummonerEmpty();
 	public static final BarsEndersteel BARS_ENDERSTEEL = new BarsEndersteel();
 
 	public static IBlock[] blocks = new IBlock[] { BARS_ENDERSTEEL, BLOCK_ENDERSTEEL, FOSSIL_DIRT, FOSSIL_DIRT_ENDER,
-			FOSSIL_NETHERRACK, FOSSIL_NETHERRACK_ENDER, SUMMONER, SUMMONER_EMPTY };
+			FOSSIL_NETHERRACK, FOSSIL_NETHERRACK_ENDER, SUMMONER, SUMMONER_EMPTY, FOSSIL_DIRT_FROZEN,
+			FOSSIL_DIRT_FUNGAL, FOSSIL_SAND, FOSSIL_SAND_SCALE, FOSSIL_SAND_ENDER };
 
 	public static void registerBlocks(IForgeRegistry<Block> registry) {
 		for (IBlock block : blocks) {

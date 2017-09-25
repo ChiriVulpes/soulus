@@ -16,8 +16,16 @@ public class ModItems {
 	public static final BoneChunkEnder BONE_CHUNK_ENDER = new BoneChunkEnder();
 	public static final BoneChunkNether BONE_CHUNK_NETHER = new BoneChunkNether();
 	public static final BoneChunkNormal BONE_CHUNK_NORMAL = new BoneChunkNormal();
+	public static final BoneChunkScale BONE_CHUNK_SCALE = new BoneChunkScale();
+	public static final BoneChunkDry BONE_CHUNK_DRY = new BoneChunkDry();
+	public static final BoneChunkFrozen BONE_CHUNK_FROZEN = new BoneChunkFrozen();
+	public static final BoneChunkFungal BONE_CHUNK_FUNGAL = new BoneChunkFungal();
 	public static final BoneEnder BONE_ENDER = new BoneEnder();
 	public static final BoneNether BONE_NETHER = new BoneNether();
+	public static final ModItem BONE_DRY = new ModItem("bone_dry");
+	public static final ModItem BONE_FROZEN = new ModItem("bone_frozen");
+	public static final ModItem BONE_FUNGAL = new ModItem("bone_fungal");
+	public static final ModItem BONE_SCALE = new ModItem("bone_scale");
 	public static final Bonemeal BONEMEAL_NETHER = new Bonemeal("bone_meal_nether");
 	public static final BonemealEnder BONEMEAL_ENDER = new BonemealEnder();
 	public static final DustEnderIron DUST_ENDER_IRON = new DustEnderIron();
@@ -39,7 +47,8 @@ public class ModItems {
 	public static ModItem[] items = new ModItem[] { BLOOD_CRYSTAL, BONE_CHUNK_ENDER, BONE_CHUNK_NETHER,
 			BONE_CHUNK_NORMAL, BONE_ENDER, BONE_NETHER, BONEMEAL_NETHER, BONEMEAL_ENDER, DUST_ENDER_IRON, DUST_IRON,
 			GEAR_BONE_ENDER, GEAR_BONE, GEAR_BONE_NETHER, GEAR_OSCILLATING, EMERALD_BURNT, EMERALD_COATED, ESSENCE,
-			GLUE, INGOT_ENDERSTEEL, NUGGET_ENDERSTEEL, ORB_MURKY, SLEDGEHAMMER, SOULBOOK };
+			GLUE, INGOT_ENDERSTEEL, NUGGET_ENDERSTEEL, ORB_MURKY, SLEDGEHAMMER, SOULBOOK, BONE_SCALE, BONE_DRY,
+			BONE_FROZEN, BONE_FUNGAL, BONE_CHUNK_DRY, BONE_CHUNK_FROZEN, BONE_CHUNK_FUNGAL, BONE_CHUNK_SCALE };
 
 	public static void registerItems(IForgeRegistry<Item> registry) {
 		OreDictionary.registerOre("bonemeal", new ItemStack(Items.DYE, 1, 15));

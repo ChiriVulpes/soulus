@@ -1,0 +1,96 @@
+// fossils
+normal: 
+	dirt
+	location: !nether, !ocean, !end, !void
+	
+dry: 
+	sand
+	location: hot, dry, !nether
+	
+fungal: 
+	dirt
+	location: wet, dense
+	
+frozen: 
+	dirt
+	location:cold
+	
+necrotic: 
+	netherrack
+	location: nether
+	
+scale: 
+	sand
+	location: water, hot, !nether
+	
+ender:
+	dirt, netherrack, sand, end_stone
+
+
+// creatures
+
+// normal
+minecraft:bat
+minecraft:chicken
+minecraft:cow
+minecraft:skeleton
+minecraft:spider
+minecraft:pig
+minecraft:rabbit
+minecraft:sheep
+minecraft:villager
+
+// dry
+minecraft:llama
+minecraft:husk
+minecraft:cave_spider
+minecraft:horse
+	minecraft:donkey
+	minecraft:mule
+	minecraft:skeleton_horse
+	minecraft:zombie_horse
+
+// fungal
+minecraft:vindication_illager
+	minecraft:illusion_illager
+	minecraft:evocation_illager
+minecraft:mooshroom
+minecraft:ocelot
+minecraft:parrot
+minecraft:witch
+minecraft:zombie
+	minecraft:zombie_villager
+
+// frozen
+minecraft:polar_bear
+minecraft:stray
+minecraft:snowman
+minecraft:wolf
+
+// necrotic
+minecraft:blaze
+minecraft:ghast
+minecraft:zombie_pigman
+minecraft:wither_skeleton
+
+// scale
+minecraft:guardian
+	minecraft:elder_guardian
+minecraft:silverfish
+minecraft:squid
+
+// ender
+minecraft:creeper
+minecraft:enderman
+minecraft:endermite
+minecraft:shulker
+
+// not from bones
+minecraft:slime
+minecraft:magma_cube
+minecraft:villager_golem
+
+// not spawnable
+minecraft:giant
+minecraft:vex
+minecraft:wither

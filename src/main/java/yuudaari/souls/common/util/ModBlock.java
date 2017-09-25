@@ -55,12 +55,21 @@ public class ModBlock extends Block implements IBlock {
 		recipes.add(recipe);
 	}
 
-	public void setHasItem() {
-		if (!hasItem) {
-			hasItem = true;
-			itemBlock = new ItemBlock(this);
-			itemBlock.setRegistryName(getRegistryName());
+	public void setHasItem(boolean hasItem) {
+		if (hasItem) {
+			if (!this.hasItem) {
+				this.hasItem = true;
+				itemBlock = new ItemBlock(this);
+				itemBlock.setRegistryName(getRegistryName());
+			}
+		} else {
+			this.hasItem = false;
+			itemBlock = null;
 		}
+	}
+
+	public void setHasItem() {
+		setHasItem(true);
 	}
 
 	public boolean hasItem() {

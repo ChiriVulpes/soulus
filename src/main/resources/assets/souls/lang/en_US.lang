@@ -3,9 +3,17 @@ itemGroup.souls=Souls
 
 item.souls:bone_nether.name=Necrotic Bone
 item.souls:bone_ender.name=Ender Bone
+item.souls:bone_dry.name=Dry Bone
+item.souls:bone_frozen.name=Frozen Bone
+item.souls:bone_fungal.name=Mossy Bone
+item.souls:bone_scale.name=Scale
 item.souls:bone_chunk_normal.name=Bone Chunk
 item.souls:bone_chunk_nether.name=Necrotic Bone Chunk
 item.souls:bone_chunk_ender.name=Ender Bone Chunk
+item.souls:bone_chunk_dry.name=Dry Bone Chunk
+item.souls:bone_chunk_frozen.name=Frozen Bone Chunk
+item.souls:bone_chunk_fungal.name=Mossy Bone Chunk
+item.souls:bone_chunk_scale.name=Scale Chunk
 item.souls:bone_meal_nether.name=Necrotic Bone Meal
 
 item.souls:dust_ender.name=Ender Bonemeal

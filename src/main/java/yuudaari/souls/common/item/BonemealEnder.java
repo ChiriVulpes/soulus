@@ -5,5 +5,6 @@ public class BonemealEnder extends Bonemeal {
 		super("dust_ender");
 		glint = true;
 		addOreDict("dustEnder");
+		addOreDict("bonemeal");
 	}
 }

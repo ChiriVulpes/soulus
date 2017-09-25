@@ -13,23 +13,22 @@ import net.minecraft.world.IBlockAccess;
 import java.util.Collections;
 import java.util.List;
 
-public class FossilDirt extends ModBlock {
-	public FossilDirt() {
-		this("fossil_dirt");
+public class FossilSand extends ModBlock {
+	public FossilSand() {
+		this("fossil_sand");
 	}
 
-	public FossilDirt(String name) {
-		super(name, new Material(MapColor.DIRT).setToolNotRequired());
+	public FossilSand(String name) {
+		super(name, new Material(MapColor.SAND).setToolNotRequired());
 		setHasItem();
 		setHardness(0.5F);
-		setResistance(2.5F);
 		setHarvestLevel("shovel", 0);
-		setSoundType(SoundType.GROUND);
+		setSoundType(SoundType.SAND);
 	}
 
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		ItemStack boneChunk = ModItems.BONE_CHUNK_NORMAL.getItemStack(4);
+		ItemStack boneChunk = ModItems.BONE_CHUNK_DRY.getItemStack(4);
 		return Collections.singletonList(boneChunk);
 	}
 }

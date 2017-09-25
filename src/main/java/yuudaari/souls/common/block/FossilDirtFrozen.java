@@ -9,15 +9,15 @@ import net.minecraft.world.IBlockAccess;
 import java.util.Collections;
 import java.util.List;
 
-public class FossilDirtEnder extends FossilDirt {
-	public FossilDirtEnder() {
-		super("fossil_dirt_ender");
+public class FossilDirtFrozen extends FossilDirt {
+	public FossilDirtFrozen() {
+		super("fossil_dirt_frozen");
 		setHasItem();
 	}
 
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		ItemStack boneChunk = ModItems.BONE_CHUNK_ENDER.getItemStack(4);
+		ItemStack boneChunk = ModItems.BONE_CHUNK_FROZEN.getItemStack(4);
 		return Collections.singletonList(boneChunk);
 	}
 }

@@ -1,7 +1,7 @@
 package yuudaari.souls.common.util;
 
 public enum BoneType {
-	NORMAL, NETHER, ENDER, SCALE, MISC;
+	NORMAL, DRY, FUNGAL, FROZEN, SCALE, NETHER, ENDER;
 
 	public static BoneType getBoneType(String type) {
 		for (BoneType boneType : BoneType.values()) {

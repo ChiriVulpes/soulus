@@ -9,7 +9,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.world.DimensionType;
+import net.minecraftforge.common.BiomeDictionary.Type;
 
 public class GeneratorFossils extends ModGenerator {
 	{
@@ -17,13 +17,24 @@ public class GeneratorFossils extends ModGenerator {
 	}
 
 	public static OreVein[] defaultVeins = new OreVein[] {
-			new OreVein().setBlock("souls:fossil_dirt").setToReplace("minecraft:dirt").setSize(3, 7).setChances(300),
+			new OreVein().setBlock("souls:fossil_dirt").setToReplace("minecraft:dirt").setSize(3, 7).setChances(300)
+					.setBiomesBlacklist(Type.NETHER, Type.OCEAN, Type.END, Type.VOID),
+			new OreVein().setBlock("souls:fossil_dirt_fungal").setToReplace("minecraft:dirt").setSize(3, 7)
+					.setChances(300).setBiomes(Type.WET, Type.DENSE),
+			new OreVein().setBlock("souls:fossil_dirt_frozen").setToReplace("minecraft:dirt").setSize(3, 7)
+					.setChances(300).setBiomes(Type.COLD),
 			new OreVein().setBlock("souls:fossil_dirt_ender").setToReplace("minecraft:dirt").setSize(2, 5)
-					.setChances(100),
+					.setChances(100).setBiomesBlacklist(Type.NETHER, Type.OCEAN, Type.END, Type.VOID),
+			new OreVein().setBlock("souls:fossil_sand").setToReplace("minecraft:sand").setSize(3, 7).setChances(300)
+					.setBiomes(Type.HOT, Type.DRY).setBiomesBlacklist(Type.NETHER),
+			new OreVein().setBlock("souls:fossil_sand_scale").setToReplace("minecraft:sand").setSize(3, 7)
+					.setChances(300).setBiomes(Type.WATER, Type.HOT).setBiomesBlacklist(Type.NETHER),
+			new OreVein().setBlock("souls:fossil_sand_ender").setToReplace("minecraft:sand").setSize(2, 5)
+					.setBiomes(Type.HOT, Type.DRY).setBiomesBlacklist(Type.NETHER),
 			new OreVein().setBlock("souls:fossil_netherrack").setToReplace("minecraft:netherrack").setSize(3, 7)
-					.setChances(300).setDimension(DimensionType.NETHER),
+					.setChances(300).setBiomes(Type.NETHER),
 			new OreVein().setBlock("souls:fossil_netherrack_ender").setToReplace("minecraft:netherrack").setSize(2, 5)
-					.setChances(10).setDimension(DimensionType.NETHER) };
+					.setChances(10).setBiomes(Type.NETHER) };
 
 	public static final ManualSerializer serializer = new ManualSerializer(GeneratorFossils::serialize,
 			GeneratorFossils::deserialize);

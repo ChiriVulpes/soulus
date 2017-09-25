@@ -9,9 +9,9 @@ import net.minecraft.world.IBlockAccess;
 import java.util.Collections;
 import java.util.List;
 
-public class FossilDirtEnder extends FossilDirt {
-	public FossilDirtEnder() {
-		super("fossil_dirt_ender");
+public class FossilSandEnder extends FossilSand {
+	public FossilSandEnder() {
+		super("fossil_sand_ender");
 		setHasItem();
 	}
 
