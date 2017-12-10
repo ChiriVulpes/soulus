@@ -25,10 +25,10 @@ public class GeneratorFossils extends ModGenerator {
 					.setChances(300).setBiomes(Type.COLD),
 			new OreVein().setBlock("souls:fossil_dirt_ender").setToReplace("minecraft:dirt").setSize(2, 5)
 					.setChances(100).setBiomesBlacklist(Type.NETHER, Type.OCEAN, Type.END, Type.VOID),
-			new OreVein().setBlock("souls:fossil_sand").setToReplace("minecraft:sand").setSize(3, 7).setChances(300)
+			new OreVein().setBlock("souls:fossil_sand").setToReplace("minecraft:sand").setSize(3, 7).setChances(50)
 					.setBiomes(Type.HOT, Type.DRY).setBiomesBlacklist(Type.NETHER),
 			new OreVein().setBlock("souls:fossil_sand_scale").setToReplace("minecraft:sand").setSize(3, 7)
-					.setChances(300).setBiomes(Type.WATER, Type.HOT).setBiomesBlacklist(Type.NETHER),
+					.setChances(30).setBiomes(Type.WATER, Type.HOT).setBiomesBlacklist(Type.NETHER),
 			new OreVein().setBlock("souls:fossil_sand_ender").setToReplace("minecraft:sand").setSize(2, 5)
 					.setBiomes(Type.HOT, Type.DRY).setBiomesBlacklist(Type.NETHER),
 			new OreVein().setBlock("souls:fossil_netherrack").setToReplace("minecraft:netherrack").setSize(3, 7)

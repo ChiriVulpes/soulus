@@ -70,7 +70,7 @@ public class SummonerRenderer extends TileEntityRenderer<SummonerTileEntity> {
 		GlStateManager.translate(0.0F, -0.2F, 0.0F);
 		GlStateManager.scale(f, f, f);
 		renderMob.setLocationAndAngles(posX, posY, posZ, 0.0F, 0.0F);
-		Minecraft.getMinecraft().getRenderManager().doRenderEntity(renderMob, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks,
+		Minecraft.getMinecraft().getRenderManager().renderEntity(renderMob, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks,
 				false);
 	}
 }
