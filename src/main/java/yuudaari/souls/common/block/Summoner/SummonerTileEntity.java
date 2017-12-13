@@ -22,9 +22,13 @@ import yuudaari.souls.common.util.Range;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Stack;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -141,6 +145,7 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 		upgradeCounts.put(Upgrade.DELAY, 0);
 		upgradeCounts.put(Upgrade.RANGE, 0);
 	}
+	private Stack<Upgrade> insertionOrder = new Stack<>();
 
 	private int spawningRadius;
 	private int activatingRange;
@@ -169,7 +174,20 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 			newCount = maximum;
 		upgradeCounts.put(upgradeType, newCount);
 		updateUpgrades();
+		updateInsertionOrder(upgradeType);
 		return newCount - oldCount;
+	}
+
+	public Upgrade getLastInserted() {
+		return insertionOrder.size() == 0 ? null : insertionOrder.peek();
+	}
+
+	public int removeUpgrade(Upgrade upgradeType) {
+		int result = upgradeCounts.get(upgradeType);
+		upgradeCounts.put(upgradeType, 0);
+		updateInsertionOrder(upgradeType);
+		updateUpgrades();
+		return result;
 	}
 
 	private void setUpgradeCount(Upgrade upgradeType, int newCount) {
@@ -177,6 +195,13 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 		if (newCount > maximum)
 			newCount = maximum;
 		upgradeCounts.put(upgradeType, newCount);
+	}
+
+	private void updateInsertionOrder(Upgrade upgradeType) {
+		insertionOrder.remove(upgradeType);
+		if (upgradeCounts.get(upgradeType) > 0) {
+			insertionOrder.push(upgradeType);
+		}
 	}
 
 	private void updateUpgrades() {
@@ -261,7 +286,7 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 				int signalStrength = (int) Math.floor(16 * getSpawnPercent());
 				if (signalStrength != this.signalStrength) {
 					this.signalStrength = signalStrength;
-					this.markDirty();
+					markDirty();
 				}
 			}
 
@@ -307,6 +332,14 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 		setUpgradeCount(Upgrade.DELAY, upgradeTag.getByte("delay"));
 		setUpgradeCount(Upgrade.RANGE, upgradeTag.getByte("range"));
 		updateUpgrades(false);
+		String[] insertionOrder = new NBTHelper(compound).getStringArray("insertion_order");
+		for (String s : insertionOrder) {
+			for (Upgrade u : Upgrade.values()) {
+				if (u.name().equals(s)) {
+					this.insertionOrder.add(u);
+				}
+			}
+		}
 	}
 
 	@Nonnull
@@ -318,11 +351,25 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 		}
 
 		super.writeToNBT(compound);
-		return new NBTHelper(compound).setString("entity_type", spawnMob).setInteger("delay", timeTillSpawn)
-				.setInteger("delay_last", lastTimeTillSpawn).setTag("upgrades",
-						new NBTHelper().setByte("count", upgradeCounts.get(Upgrade.COUNT))
-								.setByte("delay", upgradeCounts.get(Upgrade.DELAY))
-								.setByte("range", upgradeCounts.get(Upgrade.RANGE)).nbt).nbt;
+
+		NBTHelper result = new NBTHelper(compound);
+		result.setString("entity_type", spawnMob);
+		result.setInteger("delay", timeTillSpawn);
+		result.setInteger("delay_last", lastTimeTillSpawn);
+
+		NBTHelper upgrades = new NBTHelper();
+		upgrades.setByte("count", upgradeCounts.get(Upgrade.COUNT));
+		upgrades.setByte("delay", upgradeCounts.get(Upgrade.DELAY));
+		upgrades.setByte("range", upgradeCounts.get(Upgrade.RANGE));
+		result.setTag("upgrades", upgrades.nbt);
+
+		List<String> insertionOrder = new ArrayList<>();
+		for (Upgrade u : this.insertionOrder) {
+			insertionOrder.add(u.name());
+		}
+		result.setStringArray("insertion_order", insertionOrder.toArray(new String[0]));
+
+		return result.nbt;
 	}
 
 	@Nonnull
@@ -335,7 +382,7 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 	@Nullable
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
-		return new SPacketUpdateTileEntity(this.pos, 1, getUpdateTag());
+		return new SPacketUpdateTileEntity(pos, 1, getUpdateTag());
 	}
 
 	@Override

@@ -121,3 +121,5 @@ tile.souls:bars_endersteel.name=Endersteel Bars
 
 tile.souls:summoner_empty.name=Empty Summoner
 tile.souls:summoner.name=Summoner
+
+death.attack.souls:blood_crystal=%1$s sacrificed themselves to a blood crystal

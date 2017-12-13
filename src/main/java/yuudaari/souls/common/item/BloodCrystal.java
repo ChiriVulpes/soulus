@@ -2,18 +2,24 @@ package yuudaari.souls.common.item;
 
 import yuudaari.souls.common.config.PotionEffectSerializer;
 import yuudaari.souls.common.config.Serializer;
+import yuudaari.souls.common.misc.SoulsDamageSource;
 import yuudaari.souls.common.util.Colour;
 import yuudaari.souls.common.util.ModPotionEffect;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+
+import com.google.common.collect.Multimap;
 
 public class BloodCrystal extends SummonerUpgrade {
 	private static int defaultRequiredBlood = 162;
@@ -108,7 +114,7 @@ public class BloodCrystal extends SummonerUpgrade {
 			int containedBlood = getContainedBlood(heldItem);
 			if (containedBlood < requiredBlood) {
 				setContainedBlood(heldItem, containedBlood + prickAmount);
-				playerIn.attackEntityFrom(DamageSource.GENERIC, prickAmount);
+				playerIn.attackEntityFrom(SoulsDamageSource.BLOOD_CRYSTAL, prickAmount);
 
 				for (ModPotionEffect effect : prickEffects)
 					playerIn.addPotionEffect(effect);
@@ -117,6 +123,31 @@ public class BloodCrystal extends SummonerUpgrade {
 			}
 		}
 		return new ActionResult<ItemStack>(EnumActionResult.FAIL, heldItem);
+	}
+
+	@Override
+	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+		if (target.getHealth() <= this.creaturePrickRequiredHealth / 2) {
+			target.attackEntityFrom(SoulsDamageSource.BLOOD_CRYSTAL, this.creaturePrickAmount);
+			int blood = getContainedBlood(stack);
+			setContainedBlood(stack, blood + this.creaturePrickWorth);
+		}
+		return true;
+	}
+
+	@Override
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot equipmentSlot,
+			ItemStack stack) {
+		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(equipmentSlot, stack);
+
+		if (equipmentSlot == EntityEquipmentSlot.MAINHAND) {
+			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(),
+					new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", 0, 0));
+			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(),
+					new AttributeModifier(ATTACK_SPEED_MODIFIER, "Tool modifier", (double) 0, 0));
+		}
+
+		return multimap;
 	}
 
 	public static int getContainedBlood(ItemStack stack) {

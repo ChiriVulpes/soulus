@@ -27,9 +27,11 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -80,6 +82,14 @@ public class Summoner extends ModBlock {
 
 	@SubscribeEvent
 	public void registerTileEntities(RegistryEvent.Register<Item> event) {
+	}
+
+	@SubscribeEvent
+	public static void rightClickBlock(PlayerInteractEvent.RightClickBlock event) {
+		IBlockState blockState = event.getWorld().getBlockState(event.getPos());
+		if (blockState.getBlock() instanceof Summoner && event.getItemStack().getItem() instanceof SummonerUpgrade) {
+			event.setUseBlock(Result.ALLOW);
+		}
 	}
 
 	@Override
@@ -162,13 +172,46 @@ public class Summoner extends ModBlock {
 			} else if (heldItem.equals(RangeUpgrade)) {
 				heldStack.shrink(summoner.addUpgradeStack(Upgrade.RANGE, sneaking ? heldStack.getCount() : 1));
 
-			} else if (sneaking && heldItem == Items.AIR) {
-				// empty hand and sneaking = return all items from summoner
-				for (ItemStack drop : getDrops(summoner.writeToNBT(new NBTTagCompound()))) {
-					returnItemToPlayer(world, drop, player);
-				}
+			} else if (heldItem.equals(Items.AIR)) {
+				if (sneaking) {
+					// empty hand and sneaking = return all items from summoner
+					for (ItemStack drop : getDrops(summoner.writeToNBT(new NBTTagCompound()))) {
+						returnItemToPlayer(world, drop, player);
+					}
 
-				world.setBlockState(pos, ModBlocks.SUMMONER_EMPTY.getDefaultState());
+					world.setBlockState(pos, ModBlocks.SUMMONER_EMPTY.getDefaultState());
+
+				} else {
+					Upgrade lastInserted = summoner.getLastInserted();
+					if (lastInserted != null) {
+						int amtRemoved = summoner.removeUpgrade(lastInserted);
+						if (amtRemoved > 0) {
+
+							ItemStack upgradeItem;
+							switch (lastInserted) {
+
+							case COUNT:
+								upgradeItem = CountUpgrade.getFilledStack();
+								break;
+
+							case DELAY:
+								upgradeItem = DelayUpgrade.getFilledStack();
+								break;
+
+							case RANGE:
+								upgradeItem = RangeUpgrade.getFilledStack();
+								break;
+
+							default:
+								upgradeItem = new ItemStack(Items.AIR);
+
+							}
+
+							upgradeItem.setCount(amtRemoved);
+							returnItemToPlayer(world, upgradeItem, player);
+						}
+					}
+				}
 			}
 		}
 

@@ -3,7 +3,10 @@ package yuudaari.souls.common.util;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class NBTHelper {
@@ -61,6 +64,18 @@ public class NBTHelper {
 
 	public String getString(String key) {
 		return this.nbt.getString(key);
+	}
+
+	public String[] getStringArray(String key) {
+		List<String> result = new ArrayList<>();
+		NBTTagList value = (NBTTagList) this.nbt.getTag(key);
+		for (NBTBase s : value) {
+			if (s instanceof NBTTagString) {
+				result.add(((NBTTagString) s).getString());
+			}
+		}
+
+		return result.toArray(new String[0]);
 	}
 
 	public NBTTagList getList(String key) {
@@ -153,6 +168,16 @@ public class NBTHelper {
 
 	public NBTHelper setIntArray(String key, int[] value) {
 		this.nbt.setIntArray(key, value);
+		return this;
+	}
+
+	public NBTHelper setStringArray(String key, String[] value) {
+		NBTTagList list = new NBTTagList();
+		for (String s : value) {
+			list.appendTag(new NBTTagString(s));
+		}
+		this.nbt.setTag(key, list);
+
 		return this;
 	}
 

@@ -97,12 +97,14 @@ public class OreVein {
 						}
 					}
 					if (!matched) {
+						/*
 						Logger.info(
 								"Can't put '" + block + "' in biome '" + biome.getBiomeName() + "' (not whitelisted)");
 						String out = "";
 						for (Type type : biomeTypesWhitelist)
 							out += type.getName() + ", ";
 						Logger.info(out);
+						*/
 						// don't even bother, we failed once, it's likely we'll fail again
 						// might as well speed up gen speeds slightly
 						break;
