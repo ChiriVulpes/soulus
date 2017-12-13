@@ -46,8 +46,42 @@ minecraft {
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
+repositories {
+    maven {
+        url "http://maven.blamejared.com"
+    }
+    
+    repositories {
+        // Required for JEI and Mantle
+        maven {
+            name "DVS1 Maven FS" 
+            url "http://dvs1.progwml6.com/files/maven" 
+        }
+
+        // Required for HWYLA
+        maven {
+            name "tehnut"
+            url "http://tehnut.info/maven"
+        }
+
+        // Required for TheOneProbe
+        maven {
+            name "tterrag"
+            url "http://maven.tterrag.com"
+        }
+        
+        repositories {
+            // Required for RedstoneFlux
+            maven {
+                name = "CoFH Maven"
+                url = "http://maven.covers1624.net"
+            }
+        }
+    }
+}
+
 dependencies {
-    // provided "exnihilocreatio:exnihilocreatio:1.12-0.1.5"
+    provided "exnihilocreatio:exnihilocreatio:1.12-0.1.5.9"
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"

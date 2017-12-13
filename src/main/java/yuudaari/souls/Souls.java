@@ -3,7 +3,7 @@ package yuudaari.souls;
 import yuudaari.souls.client.ModRenderers;
 import yuudaari.souls.common.config.Config;
 import yuudaari.souls.common.config.SoulConfig;
-// import yuudaari.souls.common.misc.ExNihiloCreatio;
+import yuudaari.souls.common.misc.ExNihiloCreatio;
 import yuudaari.souls.common.ModBlocks;
 import yuudaari.souls.common.ModGenerators;
 import yuudaari.souls.common.ModItems;
@@ -118,7 +118,7 @@ public class Souls {
 		for (PostInitEventHandler handler : postInitHandlers) {
 			handler.handle(event);
 		}
-		// ExNihiloCreatio.init();
+		ExNihiloCreatio.init();
 	}
 
 	@SubscribeEvent
