@@ -4,10 +4,15 @@ import exnihilocreatio.ModBlocks;
 import exnihilocreatio.blocks.BlockSieve;
 import exnihilocreatio.registries.manager.ExNihiloRegistryManager;
 import net.minecraft.init.Blocks;
+import net.minecraftforge.fml.common.Loader;
 import yuudaari.souls.common.ModItems;
 
 public class ExNihiloCreatio {
 	public static void init() {
+		if (!Loader.isModLoaded("exnihilocreatio")) {
+			return;
+		}
+
 		ExNihiloRegistryManager.SIEVE_REGISTRY.register(Blocks.SAND.getDefaultState(),
 				ModItems.BONE_CHUNK_NORMAL.getItemStack(), 0.1f, BlockSieve.MeshType.FLINT.getID());
 		ExNihiloRegistryManager.SIEVE_REGISTRY.register(Blocks.SAND.getDefaultState(),
