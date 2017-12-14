@@ -122,7 +122,7 @@ tile.souls:fossil_dirt_frozen.name=Dirt with Frozen Fossils
 tile.souls:fossil_dirt_fungal.name=Dirt with Fossils and Moss
 tile.souls:fossil_netherrack.name=Netherrack with Fossils
 tile.souls:fossil_netherrack_ender.name=Netherrack with Glowing Fossils
-tile.souls:fossil_sand_dry.name=Sand with Dry Fossils
+tile.souls:fossil_sand.name=Sand with Dry Fossils
 tile.souls:fossil_sand_scale.name=Sand with Scale Fossils
 tile.souls:fossil_sand_ender.name=Sand with Glowing Fossils
 
