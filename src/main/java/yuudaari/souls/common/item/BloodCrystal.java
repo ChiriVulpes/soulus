@@ -5,6 +5,7 @@ import yuudaari.souls.common.config.Serializer;
 import yuudaari.souls.common.misc.SoulsDamageSource;
 import yuudaari.souls.common.util.Colour;
 import yuudaari.souls.common.util.ModPotionEffect;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -15,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -108,18 +110,20 @@ public class BloodCrystal extends SummonerUpgrade {
 	@ParametersAreNonnullByDefault
 	@Nonnull
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
-		ItemStack heldItem = playerIn.getHeldItem(hand);
-		if (!worldIn.isRemote) {
-			int containedBlood = getContainedBlood(heldItem);
-			if (containedBlood < requiredBlood) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand hand) {
+		ItemStack heldItem = player.getHeldItem(hand);
+		int containedBlood = getContainedBlood(heldItem);
+		if (containedBlood < requiredBlood) {
+			if (!worldIn.isRemote) {
 				setContainedBlood(heldItem, containedBlood + prickAmount);
-				playerIn.attackEntityFrom(SoulsDamageSource.BLOOD_CRYSTAL, prickAmount);
+				player.attackEntityFrom(SoulsDamageSource.BLOOD_CRYSTAL, prickAmount);
 
 				for (ModPotionEffect effect : prickEffects)
-					playerIn.addPotionEffect(effect);
+					player.addPotionEffect(effect);
 
 				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, heldItem);
+			} else {
+				particles(player);
 			}
 		}
 		return new ActionResult<ItemStack>(EnumActionResult.FAIL, heldItem);
@@ -131,6 +135,7 @@ public class BloodCrystal extends SummonerUpgrade {
 			target.attackEntityFrom(SoulsDamageSource.BLOOD_CRYSTAL, this.creaturePrickAmount);
 			int blood = getContainedBlood(stack);
 			setContainedBlood(stack, blood + this.creaturePrickWorth);
+			particles(target);
 		}
 		return true;
 	}
@@ -166,5 +171,9 @@ public class BloodCrystal extends SummonerUpgrade {
 		}
 		tag.setByte("ContainedBlood", (byte) (count + Byte.MIN_VALUE));
 		return stack;
+	}
+
+	private void particles(EntityLivingBase hitEntity) {
+		Minecraft.getMinecraft().effectRenderer.emitParticleAtEntity(hitEntity, EnumParticleTypes.CRIT);
 	}
 }
