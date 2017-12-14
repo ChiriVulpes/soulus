@@ -77,6 +77,8 @@ Endersteel can be converted between a block and nuggets. You can craft Enderstee
 
 ![Crafting Endersteel Bars](./preview/endersteel_bars.png)
 
+Here's what they look like in the world:
+
 ![Endersteel Bars Preview](./preview/endersteel_bars_preview.png)
 
 ## Summoner
@@ -99,29 +101,29 @@ There are three upgrades for a summoner. An Oscillating Gear increases the speed
 
 ### Oscillating Gear
 
-![Bone Gear](./preview/bone_gear.png)
-
 All bone types can be used to create bone gears of varying types.
 
-![Oscillating Gear](./preview/oscillating_gear_1.png)
+![Bone Gear](./preview/bone_gear.png)
 
 Using most bone types you can make a gear and surround it by endersteel to create an oscillating gear.
 
-![Oscillating Gear](./preview/oscillating_gear_2.png)
+![Oscillating Gear](./preview/oscillating_gear_1.png)
 
 Surrounding an ender bone gear in iron creates 2 oscillating gears. 
+
+![Oscillating Gear](./preview/oscillating_gear_2.png)
 
 By default, a summoner can hold 64 oscillating gears, ranging from around 10 minutes per summon to around 10 seconds per summon.
 
 ### Murky Orb
 
-![Strange Sticky Ball](./preview/strange_sticky_ball.png)
-
 Surrounding ender bonemeal with slimeballs (or glue) produces a Strange Sticky Ball. 
 
-![Murky Orb](./preview/murky_orb.png)
+![Strange Sticky Ball](./preview/strange_sticky_ball.png)
 
 Crafting a Strange Sticky Ball with essence of any type puts the essence into it. At 64 essence it becomes a Murky Orb.
+
+![Murky Orb](./preview/murky_orb.png)
 
 When a Murky Orb has been filled, its stack limit is 16.
 
@@ -131,7 +133,9 @@ By default, a summoner can hold 64 murky orbs, ranging from around a range of 3 
 
 ![Blood Crystal](./preview/blood_crystal.png)
 
-Smelting an emerald or soul sand produces a Burnt Emerald. Crafting a Burnt Emerald with redstone and a slimeball or glue produces a Bloody Emerald. Smelting a Bloody Emerald produces a Blood Crystal.
+1. Smelting an emerald or soul sand produces a Burnt Emerald. 
+2. Crafting a Burnt Emerald with redstone and a slimeball or glue produces a Bloody Emerald.
+3. Smelting a Bloody Emerald produces a Blood Crystal.
 
 By default, a Blood Crystal requires 162 blood. You may collect blood in two ways:
 
