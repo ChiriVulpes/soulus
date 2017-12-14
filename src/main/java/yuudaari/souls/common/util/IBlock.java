@@ -1,7 +1,7 @@
 package yuudaari.souls.common.util;
 
+import yuudaari.souls.common.CreativeTab;
 import yuudaari.souls.common.util.IModItem;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -21,7 +21,7 @@ public interface IBlock extends IModItem {
 
 	abstract Class<? extends TileEntity> getTileEntityClass();
 
-	abstract CreativeTabs getCreativeTabToDisplayOn();
+	abstract CreativeTab getCreativeTabToDisplayOn();
 
-	abstract void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items);
+	abstract void getSubBlocks(CreativeTab itemIn, NonNullList<ItemStack> items);
 }
