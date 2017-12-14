@@ -31,6 +31,14 @@ public class BloodCrystal extends SummonerUpgrade {
 	private static ModPotionEffect[] defaultPrickEffects = new ModPotionEffect[] { new ModPotionEffect("hunger", 100),
 			new ModPotionEffect("nausea", 200) };
 
+	public static Serializer<BloodCrystal> serializer;
+	static {
+		serializer = new Serializer<>(BloodCrystal.class, "requiredBlood", "prickAmount", "prickWorth",
+				"creaturePrickRequiredHealth", "creaturePrickAmount", "creaturePrickWorth");
+
+		serializer.fieldHandlers.put("prickEffects", PotionEffectSerializer.INSTANCE);
+	}
+
 	private static int colourEmpty = 0x281313;
 	private static int colourFilled = 0xBC2044;
 
@@ -41,14 +49,6 @@ public class BloodCrystal extends SummonerUpgrade {
 	public int creaturePrickAmount = defaultCreaturePrickAmount;
 	public int creaturePrickWorth = defaultCreaturePrickWorth;
 	public ModPotionEffect[] prickEffects = defaultPrickEffects;
-
-	public static Serializer<BloodCrystal> serializer;
-	static {
-		serializer = new Serializer<>(BloodCrystal.class, "requiredBlood", "prickAmount", "prickWorth",
-				"creaturePrickRequiredHealth", "creaturePrickAmount", "creaturePrickWorth");
-
-		serializer.fieldHandlers.put("prickEffects", PotionEffectSerializer.INSTANCE);
-	}
 
 	public BloodCrystal() {
 		super("blood_crystal");

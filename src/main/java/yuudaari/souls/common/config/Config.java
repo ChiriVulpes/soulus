@@ -37,12 +37,14 @@ public class Config {
 	public boolean replaceSpawnersWithSummoners = true;
 	public List<String> spawnEntityWhitelist = new ArrayList<>();
 	public List<String> spawnEntityBlacklist = new ArrayList<>();
+	public int boneChunkParticleCount = 3;
 
 	/* SERIALIZER */
 
 	private static final Serializer<Config> serializer;
 	static {
-		serializer = new Serializer<>(Config.class, "spawnChance", "replaceSpawnersWithSummoners");
+		serializer = new Serializer<>(Config.class, "spawnChance", "replaceSpawnersWithSummoners",
+				"boneChunkParticleCount");
 
 		serializer.fieldHandlers.put("spawnEntityWhitelist",
 				new ManualSerializer(Config::serializeList, Config::deserializeList));

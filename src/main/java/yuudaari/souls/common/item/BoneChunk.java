@@ -7,11 +7,15 @@ import yuudaari.souls.common.util.BoneType;
 import yuudaari.souls.common.util.ModItem;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -24,6 +28,7 @@ import java.util.Map;
 import java.util.Random;
 
 public class BoneChunk extends ModItem {
+
 	private Map<String, Double> drops = new HashMap<>();
 	private int chanceTotal = 0;
 
@@ -87,6 +92,28 @@ public class BoneChunk extends ModItem {
 			}
 		}
 		heldItem.setCount(heldItem.getCount() - 1);
+
+		particles(world, player);
+
 		return new ActionResult<>(EnumActionResult.PASS, heldItem);
+	}
+
+	private void particles(World world, EntityPlayer player) {
+		for (int i = 0; i < Souls.config.boneChunkParticleCount; ++i) {
+			Vec3d v = new Vec3d(((double) world.rand.nextFloat() - 0.5D) * 0.1D, Math.random() * 0.1D + 0.1D, 0.0D);
+			v = v.rotatePitch(-player.rotationPitch * 0.017453292F);
+			v = v.rotateYaw(-player.rotationYaw * 0.017453292F);
+			double d0 = (double) (-world.rand.nextFloat()) * 0.6D - 0.3D;
+			Vec3d v2 = new Vec3d(((double) world.rand.nextFloat() - 0.5D) * 0.3D, d0, 0.6D);
+			v2 = v2.rotatePitch(-player.rotationPitch * 0.017453292F);
+			v2 = v2.rotateYaw(-player.rotationYaw * 0.017453292F);
+			v2 = v2.addVector(player.posX, player.posY + (double) player.getEyeHeight(), player.posZ);
+
+			world.spawnParticle(EnumParticleTypes.ITEM_CRACK, v2.x, v2.y, v2.z, v.x, v.y + 0.05D, v.z,
+					Item.getIdFromItem(this));
+		}
+
+		player.playSound(SoundEvents.BLOCK_GRAVEL_HIT, 0.5F + 0.5F * (float) world.rand.nextInt(2),
+				(world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F + 1.0F);
 	}
 }
