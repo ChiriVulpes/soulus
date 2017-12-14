@@ -2,11 +2,11 @@
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
 		{
-			"item": "souls:block_endersteel"
+			"item": "souls:bone_frozen"
 		}
 	],
 	"result": {
-		"item": "souls:ingot_endersteel",
-		"count": 9
+		"item": "souls:bone_chunk_frozen",
+		"count": 3
 	}
 }

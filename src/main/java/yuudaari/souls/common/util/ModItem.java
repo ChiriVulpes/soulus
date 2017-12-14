@@ -74,9 +74,18 @@ public class ModItem extends Item implements IModItem {
 		setUnlocalizedName(getRegistryName().toString());
 	}
 
-	public void addOreDict(String... name) {
+	public ModItem addOreDict(String... name) {
 		for (String dict : name)
 			oreDicts.add(dict);
+
+		return this;
+	}
+
+	public ModItem removeOreDict(String... name) {
+		for (String dict : name)
+			oreDicts.remove(dict);
+
+		return this;
 	}
 
 	public List<String> getOreDicts() {

@@ -2,7 +2,8 @@
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
 		{
-			"item": "souls:bone_chunk_normal"
+			"type": "forge:ore_dict",
+			"ore": "boneChunk"
 		},
 		{
 			"item": "souls:sledgehammer",

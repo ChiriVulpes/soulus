@@ -6,6 +6,7 @@
 		}
 	],
 	"result": {
-		"item": "souls:nugget_endersteel"
+		"item": "souls:nugget_endersteel",
+		"count": 9
 	}
 }

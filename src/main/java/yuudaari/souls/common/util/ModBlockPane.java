@@ -34,9 +34,11 @@ public class ModBlockPane extends BlockPane implements IBlock {
 		setUnlocalizedName(getRegistryName().toString());
 	}
 
-	public void addOreDict(String... name) {
+	public ModBlockPane addOreDict(String... name) {
 		for (String dict : name)
 			oreDicts.add(dict);
+
+		return this;
 	}
 
 	public List<String> getOreDicts() {

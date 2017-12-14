@@ -7,6 +7,7 @@ import yuudaari.souls.common.item.BloodCrystal;
 import yuudaari.souls.common.item.Glue;
 import yuudaari.souls.common.item.OrbMurky;
 import yuudaari.souls.common.item.Sledgehammer;
+import yuudaari.souls.common.misc.BarkFromLogs;
 import yuudaari.souls.common.util.BoneType;
 import yuudaari.souls.common.util.Logger;
 import yuudaari.souls.common.world.generators.GeneratorFossils;
@@ -75,6 +76,10 @@ public class Config {
 
 		serializer.otherHandlers.put("summoner", new ManualSerializer(from -> SummonerTileEntity.serialize(),
 				(from, into) -> SummonerTileEntity.deserialize(from)));
+
+		serializer.otherHandlers.put("barkFromLogs",
+				new ManualSerializer(from -> BarkFromLogs.serializer.serialize(BarkFromLogs.INSTANCE),
+						(from, into) -> BarkFromLogs.serializer.deserialize(from, BarkFromLogs.INSTANCE)));
 
 	}
 
@@ -223,7 +228,7 @@ public class Config {
 		return dropMap;
 	}
 
-	private static JsonElement serializeList(Object obj) {
+	public static JsonElement serializeList(Object obj) {
 		@SuppressWarnings("unchecked")
 		List<String> list = (List<String>) obj;
 
@@ -234,7 +239,7 @@ public class Config {
 		return result;
 	}
 
-	private static List<String> deserializeList(JsonElement listElement, Object currentObject) {
+	public static List<String> deserializeList(JsonElement listElement, Object currentObject) {
 		@SuppressWarnings("unchecked")
 		List<String> list = (List<String>) currentObject;
 
@@ -243,6 +248,8 @@ public class Config {
 			return list;
 		}
 		JsonArray jsonList = listElement.getAsJsonArray();
+
+		list.clear();
 
 		for (JsonElement item : jsonList) {
 			if (!item.isJsonPrimitive() || !item.getAsJsonPrimitive().isString()) {

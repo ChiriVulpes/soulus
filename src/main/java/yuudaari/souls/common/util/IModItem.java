@@ -11,7 +11,7 @@ public interface IModItem {
 
 	abstract void setName(String name);
 
-	abstract void addOreDict(String... name);
+	abstract IModItem addOreDict(String... name);
 
 	abstract List<String> getOreDicts();
 

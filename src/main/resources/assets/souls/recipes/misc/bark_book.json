@@ -1,0 +1,23 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"item": "minecraft:paper"
+		},
+		{
+			"item": "minecraft:paper"
+		},
+		{
+			"item": "minecraft:paper"
+		},
+		{
+			"item": "souls:bark"
+		},
+		{
+			"item": "souls:bark"
+		}
+	],
+	"result": {
+		"item": "minecraft:book"
+	}
+}

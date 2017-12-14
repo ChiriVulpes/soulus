@@ -24,7 +24,7 @@ item.souls:ingot_endersteel.name=Endersteel Ingot
 item.souls:nugget_endersteel.name=Endersteel Nugget
 
 item.souls:glue.name=Glue
-
+item.souls:bark.name=Bark
 
 item.souls:emerald_burnt.name=Burnt Emerald
 item.souls:emerald_coated.name=Bloody Emerald
@@ -35,6 +35,9 @@ item.souls:gear_oscillating.name=Oscillating Gear
 item.souls:gear_bone.name=Bone Gear
 item.souls:gear_bone_ender.name=Ender Bone Gear
 item.souls:gear_bone_nether.name=Necrotic Bone Gear
+item.souls:gear_bone_frozen.name=Frozen Bone Gear
+item.souls:gear_bone_fungal.name=Mossy Bone Gear
+item.souls:gear_bone_dry.name=Dry Bone Gear
 
 item.souls:orb_murky.name=Strange Sticky Ball
 item.souls:orb_murky.filled.name=Murky Orb
@@ -109,6 +112,8 @@ item.souls:essence.minecraft:silverfish.name=Silverfish Essence
 item.souls:essence.minecraft:slime.name=Slime Essence
 item.souls:essence.minecraft:magmacube.name=Magma Cube Essence
 item.souls:essence.minecraft:mooshroom.name=Mooshroom Essence
+item.souls:essence.minecraft:parrot.name=Parrot Essence
+item.souls:essence.minecraft:vindication_illager.name=Illager Essence
 
 
 tile.souls:fossil_dirt.name=Dirt with Fossils

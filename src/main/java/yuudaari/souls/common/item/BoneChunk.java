@@ -35,6 +35,8 @@ public class BoneChunk extends ModItem {
 	public BoneChunk(String name, BoneType boneType) {
 		super(name);
 
+		addOreDict("boneChunk");
+
 		Souls.onInit((FMLInitializationEvent e) -> {
 			for (Map.Entry<String, EssenceDropConfig> drop : Souls.config.drops.get(boneType).entrySet()) {
 				String entityName = drop.getKey();

@@ -1,0 +1,21 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		" i ",
+		"iEi",
+		" i "
+	],
+	"key": {
+		"E": {
+			"item": "souls:gear_bone_ender"
+		},
+		"i": {
+			"type": "forge:ore_dict",
+			"ore": "ingotIron"
+		}
+	},
+	"result": {
+		"item": "souls:gear_oscillating",
+		"count": 2
+	}
+}

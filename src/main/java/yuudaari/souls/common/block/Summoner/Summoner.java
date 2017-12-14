@@ -131,24 +131,26 @@ public class Summoner extends ModBlock {
 		return drops;
 	}
 
-	private List<ItemStack> getDrops(NBTTagCompound summonerData) {
-		List<ItemStack> drops = new ArrayList<>();
-
-		// soulbook
+	private ItemStack getSoulbook(NBTTagCompound summonerData) {
 		String entityName = getSummonerEntity(summonerData);
 		ItemStack soulbook = ModItems.SOULBOOK.getItemStack();
 		MobTarget.setMobTarget(soulbook, entityName);
 		Soulbook.setContainedEssence(soulbook, Souls.getSoulInfo(entityName).quantity);
-		drops.add(soulbook);
+
+		return soulbook;
+	}
+
+	private List<ItemStack> getDrops(NBTTagCompound summonerData) {
+		List<ItemStack> drops = new ArrayList<>();
+
+		// soulbook
+		drops.add(getSoulbook(summonerData));
 
 		// upgrades
 		Upgrades upgrades = getSummonerUpgrades(summonerData);
-		for (int i = 0; i < upgrades.countUpgrades; i++)
-			drops.add(CountUpgrade.getFilledStack());
-		for (int i = 0; i < upgrades.delayUpgrades; i++)
-			drops.add(DelayUpgrade.getFilledStack());
-		for (int i = 0; i < upgrades.rangeUpgrades; i++)
-			drops.add(RangeUpgrade.getFilledStack());
+		drops.addAll(getUpgradeStacks(CountUpgrade, upgrades.countUpgrades));
+		drops.addAll(getUpgradeStacks(DelayUpgrade, upgrades.delayUpgrades));
+		drops.addAll(getUpgradeStacks(RangeUpgrade, upgrades.rangeUpgrades));
 
 		return drops;
 	}
@@ -183,32 +185,36 @@ public class Summoner extends ModBlock {
 
 				} else {
 					Upgrade lastInserted = summoner.getLastInserted();
-					if (lastInserted != null) {
+					if (lastInserted == null) {
+						returnItemToPlayer(world, getSoulbook(summoner.writeToNBT(new NBTTagCompound())), player);
+						world.setBlockState(pos, ModBlocks.SUMMONER_EMPTY.getDefaultState());
+
+					} else {
 						int amtRemoved = summoner.removeUpgrade(lastInserted);
 						if (amtRemoved > 0) {
 
-							ItemStack upgradeItem;
+							List<ItemStack> stacks = null;
 							switch (lastInserted) {
 
 							case COUNT:
-								upgradeItem = CountUpgrade.getFilledStack();
+								stacks = getUpgradeStacks(CountUpgrade, amtRemoved);
 								break;
 
 							case DELAY:
-								upgradeItem = DelayUpgrade.getFilledStack();
+								stacks = getUpgradeStacks(DelayUpgrade, amtRemoved);
 								break;
 
 							case RANGE:
-								upgradeItem = RangeUpgrade.getFilledStack();
+								stacks = getUpgradeStacks(RangeUpgrade, amtRemoved);
 								break;
-
-							default:
-								upgradeItem = new ItemStack(Items.AIR);
 
 							}
 
-							upgradeItem.setCount(amtRemoved);
-							returnItemToPlayer(world, upgradeItem, player);
+							if (stacks != null) {
+								for (int i = 0; i < stacks.size(); i++) {
+									returnItemToPlayer(world, stacks.get(i), player);
+								}
+							}
 						}
 					}
 				}
@@ -216,6 +222,18 @@ public class Summoner extends ModBlock {
 		}
 
 		return true;
+	}
+
+	private List<ItemStack> getUpgradeStacks(SummonerUpgrade upgrade, int count) {
+		List<ItemStack> result = new ArrayList<>();
+		do {
+			ItemStack stack = upgrade.getFilledStack();
+			stack.setCount(Math.min(stack.getMaxStackSize(), count));
+			count -= stack.getMaxStackSize();
+			result.add(stack);
+		} while (count > 0);
+
+		return result;
 	}
 
 	private void returnItemToPlayer(World world, ItemStack item, EntityPlayer player) {
