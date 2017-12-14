@@ -8,6 +8,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -23,7 +24,11 @@ public class ModBlock extends Block implements IBlock {
 	public ModBlock(String name, Material material) {
 		super(material);
 		setName(name);
-		setCreativeTab(CreativeTab.INSTANCE);
+	}
+
+	@Override
+	public CreativeTabs getCreativeTabToDisplayOn() {
+		return CreativeTab.INSTANCE;
 	}
 
 	public String getName() {

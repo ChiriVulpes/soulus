@@ -1,12 +1,12 @@
 package yuudaari.souls.common;
 
 import yuudaari.souls.common.util.IBlock;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -49,8 +49,10 @@ public class ModBlocks {
 					OreDictionary.registerOre(dict, item);
 				}
 			}
-			if (block.hasTileEntity()) {
-				GameRegistry.registerTileEntity(block.getTileEntityClass(), "souls:summoner");
+
+			Class<? extends TileEntity> te = block.getTileEntityClass();
+			if (te != null) {
+				GameRegistry.registerTileEntity(te, block.getRegistryName().toString());
 			}
 		}
 	}

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.block.BlockPane;
 import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 
@@ -19,7 +20,11 @@ public class ModBlockPane extends BlockPane implements IBlock {
 	public ModBlockPane(String name, Material material) {
 		super(material, true);
 		setName(name);
-		setCreativeTab(CreativeTab.INSTANCE);
+	}
+
+	@Override
+	public CreativeTabs getCreativeTabToDisplayOn() {
+		return CreativeTab.INSTANCE;
 	}
 
 	public String getName() {

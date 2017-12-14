@@ -9,6 +9,7 @@ import java.util.List;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -51,12 +52,16 @@ public class ModItem extends Item implements IModItem {
 
 	public ModItem(String name) {
 		setName(name);
-		setCreativeTab(CreativeTab.INSTANCE);
 	}
 
 	public ModItem(String name, Integer maxStackSize) {
 		this(name);
 		setMaxStackSize(maxStackSize);
+	}
+
+	@Override
+	public CreativeTabs getCreativeTab() {
+		return CreativeTab.INSTANCE;
 	}
 
 	public String getName() {

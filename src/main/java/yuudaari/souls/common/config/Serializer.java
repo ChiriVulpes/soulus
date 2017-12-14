@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.annotation.Nullable;
 import yuudaari.souls.common.util.Logger;
 
 public class Serializer<T> {
@@ -152,14 +151,13 @@ public class Serializer<T> {
 					}
 
 					Class<?> type = field.getType();
-					boolean nullable = field.getAnnotation(Nullable.class) != null;
 
 					String jsonFieldName = toSnakeCase(fieldName);
 					JsonElement fieldElement = json.get(jsonFieldName);
 
 					Object deserialized = getAsType(fieldElement, type);
 
-					if (deserialized == null && !nullable) {
+					if (deserialized == null) {
 						Logger.warn("The property '" + jsonFieldName + "' can't be null");
 						continue;
 					}

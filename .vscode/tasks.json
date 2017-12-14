@@ -2,13 +2,20 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"taskName": "Test",
+			"label": "Test",
 			"type": "shell",
 			"group": {
 				"kind": "build",
 				"isDefault": true
 			},
 			"command": "\"./gradlew\" runClient",
+			"problemMatcher": []
+		},
+		{
+			"label": "Build",
+			"type": "shell",
+			"group": "build",
+			"command": "\"./gradlew\" build",
 			"problemMatcher": []
 		}
 	]
