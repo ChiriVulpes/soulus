@@ -3,11 +3,13 @@ package yuudaari.souls.common.item;
 import yuudaari.souls.common.ModItems;
 import yuudaari.souls.common.config.Serializer;
 import yuudaari.souls.common.recipe.Recipe;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -137,5 +139,13 @@ public class OrbMurky extends SummonerUpgrade {
 		}
 		tag.setByte("essence_quantity", (byte) (count + Byte.MIN_VALUE));
 		return stack;
+	}
+
+	@Override
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+		if (this.isInCreativeTab(tab)) {
+			items.add(this.getItemStack());
+			items.add(this.getFilledStack());
+		}
 	}
 }

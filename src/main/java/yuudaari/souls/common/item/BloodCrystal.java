@@ -6,6 +6,7 @@ import yuudaari.souls.common.misc.SoulsDamageSource;
 import yuudaari.souls.common.util.Colour;
 import yuudaari.souls.common.util.ModPotionEffect;
 import net.minecraft.client.Minecraft;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -17,6 +18,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -175,5 +177,13 @@ public class BloodCrystal extends SummonerUpgrade {
 
 	private void particles(EntityLivingBase hitEntity) {
 		Minecraft.getMinecraft().effectRenderer.emitParticleAtEntity(hitEntity, EnumParticleTypes.CRIT);
+	}
+
+	@Override
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+		if (this.isInCreativeTab(tab)) {
+			items.add(this.getItemStack());
+			items.add(this.getFilledStack());
+		}
 	}
 }

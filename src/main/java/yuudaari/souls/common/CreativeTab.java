@@ -1,6 +1,7 @@
 package yuudaari.souls.common;
 
 import yuudaari.souls.Souls;
+import yuudaari.souls.common.item.Soulbook;
 import yuudaari.souls.common.util.IBlock;
 import yuudaari.souls.common.util.ModItem;
 import net.minecraft.creativetab.CreativeTabs;
@@ -19,7 +20,9 @@ public final class CreativeTab extends CreativeTabs {
 	@Nonnull
 	@Override
 	public ItemStack getTabIconItem() {
-		return ModItems.SOULBOOK.getItemStack();
+		ItemStack soulbook = ModItems.SOULBOOK.getItemStack();
+		Soulbook.setContainedEssence(soulbook, 1);
+		return soulbook;
 	}
 
 	@Override

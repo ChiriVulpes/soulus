@@ -1,6 +1,7 @@
 package yuudaari.souls.common.block.Summoner;
 
 import yuudaari.souls.Souls;
+import yuudaari.souls.common.CreativeTab;
 import yuudaari.souls.common.ModBlocks;
 import yuudaari.souls.common.ModItems;
 import yuudaari.souls.common.block.Summoner.SummonerTileEntity.Upgrade;
@@ -77,7 +78,6 @@ public class Summoner extends ModBlock {
 		setHarvestLevel("pickaxe", 1);
 		setSoundType(SoundType.METAL);
 		disableStats();
-		setCreativeTab(null);
 	}
 
 	@SubscribeEvent
@@ -259,5 +259,10 @@ public class Summoner extends ModBlock {
 	public int getComparatorInputOverride(IBlockState state, World world, BlockPos pos) {
 		SummonerTileEntity te = (SummonerTileEntity) world.getTileEntity(pos);
 		return te.getSignalStrength();
+	}
+
+	@Override
+	public CreativeTab getCreativeTabToDisplayOn() {
+		return null;
 	}
 }

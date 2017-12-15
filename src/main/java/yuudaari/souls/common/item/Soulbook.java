@@ -118,9 +118,9 @@ public class Soulbook extends ModItem {
 	@Override
 	public boolean showDurabilityBar(ItemStack stack) {
 		String mobTarget = MobTarget.getMobTarget(stack);
-		if (mobTarget == null)
-			return true;
 		int containedEssence = getContainedEssence(stack);
+		if (mobTarget == null)
+			return containedEssence == 0;
 		return containedEssence < Souls.getSoulInfo(mobTarget).quantity;
 	}
 
