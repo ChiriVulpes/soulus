@@ -114,6 +114,10 @@ item.souls:essence.minecraft:magmacube.name=Magma Cube Essence
 item.souls:essence.minecraft:mooshroom.name=Mooshroom Essence
 item.souls:essence.minecraft:parrot.name=Parrot Essence
 item.souls:essence.minecraft:vindication_illager.name=Illager Essence
+item.souls:essence.minecraft:husk.name=Husk Essence
+item.souls:essence.minecraft:llama.name=Llama Essence
+item.souls:essence.minecraft:snowman.name=Snowman Essence
+item.souls:essence.minecraft:stray.name=Stray Essence
 
 
 tile.souls:fossil_dirt.name=Dirt with Fossils
