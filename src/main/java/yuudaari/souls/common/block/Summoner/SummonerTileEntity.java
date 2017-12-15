@@ -13,6 +13,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.souls.common.ModBlocks;
 import yuudaari.souls.common.config.ManualSerializer;
 import yuudaari.souls.common.config.Serializer;
@@ -481,10 +483,10 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 		return spawned;
 	}
 
+	@SideOnly(Side.CLIENT)
 	private void explosionParticles(EntityLiving entity) {
 		Random rand = world.rand;
 
-		// this line will crash if this is ever called from the client
 		WorldServer worldServer = world.getMinecraftServer().getWorld(entity.dimension);
 
 		for (int i = 0; i < config.particleCountSpawn; ++i) {

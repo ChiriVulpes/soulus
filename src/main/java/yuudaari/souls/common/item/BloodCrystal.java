@@ -1,11 +1,15 @@
 package yuudaari.souls.common.item;
 
+import yuudaari.souls.client.util.ParticleManager;
+import yuudaari.souls.client.util.ParticleType;
+import yuudaari.souls.common.ModItems;
 import yuudaari.souls.common.config.PotionEffectSerializer;
 import yuudaari.souls.common.config.Serializer;
 import yuudaari.souls.common.misc.SoulsDamageSource;
+import yuudaari.souls.common.network.SoulsPacketHandler;
+import yuudaari.souls.common.network.packet.BloodCrystalHitEntity;
 import yuudaari.souls.common.util.Colour;
 import yuudaari.souls.common.util.ModPotionEffect;
-import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -17,12 +21,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-
 import com.google.common.collect.Multimap;
 
 public class BloodCrystal extends SummonerUpgrade {
@@ -32,13 +38,14 @@ public class BloodCrystal extends SummonerUpgrade {
 	private static int defaultCreaturePrickRequiredHealth = 1;
 	private static int defaultCreaturePrickAmount = 1;
 	private static int defaultCreaturePrickWorth = 3;
+	private static int defaultParticleCount = 50;
 	private static ModPotionEffect[] defaultPrickEffects = new ModPotionEffect[] { new ModPotionEffect("hunger", 100),
 			new ModPotionEffect("nausea", 200) };
 
 	public static Serializer<BloodCrystal> serializer;
 	static {
 		serializer = new Serializer<>(BloodCrystal.class, "requiredBlood", "prickAmount", "prickWorth",
-				"creaturePrickRequiredHealth", "creaturePrickAmount", "creaturePrickWorth");
+				"creaturePrickRequiredHealth", "creaturePrickAmount", "creaturePrickWorth", "particleCount");
 
 		serializer.fieldHandlers.put("prickEffects", PotionEffectSerializer.INSTANCE);
 	}
@@ -52,6 +59,7 @@ public class BloodCrystal extends SummonerUpgrade {
 	public int creaturePrickRequiredHealth = defaultCreaturePrickRequiredHealth;
 	public int creaturePrickAmount = defaultCreaturePrickAmount;
 	public int creaturePrickWorth = defaultCreaturePrickWorth;
+	public int particleCount = defaultParticleCount;
 	public ModPotionEffect[] prickEffects = defaultPrickEffects;
 
 	public BloodCrystal() {
@@ -125,7 +133,9 @@ public class BloodCrystal extends SummonerUpgrade {
 
 				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, heldItem);
 			} else {
-				particles(player);
+				if (player.world.isRemote) {
+					particles(player);
+				}
 			}
 		}
 		return new ActionResult<ItemStack>(EnumActionResult.FAIL, heldItem);
@@ -137,7 +147,8 @@ public class BloodCrystal extends SummonerUpgrade {
 			target.attackEntityFrom(SoulsDamageSource.BLOOD_CRYSTAL, this.creaturePrickAmount);
 			int blood = getContainedBlood(stack);
 			setContainedBlood(stack, blood + this.creaturePrickWorth);
-			particles(target);
+			SoulsPacketHandler.INSTANCE.sendToAllAround(new BloodCrystalHitEntity(target),
+					new TargetPoint(target.dimension, target.posX, target.posY, target.posZ, 128));
 		}
 		return true;
 	}
@@ -175,8 +186,20 @@ public class BloodCrystal extends SummonerUpgrade {
 		return stack;
 	}
 
-	private void particles(EntityLivingBase hitEntity) {
-		Minecraft.getMinecraft().effectRenderer.emitParticleAtEntity(hitEntity, EnumParticleTypes.CRIT);
+	@SideOnly(Side.CLIENT)
+	public static void particles(EntityLivingBase entity) {
+		World world = entity.getEntityWorld();
+		Random rand = world.rand;
+
+		for (int i = 0; i < ModItems.BLOOD_CRYSTAL.particleCount; ++i) {
+			double d3 = (entity.posX - 0.5F + rand.nextFloat());
+			double d4 = (entity.posY + rand.nextFloat());
+			double d5 = (entity.posZ - 0.5F + rand.nextFloat());
+			double d3o = (d3 - entity.posX) / 5;
+			double d4o = (d4 - entity.posY) / 5;
+			double d5o = (d5 - entity.posZ) / 5;
+			ParticleManager.spawnParticle(world, ParticleType.BLOOD.getId(), false, d3, d4, d5, d3o, d4o, d5o, 1);
+		}
 	}
 
 	@Override
