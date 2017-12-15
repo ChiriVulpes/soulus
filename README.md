@@ -6,6 +6,8 @@ Everything is configurable. There's no hardcoded things in this mod. If you find
 
 ## Previews
 
+The following preview images are of a Summoner with maximum upgrades:
+
 ![Pigsplosion](./preview/pigsplosion.png)
 
 ![Summoning](./preview/summoning.png)
