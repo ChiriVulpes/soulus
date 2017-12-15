@@ -27,14 +27,14 @@ public final class CreativeTab extends CreativeTabs {
 
 	@Override
 	public void displayAllRelevantItems(NonNullList<ItemStack> list) {
-		for (ModItem item : ModItems.items) {
-			if (item.getCreativeTab() == this) {
-				item.getSubItems(this, list);
-			}
-		}
 		for (IBlock block : ModBlocks.blocks) {
 			if (block.getCreativeTabToDisplayOn() == this) {
 				block.getSubBlocks(this, list);
+			}
+		}
+		for (ModItem item : ModItems.items) {
+			if (item.getCreativeTab() == this) {
+				item.getSubItems(this, list);
 			}
 		}
 	}
