@@ -12,6 +12,12 @@ There are no distribution restrictions for Soulus. You may use it in any modpack
 
 See below for an in-depth list of features in the mod.
 
+## Download
+
+[Github](https://github.com/Yuudaari/soulus/releases/latest)
+
+[CurseForge](https://minecraft.curseforge.com/projects/soulus)
+
 ## Previews
 
 ![Items](./preview/items.png)
