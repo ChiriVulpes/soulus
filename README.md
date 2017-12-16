@@ -14,6 +14,8 @@ See below for an in-depth list of features in the mod.
 
 ## Previews
 
+![Items](./preview/items.png)
+
 The following preview images are of a Summoner with maximum upgrades:
 
 ![Pigsplosion](./preview/pigsplosion.png)
