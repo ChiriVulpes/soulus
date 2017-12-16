@@ -14,6 +14,7 @@ import yuudaari.souls.common.block.Summoner.SummonerTileEntity;
 public class Waila implements IWailaPlugin, IWailaDataProvider {
 	@Override
 	public void register(IWailaRegistrar registrar) {
+		registrar.registerHeadProvider(this, Summoner.class);
 		registrar.registerBodyProvider(this, Summoner.class);
 	}
 
