@@ -141,8 +141,8 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 	/* OTHER */
 	private boolean hasInit = false;
 	private String spawnMob;
-	private int timeTillSpawn = 0;
-	private int lastTimeTillSpawn;
+	private float timeTillSpawn = 0;
+	private float lastTimeTillSpawn;
 	private Map<Upgrade, Integer> upgradeCounts = new HashMap<>();
 	{
 		upgradeCounts.put(Upgrade.COUNT, 0);
@@ -268,7 +268,7 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 				double d0 = player.getDistanceSqToCenter(pos);
 
 				double nearAmt = (d0 / (activatingRange * activatingRange));
-				activationAmount += 1 - (nearAmt * nearAmt);
+				activationAmount += (1 - (nearAmt * nearAmt)) * 2;
 			}
 		}
 
@@ -344,8 +344,8 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 		super.readFromNBT(compound);
 
 		spawnMob = compound.getString("entity_type");
-		timeTillSpawn = compound.getInteger("delay");
-		lastTimeTillSpawn = compound.getInteger("delay_last");
+		timeTillSpawn = compound.getFloat("delay");
+		lastTimeTillSpawn = compound.getFloat("delay_last");
 		NBTTagCompound upgradeTag = compound.getCompoundTag("upgrades");
 		setUpgradeCount(Upgrade.COUNT, upgradeTag.getByte("count"));
 		setUpgradeCount(Upgrade.DELAY, upgradeTag.getByte("delay"));
@@ -373,8 +373,8 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 
 		NBTHelper result = new NBTHelper(compound);
 		result.setString("entity_type", spawnMob);
-		result.setInteger("delay", timeTillSpawn);
-		result.setInteger("delay_last", lastTimeTillSpawn);
+		result.setFloat("delay", timeTillSpawn);
+		result.setFloat("delay_last", lastTimeTillSpawn);
 
 		NBTHelper upgrades = new NBTHelper();
 		upgrades.setByte("count", upgradeCounts.get(Upgrade.COUNT));
