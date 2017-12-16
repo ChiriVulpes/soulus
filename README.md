@@ -8,6 +8,7 @@ It adds in custom spawners, called Summoners, which start out incredibly underpo
 
 There are no distribution restrictions for Soulus. You may use it in any modpack, with any launcher.
 
+See the [Project Roadmap](https://trello.com/b/DfeJpjGX/soulus).
 See below for an in-depth list of features in the mod.
 
 ## Previews
