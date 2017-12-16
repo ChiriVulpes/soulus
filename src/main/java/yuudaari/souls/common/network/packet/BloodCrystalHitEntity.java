@@ -36,8 +36,7 @@ public class BloodCrystalHitEntity implements IMessage {
 		@Override
 		public IMessage onMessage(BloodCrystalHitEntity message, MessageContext ctx) {
 			BloodCrystal.particles(message.getEntity());
-
-			return message;
+			return null;
 		}
 	}
 }

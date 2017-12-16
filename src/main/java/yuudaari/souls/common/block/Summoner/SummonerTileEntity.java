@@ -164,6 +164,15 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 	public double prevMobRotation;
 	public EntityLiving renderMob;
 
+	public void reset() {
+		this.renderMob = null;
+		this.resetTimer();
+	}
+
+	public int getUpgradeCount(Upgrade upgradeType) {
+		return upgradeCounts.get(upgradeType);
+	}
+
 	public boolean addUpgrade(Upgrade upgradeType) {
 		boolean result = addUpgradeStack(upgradeType, 1) == 1;
 		updateUpgrades();

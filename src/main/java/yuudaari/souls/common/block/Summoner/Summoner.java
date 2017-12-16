@@ -7,6 +7,8 @@ import yuudaari.souls.common.ModItems;
 import yuudaari.souls.common.block.Summoner.SummonerTileEntity.Upgrade;
 import yuudaari.souls.common.item.Soulbook;
 import yuudaari.souls.common.item.SummonerUpgrade;
+import yuudaari.souls.common.network.SoulsPacketHandler;
+import yuudaari.souls.common.network.packet.SummonerChangeMob;
 import yuudaari.souls.common.util.Material;
 import yuudaari.souls.common.util.MobTarget;
 import yuudaari.souls.common.util.ModBlock;
@@ -64,6 +66,11 @@ public class Summoner extends ModBlock {
 	private static Upgrades getSummonerUpgrades(NBTTagCompound summonerData) {
 		NBTTagCompound upgradeData = summonerData.getCompoundTag("upgrades");
 		return new Upgrades(upgradeData.getByte("delay"), upgradeData.getByte("range"), upgradeData.getByte("count"));
+	}
+
+	private static Upgrades getSummonerUpgrades(SummonerTileEntity te) {
+		return new Upgrades(te.getUpgradeCount(Upgrade.DELAY), te.getUpgradeCount(Upgrade.RANGE),
+				te.getUpgradeCount(Upgrade.COUNT));
 	}
 
 	private static String getSummonerEntity(NBTTagCompound summonerData) {
@@ -131,8 +138,15 @@ public class Summoner extends ModBlock {
 		return drops;
 	}
 
+	private ItemStack getSoulbook(SummonerTileEntity te) {
+		return getSoulbook(te.getMob());
+	}
+
 	private ItemStack getSoulbook(NBTTagCompound summonerData) {
-		String entityName = getSummonerEntity(summonerData);
+		return getSoulbook(getSummonerEntity(summonerData));
+	}
+
+	private ItemStack getSoulbook(String entityName) {
 		ItemStack soulbook = ModItems.SOULBOOK.getItemStack();
 		MobTarget.setMobTarget(soulbook, entityName);
 		Soulbook.setContainedEssence(soulbook, Souls.getSoulInfo(entityName).quantity);
@@ -143,11 +157,22 @@ public class Summoner extends ModBlock {
 	private List<ItemStack> getDrops(NBTTagCompound summonerData) {
 		List<ItemStack> drops = new ArrayList<>();
 
-		// soulbook
 		drops.add(getSoulbook(summonerData));
 
-		// upgrades
 		Upgrades upgrades = getSummonerUpgrades(summonerData);
+		drops.addAll(getUpgradeStacks(CountUpgrade, upgrades.countUpgrades));
+		drops.addAll(getUpgradeStacks(DelayUpgrade, upgrades.delayUpgrades));
+		drops.addAll(getUpgradeStacks(RangeUpgrade, upgrades.rangeUpgrades));
+
+		return drops;
+	}
+
+	private List<ItemStack> getDrops(SummonerTileEntity te) {
+		List<ItemStack> drops = new ArrayList<>();
+
+		drops.add(getSoulbook(te));
+
+		Upgrades upgrades = getSummonerUpgrades(te);
 		drops.addAll(getUpgradeStacks(CountUpgrade, upgrades.countUpgrades));
 		drops.addAll(getUpgradeStacks(DelayUpgrade, upgrades.delayUpgrades));
 		drops.addAll(getUpgradeStacks(RangeUpgrade, upgrades.rangeUpgrades));
@@ -165,7 +190,18 @@ public class Summoner extends ModBlock {
 			Item heldItem = heldStack.getItem();
 			boolean sneaking = player.isSneaking();
 
-			if (heldItem.equals(CountUpgrade)) {
+			if (heldItem.equals(ModItems.SOULBOOK)) {
+				returnItemToPlayer(world, getSoulbook(summoner), player);
+				if (!world.isRemote) {
+					String mob = MobTarget.getMobTarget(heldStack);
+					summoner.setMob(mob);
+					summoner.reset();
+					SoulsPacketHandler.INSTANCE.sendToDimension(new SummonerChangeMob(summoner, mob),
+							world.provider.getDimension());
+				}
+				heldStack.shrink(1);
+
+			} else if (heldItem.equals(CountUpgrade)) {
 				heldStack.shrink(summoner.addUpgradeStack(Upgrade.COUNT, sneaking ? heldStack.getCount() : 1));
 
 			} else if (heldItem.equals(DelayUpgrade)) {
@@ -177,7 +213,7 @@ public class Summoner extends ModBlock {
 			} else if (heldItem.equals(Items.AIR)) {
 				if (sneaking) {
 					// empty hand and sneaking = return all items from summoner
-					for (ItemStack drop : getDrops(summoner.writeToNBT(new NBTTagCompound()))) {
+					for (ItemStack drop : getDrops(summoner)) {
 						returnItemToPlayer(world, drop, player);
 					}
 
