@@ -16,19 +16,23 @@ public class Waila implements IWailaPlugin, IWailaDataProvider {
 	public void register(IWailaRegistrar registrar) {
 		registrar.registerHeadProvider(this, Summoner.class);
 		registrar.registerBodyProvider(this, Summoner.class);
+		registrar.registerStackProvider(this, Summoner.class);
 	}
 
+	/*
 	@Override
+	@SideOnly(Side.CLIENT)
 	public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor,
 			IWailaConfigHandler config) {
-
+	
 		if (accessor.getBlock() instanceof Summoner) {
 			SummonerTileEntity summoner = (SummonerTileEntity) accessor.getTileEntity();
-			return summoner.getWailaHeader();
+			return summoner.getWailaHeader(currenttip);
 		}
-
+	
 		return currenttip;
 	}
+	*/
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -37,9 +41,19 @@ public class Waila implements IWailaPlugin, IWailaDataProvider {
 
 		if (accessor.getBlock() instanceof Summoner) {
 			SummonerTileEntity summoner = (SummonerTileEntity) accessor.getTileEntity();
-			return summoner.getWailaTooltip();
+			return summoner.getWailaTooltip(currenttip);
 		}
 
 		return currenttip;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
+		if (accessor.getBlock() instanceof Summoner) {
+			return ((Summoner) accessor.getBlock()).getItemStack((SummonerTileEntity) accessor.getTileEntity());
+		}
+
+		return null;
 	}
 }

@@ -5,6 +5,8 @@ import yuudaari.souls.common.CreativeTab;
 import yuudaari.souls.common.ModBlocks;
 import yuudaari.souls.common.ModItems;
 import yuudaari.souls.common.block.Summoner.SummonerTileEntity.Upgrade;
+import yuudaari.souls.common.item.BloodCrystal;
+import yuudaari.souls.common.item.OrbMurky;
 import yuudaari.souls.common.item.Soulbook;
 import yuudaari.souls.common.item.SummonerUpgrade;
 import yuudaari.souls.common.network.SoulsPacketHandler;
@@ -12,14 +14,15 @@ import yuudaari.souls.common.network.packet.SummonerChangeMob;
 import yuudaari.souls.common.util.Material;
 import yuudaari.souls.common.util.MobTarget;
 import yuudaari.souls.common.util.ModBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -29,7 +32,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -87,8 +89,32 @@ public class Summoner extends ModBlock {
 		disableStats();
 	}
 
-	@SubscribeEvent
-	public void registerTileEntities(RegistryEvent.Register<Item> event) {
+	public static class SummonerItemBlock extends ItemBlock {
+		public SummonerItemBlock(Block b) {
+			super(b);
+			setRegistryName(Souls.MODID + ":summoner");
+		}
+
+		@Override
+		public String getUnlocalizedNameInefficiently(@Nonnull ItemStack stack) {
+			return "tile." + Souls.MODID + ":summoner." + MobTarget.getMobTarget(stack);
+		}
+	}
+
+	private final SummonerItemBlock ITEM = new SummonerItemBlock(this);
+
+	public ItemStack getItemStack(SummonerTileEntity te) {
+		ItemStack itemStack = new ItemStack(ITEM);
+
+		SummonerTileEntity tileEntity = (SummonerTileEntity) te.getWorld().getTileEntity(te.getPos());
+		itemStack.setTagCompound(tileEntity.writeToNBT(new NBTTagCompound()));
+
+		return itemStack;
+	}
+
+	@Override
+	public ItemBlock getItemBlock() {
+		return ITEM;
 	}
 
 	@SubscribeEvent
@@ -202,13 +228,17 @@ public class Summoner extends ModBlock {
 				heldStack.shrink(1);
 
 			} else if (heldItem.equals(CountUpgrade)) {
-				heldStack.shrink(summoner.addUpgradeStack(Upgrade.COUNT, sneaking ? heldStack.getCount() : 1));
+				if (BloodCrystal.getContainedBlood(heldStack) == ModItems.BLOOD_CRYSTAL.requiredBlood) {
+					heldStack.shrink(summoner.addUpgradeStack(Upgrade.COUNT, sneaking ? heldStack.getCount() : 1));
+				}
 
 			} else if (heldItem.equals(DelayUpgrade)) {
 				heldStack.shrink(summoner.addUpgradeStack(Upgrade.DELAY, sneaking ? heldStack.getCount() : 1));
 
 			} else if (heldItem.equals(RangeUpgrade)) {
-				heldStack.shrink(summoner.addUpgradeStack(Upgrade.RANGE, sneaking ? heldStack.getCount() : 1));
+				if (OrbMurky.getContainedEssence(heldStack) == ModItems.ORB_MURKY.requiredEssence) {
+					heldStack.shrink(summoner.addUpgradeStack(Upgrade.RANGE, sneaking ? heldStack.getCount() : 1));
+				}
 
 			} else if (heldItem.equals(Items.AIR)) {
 				if (sneaking) {
@@ -282,8 +312,8 @@ public class Summoner extends ModBlock {
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
 			EntityPlayer player) {
 		// if they're requesting the block with nbt data, it needs to be this block, not an empty summoner
-		return player.isCreative() && GuiScreen.isCtrlKeyDown() ? getItemStack()
-				: ModBlocks.SUMMONER_EMPTY.getItemStack();
+		return // player.isCreative() && GuiScreen.isCtrlKeyDown() ? getItemStack() : 
+		ModBlocks.SUMMONER_EMPTY.getItemStack();
 	}
 
 	@Override

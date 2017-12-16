@@ -20,7 +20,6 @@ public class ParticleManager {
 
 	public static void spawnParticle(World world, int particleId, boolean ignoreRange, double xCoord, double yCoord,
 			double zCoord, double xSpeed, double ySpeed, double zSpeed, int... parameters) {
-		Logger.info("particles!");
 		try {
 			m.invoke(world, particleId, ignoreRange, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, parameters);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {

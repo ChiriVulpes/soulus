@@ -540,19 +540,9 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public List<String> getWailaHeader() {
-		List<String> result = new ArrayList<>();
-		result.add(I18n.format("waila." + Souls.MODID + ":summoner.header", spawnMob));
-		Logger.info(result.toString());
-		return result;
-	}
-
-	@SideOnly(Side.CLIENT)
-	public List<String> getWailaTooltip() {
-		List<String> result = new ArrayList<>();
-		result.add(I18n.format("waila." + Souls.MODID + ":summoner.label_percent",
+	public List<String> getWailaTooltip(List<String> currenttip) {
+		currenttip.add(I18n.format("waila." + Souls.MODID + ":summoner.label_percent",
 				(int) Math.floor(getSpawnPercent() * 100)));
-		Logger.info(result.toString());
-		return result;
+		return currenttip;
 	}
 }
