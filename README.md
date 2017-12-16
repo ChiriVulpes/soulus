@@ -2,7 +2,13 @@
 
 ### A Minecraft mod. You must sift through the ashes of the dead to restore life to the world.
 
-Everything is configurable. There's no hardcoded things in this mod. If you find hardcoded things, make an issue!!! I like extreme configuration.
+Soulus is a mod I created because I was sick of building giant mob-spawning boxes in skyblock modpacks.
+
+It adds in custom spawners, called Summoners, which start out incredibly underpowered but can be upgraded to be extremely fast and efficient. The upgrades are incredibly expensive and will likely take a long time to craft in the early game, but everything can be automated with other mods. The mod is also highly configurable, so you can make everything cheap and easy if you want to.
+
+There are no distribution restrictions for Soulus. You may use it in any modpack, with any launcher.
+
+See below for an in-depth list of features in the mod.
 
 ## Previews
 
@@ -157,6 +163,16 @@ Glue is crafted from sugar, bonemeal, and a bucket of water. It can be used anyw
 ### Bark
 
 Every 100 or so logs produces 8 bark instead of a log. You can use 2 bark and 3 paper to make a book.
+
+## Mod Support
+
+### Ex Nihilo Creatio
+
+Drops are added automatically to Ex Nihilo Creatio Sieves. The default values are not configurable as they can be configured via Ex Nihilo Creatio configs.
+
+### Other Explicitly Supported Mods
+
+Waila (Hwyla)
 
 ## Contributing
 
