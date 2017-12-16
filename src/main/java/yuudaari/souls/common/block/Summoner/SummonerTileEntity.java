@@ -2,10 +2,12 @@ package yuudaari.souls.common.block.Summoner;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -253,10 +255,24 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 		return (lastTimeTillSpawn - timeTillSpawn) / (float) lastTimeTillSpawn;
 	}
 
-	/** Whether there's a player close enough to activate it */
-	private boolean isActivated() {
-		return world.isAnyPlayerWithinRangeAt(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, activatingRange)
-				&& world.isBlockIndirectlyGettingPowered(pos) == 0;
+	private double activationAmount() {
+		if (world.isBlockIndirectlyGettingPowered(pos) != 0) {
+			return 0;
+		}
+
+		double activationAmount = 0;
+
+		for (EntityPlayer player : world.playerEntities) {
+
+			if (EntitySelectors.NOT_SPECTATING.apply(player)) {
+				double d0 = player.getDistanceSqToCenter(pos);
+
+				double nearAmt = (d0 / (activatingRange * activatingRange));
+				activationAmount += 1 - (nearAmt * nearAmt);
+			}
+		}
+
+		return Math.max(0, activationAmount);
 	}
 
 	@Override
@@ -271,7 +287,8 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 			updateUpgrades();
 		}
 
-		if (!isActivated()) {
+		double activationAmount = activationAmount();
+		if (activationAmount <= 0) {
 			// ease rotation to a stop
 			double diff = mobRotation - prevMobRotation;
 			prevMobRotation = mobRotation;
@@ -280,7 +297,7 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 		}
 
 		if (timeTillSpawn > 0) {
-			timeTillSpawn--;
+			timeTillSpawn -= activationAmount;
 
 			if (world.isRemote) {
 				updateRenderer();
