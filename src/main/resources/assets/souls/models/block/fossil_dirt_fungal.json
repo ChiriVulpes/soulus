@@ -1,6 +1,0 @@
-{
-	"parent": "minecraft:block/cube_all",
-	"textures": {
-		"all": "souls:blocks/fossil_dirt_fungal"
-	}
-}

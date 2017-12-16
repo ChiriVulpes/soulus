@@ -1,0 +1,9 @@
+{
+	"type": "soulus:furnace",
+	"input": {
+		"item": "minecraft:rotten_flesh"
+	},
+	"result": {
+		"item": "minecraft:leather"
+	}
+}

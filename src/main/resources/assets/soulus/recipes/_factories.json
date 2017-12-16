@@ -1,0 +1,7 @@
+{
+	"recipes": {
+		"crafting_shaped": "yuudaari.soulus.common.recipe.RecipeShaped$Factory",
+		"crafting_shapeless": "yuudaari.soulus.common.recipe.RecipeShapeless$Factory",
+		"furnace": "yuudaari.soulus.common.recipe.RecipeFurnace$Factory"
+	}
+}

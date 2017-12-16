@@ -1,0 +1,18 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"item": "soulus:emerald_burnt"
+		},
+		{
+			"type": "forge:ore_dict",
+			"ore": "slimeball"
+		},
+		{
+			"item": "minecraft:redstone"
+		}
+	],
+	"result": {
+		"item": "soulus:emerald_coated"
+	}
+}

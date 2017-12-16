@@ -1,0 +1,9 @@
+{
+	"type": "soulus:furnace",
+	"input": {
+		"item": "minecraft:soul_sand"
+	},
+	"result": {
+		"item": "soulus:emerald_burnt"
+	}
+}

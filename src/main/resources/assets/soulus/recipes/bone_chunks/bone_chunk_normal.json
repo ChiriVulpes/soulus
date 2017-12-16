@@ -1,0 +1,13 @@
+{
+	"type": "soulus:crafting_shapeless",
+	"override": "minecraft:bone_meal_from_bone",
+	"ingredients": [
+		{
+			"item": "minecraft:bone"
+		}
+	],
+	"result": {
+		"item": "soulus:bone_chunk_normal",
+		"count": 3
+	}
+}

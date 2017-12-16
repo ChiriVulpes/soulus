@@ -1,4 +1,4 @@
-# SOULS
+# SOULUS
 
 ### A Minecraft mod. You must sift through the ashes of the dead to restore life to the world.
 
@@ -160,7 +160,7 @@ Every 100 or so logs produces 8 bark instead of a log. You can use 2 bark and 3 
 
 ## Contributing
 
-If you have an error, bug, or have found an oversight please leave an issue about it. I'll try to get to them as fast as I can. If you want to help develop Souls and already know how to mod, great, make an issue and then a PR if you know what you want to do. If you don't know how to mod, I probably won't have the time to help teach you, but you're welcome to join my [Discord server](https://discord.gg/fwvBfus) and chat/ask questions.
+If you have an error, bug, or have found an oversight please leave an issue about it. I'll try to get to them as fast as I can. If you want to help develop Soulus and already know how to mod, great, make an issue and then a PR if you know what you want to do. If you don't know how to mod, I probably won't have the time to help teach you, but you're welcome to join my [Discord server](https://discord.gg/fwvBfus) and chat/ask questions.
 
 If you have a suggestion you can also leave them as an issue. I will close suggestions that I dislike or are out of scope for the mod.
 

@@ -1,9 +1,0 @@
-{
-	"type": "souls:furnace",
-	"input": {
-		"item": "minecraft:emerald"
-	},
-	"result": {
-		"item": "souls:emerald_burnt"
-	}
-}

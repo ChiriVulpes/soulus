@@ -1,9 +1,0 @@
-{
-	"type": "souls:furnace",
-	"input": {
-		"item": "souls:emerald_coated"
-	},
-	"result": {
-		"item": "souls:blood_crystal"
-	}
-}
