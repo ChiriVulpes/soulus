@@ -103,6 +103,8 @@ Summoning entities does not obey natural spawn rules. You may summon entities an
 
 If you right click a summoner, all inserted items of the last type inserted are returned. If you sneak + right click a summoner, all items in the summoner are returned.
 
+If a summoner is receiving a redstone signal it will not be active.
+
 Summoners support comparators, they will output a signal strength of 0 if they are at 0% summoned and 15 if they are at 100% summoned.
 
 ## Summoner Upgrades
