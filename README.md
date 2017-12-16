@@ -2,13 +2,14 @@
 
 ### A Minecraft mod. You must sift through the ashes of the dead to restore life to the world.
 
+[Roadmap](https://trello.com/b/DfeJpjGX/soulus)
+
 Soulus is a mod I created because I was sick of building giant mob-spawning boxes in skyblock modpacks.
 
 It adds in custom spawners, called Summoners, which start out incredibly underpowered but can be upgraded to be extremely fast and efficient. The upgrades are incredibly expensive and will likely take a long time to craft in the early game, but everything can be automated with other mods. The mod is also highly configurable, so you can make everything cheap and easy if you want to.
 
 There are no distribution restrictions for Soulus. You may use it in any modpack, with any launcher.
 
-See the [Project Roadmap](https://trello.com/b/DfeJpjGX/soulus).
 See below for an in-depth list of features in the mod.
 
 ## Previews
