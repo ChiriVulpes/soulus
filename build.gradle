@@ -47,8 +47,15 @@ minecraft {
 }
 
 repositories {
+    // Required for Ex Nihilo Creatio
     maven {
         url "http://maven.blamejared.com"
+    }
+
+    // Required for HWYLA
+    maven {
+        name "tehnut"
+        url "http://tehnut.info/maven"
     }
     
     repositories {
@@ -56,12 +63,6 @@ repositories {
         maven {
             name "DVS1 Maven FS" 
             url "http://dvs1.progwml6.com/files/maven" 
-        }
-
-        // Required for HWYLA
-        maven {
-            name "tehnut"
-            url "http://tehnut.info/maven"
         }
 
         // Required for TheOneProbe
@@ -82,6 +83,7 @@ repositories {
 
 dependencies {
     provided "exnihilocreatio:exnihilocreatio:1.12-0.1.5.9"
+    provided "mcp.mobius.waila:Hwyla:1.8.20-B38_1.12:api"
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"

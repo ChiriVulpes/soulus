@@ -1,4 +1,4 @@
-package yuudaari.souls.common.misc;
+package yuudaari.souls.common.compat;
 
 import exnihilocreatio.ModBlocks;
 import exnihilocreatio.blocks.BlockSieve;

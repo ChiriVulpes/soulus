@@ -1,6 +1,7 @@
 package yuudaari.souls.common.block.Summoner;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,6 +18,7 @@ import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import yuudaari.souls.Souls;
 import yuudaari.souls.common.ModBlocks;
 import yuudaari.souls.common.config.ManualSerializer;
 import yuudaari.souls.common.config.Serializer;
@@ -535,5 +537,22 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 			worldServer.spawnParticle(EnumParticleTypes.DRAGON_BREATH, d3, d4, d5, 1, d3o, d4o, d5o,
 					Math.sqrt(d3o * d3o + d4o * d4o + d5o * d5o) * 2);
 		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	public List<String> getWailaHeader() {
+		List<String> result = new ArrayList<>();
+		result.add(I18n.format("waila." + Souls.MODID + ":summoner.header", spawnMob));
+		Logger.info(result.toString());
+		return result;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public List<String> getWailaTooltip() {
+		List<String> result = new ArrayList<>();
+		result.add(I18n.format("waila." + Souls.MODID + ":summoner.label_percent",
+				(int) Math.floor(getSpawnPercent() * 100)));
+		Logger.info(result.toString());
+		return result;
 	}
 }
