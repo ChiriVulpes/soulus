@@ -1,5 +1,6 @@
 package yuudaari.souls.common.item;
 
+import yuudaari.souls.Souls;
 import yuudaari.souls.client.util.ParticleManager;
 import yuudaari.souls.client.util.ParticleType;
 import yuudaari.souls.common.ModItems;
@@ -10,6 +11,8 @@ import yuudaari.souls.common.network.SoulsPacketHandler;
 import yuudaari.souls.common.network.packet.BloodCrystalHitEntity;
 import yuudaari.souls.common.util.Colour;
 import yuudaari.souls.common.util.ModPotionEffect;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -26,8 +29,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 import java.util.Random;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.common.collect.Multimap;
 
@@ -158,6 +164,12 @@ public class BloodCrystal extends SummonerUpgrade {
 			ItemStack stack) {
 		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(equipmentSlot, stack);
 
+		int containedBlood = getContainedBlood(stack);
+
+		if (containedBlood == requiredBlood) {
+			return multimap;
+		}
+
 		if (equipmentSlot == EntityEquipmentSlot.MAINHAND) {
 			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(),
 					new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", 0, 0));
@@ -207,6 +219,16 @@ public class BloodCrystal extends SummonerUpgrade {
 		if (this.isInCreativeTab(tab)) {
 			items.add(this.getItemStack());
 			items.add(this.getFilledStack());
+		}
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		int containedBlood = BloodCrystal.getContainedBlood(stack);
+		if (containedBlood < requiredBlood) {
+			tooltip.add(I18n.format("tooltip." + Souls.MODID + ":blood_crystal.contained_blood", containedBlood,
+					requiredBlood));
 		}
 	}
 }

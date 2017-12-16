@@ -1,8 +1,11 @@
 package yuudaari.souls.common.item;
 
+import yuudaari.souls.Souls;
 import yuudaari.souls.common.ModItems;
 import yuudaari.souls.common.config.Serializer;
 import yuudaari.souls.common.recipe.Recipe;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
@@ -11,6 +14,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -146,6 +153,16 @@ public class OrbMurky extends SummonerUpgrade {
 		if (this.isInCreativeTab(tab)) {
 			items.add(this.getItemStack());
 			items.add(this.getFilledStack());
+		}
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		int containedEssence = OrbMurky.getContainedEssence(stack);
+		if (containedEssence < requiredEssence) {
+			tooltip.add(I18n.format("tooltip." + Souls.MODID + ":orb_murky.contained_essence", containedEssence,
+					requiredEssence));
 		}
 	}
 }

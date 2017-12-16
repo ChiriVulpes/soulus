@@ -541,7 +541,7 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 
 	@SideOnly(Side.CLIENT)
 	public List<String> getWailaTooltip(List<String> currenttip) {
-		currenttip.add(I18n.format("waila." + Souls.MODID + ":summoner.label_percent",
+		currenttip.add(I18n.format("waila." + Souls.MODID + ":summoner.summon_percentage",
 				(int) Math.floor(getSpawnPercent() * 100)));
 		return currenttip;
 	}
