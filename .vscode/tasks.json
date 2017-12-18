@@ -12,6 +12,13 @@
 			"problemMatcher": []
 		},
 		{
+			"label": "Test Server",
+			"type": "shell",
+			"group": "build",
+			"command": "\"./gradlew\" runServer",
+			"problemMatcher": []
+		},
+		{
 			"label": "Build",
 			"type": "shell",
 			"group": "build",

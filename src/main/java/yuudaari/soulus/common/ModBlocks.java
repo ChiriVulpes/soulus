@@ -9,11 +9,13 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.common.block.*;
-import yuudaari.soulus.common.block.Summoner.Summoner;
-import yuudaari.soulus.common.block.Summoner.SummonerEmpty;
+import yuudaari.soulus.common.block.summoner.Summoner;
+import yuudaari.soulus.common.block.summoner.SummonerEmpty;
 
 public class ModBlocks {
 	public static final BlockEndersteel BLOCK_ENDERSTEEL = new BlockEndersteel();
@@ -57,6 +59,7 @@ public class ModBlocks {
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static void registerModels() {
 		for (IBlock block : blocks) {
 			if (block.hasItem()) {

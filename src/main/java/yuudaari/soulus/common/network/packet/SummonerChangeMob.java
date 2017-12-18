@@ -1,13 +1,11 @@
 package yuudaari.soulus.common.network.packet;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import yuudaari.soulus.common.block.Summoner.SummonerTileEntity;
+import yuudaari.soulus.common.block.summoner.SummonerTileEntity;
+import yuudaari.soulus.common.util.Logger;
 
 public class SummonerChangeMob implements IMessage {
 	public SummonerChangeMob() {
@@ -17,12 +15,9 @@ public class SummonerChangeMob implements IMessage {
 	public String mob;
 
 	public SummonerChangeMob(SummonerTileEntity te, String newMob) {
+		Logger.info("change mob sent");
 		pos = te.getPos();
 		mob = newMob;
-	}
-
-	public SummonerTileEntity getTileEntity() {
-		return (SummonerTileEntity) Minecraft.getMinecraft().world.getTileEntity(pos);
 	}
 
 	@Override
@@ -39,13 +34,4 @@ public class SummonerChangeMob implements IMessage {
 		mob = ByteBufUtils.readUTF8String(buf);
 	}
 
-	public static class Handler implements IMessageHandler<SummonerChangeMob, IMessage> {
-		@Override
-		public IMessage onMessage(SummonerChangeMob message, MessageContext ctx) {
-			SummonerTileEntity summoner = message.getTileEntity();
-			summoner.setMob(message.mob);
-			summoner.reset();
-			return null;
-		}
-	}
 }

@@ -1,10 +1,13 @@
-package yuudaari.soulus.common.block.Summoner;
+package yuudaari.soulus.common.block.summoner;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -23,7 +26,6 @@ import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.config.ManualSerializer;
 import yuudaari.soulus.common.config.Serializer;
 import yuudaari.soulus.common.util.Logger;
-import yuudaari.soulus.common.util.NBTHelper;
 import yuudaari.soulus.common.util.Range;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -167,6 +169,7 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 	public EntityLiving renderMob;
 
 	public void reset() {
+		Logger.info("reset mob");
 		this.renderMob = null;
 		this.resetTimer();
 	}
@@ -202,6 +205,7 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 		upgradeCounts.put(upgradeType, 0);
 		updateInsertionOrder(upgradeType);
 		updateUpgrades();
+		Logger.info("removing " + upgradeType.name() + ((Integer) result).toString());
 		return result;
 	}
 
@@ -259,7 +263,10 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 	}
 
 	public NBTTagCompound getEntityNbt() {
-		return new NBTHelper().setString("id", spawnMob).nbt;
+		NBTTagCompound result = new NBTTagCompound();
+		result.setString("id", spawnMob);
+		return result;
+		//.setString("id", spawnMob).nbt;
 	}
 
 	private float getSpawnPercent() {
@@ -362,6 +369,19 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 		setUpgradeCount(Upgrade.DELAY, upgradeTag.getByte("delay"));
 		setUpgradeCount(Upgrade.RANGE, upgradeTag.getByte("range"));
 		updateUpgrades(false);
+
+		NBTTagList value = (NBTTagList) compound.getTag("insertion_order");
+		for (NBTBase s : value) {
+			if (s instanceof NBTTagString) {
+				String str = ((NBTTagString) s).getString();
+				for (Upgrade u : Upgrade.values()) {
+					if (u.name().equals(str)) {
+						this.insertionOrder.add(u);
+					}
+				}
+			}
+		}
+		/*
 		String[] insertionOrder = new NBTHelper(compound).getStringArray("insertion_order");
 		for (String s : insertionOrder) {
 			for (Upgrade u : Upgrade.values()) {
@@ -370,6 +390,7 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 				}
 			}
 		}
+		*/
 	}
 
 	@Nonnull
@@ -382,24 +403,31 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 
 		super.writeToNBT(compound);
 
-		NBTHelper result = new NBTHelper(compound);
-		result.setString("entity_type", spawnMob);
-		result.setFloat("delay", timeTillSpawn);
-		result.setFloat("delay_last", lastTimeTillSpawn);
+		//NBTHelper result = new NBTHelper(compound);
+		compound.setString("entity_type", spawnMob);
+		compound.setFloat("delay", timeTillSpawn);
+		compound.setFloat("delay_last", lastTimeTillSpawn);
 
-		NBTHelper upgrades = new NBTHelper();
-		upgrades.setByte("count", upgradeCounts.get(Upgrade.COUNT));
-		upgrades.setByte("delay", upgradeCounts.get(Upgrade.DELAY));
-		upgrades.setByte("range", upgradeCounts.get(Upgrade.RANGE));
-		result.setTag("upgrades", upgrades.nbt);
+		//NBTHelper upgrades = new NBTHelper();
+		NBTTagCompound upgrades = new NBTTagCompound();
+		upgrades.setByte("count", (byte) (int) upgradeCounts.get(Upgrade.COUNT));
+		upgrades.setByte("delay", (byte) (int) upgradeCounts.get(Upgrade.DELAY));
+		upgrades.setByte("range", (byte) (int) upgradeCounts.get(Upgrade.RANGE));
+		compound.setTag("upgrades", upgrades);
 
 		List<String> insertionOrder = new ArrayList<>();
 		for (Upgrade u : this.insertionOrder) {
 			insertionOrder.add(u.name());
 		}
-		result.setStringArray("insertion_order", insertionOrder.toArray(new String[0]));
 
-		return result.nbt;
+		NBTTagList list = new NBTTagList();
+		for (String s : insertionOrder) {
+			list.appendTag(new NBTTagString(s));
+		}
+		compound.setTag("insertion_order", list);
+		//result.setStringArray("insertion_order", insertionOrder.toArray(new String[0]));
+
+		return compound;
 	}
 
 	@Nonnull
@@ -511,7 +539,6 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 		return spawned;
 	}
 
-	@SideOnly(Side.CLIENT)
 	private void explosionParticles(EntityLiving entity) {
 		Random rand = world.rand;
 

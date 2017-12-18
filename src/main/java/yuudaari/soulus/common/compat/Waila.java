@@ -7,8 +7,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.block.Summoner.Summoner;
-import yuudaari.soulus.common.block.Summoner.SummonerTileEntity;
+import yuudaari.soulus.common.block.summoner.Summoner;
+import yuudaari.soulus.common.block.summoner.SummonerTileEntity;
 
 @WailaPlugin(Soulus.MODID)
 public class Waila implements IWailaPlugin, IWailaDataProvider {

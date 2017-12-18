@@ -6,6 +6,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.common.item.*;
@@ -66,6 +68,7 @@ public class ModItems {
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static void registerModels() {
 		for (ModItem item : items) {
 			ModelLoader.setCustomModelResourceLocation(item, 0,

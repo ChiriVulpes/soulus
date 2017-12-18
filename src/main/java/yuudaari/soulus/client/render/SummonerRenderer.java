@@ -1,7 +1,7 @@
 package yuudaari.soulus.client.render;
 
 import yuudaari.soulus.client.util.TileEntityRenderer;
-import yuudaari.soulus.common.block.Summoner.SummonerTileEntity;
+import yuudaari.soulus.common.block.summoner.SummonerTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.EntityLiving;

@@ -2,7 +2,7 @@ package yuudaari.soulus.common.config;
 
 import yuudaari.soulus.common.ModGenerators;
 import yuudaari.soulus.common.ModItems;
-import yuudaari.soulus.common.block.Summoner.SummonerTileEntity;
+import yuudaari.soulus.common.block.summoner.SummonerTileEntity;
 import yuudaari.soulus.common.item.BloodCrystal;
 import yuudaari.soulus.common.item.Glue;
 import yuudaari.soulus.common.item.OrbMurky;

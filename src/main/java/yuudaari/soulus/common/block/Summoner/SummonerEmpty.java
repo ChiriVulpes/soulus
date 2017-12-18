@@ -1,4 +1,4 @@
-package yuudaari.soulus.common.block.Summoner;
+package yuudaari.soulus.common.block.summoner;
 
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.Soulus;

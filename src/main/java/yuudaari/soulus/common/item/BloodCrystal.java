@@ -6,7 +6,6 @@ import yuudaari.soulus.client.util.ParticleType;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.config.PotionEffectSerializer;
 import yuudaari.soulus.common.config.Serializer;
-import yuudaari.soulus.common.misc.SoulsDamageSource;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.BloodCrystalHitEntity;
 import yuudaari.soulus.common.util.Colour;
@@ -22,10 +21,12 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -71,10 +72,12 @@ public class BloodCrystal extends SummonerUpgrade {
 	public BloodCrystal() {
 		super("blood_crystal");
 
-		registerColorHandler((ItemStack stack, int tintIndex) -> {
-			float percentage = getContainedBlood(stack) / (float) requiredBlood;
-			return Colour.mix(colourEmpty, colourFilled, percentage).get();
-		});
+		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+			registerColorHandler((ItemStack stack, int tintIndex) -> {
+				float percentage = getContainedBlood(stack) / (float) requiredBlood;
+				return Colour.mix(colourEmpty, colourFilled, percentage).get();
+			});
+		}
 	}
 
 	@Override
@@ -132,7 +135,7 @@ public class BloodCrystal extends SummonerUpgrade {
 		if (containedBlood < requiredBlood) {
 			if (!worldIn.isRemote) {
 				setContainedBlood(heldItem, containedBlood + prickAmount);
-				player.attackEntityFrom(SoulsDamageSource.BLOOD_CRYSTAL, prickAmount);
+				player.attackEntityFrom(new DamageSource("soulus:blood_crystal"), prickAmount);
 
 				for (ModPotionEffect effect : prickEffects)
 					player.addPotionEffect(effect);
@@ -150,7 +153,7 @@ public class BloodCrystal extends SummonerUpgrade {
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 		if (target.getHealth() <= this.creaturePrickRequiredHealth / 2) {
-			target.attackEntityFrom(SoulsDamageSource.BLOOD_CRYSTAL, this.creaturePrickAmount);
+			target.attackEntityFrom(new DamageSource("soulus:blood_crystal"), this.creaturePrickAmount);
 			int blood = getContainedBlood(stack);
 			setContainedBlood(stack, blood + this.creaturePrickWorth);
 			SoulsPacketHandler.INSTANCE.sendToAllAround(new BloodCrystalHitEntity(target),

@@ -10,7 +10,7 @@ public class SoulsPacketHandler {
 	public static final SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(Soulus.MODID);
 
 	static {
-		INSTANCE.registerMessage(BloodCrystalHitEntity.Handler.class, BloodCrystalHitEntity.class, 0, Side.CLIENT);
-		INSTANCE.registerMessage(SummonerChangeMob.Handler.class, SummonerChangeMob.class, 0, Side.CLIENT);
+		INSTANCE.registerMessage(BloodCrystalHitEntityHandler.class, BloodCrystalHitEntity.class, 0, Side.CLIENT);
+		INSTANCE.registerMessage(SummonerChangeMobHandler.class, SummonerChangeMob.class, 1, Side.CLIENT);
 	}
 }

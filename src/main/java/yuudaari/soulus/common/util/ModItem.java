@@ -108,6 +108,7 @@ public class ModItem extends Item implements IModItem {
 		return glint;
 	}
 
+	@SideOnly(Side.CLIENT)
 	public void registerColorHandler(IItemColor itemColor) {
 		Soulus.onInit((FMLInitializationEvent event) -> {
 			Minecraft.getMinecraft().getItemColors().registerItemColorHandler(itemColor, this);

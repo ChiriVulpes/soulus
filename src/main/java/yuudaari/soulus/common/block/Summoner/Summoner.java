@@ -1,10 +1,10 @@
-package yuudaari.soulus.common.block.Summoner;
+package yuudaari.soulus.common.block.summoner;
 
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.ModItems;
-import yuudaari.soulus.common.block.Summoner.SummonerTileEntity.Upgrade;
+import yuudaari.soulus.common.block.summoner.SummonerTileEntity.Upgrade;
 import yuudaari.soulus.common.item.BloodCrystal;
 import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.item.Soulbook;
@@ -260,20 +260,13 @@ public class Summoner extends ModBlock {
 						if (amtRemoved > 0) {
 
 							List<ItemStack> stacks = null;
-							switch (lastInserted) {
 
-							case COUNT:
+							if (lastInserted == Upgrade.COUNT) {
 								stacks = getUpgradeStacks(CountUpgrade, amtRemoved);
-								break;
-
-							case DELAY:
+							} else if (lastInserted == Upgrade.DELAY) {
 								stacks = getUpgradeStacks(DelayUpgrade, amtRemoved);
-								break;
-
-							case RANGE:
+							} else if (lastInserted == Upgrade.RANGE) {
 								stacks = getUpgradeStacks(RangeUpgrade, amtRemoved);
-								break;
-
 							}
 
 							if (stacks != null) {

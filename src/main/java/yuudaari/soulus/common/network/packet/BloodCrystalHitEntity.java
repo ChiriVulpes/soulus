@@ -4,9 +4,8 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import yuudaari.soulus.common.item.BloodCrystal;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BloodCrystalHitEntity implements IMessage {
 	public BloodCrystalHitEntity() {
@@ -18,6 +17,7 @@ public class BloodCrystalHitEntity implements IMessage {
 		entityId = entity.getEntityId();
 	}
 
+	@SideOnly(Side.CLIENT)
 	public EntityLivingBase getEntity() {
 		return (EntityLivingBase) Minecraft.getMinecraft().world.getEntityByID(entityId);
 	}
@@ -32,11 +32,4 @@ public class BloodCrystalHitEntity implements IMessage {
 		entityId = buf.readInt();
 	}
 
-	public static class Handler implements IMessageHandler<BloodCrystalHitEntity, IMessage> {
-		@Override
-		public IMessage onMessage(BloodCrystalHitEntity message, MessageContext ctx) {
-			BloodCrystal.particles(message.getEntity());
-			return null;
-		}
-	}
 }
