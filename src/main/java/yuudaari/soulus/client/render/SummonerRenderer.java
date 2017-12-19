@@ -15,6 +15,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class SummonerRenderer extends TileEntityRenderer<SummonerTileEntity> {
 
+	private String lastRenderedMobName;
+
 	public Class<SummonerTileEntity> getTileEntityClass() {
 		return SummonerTileEntity.class;
 	}
@@ -26,6 +28,7 @@ public class SummonerRenderer extends TileEntityRenderer<SummonerTileEntity> {
 		tileEntity.renderMob = (EntityLiving) AnvilChunkLoader.readWorldEntity(entityNbt, world, false);
 
 		String mobName = entityNbt.getString("id");
+		lastRenderedMobName = mobName;
 
 		if (tileEntity.renderMob == null)
 			throw new RuntimeException("Unable to summon mobName " + mobName);
@@ -40,7 +43,7 @@ public class SummonerRenderer extends TileEntityRenderer<SummonerTileEntity> {
 		if (tileEntity.getMob() == null)
 			return;
 
-		if (tileEntity.renderMob == null) {
+		if (tileEntity.renderMob == null || !tileEntity.getMob().equals(lastRenderedMobName)) {
 			spawnRenderMob(tileEntity);
 		}
 

@@ -9,8 +9,6 @@ import yuudaari.soulus.common.item.BloodCrystal;
 import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.item.Soulbook;
 import yuudaari.soulus.common.item.SummonerUpgrade;
-import yuudaari.soulus.common.network.SoulsPacketHandler;
-import yuudaari.soulus.common.network.packet.SummonerChangeMob;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.MobTarget;
 import yuudaari.soulus.common.util.ModBlock;
@@ -222,8 +220,6 @@ public class Summoner extends ModBlock {
 					String mob = MobTarget.getMobTarget(heldStack);
 					summoner.setMob(mob);
 					summoner.reset();
-					SoulsPacketHandler.INSTANCE.sendToDimension(new SummonerChangeMob(summoner, mob),
-							world.provider.getDimension());
 				}
 				heldStack.shrink(1);
 

@@ -11,6 +11,5 @@ public class SoulsPacketHandler {
 
 	static {
 		INSTANCE.registerMessage(BloodCrystalHitEntityHandler.class, BloodCrystalHitEntity.class, 0, Side.CLIENT);
-		INSTANCE.registerMessage(SummonerChangeMobHandler.class, SummonerChangeMob.class, 1, Side.CLIENT);
 	}
 }

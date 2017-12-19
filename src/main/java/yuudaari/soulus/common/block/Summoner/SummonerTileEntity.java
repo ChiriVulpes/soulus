@@ -169,7 +169,6 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 	public EntityLiving renderMob;
 
 	public void reset() {
-		Logger.info("reset mob");
 		this.renderMob = null;
 		this.resetTimer();
 	}
