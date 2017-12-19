@@ -12,13 +12,34 @@ There are no distribution restrictions for Soulus. You may use it in any modpack
 
 See below for an in-depth list of features in the mod.
 
-## Download
+## Table of Contents
+- [Download](#download)
+- [Previews](#previews)
+- [No Mob Spawning](#no-mob-spawning)
+- [Sledgehammer](#sledgehammer)
+- [Fossils](#fossils)
+- [Bone Chunks](#bone-chunks)
+- [Soulbook](#soulbook)
+- [Endersteel](#endersteel)
+- [Summoner](#summoner)
+	- [Summoner Upgrades](#summoner-upgrades)
+		- [Oscillating Gear](#oscillating-gear)
+		- [Murky Orb](#murky-orb)
+		- [Blood Crystal](#blood-crystal)
+- [Misc](#misc)
+	- [Glue](#glue)
+	- [Bark](#bark)
+- [Mod Support](#mod-support)
+- [Contributing](#contributing)
+
+
+## Download [↑](#table-of-contents)
 
 [Github](https://github.com/Yuudaari/soulus/releases/latest)
 
 [CurseForge](https://minecraft.curseforge.com/projects/soulus)
 
-## Previews
+## Previews [↑](#table-of-contents)
 
 ![Items](./preview/items.png)
 
@@ -30,17 +51,72 @@ The following preview images are of a Summoner with maximum upgrades:
 
 ![Aftermath](./preview/aftermath.png)
 
-## No Mob Spawning
+## No Mob Spawning [↑](#table-of-contents)
 
-All mob spawning is disabled by default. See `config.spawn_chance`, 0 = no spawns, 1 = all spawns
+All mob spawning is disabled by default. See `config.no_mob_spawning`:
 
-## Sledgehammer
+```json
+{
+	"no_mob_spawning": {
+		"*": {
+			"*": {
+				"*": {
+					"spawn_chance": 0.0
+				}
+			}
+		}
+	}
+}
+```
+This is the default configuration, which disables all spawns, from every dimension, in every biome, of every creature. The first asterisk is a wildcard matching all dimensions, while the second asterisk is a wildcard matching all biomes, while the third asterisk is a wildcard matching all creatures.
+
+Here's a more complex example:
+```json
+{
+	"no_mob_spawning": {
+		"*": {
+			"*": {
+				"*": {
+					"spawn_chance": 0.0
+				},
+				"twilightforest:*": {
+					"spawn_chance": 1.0
+				},
+				"minecraft:wither": {
+					"spawn_chance": 1.0
+				}
+			},
+			"minecraft:ocean": {
+				"*": {
+					"spawn_chance": 0.5
+				}
+			}
+		},
+		"the_end": {
+			"minecraft:*": {
+				"minecraft:ender_dragon": {
+					"spawn_chance": 1.0
+				}
+			}
+		}
+	}
+}
+```
+In this example, by default, all spawns are disabled, except for all twilight forest creatures in any dimension/biome, and the wither, in any dimension/biome.  
+Then, any creatures that spawn in an ocean biome are half as likely to spawn.  
+Then there's also an explicit configuration so that if the spawn is in the end, and in any vanilla biome, and the entity is an ender dragon, then it can spawn.
+
+  
+As a side-note, when there are no mobs spawning, or very few, the spawning algorithm works a bit harder than usual to make more spawns, so a spawn_chance of 0.5 won't end up being half as many mobs. 
+
+
+## Sledgehammer [↑](#table-of-contents)
 
 ![Sledgehammer](./preview/sledgehammer.png)
 
 The Sledgehammer is used to smash materials. It is only used as a crafting ingredient, and currently only comes in iron. Using it as a weapon and more materials for it are planned.
 
-## Fossils
+## Fossils [↑](#table-of-contents)
 
 Fossils generate around the world, different types based on the biome and block. Fossils even generate in the nether! These are the kinds of fossils you can expect to see in the world:
 
@@ -54,7 +130,7 @@ When you destroy a fossil, it will drop 4 bone chunks for that kind of fossil.
 
 Fossil veins are configurable (and you can even use the config to generate veins of other kinds of blocks, it's pretty vague). See `config.fossil_veins`
 
-## Bone Chunks
+## Bone Chunks [↑](#table-of-contents)
 
 ![Bone Chunks](./preview/bone_chunks.png)
 
@@ -72,7 +148,7 @@ The main use of bone chunks, however, is to collect Mob Essence! By right clicki
 | Nether | Zombie Pigman (20), Blaze (3), Wither Skeleton (1), Ghast (1), None (10) |
 | Ender | Shulker (1), Endermite (15), Creeper (10), Enderman (2), None (20) |
 
-## Soulbook
+## Soulbook [↑](#table-of-contents)
 
 ![Soulbook](./preview/soulbook.png)
 
@@ -82,7 +158,7 @@ You craft a Soulbook using a book and some ender bonemeal/ender dust. Soulbooks 
 
 You can fill a soulbook by crafting it with any number of your chosen type of essence. By default all mob types only require 16 essence to reconstruct their soul. That's two crafts if you craft the soulbook with 8 essence each time.
 
-## Endersteel
+## Endersteel [↑](#table-of-contents)
 
 ![Crafting Steps for Endersteel](./preview/endersteel.png)
 
@@ -99,7 +175,7 @@ Here's what they look like in the world:
 
 ![Endersteel Bars Preview](./preview/endersteel_bars_preview.png)
 
-## Summoner
+## Summoner [↑](#table-of-contents)
 
 Using 8 Endersteel bars and an ender bonemeal in the center, you can craft an Empty Summoner.
 
@@ -117,11 +193,11 @@ If a summoner is receiving a redstone signal it will not be active.
 
 Summoners support comparators, they will output a signal strength of 0 if they are at 0% summoned and 15 if they are at 100% summoned.
 
-## Summoner Upgrades
+## Summoner Upgrades [↑](#table-of-contents)
 
 There are three upgrades for a summoner. An Oscillating Gear increases the speed, a Blood Crystal increases the quantity, and a Murky Orb increases the activation range.
 
-### Oscillating Gear
+### Oscillating Gear [↑](#table-of-contents)
 
 All bone types can be used to create bone gears of varying types.
 
@@ -137,7 +213,7 @@ Surrounding an ender bone gear in iron creates 2 oscillating gears.
 
 By default, a summoner can hold 64 oscillating gears, ranging from around 10 minutes per summon to around 10 seconds per summon.
 
-### Murky Orb
+### Murky Orb [↑](#table-of-contents)
 
 Surrounding ender bonemeal with slimeballs (or glue) produces a Strange Sticky Ball. 
 
@@ -151,7 +227,7 @@ When a Murky Orb has been filled, its stack limit is 16.
 
 By default, a summoner can hold 64 murky orbs, ranging from around a range of 3 blocks to summon to around 64 blocks to summon.
 
-### Blood Crystal
+### Blood Crystal [↑](#table-of-contents)
 
 ![Blood Crystal](./preview/blood_crystal.png)
 
@@ -168,17 +244,17 @@ When a Blood Crystal has been filled, its stack limit is 16.
 
 By default, a summoner can hold 64 Blood Crystals, ranging from 1 entity summoned to 64 entities summoned.
 
-## Misc
+## Misc [↑](#table-of-contents)
 
-### Glue
+### Glue [↑](#table-of-contents)
 
 Glue is crafted from sugar, bonemeal, and a bucket of water. It can be used anywhere a slimeball can. You can consume glue.
 
-### Bark
+### Bark [↑](#table-of-contents)
 
 Every 100 or so logs produces 8 bark instead of a log. You can use 2 bark and 3 paper to make a book.
 
-## Mod Support
+## Mod Support [↑](#table-of-contents)
 
 ### Ex Nihilo Creatio
 
@@ -188,7 +264,7 @@ Drops are added automatically to Ex Nihilo Creatio Sieves. The default values ar
 
 Waila (Hwyla)
 
-## Contributing
+## Contributing [↑](#table-of-contents)
 
 If you have an error, bug, or have found an oversight please leave an issue about it. I'll try to get to them as fast as I can. If you want to help develop Soulus and already know how to mod, great, make an issue and then a PR if you know what you want to do. If you don't know how to mod, I probably won't have the time to help teach you, but you're welcome to join my [Discord server](https://discord.gg/fwvBfus) and chat/ask questions.
 
