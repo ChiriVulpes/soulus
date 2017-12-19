@@ -20,7 +20,8 @@ public class NoMobSpawning {
 	@SubscribeEvent
 	public static void onMobJoinWorld(EntityJoinWorldEvent event) {
 		Entity entity = event.getEntity();
-		if (entity == null || !(entity instanceof EntityLiving) || event.getWorld().isRemote)
+		if (entity == null || !(entity instanceof EntityLiving) || event.getWorld().isRemote
+				|| Soulus.config.spawnChance == 1)
 			return;
 
 		NBTTagCompound entityData = entity.getEntityData();
@@ -28,8 +29,8 @@ public class NoMobSpawning {
 		if (!Soulus.config.spawnEntityWhitelist.contains(entityName) || Soulus.config.spawnEntityBlacklist.size() > 0
 				&& Soulus.config.spawnEntityBlacklist.contains(entityName)) {
 
-			if (!entityData.hasKey("spawned_by_souls", 1) && Soulus.config.spawnChance == 0
-					|| event.getWorld().rand.nextDouble() < Soulus.config.spawnChance) {
+			if (!entityData.hasKey("spawned_by_souls", 1) && (Soulus.config.spawnChance == 0
+					|| event.getWorld().rand.nextDouble() >= Soulus.config.spawnChance)) {
 				event.setCanceled(true);
 			}
 		}
