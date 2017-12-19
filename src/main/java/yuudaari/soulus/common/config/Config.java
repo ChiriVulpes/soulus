@@ -8,6 +8,7 @@ import yuudaari.soulus.common.item.Glue;
 import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.item.Sledgehammer;
 import yuudaari.soulus.common.misc.BarkFromLogs;
+import yuudaari.soulus.common.misc.NoMobSpawning;
 import yuudaari.soulus.common.util.BoneType;
 import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.world.generators.GeneratorFossils;
@@ -24,7 +25,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -34,10 +34,7 @@ public class Config {
 
 	public Map<BoneType, Map<String, EssenceDropConfig>> drops = EssenceDropConfig.getDefaultDropMap();
 	public Map<String, SoulConfig> souls = SoulConfig.getDefaultSoulMap();
-	public double spawnChance = 0;
 	public boolean replaceSpawnersWithSummoners = true;
-	public List<String> spawnEntityWhitelist = new ArrayList<>();
-	public List<String> spawnEntityBlacklist = new ArrayList<>();
 	public int boneChunkParticleCount = 3;
 
 	/* SERIALIZER */
@@ -46,11 +43,6 @@ public class Config {
 	static {
 		serializer = new Serializer<>(Config.class, "spawnChance", "replaceSpawnersWithSummoners",
 				"boneChunkParticleCount");
-
-		serializer.fieldHandlers.put("spawnEntityWhitelist",
-				new ManualSerializer(Config::serializeList, Config::deserializeList));
-		serializer.fieldHandlers.put("spawnEntityBlacklist",
-				new ManualSerializer(Config::serializeList, Config::deserializeList));
 
 		serializer.fieldHandlers.put("drops", new ManualSerializer(Config::serializeDrops, Config::deserializeDrops));
 		serializer.fieldHandlers.put("souls", new ManualSerializer(Config::serializeSouls, Config::deserializeSouls));
@@ -80,6 +72,10 @@ public class Config {
 		serializer.otherHandlers.put("barkFromLogs",
 				new ManualSerializer(from -> BarkFromLogs.serializer.serialize(BarkFromLogs.INSTANCE),
 						(from, into) -> BarkFromLogs.serializer.deserialize(from, BarkFromLogs.INSTANCE)));
+
+		serializer.otherHandlers.put("noMobSpawning",
+				new ManualSerializer(from -> NoMobSpawning.serializer.serialize(NoMobSpawning.INSTANCE),
+						(from, into) -> NoMobSpawning.serializer.deserialize(from, NoMobSpawning.INSTANCE)));
 
 	}
 

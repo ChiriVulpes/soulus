@@ -23,6 +23,86 @@ import java.util.Map;
 import java.util.Random;
 
 public class OreVein {
+
+	public static Serializer<OreVein> serializer;
+	static {
+		serializer = new Serializer<>(OreVein.class, "block", "replace", "chances");
+
+		serializer.fieldHandlers.put("dimension",
+				new ManualSerializer(OreVein::serializeDimension, OreVein::deserializeDimension));
+		serializer.fieldHandlers.put("size", Range.serializer);
+		serializer.fieldHandlers.put("height", Range.serializer);
+		serializer.fieldHandlers.put("biomeTypesWhitelist",
+				new ManualSerializer(OreVein::serializeBiomeTypes, OreVein::deserializeBiomeTypes));
+		serializer.fieldHandlers.put("biomeTypesBlacklist",
+				new ManualSerializer(OreVein::serializeBiomeTypes, OreVein::deserializeBiomeTypes));
+	}
+
+	public static JsonElement serializeBiomeTypes(Object from) {
+		Type[] biomeTypes = (Type[]) from;
+
+		JsonArray result = new JsonArray();
+		for (Type type : biomeTypes) {
+			result.add(type.getName().toLowerCase());
+		}
+
+		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Object deserializeBiomeTypes(JsonElement from, Object current) {
+		if (from == null || !from.isJsonArray()) {
+			Logger.warn("Biome types must be an array");
+			return current;
+		}
+
+		List<Type> result = new ArrayList<>();
+
+		Map<String, Type> biomeTypes;
+		try {
+			Field f = Type.class.getDeclaredField("byName");
+			f.setAccessible(true);
+			biomeTypes = (Map<String, Type>) f.get(null);
+		} catch (NoSuchFieldException | IllegalAccessException e) {
+			Logger.error(e);
+			return current;
+		}
+
+		JsonArray types = from.getAsJsonArray();
+
+		deserialization: for (JsonElement type : types) {
+			if (type == null || !type.isJsonPrimitive() || !type.getAsJsonPrimitive().isString()) {
+				Logger.warn("Biome type must be a string");
+				continue;
+			}
+
+			String biome = type.getAsString();
+
+			for (Map.Entry<String, Type> biomeType : biomeTypes.entrySet()) {
+				String typeName = biomeType.getKey();
+				if (typeName.equalsIgnoreCase(biome)) {
+					result.add(biomeType.getValue());
+					continue deserialization;
+				}
+			}
+
+			Logger.warn("Biome type '" + biome + "' does not exist");
+		}
+
+		return result.toArray(new Type[result.size()]);
+	}
+
+	public static JsonElement serializeDimension(Object obj) {
+		return obj == null ? JsonNull.INSTANCE : new JsonPrimitive(((DimensionType) obj).getName());
+	}
+
+	public static Object deserializeDimension(JsonElement json, Object current) {
+		if (json == null || !json.isJsonPrimitive() || !json.getAsJsonPrimitive().isString()) {
+			return null;
+		}
+		return DimensionType.byName(json.getAsString());
+	}
+
 	public String block;
 	public String replace;
 	public int chances = 4;
@@ -132,84 +212,5 @@ public class OreVein {
 				gen.generate(world, random, pos);
 			}
 		}
-	}
-
-	public static Serializer<OreVein> serializer;
-	static {
-		serializer = new Serializer<>(OreVein.class, "block", "replace", "chances");
-
-		serializer.fieldHandlers.put("dimension",
-				new ManualSerializer(OreVein::serializeDimension, OreVein::deserializeDimension));
-		serializer.fieldHandlers.put("size", Range.serializer);
-		serializer.fieldHandlers.put("height", Range.serializer);
-		serializer.fieldHandlers.put("biomeTypesWhitelist",
-				new ManualSerializer(OreVein::serializeBiomeTypes, OreVein::deserializeBiomeTypes));
-		serializer.fieldHandlers.put("biomeTypesBlacklist",
-				new ManualSerializer(OreVein::serializeBiomeTypes, OreVein::deserializeBiomeTypes));
-	}
-
-	public static JsonElement serializeBiomeTypes(Object from) {
-		Type[] biomeTypes = (Type[]) from;
-
-		JsonArray result = new JsonArray();
-		for (Type type : biomeTypes) {
-			result.add(type.getName().toLowerCase());
-		}
-
-		return result;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Object deserializeBiomeTypes(JsonElement from, Object current) {
-		if (from == null || !from.isJsonArray()) {
-			Logger.warn("Biome types must be an array");
-			return current;
-		}
-
-		List<Type> result = new ArrayList<>();
-
-		Map<String, Type> biomeTypes;
-		try {
-			Field f = Type.class.getDeclaredField("byName");
-			f.setAccessible(true);
-			biomeTypes = (Map<String, Type>) f.get(null);
-		} catch (NoSuchFieldException | IllegalAccessException e) {
-			Logger.error(e);
-			return current;
-		}
-
-		JsonArray types = from.getAsJsonArray();
-
-		deserialization: for (JsonElement type : types) {
-			if (type == null || !type.isJsonPrimitive() || !type.getAsJsonPrimitive().isString()) {
-				Logger.warn("Biome type must be a string");
-				continue;
-			}
-
-			String biome = type.getAsString();
-
-			for (Map.Entry<String, Type> biomeType : biomeTypes.entrySet()) {
-				String typeName = biomeType.getKey();
-				if (typeName.equalsIgnoreCase(biome)) {
-					result.add(biomeType.getValue());
-					continue deserialization;
-				}
-			}
-
-			Logger.warn("Biome type '" + biome + "' does not exist");
-		}
-
-		return result.toArray(new Type[result.size()]);
-	}
-
-	public static JsonElement serializeDimension(Object obj) {
-		return obj == null ? JsonNull.INSTANCE : new JsonPrimitive(((DimensionType) obj).getName());
-	}
-
-	public static Object deserializeDimension(JsonElement json, Object current) {
-		if (json == null || !json.isJsonPrimitive() || !json.getAsJsonPrimitive().isString()) {
-			return null;
-		}
-		return DimensionType.byName(json.getAsString());
 	}
 }
