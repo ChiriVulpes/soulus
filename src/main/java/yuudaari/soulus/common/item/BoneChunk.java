@@ -1,7 +1,7 @@
 package yuudaari.soulus.common.item;
 
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.config.EssenceDropConfig;
+import yuudaari.soulus.common.config.CreatureConfig;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.util.BoneType;
 import yuudaari.soulus.common.util.ModItem;
@@ -38,22 +38,19 @@ public class BoneChunk extends ModItem {
 		addOreDict("boneChunk");
 
 		Soulus.onInit((FMLInitializationEvent e) -> {
-			for (Map.Entry<String, EssenceDropConfig> drop : Soulus.config.drops.get(boneType).entrySet()) {
-				String entityName = drop.getKey();
-				if (entityName.indexOf(":") == -1) {
-					entityName = "minecraft:" + entityName;
+			for (CreatureConfig creatureConfig : Soulus.config.creatures) {
+				if (creatureConfig.bones.type != boneType) {
+					continue;
 				}
 
-				EssenceDropConfig dropInfo = drop.getValue();
-
-				if (entityName.equals("minecraft:none")) {
-					drops.put(null, dropInfo.dropChance);
+				if (creatureConfig.essence.equals("NONE")) {
+					drops.put(null, creatureConfig.bones.dropWeight);
 				} else {
-					if (ForgeRegistries.ENTITIES.containsKey(new ResourceLocation(entityName))) {
-						drops.put(entityName, dropInfo.dropChance);
+					if (ForgeRegistries.ENTITIES.containsKey(new ResourceLocation(creatureConfig.essence))) {
+						drops.put(creatureConfig.essence, creatureConfig.bones.dropWeight);
 					} else {
-						System.out
-								.println(String.format("Colour entry missing for %s:%s", boneType.name(), entityName));
+						System.out.println(String.format("Colour entry missing for %s:%s", boneType.name(),
+								creatureConfig.essence));
 					}
 				}
 			}

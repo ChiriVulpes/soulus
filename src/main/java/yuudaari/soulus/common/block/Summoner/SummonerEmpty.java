@@ -37,7 +37,7 @@ public class SummonerEmpty extends ModBlock {
 
 		String mobTarget = MobTarget.getMobTarget(heldItem);
 		int containedEssence = Soulbook.getContainedEssence(heldItem);
-		if (mobTarget == null || containedEssence < Soulus.getSoulInfo(mobTarget).quantity)
+		if (mobTarget == null || containedEssence < Soulus.config.getSoulbookQuantity(mobTarget))
 			return false;
 
 		IBlockState mobSpawner = ((Summoner) ModBlocks.SUMMONER).getDefaultState();

@@ -1,7 +1,5 @@
 package yuudaari.soulus.common.item;
 
-import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.config.SoulConfig;
 import yuudaari.soulus.common.config.ColourConfig;
 import yuudaari.soulus.common.util.MobTarget;
 import yuudaari.soulus.common.util.ModItem;
@@ -25,17 +23,20 @@ public class Essence extends ModItem {
 				String mobTarget = MobTarget.getMobTarget(stack);
 				if (mobTarget == null)
 					return -1;
+
+				EntityList.EntityEggInfo eggInfo = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(mobTarget))
+						.getEgg();
+				if (eggInfo == null)
+					return -1;
+				ColourConfig colourInfo = new ColourConfig(eggInfo);
+				/*
 				SoulConfig soulInfo = Soulus.getSoulInfo(mobTarget, false);
 				if (soulInfo == null)
 					return -1;
 				ColourConfig colourInfo = soulInfo.colourInfo;
 				if (colourInfo == null) {
-					EntityList.EntityEggInfo eggInfo = ForgeRegistries.ENTITIES
-							.getValue(new ResourceLocation(mobTarget)).getEgg();
-					if (eggInfo == null)
-						return -1;
-					colourInfo = new ColourConfig(eggInfo);
 				}
+				*/
 				return tintIndex == 0 ? colourInfo.primaryColour : colourInfo.secondaryColour;
 			});
 		}

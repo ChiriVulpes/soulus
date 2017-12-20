@@ -173,7 +173,7 @@ public class Summoner extends ModBlock {
 	private ItemStack getSoulbook(String entityName) {
 		ItemStack soulbook = ModItems.SOULBOOK.getItemStack();
 		MobTarget.setMobTarget(soulbook, entityName);
-		Soulbook.setContainedEssence(soulbook, Soulus.getSoulInfo(entityName).quantity);
+		Soulbook.setContainedEssence(soulbook, Soulus.config.getSoulbookQuantity(entityName));
 
 		return soulbook;
 	}

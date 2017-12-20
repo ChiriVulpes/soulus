@@ -75,7 +75,7 @@ public class Soulbook extends ModItem {
 					return null;
 				}
 				if (soulbook != null && essenceCount > 0
-						&& containedEssence + essenceCount <= Soulus.getSoulInfo(target).quantity) {
+						&& containedEssence + essenceCount <= Soulus.config.getSoulbookQuantity(target)) {
 					ItemStack newStack = soulbook.copy();
 					MobTarget.setMobTarget(newStack, target);
 					setContainedEssence(newStack, containedEssence + essenceCount);
@@ -109,7 +109,7 @@ public class Soulbook extends ModItem {
 		if (mobTarget == null)
 			return false;
 		int containedEssence = getContainedEssence(stack);
-		return containedEssence == Soulus.getSoulInfo(mobTarget).quantity;
+		return containedEssence == Soulus.config.getSoulbookQuantity(mobTarget);
 	}
 
 	@Nonnull
@@ -127,7 +127,7 @@ public class Soulbook extends ModItem {
 		int containedEssence = getContainedEssence(stack);
 		if (mobTarget == null)
 			return containedEssence == 0;
-		return containedEssence < Soulus.getSoulInfo(mobTarget).quantity;
+		return containedEssence < Soulus.config.getSoulbookQuantity(mobTarget);
 	}
 
 	@Override
@@ -136,7 +136,7 @@ public class Soulbook extends ModItem {
 		if (mobTarget == null)
 			return 1;
 		int containedEssence = getContainedEssence(stack);
-		return (1 - containedEssence / (double) Soulus.getSoulInfo(mobTarget).quantity);
+		return (1 - containedEssence / (double) Soulus.config.getSoulbookQuantity(mobTarget));
 	}
 
 	public static int getContainedEssence(ItemStack stack) {
@@ -163,7 +163,7 @@ public class Soulbook extends ModItem {
 		int containedEssence = Soulbook.getContainedEssence(stack);
 		String mobTarget = MobTarget.getMobTarget(stack);
 		if (mobTarget != null) {
-			int requiredEssence = Soulus.getSoulInfo(mobTarget).quantity;
+			int requiredEssence = Soulus.config.getSoulbookQuantity(mobTarget);
 			if (containedEssence < requiredEssence) {
 				tooltip.add(I18n.format("tooltip." + Soulus.MODID + ":soulbook.contained_essence", containedEssence,
 						requiredEssence));

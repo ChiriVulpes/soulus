@@ -2,7 +2,6 @@ package yuudaari.soulus;
 
 import yuudaari.soulus.client.ModRenderers;
 import yuudaari.soulus.common.config.Config;
-import yuudaari.soulus.common.config.SoulConfig;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.ModGenerators;
 import yuudaari.soulus.common.ModItems;
@@ -57,27 +56,6 @@ public class Soulus {
 		String prefix = index == -1 ? Soulus.MODID : name.substring(0, index);
 		name = index == -1 ? name : name.substring(index + 1);
 		return new ResourceLocation(prefix, name);
-	}
-
-	public static SoulConfig getSoulInfo(String mobTarget) {
-		SoulConfig result = getSoulInfo(mobTarget, true);
-		if (result == null)
-			throw new RuntimeException("Mob Target '" + mobTarget + "' is invalid");
-		return result;
-	}
-
-	public static SoulConfig getSoulInfo(String mobTarget, boolean err) {
-
-		SoulConfig result = config.souls.get(mobTarget);
-
-		// try again but without the prefix
-		if (result == null && mobTarget.startsWith("minecraft:"))
-			result = config.souls.get(mobTarget.substring(10));
-
-		if (result == null && err) {
-			throw new RuntimeException("Mob Target '" + mobTarget + "' is invalid");
-		}
-		return result;
 	}
 
 	/* EVENT HANDLERS */

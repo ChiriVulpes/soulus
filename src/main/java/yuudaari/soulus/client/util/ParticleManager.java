@@ -25,7 +25,7 @@ public class ParticleManager {
 			*/
 			Method[] methods = World.class.getDeclaredMethods();
 			for (Method method : methods) {
-				if ((method.getName() == "spawnParticle" || method.getName() == "func_175720_a")
+				if ((method.getName().equals("spawnParticle") || method.getName().equals("func_175720_a"))
 						&& method.getParameterTypes()[0] == int.class) {
 					m = method;
 				}

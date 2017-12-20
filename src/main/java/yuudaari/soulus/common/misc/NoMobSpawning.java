@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -216,8 +217,7 @@ public class NoMobSpawning {
 		}
 
 		// then we get the creature config for this potential spawn
-		entityData = entity.serializeNBT();
-		String entityName = entityData.getString("id");
+		String entityName = EntityList.getKey(entity).toString();
 		//Logger.info(entityName);
 		NoMobSpawningCreatureConfig creatureConfig = biomeConfig.creatureConfigs.get(entityName);
 		if (creatureConfig == null) {

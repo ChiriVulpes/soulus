@@ -1,20 +1,20 @@
 itemGroup.soulus=Soulus
 
 
-item.soulus:bone_nether.name=Necrotic Bone
+item.soulus:bone_nether.name=Blackened Bone
 item.soulus:bone_ender.name=Ender Bone
 item.soulus:bone_dry.name=Dry Bone
 item.soulus:bone_frozen.name=Frozen Bone
 item.soulus:bone_fungal.name=Mossy Bone
 item.soulus:bone_scale.name=Scale
 item.soulus:bone_chunk_normal.name=Bone Chunk
-item.soulus:bone_chunk_nether.name=Necrotic Bone Chunk
+item.soulus:bone_chunk_nether.name=Blackened Bone Chunk
 item.soulus:bone_chunk_ender.name=Ender Bone Chunk
 item.soulus:bone_chunk_dry.name=Dry Bone Chunk
 item.soulus:bone_chunk_frozen.name=Frozen Bone Chunk
 item.soulus:bone_chunk_fungal.name=Mossy Bone Chunk
 item.soulus:bone_chunk_scale.name=Scale Chunk
-item.soulus:bone_meal_nether.name=Necrotic Bone Meal
+item.soulus:bone_meal_nether.name=Blackened Bone Meal
 
 item.soulus:dust_ender.name=Ender Dust
 item.soulus:dust_iron.name=Iron Dust
@@ -34,7 +34,7 @@ item.soulus:blood_crystal.filled.name=Blood Crystal
 item.soulus:gear_oscillating.name=Oscillating Gear
 item.soulus:gear_bone.name=Bone Gear
 item.soulus:gear_bone_ender.name=Ender Bone Gear
-item.soulus:gear_bone_nether.name=Necrotic Bone Gear
+item.soulus:gear_bone_nether.name=Blackened Bone Gear
 item.soulus:gear_bone_frozen.name=Frozen Bone Gear
 item.soulus:gear_bone_fungal.name=Mossy Bone Gear
 item.soulus:gear_bone_dry.name=Dry Bone Gear

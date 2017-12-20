@@ -20,6 +20,10 @@ public class Range {
 		return random.nextDouble() * (max - min) + min;
 	}
 
+	public int getInt(Random random) {
+		return (int) Math.floor(random.nextDouble() * (max - min) + min);
+	}
+
 	public static final Serializer<Range> serializer = new Serializer<>(Range.class, "min", "max");
 
 	@Override

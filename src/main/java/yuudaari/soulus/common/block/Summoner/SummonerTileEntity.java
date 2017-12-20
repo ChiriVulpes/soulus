@@ -23,6 +23,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.config.CreatureConfig;
 import yuudaari.soulus.common.config.ManualSerializer;
 import yuudaari.soulus.common.config.Serializer;
 import yuudaari.soulus.common.util.Logger;
@@ -248,12 +249,31 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 
 	}
 
+	private CreatureConfig spawnMobConfig;
+	private int spawnMobChanceTotal;
+
 	public String getMob() {
 		return spawnMob;
 	}
 
 	public void setMob(String mobName) {
 		spawnMob = mobName;
+		resetSpawnMob();
+	}
+
+	private void resetSpawnMob() {
+		for (CreatureConfig config : Soulus.config.creatures) {
+			if (config.essence.equals(spawnMob)) {
+				spawnMobConfig = config;
+
+				spawnMobChanceTotal = 0;
+				for (double dropChance : config.spawns.values()) {
+					spawnMobChanceTotal += dropChance;
+				}
+
+				break;
+			}
+		}
 	}
 
 	public int getSignalStrength() {
@@ -262,9 +282,22 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 
 	public NBTTagCompound getEntityNbt() {
 		NBTTagCompound result = new NBTTagCompound();
-		result.setString("id", spawnMob);
+		result.setString("id", getSpawnMob());
 		return result;
 		//.setString("id", spawnMob).nbt;
+	}
+
+	private String getSpawnMob() {
+		if (spawnMobChanceTotal > 0) {
+			int choice = new Random().nextInt(spawnMobChanceTotal);
+			for (Map.Entry<String, Double> spawnConfig : spawnMobConfig.spawns.entrySet()) {
+				choice -= spawnConfig.getValue();
+				if (choice < 0) {
+					return spawnConfig.getKey();
+				}
+			}
+		}
+		return spawnMob;
 	}
 
 	private float getSpawnPercent() {
@@ -360,6 +393,7 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 		super.readFromNBT(compound);
 
 		spawnMob = compound.getString("entity_type");
+		resetSpawnMob();
 		timeTillSpawn = compound.getFloat("delay");
 		lastTimeTillSpawn = compound.getFloat("delay_last");
 		NBTTagCompound upgradeTag = compound.getCompoundTag("upgrades");
