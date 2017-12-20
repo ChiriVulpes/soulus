@@ -204,7 +204,6 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 		upgradeCounts.put(upgradeType, 0);
 		updateInsertionOrder(upgradeType);
 		updateUpgrades();
-		Logger.info("removing " + upgradeType.name() + ((Integer) result).toString());
 		return result;
 	}
 
