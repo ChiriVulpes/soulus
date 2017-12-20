@@ -106,6 +106,8 @@ In this example, by default, all spawns are disabled, except for all twilight fo
 Then, any creatures that spawn in an ocean biome are half as likely to spawn.  
 Then there's also an explicit configuration so that if the spawn is in the end, and in any vanilla biome, and the entity is an ender dragon, then it can spawn.
 
+To know the dimension and biome names of modded biomes, you can use the /souluslocation command.
+
   
 As a side-note, when there are no mobs spawning, or very few, the spawning algorithm works a bit harder than usual to make more spawns, so a spawn_chance of 0.5 won't end up being half as many mobs. 
 
