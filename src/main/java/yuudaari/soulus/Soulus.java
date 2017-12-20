@@ -3,10 +3,10 @@ package yuudaari.soulus;
 import yuudaari.soulus.client.ModRenderers;
 import yuudaari.soulus.common.config.Config;
 import yuudaari.soulus.common.config.SoulConfig;
-import yuudaari.soulus.common.compat.ExNihiloCreatio;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.ModGenerators;
 import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.compat.ExNihiloCreatioRecipes;
 import yuudaari.soulus.server.command.SoulusLocation;
 
 import java.util.ArrayList;
@@ -122,7 +122,7 @@ public class Soulus {
 		for (PostInitEventHandler handler : postInitHandlers) {
 			handler.handle(event);
 		}
-		ExNihiloCreatio.init();
+		ExNihiloCreatioRecipes.init();
 	}
 
 	@SubscribeEvent
