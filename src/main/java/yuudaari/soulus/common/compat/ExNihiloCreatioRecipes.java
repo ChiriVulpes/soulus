@@ -6,7 +6,6 @@ import exnihilocreatio.registries.manager.ExNihiloRegistryManager;
 import exnihilocreatio.registries.manager.ISieveDefaultRegistryProvider;
 import exnihilocreatio.registries.registries.SieveRegistry;
 import net.minecraft.init.Blocks;
-import net.minecraftforge.fml.common.Loader;
 import yuudaari.soulus.common.ModItems;
 
 public class ExNihiloCreatioRecipes implements ISieveDefaultRegistryProvider {
@@ -127,10 +126,6 @@ public class ExNihiloCreatioRecipes implements ISieveDefaultRegistryProvider {
 	}
 
 	public static void init() {
-		if (!Loader.isModLoaded("exnihilocreatio")) {
-			return;
-		}
-
 		ExNihiloRegistryManager.registerSieveDefaultRecipeHandler(new ExNihiloCreatioRecipes());
 	}
 }

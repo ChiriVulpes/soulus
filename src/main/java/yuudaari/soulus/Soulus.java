@@ -16,6 +16,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -100,7 +101,10 @@ public class Soulus {
 		for (PostInitEventHandler handler : postInitHandlers) {
 			handler.handle(event);
 		}
-		ExNihiloCreatioRecipes.init();
+
+		if (Loader.isModLoaded("exnihilocreatio")) {
+			ExNihiloCreatioRecipes.init();
+		}
 	}
 
 	@SubscribeEvent
