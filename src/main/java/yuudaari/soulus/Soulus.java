@@ -7,6 +7,8 @@ import yuudaari.soulus.common.compat.ExNihiloCreatio;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.ModGenerators;
 import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.server.command.SoulusLocation;
+
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.block.Block;
@@ -20,6 +22,7 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -148,5 +151,10 @@ public class Soulus {
 
 		ModItems.registerRecipes(registry);
 		ModBlocks.registerRecipes(registry);
+	}
+
+	@EventHandler
+	public void serverLoad(FMLServerStartingEvent event) {
+		event.registerServerCommand(new SoulusLocation());
 	}
 }
