@@ -16,7 +16,7 @@ item.soulus:bone_chunk_fungal.name=Mossy Bone Chunk
 item.soulus:bone_chunk_scale.name=Scale Chunk
 item.soulus:bone_meal_nether.name=Necrotic Bone Meal
 
-item.soulus:dust_ender.name=Ender Bonemeal
+item.soulus:dust_ender.name=Ender Dust
 item.soulus:dust_iron.name=Iron Dust
 item.soulus:dust_ender_iron.name=Ender-Iron Dust Blend
 
@@ -178,6 +178,7 @@ tile.soulus:summoner.minecraft:wither_skeleton.name=Summoner of Wither Skeleton
 tile.soulus:summoner.minecraft:wolf.name=Summoner of Wolf
 tile.soulus:summoner.minecraft:zombie_pigman.name=Summoner of Zombie Pigman
 tile.soulus:summoner.minecraft:zombie.name=Summoner of Zombie
+
 
 death.attack.soulus:blood_crystal=%1$s sacrificed themselves to a blood crystal
 
