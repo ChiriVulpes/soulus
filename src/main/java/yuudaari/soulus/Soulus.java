@@ -27,7 +27,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 
-@Mod(modid = Soulus.MODID, name = Soulus.NAME, acceptedMinecraftVersions = "[1.12.1]")
+@Mod(modid = Soulus.MODID, name = Soulus.NAME, version = "@VERSION@", acceptedMinecraftVersions = "[1.12.1]")
 @Mod.EventBusSubscriber
 public class Soulus {
 

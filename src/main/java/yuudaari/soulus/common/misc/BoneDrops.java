@@ -17,7 +17,6 @@ import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.config.CreatureConfig;
 import yuudaari.soulus.common.config.CreatureConfig.CreatureLootConfig;
 import yuudaari.soulus.common.util.BoneType;
-import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.Range;
 
 @Mod.EventBusSubscriber
@@ -27,7 +26,6 @@ public class BoneDrops {
 		EntityLivingBase entity = event.getEntityLiving();
 		for (CreatureConfig creatureConfig : Soulus.config.creatures) {
 			for (Map.Entry<String, CreatureLootConfig> lootConfig : creatureConfig.loot.entrySet()) {
-				Logger.info(lootConfig.getKey(), EntityList.getKey(entity).toString());
 				if (lootConfig.getKey().equals(EntityList.getKey(entity).toString())) {
 					ItemStack stack = getStack(entity.world.rand, creatureConfig.bones.type, lootConfig.getValue());
 					if (stack != null) {

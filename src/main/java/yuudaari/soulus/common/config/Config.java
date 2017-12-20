@@ -46,8 +46,7 @@ public class Config {
 
 	private static final Serializer<Config> serializer;
 	static {
-		serializer = new Serializer<>(Config.class, "spawnChance", "replaceSpawnersWithSummoners",
-				"boneChunkParticleCount");
+		serializer = new Serializer<>(Config.class, "replaceSpawnersWithSummoners", "boneChunkParticleCount");
 
 		serializer.fieldHandlers.put("creatures",
 				new ManualSerializer(Config::serializeCreatures, Config::deserializeCreatures));

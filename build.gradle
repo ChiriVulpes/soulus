@@ -25,7 +25,8 @@ if (hasProperty("grgit")) { // If there's a valid Git repository, get the latest
 
 
 version = "${mc_version}-${mod_version}-${commitId}"
-group= "${package_group}"
+def soulus_version = version
+group = "${package_group}"
 archivesBaseName = "${mod_name}"
 
 sourceCompatibility = targetCompatibility = "1.8"
@@ -44,6 +45,9 @@ minecraft {
     // simply re-run your setup task after changing the mappings to update your workspace.
     mappings = "${mappings_version}"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+
+    replace "@VERSION@", "$soulus_version"
+    replaceIn "Soulus.java"
 }
 
 repositories {
@@ -110,6 +114,7 @@ dependencies {
 processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
+    inputs.property "mod_version", project.mod_version
     inputs.property "mcversion", project.minecraft.version
 
     // replace stuff in mcmod.info, nothing else
@@ -117,7 +122,7 @@ processResources {
         include 'mcmod.info'
                 
         // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+        expand 'version':project.version, 'mcversion':project.minecraft.version, 'mod_version':project.mod_version
     }
         
     // copy everything else, thats not the mcmod.info

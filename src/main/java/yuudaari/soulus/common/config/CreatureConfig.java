@@ -13,7 +13,7 @@ import yuudaari.soulus.common.util.BoneType;
 
 public class CreatureConfig {
 	public static class CreatureBoneConfig {
-		public static Serializer<CreatureBoneConfig> serializer = new Serializer<>(CreatureBoneConfig.class, "min",
+		public static Serializer<CreatureBoneConfig> serializer = new Serializer<>(CreatureBoneConfig.class,
 				"dropWeight");
 		static {
 			serializer.fieldHandlers.put("type",
