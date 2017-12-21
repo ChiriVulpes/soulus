@@ -283,6 +283,7 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 	public NBTTagCompound getEntityNbt() {
 		NBTTagCompound result = new NBTTagCompound();
 		result.setString("id", getSpawnMob());
+		result.setByte("PersistenceRequired", (byte) 1);
 		return result;
 		//.setString("id", spawnMob).nbt;
 	}

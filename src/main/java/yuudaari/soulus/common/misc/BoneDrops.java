@@ -9,6 +9,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -26,7 +27,8 @@ public class BoneDrops {
 		EntityLivingBase entity = event.getEntityLiving();
 		for (CreatureConfig creatureConfig : Soulus.config.creatures) {
 			for (Map.Entry<String, CreatureLootConfig> lootConfig : creatureConfig.loot.entrySet()) {
-				if (lootConfig.getKey().equals(EntityList.getKey(entity).toString())) {
+				ResourceLocation name = EntityList.getKey(entity);
+				if (name != null && lootConfig.getKey().equals(name.toString())) {
 					ItemStack stack = getStack(entity.world.rand, creatureConfig.bones.type, lootConfig.getValue());
 					if (stack != null) {
 						event.getDrops()
