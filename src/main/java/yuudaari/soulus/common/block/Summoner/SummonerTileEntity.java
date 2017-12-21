@@ -549,7 +549,7 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 
 				// custom data so we know the mob was spawned by souls
 				NBTTagCompound entityData = entity.getEntityData();
-				entityData.setByte("soulus:spawn_whitelisted", (byte) 1);
+				entityData.setByte("soulus:spawn_whitelisted", (byte) 2);
 
 				if (!ForgeEventFactory.doSpecialSpawn(entity, world, (float) entity.posX, (float) entity.posY,
 						(float) entity.posZ)) {
