@@ -30,7 +30,7 @@ public class ExNihiloCreatioRecipes implements ISieveDefaultRegistryProvider {
 		ExNihiloRegistryManager.SIEVE_REGISTRY.register(Blocks.DIRT.getDefaultState(),
 				ModItems.BONE_CHUNK_NORMAL.getItemStack(), 0.2f, MeshType.FLINT.getID());
 		ExNihiloRegistryManager.SIEVE_REGISTRY.register(Blocks.DIRT.getDefaultState(),
-				ModItems.BONE_CHUNK_FUNGAL.getItemStack(), 0.01f, MeshType.FLINT.getID());
+				ModItems.BONE_CHUNK_FUNGAL.getItemStack(), 0.02f, MeshType.FLINT.getID());
 		ExNihiloRegistryManager.SIEVE_REGISTRY.register(Blocks.DIRT.getDefaultState(),
 				ModItems.BONE_CHUNK_ENDER.getItemStack(), 0.01f, MeshType.FLINT.getID());
 
@@ -75,7 +75,7 @@ public class ExNihiloCreatioRecipes implements ISieveDefaultRegistryProvider {
 				ModItems.BONE_CHUNK_SCALE.getItemStack(), 0.1f, MeshType.IRON.getID());
 
 		ExNihiloRegistryManager.SIEVE_REGISTRY.register(Blocks.SNOW.getDefaultState(),
-				ModItems.BONE_CHUNK_FROZEN.getItemStack(), 0.2f, MeshType.IRON.getID());
+				ModItems.BONE_CHUNK_FROZEN.getItemStack(), 0.15f, MeshType.IRON.getID());
 
 		ExNihiloRegistryManager.SIEVE_REGISTRY.register(Blocks.GRAVEL.getDefaultState(),
 				ModItems.BONE_CHUNK_NORMAL.getItemStack(), 0.1f, MeshType.IRON.getID());
