@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModBlocks;
-import yuudaari.soulus.common.config.CreatureConfig;
+import yuudaari.soulus.common.config.EssenceConfig;
 import yuudaari.soulus.common.config.ManualSerializer;
 import yuudaari.soulus.common.config.Serializer;
 import yuudaari.soulus.common.util.Logger;
@@ -252,7 +252,7 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 
 	}
 
-	private CreatureConfig spawnMobConfig;
+	private EssenceConfig spawnMobConfig;
 	private int spawnMobChanceTotal;
 
 	public String getMob() {
@@ -265,7 +265,7 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 	}
 
 	private void resetSpawnMob() {
-		for (CreatureConfig config : Soulus.config.creatures) {
+		for (EssenceConfig config : Soulus.config.essences) {
 			if (config.essence.equals(spawnMob)) {
 				spawnMobConfig = config;
 

@@ -31,10 +31,10 @@ public class Config {
 
 	public boolean replaceSpawnersWithSummoners = true;
 	public int boneChunkParticleCount = 3;
-	public List<CreatureConfig> creatures = CreatureConfig.getDefaultCreatureConfigs();
+	public List<EssenceConfig> essences = EssenceConfig.getDefaultCreatureConfigs();
 
 	public int getSoulbookQuantity(String mobTarget) {
-		for (CreatureConfig config : creatures) {
+		for (EssenceConfig config : essences) {
 			if (config.essence.equals(mobTarget)) {
 				return config.soulbookQuantity;
 			}
@@ -48,12 +48,16 @@ public class Config {
 	static {
 		serializer = new Serializer<>(Config.class, "replaceSpawnersWithSummoners", "boneChunkParticleCount");
 
-		serializer.fieldHandlers.put("creatures",
-				new ManualSerializer(Config::serializeCreatures, Config::deserializeCreatures));
+		serializer.otherHandlers.put("glue", new ManualSerializer(from -> Glue.serializer.serialize(ModItems.GLUE),
+				(from, into) -> Glue.serializer.deserialize(from, ModItems.GLUE)));
 
-		serializer.otherHandlers.put("fossilVeins",
-				new ManualSerializer(from -> GeneratorFossils.serialize(ModGenerators.GENERATOR_FOSSILS),
-						(from, into) -> GeneratorFossils.deserialize(from, ModGenerators.GENERATOR_FOSSILS)));
+		serializer.otherHandlers.put("barkFromLogs",
+				new ManualSerializer(from -> BarkFromLogs.serializer.serialize(BarkFromLogs.INSTANCE),
+						(from, into) -> BarkFromLogs.serializer.deserialize(from, BarkFromLogs.INSTANCE)));
+
+		serializer.otherHandlers.put("sledgehammer",
+				new ManualSerializer(from -> Sledgehammer.serializer.serialize(ModItems.SLEDGEHAMMER),
+						(from, into) -> Sledgehammer.serializer.deserialize(from, ModItems.SLEDGEHAMMER)));
 
 		serializer.otherHandlers.put("bloodCrystal",
 				new ManualSerializer(from -> BloodCrystal.serializer.serialize(ModItems.BLOOD_CRYSTAL),
@@ -63,24 +67,19 @@ public class Config {
 				new ManualSerializer(from -> OrbMurky.serializer.serialize(ModItems.ORB_MURKY),
 						(from, into) -> OrbMurky.serializer.deserialize(from, ModItems.ORB_MURKY)));
 
-		serializer.otherHandlers.put("glue", new ManualSerializer(from -> Glue.serializer.serialize(ModItems.GLUE),
-				(from, into) -> Glue.serializer.deserialize(from, ModItems.GLUE)));
-
-		serializer.otherHandlers.put("sledgehammer",
-				new ManualSerializer(from -> Sledgehammer.serializer.serialize(ModItems.SLEDGEHAMMER),
-						(from, into) -> Sledgehammer.serializer.deserialize(from, ModItems.SLEDGEHAMMER)));
-
 		serializer.otherHandlers.put("summoner", new ManualSerializer(from -> SummonerTileEntity.serialize(),
 				(from, into) -> SummonerTileEntity.deserialize(from)));
 
-		serializer.otherHandlers.put("barkFromLogs",
-				new ManualSerializer(from -> BarkFromLogs.serializer.serialize(BarkFromLogs.INSTANCE),
-						(from, into) -> BarkFromLogs.serializer.deserialize(from, BarkFromLogs.INSTANCE)));
-
-		serializer.otherHandlers.put("noMobSpawning",
+		serializer.otherHandlers.put("creatures",
 				new ManualSerializer(from -> NoMobSpawning.serializer.serialize(NoMobSpawning.INSTANCE),
 						(from, into) -> NoMobSpawning.serializer.deserialize(from, NoMobSpawning.INSTANCE)));
 
+		serializer.otherHandlers.put("fossilVeins",
+				new ManualSerializer(from -> GeneratorFossils.serialize(ModGenerators.GENERATOR_FOSSILS),
+						(from, into) -> GeneratorFossils.deserialize(from, ModGenerators.GENERATOR_FOSSILS)));
+
+		serializer.fieldHandlers.put("essences",
+				new ManualSerializer(Config::serializeEssences, Config::deserializeEssences));
 	}
 
 	/* STATIC METHODS */
@@ -129,36 +128,36 @@ public class Config {
 
 	/* SERIALIZERS */
 
-	private static JsonElement serializeCreatures(Object obj) {
+	private static JsonElement serializeEssences(Object obj) {
 		@SuppressWarnings("unchecked")
-		List<CreatureConfig> creatureConfigs = (List<CreatureConfig>) obj;
+		List<EssenceConfig> essenceConfigs = (List<EssenceConfig>) obj;
 
-		JsonArray creatures = new JsonArray();
+		JsonArray essences = new JsonArray();
 
-		for (CreatureConfig creatureConfig : creatureConfigs) {
-			creatures.add(CreatureConfig.serializer.serialize(creatureConfig));
+		for (EssenceConfig essenceConfig : essenceConfigs) {
+			essences.add(EssenceConfig.serializer.serialize(essenceConfig));
 		}
 
-		return creatures;
+		return essences;
 	}
 
-	private static Object deserializeCreatures(JsonElement json, Object current) {
+	private static Object deserializeEssences(JsonElement json, Object current) {
 		@SuppressWarnings("unchecked")
-		List<CreatureConfig> creatureConfigs = (List<CreatureConfig>) current;
+		List<EssenceConfig> essenceConfigs = (List<EssenceConfig>) current;
 
-		JsonArray creatures = (JsonArray) json;
-		if (creatures == null) {
+		JsonArray essences = (JsonArray) json;
+		if (essences == null) {
 			return current;
 		}
 
-		creatureConfigs.clear();
+		essenceConfigs.clear();
 
-		for (JsonElement creatureConfig : creatures) {
-			creatureConfigs
-					.add((CreatureConfig) CreatureConfig.serializer.deserialize(creatureConfig, new CreatureConfig()));
+		for (JsonElement essenceConfig : essences) {
+			essenceConfigs
+					.add((EssenceConfig) EssenceConfig.serializer.deserialize(essenceConfig, new EssenceConfig()));
 		}
 
-		return creatureConfigs;
+		return essenceConfigs;
 	}
 
 	public static JsonElement serializeList(Object obj) {

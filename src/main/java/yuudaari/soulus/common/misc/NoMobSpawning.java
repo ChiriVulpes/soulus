@@ -21,6 +21,7 @@ import yuudaari.soulus.common.config.ManualSerializer;
 import yuudaari.soulus.common.config.Serializer;
 import yuudaari.soulus.common.misc.NoMobSpawning.NoMobSpawningDimensionConfig.NoMobSpawningBiomeConfig;
 import yuudaari.soulus.common.misc.NoMobSpawning.NoMobSpawningDimensionConfig.NoMobSpawningBiomeConfig.NoMobSpawningCreatureConfig;
+import yuudaari.soulus.common.util.Logger;
 
 @Mod.EventBusSubscriber
 public class NoMobSpawning {
@@ -41,10 +42,12 @@ public class NoMobSpawning {
 	}
 
 	public static Object deserialize(JsonElement json, Object current) {
-		JsonObject config = (JsonObject) json;
-		if (config == null) {
+		if (json == null || !(json instanceof JsonObject)) {
+			Logger.info("creatures", "Must be an object");
 			return current;
 		}
+
+		JsonObject config = (JsonObject) json;
 
 		NoMobSpawning noMobSpawning = (NoMobSpawning) current;
 		noMobSpawning.dimensionConfigs.clear();
@@ -75,10 +78,12 @@ public class NoMobSpawning {
 		}
 
 		public static Object deserialize(JsonElement json, Object current) {
-			JsonObject config = (JsonObject) json;
-			if (config == null) {
+			if (json == null || !(json instanceof JsonObject)) {
+				Logger.info("creatures[dimension]", "Must be an object");
 				return current;
 			}
+
+			JsonObject config = (JsonObject) json;
 
 			NoMobSpawningDimensionConfig dimensionConfig = (NoMobSpawningDimensionConfig) current;
 			dimensionConfig.biomeConfigs.clear();
@@ -109,10 +114,12 @@ public class NoMobSpawning {
 			}
 
 			public static Object deserialize(JsonElement json, Object current) {
-				JsonObject config = (JsonObject) json;
-				if (config == null) {
+				if (json == null || !(json instanceof JsonObject)) {
+					Logger.info("creatures[dimension][biome]", "Must be an object");
 					return current;
 				}
+
+				JsonObject config = (JsonObject) json;
 
 				NoMobSpawningBiomeConfig biomeConfig = (NoMobSpawningBiomeConfig) current;
 				biomeConfig.creatureConfigs.clear();
@@ -128,7 +135,7 @@ public class NoMobSpawning {
 
 			public static class NoMobSpawningCreatureConfig {
 				public static Serializer<NoMobSpawningCreatureConfig> serializer = new Serializer<>(
-						NoMobSpawningCreatureConfig.class, "spawnChance");
+						NoMobSpawningCreatureConfig.class, "spawnChance", "hasDrops");
 
 				public NoMobSpawningCreatureConfig() {
 				}
@@ -138,7 +145,13 @@ public class NoMobSpawning {
 				}
 
 				public String creatureId;
-				public double spawnChance;
+				public double spawnChance = 0;
+				public boolean hasDrops = true;
+
+				public NoMobSpawningCreatureConfig setNoDrops() {
+					this.hasDrops = false;
+					return this;
+				}
 			}
 
 			public NoMobSpawningBiomeConfig() {

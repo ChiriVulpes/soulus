@@ -1,8 +1,8 @@
 package yuudaari.soulus.common.item;
 
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.config.CreatureConfig;
 import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.config.EssenceConfig;
 import yuudaari.soulus.common.util.BoneType;
 import yuudaari.soulus.common.util.ModItem;
 import net.minecraft.entity.item.EntityItem;
@@ -38,19 +38,19 @@ public class BoneChunk extends ModItem {
 		addOreDict("boneChunk");
 
 		Soulus.onInit((FMLInitializationEvent e) -> {
-			for (CreatureConfig creatureConfig : Soulus.config.creatures) {
-				if (creatureConfig.bones.type != boneType) {
+			for (EssenceConfig essenceConfig : Soulus.config.essences) {
+				if (essenceConfig.bones.type != boneType) {
 					continue;
 				}
 
-				if (creatureConfig.essence.equals("NONE")) {
-					drops.put(null, creatureConfig.bones.dropWeight);
+				if (essenceConfig.essence.equals("NONE")) {
+					drops.put(null, essenceConfig.bones.dropWeight);
 				} else {
-					if (ForgeRegistries.ENTITIES.containsKey(new ResourceLocation(creatureConfig.essence))) {
-						drops.put(creatureConfig.essence, creatureConfig.bones.dropWeight);
+					if (ForgeRegistries.ENTITIES.containsKey(new ResourceLocation(essenceConfig.essence))) {
+						drops.put(essenceConfig.essence, essenceConfig.bones.dropWeight);
 					} else {
 						System.out.println(String.format("Colour entry missing for %s:%s", boneType.name(),
-								creatureConfig.essence));
+								essenceConfig.essence));
 					}
 				}
 			}
