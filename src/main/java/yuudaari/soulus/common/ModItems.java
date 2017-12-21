@@ -38,6 +38,7 @@ public class ModItems {
 	public static final ModItem BONE_SCALE = new ModItem("bone_scale");
 	public static final ModItem EMERALD_BURNT = new ModItem("emerald_burnt");
 	public static final ModItem EMERALD_COATED = new ModItem("emerald_coated");
+	public static final ModItem BLOOD_CRYSTAL_BROKEN = new ModItem("blood_crystal_broken");
 	public static final ModItem GEAR_BONE = new GearBone("gear_bone");
 	public static final ModItem GEAR_BONE_DRY = new GearBone("gear_bone_dry");
 	public static final ModItem GEAR_BONE_FROZEN = new GearBone("gear_bone_frozen");
@@ -55,7 +56,7 @@ public class ModItems {
 			BONE_CHUNK_DRY, BONE_CHUNK_FROZEN, BONE_CHUNK_FUNGAL, BONE_CHUNK_SCALE, BONE_CHUNK_ENDER, BONE_CHUNK_NETHER,
 			BONEMEAL_NETHER, BONEMEAL_ENDER, DUST_IRON, DUST_ENDER_IRON, GEAR_BONE_ENDER, GEAR_BONE, GEAR_BONE_NETHER,
 			GEAR_BONE_DRY, GEAR_BONE_FROZEN, GEAR_BONE_FUNGAL, GEAR_OSCILLATING, EMERALD_BURNT, EMERALD_COATED,
-			BLOOD_CRYSTAL, ORB_MURKY, SOULBOOK };
+			BLOOD_CRYSTAL_BROKEN, BLOOD_CRYSTAL, ORB_MURKY, SOULBOOK };
 
 	public static void registerItems(IForgeRegistry<Item> registry) {
 		OreDictionary.registerOre("bonemeal", new ItemStack(Items.DYE, 1, 15));

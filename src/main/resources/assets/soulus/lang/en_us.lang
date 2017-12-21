@@ -183,6 +183,10 @@ tile.soulus:summoner.minecraft:zombie.name=Summoner of Zombie
 death.attack.soulus:blood_crystal=%1$s sacrificed themselves to a blood crystal
 
 waila.soulus:summoner.summon_percentage=%1$s%% summoned
+waila.soulus:summoner.show_upgrades=§8§oSneak to show upgrades
+waila.soulus:summoner.upgrades_delay=%1$s/%2$s §3Oscillating Gears
+waila.soulus:summoner.upgrades_count=%1$s/%2$s §4Blood Crystals
+waila.soulus:summoner.upgrades_range=%1$s/%2$s §6Murky Orbs
 tooltip.soulus:soulbook.contained_essence=%1$s/%2$s Essence
 tooltip.soulus:orb_murky.contained_essence=%1$s/%2$s Essence
 tooltip.soulus:blood_crystal.contained_blood=%1$s/%2$s Blood

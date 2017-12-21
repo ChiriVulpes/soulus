@@ -3,6 +3,7 @@ package yuudaari.soulus.common.compat;
 import java.util.List;
 
 import mcp.mobius.waila.api.*;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -39,9 +40,12 @@ public class Waila implements IWailaPlugin, IWailaDataProvider {
 	public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor,
 			IWailaConfigHandler config) {
 
-		if (accessor.getBlock() instanceof Summoner) {
-			SummonerTileEntity summoner = (SummonerTileEntity) accessor.getTileEntity();
-			return summoner.getWailaTooltip(currenttip);
+		Block block = accessor.getBlock();
+		if (block != null && block instanceof Summoner) {
+			SummonerTileEntity te = (SummonerTileEntity) accessor.getTileEntity();
+			if (te == null)
+				return null;
+			return te.getWailaTooltip(currenttip, accessor.getPlayer().isSneaking());
 		}
 
 		return currenttip;
@@ -50,8 +54,14 @@ public class Waila implements IWailaPlugin, IWailaDataProvider {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
-		if (accessor.getBlock() instanceof Summoner) {
-			return ((Summoner) accessor.getBlock()).getItemStack((SummonerTileEntity) accessor.getTileEntity());
+
+		Block block = accessor.getBlock();
+		if (block != null && block instanceof Summoner) {
+			Summoner summoner = (Summoner) accessor.getBlock();
+			SummonerTileEntity te = (SummonerTileEntity) accessor.getTileEntity();
+			if (te == null)
+				return null;
+			return summoner.getItemStack(te);
 		}
 
 		return null;

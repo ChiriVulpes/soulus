@@ -28,10 +28,13 @@ import yuudaari.soulus.common.config.ManualSerializer;
 import yuudaari.soulus.common.config.Serializer;
 import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.Range;
+
+import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -403,6 +406,7 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 		setUpgradeCount(Upgrade.RANGE, upgradeTag.getByte("range"));
 		updateUpgrades(false);
 
+		this.insertionOrder = new Stack<>();
 		NBTTagList value = (NBTTagList) compound.getTag("insertion_order");
 		for (NBTBase s : value) {
 			if (s instanceof NBTTagString) {
@@ -600,9 +604,28 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public List<String> getWailaTooltip(List<String> currenttip) {
+	public List<String> getWailaTooltip(List<String> currenttip, boolean isSneaking) {
 		currenttip.add(I18n.format("waila." + Soulus.MODID + ":summoner.summon_percentage",
 				(int) Math.floor(getSpawnPercent() * 100)));
+
+		if (isSneaking) {
+			List<Upgrade> upgrades = new ArrayList<>(Arrays.asList(Upgrade.values()));
+			for (Upgrade upgrade : Lists.reverse(insertionOrder)) {
+				upgrades.remove(upgrade);
+				currenttip
+						.add(I18n.format("waila." + Soulus.MODID + ":summoner.upgrades_" + upgrade.name().toLowerCase(),
+								upgradeCounts.get(upgrade), config.maxUpgrades.get(upgrade)));
+			}
+			for (Upgrade upgrade : upgrades) {
+				currenttip
+						.add(I18n.format("waila." + Soulus.MODID + ":summoner.upgrades_" + upgrade.name().toLowerCase(),
+								upgradeCounts.get(upgrade), config.maxUpgrades.get(upgrade)));
+			}
+		} else {
+			currenttip.add(
+					I18n.format("waila." + Soulus.MODID + ":summoner.show_upgrades", upgradeCounts.get(Upgrade.RANGE)));
+		}
+
 		return currenttip;
 	}
 }

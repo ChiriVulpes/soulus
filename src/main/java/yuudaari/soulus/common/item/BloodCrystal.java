@@ -16,6 +16,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -26,6 +27,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
@@ -130,23 +132,35 @@ public class BloodCrystal extends SummonerUpgrade {
 	@Nonnull
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand hand) {
+
 		ItemStack heldItem = player.getHeldItem(hand);
 		int containedBlood = getContainedBlood(heldItem);
 		if (containedBlood < requiredBlood) {
-			if (!worldIn.isRemote) {
-				setContainedBlood(heldItem, containedBlood + prickAmount);
-				player.attackEntityFrom(new DamageSource("soulus:blood_crystal"), prickAmount);
 
-				for (ModPotionEffect effect : prickEffects)
-					player.addPotionEffect(effect);
+			if (player instanceof FakePlayer) {
+				heldItem.setCount(0);
+				EntityItem dropEntity = new EntityItem(player.world, player.posX, player.posY, player.posZ,
+						ModItems.BLOOD_CRYSTAL_BROKEN.getItemStack());
+				dropEntity.setNoPickupDelay();
+				player.world.spawnEntity(dropEntity);
 
-				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, heldItem);
 			} else {
-				if (player.world.isRemote) {
-					particles(player);
+				if (!worldIn.isRemote) {
+					setContainedBlood(heldItem, containedBlood + prickAmount);
+					player.attackEntityFrom(new DamageSource("soulus:blood_crystal"), prickAmount);
+
+					for (ModPotionEffect effect : prickEffects)
+						player.addPotionEffect(effect);
+
+					return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, heldItem);
+				} else {
+					if (player.world.isRemote) {
+						particles(player);
+					}
 				}
 			}
 		}
+
 		return new ActionResult<ItemStack>(EnumActionResult.FAIL, heldItem);
 	}
 
