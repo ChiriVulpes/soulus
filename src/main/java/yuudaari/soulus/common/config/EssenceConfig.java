@@ -168,7 +168,8 @@ public class EssenceConfig {
 				new EssenceConfig("minecraft:rabbit", new CreatureBoneConfig(BoneType.NORMAL, 4)).addLoot(1, 1, 0.5));
 		creatureConfigs.add(
 				new EssenceConfig("minecraft:sheep", new CreatureBoneConfig(BoneType.NORMAL, 6)).addLoot(1, 3, 0.8));
-		creatureConfigs.add(new EssenceConfig("minecraft:skeleton", new CreatureBoneConfig(BoneType.NORMAL, 3)));
+		creatureConfigs.add(
+				new EssenceConfig("minecraft:skeleton", new CreatureBoneConfig(BoneType.NORMAL, 3)).addLoot(1, 3, 0.5));
 		creatureConfigs.add(new EssenceConfig("minecraft:spider", new CreatureBoneConfig(BoneType.NORMAL, 5)));
 		creatureConfigs.add(
 				new EssenceConfig("minecraft:villager", new CreatureBoneConfig(BoneType.NORMAL, 1)).addLoot(1, 4, 1));
