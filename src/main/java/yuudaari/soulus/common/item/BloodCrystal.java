@@ -41,10 +41,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.common.collect.Multimap;
 
 public class BloodCrystal extends SummonerUpgrade {
-	private static int defaultRequiredBlood = 162;
+	private static int defaultRequiredBlood = 1000;
 	private static int defaultPrickAmount = 9;
-	private static int defaultPrickWorth = 9;
-	private static int defaultCreaturePrickRequiredHealth = 1;
+	private static int defaultPrickWorth = 90;
+	private static int defaultCreaturePrickRequiredHealth = 9999999;
 	private static int defaultCreaturePrickAmount = 1;
 	private static int defaultCreaturePrickWorth = 3;
 	private static int defaultParticleCount = 50;
@@ -146,7 +146,7 @@ public class BloodCrystal extends SummonerUpgrade {
 
 			} else {
 				if (!worldIn.isRemote) {
-					setContainedBlood(heldItem, containedBlood + prickAmount);
+					setContainedBlood(heldItem, containedBlood + prickWorth);
 					player.attackEntityFrom(new DamageSource("soulus:blood_crystal"), prickAmount);
 
 					for (ModPotionEffect effect : prickEffects)
@@ -166,7 +166,7 @@ public class BloodCrystal extends SummonerUpgrade {
 
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-		if (target.getHealth() <= this.creaturePrickRequiredHealth / 2) {
+		if (target.getHealth() <= this.creaturePrickRequiredHealth) {
 			target.attackEntityFrom(new DamageSource("soulus:blood_crystal"), this.creaturePrickAmount);
 			int blood = getContainedBlood(stack);
 			setContainedBlood(stack, blood + this.creaturePrickWorth);
@@ -199,8 +199,8 @@ public class BloodCrystal extends SummonerUpgrade {
 
 	public static int getContainedBlood(ItemStack stack) {
 		NBTTagCompound tag = stack.getTagCompound();
-		if (tag != null && tag.hasKey("ContainedBlood", 1)) {
-			return tag.getByte("ContainedBlood") - Byte.MIN_VALUE;
+		if (tag != null && tag.hasKey("ContainedBlood", 3)) {
+			return tag.getInteger("ContainedBlood");
 		}
 		return 0;
 	}
@@ -211,7 +211,7 @@ public class BloodCrystal extends SummonerUpgrade {
 			tag = new NBTTagCompound();
 			stack.setTagCompound(tag);
 		}
-		tag.setByte("ContainedBlood", (byte) (count + Byte.MIN_VALUE));
+		tag.setInteger("ContainedBlood", count);
 		return stack;
 	}
 

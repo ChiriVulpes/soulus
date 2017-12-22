@@ -29,11 +29,15 @@ import java.util.Random;
 
 public class BoneChunk extends ModItem {
 
+	public static Map<BoneType, BoneChunk> boneChunkTypes = new HashMap<>();
+
 	private Map<String, Double> drops = new HashMap<>();
 	private int chanceTotal = 0;
 
 	public BoneChunk(String name, BoneType boneType) {
 		super(name);
+
+		boneChunkTypes.put(boneType, this);
 
 		addOreDict("boneChunk");
 

@@ -53,15 +53,16 @@ The following preview images are of a Summoner with maximum upgrades:
 
 ## No Mob Spawning [↑](#table-of-contents)
 
-All mob spawning is disabled by default. See `config.no_mob_spawning`:
+All mob spawning is disabled by default. See `config.creatures`:
 
 ```json
 {
-	"no_mob_spawning": {
+	"creatures": {
 		"*": {
 			"*": {
 				"*": {
-					"spawn_chance": 0.0
+					"spawn_chance": 0.0,
+					"has_drops": true
 				}
 			}
 		}
@@ -70,32 +71,39 @@ All mob spawning is disabled by default. See `config.no_mob_spawning`:
 ```
 This is the default configuration, which disables all spawns, from every dimension, in every biome, of every creature. The first asterisk is a wildcard matching all dimensions, while the second asterisk is a wildcard matching all biomes, while the third asterisk is a wildcard matching all creatures.
 
+If you configure any creatures to still spawn, by default, they will all have drops, as seen in this config.
+
 Here's a more complex example:
 ```json
 {
-	"no_mob_spawning": {
+	"creatures": {
 		"*": {
 			"*": {
 				"*": {
-					"spawn_chance": 0.0
+					"spawn_chance": 0.0,
+					"has_drops": false
 				},
 				"twilightforest:*": {
-					"spawn_chance": 1.0
+					"spawn_chance": 1.0,
+					"has_drops": false
 				},
 				"minecraft:wither": {
-					"spawn_chance": 1.0
+					"spawn_chance": 1.0,
+					"has_drops": true
 				}
 			},
 			"minecraft:ocean": {
 				"*": {
-					"spawn_chance": 0.5
+					"spawn_chance": 0.5,
+					"has_drops": true
 				}
 			}
 		},
 		"the_end": {
 			"minecraft:*": {
 				"minecraft:ender_dragon": {
-					"spawn_chance": 1.0
+					"spawn_chance": 1.0,
+					"has_drops": true
 				}
 			}
 		}
@@ -105,6 +113,7 @@ Here's a more complex example:
 In this example, by default, all spawns are disabled, except for all twilight forest creatures in any dimension/biome, and the wither, in any dimension/biome.  
 Then, any creatures that spawn in an ocean biome are half as likely to spawn.  
 Then there's also an explicit configuration so that if the spawn is in the end, and in any vanilla biome, and the entity is an ender dragon, then it can spawn.
+In this example, nothing has drops except the ender dragon, the wither, and everything in an ocean biome.
 
 To know the dimension and biome names of modded biomes, you can use the /souluslocation command.
 
