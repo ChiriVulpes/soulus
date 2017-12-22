@@ -28,13 +28,14 @@ public class ModBlocks {
 	public static final FossilSand FOSSIL_SAND = new FossilSand();
 	public static final FossilSandScale FOSSIL_SAND_SCALE = new FossilSandScale();
 	public static final FossilSandEnder FOSSIL_SAND_ENDER = new FossilSandEnder();
+	public static final FossilEndStone FOSSIL_END_STONE = new FossilEndStone();
 	public static final Summoner SUMMONER = new Summoner();
 	public static final SummonerEmpty SUMMONER_EMPTY = new SummonerEmpty();
 	public static final BarsEndersteel BARS_ENDERSTEEL = new BarsEndersteel();
 
 	public static IBlock[] blocks = new IBlock[] { SUMMONER, SUMMONER_EMPTY, BARS_ENDERSTEEL, BLOCK_ENDERSTEEL,
 			FOSSIL_DIRT, FOSSIL_DIRT_ENDER, FOSSIL_DIRT_FROZEN, FOSSIL_DIRT_FUNGAL, FOSSIL_SAND, FOSSIL_SAND_SCALE,
-			FOSSIL_SAND_ENDER, FOSSIL_NETHERRACK, FOSSIL_NETHERRACK_ENDER };
+			FOSSIL_SAND_ENDER, FOSSIL_NETHERRACK, FOSSIL_NETHERRACK_ENDER, FOSSIL_END_STONE };
 
 	public static void registerBlocks(IForgeRegistry<Block> registry) {
 		for (IBlock block : blocks) {

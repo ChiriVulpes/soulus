@@ -34,7 +34,9 @@ public class GeneratorFossils extends ModGenerator {
 			new OreVein().setBlock("soulus:fossil_netherrack").setToReplace("minecraft:netherrack").setSize(3, 7)
 					.setChances(300).setBiomes(Type.NETHER),
 			new OreVein().setBlock("soulus:fossil_netherrack_ender").setToReplace("minecraft:netherrack").setSize(2, 5)
-					.setChances(10).setBiomes(Type.NETHER) };
+					.setChances(10).setBiomes(Type.NETHER),
+			new OreVein().setBlock("soulus:fossil_end_stone").setToReplace("minecraft:end_stone").setSize(2, 5)
+					.setChances(300).setBiomes(Type.END) };
 
 	public static final ManualSerializer serializer = new ManualSerializer(GeneratorFossils::serialize,
 			GeneratorFossils::deserialize);

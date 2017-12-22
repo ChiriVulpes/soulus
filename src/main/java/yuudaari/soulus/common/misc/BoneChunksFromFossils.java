@@ -90,6 +90,7 @@ public class BoneChunksFromFossils {
 		fossils.put("soulus:fossil_sand", new FossilConfig(BoneType.DRY, 2, 6));
 		fossils.put("soulus:fossil_sand_ender", new FossilConfig(BoneType.ENDER, 2, 6));
 		fossils.put("soulus:fossil_sand_scale", new FossilConfig(BoneType.SCALE, 2, 6));
+		fossils.put("soulus:fossil_end_stone", new FossilConfig(BoneType.ENDER, 2, 6));
 	}
 
 	@SubscribeEvent

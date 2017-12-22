@@ -136,6 +136,7 @@ tile.soulus:fossil_netherrack_ender.name=Netherrack with Glowing Fossils
 tile.soulus:fossil_sand.name=Sand with Dry Fossils
 tile.soulus:fossil_sand_scale.name=Sand with Scale Fossils
 tile.soulus:fossil_sand_ender.name=Sand with Glowing Fossils
+tile.soulus:fossil_end_stone.name=End Stone with Glowing Fossils
 
 tile.soulus:block_endersteel.name=Block of Endersteel
 tile.soulus:bars_endersteel.name=Endersteel Bars
