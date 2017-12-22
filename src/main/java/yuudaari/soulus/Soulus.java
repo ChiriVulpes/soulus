@@ -2,6 +2,7 @@ package yuudaari.soulus;
 
 import yuudaari.soulus.client.ModRenderers;
 import yuudaari.soulus.common.config.Config;
+import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.ModGenerators;
 import yuudaari.soulus.common.ModItems;
@@ -102,6 +103,7 @@ public class Soulus {
 			handler.handle(event);
 		}
 
+		SoulsPacketHandler.register();
 		if (Loader.isModLoaded("exnihilocreatio")) {
 			ExNihiloCreatioRecipes.init();
 		}

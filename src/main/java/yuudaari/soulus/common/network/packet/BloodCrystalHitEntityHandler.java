@@ -1,5 +1,6 @@
 package yuudaari.soulus.common.network.packet;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -11,7 +12,10 @@ public class BloodCrystalHitEntityHandler implements IMessageHandler<BloodCrysta
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IMessage onMessage(BloodCrystalHitEntity message, MessageContext ctx) {
-		BloodCrystal.particles(message.getEntity());
+		EntityLivingBase entity = message.getEntity();
+		if (entity != null) {
+			BloodCrystal.particles(entity);
+		}
 		return null;
 	}
 }

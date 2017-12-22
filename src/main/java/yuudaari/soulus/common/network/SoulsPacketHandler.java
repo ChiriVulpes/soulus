@@ -9,7 +9,7 @@ import yuudaari.soulus.common.network.packet.*;
 public class SoulsPacketHandler {
 	public static final SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(Soulus.MODID);
 
-	static {
+	public static void register() {
 		INSTANCE.registerMessage(BloodCrystalHitEntityHandler.class, BloodCrystalHitEntity.class, 0, Side.CLIENT);
 	}
 }
