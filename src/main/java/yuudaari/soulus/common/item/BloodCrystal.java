@@ -41,12 +41,12 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.common.collect.Multimap;
 
 public class BloodCrystal extends SummonerUpgrade {
-	private static int defaultRequiredBlood = 162;
+	private static int defaultRequiredBlood = 1000;
 	private static int defaultPrickAmount = 9;
-	private static int defaultPrickWorth = 9;
-	private static int defaultCreaturePrickRequiredHealth = 1;
+	private static int defaultPrickWorth = 90;
+	private static int defaultCreaturePrickRequiredHealth = 9999999;
 	private static int defaultCreaturePrickAmount = 1;
-	private static int defaultCreaturePrickWorth = 3;
+	private static int defaultCreaturePrickWorth = 1;
 	private static int defaultParticleCount = 50;
 	private static ModPotionEffect[] defaultPrickEffects = new ModPotionEffect[] { new ModPotionEffect("hunger", 100),
 			new ModPotionEffect("nausea", 200) };
@@ -146,7 +146,7 @@ public class BloodCrystal extends SummonerUpgrade {
 
 			} else {
 				if (!worldIn.isRemote) {
-					setContainedBlood(heldItem, containedBlood + prickAmount);
+					setContainedBlood(heldItem, containedBlood + prickWorth);
 					player.attackEntityFrom(new DamageSource("soulus:blood_crystal"), prickAmount);
 
 					for (ModPotionEffect effect : prickEffects)
@@ -166,7 +166,7 @@ public class BloodCrystal extends SummonerUpgrade {
 
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-		if (target.getHealth() <= this.creaturePrickRequiredHealth / 2) {
+		if (target.getHealth() <= this.creaturePrickRequiredHealth) {
 			target.attackEntityFrom(new DamageSource("soulus:blood_crystal"), this.creaturePrickAmount);
 			int blood = getContainedBlood(stack);
 			setContainedBlood(stack, blood + this.creaturePrickWorth);
