@@ -1,0 +1,16 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		" b ",
+		"b b",
+		" b "
+	],
+	"key": {
+		"b": {
+			"item": "soulus:bone_frozen"
+		}
+	},
+	"result": {
+		"item": "soulus:gear_bone_frozen"
+	}
+}

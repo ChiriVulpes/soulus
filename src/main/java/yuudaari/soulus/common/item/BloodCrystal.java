@@ -46,7 +46,7 @@ public class BloodCrystal extends SummonerUpgrade {
 	private static int defaultPrickWorth = 90;
 	private static int defaultCreaturePrickRequiredHealth = 9999999;
 	private static int defaultCreaturePrickAmount = 1;
-	private static int defaultCreaturePrickWorth = 1;
+	private static int defaultCreaturePrickWorth = 3;
 	private static int defaultParticleCount = 50;
 	private static ModPotionEffect[] defaultPrickEffects = new ModPotionEffect[] { new ModPotionEffect("hunger", 100),
 			new ModPotionEffect("nausea", 200) };
@@ -199,7 +199,7 @@ public class BloodCrystal extends SummonerUpgrade {
 
 	public static int getContainedBlood(ItemStack stack) {
 		NBTTagCompound tag = stack.getTagCompound();
-		if (tag != null && tag.hasKey("ContainedBlood", 1)) {
+		if (tag != null && tag.hasKey("ContainedBlood", 3)) {
 			return tag.getInteger("ContainedBlood");
 		}
 		return 0;
