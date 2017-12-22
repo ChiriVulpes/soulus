@@ -200,7 +200,7 @@ public class BloodCrystal extends SummonerUpgrade {
 	public static int getContainedBlood(ItemStack stack) {
 		NBTTagCompound tag = stack.getTagCompound();
 		if (tag != null && tag.hasKey("ContainedBlood", 1)) {
-			return tag.getByte("ContainedBlood") - Byte.MIN_VALUE;
+			return tag.getInteger("ContainedBlood");
 		}
 		return 0;
 	}
@@ -211,7 +211,7 @@ public class BloodCrystal extends SummonerUpgrade {
 			tag = new NBTTagCompound();
 			stack.setTagCompound(tag);
 		}
-		tag.setByte("ContainedBlood", (byte) (count + Byte.MIN_VALUE));
+		tag.setInteger("ContainedBlood", count);
 		return stack;
 	}
 
