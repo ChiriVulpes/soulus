@@ -8,6 +8,7 @@ import yuudaari.soulus.common.item.Glue;
 import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.item.Sledgehammer;
 import yuudaari.soulus.common.misc.BarkFromLogs;
+import yuudaari.soulus.common.misc.BoneChunksFromFossils;
 import yuudaari.soulus.common.misc.NoMobSpawning;
 import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.world.generators.GeneratorFossils;
@@ -54,6 +55,10 @@ public class Config {
 		serializer.otherHandlers.put("barkFromLogs",
 				new ManualSerializer(from -> BarkFromLogs.serializer.serialize(BarkFromLogs.INSTANCE),
 						(from, into) -> BarkFromLogs.serializer.deserialize(from, BarkFromLogs.INSTANCE)));
+
+		serializer.otherHandlers.put("fossilBlocks", new ManualSerializer(
+				from -> BoneChunksFromFossils.serializer.serialize(BoneChunksFromFossils.INSTANCE),
+				(from, into) -> BoneChunksFromFossils.serializer.deserialize(from, BoneChunksFromFossils.INSTANCE)));
 
 		serializer.otherHandlers.put("sledgehammer",
 				new ManualSerializer(from -> Sledgehammer.serializer.serialize(ModItems.SLEDGEHAMMER),
