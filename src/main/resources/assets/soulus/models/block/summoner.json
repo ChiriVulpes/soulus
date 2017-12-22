@@ -1,6 +1,3 @@
 {
-	"parent": "minecraft:block/cube_all",
-	"textures": {
-		"all": "soulus:blocks/summoner"
-	}
+	"parent": "minecraft:block/cube_all"
 }

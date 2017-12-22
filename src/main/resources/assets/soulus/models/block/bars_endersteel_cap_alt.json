@@ -1,9 +1,9 @@
 {
     "ambientocclusion": false,
     "textures": {
-        "particle": "soulus:blocks/bars_endersteel",
-        "bars": "soulus:blocks/bars_endersteel",
-        "edge": "soulus:blocks/bars_endersteel"
+        "particle": "#all",
+        "bars": "#all",
+        "edge": "#all"
     },
     "elements": [
         {   "from": [ 8, 0, 7 ],

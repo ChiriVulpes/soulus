@@ -1,32 +1,64 @@
 {
-	"multipart": [
-		{   "apply": { "model": "soulus:bars_endersteel_post_ends" }},
-		{   "when": { "north": false, "east": false, "south": false, "west": false },
-			"apply": { "model": "soulus:bars_endersteel_post" }
-		},
-		{   "when": { "north": true, "east": false, "south": false, "west": false },
-			"apply": { "model": "soulus:bars_endersteel_cap" }
-		},
-		{   "when": { "north": false, "east": true, "south": false, "west": false },
-			"apply": { "model": "soulus:bars_endersteel_cap", "y": 90 }
-		},
-		{   "when": { "north": false, "east": false, "south": true, "west": false },
-			"apply": { "model": "soulus:bars_endersteel_cap_alt" }
-		},
-		{   "when": { "north": false, "east": false, "south": false, "west": true },
-			"apply": { "model": "soulus:bars_endersteel_cap_alt", "y": 90 }
-		},
-		{   "when": { "north": true },
-			"apply": { "model": "soulus:bars_endersteel_side" }
-		},
-		{   "when": { "east": true },
-			"apply": { "model": "soulus:bars_endersteel_side", "y": 90 }
-		},
-		{   "when": { "south": true },
-			"apply": { "model": "soulus:bars_endersteel_side_alt" }
-		},
-		{   "when": { "west": true },
-			"apply": { "model": "soulus:bars_endersteel_side_alt", "y": 90 }
+	"forge_marker": 1,
+	"defaults": {
+		"multipart": [
+			{   "apply": { "model": "soulus:bars_endersteel_post_ends" }},
+			{   "when": { "north": false, "east": false, "south": false, "west": false },
+				"apply": { "model": "soulus:bars_endersteel_post" }
+			},
+			{   "when": { "north": true, "east": false, "south": false, "west": false },
+				"apply": { "model": "soulus:bars_endersteel_cap" }
+			},
+			{   "when": { "north": false, "east": true, "south": false, "west": false },
+				"apply": { "model": "soulus:bars_endersteel_cap", "y": 90 }
+			},
+			{   "when": { "north": false, "east": false, "south": true, "west": false },
+				"apply": { "model": "soulus:bars_endersteel_cap_alt" }
+			},
+			{   "when": { "north": false, "east": false, "south": false, "west": true },
+				"apply": { "model": "soulus:bars_endersteel_cap_alt", "y": 90 }
+			},
+			{   "when": { "north": true },
+				"apply": { "model": "soulus:bars_endersteel_side" }
+			},
+			{   "when": { "east": true },
+				"apply": { "model": "soulus:bars_endersteel_side", "y": 90 }
+			},
+			{   "when": { "south": true },
+				"apply": { "model": "soulus:bars_endersteel_side_alt" }
+			},
+			{   "when": { "west": true },
+				"apply": { "model": "soulus:bars_endersteel_side_alt", "y": 90 }
+			}
+		]
+	},
+	"variants": {
+		"variant": {
+			"normal": {
+				"textures": {
+					"all": "soulus:blocks/summoner_normal"
+				}
+			},
+			"wood": {
+				"textures": {
+					"all": "soulus:blocks/summoner_wood"
+				}
+			},
+			"stone": {
+				"textures": {
+					"all": "soulus:blocks/summoner_stone"
+				}
+			},
+			"end_stone": {
+				"textures": {
+					"all": "soulus:blocks/summoner_end_stone"
+				}
+			},
+			"blaze": {
+				"textures": {
+					"all": "soulus:blocks/summoner_blaze"
+				}
+			}
 		}
-	]
+	}
 }
