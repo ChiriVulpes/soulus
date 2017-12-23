@@ -23,6 +23,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemMultiTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -70,13 +71,14 @@ public class SummonerEmpty extends ModBlock {
 	@Override
 	public void getSubBlocks(CreativeTab tab, NonNullList<ItemStack> list) {
 		for (EndersteelType enumType : EndersteelType.values()) {
-			list.add(new ItemStack(this, 1, enumType.getMeta()));
+			list.add(new ItemStack(getItemBlock(), 1, enumType.getMeta()));
 		}
 	}
 
 	@Override
 	public ItemBlock getItemBlock() {
-		ItemBlock result = new ItemBlock(this) {
+		ItemBlock result = new ItemMultiTexture(this, this,
+				i -> EndersteelType.byMetadata(i.getItemDamage()).getName()) {
 			@Override
 			public int getMetadata(int damage) {
 				return damage;

@@ -1,6 +1,9 @@
 package yuudaari.soulus.common;
 
 import yuudaari.soulus.common.util.IBlock;
+
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -46,10 +49,12 @@ public class ModBlocks {
 	public static void registerItems(IForgeRegistry<Item> registry) {
 		for (IBlock block : blocks) {
 			if (block.hasItem()) {
-				ItemBlock item = block.getItemBlock();
-				registry.register(item);
-				for (String dict : block.getOreDicts()) {
-					OreDictionary.registerOre(dict, item);
+				List<ItemBlock> items = block.getItemBlocks();
+				for (ItemBlock item : items) {
+					registry.register(item);
+					for (String dict : block.getOreDicts()) {
+						OreDictionary.registerOre(dict, item);
+					}
 				}
 			}
 

@@ -2,6 +2,10 @@ package yuudaari.soulus.common.util;
 
 import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.util.IModItem;
+
+import java.util.Collections;
+import java.util.List;
+
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -21,6 +25,10 @@ public interface IBlock extends IModItem {
 	default void registerItemModel() {
 		ModelLoader.setCustomModelResourceLocation(this.getItemBlock(), 0,
 				new ModelResourceLocation(this.getRegistryName(), "inventory"));
+	}
+
+	default List<ItemBlock> getItemBlocks() {
+		return Collections.singletonList(getItemBlock());
 	}
 
 	abstract void setHasItem();
