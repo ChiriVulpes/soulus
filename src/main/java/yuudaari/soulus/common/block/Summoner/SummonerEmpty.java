@@ -26,6 +26,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemMultiTexture;
 import net.minecraft.item.ItemStack;
@@ -110,7 +111,7 @@ public class SummonerEmpty extends ModBlock {
 		NonNullList<ItemStack> stacks = NonNullList.create();
 		getSubBlocks(CreativeTab.INSTANCE, stacks);
 		for (ItemStack stack : stacks) {
-			ModelLoader.setCustomModelResourceLocation(super.getItemBlock(), stack.getMetadata(),
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), stack.getMetadata(),
 					new ModelResourceLocation(this.getRegistryName(), VARIANT.getName() + "="
 							+ EndersteelType.byMetadata(stack.getMetadata()).getName().toLowerCase()));
 		}
