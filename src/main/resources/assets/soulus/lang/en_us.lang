@@ -141,7 +141,11 @@ tile.soulus:fossil_end_stone.name=End Stone with Glowing Fossils
 tile.soulus:block_endersteel.name=Block of Endersteel
 tile.soulus:bars_endersteel.name=Endersteel Bars
 
-tile.soulus:summoner_empty.name=Empty Summoner
+tile.soulus:summoner_empty.normal.name=Empty Summoner
+tile.soulus:summoner_empty.wood.name=Empty Summoner
+tile.soulus:summoner_empty.stone.name=Empty Summoner
+tile.soulus:summoner_empty.end_stone.name=Empty Summoner
+tile.soulus:summoner_empty.blaze.name=Empty Summoner
 tile.soulus:summoner.name=Summoner
 
 tile.soulus:summoner.minecraft:bat.name=Summoner of Bat
@@ -192,3 +196,8 @@ waila.soulus:summoner.upgrades_range=%1$s/%2$s §6Murky Orbs
 tooltip.soulus:soulbook.contained_essence=%1$s/%2$s Essence
 tooltip.soulus:orb_murky.contained_essence=%1$s/%2$s Essence
 tooltip.soulus:blood_crystal.contained_blood=%1$s/%2$s Blood
+tooltip.soulus:summoner.style.normal=§8Style: §3Normal
+tooltip.soulus:summoner.style.wood=§8Style: §6Earthy
+tooltip.soulus:summoner.style.stone=§8Style: §9Spooky
+tooltip.soulus:summoner.style.end_stone=§8Style: §2Ender
+tooltip.soulus:summoner.style.blaze=§8Style: §cBlazing

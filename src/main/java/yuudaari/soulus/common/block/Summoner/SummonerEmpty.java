@@ -13,6 +13,8 @@ import yuudaari.soulus.common.util.ModBlock;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
@@ -20,6 +22,8 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
@@ -31,6 +35,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class SummonerEmpty extends ModBlock {
 
@@ -71,7 +77,7 @@ public class SummonerEmpty extends ModBlock {
 	@Override
 	public void getSubBlocks(CreativeTab tab, NonNullList<ItemStack> list) {
 		for (EndersteelType enumType : EndersteelType.values()) {
-			list.add(new ItemStack(getItemBlock(), 1, enumType.getMeta()));
+			list.add(new ItemStack(this, 1, enumType.getMeta()));
 		}
 	}
 
@@ -83,6 +89,15 @@ public class SummonerEmpty extends ModBlock {
 			public int getMetadata(int damage) {
 				return damage;
 			}
+
+			@Override
+			@SideOnly(Side.CLIENT)
+			public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip,
+					ITooltipFlag flagIn) {
+				tooltip.add(I18n.format("tooltip." + Soulus.MODID + ":summoner.style."
+						+ EndersteelType.byMetadata(stack.getItemDamage()).getName()));
+			}
+
 		};
 
 		result.setRegistryName(getRegistryName());
