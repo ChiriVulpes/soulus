@@ -64,8 +64,7 @@ public class ModBlocks {
 	public static void registerModels() {
 		for (IBlock block : blocks) {
 			if (block.hasItem()) {
-				ModelLoader.setCustomModelResourceLocation(block.getItemBlock(), 0,
-						new ModelResourceLocation(block.getRegistryName(), "inventory"));
+				block.registerItemModel();
 			}
 		}
 	}

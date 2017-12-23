@@ -1,5 +1,6 @@
 package yuudaari.soulus.common.block.summoner;
 
+import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.CreativeTab;
@@ -9,7 +10,6 @@ import yuudaari.soulus.common.block.EndersteelType;
 import yuudaari.soulus.common.item.Soulbook;
 import yuudaari.soulus.common.util.MobTarget;
 import yuudaari.soulus.common.util.ModBlock;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,13 +19,17 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 
 public class SummonerEmpty extends ModBlock {
 
@@ -65,8 +69,33 @@ public class SummonerEmpty extends ModBlock {
 
 	@Override
 	public void getSubBlocks(CreativeTab tab, NonNullList<ItemStack> list) {
-		for (final EndersteelType enumType : EndersteelType.values()) {
+		for (EndersteelType enumType : EndersteelType.values()) {
 			list.add(new ItemStack(this, 1, enumType.getMeta()));
+		}
+	}
+
+	@Override
+	public ItemBlock getItemBlock() {
+		ItemBlock result = new ItemBlock(this) {
+			@Override
+			public int getMetadata(int damage) {
+				return damage;
+			}
+		};
+
+		result.setRegistryName(getRegistryName());
+
+		return result;
+	}
+
+	@Override
+	public void registerItemModel() {
+		NonNullList<ItemStack> stacks = NonNullList.create();
+		getSubBlocks(CreativeTab.INSTANCE, stacks);
+		for (ItemStack stack : stacks) {
+			ModelLoader.setCustomModelResourceLocation(super.getItemBlock(), stack.getMetadata(),
+					new ModelResourceLocation(this.getRegistryName(), VARIANT.getName() + "="
+							+ EndersteelType.byMetadata(stack.getMetadata()).getName().toLowerCase()));
 		}
 	}
 

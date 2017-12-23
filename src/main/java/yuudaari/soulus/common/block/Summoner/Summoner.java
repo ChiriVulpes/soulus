@@ -224,7 +224,7 @@ public class Summoner extends ModBlock {
 				heldStack.shrink(1);
 
 			} else if (heldItem.equals(CountUpgrade)) {
-				if (BloodCrystal.getContainedBlood(heldStack) == ModItems.BLOOD_CRYSTAL.requiredBlood) {
+				if (BloodCrystal.getContainedBlood(heldStack) >= ModItems.BLOOD_CRYSTAL.requiredBlood) {
 					heldStack.shrink(summoner.addUpgradeStack(Upgrade.COUNT, sneaking ? heldStack.getCount() : 1));
 				}
 
@@ -232,7 +232,7 @@ public class Summoner extends ModBlock {
 				heldStack.shrink(summoner.addUpgradeStack(Upgrade.DELAY, sneaking ? heldStack.getCount() : 1));
 
 			} else if (heldItem.equals(RangeUpgrade)) {
-				if (OrbMurky.getContainedEssence(heldStack) == ModItems.ORB_MURKY.requiredEssence) {
+				if (OrbMurky.getContainedEssence(heldStack) >= ModItems.ORB_MURKY.requiredEssence) {
 					heldStack.shrink(summoner.addUpgradeStack(Upgrade.RANGE, sneaking ? heldStack.getCount() : 1));
 				}
 

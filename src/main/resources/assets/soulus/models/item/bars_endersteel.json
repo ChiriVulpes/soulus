@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "soulus:blocks/summoner"
+        "layer0": "soulus:blocks/summoner_normal"
     }
 }

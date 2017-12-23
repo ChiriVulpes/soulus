@@ -181,17 +181,14 @@ public class BloodCrystal extends SummonerUpgrade {
 			ItemStack stack) {
 		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(equipmentSlot, stack);
 
-		int containedBlood = getContainedBlood(stack);
-
-		if (containedBlood == requiredBlood) {
-			return multimap;
-		}
-
 		if (equipmentSlot == EntityEquipmentSlot.MAINHAND) {
-			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(),
-					new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", 0, 0));
-			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(),
-					new AttributeModifier(ATTACK_SPEED_MODIFIER, "Tool modifier", (double) 0, 0));
+			int containedBlood = getContainedBlood(stack);
+			if (containedBlood < requiredBlood) {
+				multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(),
+						new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", 0, 0));
+				multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(),
+						new AttributeModifier(ATTACK_SPEED_MODIFIER, "Tool modifier", (double) 0, 0));
+			}
 		}
 
 		return multimap;

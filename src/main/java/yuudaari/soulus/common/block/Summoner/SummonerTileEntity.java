@@ -321,11 +321,11 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 				double d0 = player.getDistanceSqToCenter(pos);
 
 				double nearAmt = (d0 / (activatingRange * activatingRange));
-				activationAmount += (1 - (nearAmt * nearAmt)) * 2;
+				activationAmount += Math.max(0, (1 - (nearAmt * nearAmt)) * 2);
 			}
 		}
 
-		return Math.max(0, activationAmount);
+		return activationAmount;
 	}
 
 	@Override
