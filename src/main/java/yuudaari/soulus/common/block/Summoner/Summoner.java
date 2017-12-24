@@ -6,7 +6,6 @@ import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.block.EndersteelType;
 import yuudaari.soulus.common.block.summoner.SummonerTileEntity.Upgrade;
-import yuudaari.soulus.common.compat.WailaProviders;
 import yuudaari.soulus.common.item.BloodCrystal;
 import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.item.Soulbook;
@@ -49,10 +48,14 @@ import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.Optional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+
+import mcp.mobius.waila.api.IWailaDataAccessor;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -414,20 +417,22 @@ public class Summoner extends ModBlock {
 		}
 	}
 
+	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	@Override
-	public List<String> getWailaTooltip(List<String> currentTooltip, WailaProviders.Accessor accessor) {
-		TileEntity te = accessor.te;
-		EntityPlayer player = accessor.player;
+	public List<String> getWailaTooltip(List<String> currentTooltip, IWailaDataAccessor accessor) {
+		TileEntity te = accessor.getTileEntity();
+		EntityPlayer player = accessor.getPlayer();
 		if (te == null || player == null || !(te instanceof SummonerTileEntity))
 			return null;
 		return ((SummonerTileEntity) te).getWailaTooltip(currentTooltip, player.isSneaking());
 	}
 
+	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	@Override
-	public ItemStack getWailaStack(WailaProviders.Accessor accessor) {
-		TileEntity te = accessor.te;
+	public ItemStack getWailaStack(IWailaDataAccessor accessor) {
+		TileEntity te = accessor.getTileEntity();
 		if (te == null || !(te instanceof SummonerTileEntity))
 			return null;
 		return getItemStack((SummonerTileEntity) te, 1, te.getBlockMetadata());

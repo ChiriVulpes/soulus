@@ -28,7 +28,7 @@ public class Waila implements IWailaPlugin, IWailaDataProvider {
 
 		Block block = accessor.getBlock();
 		if (block != null && block instanceof IBlock) {
-			return ((IBlock) block).getWailaTooltip(currenttip, createAccessor(accessor));
+			return ((IBlock) block).getWailaTooltip(currenttip, accessor);
 		}
 
 		return currenttip;
@@ -41,14 +41,10 @@ public class Waila implements IWailaPlugin, IWailaDataProvider {
 
 		Block block = accessor.getBlock();
 		if (block != null && block instanceof IBlock) {
-			result = ((IBlock) block).getWailaStack(createAccessor(accessor));
+			result = ((IBlock) block).getWailaStack(accessor);
 		}
 
 		return result == null ? new ItemStack(block, 1, accessor.getMetadata()) : result;
-	}
-
-	private static WailaProviders.Accessor createAccessor(IWailaDataAccessor accessor) {
-		return new WailaProviders.Accessor(accessor.getTileEntity(), accessor.getPlayer(), accessor.getMetadata());
 	}
 
 }

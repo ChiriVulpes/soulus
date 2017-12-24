@@ -7,6 +7,7 @@ import yuudaari.soulus.common.util.IModItem;
 import java.util.Collections;
 import java.util.List;
 
+import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemBlock;
@@ -18,6 +19,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.Optional;
 
 public interface IBlock extends IModItem {
 	abstract ResourceLocation getRegistryName();
@@ -52,13 +54,15 @@ public interface IBlock extends IModItem {
 
 	abstract void getSubBlocks(CreativeTab itemIn, NonNullList<ItemStack> items);
 
+	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
-	default List<String> getWailaTooltip(List<String> currentTooltip, WailaProviders.Accessor accessor) {
+	default List<String> getWailaTooltip(List<String> currentTooltip, IWailaDataAccessor accessor) {
 		return currentTooltip;
 	}
 
+	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
-	default ItemStack getWailaStack(WailaProviders.Accessor accessor) {
+	default ItemStack getWailaStack(IWailaDataAccessor accessor) {
 		return null;
 	}
 }

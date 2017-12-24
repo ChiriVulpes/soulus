@@ -6,7 +6,6 @@ import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.block.EndersteelType;
-import yuudaari.soulus.common.compat.WailaProviders;
 import yuudaari.soulus.common.item.Soulbook;
 import yuudaari.soulus.common.util.MobTarget;
 import yuudaari.soulus.common.util.ModBlock;
@@ -15,6 +14,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
@@ -38,6 +38,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.Optional;
 
 public class SummonerEmpty extends ModBlock {
 
@@ -167,12 +168,13 @@ public class SummonerEmpty extends ModBlock {
 		return true;
 	}
 
+	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	@Override
-	public List<String> getWailaTooltip(List<String> currentTooltip, WailaProviders.Accessor accessor) {
+	public List<String> getWailaTooltip(List<String> currentTooltip, IWailaDataAccessor accessor) {
 
 		currentTooltip.add(I18n.format("tooltip." + Soulus.MODID + ":summoner.style."
-				+ EndersteelType.byMetadata(accessor.metadata).getName()));
+				+ EndersteelType.byMetadata(accessor.getMetadata()).getName()));
 
 		return currentTooltip;
 	}
