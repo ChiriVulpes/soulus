@@ -39,7 +39,6 @@ public class Waila implements IWailaPlugin, IWailaDataProvider {
 
 	public static List<Class<? extends Block>> providers = new ArrayList<>();
 
-	@SideOnly(Side.CLIENT)
 	@Override
 	public void register(IWailaRegistrar registrar) {
 		for (Class<? extends Block> cls : providers) {

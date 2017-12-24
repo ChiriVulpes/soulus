@@ -43,7 +43,7 @@ public class SoulusLocation extends CommandBase {
 				+ biomeId.getResourcePath());
 
 		Set<Type> biomeTypes = BiomeDictionary.getTypes(biome);
-		result.add("Biome Types: " + TextFormatting.RED + biomeTypes.stream().map(BiomeDictionary.Type::getName)
+		result.add("Biome Types: " + TextFormatting.RED + biomeTypes.stream().map(b -> b.getName())
 				.collect(Collectors.joining(TextFormatting.WHITE + ", " + TextFormatting.RED)));
 
 		ics.sendMessage(new TextComponentString(String.join(TextFormatting.WHITE + ", ", result)));
