@@ -6,7 +6,7 @@ import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.block.EndersteelType;
 import yuudaari.soulus.common.block.summoner.SummonerTileEntity.Upgrade;
-import yuudaari.soulus.common.compat.Waila;
+import yuudaari.soulus.common.compat.WailaProviders;
 import yuudaari.soulus.common.item.BloodCrystal;
 import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.item.Soulbook;
@@ -416,9 +416,9 @@ public class Summoner extends ModBlock {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public List<String> getWailaTooltip(List<String> currentTooltip, Waila.Accessor accessor) {
-		TileEntity te = accessor.getTileEntity();
-		EntityPlayer player = accessor.getPlayer();
+	public List<String> getWailaTooltip(List<String> currentTooltip, WailaProviders.Accessor accessor) {
+		TileEntity te = accessor.te;
+		EntityPlayer player = accessor.player;
 		if (te == null || player == null || !(te instanceof SummonerTileEntity))
 			return null;
 		return ((SummonerTileEntity) te).getWailaTooltip(currentTooltip, player.isSneaking());
@@ -426,8 +426,8 @@ public class Summoner extends ModBlock {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public ItemStack getWailaStack(Waila.Accessor accessor) {
-		TileEntity te = accessor.getTileEntity();
+	public ItemStack getWailaStack(WailaProviders.Accessor accessor) {
+		TileEntity te = accessor.te;
 		if (te == null || !(te instanceof SummonerTileEntity))
 			return null;
 		return getItemStack((SummonerTileEntity) te, 1, te.getBlockMetadata());

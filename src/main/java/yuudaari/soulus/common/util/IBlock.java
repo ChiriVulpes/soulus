@@ -1,7 +1,7 @@
 package yuudaari.soulus.common.util;
 
 import yuudaari.soulus.common.CreativeTab;
-import yuudaari.soulus.common.compat.Waila;
+import yuudaari.soulus.common.compat.WailaProviders;
 import yuudaari.soulus.common.util.IModItem;
 
 import java.util.Collections;
@@ -26,7 +26,7 @@ public interface IBlock extends IModItem {
 
 	default void registerWailaProvider(Class<? extends Block> cls) {
 		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
-			Waila.providers.add(cls);
+			WailaProviders.providers.add(cls);
 		}
 	}
 
@@ -53,12 +53,12 @@ public interface IBlock extends IModItem {
 	abstract void getSubBlocks(CreativeTab itemIn, NonNullList<ItemStack> items);
 
 	@SideOnly(Side.CLIENT)
-	default List<String> getWailaTooltip(List<String> currentTooltip, Waila.Accessor accessor) {
+	default List<String> getWailaTooltip(List<String> currentTooltip, WailaProviders.Accessor accessor) {
 		return currentTooltip;
 	}
 
 	@SideOnly(Side.CLIENT)
-	default ItemStack getWailaStack(Waila.Accessor accessor) {
+	default ItemStack getWailaStack(WailaProviders.Accessor accessor) {
 		return null;
 	}
 }

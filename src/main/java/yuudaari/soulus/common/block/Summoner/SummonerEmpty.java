@@ -6,7 +6,7 @@ import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.block.EndersteelType;
-import yuudaari.soulus.common.compat.Waila;
+import yuudaari.soulus.common.compat.WailaProviders;
 import yuudaari.soulus.common.item.Soulbook;
 import yuudaari.soulus.common.util.MobTarget;
 import yuudaari.soulus.common.util.ModBlock;
@@ -169,10 +169,10 @@ public class SummonerEmpty extends ModBlock {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public List<String> getWailaTooltip(List<String> currentTooltip, Waila.Accessor accessor) {
+	public List<String> getWailaTooltip(List<String> currentTooltip, WailaProviders.Accessor accessor) {
 
 		currentTooltip.add(I18n.format("tooltip." + Soulus.MODID + ":summoner.style."
-				+ EndersteelType.byMetadata(accessor.getMetadata()).getName()));
+				+ EndersteelType.byMetadata(accessor.metadata).getName()));
 
 		return currentTooltip;
 	}
