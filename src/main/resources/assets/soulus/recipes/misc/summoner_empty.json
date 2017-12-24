@@ -15,6 +15,7 @@
 		}
 	},
 	"result": {
-		"item": "soulus:summoner_empty"
+		"item": "soulus:summoner_empty",
+		"data": 0
 	}
 }

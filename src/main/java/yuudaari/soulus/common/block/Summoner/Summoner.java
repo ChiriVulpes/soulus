@@ -4,7 +4,9 @@ import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.block.EndersteelType;
 import yuudaari.soulus.common.block.summoner.SummonerTileEntity.Upgrade;
+import yuudaari.soulus.common.compat.Waila;
 import yuudaari.soulus.common.item.BloodCrystal;
 import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.item.Soulbook;
@@ -15,34 +17,49 @@ import yuudaari.soulus.common.util.ModBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemMultiTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Soulus.MODID)
 public class Summoner extends ModBlock {
+
+	public static final IProperty<EndersteelType> VARIANT = PropertyEnum.create("variant", EndersteelType.class);
 
 	@ObjectHolder("soulus:blood_crystal")
 	public static SummonerUpgrade CountUpgrade;
@@ -85,27 +102,40 @@ public class Summoner extends ModBlock {
 		setHarvestLevel("pickaxe", 1);
 		setSoundType(SoundType.METAL);
 		disableStats();
+		registerWailaProvider(Summoner.class);
 	}
 
-	public static class SummonerItemBlock extends ItemBlock {
+	public static class SummonerItemBlock extends ItemMultiTexture {
 		public SummonerItemBlock(Block b) {
-			super(b);
+			super(b, b, i -> EndersteelType.byMetadata(i.getItemDamage()).getName());
 			setRegistryName(Soulus.MODID + ":summoner");
+		}
+
+		@Override
+		public int getMetadata(int damage) {
+			return damage;
 		}
 
 		@Override
 		public String getUnlocalizedNameInefficiently(@Nonnull ItemStack stack) {
 			return "tile." + Soulus.MODID + ":summoner." + MobTarget.getMobTarget(stack);
 		}
+
+		@Override
+		@SideOnly(Side.CLIENT)
+		public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip,
+				ITooltipFlag flagIn) {
+			tooltip.add(I18n.format("tooltip." + Soulus.MODID + ":summoner.style."
+					+ EndersteelType.byMetadata(stack.getItemDamage()).getName()));
+		}
 	}
 
 	private final SummonerItemBlock ITEM = new SummonerItemBlock(this);
 
-	public ItemStack getItemStack(SummonerTileEntity te) {
-		ItemStack itemStack = new ItemStack(ITEM);
+	public ItemStack getItemStack(SummonerTileEntity te, int count, int metadata) {
+		ItemStack itemStack = new ItemStack(ITEM, count, metadata);
 
-		SummonerTileEntity tileEntity = (SummonerTileEntity) te.getWorld().getTileEntity(te.getPos());
-		itemStack.setTagCompound(tileEntity.writeToNBT(new NBTTagCompound()));
+		itemStack.setTagCompound(te.writeToNBT(new NBTTagCompound()));
 
 		return itemStack;
 	}
@@ -157,7 +187,7 @@ public class Summoner extends ModBlock {
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @Nonnull IBlockState state, int fortune) {
 		List<ItemStack> drops = getDrops(lastBrokenSummonerData);
 
-		drops.add(ModBlocks.SUMMONER_EMPTY.getItemStack());
+		drops.add(ModBlocks.SUMMONER_EMPTY.getItemStack(1, state.getValue(VARIANT).getMeta()));
 
 		return drops;
 	}
@@ -243,13 +273,15 @@ public class Summoner extends ModBlock {
 						returnItemToPlayer(world, drop, player);
 					}
 
-					world.setBlockState(pos, ModBlocks.SUMMONER_EMPTY.getDefaultState());
+					world.setBlockState(pos, ModBlocks.SUMMONER_EMPTY.getDefaultState()
+							.withProperty(SummonerEmpty.VARIANT, state.getValue(VARIANT)));
 
 				} else {
 					Upgrade lastInserted = summoner.getLastInserted();
 					if (lastInserted == null) {
 						returnItemToPlayer(world, getSoulbook(summoner.writeToNBT(new NBTTagCompound())), player);
-						world.setBlockState(pos, ModBlocks.SUMMONER_EMPTY.getDefaultState());
+						world.setBlockState(pos, ModBlocks.SUMMONER_EMPTY.getDefaultState()
+								.withProperty(SummonerEmpty.VARIANT, state.getValue(VARIANT)));
 
 					} else {
 						int amtRemoved = summoner.removeUpgrade(lastInserted);
@@ -273,6 +305,26 @@ public class Summoner extends ModBlock {
 						}
 					}
 				}
+			} else {
+				if (heldItem.equals(ModItems.DUST_IRON) && getMetaFromState(state) != EndersteelType.NORMAL.getMeta()) {
+					world.setBlockState(pos, getDefaultState().withProperty(VARIANT, EndersteelType.NORMAL));
+				} else if (heldItem.equals(ModItems.DUST_WOOD)
+						&& getMetaFromState(state) != EndersteelType.WOOD.getMeta()) {
+					world.setBlockState(pos, getDefaultState().withProperty(VARIANT, EndersteelType.WOOD));
+				} else if (heldItem.equals(ModItems.DUST_STONE)
+						&& getMetaFromState(state) != EndersteelType.STONE.getMeta()) {
+					world.setBlockState(pos, getDefaultState().withProperty(VARIANT, EndersteelType.STONE));
+				} else if (heldItem.equals(ModItems.BONEMEAL_ENDER)
+						&& getMetaFromState(state) != EndersteelType.END_STONE.getMeta()) {
+					world.setBlockState(pos, getDefaultState().withProperty(VARIANT, EndersteelType.END_STONE));
+				} else if (heldItem.equals(Items.BLAZE_POWDER)
+						&& getMetaFromState(state) != EndersteelType.BLAZE.getMeta()) {
+					world.setBlockState(pos, getDefaultState().withProperty(VARIANT, EndersteelType.BLAZE));
+				} else {
+					return false;
+				}
+
+				heldStack.shrink(1);
 			}
 		}
 
@@ -302,7 +354,7 @@ public class Summoner extends ModBlock {
 			EntityPlayer player) {
 		// if they're requesting the block with nbt data, it needs to be this block, not an empty summoner
 		return // player.isCreative() && GuiScreen.isCtrlKeyDown() ? getItemStack() : 
-		ModBlocks.SUMMONER_EMPTY.getItemStack();
+		ModBlocks.SUMMONER_EMPTY.getItemStack(1, state.getValue(VARIANT).getMeta());
 	}
 
 	@Override
@@ -320,4 +372,65 @@ public class Summoner extends ModBlock {
 	public CreativeTab getCreativeTabToDisplayOn() {
 		return null;
 	}
+
+	@Override
+	protected BlockStateContainer createBlockState() {
+		List<IProperty<?>> props = new ArrayList<>(super.createBlockState().getProperties());
+		props.add(VARIANT);
+		return new BlockStateContainer(this, props.toArray(new IProperty<?>[0]));
+	}
+
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(VARIANT, EndersteelType.byMetadata(meta));
+	}
+
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(VARIANT).getMeta();
+	}
+
+	@Override
+	public int damageDropped(IBlockState state) {
+		return getMetaFromState(state);
+	}
+
+	@Override
+	public void getSubBlocks(CreativeTab tab, NonNullList<ItemStack> list) {
+		for (EndersteelType enumType : EndersteelType.values()) {
+			list.add(new ItemStack(this, 1, enumType.getMeta()));
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerItemModel() {
+		NonNullList<ItemStack> stacks = NonNullList.create();
+		getSubBlocks(CreativeTab.INSTANCE, stacks);
+		for (ItemStack stack : stacks) {
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), stack.getMetadata(),
+					new ModelResourceLocation(this.getRegistryName(), VARIANT.getName() + "="
+							+ EndersteelType.byMetadata(stack.getMetadata()).getName().toLowerCase()));
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public List<String> getWailaTooltip(List<String> currentTooltip, Waila.Accessor accessor) {
+		TileEntity te = accessor.getTileEntity();
+		EntityPlayer player = accessor.getPlayer();
+		if (te == null || player == null || !(te instanceof SummonerTileEntity))
+			return null;
+		return ((SummonerTileEntity) te).getWailaTooltip(currentTooltip, player.isSneaking());
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public ItemStack getWailaStack(Waila.Accessor accessor) {
+		TileEntity te = accessor.getTileEntity();
+		if (te == null || !(te instanceof SummonerTileEntity))
+			return null;
+		return getItemStack((SummonerTileEntity) te, 1, te.getBlockMetadata());
+	}
+
 }

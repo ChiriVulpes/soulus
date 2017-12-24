@@ -27,7 +27,9 @@ public class ModItems {
 	public static final BonemealEnder BONEMEAL_ENDER = new BonemealEnder();
 	public static final BoneNether BONE_NETHER = new BoneNether();
 	public static final DustEnderIron DUST_ENDER_IRON = new DustEnderIron();
-	public static final DustIron DUST_IRON = new DustIron();
+	public static final ModItem DUST_IRON = new ModItem("dust_iron").addOreDict("dustIron");
+	public static final ModItem DUST_WOOD = new ModItem("dust_wood").addOreDict("dustWood");
+	public static final ModItem DUST_STONE = new ModItem("dust_stone").addOreDict("dustStone");
 	public static final Essence ESSENCE = new Essence();
 	public static final GearBoneEnder GEAR_BONE_ENDER = new GearBoneEnder();
 	public static final GearOscillating GEAR_OSCILLATING = new GearOscillating();
@@ -56,7 +58,7 @@ public class ModItems {
 			BONE_CHUNK_DRY, BONE_CHUNK_FROZEN, BONE_CHUNK_FUNGAL, BONE_CHUNK_SCALE, BONE_CHUNK_ENDER, BONE_CHUNK_NETHER,
 			BONEMEAL_NETHER, BONEMEAL_ENDER, DUST_IRON, DUST_ENDER_IRON, GEAR_BONE_ENDER, GEAR_BONE, GEAR_BONE_NETHER,
 			GEAR_BONE_DRY, GEAR_BONE_FROZEN, GEAR_BONE_FUNGAL, GEAR_OSCILLATING, EMERALD_BURNT, EMERALD_COATED,
-			BLOOD_CRYSTAL_BROKEN, BLOOD_CRYSTAL, ORB_MURKY, SOULBOOK };
+			BLOOD_CRYSTAL_BROKEN, BLOOD_CRYSTAL, ORB_MURKY, SOULBOOK, DUST_WOOD, DUST_STONE };
 
 	public static void registerItems(IForgeRegistry<Item> registry) {
 		OreDictionary.registerOre("bonemeal", new ItemStack(Items.DYE, 1, 15));

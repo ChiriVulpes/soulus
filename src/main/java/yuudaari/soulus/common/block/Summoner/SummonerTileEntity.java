@@ -16,6 +16,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -23,6 +24,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.block.EndersteelType;
 import yuudaari.soulus.common.config.EssenceConfig;
 import yuudaari.soulus.common.config.ManualSerializer;
 import yuudaari.soulus.common.config.Serializer;
@@ -603,6 +605,11 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 		}
 	}
 
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
+	}
+
 	@SideOnly(Side.CLIENT)
 	public List<String> getWailaTooltip(List<String> currenttip, boolean isSneaking) {
 		currenttip.add(I18n.format("waila." + Soulus.MODID + ":summoner.summon_percentage",
@@ -625,6 +632,9 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 			currenttip.add(
 					I18n.format("waila." + Soulus.MODID + ":summoner.show_upgrades", upgradeCounts.get(Upgrade.RANGE)));
 		}
+
+		currenttip.add(I18n.format("tooltip." + Soulus.MODID + ":summoner.style."
+				+ EndersteelType.byMetadata(getBlockMetadata()).getName()));
 
 		return currenttip;
 	}

@@ -18,6 +18,8 @@ item.soulus:bone_meal_nether.name=Blackened Bone Meal
 
 item.soulus:dust_ender.name=Ender Dust
 item.soulus:dust_iron.name=Iron Dust
+item.soulus:dust_wood.name=Wood Dust
+item.soulus:dust_stone.name=Stone Dust
 item.soulus:dust_ender_iron.name=Ender-Iron Dust Blend
 
 item.soulus:ingot_endersteel.name=Endersteel Ingot

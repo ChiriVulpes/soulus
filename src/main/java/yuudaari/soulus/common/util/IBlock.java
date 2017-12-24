@@ -1,11 +1,13 @@
 package yuudaari.soulus.common.util;
 
 import yuudaari.soulus.common.CreativeTab;
+import yuudaari.soulus.common.compat.Waila;
 import yuudaari.soulus.common.util.IModItem;
 
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -13,6 +15,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -20,6 +23,12 @@ public interface IBlock extends IModItem {
 	abstract ResourceLocation getRegistryName();
 
 	abstract boolean hasItem();
+
+	default void registerWailaProvider(Class<? extends Block> cls) {
+		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+			Waila.providers.add(cls);
+		}
+	}
 
 	@SideOnly(Side.CLIENT)
 	default void registerItemModel() {
@@ -42,4 +51,14 @@ public interface IBlock extends IModItem {
 	abstract CreativeTab getCreativeTabToDisplayOn();
 
 	abstract void getSubBlocks(CreativeTab itemIn, NonNullList<ItemStack> items);
+
+	@SideOnly(Side.CLIENT)
+	default List<String> getWailaTooltip(List<String> currentTooltip, Waila.Accessor accessor) {
+		return currentTooltip;
+	}
+
+	@SideOnly(Side.CLIENT)
+	default ItemStack getWailaStack(Waila.Accessor accessor) {
+		return null;
+	}
 }
