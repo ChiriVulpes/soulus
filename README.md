@@ -8,7 +8,7 @@ Soulus is a mod I created because I was sick of building giant mob-spawning boxe
 
 It adds in custom spawners, called Summoners, which start out incredibly underpowered but can be upgraded to be extremely fast and efficient. The upgrades are incredibly expensive and will likely take a long time to craft in the early game, but everything can be automated with other mods. The mod is also highly configurable, so you can make everything cheap and easy if you want to.
 
-There are no distribution restrictions for Soulus. You may use it in any modpack, with any launcher.
+There are no modpack distribution restrictions for Soulus. You may use it in any modpack, with any launcher. However, there ARE general distribution restrictions. You may not provide downloads of Soulus outside of a modpack. To put it in layman's terms, all downloads of Soulus must either be as part of a modpack, through the [Github](https://github.com/Yuudaari/soulus), or through the [Curseforge](https://minecraft.curseforge.com/projects/soulus).
 
 See below for an in-depth list of features in the mod.
 
