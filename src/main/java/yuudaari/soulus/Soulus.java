@@ -17,6 +17,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -32,6 +33,10 @@ import net.minecraftforge.registries.IForgeRegistry;
 @Mod(modid = Soulus.MODID, name = Soulus.NAME, version = "@VERSION@", acceptedMinecraftVersions = "[1.12.1]")
 @Mod.EventBusSubscriber
 public class Soulus {
+
+	static {
+		FluidRegistry.enableUniversalBucket();
+	}
 
 	public interface PreInitEventHandler {
 		void handle(FMLPreInitializationEvent event);

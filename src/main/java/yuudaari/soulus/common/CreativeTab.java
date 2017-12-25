@@ -5,6 +5,7 @@ import yuudaari.soulus.common.item.Soulbook;
 import yuudaari.soulus.common.util.IBlock;
 import yuudaari.soulus.common.util.ModItem;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import javax.annotation.Nonnull;
@@ -32,7 +33,7 @@ public final class CreativeTab extends CreativeTabs {
 				block.getSubBlocks(this, list);
 			}
 		}
-		for (ModItem item : ModItems.items) {
+		for (Item item : ModItems.items) {
 			if (item.getCreativeTab() == this) {
 				item.getSubItems(this, list);
 			}

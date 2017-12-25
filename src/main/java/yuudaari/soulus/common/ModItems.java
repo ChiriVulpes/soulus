@@ -1,16 +1,15 @@
 package yuudaari.soulus.common;
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.common.item.*;
+import yuudaari.soulus.common.util.IModItem;
 import yuudaari.soulus.common.util.ModItem;
 
 public class ModItems {
@@ -52,9 +51,10 @@ public class ModItems {
 	public static final ModItem SLEDGEHAMMER = new Sledgehammer();
 	public static final ModItem SOULBOOK = new Soulbook();
 	public static final OrbMurky ORB_MURKY = new OrbMurky();
+	public static final Barket BARKET = new Barket();
 
-	public static ModItem[] items = new ModItem[] { INGOT_ENDERSTEEL, NUGGET_ENDERSTEEL, BARK, GLUE, ESSENCE,
-			SLEDGEHAMMER, BONE_DRY, BONE_FROZEN, BONE_FUNGAL, BONE_SCALE, BONE_ENDER, BONE_NETHER, BONE_CHUNK_NORMAL,
+	public static Item[] items = new Item[] { INGOT_ENDERSTEEL, NUGGET_ENDERSTEEL, BARK, GLUE, ESSENCE, SLEDGEHAMMER,
+			BARKET, BONE_DRY, BONE_FROZEN, BONE_FUNGAL, BONE_SCALE, BONE_ENDER, BONE_NETHER, BONE_CHUNK_NORMAL,
 			BONE_CHUNK_DRY, BONE_CHUNK_FROZEN, BONE_CHUNK_FUNGAL, BONE_CHUNK_SCALE, BONE_CHUNK_ENDER, BONE_CHUNK_NETHER,
 			BONEMEAL_NETHER, BONEMEAL_ENDER, DUST_IRON, DUST_WOOD, DUST_STONE, DUST_ENDER_IRON, GEAR_BONE_ENDER,
 			GEAR_BONE, GEAR_BONE_NETHER, GEAR_BONE_DRY, GEAR_BONE_FROZEN, GEAR_BONE_FUNGAL, GEAR_OSCILLATING,
@@ -63,27 +63,29 @@ public class ModItems {
 	public static void registerItems(IForgeRegistry<Item> registry) {
 		OreDictionary.registerOre("bonemeal", new ItemStack(Items.DYE, 1, 15));
 
-		for (ModItem item : items) {
+		for (Item item : items) {
 			registry.register(item);
-			for (String dict : item.getOreDicts()) {
-				OreDictionary.registerOre(dict, item);
+			if (item instanceof IModItem) {
+				for (String dict : ((IModItem) item).getOreDicts()) {
+					OreDictionary.registerOre(dict, item);
+				}
 			}
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
 	public static void registerModels() {
-		for (ModItem item : items) {
-			ModelLoader.setCustomModelResourceLocation(item, 0,
-					new ModelResourceLocation(item.getRegistryName(), "inventory"));
+		for (Item item : items) {
+			if (item instanceof IModItem)
+				((IModItem) item).registerModels();
 		}
 	}
 
 	public static void registerRecipes(IForgeRegistry<IRecipe> registry) {
-		for (ModItem item : items) {
-			for (IRecipe recipe : item.getRecipes()) {
-				registry.register(recipe);
-			}
+		for (Item item : items) {
+			if (item instanceof ModItem)
+				for (IRecipe recipe : ((ModItem) item).getRecipes())
+					registry.register(recipe);
 		}
 	}
 }
