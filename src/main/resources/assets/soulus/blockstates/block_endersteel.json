@@ -1,5 +1,15 @@
 {
+	"forge_marker": 1,
+	"defaults": {
+		"model": "minecraft:cube_all",
+		"textures": {
+			"all": "soulus:blocks/block_endersteel"
+		}
+	},
 	"variants": {
-		"normal": { "model": "soulus:block_endersteel" }
+		"has_comparator": {
+			"true": {},
+			"false": {}
+		}
 	}
 }
