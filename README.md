@@ -29,6 +29,8 @@ See below for an in-depth list of features in the mod.
 - [Misc](#misc-)
 	- [Glue](#glue-)
 	- [Bark](#bark-)
+	- [Barket](#barket-)
+	- [Endersteel Block](#endersteel-block-)
 - [Mod Support](#mod-support-)
 - [Contributing](#contributing-)
 
@@ -53,73 +55,7 @@ The following preview images are of a Summoner with maximum upgrades:
 
 ## No Mob Spawning [↑](#table-of-contents)
 
-All mob spawning is disabled by default. See `config.creatures`:
-
-```json
-{
-	"creatures": {
-		"*": {
-			"*": {
-				"*": {
-					"spawn_chance": 0.0,
-					"has_drops": true
-				}
-			}
-		}
-	}
-}
-```
-This is the default configuration, which disables all spawns, from every dimension, in every biome, of every creature. The first asterisk is a wildcard matching all dimensions, while the second asterisk is a wildcard matching all biomes, while the third asterisk is a wildcard matching all creatures.
-
-If you configure any creatures to still spawn, by default, they will all have drops, as seen in this config.
-
-Here's a more complex example:
-```json
-{
-	"creatures": {
-		"*": {
-			"*": {
-				"*": {
-					"spawn_chance": 0.0,
-					"has_drops": false
-				},
-				"twilightforest:*": {
-					"spawn_chance": 1.0,
-					"has_drops": false
-				},
-				"minecraft:wither": {
-					"spawn_chance": 1.0,
-					"has_drops": true
-				}
-			},
-			"minecraft:ocean": {
-				"*": {
-					"spawn_chance": 0.5,
-					"has_drops": true
-				}
-			}
-		},
-		"the_end": {
-			"minecraft:*": {
-				"minecraft:ender_dragon": {
-					"spawn_chance": 1.0,
-					"has_drops": true
-				}
-			}
-		}
-	}
-}
-```
-In this example, by default, all spawns are disabled, except for all twilight forest creatures in any dimension/biome, and the wither, in any dimension/biome.  
-Then, any creatures that spawn in an ocean biome are half as likely to spawn.  
-Then there's also an explicit configuration so that if the spawn is in the end, and in any vanilla biome, and the entity is an ender dragon, then it can spawn.
-In this example, nothing has drops except the ender dragon, the wither, and everything in an ocean biome.
-
-To know the dimension and biome names of modded biomes, you can use the /souluslocation command.
-
-  
-As a side-note, when there are no mobs spawning, or very few, the spawning algorithm works a bit harder than usual to make more spawns, so a spawn_chance of 0.5 won't end up being half as many mobs. 
-
+All mob spawning is disabled by default, but you can configure this functionality per dimension, biome, and creature, and even enable/disable drops for each. See [Creatures Config](./docs/CONFIG.md#config-creatures-)
 
 ## Sledgehammer [↑](#table-of-contents)
 
@@ -145,9 +81,9 @@ Fossil veins are configurable (and you can even use the config to generate veins
 
 ![Bone Chunks](./preview/bone_chunks.png)
 
-A bone chunk can be crafted with a Sledgehammer to produce bonemeal. Normal bone chunks, dry, frozen, and mossy all produce normal bonemeal, while ender bone chunks produce "ender bonemeal" and necrotic bone chunks produce "necrotic bonemeal". There is a planned use for necrotic bonemeal but it has not yet been implemented.
+A bone chunk can be crafted with a Sledgehammer to produce bonemeal. Normal bone chunks, dry, frozen, and mossy all produce normal bonemeal, while ender bone chunks produce "ender bonemeal" and blackened bone chunks produce "blackened bonemeal". There is a planned use for blackened bonemeal but it has not yet been implemented.
 
-The main use of bone chunks, however, is to collect Mob Essence! By right clicking with a bone chunk, you break it open and collect the essence inside. The possible Essences produced by each bone type is configurable, but the defaults are as follows:
+The main use of bone chunks, however, is to collect Mob Essence! By right clicking with a bone chunk, you break it open and collect the essence inside. The possible Essences produced by each bone type is configurable in the [Essences Config](./docs/CONFIG.md#config-essences-), but the defaults are as follows:
 
 | Bone Type | Essences |
 | --- | --- |
@@ -255,6 +191,10 @@ When a Blood Crystal has been filled, its stack limit is 16.
 
 By default, a summoner can hold 64 Blood Crystals, ranging from 1 entity summoned to 64 entities summoned.
 
+## Summoned Mobs Drop Bones
+
+By default, most mobs summoned by the summoner drop bones matching their bone type. This is configurable in the [Essences Config](./docs/CONFIG.md#config-essences-)
+
 ## Misc [↑](#table-of-contents)
 
 ### Glue [↑](#table-of-contents)
@@ -264,6 +204,14 @@ Glue is crafted from sugar, bonemeal, and a bucket of water. It can be used anyw
 ### Bark [↑](#table-of-contents)
 
 Every 100 or so logs produces 8 bark instead of a log. You can use 2 bark and 3 paper to make a book.
+
+### Barket [↑](#table-of-contents)
+
+Make a bucket shape with Bark to get a "Barket". It can only pick up water and will likely break in a matter of seconds. If you let it break, you'll spill your water!
+
+### Endersteel Block [↑](#table-of-contents)
+
+Crafting 9 endersteel bars into a block produces a Block of Endersteel. When placed into the world, you can use it as a clock, by reading its value via a comparator. The value is 0 when the block is receiving no power. When receiving power, it oscillates in a sin-wave from 0-15, at a speed dependent on the power received.
 
 ## Mod Support [↑](#table-of-contents)
 
