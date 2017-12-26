@@ -6,6 +6,8 @@ import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -34,19 +36,48 @@ import yuudaari.soulus.common.util.IModItem;
 public class Barket extends UniversalBucket implements IModItem {
 	private final ItemStack EMPTY = new ItemStack(this);
 
-	public int maxDamage = 2;
+	public int maxDamage = 100;
 
 	public Barket() {
 		super(1000, ItemStack.EMPTY, true);
 		setCreativeTab(CreativeTab.INSTANCE);
 		setRegistryName(Soulus.MODID + ":" + getName());
 		setUnlocalizedName(getRegistryName().toString());
-		setMaxDamage(2);
+		setMaxDamage(maxDamage);
+	}
+
+	@Override
+	public int getItemBurnTime(ItemStack itemStack) {
+		return getFluid(itemStack) == null ? 120 : 0;
 	}
 
 	@Override
 	public String getName() {
 		return "barket";
+	}
+
+	@Override
+	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+		FluidStack fluid = getFluid(stack);
+		if (fluid != null) {
+			stack.damageItem(1, (EntityLivingBase) entityIn);
+			if (stack.getCount() == 0 && entityIn instanceof EntityPlayer && !worldIn.isRemote) {
+				stack.setCount(1);
+				FluidUtil.tryPlaceFluid((EntityPlayer) entityIn, worldIn, entityIn.getPosition(), stack, fluid);
+				stack.setCount(0);
+			}
+		}
+	}
+
+	@Override
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+		return slotChanged || !fluidsEqual(oldStack, newStack);
+	}
+
+	public boolean fluidsEqual(ItemStack s1, ItemStack s2) {
+		FluidStack f1 = getFluid(s1);
+		FluidStack f2 = getFluid(s2);
+		return f1 == null ? f2 == null : f1.equals(f2);
 	}
 
 	@Override
@@ -67,28 +98,13 @@ public class Barket extends UniversalBucket implements IModItem {
 	}
 
 	@Override
-	public String getUnlocalizedNameInefficiently(ItemStack stack) {
-		FluidStack fluidStack = getFluid(stack);
-		return super.getUnlocalizedNameInefficiently(stack) + (fluidStack == null ? "" : "_filled");
-	}
-
-	@Override
-	public String getItemStackDisplayName(ItemStack stack) {
-		return I18n.format(getUnlocalizedNameInefficiently(stack) + ".name");
-	}
-
-	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		ItemStack heldItem = player.getHeldItem(hand);
 		FluidStack fluidStack = getFluid(heldItem);
 
 		// If the bucket is full, call the super method to try and empty it
 		if (fluidStack != null) {
-			ActionResult<ItemStack> result = super.onItemRightClick(world, player, hand);
-			if (result.getType() == EnumActionResult.SUCCESS) {
-				damageBucket(result.getResult(), heldItem);
-			}
-			return result;
+			return super.onItemRightClick(world, player, hand);
 		}
 
 		// If the bucket is empty, try and fill it
@@ -106,7 +122,6 @@ public class Barket extends UniversalBucket implements IModItem {
 		FluidActionResult filledResult = FluidUtil.tryPickUpFluid(singleBucket, player, world, pos, target.sideHit);
 		if (filledResult.isSuccess()) {
 			ItemStack filledBucket = filledResult.result;
-			damageBucket(filledBucket, heldItem);
 
 			if (player.capabilities.isCreativeMode)
 				return new ActionResult<>(EnumActionResult.SUCCESS, heldItem);
@@ -123,11 +138,15 @@ public class Barket extends UniversalBucket implements IModItem {
 		return new ActionResult<>(EnumActionResult.PASS, heldItem);
 	}
 
-	private void damageBucket(ItemStack newBucket, ItemStack oldBucket) {
-		newBucket.setItemDamage(oldBucket.getItemDamage() + 1);
-		if (newBucket.getItemDamage() >= newBucket.getMaxDamage()) {
-			newBucket.setCount(0);
-		}
+	@Override
+	public String getUnlocalizedNameInefficiently(ItemStack stack) {
+		FluidStack fluidStack = getFluid(stack);
+		return super.getUnlocalizedNameInefficiently(stack) + (fluidStack == null ? "" : "_filled");
+	}
+
+	@Override
+	public String getItemStackDisplayName(ItemStack stack) {
+		return I18n.format(getUnlocalizedNameInefficiently(stack) + ".name");
 	}
 
 	@Override

@@ -32,7 +32,7 @@ public class ModItems {
 	public static final Essence ESSENCE = new Essence();
 	public static final GearBoneEnder GEAR_BONE_ENDER = new GearBoneEnder();
 	public static final GearOscillating GEAR_OSCILLATING = new GearOscillating();
-	public static final ModItem BARK = new ModItem("bark");
+	public static final ModItem BARK = new ModItem("bark").setBurnTime(40);
 	public static final ModItem BONE_DRY = new ModItem("bone_dry");
 	public static final ModItem BONE_FROZEN = new ModItem("bone_frozen");
 	public static final ModItem BONE_FUNGAL = new ModItem("bone_fungal");

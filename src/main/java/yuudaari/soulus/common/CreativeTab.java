@@ -3,7 +3,6 @@ package yuudaari.soulus.common;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.item.Soulbook;
 import yuudaari.soulus.common.util.IBlock;
-import yuudaari.soulus.common.util.ModItem;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

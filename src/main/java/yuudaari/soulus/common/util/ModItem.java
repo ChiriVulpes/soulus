@@ -108,6 +108,18 @@ public class ModItem extends Item implements IModItem {
 		return glint;
 	}
 
+	private int burnTime = 0;
+
+	@Override
+	public int getItemBurnTime(ItemStack itemStack) {
+		return burnTime;
+	}
+
+	public ModItem setBurnTime(int burnTime) {
+		this.burnTime = burnTime;
+		return this;
+	}
+
 	@SideOnly(Side.CLIENT)
 	public void registerColorHandler(IItemColor itemColor) {
 		Soulus.onInit((FMLInitializationEvent event) -> {
