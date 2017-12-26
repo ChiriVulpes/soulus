@@ -1,4 +1,4 @@
-[<- Return to Main Page](..)
+[<- Return to Main Page](../README.md)
 
 ## Table of Contents
 - [Creatures](#config-creatures-)
