@@ -28,6 +28,8 @@ import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStackSimple;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.items.ItemHandlerHelper;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.CreativeTab;
@@ -146,7 +148,10 @@ public class Barket extends UniversalBucket implements IModItem {
 
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
-		return I18n.format(getUnlocalizedNameInefficiently(stack) + ".name");
+		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+			return I18n.format(getUnlocalizedNameInefficiently(stack) + ".name");
+		}
+		return getRegistryName().toString();
 	}
 
 	@Override
