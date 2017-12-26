@@ -18,7 +18,7 @@ See below for an in-depth list of features in the mod.
 - [No Mob Spawning](#no-mob-spawning-)
 - [Sledgehammer](#sledgehammer-)
 - [Fossils](#fossils-)
-- [Bone Chunks](#bone-chunks-)
+- [Bone Chunks and Essences](#bone-chunks-and-essences-)
 - [Soulbook](#soulbook-)
 - [Endersteel](#endersteel-)
 - [Summoner](#summoner-)
@@ -77,7 +77,7 @@ When you destroy a fossil, it will drop 4 bone chunks for that kind of fossil.
 
 Fossil veins are configurable (and you can even use the config to generate veins of other kinds of blocks, it's pretty vague). See `config.fossil_veins`
 
-## Bone Chunks [↑](#table-of-contents)
+## Bone Chunks and Essences [↑](#table-of-contents)
 
 ![Bone Chunks](./preview/bone_chunks.png)
 
