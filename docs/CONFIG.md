@@ -1,3 +1,5 @@
+[<- Return to Main Page](..)
+
 ## Table of Contents
 - [Creatures](#config-creatures-)
 - [Essences](#config-essences-)
