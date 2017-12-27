@@ -1,8 +1,8 @@
 [<- Return to Main Page](../README.md)
 
 ## Table of Contents
-- [Creatures](#config-creatures-)
-- [Essences](#config-essences-)
+- [Creatures](#configcreatures-)
+- [Essences](#configessences-)
 
 ## `CONFIG::creatures` [↑](#table-of-contents)
 
