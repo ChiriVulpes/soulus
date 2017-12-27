@@ -60,11 +60,11 @@ public class SummonerTileEntity extends TileEntity implements ITickable {
 		public int nonUpgradedRange = 4;
 		public Map<Upgrade, Integer> maxUpgrades = new HashMap<>();
 		{
-			maxUpgrades.put(Upgrade.COUNT, 64);
-			maxUpgrades.put(Upgrade.DELAY, 64);
-			maxUpgrades.put(Upgrade.RANGE, 64);
+			maxUpgrades.put(Upgrade.COUNT, 16);
+			maxUpgrades.put(Upgrade.DELAY, 16);
+			maxUpgrades.put(Upgrade.RANGE, 16);
 		}
-		public Range upgradeCountEffectiveness = new Range(0.3, 1);
+		public Range upgradeCountEffectiveness = new Range(0.2, 0.5);
 		public double upgradeCountRadiusEffectiveness = 0.15;
 		public Range upgradeDelayEffectiveness = new Range(0.8, 1);
 		public int upgradeRangeEffectiveness = 4;

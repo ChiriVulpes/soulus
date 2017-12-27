@@ -157,93 +157,93 @@ public class EssenceConfig {
 
 		// normal
 		creatureConfigs
-				.add(new EssenceConfig("minecraft:bat", new CreatureBoneConfig(BoneType.NORMAL, 1)).addLoot(1, 1, 0.5));
+				.add(new EssenceConfig("minecraft:bat", new CreatureBoneConfig(BoneType.NORMAL, 1)).addLoot(1, 1, 0.1));
 		creatureConfigs.add(
-				new EssenceConfig("minecraft:chicken", new CreatureBoneConfig(BoneType.NORMAL, 8)).addLoot(1, 1, 0.5));
+				new EssenceConfig("minecraft:chicken", new CreatureBoneConfig(BoneType.NORMAL, 8)).addLoot(1, 1, 0.2));
 		creatureConfigs
-				.add(new EssenceConfig("minecraft:cow", new CreatureBoneConfig(BoneType.NORMAL, 8)).addLoot(1, 3, 0.8));
+				.add(new EssenceConfig("minecraft:cow", new CreatureBoneConfig(BoneType.NORMAL, 8)).addLoot(1, 2, 0.4));
 		creatureConfigs
-				.add(new EssenceConfig("minecraft:pig", new CreatureBoneConfig(BoneType.NORMAL, 6)).addLoot(1, 2, 0.8));
+				.add(new EssenceConfig("minecraft:pig", new CreatureBoneConfig(BoneType.NORMAL, 6)).addLoot(1, 2, 0.3));
 		creatureConfigs.add(
-				new EssenceConfig("minecraft:rabbit", new CreatureBoneConfig(BoneType.NORMAL, 4)).addLoot(1, 1, 0.5));
+				new EssenceConfig("minecraft:rabbit", new CreatureBoneConfig(BoneType.NORMAL, 4)).addLoot(1, 1, 0.1));
 		creatureConfigs.add(
-				new EssenceConfig("minecraft:sheep", new CreatureBoneConfig(BoneType.NORMAL, 6)).addLoot(1, 3, 0.8));
+				new EssenceConfig("minecraft:sheep", new CreatureBoneConfig(BoneType.NORMAL, 6)).addLoot(1, 2, 0.4));
 		creatureConfigs.add(
-				new EssenceConfig("minecraft:skeleton", new CreatureBoneConfig(BoneType.NORMAL, 3)).addLoot(1, 3, 0.5));
+				new EssenceConfig("minecraft:skeleton", new CreatureBoneConfig(BoneType.NORMAL, 3)).addLoot(1, 2, 0.5));
 		creatureConfigs.add(new EssenceConfig("minecraft:spider", new CreatureBoneConfig(BoneType.NORMAL, 5)));
 		creatureConfigs.add(
-				new EssenceConfig("minecraft:villager", new CreatureBoneConfig(BoneType.NORMAL, 1)).addLoot(1, 4, 1));
+				new EssenceConfig("minecraft:villager", new CreatureBoneConfig(BoneType.NORMAL, 1)).addLoot(1, 2, 0.6));
 		creatureConfigs.add(new EssenceConfig("NONE", new CreatureBoneConfig(BoneType.NORMAL, 5)));
 
 		// dry
 		creatureConfigs.add(new EssenceConfig("minecraft:cave_spider", new CreatureBoneConfig(BoneType.DRY, 1)));
 		creatureConfigs
-				.add(new EssenceConfig("minecraft:horse", new CreatureBoneConfig(BoneType.DRY, 1)).addLoot(2, 5, 1));
+				.add(new EssenceConfig("minecraft:horse", new CreatureBoneConfig(BoneType.DRY, 1)).addLoot(1, 3, 0.6));
 		creatureConfigs
-				.add(new EssenceConfig("minecraft:husk", new CreatureBoneConfig(BoneType.DRY, 5)).addLoot(1, 3, 0.6));
+				.add(new EssenceConfig("minecraft:husk", new CreatureBoneConfig(BoneType.DRY, 5)).addLoot(1, 2, 0.3));
 		creatureConfigs
-				.add(new EssenceConfig("minecraft:llama", new CreatureBoneConfig(BoneType.DRY, 10)).addLoot(1, 4, 1));
+				.add(new EssenceConfig("minecraft:llama", new CreatureBoneConfig(BoneType.DRY, 10)).addLoot(1, 3, 0.5));
 		creatureConfigs.add(new EssenceConfig("NONE", new CreatureBoneConfig(BoneType.DRY, 30)));
 
 		// fungal
+		creatureConfigs.add(new EssenceConfig("minecraft:mooshroom", new CreatureBoneConfig(BoneType.FUNGAL, 1))
+				.addLoot(1, 3, 0.6));
 		creatureConfigs.add(
-				new EssenceConfig("minecraft:mooshroom", new CreatureBoneConfig(BoneType.FUNGAL, 1)).addLoot(1, 4, 1));
+				new EssenceConfig("minecraft:ocelot", new CreatureBoneConfig(BoneType.FUNGAL, 10)).addLoot(1, 1, 0.3));
 		creatureConfigs.add(
-				new EssenceConfig("minecraft:ocelot", new CreatureBoneConfig(BoneType.FUNGAL, 10)).addLoot(1, 2, 0.5));
-		creatureConfigs.add(
-				new EssenceConfig("minecraft:parrot", new CreatureBoneConfig(BoneType.FUNGAL, 10)).addLoot(1, 1, 0.5));
+				new EssenceConfig("minecraft:parrot", new CreatureBoneConfig(BoneType.FUNGAL, 10)).addLoot(1, 1, 0.2));
 		creatureConfigs
 				.add(new EssenceConfig("minecraft:vindication_illager", new CreatureBoneConfig(BoneType.FUNGAL, 5))
 						.addSpawnChance("minecraft:vindication_illager", 10)
 						.addSpawnChance("minecraft:evocation_illager", 1)
-						.addLoot("minecraft:vindication_illager", 1, 4, 1)
-						.addLoot("minecraft:evocation_illager", 1, 4, 1));
+						.addLoot("minecraft:vindication_illager", 1, 2, 0.6)
+						.addLoot("minecraft:evocation_illager", 1, 2, 0.6));
 		creatureConfigs.add(
-				new EssenceConfig("minecraft:witch", new CreatureBoneConfig(BoneType.FUNGAL, 5)).addLoot(1, 4, 0.6));
+				new EssenceConfig("minecraft:witch", new CreatureBoneConfig(BoneType.FUNGAL, 5)).addLoot(1, 2, 0.6));
 		creatureConfigs.add(new EssenceConfig("minecraft:zombie", new CreatureBoneConfig(BoneType.FUNGAL, 20))
 				.addSpawnChance("minecraft:zombie", 100).addSpawnChance("minecraft:zombie_villager", 10)
-				.addSpawnChance("minecraft:zombie_horse", 1).addLoot("minecraft:zombie", 1, 3, 0.5)
-				.addLoot("minecraft:zombie_villager", 1, 4, 0.8).addLoot("minecraft:zombie_horse", 2, 5, 1));
+				.addSpawnChance("minecraft:zombie_horse", 1).addLoot("minecraft:zombie", 1, 2, 0.3)
+				.addLoot("minecraft:zombie_villager", 1, 2, 0.5).addLoot("minecraft:zombie_horse", 1, 3, 0.6));
 		creatureConfigs.add(new EssenceConfig("NONE", new CreatureBoneConfig(BoneType.FUNGAL, 20)));
 
 		// frozen
 		creatureConfigs.add(new EssenceConfig("minecraft:snowman", new CreatureBoneConfig(BoneType.FROZEN, 1)));
-		creatureConfigs
-				.add(new EssenceConfig("minecraft:stray", new CreatureBoneConfig(BoneType.FROZEN, 1)).addLoot(2, 6, 1));
 		creatureConfigs.add(
-				new EssenceConfig("minecraft:wolf", new CreatureBoneConfig(BoneType.FROZEN, 5)).addLoot(1, 2, 0.5));
+				new EssenceConfig("minecraft:stray", new CreatureBoneConfig(BoneType.FROZEN, 1)).addLoot(1, 2, 0.5));
+		creatureConfigs.add(
+				new EssenceConfig("minecraft:wolf", new CreatureBoneConfig(BoneType.FROZEN, 5)).addLoot(1, 1, 0.2));
 		creatureConfigs.add(new EssenceConfig("minecraft:polar_bear", new CreatureBoneConfig(BoneType.FROZEN, 10))
-				.addLoot(2, 5, 0.6));
+				.addLoot(1, 3, 0.6));
 		creatureConfigs.add(new EssenceConfig("NONE", new CreatureBoneConfig(BoneType.FROZEN, 10)));
 
 		// scale
 		creatureConfigs.add(new EssenceConfig("minecraft:silverfish", new CreatureBoneConfig(BoneType.SCALE, 1))
-				.addLoot(1, 1, 0.4));
+				.addLoot(1, 1, 0.2));
 		creatureConfigs.add(
-				new EssenceConfig("minecraft:squid", new CreatureBoneConfig(BoneType.SCALE, 20)).addLoot(1, 2, 0.6));
+				new EssenceConfig("minecraft:squid", new CreatureBoneConfig(BoneType.SCALE, 20)).addLoot(1, 1, 0.2));
 		creatureConfigs.add(
-				new EssenceConfig("minecraft:guardian", new CreatureBoneConfig(BoneType.SCALE, 1)).addLoot(2, 4, 1));
+				new EssenceConfig("minecraft:guardian", new CreatureBoneConfig(BoneType.SCALE, 1)).addLoot(1, 3, 0.8));
 		creatureConfigs.add(new EssenceConfig("NONE", new CreatureBoneConfig(BoneType.SCALE, 10)));
 
 		// nether
 		creatureConfigs.add(new EssenceConfig("minecraft:zombie_pigman", new CreatureBoneConfig(BoneType.NETHER, 20))
-				.addLoot(1, 4, 0.5));
+				.addLoot(1, 2, 0.5));
 		creatureConfigs.add(
-				new EssenceConfig("minecraft:blaze", new CreatureBoneConfig(BoneType.NETHER, 3)).addLoot(1, 3, 0.6));
+				new EssenceConfig("minecraft:blaze", new CreatureBoneConfig(BoneType.NETHER, 3)).addLoot(1, 2, 0.6));
 		creatureConfigs.add(new EssenceConfig("minecraft:wither_skeleton", new CreatureBoneConfig(BoneType.NETHER, 1))
-				.addLoot(2, 6, 1));
-		creatureConfigs.add(
-				new EssenceConfig("minecraft:ghast", new CreatureBoneConfig(BoneType.NETHER, 1)).addLoot(4, 10, 1));
+				.addLoot(1, 2, 0.5));
+		creatureConfigs
+				.add(new EssenceConfig("minecraft:ghast", new CreatureBoneConfig(BoneType.NETHER, 1)).addLoot(3, 6, 1));
 		creatureConfigs.add(new EssenceConfig("NONE", new CreatureBoneConfig(BoneType.NETHER, 10)));
 
 		// ender
 		creatureConfigs.add(new EssenceConfig("minecraft:shulker", new CreatureBoneConfig(BoneType.ENDER, 1)));
 		creatureConfigs.add(new EssenceConfig("minecraft:endermite", new CreatureBoneConfig(BoneType.ENDER, 15))
-				.addLoot(1, 1, 0.4));
+				.addLoot(1, 1, 0.1));
 		creatureConfigs.add(
-				new EssenceConfig("minecraft:creeper", new CreatureBoneConfig(BoneType.ENDER, 10)).addLoot(1, 3, 0.8));
+				new EssenceConfig("minecraft:creeper", new CreatureBoneConfig(BoneType.ENDER, 10)).addLoot(1, 2, 0.4));
 		creatureConfigs.add(
-				new EssenceConfig("minecraft:enderman", new CreatureBoneConfig(BoneType.ENDER, 2)).addLoot(2, 6, 1));
+				new EssenceConfig("minecraft:enderman", new CreatureBoneConfig(BoneType.ENDER, 2)).addLoot(1, 4, 0.8));
 		creatureConfigs.add(new EssenceConfig("NONE", new CreatureBoneConfig(BoneType.ENDER, 20)));
 
 		return creatureConfigs;

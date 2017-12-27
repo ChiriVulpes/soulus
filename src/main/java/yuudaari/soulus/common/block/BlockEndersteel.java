@@ -4,9 +4,6 @@ import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.ModBlock;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -40,9 +37,7 @@ public class BlockEndersteel extends ModBlock {
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		List<IProperty<?>> props = new ArrayList<>(super.createBlockState().getProperties());
-		props.add(HAS_COMPARATOR);
-		return new BlockStateContainer(this, props.toArray(new IProperty<?>[0]));
+		return new BlockStateContainer(this, new IProperty<?>[] { HAS_COMPARATOR });
 	}
 
 	@Override
