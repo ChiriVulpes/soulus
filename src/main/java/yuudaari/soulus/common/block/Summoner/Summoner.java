@@ -10,6 +10,7 @@ import yuudaari.soulus.common.item.BloodCrystal;
 import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.item.Soulbook;
 import yuudaari.soulus.common.item.SummonerUpgrade;
+import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.MobTarget;
 import yuudaari.soulus.common.util.ModBlock;
@@ -37,6 +38,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -81,11 +83,6 @@ public class Summoner extends ModBlock {
 			rangeUpgrades = range;
 			countUpgrades = count;
 		}
-	}
-
-	private static Upgrades getSummonerUpgrades(NBTTagCompound summonerData) {
-		NBTTagCompound upgradeData = summonerData.getCompoundTag("upgrades");
-		return new Upgrades(upgradeData.getByte("delay"), upgradeData.getByte("range"), upgradeData.getByte("count"));
 	}
 
 	private static Upgrades getSummonerUpgrades(SummonerTileEntity te) {
@@ -178,32 +175,45 @@ public class Summoner extends ModBlock {
 	@SubscribeEvent
 	public static void onSummonerBreak(BlockEvent.BreakEvent event) {
 		if (event.getState().getBlock() == ModBlocks.SUMMONER) {
-			SummonerTileEntity tileEntity = (SummonerTileEntity) event.getWorld().getTileEntity(event.getPos());
-			if (tileEntity == null)
-				throw new RuntimeException("Summoner has no tile entity");
-			lastBrokenSummonerData = tileEntity.writeToNBT(new NBTTagCompound());
+			World world = event.getWorld();
+			BlockPos pos = event.getPos();
+			destroy(world, pos, world.getTileEntity(pos));
 		}
+	}
+
+	@Override
+	public void onBlockExploded(World world, BlockPos pos, Explosion explosion) {
+		destroy(world, pos, world.getTileEntity(pos));
+	}
+
+	private static void destroy(World world, BlockPos pos, TileEntity tileEntity) {
+		if (tileEntity == null || !(tileEntity instanceof SummonerTileEntity)) {
+			Logger.info("Summoner had no tile entity");
+			return;
+		}
+
+		List<ItemStack> drops = getDrops((SummonerTileEntity) tileEntity);
+		drops.add(ModBlocks.SUMMONER_EMPTY.getItemStack(1, world.getBlockState(pos).getValue(VARIANT).getMeta()));
+
+		for (ItemStack drop : drops)
+			dropItem(world, drop, pos);
 	}
 
 	@Nonnull
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @Nonnull IBlockState state, int fortune) {
-		List<ItemStack> drops = getDrops(lastBrokenSummonerData);
-
-		drops.add(ModBlocks.SUMMONER_EMPTY.getItemStack(1, state.getValue(VARIANT).getMeta()));
-
-		return drops;
+		return new ArrayList<>();
 	}
 
-	private ItemStack getSoulbook(SummonerTileEntity te) {
+	private static ItemStack getSoulbook(SummonerTileEntity te) {
 		return getSoulbook(te.getMob());
 	}
 
-	private ItemStack getSoulbook(NBTTagCompound summonerData) {
+	private static ItemStack getSoulbook(NBTTagCompound summonerData) {
 		return getSoulbook(getSummonerEntity(summonerData));
 	}
 
-	private ItemStack getSoulbook(String entityName) {
+	private static ItemStack getSoulbook(String entityName) {
 		ItemStack soulbook = ModItems.SOULBOOK.getItemStack();
 		MobTarget.setMobTarget(soulbook, entityName);
 		Soulbook.setContainedEssence(soulbook, Soulus.config.getSoulbookQuantity(entityName));
@@ -211,20 +221,7 @@ public class Summoner extends ModBlock {
 		return soulbook;
 	}
 
-	private List<ItemStack> getDrops(NBTTagCompound summonerData) {
-		List<ItemStack> drops = new ArrayList<>();
-
-		drops.add(getSoulbook(summonerData));
-
-		Upgrades upgrades = getSummonerUpgrades(summonerData);
-		drops.addAll(getUpgradeStacks(CountUpgrade, upgrades.countUpgrades));
-		drops.addAll(getUpgradeStacks(DelayUpgrade, upgrades.delayUpgrades));
-		drops.addAll(getUpgradeStacks(RangeUpgrade, upgrades.rangeUpgrades));
-
-		return drops;
-	}
-
-	private List<ItemStack> getDrops(SummonerTileEntity te) {
+	private static List<ItemStack> getDrops(SummonerTileEntity te) {
 		List<ItemStack> drops = new ArrayList<>();
 
 		drops.add(getSoulbook(te));
@@ -334,7 +331,7 @@ public class Summoner extends ModBlock {
 		return true;
 	}
 
-	private List<ItemStack> getUpgradeStacks(SummonerUpgrade upgrade, int count) {
+	private static List<ItemStack> getUpgradeStacks(SummonerUpgrade upgrade, int count) {
 		List<ItemStack> result = new ArrayList<>();
 		do {
 			ItemStack stack = upgrade.getFilledStack();
@@ -346,8 +343,14 @@ public class Summoner extends ModBlock {
 		return result;
 	}
 
-	private void returnItemToPlayer(World world, ItemStack item, EntityPlayer player) {
+	private static void returnItemToPlayer(World world, ItemStack item, EntityPlayer player) {
 		EntityItem dropItem = new EntityItem(world, player.posX, player.posY, player.posZ, item);
+		dropItem.setNoPickupDelay();
+		world.spawnEntity(dropItem);
+	}
+
+	private static void dropItem(World world, ItemStack item, BlockPos pos) {
+		EntityItem dropItem = new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, item);
 		dropItem.setNoPickupDelay();
 		world.spawnEntity(dropItem);
 	}

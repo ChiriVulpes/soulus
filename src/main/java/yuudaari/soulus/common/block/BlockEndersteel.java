@@ -4,9 +4,6 @@ import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.ModBlock;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.BlockRedstoneComparator;
 import net.minecraft.block.SoundType;
@@ -41,23 +38,6 @@ public class BlockEndersteel extends ModBlock {
 	}
 
 	@Override
-	public boolean hasTileEntity(IBlockState state) {
-		return state.getValue(HAS_COMPARATOR);
-	}
-
-	@Override
-	public Class<? extends TileEntity> getTileEntityClass() {
-		return BlockEndersteelTileEntity.class;
-	}
-
-	@Override
-	@Nonnull
-	@ParametersAreNonnullByDefault
-	public TileEntity createTileEntity(World worldIn, IBlockState blockState) {
-		return new BlockEndersteelTileEntity();
-	}
-
-	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState().withProperty(HAS_COMPARATOR, meta == 1 ? true : false);
 	}
@@ -80,6 +60,21 @@ public class BlockEndersteel extends ModBlock {
 
 		BlockEndersteelTileEntity te = (BlockEndersteelTileEntity) world.getTileEntity(pos);
 		return te == null ? 0 : te.power;
+	}
+
+	@Override
+	public boolean hasTileEntity(IBlockState state) {
+		return state.getValue(HAS_COMPARATOR);
+	}
+
+	@Override
+	public Class<? extends TileEntity> getTileEntityClass() {
+		return BlockEndersteelTileEntity.class;
+	}
+
+	@Override
+	public TileEntity createTileEntity(World worldIn, IBlockState blockState) {
+		return new BlockEndersteelTileEntity();
 	}
 
 	public static class BlockEndersteelTileEntity extends TileEntity implements ITickable {

@@ -145,6 +145,8 @@ tile.soulus:fossil_end_stone.name=End Stone with Glowing Fossils
 tile.soulus:block_endersteel.name=Block of Endersteel
 tile.soulus:bars_endersteel.name=Endersteel Bars
 
+tile.soulus:skewer.name=Skewer
+
 tile.soulus:summoner_empty.normal.name=Empty Summoner
 tile.soulus:summoner_empty.wood.name=Empty Summoner
 tile.soulus:summoner_empty.stone.name=Empty Summoner

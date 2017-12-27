@@ -6,6 +6,7 @@ import yuudaari.soulus.client.util.ParticleType;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.config.PotionEffectSerializer;
 import yuudaari.soulus.common.config.Serializer;
+import yuudaari.soulus.common.misc.ModDamageSource;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.BloodCrystalHitEntity;
 import yuudaari.soulus.common.util.Colour;
@@ -22,7 +23,6 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
@@ -147,7 +147,7 @@ public class BloodCrystal extends SummonerUpgrade {
 			} else {
 				if (!worldIn.isRemote) {
 					setContainedBlood(heldItem, containedBlood + prickWorth);
-					player.attackEntityFrom(new DamageSource("soulus:blood_crystal"), prickAmount);
+					player.attackEntityFrom(ModDamageSource.BLOOD_CRYSTAL, prickAmount);
 
 					for (ModPotionEffect effect : prickEffects)
 						player.addPotionEffect(effect);
@@ -167,7 +167,7 @@ public class BloodCrystal extends SummonerUpgrade {
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 		if (target.getHealth() <= this.creaturePrickRequiredHealth) {
-			target.attackEntityFrom(new DamageSource("soulus:blood_crystal"), this.creaturePrickAmount);
+			target.attackEntityFrom(ModDamageSource.BLOOD_CRYSTAL, this.creaturePrickAmount);
 			int blood = getContainedBlood(stack);
 			setContainedBlood(stack, blood + this.creaturePrickWorth);
 			SoulsPacketHandler.INSTANCE.sendToAllAround(new BloodCrystalHitEntity(target),

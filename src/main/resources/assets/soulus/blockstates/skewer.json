@@ -1,0 +1,16 @@
+{
+    "variants": {
+        "extended=false,facing=up": { "model": "soulus:skewer" },
+        "extended=false,facing=down": { "model": "soulus:skewer" },
+        "extended=false,facing=north": { "model": "soulus:skewer", "x": 90 },
+        "extended=false,facing=south": { "model": "soulus:skewer", "x": 90, "y": 180 },
+        "extended=false,facing=west": { "model": "soulus:skewer", "x": 90, "y": 270 },
+        "extended=false,facing=east": { "model": "soulus:skewer", "x": 90, "y": 90 },
+        "extended=true,facing=up": { "model": "soulus:skewer_extended" },
+        "extended=true,facing=down": { "model": "soulus:skewer_extended" },
+        "extended=true,facing=north": { "model": "soulus:skewer_extended", "x": 90 },
+        "extended=true,facing=south": { "model": "soulus:skewer_extended", "x": 90, "y": 180 },
+        "extended=true,facing=west": { "model": "soulus:skewer_extended", "x": 90, "y": 270 },
+        "extended=true,facing=east": { "model": "soulus:skewer_extended", "x": 90, "y": 90 }
+    }
+}

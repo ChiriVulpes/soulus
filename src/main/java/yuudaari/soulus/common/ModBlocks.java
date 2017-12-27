@@ -33,10 +33,11 @@ public class ModBlocks {
 	public static final Summoner SUMMONER = new Summoner();
 	public static final SummonerEmpty SUMMONER_EMPTY = new SummonerEmpty();
 	public static final BarsEndersteel BARS_ENDERSTEEL = new BarsEndersteel();
+	public static final Skewer SKEWER = new Skewer();
 
 	public static IBlock[] blocks = new IBlock[] { SUMMONER, SUMMONER_EMPTY, BARS_ENDERSTEEL, BLOCK_ENDERSTEEL,
 			FOSSIL_DIRT, FOSSIL_DIRT_ENDER, FOSSIL_DIRT_FROZEN, FOSSIL_DIRT_FUNGAL, FOSSIL_SAND, FOSSIL_SAND_SCALE,
-			FOSSIL_SAND_ENDER, FOSSIL_NETHERRACK, FOSSIL_NETHERRACK_ENDER, FOSSIL_END_STONE };
+			FOSSIL_SAND_ENDER, FOSSIL_NETHERRACK, FOSSIL_NETHERRACK_ENDER, FOSSIL_END_STONE, SKEWER };
 
 	public static void registerBlocks(IForgeRegistry<Block> registry) {
 		for (IBlock block : blocks) {
