@@ -2,29 +2,26 @@ package yuudaari.soulus.common.block.summoner;
 
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.CreativeTab;
-import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.block.EndersteelType;
-import yuudaari.soulus.common.block.summoner.SummonerTileEntity.Upgrade;
+import yuudaari.soulus.common.block.UpgradeableBlock;
 import yuudaari.soulus.common.item.BloodCrystal;
 import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.item.Soulbook;
-import yuudaari.soulus.common.item.SummonerUpgrade;
-import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.Material;
-import yuudaari.soulus.common.util.MobTarget;
-import yuudaari.soulus.common.util.ModBlock;
+import yuudaari.soulus.common.util.EssenceType;
+import yuudaari.soulus.common.util.Range;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -33,66 +30,130 @@ import net.minecraft.item.ItemMultiTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.eventhandler.Event.Result;
-import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.common.Optional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Arrays;
 
-@Mod.EventBusSubscriber(modid = Soulus.MODID)
-public class Summoner extends ModBlock {
+public class Summoner extends UpgradeableBlock {
 
-	public static final IProperty<EndersteelType> VARIANT = PropertyEnum.create("variant", EndersteelType.class);
+	/////////////////////////////////////////
+	// Upgrades
+	//
 
-	@ObjectHolder("soulus:blood_crystal")
-	public static SummonerUpgrade CountUpgrade;
-	@ObjectHolder("soulus:gear_oscillating")
-	public static SummonerUpgrade DelayUpgrade;
-	@ObjectHolder("soulus:orb_murky")
-	public static SummonerUpgrade RangeUpgrade;
+	public static enum Upgrade implements IUpgrade {
+		COUNT(0, "count", ModItems.BLOOD_CRYSTAL.getItemStack()), DELAY(1, "delay",
+				ModItems.GEAR_OSCILLATING.getItemStack()), RANGE(2, "range", ModItems.ORB_MURKY.getItemStack());
 
-	private static class Upgrades {
-		public int delayUpgrades;
-		public int rangeUpgrades;
-		public int countUpgrades;
+		private final int index;
+		private final String name;
+		private final ItemStack stack;
+		// by default all upgrades are capped at 16
+		private byte maxQuantity = 16;
 
-		public Upgrades(int delay, int range, int count) {
-			delayUpgrades = delay;
-			rangeUpgrades = range;
-			countUpgrades = count;
+		private Upgrade(int index, String name, ItemStack item) {
+			this.index = index;
+			this.name = name;
+			this.stack = item;
+		}
+
+		@Override
+		public int getIndex() {
+			return index;
+		}
+
+		@Override
+		public String getName() {
+			return name;
+		}
+
+		@Override
+		public byte getMaxQuantity() {
+			// all upgrades by default are capped at 16
+			return maxQuantity;
+		}
+
+		@Override
+		public void setMaxQuantity(byte quantity) {
+			maxQuantity = quantity;
+		}
+
+		@Override
+		public boolean isItemStack(ItemStack stack) {
+			if (stack.getItem() != this.stack.getItem())
+				return false;
+
+			if (name == "count") {
+				return BloodCrystal.isFilled(stack);
+			} else if (name == "range") {
+				return OrbMurky.isFilled(stack);
+			}
+
+			return true;
+		}
+
+		@Override
+		public ItemStack getItemStack(int quantity) {
+			ItemStack stack = new ItemStack(this.stack.getItem(), quantity);
+			if (name == "count") {
+				BloodCrystal.setFilled(stack);
+			} else if (name == "range") {
+				OrbMurky.setFilled(stack);
+			}
+
+			return stack;
 		}
 	}
 
-	private static Upgrades getSummonerUpgrades(SummonerTileEntity te) {
-		return new Upgrades(te.getUpgradeCount(Upgrade.DELAY), te.getUpgradeCount(Upgrade.RANGE),
-				te.getUpgradeCount(Upgrade.COUNT));
+	@Override
+	public IUpgrade[] getUpgrades() {
+		return Upgrade.values();
 	}
 
-	private static String getSummonerEntity(NBTTagCompound summonerData) {
-		return summonerData.getString("entity_type");
+	/////////////////////////////////////////
+	// Serializer
+	//
+
+	public int nonUpgradedSpawningRadius = 4;
+	public Range nonUpgradedCount = new Range(1, 2);
+	public Range nonUpgradedDelay = new Range(10000, 20000);
+	public int nonUpgradedRange = 4;
+	public Range upgradeCountEffectiveness = new Range(0.2, 0.5);
+	public double upgradeCountRadiusEffectiveness = 0.15;
+	public Range upgradeDelayEffectiveness = new Range(0.8, 1);
+	public int upgradeRangeEffectiveness = 4;
+	public double particleCountActivated = 3;
+	public int particleCountSpawn = 50;
+
+	{
+		serializer.fields.addAll(
+				Arrays.asList("nonUpgradedSpawningRadius", "nonUpgradedRange", "upgradeCountRadiusEffectiveness",
+						"upgradeRangeEffectiveness", "particleCountActivated", "particleCountSpawn"));
+
+		serializer.fieldHandlers.put("nonUpgradedCount", Range.serializer);
+		serializer.fieldHandlers.put("nonUpgradedDelay", Range.serializer);
+		serializer.fieldHandlers.put("upgradeCountEffectiveness", Range.serializer);
+		serializer.fieldHandlers.put("upgradeDelayEffectiveness", Range.serializer);
 	}
+
+	/////////////////////////////////////////
+	// Properties
+	//
+
+	public static final IProperty<EndersteelType> VARIANT = PropertyEnum.create("variant", EndersteelType.class);
+	public static final PropertyBool HAS_SOULBOOK = PropertyBool.create("has_soulbook");
 
 	public Summoner() {
 		super("summoner", new Material(MapColor.STONE).setTransparent());
@@ -105,262 +166,11 @@ public class Summoner extends ModBlock {
 		registerWailaProvider(Summoner.class);
 	}
 
-	public static class SummonerItemBlock extends ItemMultiTexture {
-		public SummonerItemBlock(Block b) {
-			super(b, b, i -> EndersteelType.byMetadata(i.getItemDamage()).getName());
-			setRegistryName(Soulus.MODID + ":summoner");
-		}
-
-		@Override
-		public int getMetadata(int damage) {
-			return damage;
-		}
-
-		@Override
-		public String getUnlocalizedNameInefficiently(@Nonnull ItemStack stack) {
-			return "tile." + Soulus.MODID + ":summoner." + MobTarget.getMobTarget(stack);
-		}
-
-		@Override
-		@SideOnly(Side.CLIENT)
-		public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip,
-				ITooltipFlag flagIn) {
-			tooltip.add(I18n.format("tooltip." + Soulus.MODID + ":summoner.style."
-					+ EndersteelType.byMetadata(stack.getItemDamage()).getName()));
-		}
-	}
-
-	private final SummonerItemBlock ITEM = new SummonerItemBlock(this);
-
-	public ItemStack getItemStack(SummonerTileEntity te, int count, int metadata) {
-		ItemStack itemStack = new ItemStack(ITEM, count, metadata);
-
-		itemStack.setTagCompound(te.writeToNBT(new NBTTagCompound()));
-
-		return itemStack;
-	}
+	public static Summoner INSTANCE = new Summoner();
 
 	@Override
-	public ItemBlock getItemBlock() {
-		return ITEM;
-	}
-
-	@SubscribeEvent
-	public static void rightClickBlock(PlayerInteractEvent.RightClickBlock event) {
-		IBlockState blockState = event.getWorld().getBlockState(event.getPos());
-		if (blockState.getBlock() instanceof Summoner && event.getItemStack().getItem() instanceof SummonerUpgrade) {
-			event.setUseBlock(Result.ALLOW);
-		}
-	}
-
-	@Override
-	public boolean hasTileEntity(IBlockState state) {
-		return true;
-	}
-
-	@Override
-	public Class<? extends TileEntity> getTileEntityClass() {
-		return SummonerTileEntity.class;
-	}
-
-	@Override
-	@Nonnull
-	@ParametersAreNonnullByDefault
-	public TileEntity createTileEntity(World worldIn, IBlockState blockState) {
-		return new SummonerTileEntity();
-	}
-
-	public static NBTTagCompound lastBrokenSummonerData;
-
-	@SubscribeEvent
-	public static void onSummonerBreak(BlockEvent.BreakEvent event) {
-		if (event.getState().getBlock() == ModBlocks.SUMMONER) {
-			World world = event.getWorld();
-			BlockPos pos = event.getPos();
-			destroy(world, pos, world.getTileEntity(pos));
-		}
-	}
-
-	@Override
-	public void onBlockExploded(World world, BlockPos pos, Explosion explosion) {
-		destroy(world, pos, world.getTileEntity(pos));
-	}
-
-	private static void destroy(World world, BlockPos pos, TileEntity tileEntity) {
-		if (tileEntity == null || !(tileEntity instanceof SummonerTileEntity)) {
-			Logger.info("Summoner had no tile entity");
-			return;
-		}
-
-		List<ItemStack> drops = getDrops((SummonerTileEntity) tileEntity);
-		drops.add(ModBlocks.SUMMONER_EMPTY.getItemStack(1, world.getBlockState(pos).getValue(VARIANT).getMeta()));
-
-		for (ItemStack drop : drops)
-			dropItem(world, drop, pos);
-	}
-
-	@Nonnull
-	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @Nonnull IBlockState state, int fortune) {
-		return new ArrayList<>();
-	}
-
-	private static ItemStack getSoulbook(SummonerTileEntity te) {
-		return getSoulbook(te.getMob());
-	}
-
-	private static ItemStack getSoulbook(NBTTagCompound summonerData) {
-		return getSoulbook(getSummonerEntity(summonerData));
-	}
-
-	private static ItemStack getSoulbook(String entityName) {
-		ItemStack soulbook = ModItems.SOULBOOK.getItemStack();
-		MobTarget.setMobTarget(soulbook, entityName);
-		Soulbook.setContainedEssence(soulbook, Soulus.config.getSoulbookQuantity(entityName));
-
-		return soulbook;
-	}
-
-	private static List<ItemStack> getDrops(SummonerTileEntity te) {
-		List<ItemStack> drops = new ArrayList<>();
-
-		drops.add(getSoulbook(te));
-
-		Upgrades upgrades = getSummonerUpgrades(te);
-		drops.addAll(getUpgradeStacks(CountUpgrade, upgrades.countUpgrades));
-		drops.addAll(getUpgradeStacks(DelayUpgrade, upgrades.delayUpgrades));
-		drops.addAll(getUpgradeStacks(RangeUpgrade, upgrades.rangeUpgrades));
-
-		return drops;
-	}
-
-	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
-			EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (!world.isRemote) {
-			SummonerTileEntity summoner = (SummonerTileEntity) world.getTileEntity(pos);
-
-			ItemStack heldStack = player.inventory.mainInventory.get(player.inventory.currentItem);
-			Item heldItem = heldStack.getItem();
-			boolean sneaking = player.isSneaking();
-
-			if (heldItem.equals(ModItems.SOULBOOK)) {
-				returnItemToPlayer(world, getSoulbook(summoner), player);
-				if (!world.isRemote) {
-					String mob = MobTarget.getMobTarget(heldStack);
-					summoner.setMob(mob);
-					summoner.reset();
-				}
-				heldStack.shrink(1);
-
-			} else if (heldItem.equals(CountUpgrade)) {
-				if (BloodCrystal.getContainedBlood(heldStack) >= ModItems.BLOOD_CRYSTAL.requiredBlood) {
-					heldStack.shrink(summoner.addUpgradeStack(Upgrade.COUNT, sneaking ? heldStack.getCount() : 1));
-				}
-
-			} else if (heldItem.equals(DelayUpgrade)) {
-				heldStack.shrink(summoner.addUpgradeStack(Upgrade.DELAY, sneaking ? heldStack.getCount() : 1));
-
-			} else if (heldItem.equals(RangeUpgrade)) {
-				if (OrbMurky.getContainedEssence(heldStack) >= ModItems.ORB_MURKY.requiredEssence) {
-					heldStack.shrink(summoner.addUpgradeStack(Upgrade.RANGE, sneaking ? heldStack.getCount() : 1));
-				}
-
-			} else if (heldItem.equals(Items.AIR)) {
-				if (sneaking) {
-					// empty hand and sneaking = return all items from summoner
-					for (ItemStack drop : getDrops(summoner)) {
-						returnItemToPlayer(world, drop, player);
-					}
-
-					world.setBlockState(pos, ModBlocks.SUMMONER_EMPTY.getDefaultState()
-							.withProperty(SummonerEmpty.VARIANT, state.getValue(VARIANT)));
-
-				} else {
-					Upgrade lastInserted = summoner.getLastInserted();
-					if (lastInserted == null) {
-						returnItemToPlayer(world, getSoulbook(summoner.writeToNBT(new NBTTagCompound())), player);
-						world.setBlockState(pos, ModBlocks.SUMMONER_EMPTY.getDefaultState()
-								.withProperty(SummonerEmpty.VARIANT, state.getValue(VARIANT)));
-
-					} else {
-						int amtRemoved = summoner.removeUpgrade(lastInserted);
-						if (amtRemoved > 0) {
-
-							List<ItemStack> stacks = null;
-
-							if (lastInserted == Upgrade.COUNT) {
-								stacks = getUpgradeStacks(CountUpgrade, amtRemoved);
-							} else if (lastInserted == Upgrade.DELAY) {
-								stacks = getUpgradeStacks(DelayUpgrade, amtRemoved);
-							} else if (lastInserted == Upgrade.RANGE) {
-								stacks = getUpgradeStacks(RangeUpgrade, amtRemoved);
-							}
-
-							if (stacks != null) {
-								for (int i = 0; i < stacks.size(); i++) {
-									returnItemToPlayer(world, stacks.get(i), player);
-								}
-							}
-						}
-					}
-				}
-			} else {
-				if (heldItem.equals(ModItems.DUST_IRON) && getMetaFromState(state) != EndersteelType.NORMAL.getMeta()) {
-					world.setBlockState(pos, getDefaultState().withProperty(VARIANT, EndersteelType.NORMAL));
-				} else if (heldItem.equals(ModItems.DUST_WOOD)
-						&& getMetaFromState(state) != EndersteelType.WOOD.getMeta()) {
-					world.setBlockState(pos, getDefaultState().withProperty(VARIANT, EndersteelType.WOOD));
-				} else if (heldItem.equals(ModItems.DUST_STONE)
-						&& getMetaFromState(state) != EndersteelType.STONE.getMeta()) {
-					world.setBlockState(pos, getDefaultState().withProperty(VARIANT, EndersteelType.STONE));
-				} else if (heldItem.equals(ModItems.BONEMEAL_ENDER)
-						&& getMetaFromState(state) != EndersteelType.END_STONE.getMeta()) {
-					world.setBlockState(pos, getDefaultState().withProperty(VARIANT, EndersteelType.END_STONE));
-				} else if (heldItem.equals(Items.BLAZE_POWDER)
-						&& getMetaFromState(state) != EndersteelType.BLAZE.getMeta()) {
-					world.setBlockState(pos, getDefaultState().withProperty(VARIANT, EndersteelType.BLAZE));
-				} else {
-					return false;
-				}
-
-				heldStack.shrink(1);
-			}
-		}
-
-		return true;
-	}
-
-	private static List<ItemStack> getUpgradeStacks(SummonerUpgrade upgrade, int count) {
-		List<ItemStack> result = new ArrayList<>();
-		do {
-			ItemStack stack = upgrade.getFilledStack();
-			stack.setCount(Math.min(stack.getMaxStackSize(), count));
-			count -= stack.getMaxStackSize();
-			result.add(stack);
-		} while (count > 0);
-
-		return result;
-	}
-
-	private static void returnItemToPlayer(World world, ItemStack item, EntityPlayer player) {
-		EntityItem dropItem = new EntityItem(world, player.posX, player.posY, player.posZ, item);
-		dropItem.setNoPickupDelay();
-		world.spawnEntity(dropItem);
-	}
-
-	private static void dropItem(World world, ItemStack item, BlockPos pos) {
-		EntityItem dropItem = new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, item);
-		dropItem.setNoPickupDelay();
-		world.spawnEntity(dropItem);
-	}
-
-	@Override
-	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
-			EntityPlayer player) {
-		// if they're requesting the block with nbt data, it needs to be this block, not an empty summoner
-		return // player.isCreative() && GuiScreen.isCtrlKeyDown() ? getItemStack() : 
-		ModBlocks.SUMMONER_EMPTY.getItemStack(1, state.getValue(VARIANT).getMeta());
+	public UpgradeableBlock getInstance() {
+		return INSTANCE;
 	}
 
 	@Override
@@ -375,36 +185,16 @@ public class Summoner extends ModBlock {
 	}
 
 	@Override
-	public CreativeTab getCreativeTabToDisplayOn() {
-		return null;
-	}
-
-	@Override
-	protected BlockStateContainer createBlockState() {
-		List<IProperty<?>> props = new ArrayList<>(super.createBlockState().getProperties());
-		props.add(VARIANT);
-		return new BlockStateContainer(this, props.toArray(new IProperty<?>[0]));
-	}
-
-	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(VARIANT, EndersteelType.byMetadata(meta));
-	}
-
-	@Override
-	public int getMetaFromState(IBlockState state) {
-		return state.getValue(VARIANT).getMeta();
-	}
-
-	@Override
-	public int damageDropped(IBlockState state) {
-		return getMetaFromState(state);
+	public void addBlockToList(List<ItemStack> list, World world, BlockPos pos) {
+		list.add(getItemStack(1, getMetaFromState(getDefaultState().withProperty(HAS_SOULBOOK, false)
+				.withProperty(VARIANT, world.getBlockState(pos).getValue(VARIANT)))));
 	}
 
 	@Override
 	public void getSubBlocks(CreativeTab tab, NonNullList<ItemStack> list) {
-		for (EndersteelType enumType : EndersteelType.values()) {
-			list.add(new ItemStack(this, 1, enumType.getMeta()));
+		for (EndersteelType variant : EndersteelType.values()) {
+			list.add(new ItemStack(this, 1, getMetaFromState(
+					getDefaultState().withProperty(VARIANT, variant).withProperty(HAS_SOULBOOK, false))));
 		}
 	}
 
@@ -419,6 +209,174 @@ public class Summoner extends ModBlock {
 							+ EndersteelType.byMetadata(stack.getMetadata()).getName().toLowerCase()));
 		}
 	}
+
+	/////////////////////////////////////////
+	// Blockstate
+	//
+
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, new IProperty<?>[] { VARIANT, HAS_SOULBOOK });
+	}
+
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(HAS_SOULBOOK, (meta & 1) == 0 ? true : false).withProperty(VARIANT,
+				EndersteelType.byMetadata(meta / 2));
+	}
+
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(VARIANT).getMeta() * 2 + (state.getValue(HAS_SOULBOOK) ? 1 : 0);
+	}
+
+	/////////////////////////////////////////
+	// Item
+	//
+
+	public static class SummonerItemBlock extends ItemMultiTexture {
+		public SummonerItemBlock(Block b) {
+			super(b, b, i -> EndersteelType.byMetadata(i.getItemDamage()).getName());
+			setRegistryName(Soulus.MODID + ":summoner");
+		}
+
+		@Override
+		public int getMetadata(int damage) {
+			return damage;
+		}
+
+		@Override
+		public String getUnlocalizedNameInefficiently(@Nonnull ItemStack stack) {
+			return "tile." + Soulus.MODID + ":summoner." + EssenceType.getEssenceType(stack);
+		}
+
+		@Override
+		@SideOnly(Side.CLIENT)
+		public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip,
+				ITooltipFlag flagIn) {
+			tooltip.add(I18n.format("tooltip." + Soulus.MODID + ":summoner.style."
+					+ EndersteelType.byMetadata(stack.getItemDamage()).getName()));
+		}
+	}
+
+	private final SummonerItemBlock ITEM = new SummonerItemBlock(this);
+
+	@Override
+	public ItemBlock getItemBlock() {
+		return ITEM;
+	}
+
+	public ItemStack getItemStack(SummonerTileEntity te, int count, int metadata) {
+		ItemStack itemStack = new ItemStack(ITEM, count, metadata);
+
+		itemStack.setTagCompound(te.writeToNBT(new NBTTagCompound()));
+
+		return itemStack;
+	}
+
+	/////////////////////////////////////////
+	// Tile Entity
+	//
+
+	@Override
+	public boolean hasTileEntity(IBlockState blockState) {
+		return blockState.getValue(HAS_SOULBOOK);
+	}
+
+	@Override
+	public Class<? extends UpgradeableBlockTileEntity> getTileEntityClass() {
+		return SummonerTileEntity.class;
+	}
+
+	@Override
+	public UpgradeableBlockTileEntity createTileEntity(World worldIn, IBlockState blockState) {
+		return new SummonerTileEntity();
+	}
+
+	/////////////////////////////////////////
+	// Events
+	//
+
+	@Override
+	public boolean onActivateEmptyHand(World world, BlockPos pos, EntityPlayer player) {
+		IBlockState state = world.getBlockState(pos);
+		if (!state.getValue(HAS_SOULBOOK))
+			return false;
+
+		boolean returnedUpgrade = super.onActivateEmptyHand(world, pos, player);
+
+		if (!returnedUpgrade) {
+			SummonerTileEntity te = (SummonerTileEntity) world.getTileEntity(pos);
+			String essenceType = te.getEssenceType();
+
+			returnItemsToPlayer(world, Collections.singletonList(Soulbook.getFilled(essenceType)), player);
+
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean onActivateInsert(World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
+		Item item = stack.getItem();
+		IBlockState state = world.getBlockState(pos);
+
+		boolean didChangeStyle = true;
+		// the summoner style can always be changed
+		if (item.equals(ModItems.DUST_IRON) && getMetaFromState(state) != EndersteelType.NORMAL.getMeta()) {
+			world.setBlockState(pos, getDefaultState().withProperty(VARIANT, EndersteelType.NORMAL));
+		} else if (item.equals(ModItems.DUST_WOOD) && getMetaFromState(state) != EndersteelType.WOOD.getMeta()) {
+			world.setBlockState(pos, getDefaultState().withProperty(VARIANT, EndersteelType.WOOD));
+		} else if (item.equals(ModItems.DUST_STONE) && getMetaFromState(state) != EndersteelType.STONE.getMeta()) {
+			world.setBlockState(pos, getDefaultState().withProperty(VARIANT, EndersteelType.STONE));
+		} else if (item.equals(ModItems.BONEMEAL_ENDER)
+				&& getMetaFromState(state) != EndersteelType.END_STONE.getMeta()) {
+			world.setBlockState(pos, getDefaultState().withProperty(VARIANT, EndersteelType.END_STONE));
+		} else if (item.equals(Items.BLAZE_POWDER) && getMetaFromState(state) != EndersteelType.BLAZE.getMeta()) {
+			world.setBlockState(pos, getDefaultState().withProperty(VARIANT, EndersteelType.BLAZE));
+		} else {
+			didChangeStyle = false;
+		}
+
+		if (didChangeStyle) {
+			stack.shrink(1);
+			return true;
+		}
+
+		// try to insert a soulbook
+		if (item == Soulbook.INSTANCE) {
+			if (!Soulbook.isFilled(stack))
+				return false;
+
+			if (!state.getValue(HAS_SOULBOOK)) {
+				world.setBlockState(pos, getDefaultState().withProperty(VARIANT, state.getValue(VARIANT))
+						.withProperty(HAS_SOULBOOK, true));
+			}
+
+			SummonerTileEntity te = (SummonerTileEntity) world.getTileEntity(pos);
+
+			// there was already a tile entity here, with an essence type
+			// that means there's a soulbook inside, so return it
+			String oldEssenceType = te.getEssenceType();
+			if (oldEssenceType != null) {
+				returnItemsToPlayer(world, Collections.singletonList(Soulbook.getFilled(oldEssenceType)), player);
+			}
+
+			te.setEssenceType(EssenceType.getEssenceType(stack));
+		}
+
+		// we can't insert anything else if it's an empty summoner
+		if (!state.getValue(HAS_SOULBOOK))
+			return false;
+
+		// trying to insert the upgrades
+		return super.onActivateInsert(world, pos, player, stack);
+	}
+
+	/////////////////////////////////////////
+	// Waila
+	//
 
 	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)

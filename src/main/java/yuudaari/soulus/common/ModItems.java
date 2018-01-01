@@ -13,7 +13,7 @@ import yuudaari.soulus.common.util.IModItem;
 import yuudaari.soulus.common.util.ModItem;
 
 public class ModItems {
-	public static final BloodCrystal BLOOD_CRYSTAL = new BloodCrystal();
+	public static final BloodCrystal BLOOD_CRYSTAL = BloodCrystal.INSTANCE;
 	public static final BoneChunkDry BONE_CHUNK_DRY = new BoneChunkDry();
 	public static final BoneChunkEnder BONE_CHUNK_ENDER = new BoneChunkEnder();
 	public static final BoneChunkFrozen BONE_CHUNK_FROZEN = new BoneChunkFrozen();
@@ -40,17 +40,17 @@ public class ModItems {
 	public static final ModItem EMERALD_BURNT = new ModItem("emerald_burnt");
 	public static final ModItem EMERALD_COATED = new ModItem("emerald_coated");
 	public static final ModItem BLOOD_CRYSTAL_BROKEN = new ModItem("blood_crystal_broken");
-	public static final ModItem GEAR_BONE = new GearBone("gear_bone");
-	public static final ModItem GEAR_BONE_DRY = new GearBone("gear_bone_dry");
-	public static final ModItem GEAR_BONE_FROZEN = new GearBone("gear_bone_frozen");
-	public static final ModItem GEAR_BONE_FUNGAL = new GearBone("gear_bone_fungal");
-	public static final ModItem GEAR_BONE_NETHER = new GearBone("gear_bone_nether");
-	public static final ModItem GLUE = new Glue();
+	public static final GearBone GEAR_BONE = new GearBone("gear_bone");
+	public static final GearBone GEAR_BONE_DRY = new GearBone("gear_bone_dry");
+	public static final GearBone GEAR_BONE_FROZEN = new GearBone("gear_bone_frozen");
+	public static final GearBone GEAR_BONE_FUNGAL = new GearBone("gear_bone_fungal");
+	public static final GearBone GEAR_BONE_NETHER = new GearBone("gear_bone_nether");
+	public static final Glue GLUE = new Glue();
 	public static final ModItem INGOT_ENDERSTEEL = new ModItem("ingot_endersteel");
-	public static final ModItem NUGGET_ENDERSTEEL = new NuggetEndersteel();
-	public static final ModItem SLEDGEHAMMER = new Sledgehammer();
-	public static final ModItem SOULBOOK = new Soulbook();
-	public static final OrbMurky ORB_MURKY = new OrbMurky();
+	public static final NuggetEndersteel NUGGET_ENDERSTEEL = new NuggetEndersteel();
+	public static final Sledgehammer SLEDGEHAMMER = new Sledgehammer();
+	public static final Soulbook SOULBOOK = Soulbook.INSTANCE;
+	public static final OrbMurky ORB_MURKY = OrbMurky.INSTANCE;
 	public static final Barket BARKET = new Barket();
 
 	public static Item[] items = new Item[] { INGOT_ENDERSTEEL, NUGGET_ENDERSTEEL, BARK, GLUE, ESSENCE, SLEDGEHAMMER,

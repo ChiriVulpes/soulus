@@ -6,6 +6,9 @@ import com.google.gson.JsonPrimitive;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import yuudaari.soulus.common.util.Logger;
@@ -23,7 +26,7 @@ public class Serializer<T> {
 	public Class<T> targetClass;
 
 	/** A camelCase list of primitive fields to serialize/deserialize (will appear as snake_case in json) */
-	public String[] fields;
+	public List<String> fields;
 
 	public Map<String, Serializer<?>> fieldHandlers = new HashMap<>();
 	public Map<String, Serializer<?>> otherHandlers = new HashMap<>();
@@ -33,12 +36,12 @@ public class Serializer<T> {
 
 	public Serializer(Class<T> cls, String... primitiveFields) {
 		this.targetClass = cls;
-		this.fields = primitiveFields;
+		this.fields = new ArrayList<>(Arrays.asList(primitiveFields));
 	}
 
 	public Serializer(Class<T> cls, Map<String, Serializer<?>> handlers, String... primitiveFields) {
 		this.targetClass = cls;
-		this.fields = primitiveFields;
+		this.fields = new ArrayList<>(Arrays.asList(primitiveFields));
 		this.fieldHandlers = handlers;
 	}
 

@@ -2,7 +2,7 @@ package yuudaari.soulus.common.item;
 
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModItems;
-import yuudaari.soulus.common.util.MobTarget;
+import yuudaari.soulus.common.util.EssenceType;
 import yuudaari.soulus.common.util.ModItem;
 import yuudaari.soulus.common.recipe.Recipe;
 import net.minecraft.client.resources.I18n;
@@ -44,7 +44,7 @@ public class Soulbook extends ModItem {
 			public ItemStack getCraftingResult(InventoryCrafting inv) {
 				int essenceCount = 0;
 				ItemStack soulbook = null;
-				String target = null;
+				String essenceType = null;
 				int containedEssence = 0;
 				int inventorySize = inv.getSizeInventory();
 				for (int i = 0; i < inventorySize; i++) {
@@ -55,29 +55,29 @@ public class Soulbook extends ModItem {
 					if (stackItem == self) {
 						if (soulbook != null)
 							return null;
-						String itemTarget = MobTarget.getMobTarget(stack);
+						String itemTarget = EssenceType.getEssenceType(stack);
 						if (itemTarget != null) {
-							if (target != null && !itemTarget.equals(target))
+							if (essenceType != null && !itemTarget.equals(essenceType))
 								return null;
-							target = itemTarget;
+							essenceType = itemTarget;
 						}
 						containedEssence = getContainedEssence(stack);
 						soulbook = stack;
 						continue;
 					} else if (stackItem == ModItems.ESSENCE) {
-						String itemTarget = MobTarget.getMobTarget(stack);
-						if (itemTarget == null || (target != null && !itemTarget.equals(target)))
+						String itemTarget = EssenceType.getEssenceType(stack);
+						if (itemTarget == null || (essenceType != null && !itemTarget.equals(essenceType)))
 							return null;
-						target = itemTarget;
+						essenceType = itemTarget;
 						essenceCount++;
 						continue;
 					}
 					return null;
 				}
 				if (soulbook != null && essenceCount > 0
-						&& containedEssence + essenceCount <= Soulus.config.getSoulbookQuantity(target)) {
+						&& containedEssence + essenceCount <= Soulus.config.getSoulbookQuantity(essenceType)) {
 					ItemStack newStack = soulbook.copy();
-					MobTarget.setMobTarget(newStack, target);
+					EssenceType.setEssenceType(newStack, essenceType);
 					setContainedEssence(newStack, containedEssence + essenceCount);
 					return newStack;
 				}
@@ -92,51 +92,64 @@ public class Soulbook extends ModItem {
 		});
 	}
 
-	public ItemStack getStack(String mobTarget) {
-		return getStack(mobTarget, 1);
+	public final static Soulbook INSTANCE = new Soulbook();
+
+	public static ItemStack getFilled(String essenceType) {
+		return getStack(essenceType, Soulus.config.getSoulbookQuantity(essenceType));
 	}
 
-	public ItemStack getStack(String mobTarget, Integer count) {
-		ItemStack stack = new ItemStack(this, count);
-		MobTarget.setMobTarget(stack, mobTarget);
+	public static ItemStack getStack(String essenceType) {
+		return getStack(essenceType, 1);
+	}
+
+	public static ItemStack getStack(String essenceType, Integer count) {
+		ItemStack stack = new ItemStack(INSTANCE, count);
+		EssenceType.setEssenceType(stack, essenceType);
 		setContainedEssence(stack, 0);
 		return stack;
 	}
 
+	public static boolean isFilled(ItemStack stack) {
+		String essenceType = EssenceType.getEssenceType(stack);
+		if (essenceType == null)
+			return false;
+		return getContainedEssence(stack) >= Soulus.config.getSoulbookQuantity(essenceType);
+	}
+
 	@Override
 	public boolean hasEffect(ItemStack stack) {
-		String mobTarget = MobTarget.getMobTarget(stack);
-		if (mobTarget == null)
+		String essenceType = EssenceType.getEssenceType(stack);
+		if (essenceType == null)
 			return false;
 		int containedEssence = getContainedEssence(stack);
-		return containedEssence == Soulus.config.getSoulbookQuantity(mobTarget);
+		return containedEssence == Soulus.config.getSoulbookQuantity(essenceType);
 	}
 
 	@Nonnull
 	@Override
 	public String getUnlocalizedNameInefficiently(@Nonnull ItemStack stack) {
-		String mobTarget = MobTarget.getMobTarget(stack);
-		if (mobTarget == null)
-			mobTarget = "unfocused";
-		return super.getUnlocalizedNameInefficiently(stack) + "." + mobTarget;
+		String essenceType = EssenceType.getEssenceType(stack);
+		if (essenceType == null)
+			essenceType = "unfocused";
+		return super.getUnlocalizedNameInefficiently(stack) + "." + essenceType;
 	}
 
 	@Override
 	public boolean showDurabilityBar(ItemStack stack) {
-		String mobTarget = MobTarget.getMobTarget(stack);
+		String essenceType = EssenceType.getEssenceType(stack);
 		int containedEssence = getContainedEssence(stack);
-		if (mobTarget == null)
+		if (essenceType == null)
 			return containedEssence == 0;
-		return containedEssence < Soulus.config.getSoulbookQuantity(mobTarget);
+		return containedEssence < Soulus.config.getSoulbookQuantity(essenceType);
 	}
 
 	@Override
 	public double getDurabilityForDisplay(ItemStack stack) {
-		String mobTarget = MobTarget.getMobTarget(stack);
-		if (mobTarget == null)
+		String essenceType = EssenceType.getEssenceType(stack);
+		if (essenceType == null)
 			return 1;
 		int containedEssence = getContainedEssence(stack);
-		return (1 - containedEssence / (double) Soulus.config.getSoulbookQuantity(mobTarget));
+		return (1 - containedEssence / (double) Soulus.config.getSoulbookQuantity(essenceType));
 	}
 
 	public static int getContainedEssence(ItemStack stack) {
@@ -161,7 +174,7 @@ public class Soulbook extends ModItem {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		int containedEssence = Soulbook.getContainedEssence(stack);
-		String mobTarget = MobTarget.getMobTarget(stack);
+		String mobTarget = EssenceType.getEssenceType(stack);
 		if (mobTarget != null) {
 			int requiredEssence = Soulus.config.getSoulbookQuantity(mobTarget);
 			if (containedEssence < requiredEssence) {

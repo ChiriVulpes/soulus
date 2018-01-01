@@ -2,7 +2,7 @@ package yuudaari.soulus.common.config;
 
 import yuudaari.soulus.common.ModGenerators;
 import yuudaari.soulus.common.ModItems;
-import yuudaari.soulus.common.block.summoner.SummonerTileEntity;
+import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.item.BloodCrystal;
 import yuudaari.soulus.common.item.Glue;
 import yuudaari.soulus.common.item.OrbMurky;
@@ -72,8 +72,11 @@ public class Config {
 				new ManualSerializer(from -> OrbMurky.serializer.serialize(ModItems.ORB_MURKY),
 						(from, into) -> OrbMurky.serializer.deserialize(from, ModItems.ORB_MURKY)));
 
-		serializer.otherHandlers.put("summoner", new ManualSerializer(from -> SummonerTileEntity.serialize(),
-				(from, into) -> SummonerTileEntity.deserialize(from)));
+		serializer.otherHandlers.put("summoner", new ManualSerializer(from -> ModBlocks.SUMMONER.serialize(),
+				(from, into) -> ModBlocks.SUMMONER.deserialize(from)));
+
+		serializer.otherHandlers.put("skewer", new ManualSerializer(from -> ModBlocks.SKEWER.serialize(),
+				(from, into) -> ModBlocks.SKEWER.deserialize(from)));
 
 		serializer.otherHandlers.put("creatures",
 				new ManualSerializer(from -> NoMobSpawning.serializer.serialize(NoMobSpawning.INSTANCE),

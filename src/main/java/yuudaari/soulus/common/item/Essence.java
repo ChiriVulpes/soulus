@@ -1,7 +1,7 @@
 package yuudaari.soulus.common.item;
 
 import yuudaari.soulus.common.config.ColourConfig;
-import yuudaari.soulus.common.util.MobTarget;
+import yuudaari.soulus.common.util.EssenceType;
 import yuudaari.soulus.common.util.ModItem;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
@@ -20,11 +20,11 @@ public class Essence extends ModItem {
 
 		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
 			registerColorHandler((ItemStack stack, int tintIndex) -> {
-				String mobTarget = MobTarget.getMobTarget(stack);
-				if (mobTarget == null)
+				String essenceType = EssenceType.getEssenceType(stack);
+				if (essenceType == null)
 					return -1;
 
-				EntityList.EntityEggInfo eggInfo = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(mobTarget))
+				EntityList.EntityEggInfo eggInfo = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(essenceType))
 						.getEgg();
 				if (eggInfo == null)
 					return -1;
@@ -48,14 +48,14 @@ public class Essence extends ModItem {
 
 	public ItemStack getStack(String mobTarget, Integer count) {
 		ItemStack stack = new ItemStack(this, count);
-		MobTarget.setMobTarget(stack, mobTarget);
+		EssenceType.setEssenceType(stack, mobTarget);
 		return stack;
 	}
 
 	@Nonnull
 	@Override
 	public String getUnlocalizedNameInefficiently(@Nonnull ItemStack stack) {
-		String mobTarget = MobTarget.getMobTarget(stack);
+		String mobTarget = EssenceType.getEssenceType(stack);
 		if (mobTarget == null)
 			mobTarget = "unfocused";
 		return super.getUnlocalizedNameInefficiently(stack) + "." + mobTarget;

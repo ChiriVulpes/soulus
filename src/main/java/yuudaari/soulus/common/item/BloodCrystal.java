@@ -41,17 +41,17 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.common.collect.Multimap;
 
 public class BloodCrystal extends SummonerUpgrade {
-	private static int defaultRequiredBlood = 1000;
-	private static int defaultPrickAmount = 9;
-	private static int defaultPrickWorth = 90;
-	private static int defaultCreaturePrickRequiredHealth = 9999999;
-	private static int defaultCreaturePrickAmount = 1;
-	private static int defaultCreaturePrickWorth = 3;
-	private static int defaultParticleCount = 50;
-	private static ModPotionEffect[] defaultPrickEffects = new ModPotionEffect[] { new ModPotionEffect("hunger", 100),
-			new ModPotionEffect("nausea", 200) };
+	private static final int defaultRequiredBlood = 1000;
+	private static final int defaultPrickAmount = 9;
+	private static final int defaultPrickWorth = 90;
+	private static final int defaultCreaturePrickRequiredHealth = 9999999;
+	private static final int defaultCreaturePrickAmount = 1;
+	private static final int defaultCreaturePrickWorth = 3;
+	private static final int defaultParticleCount = 50;
+	private static final ModPotionEffect[] defaultPrickEffects = new ModPotionEffect[] {
+			new ModPotionEffect("hunger", 100), new ModPotionEffect("nausea", 200) };
 
-	public static Serializer<BloodCrystal> serializer;
+	public static final Serializer<BloodCrystal> serializer;
 	static {
 		serializer = new Serializer<>(BloodCrystal.class, "requiredBlood", "prickAmount", "prickWorth",
 				"creaturePrickRequiredHealth", "creaturePrickAmount", "creaturePrickWorth", "particleCount");
@@ -59,8 +59,10 @@ public class BloodCrystal extends SummonerUpgrade {
 		serializer.fieldHandlers.put("prickEffects", PotionEffectSerializer.INSTANCE);
 	}
 
-	private static int colourEmpty = 0x281313;
-	private static int colourFilled = 0xBC2044;
+	private static final int colourEmpty = 0x281313;
+	private static final int colourFilled = 0xBC2044;
+
+	public static final BloodCrystal INSTANCE = new BloodCrystal();
 
 	public int requiredBlood = defaultRequiredBlood;
 	public int prickAmount = defaultPrickAmount;
@@ -202,6 +204,10 @@ public class BloodCrystal extends SummonerUpgrade {
 		return 0;
 	}
 
+	public static boolean isFilled(ItemStack stack) {
+		return getContainedBlood(stack) >= INSTANCE.requiredBlood;
+	}
+
 	public static ItemStack setContainedBlood(ItemStack stack, int count) {
 		NBTTagCompound tag = stack.getTagCompound();
 		if (tag == null) {
@@ -210,6 +216,10 @@ public class BloodCrystal extends SummonerUpgrade {
 		}
 		tag.setInteger("ContainedBlood", count);
 		return stack;
+	}
+
+	public static ItemStack setFilled(ItemStack stack) {
+		return setContainedBlood(stack, INSTANCE.requiredBlood);
 	}
 
 	@SideOnly(Side.CLIENT)

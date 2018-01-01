@@ -25,7 +25,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 public class OrbMurky extends SummonerUpgrade {
 
-	public static Serializer<OrbMurky> serializer = new Serializer<>(OrbMurky.class, "requiredEssence");
+	public static final Serializer<OrbMurky> serializer = new Serializer<>(OrbMurky.class, "requiredEssence");
+
+	public static final OrbMurky INSTANCE = new OrbMurky();
 
 	public int requiredEssence = 64;
 
@@ -138,6 +140,10 @@ public class OrbMurky extends SummonerUpgrade {
 		return 0;
 	}
 
+	public static boolean isFilled(ItemStack stack) {
+		return getContainedEssence(stack) >= INSTANCE.requiredEssence;
+	}
+
 	public static ItemStack setContainedEssence(ItemStack stack, int count) {
 		NBTTagCompound tag = stack.getTagCompound();
 		if (tag == null) {
@@ -146,6 +152,10 @@ public class OrbMurky extends SummonerUpgrade {
 		}
 		tag.setByte("essence_quantity", (byte) (count + Byte.MIN_VALUE));
 		return stack;
+	}
+
+	public static ItemStack setFilled(ItemStack stack) {
+		return setContainedEssence(stack, INSTANCE.requiredEssence);
 	}
 
 	@Override

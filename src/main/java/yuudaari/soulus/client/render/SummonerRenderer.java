@@ -40,10 +40,10 @@ public class SummonerRenderer extends TileEntityRenderer<SummonerTileEntity> {
 	public void render(SummonerTileEntity tileEntity, double x, double y, double z, float partialTicks,
 			int destroyStage, float alpha) {
 
-		if (tileEntity.getMob() == null)
+		if (tileEntity.getEssenceType() == null)
 			return;
 
-		if (tileEntity.renderMob == null || !tileEntity.getMob().equals(lastRenderedMobName)) {
+		if (tileEntity.renderMob == null || !tileEntity.getEssenceType().equals(lastRenderedMobName)) {
 			spawnRenderMob(tileEntity);
 		}
 

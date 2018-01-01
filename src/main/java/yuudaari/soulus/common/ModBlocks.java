@@ -16,7 +16,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.common.block.*;
 import yuudaari.soulus.common.block.summoner.Summoner;
-import yuudaari.soulus.common.block.summoner.SummonerEmpty;
+import yuudaari.soulus.common.block.skewer.Skewer;
 
 public class ModBlocks {
 	public static final BlockEndersteel BLOCK_ENDERSTEEL = new BlockEndersteel();
@@ -31,12 +31,11 @@ public class ModBlocks {
 	public static final FossilSandEnder FOSSIL_SAND_ENDER = new FossilSandEnder();
 	public static final FossilEndStone FOSSIL_END_STONE = new FossilEndStone();
 	public static final Summoner SUMMONER = new Summoner();
-	public static final SummonerEmpty SUMMONER_EMPTY = new SummonerEmpty();
 	public static final BarsEndersteel BARS_ENDERSTEEL = new BarsEndersteel();
 	public static final Skewer SKEWER = new Skewer();
 
-	public static IBlock[] blocks = new IBlock[] { SUMMONER, SUMMONER_EMPTY, BARS_ENDERSTEEL, BLOCK_ENDERSTEEL,
-			FOSSIL_DIRT, FOSSIL_DIRT_ENDER, FOSSIL_DIRT_FROZEN, FOSSIL_DIRT_FUNGAL, FOSSIL_SAND, FOSSIL_SAND_SCALE,
+	public static IBlock[] blocks = new IBlock[] { SUMMONER, BARS_ENDERSTEEL, BLOCK_ENDERSTEEL, FOSSIL_DIRT,
+			FOSSIL_DIRT_ENDER, FOSSIL_DIRT_FROZEN, FOSSIL_DIRT_FUNGAL, FOSSIL_SAND, FOSSIL_SAND_SCALE,
 			FOSSIL_SAND_ENDER, FOSSIL_NETHERRACK, FOSSIL_NETHERRACK_ENDER, FOSSIL_END_STONE, SKEWER };
 
 	public static void registerBlocks(IForgeRegistry<Block> registry) {

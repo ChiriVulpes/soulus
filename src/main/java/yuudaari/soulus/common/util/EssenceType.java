@@ -5,9 +5,9 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nullable;
 
-public class MobTarget {
+public class EssenceType {
 	@Nullable
-	public static String getMobTarget(ItemStack stack) {
+	public static String getEssenceType(ItemStack stack) {
 		NBTTagCompound tag = stack.getTagCompound();
 		if (tag != null) {
 			if (tag.hasKey("essence_type", 8)) {
@@ -20,13 +20,13 @@ public class MobTarget {
 		return null;
 	}
 
-	public static ItemStack setMobTarget(ItemStack stack, String mobTarget) {
+	public static ItemStack setEssenceType(ItemStack stack, String essenceType) {
 		NBTTagCompound tag = stack.getTagCompound();
 		if (tag == null) {
 			tag = new NBTTagCompound();
 			stack.setTagCompound(tag);
 		}
-		tag.setString("essence_type", mobTarget);
+		tag.setString("essence_type", essenceType);
 		return stack;
 	}
 }
