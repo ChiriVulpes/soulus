@@ -328,22 +328,41 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	}
 
 	@Override
+	public boolean onActivateEmptyHandSneaking(World world, BlockPos pos, EntityPlayer player) {
+		super.onActivateEmptyHandSneaking(world, pos, player);
+
+		IBlockState state = world.getBlockState(pos);
+		world.setBlockState(pos, getDefaultState().withProperty(VARIANT, state.getValue(VARIANT)));
+
+		return true;
+	}
+
+	@Override
+	public void addOtherDropStacksToList(List<ItemStack> list, World world, BlockPos pos, IBlockState state) {
+		TileEntity te = world.getTileEntity(pos);
+
+		if (te != null && te instanceof SummonerTileEntity) {
+			SummonerTileEntity ste = (SummonerTileEntity) te;
+			list.add(Soulbook.getFilled(ste.getEssenceType()));
+		}
+	}
+
+	@Override
 	public boolean onActivateInsert(World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
 		Item item = stack.getItem();
 		IBlockState state = world.getBlockState(pos);
 
 		boolean didChangeStyle = true;
 		// the summoner style can always be changed
-		if (item.equals(ModItems.DUST_IRON) && getMetaFromState(state) != EndersteelType.NORMAL.getMeta()) {
+		if (item.equals(ModItems.DUST_IRON) && state.getValue(VARIANT) != EndersteelType.NORMAL) {
 			world.setBlockState(pos, getDefaultState().withProperty(VARIANT, EndersteelType.NORMAL));
-		} else if (item.equals(ModItems.DUST_WOOD) && getMetaFromState(state) != EndersteelType.WOOD.getMeta()) {
+		} else if (item.equals(ModItems.DUST_WOOD) && state.getValue(VARIANT) != EndersteelType.WOOD) {
 			world.setBlockState(pos, getDefaultState().withProperty(VARIANT, EndersteelType.WOOD));
-		} else if (item.equals(ModItems.DUST_STONE) && getMetaFromState(state) != EndersteelType.STONE.getMeta()) {
+		} else if (item.equals(ModItems.DUST_STONE) && state.getValue(VARIANT) != EndersteelType.STONE) {
 			world.setBlockState(pos, getDefaultState().withProperty(VARIANT, EndersteelType.STONE));
-		} else if (item.equals(ModItems.BONEMEAL_ENDER)
-				&& getMetaFromState(state) != EndersteelType.END_STONE.getMeta()) {
+		} else if (item.equals(ModItems.BONEMEAL_ENDER) && state.getValue(VARIANT) != EndersteelType.END_STONE) {
 			world.setBlockState(pos, getDefaultState().withProperty(VARIANT, EndersteelType.END_STONE));
-		} else if (item.equals(Items.BLAZE_POWDER) && getMetaFromState(state) != EndersteelType.BLAZE.getMeta()) {
+		} else if (item.equals(Items.BLAZE_POWDER) && state.getValue(VARIANT) != EndersteelType.BLAZE) {
 			world.setBlockState(pos, getDefaultState().withProperty(VARIANT, EndersteelType.BLAZE));
 		} else {
 			didChangeStyle = false;

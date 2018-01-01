@@ -194,23 +194,24 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.
 		if (block instanceof UpgradeableBlock) {
 			World world = event.getWorld();
 			BlockPos pos = event.getPos();
+			EntityPlayer player = event.getPlayer();
 			((UpgradeableBlock<? extends UpgradeableBlockTileEntity>) block).onBlockDestroy(world, pos,
-					world.getTileEntity(pos), EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE,
-							event.getPlayer().getHeldItemMainhand()));
+					EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, player.getHeldItemMainhand()),
+					player.isCreative());
 		}
 	}
 
 	@Override
 	public final void onBlockExploded(World world, BlockPos pos, Explosion explosion) {
-		onBlockDestroy(world, pos, world.getTileEntity(pos));
+		onBlockDestroy(world, pos, 0, false);
 	}
 
-	public final void onBlockDestroy(World world, BlockPos pos, TileEntity tileEntity) {
-		onBlockDestroy(world, pos, tileEntity, 0);
+	public final void onBlockDestroy(World world, BlockPos pos, boolean creative) {
+		onBlockDestroy(world, pos, 0, creative);
 	}
 
-	public final void onBlockDestroy(World world, BlockPos pos, TileEntity tileEntity, int fortune) {
-		List<ItemStack> drops = getActualDrops(world, pos, world.getBlockState(pos), fortune);
+	public final void onBlockDestroy(World world, BlockPos pos, int fortune, boolean creative) {
+		List<ItemStack> drops = getDropsForBreak(world, pos, world.getBlockState(pos), fortune, creative);
 
 		dropItems(world, drops, pos);
 	}
@@ -222,11 +223,23 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.
 			ItemStack heldStack = player.getHeldItem(hand);
 
 			if (heldStack.isEmpty()) {
-				return onActivateEmptyHand(world, pos, player);
+				if (player.isSneaking()) {
+					return onActivateEmptyHandSneaking(world, pos, player);
+				} else {
+					return onActivateEmptyHand(world, pos, player);
+				}
 			} else {
 				return onActivateInsert(world, pos, player, heldStack);
 			}
 		}
+
+		return true;
+	}
+
+	public boolean onActivateEmptyHandSneaking(World world, BlockPos pos, EntityPlayer player) {
+		List<ItemStack> drops = getDropsForEmpty(world, pos, world.getBlockState(pos));
+
+		returnItemsToPlayer(world, drops, player);
 
 		return true;
 	}
@@ -302,17 +315,35 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.
 		}
 	}
 
-	public List<ItemStack> getActualDrops(World world, BlockPos pos, IBlockState state, int fortune) {
+	public final List<ItemStack> getDropsForBreak(World world, BlockPos pos, IBlockState state, int fortune,
+			boolean creative) {
 		List<ItemStack> result = new ArrayList<>();
 
-		addBlockToList(result, world, pos);
-
-		TileEntity te = world.getTileEntity(pos);
-		if (te != null && te instanceof UpgradeableBlockTileEntity) {
-			((UpgradeableBlockTileEntity) te).addUpgradeStacksToList(result);
-		}
+		if (!creative)
+			addBlockToList(result, world, pos);
+		addUpgradeStacksToList(result, world, pos, state);
+		addOtherDropStacksToList(result, world, pos, state);
 
 		return result;
+	}
+
+	public List<ItemStack> getDropsForEmpty(World world, BlockPos pos, IBlockState state) {
+		List<ItemStack> result = new ArrayList<>();
+
+		addUpgradeStacksToList(result, world, pos, state);
+		addOtherDropStacksToList(result, world, pos, state);
+
+		return result;
+	}
+
+	public final void addUpgradeStacksToList(List<ItemStack> list, World world, BlockPos pos, IBlockState state) {
+		TileEntity te = world.getTileEntity(pos);
+		if (te != null && te instanceof UpgradeableBlockTileEntity) {
+			((UpgradeableBlockTileEntity) te).addUpgradeStacksToList(list);
+		}
+	}
+
+	public void addOtherDropStacksToList(List<ItemStack> list, World world, BlockPos pos, IBlockState state) {
 	}
 
 	public void addBlockToList(List<ItemStack> list, World world, BlockPos pos) {
