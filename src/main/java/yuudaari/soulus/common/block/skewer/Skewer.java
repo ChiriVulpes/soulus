@@ -30,7 +30,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.common.block.UpgradeableBlock;
 import yuudaari.soulus.common.item.BloodCrystal;
 import yuudaari.soulus.common.ModItems;
-import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.Soulus;
 
