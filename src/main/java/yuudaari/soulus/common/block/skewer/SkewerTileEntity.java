@@ -1,40 +1,63 @@
 package yuudaari.soulus.common.block.skewer;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import com.google.common.collect.Lists;
-
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.block.UpgradeableBlock;
 import yuudaari.soulus.common.block.UpgradeableBlock.IUpgrade;
 import yuudaari.soulus.common.block.UpgradeableBlock.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.block.skewer.Skewer.Upgrade;
+import yuudaari.soulus.common.item.BloodCrystal;
 import yuudaari.soulus.common.misc.ModDamageSource;
+import yuudaari.soulus.common.util.Logger;
 
 public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 
+	public int bloodCrystalBlood = 0;
+
 	@Override
-	public UpgradeableBlock getBlock() {
+	public Skewer getBlock() {
 		return Skewer.INSTANCE;
 	}
 
+	/////////////////////////////////////////
+	// Events
+	//
+
 	@Override
 	public void update() {
-		EnumFacing facing = world.getBlockState(pos).getValue(Skewer.FACING);
-		for (EntityLivingBase entity : world.getEntitiesWithinAABB(EntityLivingBase.class,
-				Skewer.getSpikeHitbox(facing, pos))) {
-			entity.attackEntityFrom(ModDamageSource.SKEWER, 1);
+		if (world.isRemote)
+			return;
+
+		Skewer skewer = getBlock();
+		IBlockState state = world.getBlockState(pos);
+		if (state.getValue(Skewer.EXTENDED)) {
+			EnumFacing facing = state.getValue(Skewer.FACING);
+			for (EntityLivingBase entity : world.getEntitiesWithinAABB(EntityLivingBase.class,
+					Skewer.getSpikeHitbox(facing, pos))) {
+
+				if (!entity.getIsInvulnerable()
+						&& (float) entity.hurtResistantTime <= (float) entity.maxHurtResistantTime / 2.0F) {
+					float damage = skewer.baseDamage;
+
+					damage += skewer.upgradeDamageEffectiveness * upgrades.get(Upgrade.DAMAGE);
+
+					entity.attackEntityFrom(ModDamageSource.SKEWER, damage);
+
+					if (world.rand.nextDouble() < skewer.chanceForBloodPerHit
+							&& upgrades.get(Upgrade.BLOOD_CRYSTAL) == 1) {
+						bloodCrystalBlood += getBlock().bloodPerDamage * damage;
+						if (bloodCrystalBlood > BloodCrystal.INSTANCE.requiredBlood) {
+							bloodCrystalBlood = BloodCrystal.INSTANCE.requiredBlood;
+						}
+						BloodCrystal.bloodParticles(entity);
+						blockUpdate();
+					}
+				}
+			}
 		}
 	}
 
@@ -44,35 +67,26 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 	}
 
 	@Override
+	public void onInsertUpgrade(ItemStack stack, IUpgrade upgrade, int newQuantity) {
+		Logger.info(stack.toString() + upgrade);
+		if (upgrade == Upgrade.BLOOD_CRYSTAL) {
+			Logger.info("blood" + BloodCrystal.getContainedBlood(stack));
+			this.bloodCrystalBlood = BloodCrystal.getContainedBlood(stack);
+		}
+	}
+
+	/////////////////////////////////////////
+	// NBT
+	//
+
+	@Override
 	public void onReadFromNBT(NBTTagCompound compound) {
-		super.readFromNBT(compound);
+		bloodCrystalBlood = compound.getInteger("blood_crystal_stored_blood");
 	}
 
 	@Override
 	public void onWriteToNBT(NBTTagCompound compound) {
-		super.writeToNBT(compound);
+		compound.setInteger("blood_crystal_stored_blood", bloodCrystalBlood);
 	}
 
-	@SideOnly(Side.CLIENT)
-	public List<String> getWailaTooltip(List<String> currenttip, boolean isSneaking) {
-		currenttip.add(I18n.format("waila." + Soulus.MODID
-				+ (world.getBlockState(pos).getValue(Skewer.EXTENDED) ? ":skewer.extended" : ":skewer.not_extended")));
-
-		if (isSneaking) {
-			List<IUpgrade> upgrades = new ArrayList<>(Arrays.asList(Upgrade.values()));
-			for (IUpgrade upgrade : Lists.reverse(insertionOrder)) {
-				upgrades.remove(upgrade);
-				currenttip.add(I18n
-						.format("waila." + Soulus.MODID + ":skewer.has_upgrade_" + upgrade.getName().toLowerCase()));
-			}
-			for (IUpgrade upgrade : upgrades) {
-				currenttip.add(I18n.format(
-						"waila." + Soulus.MODID + ":skewer.missing_upgrade_" + upgrade.getName().toLowerCase()));
-			}
-		} else {
-			currenttip.add(I18n.format("waila." + Soulus.MODID + ":skewer.show_upgrades"));
-		}
-
-		return currenttip;
-	}
 }

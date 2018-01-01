@@ -1,7 +1,9 @@
 package yuudaari.soulus.common.block.summoner;
 
+import java.util.Map;
+import java.util.Random;
+import javax.annotation.Nonnull;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -10,27 +12,15 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.block.EndersteelType;
-import yuudaari.soulus.common.block.UpgradeableBlock.IUpgrade;
-import yuudaari.soulus.common.block.UpgradeableBlock.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.block.summoner.Summoner.Upgrade;
+import yuudaari.soulus.common.block.UpgradeableBlock.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.config.EssenceConfig;
 import yuudaari.soulus.common.util.Range;
-
-import com.google.common.collect.Lists;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
-import javax.annotation.Nonnull;
+import yuudaari.soulus.Soulus;
 
 public class SummonerTileEntity extends UpgradeableBlockTileEntity implements ITickable {
 
@@ -63,7 +53,8 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		this.resetTimer();
 	}
 
-	private void updateUpgrades() {
+	@Override
+	public void onUpdateUpgrades() {
 		updateUpgrades(true);
 	}
 
@@ -143,7 +134,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		return essenceType;
 	}
 
-	private float getSpawnPercent() {
+	public float getSpawnPercent() {
 		return (lastTimeTillSpawn - timeTillSpawn) / (float) lastTimeTillSpawn;
 	}
 
@@ -176,7 +167,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 		if (!hasInit) {
 			hasInit = true;
-			updateUpgrades();
+			onUpdateUpgrades();
 		}
 
 		double activationAmount = activationAmount();
@@ -220,13 +211,6 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 		if (update)
 			blockUpdate();
-	}
-
-	private void blockUpdate() {
-		if (world != null) {
-			IBlockState blockState = world.getBlockState(pos);
-			world.notifyBlockUpdate(pos, blockState, blockState, 7);
-		}
 	}
 
 	@Override
@@ -376,33 +360,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 	@Override
 	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
-		return oldState.getBlock() != newState.getBlock();
-	}
-
-	@SideOnly(Side.CLIENT)
-	public List<String> getWailaTooltip(List<String> currenttip, boolean isSneaking) {
-		currenttip.add(I18n.format("waila." + Soulus.MODID + ":summoner.summon_percentage",
-				(int) Math.floor(getSpawnPercent() * 100)));
-
-		if (isSneaking) {
-			for (IUpgrade upgrade : Lists.reverse(insertionOrder)) {
-				upgrades.remove(upgrade);
-				currenttip.add(
-						I18n.format("waila." + Soulus.MODID + ":summoner.upgrades_" + upgrade.getName().toLowerCase(),
-								upgrades.get(upgrade), upgrade.getMaxQuantity()));
-			}
-			for (IUpgrade upgrade : getBlock().getUpgrades()) {
-				currenttip.add(
-						I18n.format("waila." + Soulus.MODID + ":summoner.upgrades_" + upgrade.getName().toLowerCase(),
-								upgrades.get(upgrade), upgrade.getMaxQuantity()));
-			}
-		} else {
-			currenttip.add(I18n.format("waila." + Soulus.MODID + ":summoner.show_upgrades"));
-		}
-
-		currenttip.add(I18n.format("tooltip." + Soulus.MODID + ":summoner.style."
-				+ EndersteelType.byMetadata(getBlockMetadata()).getName()));
-
-		return currenttip;
+		return oldState.getBlock() != newState.getBlock()
+				|| oldState.getValue(Summoner.HAS_SOULBOOK) != newState.getValue(Summoner.HAS_SOULBOOK);
 	}
 }

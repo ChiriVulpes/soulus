@@ -14,7 +14,7 @@ public class BloodCrystalHitEntityHandler implements IMessageHandler<BloodCrysta
 	public IMessage onMessage(BloodCrystalHitEntity message, MessageContext ctx) {
 		EntityLivingBase entity = message.getEntity();
 		if (entity != null) {
-			BloodCrystal.particles(entity);
+			BloodCrystal.bloodParticles(entity);
 		}
 		return null;
 	}

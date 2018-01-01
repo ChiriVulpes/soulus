@@ -1,13 +1,20 @@
 package yuudaari.soulus.common.block;
 
+import com.google.common.collect.Lists;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import mcp.mobius.waila.api.IWailaDataAccessor;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,27 +30,29 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import yuudaari.soulus.Soulus;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Optional;
+import yuudaari.soulus.common.config.ManualSerializer;
+import yuudaari.soulus.common.config.Serializer;
+import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.ModBlock;
-import yuudaari.soulus.common.config.Serializer;
-import yuudaari.soulus.common.config.ManualSerializer;
-import yuudaari.soulus.common.util.Logger;
+import yuudaari.soulus.Soulus;
 
 @Mod.EventBusSubscriber(modid = Soulus.MODID)
-public abstract class UpgradeableBlock extends ModBlock {
+public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.UpgradeableBlockTileEntity>
+		extends ModBlock {
 
 	/////////////////////////////////////////
 	// Upgrades
@@ -51,11 +60,20 @@ public abstract class UpgradeableBlock extends ModBlock {
 	public static interface IUpgrade {
 		public ItemStack getItemStack(int quantity);
 
+		public default ItemStack getItemStackForTileEntity(UpgradeableBlockTileEntity te, int quantity) {
+			return getItemStack(quantity);
+		}
+
 		public default void addItemStackToList(List<ItemStack> list, int quantity) {
-			ItemStack item = getItemStack(1);
+			addItemStackToList(null, list, quantity);
+		}
+
+		public default void addItemStackToList(UpgradeableBlockTileEntity te, List<ItemStack> list, int quantity) {
+			ItemStack item = te == null ? getItemStack(1) : getItemStackForTileEntity(te, 1);
 			int maxStackSize = item.getMaxStackSize();
 			while (quantity > 0) {
-				list.add(getItemStack(Math.min(maxStackSize, quantity)));
+				int stackSize = Math.min(maxStackSize, quantity);
+				list.add(te == null ? getItemStack(stackSize) : getItemStackForTileEntity(te, stackSize));
 				quantity -= maxStackSize;
 			}
 		}
@@ -77,6 +95,8 @@ public abstract class UpgradeableBlock extends ModBlock {
 	// Serializer
 	//
 
+	public abstract Class<? extends UpgradeableBlock<TileEntityClass>> getSerializationClass();
+
 	public final JsonElement serialize() {
 		return serializer.serialize(this);
 	}
@@ -86,21 +106,19 @@ public abstract class UpgradeableBlock extends ModBlock {
 		return null;
 	}
 
-	public final Serializer<UpgradeableBlock> serializer = new Serializer<>();
+	public final Serializer<? extends UpgradeableBlock<TileEntityClass>> serializer = new Serializer<>(
+			getSerializationClass());
 	{
 		serializer.otherHandlers.put("upgradeMaxCounts",
 				new ManualSerializer(this::serializeMaxUpgrades, this::deserializeMaxUpgrades));
 	}
 
 	private final JsonElement serializeMaxUpgrades(Object from) {
-		@SuppressWarnings("unchecked")
-		Map<IUpgrade, Integer> upgrades = (Map<IUpgrade, Integer>) from;
-
 		JsonObject result = new JsonObject();
 
-		for (Map.Entry<IUpgrade, Integer> upgrade : upgrades.entrySet()) {
-			String key = upgrade.getKey().getName().toLowerCase();
-			result.addProperty(key, upgrade.getValue());
+		for (IUpgrade upgrade : getUpgrades()) {
+			String key = upgrade.getName().toLowerCase();
+			result.addProperty(key, upgrade.getMaxQuantity());
 		}
 
 		return result;
@@ -111,9 +129,6 @@ public abstract class UpgradeableBlock extends ModBlock {
 			Logger.warn("Max upgrades must be an object");
 			return current;
 		}
-
-		@SuppressWarnings("unchecked")
-		Map<IUpgrade, Integer> currentUpgrades = (Map<IUpgrade, Integer>) current;
 
 		JsonObject upgrades = from.getAsJsonObject();
 		for (Map.Entry<String, JsonElement> entry : upgrades.entrySet()) {
@@ -136,7 +151,7 @@ public abstract class UpgradeableBlock extends ModBlock {
 				continue;
 			}
 
-			currentUpgrades.put(upgrade, val.getAsInt());
+			upgrade.setMaxQuantity(val.getAsByte());
 		}
 
 		return current;
@@ -153,32 +168,35 @@ public abstract class UpgradeableBlock extends ModBlock {
 		registerWailaProvider(UpgradeableBlock.class);
 	}
 
-	public abstract UpgradeableBlock getInstance();
+	public abstract UpgradeableBlock<TileEntityClass> getInstance();
 
 	/////////////////////////////////////////
 	// Events
 	//
 
+	@SuppressWarnings("unchecked")
 	@SubscribeEvent
 	public static final void rightClickBlock(PlayerInteractEvent.RightClickBlock event) {
 		World world = event.getWorld();
 		BlockPos pos = event.getPos();
 		IBlockState blockState = world.getBlockState(pos);
 		Block block = blockState.getBlock();
-		if (block instanceof UpgradeableBlock
-				&& ((UpgradeableBlock) block).canActivateWithItem(event.getItemStack(), world, pos)) {
+		if (block instanceof UpgradeableBlock && ((UpgradeableBlock<? extends UpgradeableBlockTileEntity>) block)
+				.canActivateWithItem(event.getItemStack(), world, pos)) {
 			event.setUseBlock(Result.ALLOW);
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@SubscribeEvent
 	public static final void onBlockBreak(BlockEvent.BreakEvent event) {
 		Block block = event.getState().getBlock();
 		if (block instanceof UpgradeableBlock) {
 			World world = event.getWorld();
 			BlockPos pos = event.getPos();
-			((UpgradeableBlock) block).onBlockDestroy(world, pos, world.getTileEntity(pos), EnchantmentHelper
-					.getEnchantmentLevel(Enchantments.FORTUNE, event.getPlayer().getHeldItemMainhand()));
+			((UpgradeableBlock<? extends UpgradeableBlockTileEntity>) block).onBlockDestroy(world, pos,
+					world.getTileEntity(pos), EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE,
+							event.getPlayer().getHeldItemMainhand()));
 		}
 	}
 
@@ -232,7 +250,7 @@ public abstract class UpgradeableBlock extends ModBlock {
 		int count = ute.removeUpgrade(upgrade);
 
 		List<ItemStack> toReturn = new ArrayList<>();
-		upgrade.addItemStackToList(toReturn, count);
+		upgrade.addItemStackToList(ute, toReturn, count);
 
 		returnItemsToPlayer(world, toReturn, player);
 
@@ -254,8 +272,7 @@ public abstract class UpgradeableBlock extends ModBlock {
 		if (upgrade == null)
 			return false;
 
-		int insertedQuantity = ute.insertUpgrade(upgrade, stack.getCount());
-		stack.shrink(insertedQuantity);
+		ute.insertUpgrade(stack, upgrade, player.isSneaking() ? stack.getCount() : 1);
 
 		return true;
 	}
@@ -332,7 +349,7 @@ public abstract class UpgradeableBlock extends ModBlock {
 
 	public static abstract class UpgradeableBlockTileEntity extends TileEntity implements ITickable {
 
-		public abstract UpgradeableBlock getBlock();
+		public abstract UpgradeableBlock<? extends UpgradeableBlockTileEntity> getBlock();
 
 		public Map<IUpgrade, Byte> upgrades = new HashMap<>();
 		{
@@ -345,7 +362,7 @@ public abstract class UpgradeableBlock extends ModBlock {
 
 		public void addUpgradeStacksToList(List<ItemStack> list) {
 			for (Map.Entry<IUpgrade, Byte> upgrade : upgrades.entrySet()) {
-				upgrade.getKey().addItemStackToList(list, (int) upgrade.getValue());
+				upgrade.getKey().addItemStackToList(this, list, (int) upgrade.getValue());
 			}
 		}
 
@@ -359,7 +376,8 @@ public abstract class UpgradeableBlock extends ModBlock {
 			return null;
 		}
 
-		public int insertUpgrade(IUpgrade upgrade, int quantity) {
+		public final void insertUpgrade(ItemStack stack, IUpgrade upgrade, int quantity) {
+			this.insertionOrder.remove(upgrade);
 			this.insertionOrder.push(upgrade);
 
 			int currentQuantity = upgrades.get(upgrade);
@@ -368,21 +386,27 @@ public abstract class UpgradeableBlock extends ModBlock {
 			int newQuantity = currentQuantity + insertQuantity;
 
 			upgrades.put(upgrade, (byte) newQuantity);
-			onInsertUpgrade(upgrade, newQuantity);
+			onInsertUpgrade(stack, upgrade, newQuantity);
 
-			return insertQuantity;
+			stack.shrink(insertQuantity);
+
+			onUpdateUpgrades();
+			blockUpdate();
 		}
 
-		public void onInsertUpgrade(IUpgrade upgrade, int newQuantity) {
+		public void onInsertUpgrade(ItemStack stack, IUpgrade upgrade, int newQuantity) {
 		}
 
-		public IUpgrade popLastUpgrade() {
+		public final IUpgrade popLastUpgrade() {
 			return insertionOrder.size() == 0 ? null : insertionOrder.pop();
 		}
 
 		public int removeUpgrade(IUpgrade upgrade) {
 			int result = upgrades.get(upgrade);
 			upgrades.put(upgrade, (byte) 0);
+
+			onUpdateUpgrades();
+			blockUpdate();
 			return result;
 		}
 
@@ -468,5 +492,72 @@ public abstract class UpgradeableBlock extends ModBlock {
 		public final void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 			readFromNBT(pkt.getNbtCompound());
 		}
+
+		protected final void blockUpdate() {
+			if (world != null) {
+				IBlockState blockState = world.getBlockState(pos);
+				world.notifyBlockUpdate(pos, blockState, blockState, 7);
+			}
+		}
 	}
+
+	/////////////////////////////////////////
+	// Waila
+	//
+
+	@Optional.Method(modid = "waila")
+	@Override
+	public ItemStack getWailaStack(IWailaDataAccessor accessor) {
+		return getItemStack();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Optional.Method(modid = "waila")
+	@SideOnly(Side.CLIENT)
+	@Override
+	public final List<String> getWailaTooltip(List<String> currentTooltip, IWailaDataAccessor accessor) {
+		TileEntity te = accessor.getTileEntity();
+		if (te == null || !(te instanceof UpgradeableBlockTileEntity))
+			return currentTooltip;
+
+		UpgradeableBlockTileEntity ute = (UpgradeableBlockTileEntity) te;
+
+		boolean isSneaking = accessor.getPlayer().isSneaking();
+
+		onWailaTooltipHeader(currentTooltip, accessor.getBlockState(), (TileEntityClass) te, isSneaking);
+
+		if (isSneaking) {
+			List<IUpgrade> upgrades = new ArrayList<>(Arrays.asList(getUpgrades()));
+			for (IUpgrade upgrade : Lists.reverse(ute.insertionOrder)) {
+				upgrades.remove(upgrade);
+				currentTooltip
+						.add(I18n.format("waila." + getRegistryName() + ".upgrades_" + upgrade.getName().toLowerCase(),
+								ute.upgrades.get(upgrade), upgrade.getMaxQuantity()));
+			}
+			for (IUpgrade upgrade : upgrades) {
+				currentTooltip
+						.add(I18n.format("waila." + getRegistryName() + ".upgrades_" + upgrade.getName().toLowerCase(),
+								ute.upgrades.get(upgrade), upgrade.getMaxQuantity()));
+			}
+		} else {
+			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":upgradeable_block.show_upgrades"));
+		}
+
+		onWailaTooltipFooter(currentTooltip, accessor.getBlockState(), (TileEntityClass) te, isSneaking);
+
+		return currentTooltip;
+	}
+
+	@Optional.Method(modid = "waila")
+	@SideOnly(Side.CLIENT)
+	protected void onWailaTooltipHeader(List<String> currentTooltip, IBlockState blockState, TileEntityClass te,
+			boolean isSneaking) {
+	}
+
+	@Optional.Method(modid = "waila")
+	@SideOnly(Side.CLIENT)
+	protected void onWailaTooltipFooter(List<String> currentTooltip, IBlockState blockState, TileEntityClass te,
+			boolean isSneaking) {
+	}
+
 }

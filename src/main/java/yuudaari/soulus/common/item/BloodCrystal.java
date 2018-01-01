@@ -172,8 +172,7 @@ public class BloodCrystal extends SummonerUpgrade {
 			target.attackEntityFrom(ModDamageSource.BLOOD_CRYSTAL, this.creaturePrickAmount);
 			int blood = getContainedBlood(stack);
 			setContainedBlood(stack, blood + this.creaturePrickWorth);
-			SoulsPacketHandler.INSTANCE.sendToAllAround(new BloodCrystalHitEntity(target),
-					new TargetPoint(target.dimension, target.posX, target.posY, target.posZ, 128));
+			BloodCrystal.bloodParticles(target);
 		}
 		return true;
 	}
@@ -222,8 +221,17 @@ public class BloodCrystal extends SummonerUpgrade {
 		return setContainedBlood(stack, INSTANCE.requiredBlood);
 	}
 
+	public static void bloodParticles(EntityLivingBase entity) {
+		if (entity.world.isRemote) {
+			particles(entity);
+		} else {
+			SoulsPacketHandler.INSTANCE.sendToAllAround(new BloodCrystalHitEntity(entity),
+					new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 128));
+		}
+	}
+
 	@SideOnly(Side.CLIENT)
-	public static void particles(EntityLivingBase entity) {
+	private static void particles(EntityLivingBase entity) {
 		World world = entity.getEntityWorld();
 		Random rand = world.rand;
 

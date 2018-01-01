@@ -26,7 +26,7 @@ public class Serializer<T> {
 	public Class<T> targetClass;
 
 	/** A camelCase list of primitive fields to serialize/deserialize (will appear as snake_case in json) */
-	public List<String> fields;
+	public List<String> fields = new ArrayList<>();
 
 	public Map<String, Serializer<?>> fieldHandlers = new HashMap<>();
 	public Map<String, Serializer<?>> otherHandlers = new HashMap<>();
@@ -36,12 +36,12 @@ public class Serializer<T> {
 
 	public Serializer(Class<T> cls, String... primitiveFields) {
 		this.targetClass = cls;
-		this.fields = new ArrayList<>(Arrays.asList(primitiveFields));
+		this.fields.addAll(Arrays.asList(primitiveFields));
 	}
 
 	public Serializer(Class<T> cls, Map<String, Serializer<?>> handlers, String... primitiveFields) {
 		this.targetClass = cls;
-		this.fields = new ArrayList<>(Arrays.asList(primitiveFields));
+		this.fields.addAll(Arrays.asList(primitiveFields));
 		this.fieldHandlers = handlers;
 	}
 

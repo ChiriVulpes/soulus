@@ -147,11 +147,7 @@ tile.soulus:bars_endersteel.name=Endersteel Bars
 
 tile.soulus:skewer.name=Skewer
 
-tile.soulus:summoner_empty.normal.name=Empty Summoner
-tile.soulus:summoner_empty.wood.name=Empty Summoner
-tile.soulus:summoner_empty.stone.name=Empty Summoner
-tile.soulus:summoner_empty.end_stone.name=Empty Summoner
-tile.soulus:summoner_empty.blaze.name=Empty Summoner
+tile.soulus:summoner_empty.name=Empty Summoner
 tile.soulus:summoner.name=Summoner
 
 tile.soulus:summoner.minecraft:bat.name=Summoner of Bat
@@ -195,8 +191,9 @@ tile.soulus:summoner.minecraft:zombie.name=Summoner of Zombie
 death.attack.soulus:blood_crystal=%1$s sacrificed themselves to a blood crystal
 death.attack.soulus:skewer=%1$s became a shishkebab
 
+waila.soulus:upgradeable_block.show_upgrades=§8§oSneak to show upgrades
+
 waila.soulus:summoner.summon_percentage=%1$s%% summoned
-waila.soulus:summoner.show_upgrades=§8§oSneak to show upgrades
 waila.soulus:summoner.upgrades_delay=%1$s/%2$s §3Oscillating Gears
 waila.soulus:summoner.upgrades_count=%1$s/%2$s §4Blood Crystals
 waila.soulus:summoner.upgrades_range=%1$s/%2$s §6Murky Orbs
@@ -211,12 +208,8 @@ tooltip.soulus:summoner.style.blaze=§8Style: §cBlazing
 
 waila.soulus:skewer.extended=Extended
 waila.soulus:skewer.not_extended=Not Extended
-waila.soulus:skewer.show_upgrades=§8§oSneak to show upgrades
-waila.soulus:skewer.missing_upgrade_blood_crystal=§4Blood Crystal: §7No
-waila.soulus:skewer.missing_upgrade_damage=§6Damage Upgrade: §7No
-waila.soulus:skewer.missing_upgrade_poison=§2Poison Upgrade: §7No
-waila.soulus:skewer.missing_upgrade_power=§cPower Upgrade: §7No
-waila.soulus:skewer.has_upgrade_blood_crystal=§4Blood Crystal: §7Yes
-waila.soulus:skewer.has_upgrade_damage=§6Damage Upgrade: §7Yes
-waila.soulus:skewer.has_upgrade_poison=§2Poison Upgrade: §7Yes
-waila.soulus:skewer.has_upgrade_power=§cPower Upgrade: §7Yes
+waila.soulus:skewer.blood_crystal_stored_blood=§4Blood Crystal: §8%1$s/%2$s Blood
+waila.soulus:skewer.upgrades_blood_crystal=%1$s/%2$s §4Blood Crystal
+waila.soulus:skewer.upgrades_damage=%1$s/%2$s §6Damage Upgrade
+waila.soulus:skewer.upgrades_poison=%1$s/%2$s §2Poison Upgrade
+waila.soulus:skewer.upgrades_power=%1$s/%2$s §cPower Upgrade

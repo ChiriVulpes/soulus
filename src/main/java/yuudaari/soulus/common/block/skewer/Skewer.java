@@ -2,8 +2,6 @@ package yuudaari.soulus.common.block.skewer;
 
 import java.util.Arrays;
 import java.util.List;
-
-import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
@@ -11,30 +9,32 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.block.UpgradeableBlock;
 import yuudaari.soulus.common.item.BloodCrystal;
+import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.Material;
-import net.minecraftforge.fml.common.Optional;
+import yuudaari.soulus.Soulus;
 
-public class Skewer extends UpgradeableBlock {
+public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 
 	/////////////////////////////////////////
 	// Upgrades
@@ -102,9 +102,19 @@ public class Skewer extends UpgradeableBlock {
 
 		@Override
 		public ItemStack getItemStack(int quantity) {
-			ItemStack stack = new ItemStack(this.stack.getItem(), quantity);
+			Logger.info("hoo");
+			return new ItemStack(this.stack.getItem(), quantity);
+		}
+
+		@Override
+		public ItemStack getItemStackForTileEntity(UpgradeableBlockTileEntity te, int quantity) {
+			ItemStack stack = getItemStack(quantity);
+
 			if (name == "blood_crystal") {
-				BloodCrystal.setFilled(stack);
+				SkewerTileEntity ste = (SkewerTileEntity) te;
+				Logger.info("blood " + ste.bloodCrystalBlood);
+				BloodCrystal.setContainedBlood(stack,
+						Math.min(BloodCrystal.INSTANCE.requiredBlood, ste.bloodCrystalBlood));
 			}
 
 			return stack;
@@ -120,9 +130,15 @@ public class Skewer extends UpgradeableBlock {
 	// Serializer
 	//
 
-	public double baseDamage = 1;
-	public double upgradeDamageEffectiveness = 0.15;
+	@Override
+	public Class<? extends UpgradeableBlock<SkewerTileEntity>> getSerializationClass() {
+		return Skewer.class;
+	}
+
+	public float baseDamage = 1;
+	public float upgradeDamageEffectiveness = 0.15f;
 	public int bloodPerDamage = 1;
+	public double chanceForBloodPerHit = 0.5;
 
 	{
 		serializer.fields.addAll(Arrays.asList("baseDamage", "upgradeDamageEffectiveness", "bloodPerDamage"));
@@ -141,13 +157,12 @@ public class Skewer extends UpgradeableBlock {
 		setDefaultState(getDefaultState().withProperty(EXTENDED, false).withProperty(FACING, EnumFacing.NORTH));
 		setHarvestLevel("pickaxe", 1);
 		setHardness(3F);
-		registerWailaProvider(Skewer.class);
 	}
 
 	public static Skewer INSTANCE = new Skewer();
 
 	@Override
-	public UpgradeableBlock getInstance() {
+	public UpgradeableBlock<SkewerTileEntity> getInstance() {
 		return INSTANCE;
 	}
 
@@ -155,6 +170,10 @@ public class Skewer extends UpgradeableBlock {
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
+
+	/////////////////////////////////////////
+	// Events
+	//
 
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
@@ -193,7 +212,7 @@ public class Skewer extends UpgradeableBlock {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(EXTENDED, (meta & 1) == 0 ? true : false).withProperty(FACING,
+		return getDefaultState().withProperty(EXTENDED, (meta & 1) == 0 ? false : true).withProperty(FACING,
 				EnumFacing.getFront(meta / 2));
 	}
 
@@ -298,19 +317,18 @@ public class Skewer extends UpgradeableBlock {
 	//
 
 	@Optional.Method(modid = "waila")
-	@Override
-	public ItemStack getWailaStack(IWailaDataAccessor accessor) {
-		return getItemStack();
-	}
-
-	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	@Override
-	public List<String> getWailaTooltip(List<String> currentTooltip, IWailaDataAccessor accessor) {
-		TileEntity te = accessor.getTileEntity();
-		if (te == null || !(te instanceof SkewerTileEntity))
-			return currentTooltip;
-		return ((SkewerTileEntity) te).getWailaTooltip(currentTooltip, accessor.getPlayer().isSneaking());
+	protected void onWailaTooltipHeader(List<String> currentTooltip, IBlockState blockState, SkewerTileEntity te,
+			boolean isSneaking) {
+
+		currentTooltip.add(I18n.format("waila." + Soulus.MODID
+				+ (blockState.getValue(Skewer.EXTENDED) ? ":skewer.extended" : ":skewer.not_extended")));
+
+		if (te.upgrades.get(Upgrade.BLOOD_CRYSTAL) == 1) {
+			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":skewer.blood_crystal_stored_blood",
+					te.bloodCrystalBlood, BloodCrystal.INSTANCE.requiredBlood));
+		}
 	}
 
 }

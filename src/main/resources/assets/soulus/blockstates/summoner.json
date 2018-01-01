@@ -30,6 +30,10 @@
 					"all": "soulus:blocks/summoner_blaze"
 				}
 			}
+		},
+		"has_soulbook": {
+			"true": {},
+			"false": {}
 		}
 	}
 }

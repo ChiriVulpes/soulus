@@ -99,13 +99,13 @@ public class Soulbook extends ModItem {
 	}
 
 	public static ItemStack getStack(String essenceType) {
-		return getStack(essenceType, 1);
+		return getStack(essenceType, (byte) 0);
 	}
 
-	public static ItemStack getStack(String essenceType, Integer count) {
-		ItemStack stack = new ItemStack(INSTANCE, count);
+	public static ItemStack getStack(String essenceType, byte essenceAmount) {
+		ItemStack stack = new ItemStack(INSTANCE, 1);
 		EssenceType.setEssenceType(stack, essenceType);
-		setContainedEssence(stack, 0);
+		setContainedEssence(stack, essenceAmount);
 		return stack;
 	}
 

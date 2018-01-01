@@ -1,22 +1,17 @@
 package yuudaari.soulus.common.block.summoner;
 
-import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.CreativeTab;
-import yuudaari.soulus.common.ModItems;
-import yuudaari.soulus.common.block.EndersteelType;
-import yuudaari.soulus.common.block.UpgradeableBlock;
-import yuudaari.soulus.common.item.BloodCrystal;
-import yuudaari.soulus.common.item.OrbMurky;
-import yuudaari.soulus.common.item.Soulbook;
-import yuudaari.soulus.common.util.Material;
-import yuudaari.soulus.common.util.EssenceType;
-import yuudaari.soulus.common.util.Range;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -30,24 +25,26 @@ import net.minecraft.item.ItemMultiTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.common.Optional;
+import yuudaari.soulus.common.block.EndersteelType;
+import yuudaari.soulus.common.block.UpgradeableBlock;
+import yuudaari.soulus.common.CreativeTab;
+import yuudaari.soulus.common.item.BloodCrystal;
+import yuudaari.soulus.common.item.OrbMurky;
+import yuudaari.soulus.common.item.Soulbook;
+import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.util.EssenceType;
+import yuudaari.soulus.common.util.Material;
+import yuudaari.soulus.common.util.Range;
+import yuudaari.soulus.Soulus;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import mcp.mobius.waila.api.IWailaDataAccessor;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Arrays;
-
-public class Summoner extends UpgradeableBlock {
+public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 	/////////////////////////////////////////
 	// Upgrades
@@ -126,6 +123,11 @@ public class Summoner extends UpgradeableBlock {
 	// Serializer
 	//
 
+	@Override
+	public Class<? extends UpgradeableBlock<SummonerTileEntity>> getSerializationClass() {
+		return Summoner.class;
+	}
+
 	public int nonUpgradedSpawningRadius = 4;
 	public Range nonUpgradedCount = new Range(1, 2);
 	public Range nonUpgradedDelay = new Range(10000, 20000);
@@ -163,13 +165,14 @@ public class Summoner extends UpgradeableBlock {
 		setHarvestLevel("pickaxe", 1);
 		setSoundType(SoundType.METAL);
 		disableStats();
-		registerWailaProvider(Summoner.class);
+		setDefaultState(
+				getDefaultState().withProperty(HAS_SOULBOOK, false).withProperty(VARIANT, EndersteelType.NORMAL));
 	}
 
 	public static Summoner INSTANCE = new Summoner();
 
 	@Override
-	public UpgradeableBlock getInstance() {
+	public UpgradeableBlock<SummonerTileEntity> getInstance() {
 		return INSTANCE;
 	}
 
@@ -204,9 +207,13 @@ public class Summoner extends UpgradeableBlock {
 		NonNullList<ItemStack> stacks = NonNullList.create();
 		getSubBlocks(CreativeTab.INSTANCE, stacks);
 		for (ItemStack stack : stacks) {
+			IBlockState state = getStateFromMeta(stack.getMetadata());
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), stack.getMetadata(),
-					new ModelResourceLocation(this.getRegistryName(), VARIANT.getName() + "="
-							+ EndersteelType.byMetadata(stack.getMetadata()).getName().toLowerCase()));
+					new ModelResourceLocation(this.getRegistryName(), HAS_SOULBOOK.getName() + "=false,"
+							+ VARIANT.getName() + "=" + state.getValue(VARIANT).getName().toLowerCase()));
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), stack.getMetadata() + 1,
+					new ModelResourceLocation(this.getRegistryName(), HAS_SOULBOOK.getName() + "=true,"
+							+ VARIANT.getName() + "=" + state.getValue(VARIANT).getName().toLowerCase()));
 		}
 	}
 
@@ -221,7 +228,7 @@ public class Summoner extends UpgradeableBlock {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(HAS_SOULBOOK, (meta & 1) == 0 ? true : false).withProperty(VARIANT,
+		return getDefaultState().withProperty(HAS_SOULBOOK, (meta & 1) == 0 ? false : true).withProperty(VARIANT,
 				EndersteelType.byMetadata(meta / 2));
 	}
 
@@ -247,7 +254,8 @@ public class Summoner extends UpgradeableBlock {
 
 		@Override
 		public String getUnlocalizedNameInefficiently(@Nonnull ItemStack stack) {
-			return "tile." + Soulus.MODID + ":summoner." + EssenceType.getEssenceType(stack);
+			String essenceType = EssenceType.getEssenceType(stack);
+			return "tile." + getRegistryName() + (essenceType == null ? "_empty" : "." + essenceType);
 		}
 
 		@Override
@@ -255,7 +263,7 @@ public class Summoner extends UpgradeableBlock {
 		public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip,
 				ITooltipFlag flagIn) {
 			tooltip.add(I18n.format("tooltip." + Soulus.MODID + ":summoner.style."
-					+ EndersteelType.byMetadata(stack.getItemDamage()).getName()));
+					+ EndersteelType.byMetadata(stack.getItemDamage() / 2).getName()));
 		}
 	}
 
@@ -311,6 +319,8 @@ public class Summoner extends UpgradeableBlock {
 
 			returnItemsToPlayer(world, Collections.singletonList(Soulbook.getFilled(essenceType)), player);
 
+			world.setBlockState(pos, getDefaultState().withProperty(VARIANT, state.getValue(VARIANT)));
+
 			return true;
 		}
 
@@ -364,6 +374,8 @@ public class Summoner extends UpgradeableBlock {
 			}
 
 			te.setEssenceType(EssenceType.getEssenceType(stack));
+
+			stack.shrink(1);
 		}
 
 		// we can't insert anything else if it's an empty summoner
@@ -381,12 +393,22 @@ public class Summoner extends UpgradeableBlock {
 	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	@Override
-	public List<String> getWailaTooltip(List<String> currentTooltip, IWailaDataAccessor accessor) {
-		TileEntity te = accessor.getTileEntity();
-		EntityPlayer player = accessor.getPlayer();
-		if (te == null || player == null || !(te instanceof SummonerTileEntity))
-			return null;
-		return ((SummonerTileEntity) te).getWailaTooltip(currentTooltip, player.isSneaking());
+	protected void onWailaTooltipHeader(List<String> currentTooltip, IBlockState blockState, SummonerTileEntity te,
+			boolean isSneaking) {
+
+		currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":summoner.summon_percentage",
+				(int) Math.floor(te.getSpawnPercent() * 100)));
+
+	}
+
+	@Optional.Method(modid = "waila")
+	@SideOnly(Side.CLIENT)
+	@Override
+	protected void onWailaTooltipFooter(List<String> currentTooltip, IBlockState blockState, SummonerTileEntity te,
+			boolean isSneaking) {
+
+		currentTooltip.add(
+				I18n.format("tooltip." + Soulus.MODID + ":summoner.style." + blockState.getValue(VARIANT).getName()));
 	}
 
 	@Optional.Method(modid = "waila")

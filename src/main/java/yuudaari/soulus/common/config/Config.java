@@ -34,9 +34,9 @@ public class Config {
 	public int boneChunkParticleCount = 3;
 	public List<EssenceConfig> essences = EssenceConfig.getDefaultCreatureConfigs();
 
-	public int getSoulbookQuantity(String mobTarget) {
+	public byte getSoulbookQuantity(String essenceType) {
 		for (EssenceConfig config : essences) {
-			if (config.essence.equals(mobTarget)) {
+			if (config.essence.equals(essenceType)) {
 				return config.soulbookQuantity;
 			}
 		}
