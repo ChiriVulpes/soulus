@@ -15,7 +15,7 @@ See below for an in-depth list of features in the mod.
 ## Table of Contents
 - [Download](#download-)
 - [Previews](#previews-)
-- [No Mob Spawning](#no-mob-spawning-)
+- [No Mob Spawning and No Mob Drops](#no-mob-spawning-and-no-mob-drops-)
 - [Sledgehammer](#sledgehammer-)
 - [Fossils](#fossils-)
 - [Bone Chunks and Essences](#bone-chunks-and-essences-)
@@ -26,6 +26,8 @@ See below for an in-depth list of features in the mod.
 		- [Oscillating Gear](#oscillating-gear-)
 		- [Murky Orb](#murky-orb-)
 		- [Blood Crystal](#blood-crystal-)
+- [Skewer](#skewer-)
+- [Bone Drops](#bone-drops-)
 - [Misc](#misc-)
 	- [Glue](#glue-)
 	- [Bark](#bark-)
@@ -45,17 +47,11 @@ See below for an in-depth list of features in the mod.
 
 ![Items](./preview/items.png)
 
-The following preview images are of a Summoner with maximum upgrades:
+![Example Farm](./preview/example_farm.png)
 
-![Pigsplosion](./preview/pigsplosion.png)
+## No Mob Spawning and No Mob Drops [↑](#table-of-contents)
 
-![Summoning](./preview/summoning.png)
-
-![Aftermath](./preview/aftermath.png)
-
-## No Mob Spawning [↑](#table-of-contents)
-
-All mob spawning is disabled by default, but you can configure this functionality per dimension, biome, and creature, and even enable/disable drops for each. See [Creatures Config](./docs/CONFIG.md#config-creatures-)
+All mob spawning is disabled by default, but you can configure this functionality per dimension, biome, and creature, and even enable/disable drops for each. See [Creatures Config](./docs/CONFIG.md#configcreatures-)
 
 ## Sledgehammer [↑](#table-of-contents)
 
@@ -83,7 +79,7 @@ Fossil veins are configurable (and you can even use the config to generate veins
 
 A bone chunk can be crafted with a Sledgehammer to produce bonemeal. Normal bone chunks, dry, frozen, and mossy all produce normal bonemeal, while ender bone chunks produce "ender bonemeal" and blackened bone chunks produce "blackened bonemeal". There is a planned use for blackened bonemeal but it has not yet been implemented.
 
-The main use of bone chunks, however, is to collect Mob Essence! By right clicking with a bone chunk, you break it open and collect the essence inside. The possible Essences produced by each bone type is configurable in the [Essences Config](./docs/CONFIG.md#config-essences-), but the defaults are as follows:
+The main use of bone chunks, however, is to collect Mob Essence! By right clicking with a bone chunk, you break it open and collect the essence inside. The possible Essences produced by each bone type is configurable in the [Essences Config](./docs/CONFIG.md#configessences-), but the defaults are as follows:
 
 | Bone Type | Essences |
 | --- | --- |
@@ -101,18 +97,25 @@ The main use of bone chunks, however, is to collect Mob Essence! By right clicki
 
 You craft a Soulbook using a book and some ender bonemeal/ender dust. Soulbooks are how you can reconstruct souls from their essence.
 
-![Filling a Soulbook](./preview/filling_soulbook.png)
+![Filling a Soulbook 1](./preview/filling_soulbook_1.png)
+![Filling a Soulbook 2](./preview/filling_soulbook_2.png)
 
 You can fill a soulbook by crafting it with any number of your chosen type of essence. By default all mob types only require 16 essence to reconstruct their soul. That's two crafts if you craft the soulbook with 8 essence each time.
 
 ## Endersteel [↑](#table-of-contents)
 
-![Crafting Steps for Endersteel](./preview/endersteel.png)
 
 1. Crush an iron ingot into iron dust.
-2. Crush an ender bone chunk into ender bonemeal.
+![Iron Dust](./preview/iron_dust.png)
+
+2. Crush an ender bone chunk into ender dust.
+![Ender Dust](./preview/ender_dust.png)
+
 3. Combine iron dust with ender bonemeal, into an ender-iron dust blend.
+![Iron-Iron Dust Blend](./preview/ender_iron_dust_blend.png)
+
 4. Smelt the ender-iron dust blend to get an endersteel ingot!
+![Endersteel](./preview/endersteel.png)
 
 Endersteel can be converted between a block and nuggets. You can craft Endersteel bars from a 3x2 of ingots. The recipe produces 16 bars.
 
@@ -126,9 +129,9 @@ Here's what they look like in the world:
 
 Using 8 Endersteel bars and an ender bonemeal in the center, you can craft an Empty Summoner.
 
-![Empty Summoner](./preview/empty_summoner.png)
+![Empty Summoner](./preview/summoner.png)
 
-You can also find empty summoners in the world, in the places where mob spawners used to be. (This replacement can be disabled with `config.replace_spawners_with_summoners`, but fair warning: the vanilla mob spawner is unable to spawn entities unless you also change `config.spawn_chance`)
+You can also find empty summoners in the world, in the places where mob spawners used to be. (This replacement can be disabled with `config.replace_spawners_with_summoners`, but fair warning: the vanilla mob spawner is unable to spawn entities unless you also change the [Creatures Config](./docs/CONFIG.md#configcreatures-))
 
 If you right click on an empty summoner with a filled soulbook, a summoner is created. By default, summoning a mob takes around 10 minutes, only summons one, and you have to be within 3 blocks to increase the summon percentage. (Eg: you can spend 5 minutes at the summoner, then come back later and complete the summon)
 
@@ -152,52 +155,73 @@ All bone types can be used to create bone gears of varying types.
 
 Using most bone types you can make a gear and surround it by endersteel to create an oscillating gear.
 
-![Oscillating Gear](./preview/oscillating_gear_1.png)
+![Oscillating Gear](./preview/oscillating_gear_1.gif)
 
 Surrounding an ender bone gear in iron creates 2 oscillating gears. 
 
 ![Oscillating Gear](./preview/oscillating_gear_2.png)
 
-By default, a summoner can hold 64 oscillating gears, ranging from around 10 minutes per summon to around 10 seconds per summon.
+By default, a summoner can hold 16 oscillating gears, ranging from around 10 minutes per summon to around 30 seconds per summon.
 
 ### Murky Orb [↑](#table-of-contents)
 
 Surrounding ender bonemeal with slimeballs (or glue) produces a Strange Sticky Ball. 
 
-![Strange Sticky Ball](./preview/strange_sticky_ball.png)
+![Strange Sticky Ball](./preview/strange_sticky_ball.gif)
 
 Crafting a Strange Sticky Ball with essence of any type puts the essence into it. At 64 essence it becomes a Murky Orb.
 
-![Murky Orb](./preview/murky_orb.png)
+![Murky Orb](./preview/filling_murky_orb_1.png)
+![Murky Orb](./preview/filling_murky_orb_2.png)
 
 When a Murky Orb has been filled, its stack limit is 16.
 
-By default, a summoner can hold 64 murky orbs, ranging from around a range of 3 blocks to summon to around 64 blocks to summon.
+By default, a summoner can hold 16 murky orbs, ranging from around a range of 5 blocks to be active to around 70 blocks to be active.
 
 ### Blood Crystal [↑](#table-of-contents)
 
-![Blood Crystal](./preview/blood_crystal.png)
 
 1. Smelting an emerald or soul sand produces a Burnt Emerald. 
-2. Crafting a Burnt Emerald with redstone and a slimeball or glue produces a Bloody Emerald.
+![Burnt Emerald](./preview/burnt_emerald.png)
+
+2. Crafting a Burnt Emerald (or a Shattered Blood Crystal) with redstone and a slimeball or glue produces a Bloody Emerald.
+![Bloody Emerald](./preview/Bloody Emerald.png)
+
 3. Smelting a Bloody Emerald produces a Blood Crystal.
+![Blood Crystal](./preview/blood_crystal.png)
 
-By default, a Blood Crystal requires 162 blood. You may collect blood in two ways:
+By default, a Blood Crystal requires 1000 blood. You may collect blood in two ways:
 
-- Pricking yourself. Pricking yourself deals 9 damage to you (4.5 hearts) and gives you the effects hunger and nausea. It adds 9 blood to the blood crystal.
-- Killing a creature. It deals 1 damage to entities, and collects no blood, until the entity is killed. The death is worth 3 blood.
+- Pricking yourself. Pricking yourself deals 9 damage to you (4.5 hearts) and gives you the effects hunger and nausea. It adds 90 blood to the blood crystal.
+- Killing creatures. It deals 1 damage to entities, and collects 3 blood from each prick.
 
 When a Blood Crystal has been filled, its stack limit is 16.
 
-By default, a summoner can hold 64 Blood Crystals, ranging from 1 entity summoned to 64 entities summoned.
+By default, a summoner can hold 16 Blood Crystals, ranging from 1 entity summoned to around 6 entities summoned, max.
 
-## Summoned Mobs Drop Bones
+## Skewer [↑](#table-of-contents)
 
-By default, most mobs summoned by the summoner drop bones matching their bone type. This is configurable in the [Essences Config](./docs/CONFIG.md#config-essences-)
+![Skewer](./preview/skewer.png)
+
+The Skewer is the Soulus way of killing creatures. It has two upgrades, and the upgrades can be inserted and removed in the same way as the [Summoner](#summoner-).
+
+Skewers can be placed in any orientation, and spikes will extend outwards when the block receives a redstone signal. If you are at the same height as the spikes when they're facing upwards, you will collide with them and not be able to walk into them, but if you are any higher than that (eg: on a slab, a trapdoor, snow layers, or even a carpet), you will fall into them and begin to take damage. There is currently no collision protection for other orientations of the skewer.
+
+The first upgrade for the Skewer is an unfinished Blood Crystal. As the skewer damages entities, it can collect blood into the blood crystal it stores, based on the damage it deals. By default, for each damage it deals to an entity, there is a 50% chance of receiving 1 blood.
+
+The second upgrade for the Skewer is Nether Quartz. By default, the Skewer only deals 1 damage to each entity when they're not resistant to the damage. The Skewer can hold 256 Nether Quartz. At this point it will deal around 11 damage to entities when they're not resistant to the damage.
+
+Other upgrades for the Skewer are planned.
+
+## Bone Drops [↑](#table-of-contents)
+
+By default, most mobs drop bones matching the bone type their essence comes from. This is configurable in the [Essences Config](./docs/CONFIG.md#configessences-)
 
 ## Misc [↑](#table-of-contents)
 
 ### Glue [↑](#table-of-contents)
+
+![Glue](./preview/glue.gif)
 
 Glue is crafted from sugar, bonemeal, and a bucket of water. It can be used anywhere a slimeball can. You can consume glue.
 
@@ -206,6 +230,8 @@ Glue is crafted from sugar, bonemeal, and a bucket of water. It can be used anyw
 Every 100 or so logs produces 8 bark instead of a log. You can use 2 bark and 3 paper to make a book.
 
 ### Barket [↑](#table-of-contents)
+
+![Barket](./preview/barket.png)
 
 Make a bucket shape with Bark to get a "Barket". It can only pick up water and will likely break in a matter of seconds. If you let it break, you'll spill your water!
 
@@ -230,3 +256,17 @@ If you have an error, bug, or have found an oversight please leave an issue abou
 If you have a suggestion you can also leave them as an issue. I will close suggestions that I dislike or are out of scope for the mod.
 
 If you want to support me financially, consider supporting me on [Patreon](https://www.patreon.com/yuudaari)!
+
+  
+[The MIT License Copyright (c) 2017 Mackenzie "Yuudaari" McClane](./LICENSE)
+
+  
+The following preview images are of a Summoner, with changes to the config file that allow for more upgrades to be inserted and buffed effects for the upgrades:
+
+![Pigsplosion](./preview/pigsplosion.png)
+
+![Summoning](./preview/summoning.png)
+
+![Aftermath](./preview/aftermath.png)
+
+By default, they don't get *quite* this powerful. ;) 

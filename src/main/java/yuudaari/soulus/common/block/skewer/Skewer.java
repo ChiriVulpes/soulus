@@ -135,7 +135,7 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	}
 
 	public float baseDamage = 1;
-	public float upgradeDamageEffectiveness = 0.15f;
+	public float upgradeDamageEffectiveness = 0.04f;
 	public int bloodPerDamage = 1;
 	public double chanceForBloodPerHit = 0.5;
 
