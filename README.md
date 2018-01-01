@@ -105,16 +105,16 @@ You can fill a soulbook by crafting it with any number of your chosen type of es
 ## Endersteel [↑](#table-of-contents)
 
 
-1. Crush an iron ingot into iron dust.
+1. Crush an iron ingot into iron dust.  
 ![Iron Dust](./preview/iron_dust.png)
 
-2. Crush an ender bone chunk into ender dust.
+2. Crush an ender bone chunk into ender dust.  
 ![Ender Dust](./preview/ender_dust.png)
 
-3. Combine iron dust with ender bonemeal, into an ender-iron dust blend.
+3. Combine iron dust with ender bonemeal, into an ender-iron dust blend.  
 ![Iron-Iron Dust Blend](./preview/ender_iron_dust_blend.png)
 
-4. Smelt the ender-iron dust blend to get an endersteel ingot!
+4. Smelt the ender-iron dust blend to get an endersteel ingot!  
 ![Endersteel](./preview/endersteel.png)
 
 Endersteel can be converted between a block and nuggets. You can craft Endersteel bars from a 3x2 of ingots. The recipe produces 16 bars.
@@ -181,13 +181,14 @@ By default, a summoner can hold 16 murky orbs, ranging from around a range of 5 
 ### Blood Crystal [↑](#table-of-contents)
 
 
-1. Smelting an emerald or soul sand produces a Burnt Emerald. 
-![Burnt Emerald](./preview/burnt_emerald.png)
+1. Smelting an emerald or soul sand produces a Burnt Emerald.   
+![Burnt Emerald](./preview/burnt_emerald_1.png)
+![Burnt Emerald](./preview/burnt_emerald_2.png)
 
-2. Crafting a Burnt Emerald (or a Shattered Blood Crystal) with redstone and a slimeball or glue produces a Bloody Emerald.
+2. Crafting a Burnt Emerald (or a Shattered Blood Crystal) with redstone and a slimeball or glue produces a Bloody Emerald.  
 ![Bloody Emerald](./preview/Bloody Emerald.png)
 
-3. Smelting a Bloody Emerald produces a Blood Crystal.
+3. Smelting a Bloody Emerald produces a Blood Crystal.  
 ![Blood Crystal](./preview/blood_crystal.png)
 
 By default, a Blood Crystal requires 1000 blood. You may collect blood in two ways:
@@ -256,10 +257,11 @@ If you have an error, bug, or have found an oversight please leave an issue abou
 If you have a suggestion you can also leave them as an issue. I will close suggestions that I dislike or are out of scope for the mod.
 
 If you want to support me financially, consider supporting me on [Patreon](https://www.patreon.com/yuudaari)!
-
+  
   
 [The MIT License Copyright (c) 2017 Mackenzie "Yuudaari" McClane](./LICENSE)
-
+  
+  
   
 The following preview images are of a Summoner, with changes to the config file that allow for more upgrades to be inserted and buffed effects for the upgrades:
 
