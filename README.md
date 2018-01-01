@@ -53,6 +53,8 @@ See below for an in-depth list of features in the mod.
 
 All mob spawning is disabled by default, but you can configure this functionality per dimension, biome, and creature, and even enable/disable drops for each. See [Creatures Config](./docs/CONFIG.md#configcreatures-)
 
+Summoner-summoned mobs are exempt from this config. They will always be summoned, and they will always have drops.
+
 ## Sledgehammer [↑](#table-of-contents)
 
 ![Sledgehammer](./preview/sledgehammer.png)
@@ -257,12 +259,11 @@ If you have an error, bug, or have found an oversight please leave an issue abou
 If you have a suggestion you can also leave them as an issue. I will close suggestions that I dislike or are out of scope for the mod.
 
 If you want to support me financially, consider supporting me on [Patreon](https://www.patreon.com/yuudaari)!
-  
-  
+
 [The MIT License Copyright (c) 2017 Mackenzie "Yuudaari" McClane](./LICENSE)
-  
-  
-  
+
+---
+
 The following preview images are of a Summoner, with changes to the config file that allow for more upgrades to be inserted and buffed effects for the upgrades:
 
 ![Pigsplosion](./preview/pigsplosion.png)
