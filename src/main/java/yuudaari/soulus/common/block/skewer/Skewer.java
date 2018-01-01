@@ -42,14 +42,16 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 
 	public static enum Upgrade implements IUpgrade {
 		BLOOD_CRYSTAL(0, "blood_crystal", ModItems.BLOOD_CRYSTAL.getItemStack()), DAMAGE(1, "damage",
-				new ItemStack(Items.QUARTZ)), POISON(2, "poison",
-						new ItemStack(Items.SPIDER_EYE)), POWER(3, "power", new ItemStack(Blocks.REDSTONE_TORCH));
+				new ItemStack(Items.QUARTZ))
+		//, POISON(2, "poison",
+		//		new ItemStack(Items.SPIDER_EYE)), POWER(3, "power", new ItemStack(Blocks.REDSTONE_TORCH))
+		;
 
 		private final int index;
 		private final String name;
 		private final ItemStack stack;
 		// by default all upgrades are capped at 16
-		private Byte maxQuantity;
+		private Integer maxQuantity;
 
 		private Upgrade(int index, String name, ItemStack item) {
 			this.index = index;
@@ -68,13 +70,13 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		}
 
 		@Override
-		public byte getMaxQuantity() {
+		public int getMaxQuantity() {
 			// all upgrades by default are capped at 16
 			if (maxQuantity == null) {
 				if (name == "blood_crystal")
 					return 1;
 				if (name == "damage")
-					return 64;
+					return 256;
 				if (name == "poison")
 					return 16;
 				if (name == "power")
@@ -85,7 +87,7 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		}
 
 		@Override
-		public void setMaxQuantity(byte quantity) {
+		public void setMaxQuantity(int quantity) {
 			maxQuantity = quantity;
 		}
 
@@ -179,21 +181,19 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		int power = world.isBlockIndirectlyGettingPowered(pos);
 
-		if (state.getValue(EXTENDED) != (power > 0)) {
-			EnumFacing facing = state.getValue(FACING);
+		EnumFacing facing = state.getValue(FACING);
 
-			if (power > 0) {
-				BlockPos spikePos = pos.offset(facing);
-				Block blockAtSpikePos = world.getBlockState(spikePos).getBlock();
+		BlockPos spikePos = pos.offset(facing);
+		Block blockAtSpikePos = world.getBlockState(spikePos).getBlock();
 
-				if (!blockAtSpikePos.equals(Blocks.AIR)) {
-					if (!blockAtSpikePos.isReplaceable(world, spikePos))
-						return;
-				}
-			}
+		boolean spikeBlocked = !blockAtSpikePos.equals(Blocks.AIR) && !blockAtSpikePos.isReplaceable(world, spikePos);
 
-			world.setBlockState(pos, getDefaultState().withProperty(FACING, facing).withProperty(EXTENDED, power > 0),
-					11);
+		boolean shouldBeExtended = power > 0 && !spikeBlocked;
+
+		if (state.getValue(EXTENDED) != shouldBeExtended) {
+
+			world.setBlockState(pos,
+					getDefaultState().withProperty(FACING, facing).withProperty(EXTENDED, shouldBeExtended), 11);
 
 			world.playSound(null, pos, SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F,
 					world.rand.nextFloat() * 0.25F + 0.6F);

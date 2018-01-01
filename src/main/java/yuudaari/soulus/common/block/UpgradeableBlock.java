@@ -84,9 +84,9 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.
 
 		public String getName();
 
-		public byte getMaxQuantity();
+		public int getMaxQuantity();
 
-		public void setMaxQuantity(byte quantity);
+		public void setMaxQuantity(int quantity);
 	}
 
 	public abstract IUpgrade[] getUpgrades();
@@ -151,7 +151,7 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.
 				continue;
 			}
 
-			upgrade.setMaxQuantity(val.getAsByte());
+			upgrade.setMaxQuantity(val.getAsInt());
 		}
 
 		return current;
@@ -351,23 +351,23 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.
 
 		public abstract UpgradeableBlock<? extends UpgradeableBlockTileEntity> getBlock();
 
-		public Map<IUpgrade, Byte> upgrades = new HashMap<>();
+		public Map<IUpgrade, Integer> upgrades = new HashMap<>();
 		{
 			for (IUpgrade upgrade : getBlock().getUpgrades()) {
-				upgrades.put(upgrade, (byte) 0);
+				upgrades.put(upgrade, 0);
 			}
 		}
 
 		public Stack<IUpgrade> insertionOrder = new Stack<>();
 
 		public void addUpgradeStacksToList(List<ItemStack> list) {
-			for (Map.Entry<IUpgrade, Byte> upgrade : upgrades.entrySet()) {
+			for (Map.Entry<IUpgrade, Integer> upgrade : upgrades.entrySet()) {
 				upgrade.getKey().addItemStackToList(this, list, (int) upgrade.getValue());
 			}
 		}
 
 		public IUpgrade getUpgradeForItem(ItemStack stack) {
-			for (Map.Entry<IUpgrade, Byte> upgradeEntry : upgrades.entrySet()) {
+			for (Map.Entry<IUpgrade, Integer> upgradeEntry : upgrades.entrySet()) {
 				IUpgrade upgrade = upgradeEntry.getKey();
 				if (upgrade.isItemStack(stack))
 					return upgrade;
@@ -385,7 +385,7 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.
 			int insertQuantity = Math.min(quantity, maxQuantity - currentQuantity);
 			int newQuantity = currentQuantity + insertQuantity;
 
-			upgrades.put(upgrade, (byte) newQuantity);
+			upgrades.put(upgrade, newQuantity);
 			onInsertUpgrade(stack, upgrade, newQuantity);
 
 			stack.shrink(insertQuantity);
@@ -403,7 +403,7 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.
 
 		public int removeUpgrade(IUpgrade upgrade) {
 			int result = upgrades.get(upgrade);
-			upgrades.put(upgrade, (byte) 0);
+			upgrades.put(upgrade, 0);
 
 			onUpdateUpgrades();
 			blockUpdate();
@@ -435,7 +435,7 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.
 
 			NBTTagCompound upgradeTag = compound.getCompoundTag("upgrades");
 			for (IUpgrade upgrade : upgrades) {
-				this.upgrades.put(upgrade, upgradeTag.getByte(upgrade.getName()));
+				this.upgrades.put(upgrade, upgradeTag.getInteger(upgrade.getName()));
 			}
 
 			this.insertionOrder = new Stack<>();
@@ -470,7 +470,7 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.
 
 			NBTTagCompound upgradeTag = new NBTTagCompound();
 			for (IUpgrade upgrade : upgrades) {
-				upgradeTag.setByte(upgrade.getName(), this.upgrades.get(upgrade));
+				upgradeTag.setInteger(upgrade.getName(), this.upgrades.get(upgrade));
 			}
 			compound.setTag("upgrades", upgradeTag);
 

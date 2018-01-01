@@ -58,7 +58,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		private final String name;
 		private final ItemStack stack;
 		// by default all upgrades are capped at 16
-		private byte maxQuantity = 16;
+		private int maxQuantity = 16;
 
 		private Upgrade(int index, String name, ItemStack item) {
 			this.index = index;
@@ -77,13 +77,13 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		}
 
 		@Override
-		public byte getMaxQuantity() {
+		public int getMaxQuantity() {
 			// all upgrades by default are capped at 16
 			return maxQuantity;
 		}
 
 		@Override
-		public void setMaxQuantity(byte quantity) {
+		public void setMaxQuantity(int quantity) {
 			maxQuantity = quantity;
 		}
 

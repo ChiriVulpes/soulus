@@ -1,0 +1,28 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"sIs",
+		"sPs",
+		"srs"
+	],
+	"key": {
+		"s": {
+			"type": "forge:ore_dict",
+			"ore": "cobblestone"
+		},
+		"r": {
+			"type": "forge:ore_dict",
+			"ore": "dustRedstone"
+		},
+		"P": {
+			"item": "minecraft:piston"
+		},
+		"I": {
+			"item": "minecraft:iron_bars"
+		}
+	},
+	"result": {
+		"item": "soulus:skewer",
+		"data": 0
+	}
+}
