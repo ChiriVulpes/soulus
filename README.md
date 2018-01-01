@@ -186,7 +186,7 @@ By default, a summoner can hold 16 murky orbs, ranging from around a range of 5 
 ![Burnt Emerald](./preview/burnt_emerald_2.png)
 
 2. Crafting a Burnt Emerald (or a Shattered Blood Crystal) with redstone and a slimeball or glue produces a Bloody Emerald.  
-![Bloody Emerald](./preview/Bloody Emerald.png)
+![Bloody Emerald](./preview/bloody_emerald.gif)
 
 3. Smelting a Bloody Emerald produces a Blood Crystal.  
 ![Blood Crystal](./preview/blood_crystal.png)
