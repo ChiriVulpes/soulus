@@ -242,7 +242,7 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.
 		returnItemsToPlayer(world, drops, player);
 
 		TileEntity te = world.getTileEntity(pos);
-		if (te != null && !(te instanceof UpgradeableBlockTileEntity)) {
+		if (te != null && te instanceof UpgradeableBlockTileEntity) {
 			UpgradeableBlockTileEntity ute = (UpgradeableBlockTileEntity) te;
 
 			ute.clear();
@@ -452,6 +452,9 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.
 			for (IUpgrade upgrade : getBlock().getUpgrades()) {
 				upgrades.put(upgrade, 0);
 			}
+
+			onUpdateUpgrades();
+			blockUpdate();
 		}
 
 		/////////////////////////////////////////

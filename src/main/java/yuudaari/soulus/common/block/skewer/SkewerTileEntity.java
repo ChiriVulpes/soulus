@@ -68,9 +68,7 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 
 	@Override
 	public void onInsertUpgrade(ItemStack stack, IUpgrade upgrade, int newQuantity) {
-		Logger.info(stack.toString() + upgrade);
 		if (upgrade == Upgrade.BLOOD_CRYSTAL) {
-			Logger.info("blood" + BloodCrystal.getContainedBlood(stack));
 			this.bloodCrystalBlood = BloodCrystal.getContainedBlood(stack);
 		}
 	}

@@ -104,7 +104,6 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 
 		@Override
 		public ItemStack getItemStack(int quantity) {
-			Logger.info("hoo");
 			return new ItemStack(this.stack.getItem(), quantity);
 		}
 
@@ -114,7 +113,6 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 
 			if (name == "blood_crystal") {
 				SkewerTileEntity ste = (SkewerTileEntity) te;
-				Logger.info("blood " + ste.bloodCrystalBlood);
 				BloodCrystal.setContainedBlood(stack,
 						Math.min(BloodCrystal.INSTANCE.requiredBlood, ste.bloodCrystalBlood));
 			}
