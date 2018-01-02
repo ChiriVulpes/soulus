@@ -85,6 +85,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 	private EssenceConfig spawnMobConfig;
 	private int spawnMobChanceTotal;
+	public String lastRenderedEssenceType;
 
 	public String getEssenceType() {
 		return essenceType;

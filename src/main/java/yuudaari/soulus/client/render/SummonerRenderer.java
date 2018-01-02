@@ -15,8 +15,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class SummonerRenderer extends TileEntityRenderer<SummonerTileEntity> {
 
-	private String lastRenderedEssenceType;
-
 	public Class<SummonerTileEntity> getTileEntityClass() {
 		return SummonerTileEntity.class;
 	}
@@ -36,20 +34,20 @@ public class SummonerRenderer extends TileEntityRenderer<SummonerTileEntity> {
 	}
 
 	@Override
-	public void render(SummonerTileEntity tileEntity, double x, double y, double z, float partialTicks,
-			int destroyStage, float alpha) {
+	public void render(SummonerTileEntity te, double x, double y, double z, float partialTicks, int destroyStage,
+			float alpha) {
 
-		if (tileEntity.getEssenceType() == null)
+		if (te.getEssenceType() == null)
 			return;
 
-		if (tileEntity.renderMob == null || !tileEntity.getEssenceType().equals(lastRenderedEssenceType)) {
-			lastRenderedEssenceType = tileEntity.getEssenceType();
-			spawnRenderMob(tileEntity);
+		if (te.renderMob == null || !te.getEssenceType().equals(te.lastRenderedEssenceType)) {
+			te.lastRenderedEssenceType = te.getEssenceType();
+			spawnRenderMob(te);
 		}
 
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x + 0.5F, (float) y, (float) z + 0.5F);
-		renderMob(tileEntity, x, y, z, partialTicks);
+		renderMob(te, x, y, z, partialTicks);
 		GlStateManager.popMatrix();
 	}
 
