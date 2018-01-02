@@ -540,7 +540,7 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.
 			readFromNBT(pkt.getNbtCompound());
 		}
 
-		protected final void blockUpdate() {
+		public final void blockUpdate() {
 			if (world != null) {
 				IBlockState blockState = world.getBlockState(pos);
 				world.notifyBlockUpdate(pos, blockState, blockState, 7);

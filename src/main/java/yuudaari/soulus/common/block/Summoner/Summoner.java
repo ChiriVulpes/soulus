@@ -395,6 +395,10 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 			te.setEssenceType(EssenceType.getEssenceType(stack));
 
 			stack.shrink(1);
+
+			te.blockUpdate();
+
+			return true;
 		}
 
 		// we can't insert anything else if it's an empty summoner
