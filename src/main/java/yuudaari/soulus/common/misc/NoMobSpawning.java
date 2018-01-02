@@ -1,6 +1,9 @@
 package yuudaari.soulus.common.misc;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.gson.JsonElement;
@@ -17,6 +20,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import yuudaari.soulus.common.config.ListSerializer;
 import yuudaari.soulus.common.config.ManualSerializer;
 import yuudaari.soulus.common.config.Serializer;
 import yuudaari.soulus.common.misc.NoMobSpawning.NoMobSpawningDimensionConfig.NoMobSpawningBiomeConfig;
@@ -135,7 +139,11 @@ public class NoMobSpawning {
 
 			public static class NoMobSpawningCreatureConfig {
 				public static Serializer<NoMobSpawningCreatureConfig> serializer = new Serializer<>(
-						NoMobSpawningCreatureConfig.class, "spawnChance", "hasDrops");
+						NoMobSpawningCreatureConfig.class, "spawnChance");
+				static {
+					serializer.fieldHandlers.put("whitelistedDrops", new ListSerializer());
+					serializer.fieldHandlers.put("blacklistedDrops", new ListSerializer());
+				}
 
 				public NoMobSpawningCreatureConfig() {
 				}
@@ -146,10 +154,16 @@ public class NoMobSpawning {
 
 				public String creatureId;
 				public double spawnChance = 0;
-				public boolean hasDrops = true;
+				public List<String> whitelistedDrops = new ArrayList<>(Arrays.asList("*"));
+				public List<String> blacklistedDrops = new ArrayList<>();
 
-				public NoMobSpawningCreatureConfig setNoDrops() {
-					this.hasDrops = false;
+				public NoMobSpawningCreatureConfig setWhitelistedDrops(String... whitelistedDrops) {
+					this.whitelistedDrops = Arrays.asList(whitelistedDrops);
+					return this;
+				}
+
+				public NoMobSpawningCreatureConfig setBlacklistedDrops(String... blacklistedDrops) {
+					this.blacklistedDrops = Arrays.asList(blacklistedDrops);
 					return this;
 				}
 			}
@@ -180,6 +194,10 @@ public class NoMobSpawning {
 	{
 		Map<String, NoMobSpawningCreatureConfig> creatureConfigs = new HashMap<>();
 		creatureConfigs.put("*", new NoMobSpawningCreatureConfig(0.0));
+		creatureConfigs.put("minecraft:skeleton",
+				new NoMobSpawningCreatureConfig(0.0).setBlacklistedDrops("minecraft:bone"));
+		creatureConfigs.put("minecraft:wither_skeleton",
+				new NoMobSpawningCreatureConfig(0.0).setBlacklistedDrops("minecraft:bone"));
 
 		Map<String, NoMobSpawningBiomeConfig> biomeConfigs = new HashMap<>();
 		biomeConfigs.put("*", new NoMobSpawningBiomeConfig(creatureConfigs));

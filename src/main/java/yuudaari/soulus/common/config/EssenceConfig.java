@@ -169,7 +169,7 @@ public class EssenceConfig {
 		creatureConfigs.add(
 				new EssenceConfig("minecraft:sheep", new CreatureBoneConfig(BoneType.NORMAL, 6)).addLoot(1, 2, 0.4));
 		creatureConfigs.add(
-				new EssenceConfig("minecraft:skeleton", new CreatureBoneConfig(BoneType.NORMAL, 3)).addLoot(1, 2, 0.5));
+				new EssenceConfig("minecraft:skeleton", new CreatureBoneConfig(BoneType.NORMAL, 3)).addLoot(1, 2, 0.7));
 		creatureConfigs.add(new EssenceConfig("minecraft:spider", new CreatureBoneConfig(BoneType.NORMAL, 5)));
 		creatureConfigs.add(
 				new EssenceConfig("minecraft:villager", new CreatureBoneConfig(BoneType.NORMAL, 1)).addLoot(1, 2, 0.6));
@@ -231,7 +231,7 @@ public class EssenceConfig {
 		creatureConfigs.add(
 				new EssenceConfig("minecraft:blaze", new CreatureBoneConfig(BoneType.NETHER, 3)).addLoot(1, 2, 0.6));
 		creatureConfigs.add(new EssenceConfig("minecraft:wither_skeleton", new CreatureBoneConfig(BoneType.NETHER, 1))
-				.addLoot(1, 2, 0.5));
+				.addLoot(1, 2, 0.7));
 		creatureConfigs
 				.add(new EssenceConfig("minecraft:ghast", new CreatureBoneConfig(BoneType.NETHER, 1)).addLoot(3, 6, 1));
 		creatureConfigs.add(new EssenceConfig("NONE", new CreatureBoneConfig(BoneType.NETHER, 10)));
