@@ -1,5 +1,6 @@
 {
-	"type": "minecraft:crafting_shapeless",
+	"type": "soulus:crafting_shapeless",
+	"override": "minecraft:bone_meal_from_bone",
 	"ingredients": [
 		[
 			{

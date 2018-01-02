@@ -14,7 +14,6 @@ import yuudaari.soulus.common.block.UpgradeableBlock.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.block.skewer.Skewer.Upgrade;
 import yuudaari.soulus.common.item.BloodCrystal;
 import yuudaari.soulus.common.misc.ModDamageSource;
-import yuudaari.soulus.common.util.Logger;
 
 public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 

@@ -19,24 +19,37 @@ import yuudaari.soulus.common.block.summoner.Summoner;
 import yuudaari.soulus.common.block.skewer.Skewer;
 
 public class ModBlocks {
+	public static final BarsEndersteel BARS_ENDERSTEEL = new BarsEndersteel();
 	public static final BlockEndersteel BLOCK_ENDERSTEEL = new BlockEndersteel();
 	public static final FossilDirt FOSSIL_DIRT = new FossilDirt();
+	public static final FossilDirtEnder FOSSIL_DIRT_ENDER = new FossilDirtEnder();
 	public static final FossilDirtFrozen FOSSIL_DIRT_FROZEN = new FossilDirtFrozen();
 	public static final FossilDirtFungal FOSSIL_DIRT_FUNGAL = new FossilDirtFungal();
-	public static final FossilDirtEnder FOSSIL_DIRT_ENDER = new FossilDirtEnder();
+	public static final FossilEndStone FOSSIL_END_STONE = new FossilEndStone();
 	public static final FossilNetherrack FOSSIL_NETHERRACK = new FossilNetherrack();
 	public static final FossilNetherrackEnder FOSSIL_NETHERRACK_ENDER = new FossilNetherrackEnder();
 	public static final FossilSand FOSSIL_SAND = new FossilSand();
-	public static final FossilSandScale FOSSIL_SAND_SCALE = new FossilSandScale();
 	public static final FossilSandEnder FOSSIL_SAND_ENDER = new FossilSandEnder();
-	public static final FossilEndStone FOSSIL_END_STONE = new FossilEndStone();
-	public static final Summoner SUMMONER = new Summoner();
-	public static final BarsEndersteel BARS_ENDERSTEEL = new BarsEndersteel();
+	public static final FossilSandScale FOSSIL_SAND_SCALE = new FossilSandScale();
 	public static final Skewer SKEWER = Skewer.INSTANCE;
+	public static final Summoner SUMMONER = new Summoner();
 
-	public static IBlock[] blocks = new IBlock[] { SUMMONER, BARS_ENDERSTEEL, BLOCK_ENDERSTEEL, FOSSIL_DIRT,
-			FOSSIL_DIRT_ENDER, FOSSIL_DIRT_FROZEN, FOSSIL_DIRT_FUNGAL, FOSSIL_SAND, FOSSIL_SAND_SCALE,
-			FOSSIL_SAND_ENDER, FOSSIL_NETHERRACK, FOSSIL_NETHERRACK_ENDER, FOSSIL_END_STONE, SKEWER };
+	public static IBlock[] blocks = new IBlock[] { //
+			BARS_ENDERSTEEL, //
+			BLOCK_ENDERSTEEL, //
+			FOSSIL_DIRT_ENDER, //
+			FOSSIL_DIRT_FROZEN, //
+			FOSSIL_DIRT_FUNGAL, //
+			FOSSIL_DIRT, //
+			FOSSIL_END_STONE, // 
+			FOSSIL_NETHERRACK_ENDER, //
+			FOSSIL_NETHERRACK, //
+			FOSSIL_SAND_ENDER, //
+			FOSSIL_SAND_SCALE, //
+			FOSSIL_SAND, //
+			SKEWER, //
+			SUMMONER //
+	};
 
 	public static void registerBlocks(IForgeRegistry<Block> registry) {
 		for (IBlock block : blocks) {

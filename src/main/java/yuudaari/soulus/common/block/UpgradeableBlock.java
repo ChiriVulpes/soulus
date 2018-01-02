@@ -181,10 +181,13 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.
 		BlockPos pos = event.getPos();
 		IBlockState blockState = world.getBlockState(pos);
 		Block block = blockState.getBlock();
-		if (block instanceof UpgradeableBlock && ((UpgradeableBlock<? extends UpgradeableBlockTileEntity>) block)
-				.canActivateWithItem(event.getItemStack(), world, pos)) {
-			event.setUseBlock(Result.ALLOW);
+		if (block instanceof UpgradeableBlock) {
+			UpgradeableBlock<? extends UpgradeableBlockTileEntity> ublock = (UpgradeableBlock<? extends UpgradeableBlockTileEntity>) block;
+			if (ublock.canActivateWithItem(event.getItemStack(), world, pos)) {
+				event.setUseBlock(Result.ALLOW);
+			}
 		}
+
 	}
 
 	@SuppressWarnings("unchecked")
@@ -367,7 +370,7 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.
 	}
 
 	public boolean canActivateWithItem(ItemStack stack, World world, BlockPos pos) {
-		return isUpgradeItem(stack, world, pos) != null;
+		return stack.isEmpty() || isUpgradeItem(stack, world, pos) != null;
 	}
 
 	/////////////////////////////////////////

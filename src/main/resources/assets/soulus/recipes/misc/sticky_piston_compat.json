@@ -1,5 +1,6 @@
 {
-	"type": "minecraft:crafting_shapeless",
+	"type": "soulus:crafting_shapeless",
+	"override": "minecraft:sticky_piston",
 	"ingredients": [
 		{
 			"item": "minecraft:piston"

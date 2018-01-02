@@ -6,9 +6,14 @@
 		" b "
 	],
 	"key": {
-		"b": {
-			"item": "minecraft:bone"
-		}
+		"b": [
+			{
+				"item": "minecraft:bone"
+			},
+			{
+				"item": "soulus:bone_normal"
+			}
+		]
 	},
 	"result": {
 		"item": "soulus:gear_bone"
