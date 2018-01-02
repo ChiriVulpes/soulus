@@ -32,7 +32,7 @@ public class ModBlocks {
 	public static final FossilEndStone FOSSIL_END_STONE = new FossilEndStone();
 	public static final Summoner SUMMONER = new Summoner();
 	public static final BarsEndersteel BARS_ENDERSTEEL = new BarsEndersteel();
-	public static final Skewer SKEWER = new Skewer();
+	public static final Skewer SKEWER = Skewer.INSTANCE;
 
 	public static IBlock[] blocks = new IBlock[] { SUMMONER, BARS_ENDERSTEEL, BLOCK_ENDERSTEEL, FOSSIL_DIRT,
 			FOSSIL_DIRT_ENDER, FOSSIL_DIRT_FROZEN, FOSSIL_DIRT_FUNGAL, FOSSIL_SAND, FOSSIL_SAND_SCALE,

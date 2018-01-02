@@ -1,5 +1,7 @@
 package yuudaari.soulus.common.block.skewer;
 
+import java.util.HashMap;
+import java.util.Map;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -12,10 +14,13 @@ import yuudaari.soulus.common.block.UpgradeableBlock.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.block.skewer.Skewer.Upgrade;
 import yuudaari.soulus.common.item.BloodCrystal;
 import yuudaari.soulus.common.misc.ModDamageSource;
+import yuudaari.soulus.common.util.Logger;
 
 public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 
 	public int bloodCrystalBlood = 0;
+
+	private Map<EntityLivingBase, Long> entityHitTimes = new HashMap<>();
 
 	@Override
 	public Skewer getBlock() {
@@ -35,16 +40,25 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 		IBlockState state = world.getBlockState(pos);
 		if (state.getValue(Skewer.EXTENDED)) {
 			EnumFacing facing = state.getValue(Skewer.FACING);
+			long time = world.getTotalWorldTime();
+
+			entityHitTimes.entrySet()
+					.removeIf(entityHitTime -> time - entityHitTime.getValue() > getBlock().ticksBetweenDamage);
+
 			for (EntityLivingBase entity : world.getEntitiesWithinAABB(EntityLivingBase.class,
 					Skewer.getSpikeHitbox(facing, pos))) {
 
-				if (!entity.getIsInvulnerable()
-						&& (float) entity.hurtResistantTime <= (float) entity.maxHurtResistantTime / 2.0F) {
+				if (!entity.getIsInvulnerable() && !entityHitTimes.containsKey(entity)) {
+
+					entityHitTimes.put(entity, world.getTotalWorldTime());
+
 					float damage = skewer.baseDamage;
 
 					damage += skewer.upgradeDamageEffectiveness * upgrades.get(Upgrade.DAMAGE);
 
+					int rtime = entity.hurtResistantTime;
 					entity.attackEntityFrom(ModDamageSource.SKEWER, damage);
+					entity.hurtResistantTime = rtime;
 
 					if (world.rand.nextDouble() < skewer.chanceForBloodPerHit
 							&& upgrades.get(Upgrade.BLOOD_CRYSTAL) == 1) {

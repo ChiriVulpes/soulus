@@ -3,6 +3,7 @@ package yuudaari.soulus.common.block.skewer;
 import java.util.Arrays;
 import java.util.List;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -138,9 +139,11 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	public float upgradeDamageEffectiveness = 0.04f;
 	public int bloodPerDamage = 1;
 	public double chanceForBloodPerHit = 0.5;
+	public int ticksBetweenDamage = 15;
 
 	{
-		serializer.fields.addAll(Arrays.asList("baseDamage", "upgradeDamageEffectiveness", "bloodPerDamage"));
+		serializer.fields.addAll(
+				Arrays.asList("baseDamage", "upgradeDamageEffectiveness", "bloodPerDamage", "ticksBetweenDamage"));
 	}
 
 	/////////////////////////////////////////
@@ -155,6 +158,7 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		setHasItem();
 		setDefaultState(getDefaultState().withProperty(EXTENDED, false).withProperty(FACING, EnumFacing.NORTH));
 		setHarvestLevel("pickaxe", 1);
+		setSoundType(SoundType.STONE);
 		setHardness(3F);
 	}
 
