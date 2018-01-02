@@ -138,11 +138,12 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	public int upgradeRangeEffectiveness = 4;
 	public double particleCountActivated = 3;
 	public int particleCountSpawn = 50;
+	public int soulbookUses = -1;
 
 	{
 		serializer.fields.addAll(
 				Arrays.asList("nonUpgradedSpawningRadius", "nonUpgradedRange", "upgradeCountRadiusEffectiveness",
-						"upgradeRangeEffectiveness", "particleCountActivated", "particleCountSpawn"));
+						"upgradeRangeEffectiveness", "particleCountActivated", "particleCountSpawn", "soulbookUses"));
 
 		serializer.fieldHandlers.put("nonUpgradedCount", Range.serializer);
 		serializer.fieldHandlers.put("nonUpgradedDelay", Range.serializer);
@@ -315,9 +316,8 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 		if (!returnedUpgrade) {
 			SummonerTileEntity te = (SummonerTileEntity) world.getTileEntity(pos);
-			String essenceType = te.getEssenceType();
 
-			returnItemsToPlayer(world, Collections.singletonList(Soulbook.getFilled(essenceType)), player);
+			returnItemsToPlayer(world, Collections.singletonList(getSoulbook(te)), player);
 
 			world.setBlockState(pos, getDefaultState().withProperty(VARIANT, state.getValue(VARIANT)));
 
@@ -343,7 +343,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 		if (te != null && te instanceof SummonerTileEntity) {
 			SummonerTileEntity ste = (SummonerTileEntity) te;
-			list.add(Soulbook.getFilled(ste.getEssenceType()));
+			list.add(getSoulbook(ste));
 		}
 	}
 
@@ -375,7 +375,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 		// try to insert a soulbook
 		if (item == Soulbook.INSTANCE) {
-			if (!Soulbook.isFilled(stack))
+			if (soulbookUses <= 0 && !Soulbook.isFilled(stack))
 				return false;
 
 			if (!state.getValue(HAS_SOULBOOK)) {
@@ -389,10 +389,13 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 			// that means there's a soulbook inside, so return it
 			String oldEssenceType = te.getEssenceType();
 			if (oldEssenceType != null) {
-				returnItemsToPlayer(world, Collections.singletonList(Soulbook.getFilled(oldEssenceType)), player);
+				returnItemsToPlayer(world, Collections.singletonList(getSoulbook(te)), player);
 			}
 
-			te.setEssenceType(EssenceType.getEssenceType(stack));
+			String newEssenceType = EssenceType.getEssenceType(stack);
+			te.setEssenceType(newEssenceType);
+			te.soulbookUses = (int) (Soulbook.getContainedEssence(stack)
+					/ (double) Soulus.config.getSoulbookQuantity(newEssenceType) * this.soulbookUses);
 
 			stack.shrink(1);
 
@@ -409,6 +412,17 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		return super.onActivateInsert(world, pos, player, stack);
 	}
 
+	public ItemStack getSoulbook(SummonerTileEntity te) {
+		String essenceType = te.getEssenceType();
+
+		return soulbookUses > 0
+				? Soulbook
+						.getStack(essenceType,
+								(byte) (te.soulbookUses / (double) soulbookUses
+										* Soulus.config.getSoulbookQuantity(essenceType)))
+				: Soulbook.getFilled(essenceType);
+	}
+
 	/////////////////////////////////////////
 	// Waila
 	//
@@ -421,6 +435,11 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 		currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":summoner.summon_percentage",
 				(int) Math.floor(te.getSpawnPercent() * 100)));
+
+		if (soulbookUses > 0) {
+			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":summoner.summons_remaining", te.soulbookUses,
+					soulbookUses));
+		}
 
 	}
 

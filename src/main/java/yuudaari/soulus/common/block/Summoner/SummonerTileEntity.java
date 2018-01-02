@@ -34,6 +34,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	private String essenceType;
 	private float timeTillSpawn = 0;
 	private float lastTimeTillSpawn;
+	public int soulbookUses = getBlock().soulbookUses;
 
 	private int spawningRadius;
 	private int activatingRange;
@@ -93,6 +94,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 	public void setEssenceType(String essenceType) {
 		this.essenceType = essenceType;
+		this.soulbookUses = Soulus.config.getSoulbookQuantity(essenceType);
 		resetEssenceType();
 	}
 
@@ -140,7 +142,13 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	}
 
 	private double activationAmount() {
+		// when powered by redstone, don't run
 		if (world.isBlockIndirectlyGettingPowered(pos) != 0) {
+			return 0;
+		}
+
+		// when the soulbook is empty, don't run
+		if (getBlock().soulbookUses > 0 && soulbookUses <= 0) {
 			return 0;
 		}
 
@@ -219,6 +227,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		hasInit = true;
 
 		essenceType = compound.getString("entity_type");
+		soulbookUses = compound.getInteger("soulbook_uses");
 		resetEssenceType();
 		timeTillSpawn = compound.getFloat("delay");
 		lastTimeTillSpawn = compound.getFloat("delay_last");
@@ -235,6 +244,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		}
 
 		compound.setString("entity_type", essenceType);
+		compound.setInteger("soulbook_uses", soulbookUses);
 		compound.setFloat("delay", timeTillSpawn);
 		compound.setFloat("delay_last", lastTimeTillSpawn);
 	}
@@ -275,7 +285,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		int spawnCount = this.spawnCount.get(world.rand).intValue();
 		int spawned = 0;
 
-		for (int i = 0; i < spawnCount; i++) {
+		MainSpawningLoop: for (int i = 0; i < spawnCount; i++) {
 			NBTTagCompound entityNbt = getEntityNbt();
 			for (int tries = 0; tries < 5; tries++) {
 				double x = pos.getX() + world.rand.nextDouble() * spawningRadius * 2 + 0.5D - spawningRadius;
@@ -295,7 +305,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 				if (world.getEntitiesWithinAABB(entity.getClass(), boundingBox)
 						.size() >= Math.pow(spawningRadius * 2, 2) / 10) {
 					// we can return here because this check won't change next loop
-					return spawned;
+					break MainSpawningLoop;
 				}
 
 				// check if there's blocks in the way
@@ -328,6 +338,8 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 				break;
 			}
 		}
+
+		soulbookUses -= spawned;
 
 		return spawned;
 	}

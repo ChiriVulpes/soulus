@@ -195,6 +195,7 @@ death.attack.soulus:skewer=%1$s became a shishkebab
 waila.soulus:upgradeable_block.show_upgrades=§8§oSneak to show upgrades
 
 waila.soulus:summoner.summon_percentage=%1$s%% summoned
+waila.soulus:summoner.summons_remaining=%1$s/%2$s Summons Remaining
 waila.soulus:summoner.upgrades_delay=%1$s/%2$s §3Oscillating Gears
 waila.soulus:summoner.upgrades_count=%1$s/%2$s §4Blood Crystals
 waila.soulus:summoner.upgrades_range=%1$s/%2$s §6Murky Orbs
