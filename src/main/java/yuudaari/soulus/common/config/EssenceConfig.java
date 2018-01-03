@@ -127,7 +127,7 @@ public class EssenceConfig {
 	public Map<String, Double> spawns = new HashMap<>();
 	public Map<String, CreatureLootConfig> loot = new HashMap<>();
 	public CreatureBoneConfig bones = new CreatureBoneConfig();
-	public byte soulbookQuantity = 16;
+	public int soulbookQuantity = 16;
 
 	public EssenceConfig() {
 	}

@@ -139,11 +139,12 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	public double particleCountActivated = 3;
 	public int particleCountSpawn = 50;
 	public int soulbookUses = -1;
+	public double soulbookEssenceRequiredToInsert = 0.5;
 
 	{
-		serializer.fields.addAll(
-				Arrays.asList("nonUpgradedSpawningRadius", "nonUpgradedRange", "upgradeCountRadiusEffectiveness",
-						"upgradeRangeEffectiveness", "particleCountActivated", "particleCountSpawn", "soulbookUses"));
+		serializer.fields.addAll(Arrays.asList("nonUpgradedSpawningRadius", "nonUpgradedRange",
+				"upgradeCountRadiusEffectiveness", "upgradeRangeEffectiveness", "particleCountActivated",
+				"particleCountSpawn", "soulbookUses", "soulbookEssenceRequiredToInsert"));
 
 		serializer.fieldHandlers.put("nonUpgradedCount", Range.serializer);
 		serializer.fieldHandlers.put("nonUpgradedDelay", Range.serializer);
@@ -375,7 +376,9 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 		// try to insert a soulbook
 		if (item == Soulbook.INSTANCE) {
-			if (soulbookUses <= 0 && !Soulbook.isFilled(stack))
+			if ((soulbookUses <= 0 && !Soulbook.isFilled(stack))
+					|| Soulbook.getContainedEssence(stack) < soulbookEssenceRequiredToInsert
+							* Soulus.config.getSoulbookQuantity(EssenceType.getEssenceType(stack)))
 				return false;
 
 			if (!state.getValue(HAS_SOULBOOK)) {
@@ -417,7 +420,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 		return soulbookUses > 0
 				? Soulbook.getStack(essenceType,
-						(byte) Math.max(0,
+						(int) Math.max(0,
 								te.soulbookUses / (double) soulbookUses
 										* Soulus.config.getSoulbookQuantity(essenceType)))
 				: Soulbook.getFilled(essenceType);

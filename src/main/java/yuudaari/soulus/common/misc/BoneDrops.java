@@ -1,5 +1,6 @@
 package yuudaari.soulus.common.misc;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -18,9 +19,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import yuudaari.soulus.common.config.EssenceConfig;
 import yuudaari.soulus.common.config.EssenceConfig.CreatureLootConfig;
-import yuudaari.soulus.common.misc.NoMobSpawning.NoMobSpawningDimensionConfig;
-import yuudaari.soulus.common.misc.NoMobSpawning.NoMobSpawningDimensionConfig.NoMobSpawningBiomeConfig;
-import yuudaari.soulus.common.misc.NoMobSpawning.NoMobSpawningDimensionConfig.NoMobSpawningBiomeConfig.NoMobSpawningCreatureConfig;
+import yuudaari.soulus.common.misc.NoMobSpawning.DimensionConfig;
+import yuudaari.soulus.common.misc.NoMobSpawning.DimensionConfig.BiomeConfig;
+import yuudaari.soulus.common.misc.NoMobSpawning.DimensionConfig.BiomeConfig.CreatureConfig;
+import yuudaari.soulus.common.misc.NoMobSpawning.DimensionConfig.BiomeConfig.CreatureConfig.DropConfig;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.util.BoneType;
 import yuudaari.soulus.common.util.Range;
@@ -38,16 +40,10 @@ public class BoneDrops {
 
 		List<EntityItem> drops = event.getDrops();
 
-		// then we check to see if the entity was summoned
-		if (entity.getEntityData().getByte("soulus:spawn_whitelisted") == (byte) 2) {
-			doMobDrops(null, drops, entity);
-			return;
-		}
-
 		// then we get the dimension config for this potential spawn
 		DimensionType dimension = entity.world.provider.getDimensionType();
 		//Logger.info(dimension.getName());
-		NoMobSpawningDimensionConfig dimensionConfig = NoMobSpawning.INSTANCE.dimensionConfigs.get(dimension.getName());
+		DimensionConfig dimensionConfig = NoMobSpawning.INSTANCE.dimensionConfigs.get(dimension.getName());
 		if (dimensionConfig == null) {
 			dimensionConfig = NoMobSpawning.INSTANCE.dimensionConfigs.get("*");
 			if (dimensionConfig == null) {
@@ -60,7 +56,7 @@ public class BoneDrops {
 		BlockPos pos = entity.getPosition();
 		Biome biome = entity.world.getBiome(pos);
 		//Logger.info(biome.getRegistryName().toString());
-		NoMobSpawningBiomeConfig biomeConfig = dimensionConfig.biomeConfigs.get(biome.getRegistryName().toString());
+		BiomeConfig biomeConfig = dimensionConfig.biomeConfigs.get(biome.getRegistryName().toString());
 		if (biomeConfig == null) {
 			biomeConfig = dimensionConfig.biomeConfigs.get(biome.getRegistryName().getResourceDomain() + ":*");
 			if (biomeConfig == null) {
@@ -75,7 +71,7 @@ public class BoneDrops {
 		// then we get the creature config for this potential spawn
 		String entityName = EntityList.getKey(entity).toString();
 		//Logger.info(entityName);
-		NoMobSpawningCreatureConfig creatureConfig = biomeConfig.creatureConfigs.get(entityName);
+		CreatureConfig creatureConfig = biomeConfig.creatureConfigs.get(entityName);
 		if (creatureConfig == null) {
 			creatureConfig = biomeConfig.creatureConfigs
 					.get(new ResourceLocation(entityName).getResourceDomain() + ":*");
@@ -91,32 +87,64 @@ public class BoneDrops {
 		doMobDrops(creatureConfig, drops, entity);
 	}
 
-	private static void doMobDrops(NoMobSpawningCreatureConfig config, List<EntityItem> drops,
-			EntityLivingBase entity) {
+	private static void doMobDrops(CreatureConfig config, List<EntityItem> drops, EntityLivingBase entity) {
 
 		if (config != null) {
-			List<String> whitelistedDrops = config.whitelistedDrops;
-			List<String> blacklistedDrops = config.blacklistedDrops;
-			boolean allBlacklisted = blacklistedDrops.contains("*");
-			if (!whitelistedDrops.contains("*") || blacklistedDrops.size() > 0) {
-				drops.removeIf(existingDrop -> {
-					ResourceLocation name = existingDrop.getItem().getItem().getRegistryName();
-					if (!whitelistedDrops.contains(name.getResourceDomain() + ":*")) {
-						if (!whitelistedDrops.contains(name.toString())) {
+			boolean wasSummoned = entity.getEntityData().getByte("soulus:spawn_whitelisted") == (byte) 2;
+			String spawnType = wasSummoned ? "summoned" : "spawned";
+
+			DropConfig dropConfig = config.drops.get(spawnType);
+			DropConfig dropConfigAll = config.drops.get("all");
+
+			if (dropConfig == null && dropConfigAll == null) {
+				// Logger.info("all cleared null");
+				drops.clear();
+				return;
+
+			} else {
+				List<String> emptyList = new ArrayList<>();
+				boolean dc = dropConfig != null;
+				boolean dca = dropConfigAll != null;
+				List<String> whitelistedDrops = dc ? dropConfig.whitelistedDrops : emptyList;
+				List<String> blacklistedDrops = dc ? dropConfig.blacklistedDrops : emptyList;
+				List<String> whitelistedDropsAll = dca ? dropConfigAll.whitelistedDrops : emptyList;
+				List<String> blacklistedDropsAll = dca ? dropConfigAll.blacklistedDrops : emptyList;
+				boolean allBlacklisted = blacklistedDrops.contains("*");
+				if (allBlacklisted) {
+					// Logger.info("all cleared all blacklisted");
+					drops.clear();
+					return;
+				}
+
+				if (!(whitelistedDrops.contains("*") || whitelistedDropsAll.contains("*"))
+						|| blacklistedDrops.size() + blacklistedDropsAll.size() > 0) {
+					drops.removeIf(existingDrop -> {
+						ResourceLocation res = existingDrop.getItem().getItem().getRegistryName();
+						String modWild = res.getResourceDomain() + ":*";
+						String name = res.toString();
+						if (!whitelistedDrops.contains("*") && !whitelistedDropsAll.contains("*")) {
+							if (!whitelistedDrops.contains(modWild) && !whitelistedDropsAll.contains(modWild)) {
+								if (!whitelistedDrops.contains(name) && !whitelistedDropsAll.contains(name)) {
+									return true;
+								}
+							}
+						}
+
+						if (allBlacklisted || blacklistedDrops.contains(modWild) || blacklistedDrops.contains(name)
+								|| (blacklistedDropsAll.contains(modWild)
+										&& !(whitelistedDrops.contains(modWild) || whitelistedDrops.contains(name)))
+								|| (blacklistedDropsAll.contains(name)
+										&& !(whitelistedDrops.contains(modWild) || whitelistedDrops.contains(name)))) {
 							return true;
 						}
-					}
 
-					if (allBlacklisted || blacklistedDrops.contains(name.getResourceDomain() + ":*")
-							|| blacklistedDrops.contains(name.toString())) {
-						return true;
-					}
-
-					return false;
-				});
+						return false;
+					});
+				}
 			}
 		}
 
+		// Logger.info("added bone drops");
 		for (EssenceConfig essenceConfig : Soulus.config.essences) {
 			for (Map.Entry<String, CreatureLootConfig> lootConfig : essenceConfig.loot.entrySet()) {
 				ResourceLocation name = EntityList.getKey(entity);

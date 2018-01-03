@@ -134,8 +134,8 @@ public class OrbMurky extends SummonerUpgrade {
 
 	public static int getContainedEssence(ItemStack stack) {
 		NBTTagCompound tag = stack.getTagCompound();
-		if (tag != null && tag.hasKey("essence_quantity", 1)) {
-			return tag.getByte("essence_quantity") - Byte.MIN_VALUE;
+		if (tag != null && tag.hasKey("essence_quantity", 3)) {
+			return tag.getInteger("essence_quantity");
 		}
 		return 0;
 	}
@@ -150,7 +150,7 @@ public class OrbMurky extends SummonerUpgrade {
 			tag = new NBTTagCompound();
 			stack.setTagCompound(tag);
 		}
-		tag.setByte("essence_quantity", (byte) (count + Byte.MIN_VALUE));
+		tag.setInteger("essence_quantity", count);
 		return stack;
 	}
 

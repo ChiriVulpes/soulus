@@ -99,10 +99,10 @@ public class Soulbook extends ModItem {
 	}
 
 	public static ItemStack getStack(String essenceType) {
-		return getStack(essenceType, (byte) 0);
+		return getStack(essenceType, 0);
 	}
 
-	public static ItemStack getStack(String essenceType, byte essenceAmount) {
+	public static ItemStack getStack(String essenceType, int essenceAmount) {
 		ItemStack stack = new ItemStack(INSTANCE, 1);
 		EssenceType.setEssenceType(stack, essenceType);
 		setContainedEssence(stack, essenceAmount);
@@ -154,8 +154,8 @@ public class Soulbook extends ModItem {
 
 	public static int getContainedEssence(ItemStack stack) {
 		NBTTagCompound tag = stack.getTagCompound();
-		if (tag != null && tag.hasKey("essence_quantity", 1)) {
-			return tag.getByte("essence_quantity") - Byte.MIN_VALUE;
+		if (tag != null && tag.hasKey("essence_quantity", 3)) {
+			return tag.getInteger("essence_quantity");
 		}
 		return 0;
 	}
@@ -166,7 +166,7 @@ public class Soulbook extends ModItem {
 			tag = new NBTTagCompound();
 			stack.setTagCompound(tag);
 		}
-		tag.setByte("essence_quantity", (byte) (count + Byte.MIN_VALUE));
+		tag.setInteger("essence_quantity", count);
 		return stack;
 	}
 
