@@ -51,7 +51,7 @@ public class SummonerReplacer {
 
 		public static Object deserialize(JsonElement json, Object current) {
 			if (json == null || !(json instanceof JsonObject)) {
-				Logger.info("summonerReplacer[structure]", "Must be an object");
+				Logger.error("summonerReplacer[structure]", "Must be an object");
 				return current;
 			}
 
@@ -96,7 +96,7 @@ public class SummonerReplacer {
 
 	public static Object deserialize(JsonElement json, Object current) {
 		if (json == null || !(json instanceof JsonObject)) {
-			Logger.info("creatures", "Must be an object");
+			Logger.error("creatures", "Must be an object");
 			return current;
 		}
 

@@ -47,7 +47,7 @@ public class NoMobSpawning {
 
 	public static Object deserialize(JsonElement json, Object current) {
 		if (json == null || !(json instanceof JsonObject)) {
-			Logger.info("creatures", "Must be an object");
+			Logger.error("creatures", "Must be an object");
 			return current;
 		}
 
@@ -83,7 +83,7 @@ public class NoMobSpawning {
 
 		public static Object deserialize(JsonElement json, Object current) {
 			if (json == null || !(json instanceof JsonObject)) {
-				Logger.info("creatures[dimension]", "Must be an object");
+				Logger.error("creatures[dimension]", "Must be an object");
 				return current;
 			}
 
@@ -119,7 +119,7 @@ public class NoMobSpawning {
 
 			public static Object deserialize(JsonElement json, Object current) {
 				if (json == null || !(json instanceof JsonObject)) {
-					Logger.info("creatures[dimension][biome]", "Must be an object");
+					Logger.error("creatures[dimension][biome]", "Must be an object");
 					return current;
 				}
 

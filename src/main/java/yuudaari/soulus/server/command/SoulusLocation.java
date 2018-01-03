@@ -21,7 +21,6 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.event.terraingen.InitMapGenEvent.EventType;
 import yuudaari.soulus.common.util.GeneratorName;
-import yuudaari.soulus.common.util.Logger;
 
 public class SoulusLocation extends CommandBase {
 
@@ -56,8 +55,8 @@ public class SoulusLocation extends CommandBase {
 		result.add("Structures: " + TextFormatting.RED + Arrays.asList(EventType.values()).stream().map(eventType -> {
 			boolean isInsideStructure = cps.isInsideStructure(world, GeneratorName.get(eventType.name()), pos);
 
-			Logger.info("type: " + eventType.name() + ", fixed: " + GeneratorName.get(eventType.name())
-					+ ", is inside? " + isInsideStructure);
+			// Logger.info("type: " + eventType.name() + ", fixed: " + GeneratorName.get(eventType.name())
+			//		+ ", is inside? " + isInsideStructure);
 
 			return isInsideStructure ? eventType.name() : null;
 		}).filter(eventTypeName -> eventTypeName != null)

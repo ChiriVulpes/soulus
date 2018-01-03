@@ -39,7 +39,7 @@ public class BoneChunksFromFossils {
 
 	public static Object deserialize(JsonElement json, Object current) {
 		if (json == null || !(json instanceof JsonObject)) {
-			Logger.info("fossils", "Must be an object");
+			Logger.error("fossils", "Must be an object");
 			return current;
 		}
 
