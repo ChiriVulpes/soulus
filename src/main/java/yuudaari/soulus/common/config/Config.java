@@ -11,6 +11,7 @@ import yuudaari.soulus.common.misc.BarkFromLogs;
 import yuudaari.soulus.common.misc.BoneChunksFromFossils;
 import yuudaari.soulus.common.misc.NoMobSpawning;
 import yuudaari.soulus.common.util.Logger;
+import yuudaari.soulus.common.world.SummonerReplacer;
 import yuudaari.soulus.common.world.generators.GeneratorFossils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -30,7 +31,6 @@ public class Config {
 
 	private static final String configFileName = "soulus.json";
 
-	public boolean replaceSpawnersWithSummoners = true;
 	public int boneChunkParticleCount = 3;
 	public List<EssenceConfig> essences = EssenceConfig.getDefaultCreatureConfigs();
 
@@ -47,7 +47,7 @@ public class Config {
 
 	private static final Serializer<Config> serializer;
 	static {
-		serializer = new Serializer<>(Config.class, "replaceSpawnersWithSummoners", "boneChunkParticleCount");
+		serializer = new Serializer<>(Config.class, "boneChunkParticleCount");
 
 		serializer.otherHandlers.put("glue", new ManualSerializer(from -> Glue.serializer.serialize(ModItems.GLUE),
 				(from, into) -> Glue.serializer.deserialize(from, ModItems.GLUE)));
@@ -82,12 +82,17 @@ public class Config {
 				new ManualSerializer(from -> NoMobSpawning.serializer.serialize(NoMobSpawning.INSTANCE),
 						(from, into) -> NoMobSpawning.serializer.deserialize(from, NoMobSpawning.INSTANCE)));
 
+		serializer.otherHandlers.put("summonerReplacer",
+				new ManualSerializer(from -> SummonerReplacer.serializer.serialize(SummonerReplacer.INSTANCE),
+						(from, into) -> SummonerReplacer.serializer.deserialize(from, SummonerReplacer.INSTANCE)));
+
 		serializer.otherHandlers.put("fossilVeins",
 				new ManualSerializer(from -> GeneratorFossils.serialize(ModGenerators.GENERATOR_FOSSILS),
 						(from, into) -> GeneratorFossils.deserialize(from, ModGenerators.GENERATOR_FOSSILS)));
 
 		serializer.fieldHandlers.put("essences",
 				new ManualSerializer(Config::serializeEssences, Config::deserializeEssences));
+
 	}
 
 	/* STATIC METHODS */
