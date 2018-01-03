@@ -355,15 +355,15 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		boolean didChangeStyle = true;
 		// the summoner style can always be changed
 		if (item.equals(ModItems.DUST_IRON) && state.getValue(VARIANT) != EndersteelType.NORMAL) {
-			world.setBlockState(pos, getDefaultState().withProperty(VARIANT, EndersteelType.NORMAL));
+			world.setBlockState(pos, state.withProperty(VARIANT, EndersteelType.NORMAL));
 		} else if (item.equals(ModItems.DUST_WOOD) && state.getValue(VARIANT) != EndersteelType.WOOD) {
-			world.setBlockState(pos, getDefaultState().withProperty(VARIANT, EndersteelType.WOOD));
+			world.setBlockState(pos, state.withProperty(VARIANT, EndersteelType.WOOD));
 		} else if (item.equals(ModItems.DUST_STONE) && state.getValue(VARIANT) != EndersteelType.STONE) {
-			world.setBlockState(pos, getDefaultState().withProperty(VARIANT, EndersteelType.STONE));
+			world.setBlockState(pos, state.withProperty(VARIANT, EndersteelType.STONE));
 		} else if (item.equals(ModItems.BONEMEAL_ENDER) && state.getValue(VARIANT) != EndersteelType.END_STONE) {
-			world.setBlockState(pos, getDefaultState().withProperty(VARIANT, EndersteelType.END_STONE));
+			world.setBlockState(pos, state.withProperty(VARIANT, EndersteelType.END_STONE));
 		} else if (item.equals(Items.BLAZE_POWDER) && state.getValue(VARIANT) != EndersteelType.BLAZE) {
-			world.setBlockState(pos, getDefaultState().withProperty(VARIANT, EndersteelType.BLAZE));
+			world.setBlockState(pos, state.withProperty(VARIANT, EndersteelType.BLAZE));
 		} else {
 			didChangeStyle = false;
 		}
@@ -416,9 +416,9 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		String essenceType = te.getEssenceType();
 
 		return soulbookUses > 0
-				? Soulbook
-						.getStack(essenceType,
-								(byte) (te.soulbookUses / (double) soulbookUses
+				? Soulbook.getStack(essenceType,
+						(byte) Math.max(0,
+								te.soulbookUses / (double) soulbookUses
 										* Soulus.config.getSoulbookQuantity(essenceType)))
 				: Soulbook.getFilled(essenceType);
 	}
@@ -437,8 +437,8 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 				(int) Math.floor(te.getSpawnPercent() * 100)));
 
 		if (soulbookUses > 0) {
-			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":summoner.summons_remaining", te.soulbookUses,
-					soulbookUses));
+			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":summoner.summons_remaining",
+					Math.max(0, te.soulbookUses), soulbookUses));
 		}
 
 	}

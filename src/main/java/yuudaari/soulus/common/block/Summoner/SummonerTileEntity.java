@@ -314,12 +314,12 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 					continue;
 				}
 
-				entity.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, world.rand.nextFloat() * 360.0F,
-						0.0F);
-
 				// custom data so we know the mob was spawned by souls
 				NBTTagCompound entityData = entity.getEntityData();
 				entityData.setByte("soulus:spawn_whitelisted", (byte) 2);
+
+				entity.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, world.rand.nextFloat() * 360.0F,
+						0.0F);
 
 				if (!ForgeEventFactory.doSpecialSpawn(entity, world, (float) entity.posX, (float) entity.posY,
 						(float) entity.posZ)) {
@@ -330,7 +330,6 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 				if (isPlayerInRangeForEffects())
 					explosionParticles(entity);
-				world.setEntityState(entity, (byte) 20);
 
 				spawned++;
 
