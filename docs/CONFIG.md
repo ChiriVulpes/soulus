@@ -13,9 +13,42 @@ Summoner-summoned mobs are excempt from this config. They will always be summone
 	"creatures": {
 		"*": {
 			"*": {
+				"minecraft:skeleton": {
+					"spawn_chance": 0.0,
+					"drops": {
+						"all": {
+							"whitelisted_drops": [
+								"*"
+							],
+							"blacklisted_drops": [
+								"minecraft:bone"
+							]
+						}
+					}
+				},
+				"minecraft:wither_skeleton": {
+					"spawn_chance": 0.0,
+					"drops": {
+						"all": {
+							"whitelisted_drops": [
+								"*"
+							],
+							"blacklisted_drops": [
+								"minecraft:bone"
+							]
+						}
+					}
+				},
 				"*": {
 					"spawn_chance": 0.0,
-					"has_drops": true
+					"drops": {
+						"summoned": {
+							"whitelisted_drops": [
+								"*"
+							],
+							"blacklisted_drops": []
+						}
+					}
 				}
 			}
 		}
@@ -24,7 +57,13 @@ Summoner-summoned mobs are excempt from this config. They will always be summone
 ```
 This is the default configuration, which disables all spawns, from every dimension, in every biome, of every creature. The first asterisk is a wildcard matching all dimensions, while the second asterisk is a wildcard matching all biomes, while the third asterisk is a wildcard matching all creatures.
 
-If you configure any creatures to still spawn, by default, they will all have drops, as seen in this config.
+`spawn_chance` affects only natural spawns. `drops`, however, will affect all mobs. In this config, we see Minecraft's bones being removed from all Skeletons and Wither Skeletons. (Soulus bones are added by default, elsewhere in the config)
+
+`drops` is an object that can take any of three properties, `all`, `summoned`, or `spawned`. The blacklist is used above the whitelist, and `summoned/spawned` is used above `all`. For example, you can whitelist all drops, but disable one specific drop (such as by default is done with Skeletons and Wither Skeletons). Another example is disabling all drops, except for one which is whitelisted only when they're summoned.
+
+If the `drops` object is empty, all drops will be disabled.
+
+For listing drops in `whitelisted_drops` or `blacklisted_drops`, you may use `"*"` for everything, `"minecraft:*"` for everything from minecraft (you can do this with any mod as well), or the exact id of the item.
 
 Here's a more complex example:
 ```json
@@ -34,21 +73,41 @@ Here's a more complex example:
 			"*": {
 				"*": {
 					"spawn_chance": 0.0,
-					"has_drops": false
+					"drops": {}
 				},
 				"twilightforest:*": {
 					"spawn_chance": 1.0,
-					"has_drops": false
+					"drops": {}
 				},
 				"minecraft:wither": {
 					"spawn_chance": 1.0,
-					"has_drops": true
+					"drops": {
+						"all": {
+							"whitelisted_drops": [
+								"*"
+							],
+							"blacklisted_drops": []
+						}
+					}
 				}
 			},
 			"minecraft:ocean": {
 				"*": {
 					"spawn_chance": 0.5,
-					"has_drops": true
+					"drops": {
+						"all": {
+							"whitelisted_drops": [
+								"*"
+							],
+							"blacklisted_drops": []
+						},
+						"spawned": {
+							"whitelisted_drops": [],
+							"blacklisted_drops": [
+								"minecraft:dye"
+							]
+						}
+					}
 				}
 			}
 		},
@@ -56,7 +115,14 @@ Here's a more complex example:
 			"minecraft:*": {
 				"minecraft:ender_dragon": {
 					"spawn_chance": 1.0,
-					"has_drops": true
+					"drops": {
+						"all": {
+							"whitelisted_drops": [
+								"*"
+							],
+							"blacklisted_drops": []
+						}
+					}
 				}
 			}
 		}
@@ -66,7 +132,7 @@ Here's a more complex example:
 In this example, by default, all spawns are disabled, except for all twilight forest creatures in any dimension/biome, and the wither, in any dimension/biome.  
 Then, any creatures that spawn in an ocean biome are half as likely to spawn.  
 Then there's also an explicit configuration so that if the spawn is in the end, and in any vanilla biome, and the entity is an ender dragon, then it can spawn.
-In this example, nothing has drops except the ender dragon, the wither, and everything in an ocean biome.
+In this example, nothing has drops except the ender dragon, the wither, and everything in an ocean biome. However, it also makes it so that nothing naturally spawned, which is in an ocean biome, will drop any "dye" item.
 
 To know the dimension and biome names of modded biomes, you can use the /souluslocation command.
 
