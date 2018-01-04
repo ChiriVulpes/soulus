@@ -6,8 +6,6 @@
 
 ## `CONFIG::creatures` [↑](#table-of-contents)
 
-Summoner-summoned mobs are excempt from this config. They will always be summoned, and they will always have drops.
-
 ```json
 {
 	"creatures": {
