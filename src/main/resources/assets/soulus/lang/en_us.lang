@@ -132,16 +132,19 @@ item.soulus:essence.minecraft:zombie_pigman.name=Zombie Pigman Essence
 item.soulus:essence.minecraft:zombie.name=Zombie Essence
 
 
-tile.soulus:fossil_dirt.name=Dirt with Fossils
 tile.soulus:fossil_dirt_ender.name=Dirt with Glowing Fossils
 tile.soulus:fossil_dirt_frozen.name=Dirt with Frozen Fossils
 tile.soulus:fossil_dirt_fungal.name=Dirt with Fossils and Moss
-tile.soulus:fossil_netherrack.name=Netherrack with Fossils
-tile.soulus:fossil_netherrack_ender.name=Netherrack with Glowing Fossils
-tile.soulus:fossil_sand.name=Sand with Dry Fossils
-tile.soulus:fossil_sand_scale.name=Sand with Scale Fossils
-tile.soulus:fossil_sand_ender.name=Sand with Glowing Fossils
+tile.soulus:fossil_dirt.name=Dirt with Fossils
 tile.soulus:fossil_end_stone.name=End Stone with Glowing Fossils
+tile.soulus:fossil_gravel_scale.name=Gravel with Scale Fossils
+tile.soulus:fossil_netherrack_ender.name=Netherrack with Glowing Fossils
+tile.soulus:fossil_netherrack.name=Netherrack with Fossils
+tile.soulus:fossil_sand_ender.name=Sand with Glowing Fossils
+tile.soulus:fossil_sand_scale.name=Sand with Scale Fossils
+tile.soulus:fossil_sand.name=Sand with Dry Fossils
+tile.soulus:fossil_sand_red_dry.name=Red Sand with Dry Fossils
+tile.soulus:fossil_sand_red_scale.name=Red Sand with Scale Fossils
 
 tile.soulus:block_endersteel.name=Block of Endersteel
 tile.soulus:bars_endersteel.name=Endersteel Bars

@@ -26,11 +26,14 @@ public class ModBlocks {
 	public static final FossilDirtFrozen FOSSIL_DIRT_FROZEN = new FossilDirtFrozen();
 	public static final FossilDirtFungal FOSSIL_DIRT_FUNGAL = new FossilDirtFungal();
 	public static final FossilEndStone FOSSIL_END_STONE = new FossilEndStone();
+	public static final FossilGravel FOSSIL_GRAVEL = new FossilGravel();
 	public static final FossilNetherrack FOSSIL_NETHERRACK = new FossilNetherrack();
 	public static final FossilNetherrackEnder FOSSIL_NETHERRACK_ENDER = new FossilNetherrackEnder();
 	public static final FossilSand FOSSIL_SAND = new FossilSand();
 	public static final FossilSandEnder FOSSIL_SAND_ENDER = new FossilSandEnder();
 	public static final FossilSandScale FOSSIL_SAND_SCALE = new FossilSandScale();
+	public static final FossilSandRed FOSSIL_SAND_RED = new FossilSandRed();
+	public static final FossilSandRedScale FOSSIL_SAND_RED_SCALE = new FossilSandRedScale();
 	public static final Skewer SKEWER = Skewer.INSTANCE;
 	public static final Summoner SUMMONER = Summoner.INSTANCE;
 
@@ -42,11 +45,14 @@ public class ModBlocks {
 			FOSSIL_DIRT_FUNGAL, //
 			FOSSIL_DIRT, //
 			FOSSIL_END_STONE, // 
+			FOSSIL_GRAVEL, // 
 			FOSSIL_NETHERRACK_ENDER, //
 			FOSSIL_NETHERRACK, //
 			FOSSIL_SAND_ENDER, //
 			FOSSIL_SAND_SCALE, //
 			FOSSIL_SAND, //
+			FOSSIL_SAND_RED, //
+			FOSSIL_SAND_RED_SCALE, //
 			SKEWER, //
 			SUMMONER //
 	};

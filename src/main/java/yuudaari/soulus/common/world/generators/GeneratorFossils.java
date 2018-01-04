@@ -25,12 +25,18 @@ public class GeneratorFossils extends ModGenerator {
 					.setChances(300).setBiomes(Type.COLD),
 			new OreVein().setBlock("soulus:fossil_dirt_ender").setToReplace("minecraft:dirt").setSize(2, 5)
 					.setChances(100).setBiomesBlacklist(Type.NETHER, Type.OCEAN, Type.END, Type.VOID),
-			new OreVein().setBlock("soulus:fossil_sand").setToReplace("minecraft:sand").setSize(3, 7).setChances(50)
+			new OreVein().setBlock("soulus:fossil_gravel_scale").setToReplace("minecraft:gravel").setSize(3, 7)
+					.setChances(30).setBiomes(Type.OCEAN),
+			new OreVein().setBlock("soulus:fossil_sand").setToReplace("minecraft:sand@0").setSize(3, 7).setChances(50)
 					.setBiomes(Type.HOT, Type.DRY).setBiomesBlacklist(Type.NETHER),
-			new OreVein().setBlock("soulus:fossil_sand_scale").setToReplace("minecraft:sand").setSize(3, 7)
+			new OreVein().setBlock("soulus:fossil_sand_scale").setToReplace("minecraft:sand@0").setSize(3, 7)
 					.setChances(30).setBiomes(Type.WATER, Type.HOT).setBiomesBlacklist(Type.NETHER),
-			new OreVein().setBlock("soulus:fossil_sand_ender").setToReplace("minecraft:sand").setSize(2, 5)
+			new OreVein().setBlock("soulus:fossil_sand_ender").setToReplace("minecraft:sand@0").setSize(2, 5)
 					.setBiomes(Type.HOT, Type.DRY).setBiomesBlacklist(Type.NETHER),
+			new OreVein().setBlock("soulus:fossil_sand_red_dry").setToReplace("minecraft:sand@1").setSize(3, 7)
+					.setChances(50).setBiomes(Type.HOT, Type.DRY).setBiomesBlacklist(Type.NETHER),
+			new OreVein().setBlock("soulus:fossil_sand_red_scale").setToReplace("minecraft:sand@1").setSize(3, 7)
+					.setChances(30).setBiomes(Type.HOT, Type.DRY).setBiomesBlacklist(Type.NETHER),
 			new OreVein().setBlock("soulus:fossil_netherrack").setToReplace("minecraft:netherrack").setSize(3, 7)
 					.setChances(300).setBiomes(Type.NETHER),
 			new OreVein().setBlock("soulus:fossil_netherrack_ender").setToReplace("minecraft:netherrack").setSize(2, 5)

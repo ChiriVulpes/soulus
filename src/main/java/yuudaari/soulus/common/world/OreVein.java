@@ -1,6 +1,6 @@
 package yuudaari.soulus.common.world;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
@@ -8,6 +8,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
+import yuudaari.soulus.common.util.BlockFromString;
 import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.config.ManualSerializer;
 import yuudaari.soulus.common.config.Serializer;
@@ -157,8 +158,15 @@ public class OreVein {
 			int veinSize = size.min.intValue() + random.nextInt(size.max.intValue() - size.min.intValue());
 			int heightRange = height.max.intValue() - height.min.intValue();
 
-			WorldGenMinable gen = new WorldGenMinable(Block.getBlockFromName(block).getDefaultState(), veinSize,
-					blockstate -> blockstate.equals(Block.getBlockFromName(replace).getDefaultState()));
+			IBlockState veinBlock = BlockFromString.get(block);
+			IBlockState toReplace = BlockFromString.get(replace);
+
+			if (veinBlock == null || toReplace == null) {
+				Logger.info("Unable to generate vein of " + veinBlock + " in " + toReplace);
+				return;
+			}
+
+			WorldGenMinable gen = new WorldGenMinable(veinBlock, veinSize, blockstate -> blockstate.equals(toReplace));
 			for (int i = 0; i < chances; i++) {
 				int x = chunkX * 16 + random.nextInt(16);
 				int y = random.nextInt(heightRange) + height.min.intValue();

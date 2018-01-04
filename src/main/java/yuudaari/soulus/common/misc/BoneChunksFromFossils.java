@@ -81,16 +81,19 @@ public class BoneChunksFromFossils {
 
 	public Map<String, FossilConfig> fossils = new HashMap<>();
 	{
-		fossils.put("soulus:fossil_dirt", new FossilConfig(BoneType.NORMAL, 2, 6));
 		fossils.put("soulus:fossil_dirt_ender", new FossilConfig(BoneType.ENDER, 2, 6));
 		fossils.put("soulus:fossil_dirt_frozen", new FossilConfig(BoneType.FROZEN, 2, 6));
 		fossils.put("soulus:fossil_dirt_fungal", new FossilConfig(BoneType.FUNGAL, 2, 6));
-		fossils.put("soulus:fossil_netherrack", new FossilConfig(BoneType.NETHER, 2, 6));
+		fossils.put("soulus:fossil_dirt", new FossilConfig(BoneType.NORMAL, 2, 6));
+		fossils.put("soulus:fossil_end_stone", new FossilConfig(BoneType.ENDER, 2, 6));
+		fossils.put("soulus:fossil_gravel_scale", new FossilConfig(BoneType.SCALE, 2, 6));
 		fossils.put("soulus:fossil_netherrack_ender", new FossilConfig(BoneType.ENDER, 2, 6));
-		fossils.put("soulus:fossil_sand", new FossilConfig(BoneType.DRY, 2, 6));
+		fossils.put("soulus:fossil_netherrack", new FossilConfig(BoneType.NETHER, 2, 6));
 		fossils.put("soulus:fossil_sand_ender", new FossilConfig(BoneType.ENDER, 2, 6));
 		fossils.put("soulus:fossil_sand_scale", new FossilConfig(BoneType.SCALE, 2, 6));
-		fossils.put("soulus:fossil_end_stone", new FossilConfig(BoneType.ENDER, 2, 6));
+		fossils.put("soulus:fossil_sand", new FossilConfig(BoneType.DRY, 2, 6));
+		fossils.put("soulus:fossil_sand_red_scale", new FossilConfig(BoneType.SCALE, 2, 6));
+		fossils.put("soulus:fossil_sand_red_dry", new FossilConfig(BoneType.DRY, 2, 6));
 	}
 
 	@SubscribeEvent
