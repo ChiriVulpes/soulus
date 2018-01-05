@@ -82,6 +82,11 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 	public void onInsertUpgrade(ItemStack stack, IUpgrade upgrade, int newQuantity) {
 		if (upgrade == Upgrade.BLOOD_CRYSTAL) {
 			this.bloodCrystalBlood = BloodCrystal.getContainedBlood(stack);
+
+		} else if (upgrades.get(Upgrade.BLOOD_CRYSTAL) > 0) {
+			// always keep blood crystal at the top (first to remove)
+			this.insertionOrder.remove(Upgrade.BLOOD_CRYSTAL);
+			this.insertionOrder.push(Upgrade.BLOOD_CRYSTAL);
 		}
 	}
 
