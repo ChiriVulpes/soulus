@@ -54,6 +54,7 @@ public class ModItems {
 	public static final OrbMurky ORB_MURKY = OrbMurky.INSTANCE;
 	public static final Sledgehammer SLEDGEHAMMER = new Sledgehammer();
 	public static final Soulbook SOULBOOK = Soulbook.INSTANCE;
+	public static final SoulCatalyst SOUL_CATALYST = new SoulCatalyst();
 
 	public static Item[] items = new Item[] { //
 			ASH, //
@@ -96,7 +97,8 @@ public class ModItems {
 			NUGGET_ENDERSTEEL, //
 			ORB_MURKY, // 
 			SLEDGEHAMMER, // 
-			SOULBOOK //
+			SOULBOOK, //
+			SOUL_CATALYST //
 	};
 
 	public static void registerItems(IForgeRegistry<Item> registry) {
