@@ -2,7 +2,6 @@ package yuudaari.soulus.common.util;
 
 import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.compat.WailaProviders;
-import yuudaari.soulus.common.util.IModItem;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +20,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.common.Optional;
 
-public interface IBlock extends IModItem {
+public interface IBlock extends IModThing {
 	abstract ResourceLocation getRegistryName();
 
 	abstract boolean hasItem();

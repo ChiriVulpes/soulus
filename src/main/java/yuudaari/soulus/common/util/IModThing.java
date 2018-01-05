@@ -12,13 +12,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.common.recipe.Recipe;
 
-public interface IModItem {
+public interface IModThing {
 	abstract String getName();
 
 	default void setName(String name) {
 	}
 
-	default IModItem addOreDict(String... name) {
+	default IModThing addOreDict(String... name) {
 		return this;
 	}
 

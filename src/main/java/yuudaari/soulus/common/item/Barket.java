@@ -33,9 +33,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.items.ItemHandlerHelper;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.CreativeTab;
-import yuudaari.soulus.common.util.IModItem;
+import yuudaari.soulus.common.util.IModThing;
 
-public class Barket extends UniversalBucket implements IModItem {
+public class Barket extends UniversalBucket implements IModThing {
 	private final ItemStack EMPTY = new ItemStack(this);
 
 	public int maxDamage = 100;

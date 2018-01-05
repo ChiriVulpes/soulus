@@ -3,7 +3,6 @@ package yuudaari.soulus.common.util;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.recipe.Recipe;
-import yuudaari.soulus.common.util.IModItem;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -28,7 +27,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ModItem extends Item implements IModItem {
+public class ModItem extends Item implements IModThing {
 	public interface ConsumeHandler {
 		void consume(ItemStack item, World world, EntityLivingBase entity);
 	}

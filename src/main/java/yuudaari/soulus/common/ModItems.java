@@ -9,7 +9,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.common.item.*;
-import yuudaari.soulus.common.util.IModItem;
+import yuudaari.soulus.common.util.IModThing;
 import yuudaari.soulus.common.util.ModItem;
 
 public class ModItems {
@@ -104,8 +104,8 @@ public class ModItems {
 
 		for (Item item : items) {
 			registry.register(item);
-			if (item instanceof IModItem) {
-				for (String dict : ((IModItem) item).getOreDicts()) {
+			if (item instanceof IModThing) {
+				for (String dict : ((IModThing) item).getOreDicts()) {
 					OreDictionary.registerOre(dict, item);
 				}
 			}
@@ -115,8 +115,8 @@ public class ModItems {
 	@SideOnly(Side.CLIENT)
 	public static void registerModels() {
 		for (Item item : items) {
-			if (item instanceof IModItem)
-				((IModItem) item).registerModels();
+			if (item instanceof IModThing)
+				((IModThing) item).registerModels();
 		}
 	}
 
