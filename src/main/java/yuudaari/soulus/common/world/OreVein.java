@@ -162,7 +162,7 @@ public class OreVein {
 			IBlockState toReplace = BlockFromString.get(replace);
 
 			if (veinBlock == null || toReplace == null) {
-				Logger.info("Unable to generate vein of " + veinBlock + " in " + toReplace);
+				Logger.error("Unable to generate vein of " + veinBlock + " in " + toReplace);
 				return;
 			}
 

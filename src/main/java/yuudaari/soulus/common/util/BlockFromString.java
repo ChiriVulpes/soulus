@@ -20,11 +20,9 @@ public class BlockFromString {
 		Block block = Block.getBlockFromName(name);
 
 		if (block == null) {
-			Logger.info("Can't find block for " + name);
+			Logger.error("Can't find block for " + name);
 			return null;
 		}
-
-		Logger.info("name " + name + ", metadata " + metadata);
 
 		return metadata == -1 ? block.getDefaultState() : block.getStateFromMeta(metadata);
 	}

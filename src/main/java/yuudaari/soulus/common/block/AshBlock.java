@@ -16,6 +16,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
+import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.util.ModBlock;
 
@@ -27,6 +28,11 @@ public class AshBlock extends ModBlock {
 		super("ash_block", new MaterialTransparent(MapColor.BLACK).setReplaceable());
 		setSoundType(SoundType.PLANT);
 		registerWailaProvider(AshBlock.class);
+	}
+
+	@Override
+	public CreativeTab getCreativeTabToDisplayOn() {
+		return null;
 	}
 
 	@Override
