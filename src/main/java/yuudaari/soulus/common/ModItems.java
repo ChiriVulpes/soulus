@@ -23,7 +23,7 @@ public class ModItems {
 	public static final BoneChunkNormal BONE_CHUNK_NORMAL = new BoneChunkNormal();
 	public static final BoneChunkScale BONE_CHUNK_SCALE = new BoneChunkScale();
 	public static final BoneEnder BONE_ENDER = new BoneEnder();
-	public static final Bonemeal BONEMEAL_NETHER = new Bonemeal("bone_meal_nether");
+	public static final Bonemeal BONEMEAL_NETHER = BonemealNether.INSTANCE;
 	public static final BonemealEnder BONEMEAL_ENDER = new BonemealEnder();
 	public static final BoneNether BONE_NETHER = new BoneNether();
 	public static final DustEnderIron DUST_ENDER_IRON = new DustEnderIron();
@@ -36,6 +36,7 @@ public class ModItems {
 	public static final GearBoneEnder GEAR_BONE_ENDER = new GearBoneEnder();
 	public static final GearOscillating GEAR_OSCILLATING = new GearOscillating();
 	public static final Glue GLUE = new Glue();
+	public static final ModItem ASH = new ModItem("ash");
 	public static final ModItem BARK = new ModItem("bark").setBurnTime(40);
 	public static final ModItem BLOOD_CRYSTAL_BROKEN = new ModItem("blood_crystal_broken");
 	public static final ModItem BONE_DRY = new ModItem("bone_dry");
@@ -55,6 +56,7 @@ public class ModItems {
 	public static final Soulbook SOULBOOK = Soulbook.INSTANCE;
 
 	public static Item[] items = new Item[] { //
+			ASH, //
 			BARK, // 
 			BARKET, //  
 			BLOOD_CRYSTAL_BROKEN, // 
@@ -66,12 +68,12 @@ public class ModItems {
 			BONE_CHUNK_NETHER, // 
 			BONE_CHUNK_NORMAL, // 
 			BONE_CHUNK_SCALE, //
-			BONE_NORMAL, // 
 			BONE_DRY, //  
 			BONE_ENDER, //  
 			BONE_FROZEN, //  
 			BONE_FUNGAL, //  
 			BONE_NETHER, //  
+			BONE_NORMAL, // 
 			BONE_SCALE, //  
 			BONEMEAL_ENDER, // 
 			BONEMEAL_NETHER, // 

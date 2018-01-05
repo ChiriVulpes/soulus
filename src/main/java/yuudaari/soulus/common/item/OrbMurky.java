@@ -29,7 +29,7 @@ public class OrbMurky extends SummonerUpgrade {
 
 	public static final OrbMurky INSTANCE = new OrbMurky();
 
-	public int requiredEssence = 64;
+	public int requiredEssence = 128;
 
 	public OrbMurky() {
 		super("orb_murky");
@@ -63,7 +63,7 @@ public class OrbMurky extends SummonerUpgrade {
 						containedEssence = getContainedEssence(stack);
 						orb = stack;
 						continue;
-					} else if (stackItem == ModItems.ESSENCE) {
+					} else if (stackItem == ModItems.ESSENCE || stackItem == ModItems.ASH) {
 						essenceCount++;
 						continue;
 					}

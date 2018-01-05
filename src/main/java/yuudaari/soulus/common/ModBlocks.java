@@ -19,6 +19,7 @@ import yuudaari.soulus.common.block.summoner.Summoner;
 import yuudaari.soulus.common.block.skewer.Skewer;
 
 public class ModBlocks {
+	public static final AshBlock ASH = new AshBlock();
 	public static final BarsEndersteel BARS_ENDERSTEEL = new BarsEndersteel();
 	public static final BlockEndersteel BLOCK_ENDERSTEEL = new BlockEndersteel();
 	public static final FossilDirt FOSSIL_DIRT = new FossilDirt();
@@ -38,6 +39,7 @@ public class ModBlocks {
 	public static final Summoner SUMMONER = Summoner.INSTANCE;
 
 	public static IBlock[] blocks = new IBlock[] { //
+			ASH, //
 			BARS_ENDERSTEEL, //
 			BLOCK_ENDERSTEEL, //
 			FOSSIL_DIRT_ENDER, //
