@@ -260,7 +260,7 @@ If you have a suggestion you can also leave them as an issue. I will close sugge
 
 If you want to support me financially, consider supporting me on [Patreon](https://www.patreon.com/yuudaari)!
 
-[The Soulus License Copyright (c) 2017-2018 Mackenzie "Yuudaari" McClane](./LICENSE.md)
+[The Soulus License Copyright (c) 2018 Mackenzie "Yuudaari" McClane](./LICENSE.md)
 
 ---
 
