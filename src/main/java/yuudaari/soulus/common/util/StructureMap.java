@@ -57,7 +57,7 @@ public class StructureMap {
 
 	public Boolean loopBlocks(World world, BlockPos pos, EnumFacing facing, BlockLoop loop, Boolean defaultResult) {
 		EnumFacing z = facing;
-		EnumFacing x = facing.rotateY();
+		EnumFacing x = rotateY(facing);
 		EnumFacing y = facing.rotateAround(Axis.X);
 
 		for (Map.Entry<BlockPos, BlockValidator> entry : blocks.entrySet()) {
@@ -95,5 +95,11 @@ public class StructureMap {
 				return false;
 			};
 		}
+	}
+
+	private EnumFacing rotateY(EnumFacing f) {
+		if (f == EnumFacing.DOWN || f == EnumFacing.UP)
+			return f;
+		return f.rotateY();
 	}
 }

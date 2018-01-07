@@ -254,6 +254,8 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	protected void onWailaTooltipHeader(List<String> currentTooltip, IBlockState blockState, ComposerCellTileEntity te,
 			boolean isSneaking) {
 
+		currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":composer_cell.slot", te.slot));
+
 		if (te.storedQuantity == 0) {
 			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":composer_cell.no_items"));
 		} else {

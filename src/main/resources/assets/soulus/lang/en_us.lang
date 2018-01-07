@@ -227,3 +227,4 @@ waila.soulus:skewer.upgrades_power=%1$s/%2$s §cPower Upgrade
 waila.soulus:composer.upgrades_range=%1$s/%2$s §6Murky Orbs
 waila.soulus:composer_cell.no_items=Contains No Items
 waila.soulus:composer_cell.contained_item=%1$s/%2$s §6%3$s
+waila.soulus:composer_cell.slot=Slot %1$s

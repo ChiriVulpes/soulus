@@ -21,7 +21,6 @@ import scala.actors.threadpool.Arrays;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.block.UpgradeableBlock;
-import yuudaari.soulus.common.block.composer.ComposerCell.CellState;
 import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.StructureMap;
@@ -174,6 +173,7 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 
 					ComposerCellTileEntity ccte = (ComposerCellTileEntity) world.getTileEntity(pos2);
 					ccte.composerLocation = null;
+					ccte.blockUpdate();
 				}
 
 				return null;
@@ -229,10 +229,10 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 		BlockValidator block = (pos, world, checkPos, state) -> {
 			if (state.getBlock() != ComposerCell.INSTANCE)
 				return false;
-			if (state.getValue(ComposerCell.CELL_STATE) == CellState.DISCONNECTED)
-				return true;
 			ComposerCellTileEntity te = (ComposerCellTileEntity) world.getTileEntity(checkPos);
-			return te == null || pos.equals(te.composerLocation);
+			boolean result = te == null || (te.composerLocation == null && te.changeComposerCooldown < 0)
+					|| pos.equals(te.composerLocation);
+			return result;
 		};
 
 		structure.addRowX(-2, 0, -5, 5, bars);

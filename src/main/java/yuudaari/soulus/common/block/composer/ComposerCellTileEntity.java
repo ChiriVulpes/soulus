@@ -1,32 +1,19 @@
 package yuudaari.soulus.common.block.composer;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 
 	public BlockPos composerLocation;
+	public int changeComposerCooldown = 0;
+	public byte slot = -1;
 
 	public ItemStack storedItem;
 	public int storedQuantity;
-	private double itemRotation = Math.random() * 360;
-	private double prevItemRotation = 0;
-
-	@Override
-	public double getItemRotation() {
-		return itemRotation;
-	}
-
-	@Override
-	public double getPrevItemRotation() {
-		return prevItemRotation;
-	}
-
-	@Override
-	public ItemStack getStoredItem() {
-		return storedItem;
-	}
 
 	@Override
 	public ComposerCell getBlock() {
@@ -34,11 +21,22 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 	}
 
 	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
+	}
+
+	@Override
 	public void update() {
+		changeComposerCooldown--;
+
 		double diff = itemRotation - prevItemRotation;
 		prevItemRotation = itemRotation;
 		itemRotation = itemRotation + 0.05F + diff * 0.8;
 	}
+
+	/////////////////////////////////////////
+	// NBT
+	//
 
 	@Override
 	public void onWriteToNBT(NBTTagCompound compound) {
@@ -55,6 +53,8 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 		if (storedQuantity > 0) {
 			compound.setTag("stored_item", storedItem.writeToNBT(new NBTTagCompound()));
 		}
+
+		compound.setByte("slot", slot);
 	}
 
 	@Override
@@ -70,5 +70,29 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 		} else {
 			storedItem = null;
 		}
+
+		slot = compound.getByte("slot");
+	}
+
+	/////////////////////////////////////////
+	// Renderer
+	//
+
+	private double itemRotation = Math.random() * 360;
+	private double prevItemRotation = 0;
+
+	@Override
+	public double getItemRotation() {
+		return itemRotation;
+	}
+
+	@Override
+	public double getPrevItemRotation() {
+		return prevItemRotation;
+	}
+
+	@Override
+	public ItemStack getStoredItem() {
+		return storedItem;
 	}
 }
