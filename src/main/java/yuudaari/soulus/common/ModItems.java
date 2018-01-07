@@ -25,7 +25,6 @@ public class ModItems {
 	public static final BoneEnder BONE_ENDER = new BoneEnder();
 	public static final Bonemeal BONEMEAL_NETHER = BonemealNether.INSTANCE;
 	public static final BonemealEnder BONEMEAL_ENDER = new BonemealEnder();
-	public static final BoneNether BONE_NETHER = new BoneNether();
 	public static final DustEnderIron DUST_ENDER_IRON = new DustEnderIron();
 	public static final Essence ESSENCE = new Essence();
 	public static final GearBone GEAR_BONE = new GearBone("gear_bone");
@@ -39,10 +38,11 @@ public class ModItems {
 	public static final ModItem ASH = new ModItem("ash");
 	public static final ModItem BARK = new ModItem("bark").setBurnTime(40);
 	public static final ModItem BLOOD_CRYSTAL_BROKEN = new ModItem("blood_crystal_broken");
-	public static final ModItem BONE_DRY = new ModItem("bone_dry");
-	public static final ModItem BONE_FROZEN = new ModItem("bone_frozen");
-	public static final ModItem BONE_FUNGAL = new ModItem("bone_fungal");
-	public static final ModItem BONE_NORMAL = new ModItem("bone_normal");
+	public static final ModItem BONE_DRY = new ModItem("bone_dry").addOreDict("bone");
+	public static final ModItem BONE_FROZEN = new ModItem("bone_frozen").addOreDict("bone");
+	public static final ModItem BONE_FUNGAL = new ModItem("bone_fungal").addOreDict("bone");
+	public static final ModItem BONE_NETHER = new ModItem("bone_nether");
+	public static final ModItem BONE_NORMAL = new ModItem("bone_normal").addOreDict("bone");
 	public static final ModItem BONE_SCALE = new ModItem("bone_scale");
 	public static final ModItem DUST_IRON = new ModItem("dust_iron").addOreDict("dustIron");
 	public static final ModItem DUST_STONE = new ModItem("dust_stone").addOreDict("dustStone");

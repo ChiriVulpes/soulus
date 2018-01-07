@@ -240,6 +240,7 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	/////////////////////////////////////////
 	// Tile Entity
 	//
+
 	@Override
 	public boolean hasTileEntity(IBlockState blockState) {
 		return true;

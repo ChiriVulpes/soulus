@@ -30,6 +30,7 @@ public class BlockEndersteel extends ModBlock {
 		setHarvestLevel("pickaxe", 1);
 		setSoundType(SoundType.METAL);
 		setTickRandomly(false);
+		setDefaultState(super.getDefaultState().withProperty(HAS_COMPARATOR, false));
 	}
 
 	@Override

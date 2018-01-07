@@ -36,17 +36,18 @@ item.soulus:blood_crystal_broken.name=Shattered Blood Crystal
 item.soulus:blood_crystal.name=Blood Crystal
 item.soulus:blood_crystal.filled.name=Blood Crystal
 
-item.soulus:gear_oscillating.name=Oscillating Gear
 item.soulus:gear_bone.name=Normal Bone Gear
 item.soulus:gear_bone_ender.name=Ender Bone Gear
 item.soulus:gear_bone_nether.name=Blackened Bone Gear
 item.soulus:gear_bone_frozen.name=Frozen Bone Gear
 item.soulus:gear_bone_fungal.name=Mossy Bone Gear
 item.soulus:gear_bone_dry.name=Dry Bone Gear
+item.soulus:gear_oscillating.name=Oscillating Gear
 
 item.soulus:orb_murky.name=Strange Sticky Ball
 item.soulus:orb_murky.filled.name=Murky Orb
 
+item.soulus:soul_catalyst.name=Soul Catalyst
 
 item.soulus:sledgehammer.name=Sledgehammer
 item.soulus:barket.name=Barket
@@ -152,6 +153,9 @@ tile.soulus:bars_endersteel.name=Endersteel Bars
 
 tile.soulus:skewer.name=Skewer
 
+tile.soulus:composer.name=Composer
+tile.soulus:composer_cell.name=Composer Cell
+
 tile.soulus:summoner_empty.name=Empty Summoner
 tile.soulus:summoner.name=Summoner
 
@@ -212,10 +216,14 @@ tooltip.soulus:summoner.style.stone=§8Style: §9Spooky
 tooltip.soulus:summoner.style.end_stone=§8Style: §2Ender
 tooltip.soulus:summoner.style.blaze=§8Style: §cBlazing
 
-waila.soulus:skewer.extended=Extended
-waila.soulus:skewer.not_extended=Not Extended
+waila.soulus:skewer.extended=§8Extended
+waila.soulus:skewer.not_extended=§8Not Extended
 waila.soulus:skewer.blood_crystal_stored_blood=§4Blood Crystal: §8%1$s/%2$s Blood
 waila.soulus:skewer.upgrades_blood_crystal=%1$s/%2$s §4Blood Crystal
 waila.soulus:skewer.upgrades_damage=%1$s/%2$s §6Damage Upgrade
 waila.soulus:skewer.upgrades_poison=%1$s/%2$s §2Poison Upgrade
 waila.soulus:skewer.upgrades_power=%1$s/%2$s §cPower Upgrade
+
+waila.soulus:composer.upgrades_range=%1$s/%2$s §6Murky Orbs
+waila.soulus:composer_cell.no_items=Contains No Items
+waila.soulus:composer_cell.contained_item=%1$s/%2$s §6%3$s

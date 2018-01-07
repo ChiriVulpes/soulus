@@ -213,7 +213,7 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.
 		onBlockDestroy(world, pos, 0, creative);
 	}
 
-	public final void onBlockDestroy(World world, BlockPos pos, int fortune, boolean creative) {
+	public void onBlockDestroy(World world, BlockPos pos, int fortune, boolean creative) {
 		List<ItemStack> drops = getDropsForBreak(world, pos, world.getBlockState(pos), fortune, creative);
 
 		dropItems(world, drops, pos);
@@ -546,7 +546,7 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.
 		public final void blockUpdate() {
 			if (world != null) {
 				IBlockState blockState = world.getBlockState(pos);
-				world.notifyBlockUpdate(pos, blockState, blockState, 7);
+				world.notifyBlockUpdate(pos, blockState, blockState, 3);
 			}
 		}
 	}
@@ -576,8 +576,9 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.
 
 		onWailaTooltipHeader(currentTooltip, accessor.getBlockState(), (TileEntityClass) te, isSneaking);
 
-		if (isSneaking) {
-			List<IUpgrade> upgrades = new ArrayList<>(Arrays.asList(getUpgrades()));
+		List<IUpgrade> upgrades = new ArrayList<>(Arrays.asList(getUpgrades()));
+
+		if (isSneaking || upgrades.size() < 2) {
 			for (IUpgrade upgrade : Lists.reverse(ute.insertionOrder)) {
 				upgrades.remove(upgrade);
 				currentTooltip
