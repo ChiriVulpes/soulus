@@ -9,6 +9,7 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Mirror;
@@ -213,10 +214,10 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY,
 			float hitZ, int meta, EntityLivingBase placer) {
 
-		IBlockState state = getDefaultState().withProperty(FACING,
-				EnumFacing.getDirectionFromEntityLiving(pos, placer));
+		EnumFacing defaultDirection = EnumFacing.getDirectionFromEntityLiving(pos, placer);
+		IBlockState state = getDefaultState().withProperty(FACING, defaultDirection);
 
-		EnumFacing direction = validateStructure(world, pos);
+		EnumFacing direction = validateStructure(world, pos, defaultDirection);
 		if (direction != null && state.getValue(Composer.FACING) != direction)
 			state = state.withProperty(Composer.FACING, direction);
 
@@ -226,7 +227,7 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	public StructureMap structure = new StructureMap();
 	{
 		BlockValidator bars = BlockValidator.byBlock(ModBlocks.BARS_ENDERSTEEL);
-		BlockValidator block = (pos, world, checkPos, state) -> {
+		BlockValidator cell = (pos, world, checkPos, state) -> {
 			if (state.getBlock() != ComposerCell.INSTANCE)
 				return false;
 			ComposerCellTileEntity te = (ComposerCellTileEntity) world.getTileEntity(checkPos);
@@ -234,25 +235,61 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 					|| pos.equals(te.composerLocation);
 			return result;
 		};
+		BlockValidator obsidian = BlockValidator.byBlock(Blocks.OBSIDIAN);
+		BlockValidator endersteel = BlockValidator.byBlock(ModBlocks.BLOCK_ENDERSTEEL);
 
-		structure.addRowX(-2, 0, -5, 5, bars);
+		// layer 1
+		structure.addBlock(-2, 0, -5, obsidian);
+		structure.addRowX(-1, 0, -5, 3, bars);
+		structure.addBlock(2, 0, -5, obsidian);
+
 		structure.addBlock(-2, 0, -4, bars);
-		structure.addRowX(-1, 0, -4, 3, block);
+		structure.addRowX(-1, 0, -4, 3, cell);
 		structure.addBlock(2, 0, -4, bars);
+
 		structure.addBlock(-2, 0, -3, bars);
-		structure.addRowX(-1, 0, -3, 3, block);
+		structure.addRowX(-1, 0, -3, 3, cell);
 		structure.addBlock(2, 0, -3, bars);
+
 		structure.addBlock(-2, 0, -2, bars);
-		structure.addRowX(-1, 0, -2, 3, block);
+		structure.addRowX(-1, 0, -2, 3, cell);
 		structure.addBlock(2, 0, -2, bars);
-		structure.addRowX(-2, 0, -1, 5, bars);
+
+		structure.addBlock(-2, 0, -1, obsidian);
+		structure.addRowX(-1, 0, -1, 3, bars);
+		structure.addBlock(2, 0, -1, obsidian);
+
+		// layer 2
+		structure.addBlock(-2, 1, -5, obsidian);
+		structure.addBlock(-1, 1, -5, bars);
+		structure.addBlock(1, 1, -5, bars);
+		structure.addBlock(2, 1, -5, obsidian);
+
+		structure.addBlock(-2, 1, -4, bars);
+		structure.addBlock(2, 1, -4, bars);
+
+		structure.addBlock(-2, 1, -2, bars);
+		structure.addBlock(2, 1, -2, bars);
+
+		structure.addBlock(-2, 1, -1, obsidian);
+		structure.addBlock(-1, 1, -1, bars);
+		structure.addBlock(1, 1, -1, bars);
+		structure.addBlock(2, 1, -1, obsidian);
+
+		// layer 3
+		structure.addBlock(-2, 2, -5, endersteel);
+		structure.addBlock(2, 2, -5, endersteel);
+
+		structure.addBlock(-2, 2, -1, endersteel);
+		structure.addBlock(2, 2, -1, endersteel);
 	}
 
-	public EnumFacing validateStructure(World world, BlockPos pos) {
-		for (EnumFacing facing : EnumFacing.HORIZONTALS) {
-			if (structure.isValid(world, pos, facing))
-				return facing;
-		}
+	public EnumFacing validateStructure(World world, BlockPos pos, EnumFacing currentDirection) {
+		if (currentDirection != EnumFacing.DOWN && currentDirection != EnumFacing.UP)
+			for (EnumFacing facing : EnumFacing.HORIZONTALS) {
+				if (structure.isValid(world, pos, facing))
+					return facing;
+			}
 		return null;
 		// return structure.isValid(world, pos, world.getBlockState(pos).getValue(FACING));
 	}

@@ -3,11 +3,14 @@ package yuudaari.soulus.common.block.composer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import yuudaari.soulus.common.util.Logger;
 
 public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 
+	public ChangeItemHandler changeItemHandler;
 	public BlockPos composerLocation;
 	public int changeComposerCooldown = 0;
 	public byte slot = -1;
@@ -32,6 +35,24 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 		double diff = itemRotation - prevItemRotation;
 		prevItemRotation = itemRotation;
 		itemRotation = itemRotation + 0.05F + diff * 0.8;
+	}
+
+	public void onChangeItem() {
+		Logger.info("change item handler called " + changeItemHandler);
+		TileEntity te = world.getTileEntity(composerLocation);
+		if (te == null || !(te instanceof ComposerTileEntity) || !((ComposerTileEntity) te).isConnected())
+			return;
+
+		if (changeItemHandler != null)
+			changeItemHandler.handle(this);
+	}
+
+	public void onChangeItem(ChangeItemHandler handler) {
+		changeItemHandler = handler;
+	}
+
+	public static interface ChangeItemHandler {
+		public Boolean handle(ComposerCellTileEntity ccte);
 	}
 
 	/////////////////////////////////////////

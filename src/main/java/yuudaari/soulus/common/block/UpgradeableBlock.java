@@ -529,8 +529,7 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.
 
 		@Override
 		public final NBTTagCompound getUpdateTag() {
-			NBTTagCompound nbt = writeToNBT(new NBTTagCompound());
-			return nbt;
+			return writeToNBT(new NBTTagCompound());
 		}
 
 		@Override

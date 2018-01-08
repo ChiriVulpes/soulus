@@ -183,7 +183,7 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 			}
 
 			stack.shrink(insertQuantity);
-
+			te.onChangeItem();
 			te.blockUpdate();
 
 			return true;
@@ -207,6 +207,7 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 		te.storedItem = null;
 		te.storedQuantity = 0;
 
+		te.onChangeItem();
 		te.blockUpdate();
 
 		return true;

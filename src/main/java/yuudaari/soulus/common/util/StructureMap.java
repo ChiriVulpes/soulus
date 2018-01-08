@@ -58,12 +58,13 @@ public class StructureMap {
 	public Boolean loopBlocks(World world, BlockPos pos, EnumFacing facing, BlockLoop loop, Boolean defaultResult) {
 		EnumFacing z = facing;
 		EnumFacing x = rotateY(facing);
-		EnumFacing y = facing.rotateAround(Axis.X);
+		EnumFacing y = facing.rotateAround(x.getAxis());
 
 		for (Map.Entry<BlockPos, BlockValidator> entry : blocks.entrySet()) {
 			BlockPos mapPos = entry.getKey();
 			BlockPos offsetPosition = pos.offset(x, mapPos.getX()).offset(y, mapPos.getY()).offset(z, mapPos.getZ());
 			Boolean result = loop.handle(offsetPosition, entry.getValue());
+			// Logger.info("pos: " + pos + ", mapPos: " + mapPos + ", calculated: " + offsetPosition + ", result: " + result);
 			if (result != null)
 				return result;
 		}
