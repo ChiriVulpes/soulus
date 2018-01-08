@@ -285,11 +285,21 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	}
 
 	public EnumFacing validateStructure(World world, BlockPos pos, EnumFacing currentDirection) {
-		if (currentDirection != EnumFacing.DOWN && currentDirection != EnumFacing.UP)
+
+		boolean checkCurrentDirection = currentDirection != EnumFacing.DOWN && currentDirection != EnumFacing.UP;
+
+		if (checkCurrentDirection && structure.isValid(world, pos, currentDirection))
+			return currentDirection;
+
+		else {
 			for (EnumFacing facing : EnumFacing.HORIZONTALS) {
+				if (checkCurrentDirection && facing == currentDirection)
+					continue;
 				if (structure.isValid(world, pos, facing))
 					return facing;
 			}
+		}
+
 		return null;
 		// return structure.isValid(world, pos, world.getBlockState(pos).getValue(FACING));
 	}

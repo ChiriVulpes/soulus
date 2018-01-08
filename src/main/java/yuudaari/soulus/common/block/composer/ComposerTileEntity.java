@@ -1,20 +1,18 @@
 package yuudaari.soulus.common.block.composer;
 
+import com.mojang.authlib.GameProfile;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
-import com.mojang.authlib.GameProfile;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.ItemStack;
+import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EntitySelectors;
@@ -26,7 +24,6 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.StructureMap.BlockValidator;
 
 public class ComposerTileEntity extends HasRenderItemTileEntity {
@@ -198,18 +195,13 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		}
 		compound.setTag("cell_map", cellTag);
 
-		Logger.info("write to nbt, has container: " + (container != null));
-
 		if (FMLCommonHandler.instance().getEffectiveSide().isServer()) {
-			Logger.info("stored item: " + getStoredItem());
 			compound.setTag("crafting_item", getStoredItem().writeToNBT(new NBTTagCompound()));
 		}
 	}
 
 	@Override
 	public void onReadFromNBT(NBTTagCompound compound) {
-		Logger.info("read from nbt 3");
-
 		NBTTagCompound cellTag = compound.getCompoundTag("cell_map");
 		for (Integer slot = 0; slot < 9; slot++) {
 			NBTTagCompound posTag = cellTag.getCompoundTag(slot.toString());
@@ -219,11 +211,8 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 		needsRecipeRefresh = true;
 
-		Logger.info("read from nbt, has crafting item: " + compound.hasKey("crafting_item"));
-
 		if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
 			renderItem = new ItemStack(compound.getCompoundTag("crafting_item"));
-			Logger.info("render item: " + renderItem);
 		}
 	}
 
@@ -304,18 +293,15 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		protected void slotChangedCraftingGrid(World world, EntityPlayer player, InventoryCrafting craftingMatrix,
 				InventoryCraftResult craftResult) {
 
-			Logger.info("slot changed");
 			if (!world.isRemote) {
 				ItemStack stack = ItemStack.EMPTY;
 				IRecipe recipe = CraftingManager.findMatchingRecipe(craftingMatrix, world);
-				Logger.info("recipe " + recipe);
 
 				if (recipe != null) {
 					craftResult.setRecipeUsed(recipe);
 					stack = recipe.getCraftingResult(craftingMatrix);
 				}
 
-				Logger.info("recipe result " + stack);
 				craftResult.setInventorySlotContents(0, stack);
 			}
 		}
@@ -350,7 +336,6 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 	public Boolean updateCCTEItem(ComposerCellTileEntity ccte, boolean blockUpdate) {
 		ccte.onChangeItem(this::updateCCTEItem);
-		Logger.info("update slot " + ccte.slot + ", stored item: " + ccte.storedItem);
 		container.craftingMatrix.setInventorySlotContents(ccte.slot,
 				ccte.storedItem == null ? ItemStack.EMPTY : ccte.storedItem);
 
