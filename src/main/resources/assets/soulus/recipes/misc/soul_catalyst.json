@@ -1,0 +1,30 @@
+{
+	"type": "soulus:composer_shaped",
+	"pattern": [
+		"MGM",
+		"GBG",
+		"MGM"
+	],
+	"key": {
+		"B": {
+			"type": "minecraft:item_nbt",
+			"item": "soulus:blood_crystal",
+			"nbt": {
+				"ContainedBlood": 1000
+			}
+		},
+		"M": {
+			"type": "minecraft:item_nbt",
+			"item": "soulus:orb_murky",
+			"nbt": {
+				"essence_quantity": 64
+			}
+		},
+		"G": {
+			"item": "soulus:gear_oscillating"
+		}
+	},
+	"result": {
+		"item": "soulus:soul_catalyst"
+	}
+}

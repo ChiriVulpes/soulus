@@ -78,6 +78,9 @@ public class Config {
 		serializer.otherHandlers.put("skewer", new ManualSerializer(from -> ModBlocks.SKEWER.serialize(),
 				(from, into) -> ModBlocks.SKEWER.deserialize(from)));
 
+		serializer.otherHandlers.put("composer", new ManualSerializer(from -> ModBlocks.COMPOSER.serialize(),
+				(from, into) -> ModBlocks.COMPOSER.deserialize(from)));
+
 		serializer.otherHandlers.put("creatures",
 				new ManualSerializer(from -> NoMobSpawning.serializer.serialize(NoMobSpawning.INSTANCE),
 						(from, into) -> NoMobSpawning.serializer.deserialize(from, NoMobSpawning.INSTANCE)));

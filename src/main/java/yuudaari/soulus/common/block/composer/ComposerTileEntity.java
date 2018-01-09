@@ -1,10 +1,17 @@
 package yuudaari.soulus.common.block.composer;
 
 import com.mojang.authlib.GameProfile;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -12,11 +19,13 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -24,13 +33,25 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import yuudaari.soulus.client.util.ParticleManager;
+import yuudaari.soulus.client.util.ParticleType;
+import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.block.composer.Composer.Upgrade;
+import yuudaari.soulus.common.network.SoulsPacketHandler;
+import yuudaari.soulus.common.network.packet.MobPoof;
+import yuudaari.soulus.common.util.Logger;
+import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.common.util.StructureMap.BlockValidator;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 	private boolean isConnected = false;
 	private float timeTillCraft = 5;
 	private float lastTimeTillCraft = 10;
+	private int activatingRange;
+	private Range spawnDelay;
+	private int signalStrength;
 
 	@Override
 	public Composer getBlock() {
@@ -46,9 +67,34 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		return isConnected;
 	}
 
+	public boolean hasValidRecipe() {
+		ItemStack storedItem = getStoredItem();
+		return storedItem != null && !storedItem.isEmpty();
+	}
+
+	public int getSignalStrength() {
+		return isConnected && hasValidRecipe() ? signalStrength : 0;
+	}
+
 	/////////////////////////////////////////
 	// Update
 	//
+
+	public void reset() {
+		this.resetTimer();
+	}
+
+	private void resetTimer() {
+		resetTimer(true);
+	}
+
+	private void resetTimer(boolean update) {
+		timeTillCraft = spawnDelay.get(world.rand).intValue();
+		lastTimeTillCraft = timeTillCraft;
+
+		if (update)
+			blockUpdate();
+	}
 
 	private double activationAmount() {
 		// when powered by redstone, don't run
@@ -58,23 +104,65 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 		double activationAmount = 0;
 
-		for (EntityPlayer player : world.playerEntities) {
+		List<String> entityTypes = new ArrayList<>();
 
-			if (EntitySelectors.NOT_SPECTATING.apply(player)) {
-				double d0 = player.getDistanceSqToCenter(pos);
+		for (EntityLivingBase entity : world.getEntitiesWithinAABB(EntityLivingBase.class,
+				new AxisAlignedBB(pos).grow(activatingRange))) {
 
-				double nearAmt = (d0 / (20));
-				activationAmount += Math.max(0, (1 - (nearAmt * nearAmt)) * 2);
+			if (!(entity instanceof EntityPlayer)) {
+				String entityType = EntityList.getKey(entity).toString();
+				if (entityTypes.contains(entityType))
+					continue;
+				entityTypes.add(entityType);
+
+				activationAmount += 1;
+
+				if (!world.isRemote && isConnected && hasValidRecipe()
+						&& getBlock().poofChance > world.rand.nextDouble()) {
+					entity.setDead();
+					mobPoofParticles(world, pos);
+					mobPoofParticles(world, entity.getPosition());
+				}
 			}
 		}
 
 		return activationAmount;
 	}
 
+	public static void mobPoofParticles(World world, BlockPos pos) {
+		if (world.isRemote) {
+			particles(pos);
+		} else {
+			SoulsPacketHandler.INSTANCE.sendToAllAround(new MobPoof(pos),
+					new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 128));
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	private static void particles(BlockPos pos) {
+		World world = Minecraft.getMinecraft().world;
+		Random rand = world.rand;
+
+		for (int i = 0; i < ModBlocks.COMPOSER.particleCountMobPoof; ++i) {
+			double d3 = (pos.getX() - 0.5F + rand.nextFloat());
+			double d4 = (pos.getY() + rand.nextFloat());
+			double d5 = (pos.getZ() - 0.5F + rand.nextFloat());
+			double d3o = (d3 - pos.getX()) / 4;
+			double d4o = (d4 - pos.getY()) / 5;
+			double d5o = (d5 - pos.getZ()) / 4;
+			ParticleManager.spawnParticle(world, ParticleType.MOB_POOF.getId(), false, d3 + 0.5F, d4, d5 + 0.5F, d3o,
+					d4o, d5o, 1);
+		}
+	}
+
 	@Override
 	public void update() {
+		double activationAmount = activationAmount();
+		if (timeTillCraft > 0) {
+			timeTillCraft -= activationAmount;
+		}
+
 		if (world.isRemote) {
-			double activationAmount = activationAmount();
 			updateRenderer(activationAmount);
 
 		} else {
@@ -82,6 +170,21 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 			if (needsRecipeRefresh) {
 				refreshRecipe();
+			}
+
+			if (isConnected && hasValidRecipe()) {
+				if (timeTillCraft > 0) {
+					int signalStrength = (int) Math.floor(16 * getCompositionPercent());
+					if (signalStrength != this.signalStrength) {
+						this.signalStrength = signalStrength;
+						markDirty();
+					}
+
+					return;
+				}
+
+				if (!world.isRemote)
+					completeCraft();
 			}
 		}
 	}
@@ -179,12 +282,73 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		public Boolean handle(ComposerCellTileEntity te);
 	}
 
+	public void completeCraft() {
+		if (!hasValidRecipe())
+			return;
+
+		ItemStack result = getStoredItem();
+		dispenseItem(result.copy(), world, pos, world.getBlockState(pos).getValue(Composer.FACING));
+		loopComposerCells(ccte -> {
+			if (ccte.storedItem == null)
+				return null;
+
+			ccte.storedQuantity--;
+
+			Item storedItem = ccte.storedItem.getItem();
+			if (storedItem.hasContainerItem(ccte.storedItem)) {
+				ItemStack containerItem = storedItem.getContainerItem(ccte.storedItem);
+				dispenseItem(containerItem, world, ccte.getPos(), EnumFacing.DOWN);
+			}
+
+			if (ccte.storedQuantity <= 0) {
+				ccte.storedQuantity = 0;
+				ccte.storedItem = null;
+				container.craftingMatrix.setInventorySlotContents(ccte.slot, ItemStack.EMPTY);
+			}
+
+			ccte.blockUpdate();
+
+			return null;
+		});
+
+		blockUpdate();
+
+		resetTimer();
+	}
+
+	/////////////////////////////////////////
+	// Events
+	//
+
+	@Override
+	public void onUpdateUpgrades(boolean readFromNBT) {
+
+		Composer block = getBlock();
+
+		int delayUpgrades = upgrades.get(Upgrade.DELAY);
+		spawnDelay = new Range(block.nonUpgradedDelay.min / (1 + delayUpgrades * block.upgradeDelayEffectiveness.min),
+				block.nonUpgradedDelay.max / (1 + delayUpgrades * block.upgradeDelayEffectiveness.max));
+
+		int rangeUpgrades = upgrades.get(Upgrade.RANGE);
+		activatingRange = block.nonUpgradedRange + rangeUpgrades * block.upgradeRangeEffectiveness;
+
+		if (world != null && !world.isRemote) {
+			if (!readFromNBT)
+				resetTimer(false);
+			blockUpdate();
+		}
+	}
+
 	/////////////////////////////////////////
 	// NBT
 	//
 
 	@Override
 	public void onWriteToNBT(NBTTagCompound compound) {
+
+		compound.setFloat("delay", timeTillCraft);
+		compound.setFloat("delay_last", lastTimeTillCraft);
+
 		NBTTagCompound cellTag = new NBTTagCompound();
 		for (Map.Entry<BlockPos, Byte> cell : cellMap.entrySet()) {
 			NBTTagCompound posTag = new NBTTagCompound();
@@ -202,6 +366,10 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 	@Override
 	public void onReadFromNBT(NBTTagCompound compound) {
+
+		timeTillCraft = compound.getFloat("delay");
+		lastTimeTillCraft = compound.getFloat("delay_last");
+
 		NBTTagCompound cellTag = compound.getCompoundTag("cell_map");
 		for (Integer slot = 0; slot < 9; slot++) {
 			NBTTagCompound posTag = cellTag.getCompoundTag(slot.toString());
@@ -224,15 +392,44 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	private double itemRotation = 0;
 	@SideOnly(Side.CLIENT)
 	private double prevItemRotation = 0;
+	@SideOnly(Side.CLIENT)
+	private double timeTillParticle = 0;
 	private ItemStack renderItem;
 
 	@SideOnly(Side.CLIENT)
+	private boolean isPlayerInRangeForEffects() {
+		return world.isAnyPlayerWithinRangeAt(pos.getX(), pos.getY(), pos.getZ(), 64);
+	}
+
+	@SideOnly(Side.CLIENT)
 	public void updateRenderer(double activationAmount) {
+
 		double diff = itemRotation - prevItemRotation;
 		prevItemRotation = itemRotation;
 		itemRotation += activationAmount <= 0 ? //
 				diff * 0.9 // ease rotation to a stop
 				: 1.0F * getCompositionPercent() + diff * 0.8; // normal rotation
+
+		if (!hasValidRecipe() || !isPlayerInRangeForEffects() || activationAmount == 0)
+			return;
+
+		Composer composer = getBlock();
+		if (composer.particleCountActivated < 1) {
+			timeTillParticle += composer.particleCountActivated;
+
+			if (timeTillParticle < 1)
+				return;
+		}
+
+		timeTillParticle = 0;
+
+		for (int i = 0; i < composer.particleCountActivated; i++) {
+			double d3 = (pos.getX() + world.rand.nextFloat());
+			double d4 = (pos.getY() + world.rand.nextFloat());
+			double d5 = (pos.getZ() + world.rand.nextFloat());
+			world.spawnParticle(EnumParticleTypes.PORTAL, d3, d4, d5, (d3 - pos.getX() - 0.5F), -0.3D,
+					(d5 - pos.getZ() - 0.5F));
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -266,16 +463,23 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	// Recipe
 	//
 
-	private static class ComposerContainer extends Container {
+	public static class ComposerContainer extends Container {
 		public InventoryCrafting craftingMatrix;
 		public InventoryCraftResult craftResult;
 		private final World world;
 		private final EntityPlayer player;
+		private RecipeChangedHandler onRecipeChanged;
+
+		public static class CraftingMatrix extends InventoryCrafting {
+			public CraftingMatrix(ComposerContainer c, int width, int height) {
+				super(c, width, height);
+			}
+		}
 
 		public ComposerContainer(World world, EntityPlayer player) {
 			this.world = world;
 			this.player = player;
-			this.craftingMatrix = new InventoryCrafting(this, 3, 3);
+			this.craftingMatrix = new CraftingMatrix(this, 3, 3);
 			this.craftResult = new InventoryCraftResult();
 		}
 
@@ -300,10 +504,24 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 				if (recipe != null) {
 					craftResult.setRecipeUsed(recipe);
 					stack = recipe.getCraftingResult(craftingMatrix);
+					onRecipeChanged();
 				}
 
 				craftResult.setInventorySlotContents(0, stack);
 			}
+		}
+
+		public void onRecipeChanged() {
+			if (onRecipeChanged != null)
+				onRecipeChanged.handle();
+		}
+
+		public void onRecipeChanged(RecipeChangedHandler handler) {
+			onRecipeChanged = handler;
+		}
+
+		public static interface RecipeChangedHandler {
+			public void handle();
 		}
 	}
 
@@ -332,6 +550,10 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		uuid = UUID.randomUUID();
 		fakePlayer = new FakePlayer((WorldServer) world, new GameProfile(uuid, "composer_tile_entity"));
 		container = new ComposerContainer(world, fakePlayer);
+		container.onRecipeChanged(() -> {
+			Logger.info("on recipe changed");
+			resetTimer();
+		});
 	}
 
 	public Boolean updateCCTEItem(ComposerCellTileEntity ccte, boolean blockUpdate) {

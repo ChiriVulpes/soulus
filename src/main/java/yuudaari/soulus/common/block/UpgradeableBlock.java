@@ -3,15 +3,13 @@ package yuudaari.soulus.common.block;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
-import mcp.mobius.waila.api.IWailaDataAccessor;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -19,6 +17,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -27,6 +26,7 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
@@ -38,11 +38,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.common.config.ManualSerializer;
 import yuudaari.soulus.common.config.Serializer;
 import yuudaari.soulus.common.util.Logger;
@@ -431,7 +431,7 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.
 
 			stack.shrink(insertQuantity);
 
-			onUpdateUpgrades();
+			onUpdateUpgrades(false);
 			blockUpdate();
 		}
 
@@ -446,7 +446,7 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.
 			int result = upgrades.get(upgrade);
 			upgrades.put(upgrade, 0);
 
-			onUpdateUpgrades();
+			onUpdateUpgrades(false);
 			blockUpdate();
 			return result;
 		}
@@ -456,15 +456,51 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.
 				upgrades.put(upgrade, 0);
 			}
 
-			onUpdateUpgrades();
+			onUpdateUpgrades(false);
 			blockUpdate();
+		}
+
+		public static void dispenseItem(ItemStack stack, World world, BlockPos pos, EnumFacing facing) {
+			if (!stack.isEmpty()) {
+				BlockPos facingPos = pos.offset(facing);
+				IInventory facingInventory = TileEntityHopper.getInventoryAtPosition(world, (double) facingPos.getX(),
+						(double) facingPos.getY(), (double) facingPos.getZ());
+
+				if (facingInventory != null) {
+					stack = TileEntityHopper.putStackInInventoryAllSlots(null, facingInventory, stack.copy(),
+							facing.getOpposite());
+				}
+
+				if (facingInventory == null) {
+					double d0 = pos.getX() + 0.5 + facing.getFrontOffsetX() / 1.5;
+					double d1 = pos.getY() + 0.5 + facing.getFrontOffsetY() / 1.5;
+					double d2 = pos.getZ() + 0.5 + facing.getFrontOffsetZ() / 1.5;
+
+					if (facing.getAxis() == EnumFacing.Axis.Y) {
+						d1 = d1 - 0.125D;
+					} else {
+						d1 = d1 - 0.15625D;
+					}
+
+					EntityItem itemEntity = new EntityItem(world, d0, d1, d2, stack);
+					double d3 = world.rand.nextDouble() * 0.1D + 0.2D;
+					itemEntity.motionX = facing.getFrontOffsetX() * d3;
+					itemEntity.motionY = facing.getFrontOffsetY() * d3;
+					itemEntity.motionZ = facing.getFrontOffsetZ() * d3;
+					double speed = 1.5;
+					itemEntity.motionX += world.rand.nextGaussian() * 0.0075D * speed;
+					itemEntity.motionY += world.rand.nextGaussian() * 0.0075D * speed;
+					itemEntity.motionZ += world.rand.nextGaussian() * 0.0075D * speed;
+					world.spawnEntity(itemEntity);
+				}
+			}
 		}
 
 		/////////////////////////////////////////
 		// Events
 		//
 
-		public void onUpdateUpgrades() {
+		public void onUpdateUpgrades(boolean readFromNBT) {
 		}
 
 		public void onReadFromNBT(NBTTagCompound compound) {
@@ -500,6 +536,8 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.
 					}
 				}
 			}
+
+			this.onUpdateUpgrades(true);
 
 			onReadFromNBT(compound);
 		}

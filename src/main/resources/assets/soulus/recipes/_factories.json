@@ -2,6 +2,8 @@
 	"recipes": {
 		"crafting_shaped": "yuudaari.soulus.common.recipe.RecipeShaped$Factory",
 		"crafting_shapeless": "yuudaari.soulus.common.recipe.RecipeShapeless$Factory",
+		"composer_shaped": "yuudaari.soulus.common.recipe.RecipeComposerShaped$Factory",
+		"composer_shapeless": "yuudaari.soulus.common.recipe.RecipeComposerShapeless$Factory",
 		"furnace": "yuudaari.soulus.common.recipe.RecipeFurnace$Factory"
 	}
 }

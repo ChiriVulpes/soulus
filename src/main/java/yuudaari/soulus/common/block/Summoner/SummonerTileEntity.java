@@ -55,11 +55,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	}
 
 	@Override
-	public void onUpdateUpgrades() {
-		updateUpgrades(true);
-	}
-
-	private void updateUpgrades(boolean resetTimer) {
+	public void onUpdateUpgrades(boolean readFromNBT) {
 
 		Summoner block = getBlock();
 
@@ -77,7 +73,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		activatingRange = block.nonUpgradedRange + rangeUpgrades * block.upgradeRangeEffectiveness;
 
 		if (world != null && !world.isRemote) {
-			if (resetTimer)
+			if (!readFromNBT)
 				resetTimer(false);
 			blockUpdate();
 		}
@@ -176,7 +172,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 		if (!hasInit) {
 			hasInit = true;
-			onUpdateUpgrades();
+			onUpdateUpgrades(false);
 		}
 
 		double activationAmount = activationAmount();
@@ -232,7 +228,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		timeTillSpawn = compound.getFloat("delay");
 		lastTimeTillSpawn = compound.getFloat("delay_last");
 
-		updateUpgrades(false);
+		onUpdateUpgrades(false);
 	}
 
 	@Nonnull

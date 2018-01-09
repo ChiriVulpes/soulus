@@ -1,31 +1,35 @@
 package yuudaari.soulus.common.block.composer;
 
-import net.minecraft.block.SoundType;
+import java.util.Arrays;
+import java.util.List;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import scala.actors.threadpool.Arrays;
-import yuudaari.soulus.common.ModBlocks;
-import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.block.UpgradeableBlock;
 import yuudaari.soulus.common.item.OrbMurky;
+import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.util.Material;
+import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.common.util.StructureMap;
 import yuudaari.soulus.common.util.StructureMap.BlockValidator;
+import yuudaari.soulus.Soulus;
 
 public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 
@@ -34,7 +38,8 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	//
 
 	public static enum Upgrade implements IUpgrade {
-		RANGE(2, "range", ModItems.ORB_MURKY.getItemStack());
+		RANGE(0, "range", ModItems.ORB_MURKY.getItemStack()), //
+		DELAY(1, "delay", ModItems.GEAR_OSCILLATING.getItemStack());
 
 		private final int index;
 		private final String name;
@@ -63,6 +68,8 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 			// all upgrades by default are capped at 16
 			if (maxQuantity == null) {
 				if (name == "range")
+					return 16;
+				if (name == "delay")
 					return 16;
 			}
 
@@ -104,6 +111,24 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	/////////////////////////////////////////
 	// Serializer
 	//
+
+	public Range nonUpgradedCount = new Range(1, 2);
+	public Range nonUpgradedDelay = new Range(500, 1000);
+	public int nonUpgradedRange = 4;
+	public Range upgradeDelayEffectiveness = new Range(0.8, 1);
+	public int upgradeRangeEffectiveness = 1;
+	public int particleCountActivated = 3;
+	public int particleCountMobPoof = 50;
+	public double poofChance = 0.001;
+
+	{
+		serializer.fields.addAll(Arrays.asList("nonUpgradedRange", "upgradeRangeEffectiveness",
+				"particleCountActivated", "particleCountMobPoof", "poofChance"));
+
+		serializer.fieldHandlers.put("nonUpgradedCount", Range.serializer);
+		serializer.fieldHandlers.put("nonUpgradedDelay", Range.serializer);
+		serializer.fieldHandlers.put("upgradeDelayEffectiveness", Range.serializer);
+	}
 
 	@Override
 	public Class<? extends UpgradeableBlock<ComposerTileEntity>> getSerializationClass() {
@@ -181,6 +206,17 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 			});
 
 		}
+	}
+
+	@Override
+	public boolean hasComparatorInputOverride(IBlockState state) {
+		return true;
+	}
+
+	@Override
+	public int getComparatorInputOverride(IBlockState state, World world, BlockPos pos) {
+		ComposerTileEntity te = (ComposerTileEntity) world.getTileEntity(pos);
+		return te.getSignalStrength();
 	}
 
 	/////////////////////////////////////////
@@ -321,5 +357,22 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	@Override
 	public UpgradeableBlockTileEntity createTileEntity(World worldIn, IBlockState blockState) {
 		return new ComposerTileEntity();
+	}
+
+	/////////////////////////////////////////
+	// Waila
+	//
+
+	@Override
+	protected void onWailaTooltipHeader(List<String> currentTooltip, IBlockState blockState, ComposerTileEntity te,
+			boolean isSneaking) {
+
+		if (te.hasValidRecipe()) {
+			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":composer.craft_percentage",
+					(int) Math.floor(te.getCompositionPercent() * 100)));
+		} else {
+			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":composer.no_recipe"));
+		}
+
 	}
 }
