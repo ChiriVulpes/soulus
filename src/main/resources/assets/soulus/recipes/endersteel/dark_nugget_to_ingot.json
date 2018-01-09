@@ -1,0 +1,16 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"eee",
+		"eee",
+		"eee"
+	],
+	"key": {
+		"e": {
+			"item": "soulus:nugget_endersteel_dark"
+		}
+	},
+	"result": {
+		"item": "soulus:ingot_endersteel_dark"
+	}
+}

@@ -23,6 +23,7 @@ public class ModBlocks {
 	public static final AshBlock ASH = new AshBlock();
 	public static final BarsEndersteel BARS_ENDERSTEEL = new BarsEndersteel();
 	public static final BlockEndersteel BLOCK_ENDERSTEEL = new BlockEndersteel();
+	public static final BlockEndersteelDark BLOCK_ENDERSTEEL_DARK = new BlockEndersteelDark();
 	public static final Composer COMPOSER = Composer.INSTANCE;
 	public static final ComposerCell COMPOSER_CELL = ComposerCell.INSTANCE;
 	public static final FossilDirt FOSSIL_DIRT = new FossilDirt();
@@ -45,6 +46,7 @@ public class ModBlocks {
 			ASH, //
 			BARS_ENDERSTEEL, //
 			BLOCK_ENDERSTEEL, //
+			BLOCK_ENDERSTEEL_DARK, //
 			COMPOSER, //
 			COMPOSER_CELL, //
 			FOSSIL_DIRT_ENDER, //

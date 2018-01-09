@@ -1,0 +1,26 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"EoE",
+		"gig",
+		"iii"
+	],
+	"key": {
+		"o": {
+			"item": "minecraft:obsidian"
+		},
+		"E": {
+			"item": "soulus:block_endersteel_dark"
+		},
+		"i": {
+			"type": "forge:ore_dict",
+			"ore": "ingotIron"
+		},
+		"g": {
+			"item": "soulus:gear_oscillating"
+		}
+	},
+	"result": {
+		"item": "soulus:composer_cell"
+	}
+}

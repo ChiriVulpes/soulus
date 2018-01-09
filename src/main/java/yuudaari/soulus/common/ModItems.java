@@ -44,12 +44,15 @@ public class ModItems {
 	public static final ModItem BONE_NETHER = new ModItem("bone_nether");
 	public static final ModItem BONE_NORMAL = new ModItem("bone_normal").addOreDict("bone");
 	public static final ModItem BONE_SCALE = new ModItem("bone_scale");
+	public static final ModItem DUST_ENDER_IRON_ASHEN = new ModItem("dust_ender_iron_ashen");
 	public static final ModItem DUST_IRON = new ModItem("dust_iron").addOreDict("dustIron");
 	public static final ModItem DUST_STONE = new ModItem("dust_stone").addOreDict("dustStone");
 	public static final ModItem DUST_WOOD = new ModItem("dust_wood").addOreDict("dustWood");
 	public static final ModItem EMERALD_BURNT = new ModItem("emerald_burnt");
 	public static final ModItem EMERALD_COATED = new ModItem("emerald_coated");
 	public static final ModItem INGOT_ENDERSTEEL = new ModItem("ingot_endersteel");
+	public static final ModItem INGOT_ENDERSTEEL_DARK = new ModItem("ingot_endersteel_dark");
+	public static final ModItem NUGGET_ENDERSTEEL_DARK = new ModItem("nugget_endersteel_dark");
 	public static final NuggetEndersteel NUGGET_ENDERSTEEL = new NuggetEndersteel();
 	public static final OrbMurky ORB_MURKY = OrbMurky.INSTANCE;
 	public static final Sledgehammer SLEDGEHAMMER = new Sledgehammer();
@@ -79,6 +82,7 @@ public class ModItems {
 			BONEMEAL_ENDER, // 
 			BONEMEAL_NETHER, // 
 			DUST_ENDER_IRON, // 
+			DUST_ENDER_IRON_ASHEN, // 
 			DUST_IRON, // 
 			DUST_STONE, // 
 			DUST_WOOD, // 
@@ -94,7 +98,9 @@ public class ModItems {
 			GEAR_OSCILLATING, // 
 			GLUE, //  
 			INGOT_ENDERSTEEL, // 
+			INGOT_ENDERSTEEL_DARK, // 
 			NUGGET_ENDERSTEEL, //
+			NUGGET_ENDERSTEEL_DARK, //
 			ORB_MURKY, // 
 			SLEDGEHAMMER, // 
 			SOULBOOK, //

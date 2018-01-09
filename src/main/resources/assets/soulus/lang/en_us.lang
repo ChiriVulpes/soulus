@@ -22,9 +22,12 @@ item.soulus:dust_iron.name=Iron Dust
 item.soulus:dust_wood.name=Wood Dust
 item.soulus:dust_stone.name=Stone Dust
 item.soulus:dust_ender_iron.name=Ender-Iron Dust Blend
+item.soulus:dust_ender_iron_ashen.name=Ash-Ender-Iron Dust Blend
 
 item.soulus:ingot_endersteel.name=Endersteel Ingot
 item.soulus:nugget_endersteel.name=Endersteel Nugget
+item.soulus:ingot_endersteel_dark.name=Dark Endersteel Ingot
+item.soulus:nugget_endersteel_dark.name=Dark Endersteel Nugget
 
 item.soulus:glue.name=Glue
 item.soulus:bark.name=Bark
@@ -149,6 +152,7 @@ tile.soulus:fossil_sand_red_dry.name=Red Sand with Dry Fossils
 tile.soulus:fossil_sand_red_scale.name=Red Sand with Scale Fossils
 
 tile.soulus:block_endersteel.name=Block of Endersteel
+tile.soulus:block_endersteel_dark.name=Block of Dark Endersteel
 tile.soulus:bars_endersteel.name=Endersteel Bars
 
 tile.soulus:skewer.name=Skewer

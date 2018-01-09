@@ -1,0 +1,19 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"type": "forge:ore_dict",
+			"ore": "dustIron"
+		},
+		{
+			"type": "forge:ore_dict",
+			"ore": "dustEnder"
+		},
+		{
+			"item": "soulus:ash"
+		}
+	],
+	"result": {
+		"item": "soulus:dust_ender_iron_ashen"
+	}
+}
