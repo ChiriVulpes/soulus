@@ -37,6 +37,8 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 	}
 
 	public void onChangeItem() {
+		if (composerLocation == null)
+			return;
 		TileEntity te = world.getTileEntity(composerLocation);
 		if (te == null || !(te instanceof ComposerTileEntity) || !((ComposerTileEntity) te).isConnected())
 			return;
