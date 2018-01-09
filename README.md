@@ -28,11 +28,15 @@ See below for an in-depth list of features in the mod.
 		- [Blood Crystal](#blood-crystal-)
 - [Skewer](#skewer-)
 - [Bone Drops](#bone-drops-)
+- [Ash](#ash-)
+- [Dark Endersteel](#dark-endersteel-)
+- [Composer](#composer-)
 - [Misc](#misc-)
 	- [Glue](#glue-)
 	- [Bark](#bark-)
 	- [Barket](#barket-)
 	- [Endersteel Block](#endersteel-block-)
+	- [Dark Endersteel Block](#dark-endersteel-block-)
 - [Mod Support](#mod-support-)
 - [Contributing](#contributing-)
 
@@ -48,6 +52,8 @@ See below for an in-depth list of features in the mod.
 ![Items](./preview/items.png)
 
 ![Example Farm](./preview/example_farm.png)
+
+![Example Autocrafter](./preview/example_composer.png)
 
 ## No Mob Spawning and No Mob Drops [↑](#table-of-contents)
 
@@ -220,6 +226,53 @@ Other upgrades for the Skewer are planned.
 
 By default, most mobs drop bones matching the bone type their essence comes from. This is configurable in the [Essences Config](./docs/CONFIG.md#configessences-)
 
+## Ash [↑](#table-of-contents)
+
+After collecting Blackened Bonemeal, you may use it on plants! This is a horrible, terrible fertilizer which in fact does not grow the plant, but reduces it to a pile of ash. It's also not very nice to do. Plant murderer.
+
+You can use ash as a replacement for essence in a Murky Orb, or to create Dark Endersteel.
+
+## Dark Endersteel [↑](#table-of-contents)
+
+1. Crush an iron ingot into iron dust.  
+![Iron Dust](./preview/iron_dust.png)
+
+2. Crush an ender bone chunk into ender dust.  
+![Ender Dust](./preview/ender_dust.png)
+
+3. Combine iron dust with ender dust and ash, into an ash-ender-iron dust blend.  
+![Ash-Ender-Iron Dust Blend](./preview/dust_ender_iron_ashen.png)
+
+4. Smelt the ash-ender-iron dust blend to get a dark endersteel ingot!  
+![Dark Endersteel](./preview/dark_endersteel.png)
+
+## Composer [↑](#table-of-contents)
+
+The Composer is a block which requires a multiblock structure to be built. It is an autocrafting table, more or less, which is very expensive and slow, but can be upgraded to be very fast. To build a Composer, here's what you will need:
+
+20 [Endersteel Bars](#endersteel-)  
+8 Obsidian  
+4 [Endersteel Blocks](#endersteel-block-)  
+9 Composer Cells:  
+![Composer Cell](./preview/composer_cell.png)
+1 Composer:  
+![Composer](./preview/composer.png)
+
+Build the structure like this:
+![Composer Structure](./preview/composer_structure.png)
+
+The composer can be on any side, as long as it's in the middle of that side. Multiple composers will not connect to the same structure, however you can use the same bars, obsidian, and endersteel blocks in multiple composers. (potentially building 4 composers for the price of 3! (minus the composer cells and composer, of course))
+
+The orientation of the composer is like a crafting table GUI. When looking at the structure from the composer, the right side is the top row of the crafting grid.
+
+Each composer cell can hold up to 16 of the same item. *This ignores normal stack limitations.* Any container items will be dropped underneath their cells after a composition completes. (You may put another block with an inventory underneath to deposit them into this inventory instead)
+
+The Composer doesn't work quite like the Summoner, in which it would require nearby players to function. Instead, it uses creatures! Each unique creature type nearby makes it go slightly faster. However, each creature type nearby has a 2% chance of "poofing", or being used up by the Composer, every second. (The creature will vanish entirely in a puff of smoke) EG: To keep a Composer running around the clock, you must feed it creatures with Summoner(s).
+
+The Composer can craft any normal or shapeless recipe, and you can add recipes via json ("soulus:composer_shapeless" or "soulus:composer_shaped"). These recipes will work *only* in the Composer, and not in any other table or autocrafter.
+
+The Composer comes with one recipe, currently. The Soul Catalyst. (Currently has no uses, but will be a big part of late-game Soulus soon)
+
 ## Misc [↑](#table-of-contents)
 
 ### Glue [↑](#table-of-contents)
@@ -241,6 +294,10 @@ Make a bucket shape with Bark to get a "Barket". It can only pick up water and w
 ### Endersteel Block [↑](#table-of-contents)
 
 Crafting 9 endersteel bars into a block produces a Block of Endersteel. When placed into the world, you can use it as a clock, by reading its value via a comparator. The value is 0 when the block is receiving no power. When receiving power, it oscillates in a sin-wave from 0-15, at a speed dependent on the power received.
+
+### Dark Endersteel Block [↑](#table-of-contents)
+
+Crafting 9 dark endersteel bars into a block produces a Block of Dark Endersteel. When placed into the world, you can use it as a random number generator, by reading its value via a comparator. The value is 0 when the block is receiving no power. Whenever it receives a new power level, it chooses a random output level 1-15.
 
 ## Mod Support [↑](#table-of-contents)
 
