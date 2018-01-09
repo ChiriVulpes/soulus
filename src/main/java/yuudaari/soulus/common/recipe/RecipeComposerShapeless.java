@@ -1,48 +1,43 @@
 package yuudaari.soulus.common.recipe;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import java.util.Iterator;
+import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IRecipeFactory;
 import net.minecraftforge.common.crafting.JsonContext;
 import yuudaari.soulus.common.block.composer.ComposerTileEntity;
 
-import javax.annotation.Nonnull;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-
 public class RecipeComposerShapeless extends Recipe {
 	@Nonnull
 	protected ItemStack output = ItemStack.EMPTY;
 	protected NonNullList<Ingredient> input = NonNullList.create();
 
-	public RecipeComposerShapeless(ResourceLocation group, Block result, Object... recipe) {
-		this(group, new ItemStack(result), recipe);
+	public RecipeComposerShapeless(Block result, Object... recipe) {
+		this(new ItemStack(result), recipe);
 	}
 
-	public RecipeComposerShapeless(ResourceLocation group, Item result, Object... recipe) {
-		this(group, new ItemStack(result), recipe);
+	public RecipeComposerShapeless(Item result, Object... recipe) {
+		this(new ItemStack(result), recipe);
 	}
 
-	public RecipeComposerShapeless(ResourceLocation group, NonNullList<Ingredient> input, @Nonnull ItemStack result) {
+	public RecipeComposerShapeless(NonNullList<Ingredient> input, @Nonnull ItemStack result) {
 		output = result.copy();
-		this.group = group;
 		this.input = input;
 	}
 
-	public RecipeComposerShapeless(ResourceLocation group, @Nonnull ItemStack result, Object... recipe) {
-		this.group = group;
+	public RecipeComposerShapeless(@Nonnull ItemStack result, Object... recipe) {
 		output = result.copy();
 		for (Object in : recipe) {
 			Ingredient ing = CraftingHelper.getIngredient(in);
@@ -133,8 +128,6 @@ public class RecipeComposerShapeless extends Recipe {
 
 		@Override
 		public IRecipe parse(JsonContext context, JsonObject json) {
-			String group = JsonUtils.getString(json, "group", "");
-
 			NonNullList<Ingredient> ings = NonNullList.create();
 			for (JsonElement ele : JsonUtils.getJsonArray(json, "ingredients"))
 				ings.add(CraftingHelper.getIngredient(ele, context));
@@ -143,8 +136,7 @@ public class RecipeComposerShapeless extends Recipe {
 				throw new JsonParseException("No ingredients for shapeless recipe");
 
 			ItemStack itemstack = CraftingHelper.getItemStack(JsonUtils.getJsonObject(json, "result"), context);
-			RecipeComposerShapeless result = new RecipeComposerShapeless(
-					group.isEmpty() ? null : new ResourceLocation(group), ings, itemstack);
+			RecipeComposerShapeless result = new RecipeComposerShapeless(ings, itemstack);
 
 			return result;
 		}

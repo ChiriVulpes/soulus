@@ -8,7 +8,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IRecipeFactory;
@@ -40,22 +39,20 @@ public class RecipeComposerShaped extends Recipe {
 	protected int width = 0;
 	protected int height = 0;
 	protected boolean mirrored = true;
-	protected ResourceLocation group;
 
-	public RecipeComposerShaped(ResourceLocation group, Block result, Object... recipe) {
-		this(group, new ItemStack(result), recipe);
+	public RecipeComposerShaped(Block result, Object... recipe) {
+		this(new ItemStack(result), recipe);
 	}
 
-	public RecipeComposerShaped(ResourceLocation group, Item result, Object... recipe) {
-		this(group, new ItemStack(result), recipe);
+	public RecipeComposerShaped(Item result, Object... recipe) {
+		this(new ItemStack(result), recipe);
 	}
 
-	public RecipeComposerShaped(ResourceLocation group, @Nonnull ItemStack result, Object... recipe) {
-		this(group, result, CraftingHelper.parseShaped(recipe));
+	public RecipeComposerShaped(@Nonnull ItemStack result, Object... recipe) {
+		this(result, CraftingHelper.parseShaped(recipe));
 	}
 
-	public RecipeComposerShaped(ResourceLocation group, @Nonnull ItemStack result, ShapedPrimer primer) {
-		this.group = group;
+	public RecipeComposerShaped(@Nonnull ItemStack result, ShapedPrimer primer) {
 		output = result.copy();
 		this.width = primer.width;
 		this.height = primer.height;
@@ -165,8 +162,6 @@ public class RecipeComposerShaped extends Recipe {
 
 		@Override
 		public IRecipe parse(JsonContext context, JsonObject json) {
-			String group = JsonUtils.getString(json, "group", "");
-
 			Map<Character, Ingredient> ingMap = Maps.newHashMap();
 			for (Entry<String, JsonElement> entry : JsonUtils.getJsonObject(json, "key").entrySet()) {
 				if (entry.getKey().length() != 1)
@@ -218,8 +213,7 @@ public class RecipeComposerShaped extends Recipe {
 				throw new JsonSyntaxException("Key defines symbols that aren't used in pattern: " + keys);
 
 			ItemStack output = CraftingHelper.getItemStack(JsonUtils.getJsonObject(json, "result"), context);
-			RecipeComposerShaped result = new RecipeComposerShaped(group.isEmpty() ? null : new ResourceLocation(group),
-					output, primer);
+			RecipeComposerShaped result = new RecipeComposerShaped(output, primer);
 
 			return result;
 		}

@@ -39,7 +39,6 @@ import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.block.composer.Composer.Upgrade;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.MobPoof;
-import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.common.util.StructureMap.BlockValidator;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
@@ -89,6 +88,9 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	}
 
 	private void resetTimer(boolean update) {
+		if (spawnDelay == null)
+			return;
+
 		timeTillCraft = spawnDelay.get(world.rand).intValue();
 		lastTimeTillCraft = timeTillCraft;
 
@@ -388,11 +390,8 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	// Renderer
 	//
 
-	@SideOnly(Side.CLIENT)
 	private double itemRotation = 0;
-	@SideOnly(Side.CLIENT)
 	private double prevItemRotation = 0;
-	@SideOnly(Side.CLIENT)
 	private double timeTillParticle = 0;
 	private ItemStack renderItem;
 
@@ -551,7 +550,6 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		fakePlayer = new FakePlayer((WorldServer) world, new GameProfile(uuid, "composer_tile_entity"));
 		container = new ComposerContainer(world, fakePlayer);
 		container.onRecipeChanged(() -> {
-			Logger.info("on recipe changed");
 			resetTimer();
 		});
 	}

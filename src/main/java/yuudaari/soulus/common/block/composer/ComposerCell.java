@@ -213,6 +213,11 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 		return true;
 	}
 
+	@Override
+	public boolean onActivateEmptyHandSneaking(World world, BlockPos pos, EntityPlayer player) {
+		return onActivateEmptyHand(world, pos, player);
+	}
+
 	public void addItemStackToList(ItemStack item, List<ItemStack> list, int quantity) {
 		int maxStackSize = item.getMaxStackSize();
 		while (quantity > 0) {
