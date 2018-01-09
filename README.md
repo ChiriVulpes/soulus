@@ -254,11 +254,11 @@ The Composer is a block which requires a multiblock structure to be built. It is
 8 Obsidian  
 4 [Endersteel Blocks](#endersteel-block-)  
 9 Composer Cells:  
-![Composer Cell](./preview/composer_cell.png)
+![Composer Cell](./preview/composer_cell.png)  
 1 Composer:  
 ![Composer](./preview/composer.png)
 
-Build the structure like this:
+Build the structure like this:  
 ![Composer Structure](./preview/composer_structure.png)
 
 The composer can be on any side, as long as it's in the middle of that side. Multiple composers will not connect to the same structure, however you can use the same bars, obsidian, and endersteel blocks in multiple composers. (potentially building 4 composers for the price of 3! (minus the composer cells and composer, of course))
@@ -269,7 +269,7 @@ Each composer cell can hold up to 16 of the same item. *This ignores normal stac
 
 The Composer doesn't work quite like the Summoner, in which it would require nearby players to function. Instead, it uses creatures! Each unique creature type nearby makes it go slightly faster. However, each creature type nearby has a 2% chance of "poofing", or being used up by the Composer, every second. (The creature will vanish entirely in a puff of smoke) EG: To keep a Composer running around the clock, you must feed it creatures with Summoner(s).
 
-The Composer can craft any normal or shapeless recipe, and you can add recipes via json ("soulus:composer_shapeless" or "soulus:composer_shaped"). These recipes will work *only* in the Composer, and not in any other table or autocrafter.
+The Composer can craft any normal or shapeless recipe, and you can add recipes via json (`soulus:composer_shapeless` or `soulus:composer_shaped`). These recipes will work *only* in the Composer, and not in any other table or autocrafter.
 
 The Composer comes with one recipe, currently. The Soul Catalyst. (Currently has no uses, but will be a big part of late-game Soulus soon)
 
