@@ -390,6 +390,10 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.
 
 	public static abstract class UpgradeableBlockTileEntity extends TileEntity implements ITickable {
 
+		public UpgradeableBlockTileEntity() {
+			this.onUpdateUpgrades(false);
+		}
+
 		public abstract UpgradeableBlock<? extends UpgradeableBlockTileEntity> getBlock();
 
 		public Map<IUpgrade, Integer> upgrades = new HashMap<>();
