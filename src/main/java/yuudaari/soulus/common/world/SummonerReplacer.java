@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import yuudaari.soulus.common.block.EndersteelType;
@@ -122,7 +123,7 @@ public class SummonerReplacer {
 
 	public static SummonerReplacer INSTANCE = new SummonerReplacer();
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void populateChunkPost(PopulateChunkEvent.Post event) {
 		World world = event.getWorld();
 		Chunk chunk = world.getChunkFromChunkCoords(event.getChunkX(), event.getChunkZ());

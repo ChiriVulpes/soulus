@@ -3,6 +3,7 @@
 ## Table of Contents
 - [Creatures](#configcreatures-)
 - [Essences](#configessences-)
+- [Summoner Replacement](#configsummoner-replacer-)
 
 ## `CONFIG::creatures` [↑](#table-of-contents)
 
@@ -183,3 +184,34 @@ As a side-note, when there are no mobs spawning, or very few, the spawning algor
 `bones`: An object containing the `type`, which is the bone type (eg, `normal`, `frozen`, `fungal`, `nether`, etc), and the `drop_weight` which is how frequent this essence type drops compared to the other essences in the given bone chunk.  
 `spawns`: An object containing each mob that can *actually* spawn from this essence type, and the chance of spawning each over the others. If the object is empty, it can only spawn the mob that `essence` represents. Otherwise, it chooses from `spawns` (it does not include the mob in `essence` unless you specify it!)  
 `loot`: An object representing the bone drops for the spawned entities. `min` and `max` are used for the number of bones to drop, and `chance` is the chance that bones should be dropped at all.
+
+## `CONFIG::summoner_replacer` [↑](#table-of-contents)
+
+By default, all naturally-spawning mob spawners are replaced with empty variants of a summoner.
+
+The default config:
+```json
+"summoner_replacer": {
+	"fortress": {
+		"*": "blaze"
+	},
+	"*": {
+		"*": "normal"
+	},
+	"mineshaft": {
+		"*": "stone"
+	},
+	"stronghold": {
+		"*": "end_stone"
+	},
+	"mansion": {
+		"*": "wood"
+	}
+}
+```
+
+The first key is used for the structure the spawner is in, and the second key is used for the creature id in the spawner. You can use `*` to target all creatures, `mod:*` to target all creatures from a mod, and the exact creature id to target just one creature.
+
+As for structures, you can use the `/souluslocation` command to get see the structures you're currently in. You can target all structures with `*`.
+
+The string you provide to the replacer can be any variant of the summoner. This example shows all 5 in use.
