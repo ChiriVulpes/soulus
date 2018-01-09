@@ -15,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import yuudaari.soulus.common.config.EssenceConfig;
@@ -30,7 +31,7 @@ import yuudaari.soulus.Soulus;
 
 @Mod.EventBusSubscriber
 public class BoneDrops {
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onMobDrops(LivingDropsEvent event) {
 
 		// first we check if we should even try to do drops
