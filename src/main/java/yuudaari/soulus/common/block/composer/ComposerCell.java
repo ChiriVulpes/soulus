@@ -229,6 +229,16 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 		}
 	}
 
+	@Override
+	public void addOtherDropStacksToList(List<ItemStack> list, World world, BlockPos pos, IBlockState state) {
+		ComposerCellTileEntity te = (ComposerCellTileEntity) world.getTileEntity(pos);
+
+		if (te.storedItem == null)
+			return;
+
+		addItemStackToList(te.storedItem, list, te.storedQuantity);
+	}
+
 	/////////////////////////////////////////
 	// Utility
 	//
@@ -260,7 +270,7 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	protected void onWailaTooltipHeader(List<String> currentTooltip, IBlockState blockState, ComposerCellTileEntity te,
 			boolean isSneaking) {
 
-		currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":composer_cell.slot", te.slot));
+		// currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":composer_cell.slot", te.slot));
 
 		if (te.storedQuantity == 0) {
 			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":composer_cell.no_items"));
