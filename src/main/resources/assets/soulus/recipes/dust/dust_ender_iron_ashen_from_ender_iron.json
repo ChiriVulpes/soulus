@@ -1,0 +1,14 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"item": "soulus:dust_ender_iron"
+		},
+		{
+			"item": "soulus:ash"
+		}
+	],
+	"result": {
+		"item": "soulus:dust_ender_iron_ashen"
+	}
+}
