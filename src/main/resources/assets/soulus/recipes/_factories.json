@@ -5,5 +5,8 @@
 		"composer_shaped": "yuudaari.soulus.common.recipe.RecipeComposerShaped$Factory",
 		"composer_shapeless": "yuudaari.soulus.common.recipe.RecipeComposerShapeless$Factory",
 		"furnace": "yuudaari.soulus.common.recipe.RecipeFurnace$Factory"
+	},
+	"ingredients": {
+		"potential_essence": "yuudaari.soulus.common.recipe.IngredientPotentialEssence$Factory"
 	}
 }

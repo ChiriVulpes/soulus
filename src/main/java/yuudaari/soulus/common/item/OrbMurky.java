@@ -3,7 +3,7 @@ package yuudaari.soulus.common.item;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.config.Serializer;
-import yuudaari.soulus.common.recipe.Recipe;
+import yuudaari.soulus.common.recipe.IngredientPotentialEssence;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -11,12 +11,16 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -31,58 +35,66 @@ public class OrbMurky extends SummonerUpgrade {
 
 	public int requiredEssence = 128;
 
-	public OrbMurky() {
-		super("orb_murky");
+	public static class OrbMurkyFillRecipe extends ShapelessRecipes {
+		public static NonNullList<Ingredient> getIngredients(int size) {
+			NonNullList<Ingredient> result = NonNullList.from(Ingredient.EMPTY,
+					Collections.nCopies(size * size - 1, new IngredientPotentialEssence()).toArray(new Ingredient[0]));
 
-		OrbMurky self = this;
+			result.add(Ingredient.fromItem(INSTANCE));
 
-		addRecipe(new Recipe(getRegistryName()) {
+			return result;
+		}
 
-			@ParametersAreNonnullByDefault
-			@Override
-			public boolean matches(InventoryCrafting inv, World worldIn) {
-				return getCraftingResult(inv) != null;
-			}
+		public OrbMurkyFillRecipe(ResourceLocation name, int size) {
+			super(null, INSTANCE.getItemStack(), getIngredients(size));
+			setRegistryName(name + "" + size);
+		}
 
-			@ParametersAreNonnullByDefault
-			@Nullable
-			@Override
-			public ItemStack getCraftingResult(InventoryCrafting inv) {
-				int essenceCount = 0;
-				ItemStack orb = null;
-				int containedEssence = 0;
-				int inventorySize = inv.getSizeInventory();
-				for (int i = 0; i < inventorySize; i++) {
-					ItemStack stack = inv.getStackInSlot(i);
-					Item stackItem = stack.getItem();
-					if (stack == null || stackItem == Items.AIR)
-						continue;
-					if (stackItem == self) {
-						if (orb != null)
-							return null;
-						containedEssence = getContainedEssence(stack);
-						orb = stack;
-						continue;
-					} else if (stackItem == ModItems.ESSENCE || stackItem == ModItems.ASH) {
-						essenceCount++;
-						continue;
-					}
-					return null;
-				}
-				if (orb != null && essenceCount > 0 && containedEssence + essenceCount <= requiredEssence) {
-					ItemStack newStack = orb.copy();
-					setContainedEssence(newStack, containedEssence + essenceCount);
-					return newStack;
+		@ParametersAreNonnullByDefault
+		@Override
+		public boolean matches(InventoryCrafting inv, World worldIn) {
+			return getCraftingResult(inv) != null;
+		}
+
+		@ParametersAreNonnullByDefault
+		@Nullable
+		@Override
+		public ItemStack getCraftingResult(InventoryCrafting inv) {
+			int essenceCount = 0;
+			ItemStack orb = null;
+			int containedEssence = 0;
+			int inventorySize = inv.getSizeInventory();
+			for (int i = 0; i < inventorySize; i++) {
+				ItemStack stack = inv.getStackInSlot(i);
+				Item stackItem = stack.getItem();
+				if (stack == null || stackItem == Items.AIR)
+					continue;
+				if (stackItem == INSTANCE) {
+					if (orb != null)
+						return null;
+					containedEssence = getContainedEssence(stack);
+					orb = stack;
+					continue;
+				} else if (stackItem == ModItems.ESSENCE || stackItem == ModItems.ASH) {
+					essenceCount++;
+					continue;
 				}
 				return null;
 			}
-
-			@Nullable
-			@Override
-			public ItemStack getRecipeOutput() {
-				return self.getItemStack(1);
+			if (orb != null && essenceCount > 0 && containedEssence + essenceCount <= INSTANCE.requiredEssence) {
+				ItemStack newStack = orb.copy();
+				setContainedEssence(newStack, containedEssence + essenceCount);
+				return newStack;
 			}
-		});
+			return null;
+		}
+	}
+
+	public OrbMurky() {
+		super("orb_murky");
+
+		addRecipe(new OrbMurkyFillRecipe(getRegistryName(), 2));
+		addRecipe(new OrbMurkyFillRecipe(getRegistryName(), 3));
 	}
 
 	@Override

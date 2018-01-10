@@ -2,7 +2,6 @@ package yuudaari.soulus.common.util;
 
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.CreativeTab;
-import yuudaari.soulus.common.recipe.Recipe;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -16,6 +15,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
@@ -91,13 +91,13 @@ public class ModItem extends Item implements IModThing {
 		return oreDicts;
 	}
 
-	protected List<Recipe> recipes = new ArrayList<>();
+	protected List<IRecipe> recipes = new ArrayList<>();
 
-	public List<Recipe> getRecipes() {
+	public List<IRecipe> getRecipes() {
 		return recipes;
 	}
 
-	public void addRecipe(Recipe recipe) {
+	public void addRecipe(IRecipe recipe) {
 		recipes.add(recipe);
 	}
 

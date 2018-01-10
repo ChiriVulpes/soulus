@@ -2,7 +2,6 @@ package yuudaari.soulus.common.util;
 
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.CreativeTab;
-import yuudaari.soulus.common.recipe.Recipe;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.block.Block;
@@ -10,10 +9,10 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.NonNullList;
-
 import javax.annotation.Nonnull;
 
 public class ModBlock extends Block implements IBlock {
@@ -49,13 +48,13 @@ public class ModBlock extends Block implements IBlock {
 		return oreDicts;
 	}
 
-	protected List<Recipe> recipes = new ArrayList<>();
+	protected List<IRecipe> recipes = new ArrayList<>();
 
-	public List<Recipe> getRecipes() {
+	public List<IRecipe> getRecipes() {
 		return recipes;
 	}
 
-	public void addRecipe(Recipe recipe) {
+	public void addRecipe(IRecipe recipe) {
 		recipes.add(recipe);
 	}
 

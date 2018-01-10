@@ -7,10 +7,10 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import yuudaari.soulus.common.recipe.Recipe;
 
 public interface IModThing {
 	abstract String getName();
@@ -26,11 +26,11 @@ public interface IModThing {
 		return new ArrayList<>();
 	}
 
-	default List<Recipe> getRecipes() {
+	default List<IRecipe> getRecipes() {
 		return new ArrayList<>();
 	}
 
-	default void addRecipe(Recipe recipe) {
+	default void addRecipe(IRecipe recipe) {
 	}
 
 	default ItemStack getItemStack() {

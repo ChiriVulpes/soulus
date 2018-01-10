@@ -4,14 +4,16 @@ import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.util.EssenceType;
 import yuudaari.soulus.common.util.ModItem;
-import yuudaari.soulus.common.recipe.Recipe;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -23,74 +25,6 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 public class Soulbook extends ModItem {
-
-	public Soulbook() {
-		super("soulbook", 1);
-		this.glint = true;
-
-		Soulbook self = this;
-
-		addRecipe(new Recipe(getRegistryName()) {
-
-			@ParametersAreNonnullByDefault
-			@Override
-			public boolean matches(InventoryCrafting inv, World worldIn) {
-				return getCraftingResult(inv) != null;
-			}
-
-			@ParametersAreNonnullByDefault
-			@Nullable
-			@Override
-			public ItemStack getCraftingResult(InventoryCrafting inv) {
-				int essenceCount = 0;
-				ItemStack soulbook = null;
-				String essenceType = null;
-				int containedEssence = 0;
-				int inventorySize = inv.getSizeInventory();
-				for (int i = 0; i < inventorySize; i++) {
-					ItemStack stack = inv.getStackInSlot(i);
-					Item stackItem = stack.getItem();
-					if (stack == null || stackItem == Items.AIR)
-						continue;
-					if (stackItem == self) {
-						if (soulbook != null)
-							return null;
-						String itemTarget = EssenceType.getEssenceType(stack);
-						if (itemTarget != null) {
-							if (essenceType != null && !itemTarget.equals(essenceType))
-								return null;
-							essenceType = itemTarget;
-						}
-						containedEssence = getContainedEssence(stack);
-						soulbook = stack;
-						continue;
-					} else if (stackItem == ModItems.ESSENCE) {
-						String itemTarget = EssenceType.getEssenceType(stack);
-						if (itemTarget == null || (essenceType != null && !itemTarget.equals(essenceType)))
-							return null;
-						essenceType = itemTarget;
-						essenceCount++;
-						continue;
-					}
-					return null;
-				}
-				if (soulbook != null && essenceCount > 0
-						&& containedEssence + essenceCount <= Soulus.config.getSoulbookQuantity(essenceType)) {
-					ItemStack newStack = soulbook.copy();
-					EssenceType.setEssenceType(newStack, essenceType);
-					setContainedEssence(newStack, containedEssence + essenceCount);
-					return newStack;
-				}
-				return null;
-			}
-
-			@Nullable
-			@Override
-			public ItemStack getRecipeOutput() {
-				return self.getItemStack(1);
-			}
-		});
-	}
 
 	public final static Soulbook INSTANCE = new Soulbook();
 
@@ -114,6 +48,76 @@ public class Soulbook extends ModItem {
 		if (essenceType == null)
 			return false;
 		return getContainedEssence(stack) >= Soulus.config.getSoulbookQuantity(essenceType);
+	}
+
+	public static class SoulbookRecipe extends ShapelessRecipes {
+		public SoulbookRecipe(ResourceLocation name) {
+			super(null, ItemStack.EMPTY, NonNullList.create());
+			setRegistryName(name);
+		}
+
+		@ParametersAreNonnullByDefault
+		@Override
+		public boolean matches(InventoryCrafting inv, World worldIn) {
+			return getCraftingResult(inv) != null;
+		}
+
+		@ParametersAreNonnullByDefault
+		@Nullable
+		@Override
+		public ItemStack getCraftingResult(InventoryCrafting inv) {
+			int essenceCount = 0;
+			ItemStack soulbook = null;
+			String essenceType = null;
+			int containedEssence = 0;
+			int inventorySize = inv.getSizeInventory();
+			for (int i = 0; i < inventorySize; i++) {
+				ItemStack stack = inv.getStackInSlot(i);
+				Item stackItem = stack.getItem();
+				if (stack == null || stackItem == Items.AIR)
+					continue;
+				if (stackItem == INSTANCE) {
+					if (soulbook != null)
+						return null;
+					String itemTarget = EssenceType.getEssenceType(stack);
+					if (itemTarget != null) {
+						if (essenceType != null && !itemTarget.equals(essenceType))
+							return null;
+						essenceType = itemTarget;
+					}
+					containedEssence = getContainedEssence(stack);
+					soulbook = stack;
+					continue;
+				} else if (stackItem == ModItems.ESSENCE) {
+					String itemTarget = EssenceType.getEssenceType(stack);
+					if (itemTarget == null || (essenceType != null && !itemTarget.equals(essenceType)))
+						return null;
+					essenceType = itemTarget;
+					essenceCount++;
+					continue;
+				}
+				return null;
+			}
+			if (soulbook != null && essenceCount > 0
+					&& containedEssence + essenceCount <= Soulus.config.getSoulbookQuantity(essenceType)) {
+				ItemStack newStack = soulbook.copy();
+				EssenceType.setEssenceType(newStack, essenceType);
+				setContainedEssence(newStack, containedEssence + essenceCount);
+				return newStack;
+			}
+			return null;
+		}
+
+		@Nullable
+		@Override
+		public ItemStack getRecipeOutput() {
+			return INSTANCE.getItemStack(1);
+		}
+	}
+
+	public Soulbook() {
+		super("soulbook", 1);
+		this.glint = true;
 	}
 
 	@Override
