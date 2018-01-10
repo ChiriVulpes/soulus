@@ -13,98 +13,98 @@ import yuudaari.soulus.common.util.IModThing;
 import yuudaari.soulus.common.util.ModItem;
 
 public class ModItems {
-	public static final Barket BARKET = new Barket();
-	public static final BloodCrystal BLOOD_CRYSTAL = BloodCrystal.INSTANCE;
-	public static final BoneChunkDry BONE_CHUNK_DRY = new BoneChunkDry();
-	public static final BoneChunkEnder BONE_CHUNK_ENDER = new BoneChunkEnder();
-	public static final BoneChunkFrozen BONE_CHUNK_FROZEN = new BoneChunkFrozen();
-	public static final BoneChunkFungal BONE_CHUNK_FUNGAL = new BoneChunkFungal();
-	public static final BoneChunkNether BONE_CHUNK_NETHER = new BoneChunkNether();
-	public static final BoneChunkNormal BONE_CHUNK_NORMAL = new BoneChunkNormal();
-	public static final BoneChunkScale BONE_CHUNK_SCALE = new BoneChunkScale();
-	public static final BoneEnder BONE_ENDER = new BoneEnder();
-	public static final Bonemeal BONEMEAL_NETHER = BonemealNether.INSTANCE;
-	public static final BonemealEnder BONEMEAL_ENDER = new BonemealEnder();
-	public static final DustEnderIron DUST_ENDER_IRON = new DustEnderIron();
-	public static final Essence ESSENCE = new Essence();
-	public static final GearBone GEAR_BONE = new GearBone("gear_bone");
-	public static final GearBone GEAR_BONE_DRY = new GearBone("gear_bone_dry");
-	public static final GearBone GEAR_BONE_FROZEN = new GearBone("gear_bone_frozen");
-	public static final GearBone GEAR_BONE_FUNGAL = new GearBone("gear_bone_fungal");
-	public static final GearBone GEAR_BONE_NETHER = new GearBone("gear_bone_nether");
-	public static final GearBoneEnder GEAR_BONE_ENDER = new GearBoneEnder();
-	public static final GearOscillating GEAR_OSCILLATING = new GearOscillating();
-	public static final Glue GLUE = new Glue();
-	public static final ModItem ASH = new ModItem("ash");
-	public static final ModItem BARK = new ModItem("bark").setBurnTime(40);
-	public static final ModItem BLOOD_CRYSTAL_BROKEN = new ModItem("blood_crystal_broken");
-	public static final ModItem BONE_DRY = new ModItem("bone_dry").addOreDict("bone");
-	public static final ModItem BONE_FROZEN = new ModItem("bone_frozen").addOreDict("bone");
-	public static final ModItem BONE_FUNGAL = new ModItem("bone_fungal").addOreDict("bone");
-	public static final ModItem BONE_NETHER = new ModItem("bone_nether");
-	public static final ModItem BONE_NORMAL = new ModItem("bone_normal").addOreDict("bone");
-	public static final ModItem BONE_SCALE = new ModItem("bone_scale");
-	public static final ModItem DUST_ENDER_IRON_ASHEN = new ModItem("dust_ender_iron_ashen");
-	public static final ModItem DUST_IRON = new ModItem("dust_iron").addOreDict("dustIron");
-	public static final ModItem DUST_STONE = new ModItem("dust_stone").addOreDict("dustStone");
-	public static final ModItem DUST_WOOD = new ModItem("dust_wood").addOreDict("dustWood");
-	public static final ModItem EMERALD_BURNT = new ModItem("emerald_burnt");
-	public static final ModItem EMERALD_COATED = new ModItem("emerald_coated");
-	public static final ModItem INGOT_ENDERSTEEL = new ModItem("ingot_endersteel");
-	public static final ModItem INGOT_ENDERSTEEL_DARK = new ModItem("ingot_endersteel_dark");
-	public static final ModItem NUGGET_ENDERSTEEL_DARK = new ModItem("nugget_endersteel_dark");
-	public static final NuggetEndersteel NUGGET_ENDERSTEEL = new NuggetEndersteel();
-	public static final OrbMurky ORB_MURKY = OrbMurky.INSTANCE;
-	public static final Sledgehammer SLEDGEHAMMER = new Sledgehammer();
-	public static final Soulbook SOULBOOK = Soulbook.INSTANCE;
-	public static final SoulCatalyst SOUL_CATALYST = new SoulCatalyst();
+	public static Barket BARKET = new Barket();
+	public static BoneChunkDry BONE_CHUNK_DRY = new BoneChunkDry();
+	public static BoneChunkEnder BONE_CHUNK_ENDER = new BoneChunkEnder();
+	public static BoneChunkFrozen BONE_CHUNK_FROZEN = new BoneChunkFrozen();
+	public static BoneChunkFungal BONE_CHUNK_FUNGAL = new BoneChunkFungal();
+	public static BoneChunkNether BONE_CHUNK_NETHER = new BoneChunkNether();
+	public static BoneChunkNormal BONE_CHUNK_NORMAL = new BoneChunkNormal();
+	public static BoneChunkScale BONE_CHUNK_SCALE = new BoneChunkScale();
+	public static BoneEnder BONE_ENDER = new BoneEnder();
+	public static Bonemeal BONEMEAL_NETHER = BonemealNether.INSTANCE;
+	public static BonemealEnder BONEMEAL_ENDER = new BonemealEnder();
+	public static CrystalBlood CRYSTAL_BLOOD = CrystalBlood.INSTANCE;
+	public static DustEnderIron DUST_ENDER_IRON = new DustEnderIron();
+	public static Essence ESSENCE = Essence.INSTANCE;
+	public static GearBone GEAR_BONE = new GearBone("gear_bone");
+	public static GearBone GEAR_BONE_DRY = new GearBone("gear_bone_dry");
+	public static GearBone GEAR_BONE_FROZEN = new GearBone("gear_bone_frozen");
+	public static GearBone GEAR_BONE_FUNGAL = new GearBone("gear_bone_fungal");
+	public static GearBone GEAR_BONE_NETHER = new GearBone("gear_bone_nether");
+	public static GearBoneEnder GEAR_BONE_ENDER = new GearBoneEnder();
+	public static GearOscillating GEAR_OSCILLATING = new GearOscillating();
+	public static Glue GLUE = new Glue();
+	public static ModItem ASH = new ModItem("ash");
+	public static ModItem BARK = new ModItem("bark").setBurnTime(40);
+	public static ModItem BONE_DRY = new ModItem("bone_dry").addOreDict("bone");
+	public static ModItem BONE_FROZEN = new ModItem("bone_frozen").addOreDict("bone");
+	public static ModItem BONE_FUNGAL = new ModItem("bone_fungal").addOreDict("bone");
+	public static ModItem BONE_NETHER = new ModItem("bone_nether");
+	public static ModItem BONE_NORMAL = new ModItem("bone_normal").addOreDict("bone");
+	public static ModItem BONE_SCALE = new ModItem("bone_scale");
+	public static ModItem CRYSTAL_BLOOD_BROKEN = new ModItem("crystal_blood_broken");
+	public static ModItem DUST_ENDER_IRON_ASHEN = new ModItem("dust_ender_iron_ashen");
+	public static ModItem DUST_IRON = new ModItem("dust_iron").addOreDict("dustIron");
+	public static ModItem DUST_STONE = new ModItem("dust_stone").addOreDict("dustStone");
+	public static ModItem DUST_WOOD = new ModItem("dust_wood").addOreDict("dustWood");
+	public static ModItem EMERALD_BURNT = new ModItem("emerald_burnt");
+	public static ModItem EMERALD_COATED = new ModItem("emerald_coated");
+	public static ModItem INGOT_ENDERSTEEL = new ModItem("ingot_endersteel");
+	public static ModItem INGOT_ENDERSTEEL_DARK = new ModItem("ingot_endersteel_dark");
+	public static ModItem NUGGET_ENDERSTEEL_DARK = new ModItem("nugget_endersteel_dark");
+	public static NuggetEndersteel NUGGET_ENDERSTEEL = new NuggetEndersteel();
+	public static OrbMurky ORB_MURKY = OrbMurky.INSTANCE;
+	public static Sledgehammer SLEDGEHAMMER = new Sledgehammer();
+	public static Soulbook SOULBOOK = Soulbook.INSTANCE;
+	public static SoulCatalyst SOUL_CATALYST = new SoulCatalyst();
 
 	public static Item[] items = new Item[] { //
-			ASH, //
+			ASH, // 
 			BARK, // 
-			BARKET, //  
-			BLOOD_CRYSTAL_BROKEN, // 
-			BLOOD_CRYSTAL, // 
-			BONE_CHUNK_DRY, // 
+			BARKET, //
+			BONE_CHUNK_DRY, //  
 			BONE_CHUNK_ENDER, // 
 			BONE_CHUNK_FROZEN, // 
 			BONE_CHUNK_FUNGAL, // 
 			BONE_CHUNK_NETHER, // 
 			BONE_CHUNK_NORMAL, // 
-			BONE_CHUNK_SCALE, //
-			BONE_DRY, //  
-			BONE_ENDER, //  
+			BONE_CHUNK_SCALE, // 
+			BONE_DRY, // 
+			BONE_ENDER, // 
 			BONE_FROZEN, //  
-			BONE_FUNGAL, //  
+			BONE_FUNGAL, // 
 			BONE_NETHER, //  
 			BONE_NORMAL, // 
-			BONE_SCALE, //  
-			BONEMEAL_ENDER, // 
+			BONE_SCALE, // 
+			BONEMEAL_ENDER, //
 			BONEMEAL_NETHER, // 
-			DUST_ENDER_IRON, // 
+			CRYSTAL_BLOOD_BROKEN, // 
+			CRYSTAL_BLOOD, // 
 			DUST_ENDER_IRON_ASHEN, // 
+			DUST_ENDER_IRON, //  
 			DUST_IRON, // 
 			DUST_STONE, // 
 			DUST_WOOD, // 
-			EMERALD_BURNT, //  
-			EMERALD_COATED, // 
+			EMERALD_BURNT, // 
+			EMERALD_COATED, //  
 			ESSENCE, //  
-			GEAR_BONE_DRY, // 
+			GEAR_BONE_DRY, //  
 			GEAR_BONE_ENDER, // 
-			GEAR_BONE_FROZEN, // 
+			GEAR_BONE_FROZEN, //  
 			GEAR_BONE_FUNGAL, // 
-			GEAR_BONE_NETHER, // 
-			GEAR_BONE, // 
+			GEAR_BONE_NETHER, //  
+			GEAR_BONE, //  
 			GEAR_OSCILLATING, // 
-			GLUE, //  
-			INGOT_ENDERSTEEL, // 
+			GLUE, // 
 			INGOT_ENDERSTEEL_DARK, // 
-			NUGGET_ENDERSTEEL, //
+			INGOT_ENDERSTEEL, // 
 			NUGGET_ENDERSTEEL_DARK, //
+			NUGGET_ENDERSTEEL, //
 			ORB_MURKY, // 
 			SLEDGEHAMMER, // 
-			SOULBOOK, //
-			SOUL_CATALYST //
+			SOUL_CATALYST, //
+			SOULBOOK //
 	};
 
 	public static void registerItems(IForgeRegistry<Item> registry) {
@@ -130,9 +130,8 @@ public class ModItems {
 
 	public static void registerRecipes(IForgeRegistry<IRecipe> registry) {
 		for (Item item : items) {
-			if (item instanceof ModItem)
-				for (IRecipe recipe : ((ModItem) item).getRecipes())
-					registry.register(recipe);
+			if (item instanceof IModThing)
+				((IModThing) item).onRegisterRecipes(registry);
 		}
 	}
 }

@@ -3,7 +3,7 @@ package yuudaari.soulus.common.config;
 import yuudaari.soulus.common.ModGenerators;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.ModBlocks;
-import yuudaari.soulus.common.item.BloodCrystal;
+import yuudaari.soulus.common.item.CrystalBlood;
 import yuudaari.soulus.common.item.Glue;
 import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.item.Sledgehammer;
@@ -40,7 +40,7 @@ public class Config {
 				return config.soulbookQuantity;
 			}
 		}
-		return -1;
+		return essenceType == "unfocused" ? 1 : -1;
 	}
 
 	/* SERIALIZER */
@@ -65,8 +65,8 @@ public class Config {
 						(from, into) -> Sledgehammer.serializer.deserialize(from, ModItems.SLEDGEHAMMER)));
 
 		serializer.otherHandlers.put("bloodCrystal",
-				new ManualSerializer(from -> BloodCrystal.serializer.serialize(ModItems.BLOOD_CRYSTAL),
-						(from, into) -> BloodCrystal.serializer.deserialize(from, ModItems.BLOOD_CRYSTAL)));
+				new ManualSerializer(from -> CrystalBlood.serializer.serialize(ModItems.CRYSTAL_BLOOD),
+						(from, into) -> CrystalBlood.serializer.deserialize(from, ModItems.CRYSTAL_BLOOD)));
 
 		serializer.otherHandlers.put("murkyOrb",
 				new ManualSerializer(from -> OrbMurky.serializer.serialize(ModItems.ORB_MURKY),

@@ -29,7 +29,7 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.common.block.UpgradeableBlock;
-import yuudaari.soulus.common.item.BloodCrystal;
+import yuudaari.soulus.common.item.CrystalBlood;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.Soulus;
@@ -41,7 +41,7 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	//
 
 	public static enum Upgrade implements IUpgrade {
-		BLOOD_CRYSTAL(0, "blood_crystal", ModItems.BLOOD_CRYSTAL.getItemStack()), //
+		CRYSTAL_BLOOD(0, "crystal_blood", ModItems.CRYSTAL_BLOOD.getItemStack()), //
 		DAMAGE(1, "damage", new ItemStack(Items.QUARTZ))
 		//, POISON(2, "poison",
 		//		new ItemStack(Items.SPIDER_EYE)), POWER(3, "power", new ItemStack(Blocks.REDSTONE_TORCH))
@@ -73,7 +73,7 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		public int getMaxQuantity() {
 			// all upgrades by default are capped at 16
 			if (maxQuantity == null) {
-				if (name == "blood_crystal")
+				if (name == "crystal_blood")
 					return 1;
 				if (name == "damage")
 					return 256;
@@ -96,8 +96,8 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 			if (stack.getItem() != this.stack.getItem())
 				return false;
 
-			if (name == "blood_crystal")
-				return !BloodCrystal.isFilled(stack);
+			if (name == "crystal_blood")
+				return !CrystalBlood.isFilled(stack);
 
 			return true;
 		}
@@ -111,10 +111,10 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		public ItemStack getItemStackForTileEntity(UpgradeableBlockTileEntity te, int quantity) {
 			ItemStack stack = getItemStack(quantity);
 
-			if (name == "blood_crystal") {
+			if (name == "crystal_blood") {
 				SkewerTileEntity ste = (SkewerTileEntity) te;
-				BloodCrystal.setContainedBlood(stack,
-						Math.min(BloodCrystal.INSTANCE.requiredBlood, ste.bloodCrystalBlood));
+				CrystalBlood.setContainedBlood(stack,
+						Math.min(CrystalBlood.INSTANCE.requiredBlood, ste.crystalBloodContainedBlood));
 			}
 
 			return stack;
@@ -327,9 +327,9 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		currentTooltip.add(I18n.format("waila." + Soulus.MODID
 				+ (blockState.getValue(Skewer.EXTENDED) ? ":skewer.extended" : ":skewer.not_extended")));
 
-		if (te.upgrades.get(Upgrade.BLOOD_CRYSTAL) == 1) {
-			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":skewer.blood_crystal_stored_blood",
-					te.bloodCrystalBlood, BloodCrystal.INSTANCE.requiredBlood));
+		if (te.upgrades.get(Upgrade.CRYSTAL_BLOOD) == 1) {
+			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":skewer.crystal_blood_stored_blood",
+					te.crystalBloodContainedBlood, CrystalBlood.INSTANCE.requiredBlood));
 		}
 	}
 

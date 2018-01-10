@@ -12,12 +12,12 @@ import net.minecraft.world.World;
 import yuudaari.soulus.common.block.UpgradeableBlock.IUpgrade;
 import yuudaari.soulus.common.block.UpgradeableBlock.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.block.skewer.Skewer.Upgrade;
-import yuudaari.soulus.common.item.BloodCrystal;
+import yuudaari.soulus.common.item.CrystalBlood;
 import yuudaari.soulus.common.misc.ModDamageSource;
 
 public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 
-	public int bloodCrystalBlood = 0;
+	public int crystalBloodContainedBlood = 0;
 
 	private Map<EntityLivingBase, Long> entityHitTimes = new HashMap<>();
 
@@ -60,12 +60,12 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 					entity.hurtResistantTime = rtime;
 
 					if (world.rand.nextDouble() < skewer.chanceForBloodPerHit
-							&& upgrades.get(Upgrade.BLOOD_CRYSTAL) == 1) {
-						bloodCrystalBlood += getBlock().bloodPerDamage * damage;
-						if (bloodCrystalBlood > BloodCrystal.INSTANCE.requiredBlood) {
-							bloodCrystalBlood = BloodCrystal.INSTANCE.requiredBlood;
+							&& upgrades.get(Upgrade.CRYSTAL_BLOOD) == 1) {
+						crystalBloodContainedBlood += getBlock().bloodPerDamage * damage;
+						if (crystalBloodContainedBlood > CrystalBlood.INSTANCE.requiredBlood) {
+							crystalBloodContainedBlood = CrystalBlood.INSTANCE.requiredBlood;
 						}
-						BloodCrystal.bloodParticles(entity);
+						CrystalBlood.bloodParticles(entity);
 						blockUpdate();
 					}
 				}
@@ -80,13 +80,13 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 
 	@Override
 	public void onInsertUpgrade(ItemStack stack, IUpgrade upgrade, int newQuantity) {
-		if (upgrade == Upgrade.BLOOD_CRYSTAL) {
-			this.bloodCrystalBlood = BloodCrystal.getContainedBlood(stack);
+		if (upgrade == Upgrade.CRYSTAL_BLOOD) {
+			this.crystalBloodContainedBlood = CrystalBlood.getContainedBlood(stack);
 
-		} else if (upgrades.get(Upgrade.BLOOD_CRYSTAL) > 0) {
+		} else if (upgrades.get(Upgrade.CRYSTAL_BLOOD) > 0) {
 			// always keep blood crystal at the top (first to remove)
-			this.insertionOrder.remove(Upgrade.BLOOD_CRYSTAL);
-			this.insertionOrder.push(Upgrade.BLOOD_CRYSTAL);
+			this.insertionOrder.remove(Upgrade.CRYSTAL_BLOOD);
+			this.insertionOrder.push(Upgrade.CRYSTAL_BLOOD);
 		}
 	}
 
@@ -96,12 +96,12 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 
 	@Override
 	public void onReadFromNBT(NBTTagCompound compound) {
-		bloodCrystalBlood = compound.getInteger("blood_crystal_stored_blood");
+		crystalBloodContainedBlood = compound.getInteger("crystal_blood_stored_blood");
 	}
 
 	@Override
 	public void onWriteToNBT(NBTTagCompound compound) {
-		compound.setInteger("blood_crystal_stored_blood", bloodCrystalBlood);
+		compound.setInteger("crystal_blood_stored_blood", crystalBloodContainedBlood);
 	}
 
 }

@@ -13,6 +13,19 @@ import net.minecraftforge.fml.relauncher.Side;
 import javax.annotation.Nonnull;
 
 public class Essence extends ModItem {
+
+	public static Essence INSTANCE = new Essence();
+
+	public static ItemStack getStack(String essenceType) {
+		return getStack(essenceType, 1);
+	}
+
+	public static ItemStack getStack(String essenceType, Integer count) {
+		ItemStack stack = new ItemStack(INSTANCE, count);
+		EssenceType.setEssenceType(stack, essenceType);
+		return stack;
+	}
+
 	public Essence() {
 		super("essence");
 		setMaxStackSize(64);
@@ -40,16 +53,6 @@ public class Essence extends ModItem {
 				return tintIndex == 0 ? colourInfo.primaryColour : colourInfo.secondaryColour;
 			});
 		}
-	}
-
-	public ItemStack getStack(String mobTarget) {
-		return getStack(mobTarget, 1);
-	}
-
-	public ItemStack getStack(String mobTarget, Integer count) {
-		ItemStack stack = new ItemStack(this, count);
-		EssenceType.setEssenceType(stack, mobTarget);
-		return stack;
 	}
 
 	@Nonnull

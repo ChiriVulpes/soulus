@@ -3,7 +3,7 @@ package yuudaari.soulus.common.item;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.config.Serializer;
-import yuudaari.soulus.common.recipe.IngredientPotentialEssence;
+import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -11,6 +11,7 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,7 +20,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.IForgeRegistry;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -37,16 +40,17 @@ public class OrbMurky extends SummonerUpgrade {
 
 	public static class OrbMurkyFillRecipe extends ShapelessRecipes {
 		public static NonNullList<Ingredient> getIngredients(int size) {
-			NonNullList<Ingredient> result = NonNullList.from(Ingredient.EMPTY,
-					Collections.nCopies(size * size - 1, new IngredientPotentialEssence()).toArray(new Ingredient[0]));
 
-			result.add(Ingredient.fromItem(INSTANCE));
+			List<Ingredient> ingredients = new ArrayList<>();
 
-			return result;
+			ingredients.addAll(Collections.nCopies(size * size - 1, IngredientPotentialEssence.INSTANCE));
+			ingredients.add(Ingredient.fromItem(INSTANCE));
+
+			return NonNullList.from(Ingredient.EMPTY, ingredients.toArray(new Ingredient[0]));
 		}
 
 		public OrbMurkyFillRecipe(ResourceLocation name, int size) {
-			super(null, INSTANCE.getItemStack(), getIngredients(size));
+			super("", INSTANCE.getFilledStack(), getIngredients(size));
 			setRegistryName(name + "" + size);
 		}
 
@@ -92,9 +96,14 @@ public class OrbMurky extends SummonerUpgrade {
 
 	public OrbMurky() {
 		super("orb_murky");
+	}
 
-		addRecipe(new OrbMurkyFillRecipe(getRegistryName(), 2));
-		addRecipe(new OrbMurkyFillRecipe(getRegistryName(), 3));
+	@Override
+	public void onRegisterRecipes(IForgeRegistry<IRecipe> registry) {
+		registry.registerAll( //
+				new OrbMurkyFillRecipe(getRegistryName(), 2), //
+				new OrbMurkyFillRecipe(getRegistryName(), 3) //
+		);
 	}
 
 	@Override

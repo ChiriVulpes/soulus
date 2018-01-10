@@ -7,6 +7,8 @@
 		"furnace": "yuudaari.soulus.common.recipe.RecipeFurnace$Factory"
 	},
 	"ingredients": {
-		"potential_essence": "yuudaari.soulus.common.recipe.IngredientPotentialEssence$Factory"
+		"potential_essence": "yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence$Factory",
+		"orb_murky": "yuudaari.soulus.common.recipe.ingredient.IngredientOrbMurky$Factory",
+		"crystal_blood": "yuudaari.soulus.common.recipe.ingredient.IngredientCrystalBlood$Factory"
 	}
 }

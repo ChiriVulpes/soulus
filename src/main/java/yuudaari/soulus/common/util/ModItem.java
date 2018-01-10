@@ -15,7 +15,6 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
@@ -89,16 +88,6 @@ public class ModItem extends Item implements IModThing {
 
 	public List<String> getOreDicts() {
 		return oreDicts;
-	}
-
-	protected List<IRecipe> recipes = new ArrayList<>();
-
-	public List<IRecipe> getRecipes() {
-		return recipes;
-	}
-
-	public void addRecipe(IRecipe recipe) {
-		recipes.add(recipe);
 	}
 
 	@SideOnly(Side.CLIENT)

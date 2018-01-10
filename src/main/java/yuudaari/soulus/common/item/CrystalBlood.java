@@ -8,7 +8,7 @@ import yuudaari.soulus.common.config.PotionEffectSerializer;
 import yuudaari.soulus.common.config.Serializer;
 import yuudaari.soulus.common.misc.ModDamageSource;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
-import yuudaari.soulus.common.network.packet.BloodCrystalHitEntity;
+import yuudaari.soulus.common.network.packet.CrystalBloodHitEntity;
 import yuudaari.soulus.common.util.Colour;
 import yuudaari.soulus.common.util.ModPotionEffect;
 import net.minecraft.client.resources.I18n;
@@ -40,7 +40,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.common.collect.Multimap;
 
-public class BloodCrystal extends SummonerUpgrade {
+public class CrystalBlood extends SummonerUpgrade {
 	private static final int defaultRequiredBlood = 1000;
 	private static final int defaultPrickAmount = 9;
 	private static final int defaultPrickWorth = 90;
@@ -51,9 +51,9 @@ public class BloodCrystal extends SummonerUpgrade {
 	private static final ModPotionEffect[] defaultPrickEffects = new ModPotionEffect[] {
 			new ModPotionEffect("hunger", 100), new ModPotionEffect("nausea", 200) };
 
-	public static final Serializer<BloodCrystal> serializer;
+	public static final Serializer<CrystalBlood> serializer;
 	static {
-		serializer = new Serializer<>(BloodCrystal.class, "requiredBlood", "prickAmount", "prickWorth",
+		serializer = new Serializer<>(CrystalBlood.class, "requiredBlood", "prickAmount", "prickWorth",
 				"creaturePrickRequiredHealth", "creaturePrickAmount", "creaturePrickWorth", "particleCount");
 
 		serializer.fieldHandlers.put("prickEffects", PotionEffectSerializer.INSTANCE);
@@ -62,7 +62,7 @@ public class BloodCrystal extends SummonerUpgrade {
 	private static final int colourEmpty = 0x281313;
 	private static final int colourFilled = 0xBC2044;
 
-	public static final BloodCrystal INSTANCE = new BloodCrystal();
+	public static final CrystalBlood INSTANCE = new CrystalBlood();
 
 	public int requiredBlood = defaultRequiredBlood;
 	public int prickAmount = defaultPrickAmount;
@@ -73,8 +73,8 @@ public class BloodCrystal extends SummonerUpgrade {
 	public int particleCount = defaultParticleCount;
 	public ModPotionEffect[] prickEffects = defaultPrickEffects;
 
-	public BloodCrystal() {
-		super("blood_crystal");
+	public CrystalBlood() {
+		super("crystal_blood");
 
 		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
 			registerColorHandler((ItemStack stack, int tintIndex) -> {
@@ -142,14 +142,14 @@ public class BloodCrystal extends SummonerUpgrade {
 			if (player instanceof FakePlayer) {
 				heldItem.setCount(0);
 				EntityItem dropEntity = new EntityItem(player.world, player.posX, player.posY, player.posZ,
-						ModItems.BLOOD_CRYSTAL_BROKEN.getItemStack());
+						ModItems.CRYSTAL_BLOOD_BROKEN.getItemStack());
 				dropEntity.setNoPickupDelay();
 				player.world.spawnEntity(dropEntity);
 
 			} else {
 				if (!worldIn.isRemote) {
 					setContainedBlood(heldItem, containedBlood + prickWorth);
-					player.attackEntityFrom(ModDamageSource.BLOOD_CRYSTAL, prickAmount);
+					player.attackEntityFrom(ModDamageSource.CRYSTAL_BLOOD, prickAmount);
 
 					for (ModPotionEffect effect : prickEffects)
 						player.addPotionEffect(effect);
@@ -169,10 +169,10 @@ public class BloodCrystal extends SummonerUpgrade {
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 		if (target.getHealth() <= this.creaturePrickRequiredHealth) {
-			target.attackEntityFrom(ModDamageSource.BLOOD_CRYSTAL, this.creaturePrickAmount);
+			target.attackEntityFrom(ModDamageSource.CRYSTAL_BLOOD, this.creaturePrickAmount);
 			int blood = getContainedBlood(stack);
 			setContainedBlood(stack, blood + this.creaturePrickWorth);
-			BloodCrystal.bloodParticles(target);
+			CrystalBlood.bloodParticles(target);
 		}
 		return true;
 	}
@@ -197,8 +197,8 @@ public class BloodCrystal extends SummonerUpgrade {
 
 	public static int getContainedBlood(ItemStack stack) {
 		NBTTagCompound tag = stack.getTagCompound();
-		if (tag != null && tag.hasKey("ContainedBlood", 3)) {
-			return tag.getInteger("ContainedBlood");
+		if (tag != null && tag.hasKey("contained_blood", 3)) {
+			return tag.getInteger("contained_blood");
 		}
 		return 0;
 	}
@@ -213,7 +213,7 @@ public class BloodCrystal extends SummonerUpgrade {
 			tag = new NBTTagCompound();
 			stack.setTagCompound(tag);
 		}
-		tag.setInteger("ContainedBlood", count);
+		tag.setInteger("contained_blood", count);
 		return stack;
 	}
 
@@ -225,7 +225,7 @@ public class BloodCrystal extends SummonerUpgrade {
 		if (entity.world.isRemote) {
 			particles(entity);
 		} else {
-			SoulsPacketHandler.INSTANCE.sendToAllAround(new BloodCrystalHitEntity(entity),
+			SoulsPacketHandler.INSTANCE.sendToAllAround(new CrystalBloodHitEntity(entity),
 					new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 128));
 		}
 	}
@@ -235,7 +235,7 @@ public class BloodCrystal extends SummonerUpgrade {
 		World world = entity.getEntityWorld();
 		Random rand = world.rand;
 
-		for (int i = 0; i < ModItems.BLOOD_CRYSTAL.particleCount; ++i) {
+		for (int i = 0; i < ModItems.CRYSTAL_BLOOD.particleCount; ++i) {
 			double d3 = (entity.posX - 0.5F + rand.nextFloat());
 			double d4 = (entity.posY + rand.nextFloat());
 			double d5 = (entity.posZ - 0.5F + rand.nextFloat());
@@ -257,9 +257,9 @@ public class BloodCrystal extends SummonerUpgrade {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		int containedBlood = BloodCrystal.getContainedBlood(stack);
+		int containedBlood = CrystalBlood.getContainedBlood(stack);
 		if (containedBlood < requiredBlood) {
-			tooltip.add(I18n.format("tooltip." + Soulus.MODID + ":blood_crystal.contained_blood", containedBlood,
+			tooltip.add(I18n.format("tooltip." + Soulus.MODID + ":crystal_blood.contained_blood", containedBlood,
 					requiredBlood));
 		}
 	}

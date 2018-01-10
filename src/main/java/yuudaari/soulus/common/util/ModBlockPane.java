@@ -8,7 +8,6 @@ import net.minecraft.block.BlockPane;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 
@@ -43,16 +42,6 @@ public class ModBlockPane extends BlockPane implements IBlock {
 
 	public List<String> getOreDicts() {
 		return oreDicts;
-	}
-
-	protected List<IRecipe> recipes = new ArrayList<>();
-
-	public List<IRecipe> getRecipes() {
-		return recipes;
-	}
-
-	public void addRecipe(IRecipe recipe) {
-		recipes.add(recipe);
 	}
 
 	public void setHasItem() {

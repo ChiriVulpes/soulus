@@ -7,13 +7,13 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BloodCrystalHitEntity implements IMessage {
-	public BloodCrystalHitEntity() {
+public class CrystalBloodHitEntity implements IMessage {
+	public CrystalBloodHitEntity() {
 	}
 
 	private int entityId;
 
-	public BloodCrystalHitEntity(EntityLivingBase entity) {
+	public CrystalBloodHitEntity(EntityLivingBase entity) {
 		entityId = entity.getEntityId();
 	}
 

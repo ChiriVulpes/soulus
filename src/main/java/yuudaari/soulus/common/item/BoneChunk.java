@@ -1,7 +1,6 @@
 package yuudaari.soulus.common.item;
 
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.config.EssenceConfig;
 import yuudaari.soulus.common.util.BoneType;
 import yuudaari.soulus.common.util.ModItem;
@@ -73,7 +72,7 @@ public class BoneChunk extends ModItem {
 			if (choice < 0) {
 				String drop = dropInfo.getKey();
 				if (drop != null) {
-					return ModItems.ESSENCE.getStack(drop);
+					return Essence.getStack(drop);
 				}
 				return null;
 			}

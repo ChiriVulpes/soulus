@@ -1,6 +1,7 @@
 package yuudaari.soulus.common;
 
 import yuudaari.soulus.common.util.IBlock;
+import yuudaari.soulus.common.util.IModThing;
 
 import java.util.List;
 
@@ -102,9 +103,8 @@ public class ModBlocks {
 
 	public static void registerRecipes(IForgeRegistry<IRecipe> registry) {
 		for (IBlock block : blocks) {
-			for (IRecipe recipe : block.getRecipes()) {
-				registry.register(recipe);
-			}
+			if (block instanceof IModThing)
+				((IModThing) block).onRegisterRecipes(registry);
 		}
 	}
 }

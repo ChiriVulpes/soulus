@@ -2,6 +2,7 @@ package yuudaari.soulus.common.item;
 
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
 import yuudaari.soulus.common.util.EssenceType;
 import yuudaari.soulus.common.util.ModItem;
 import net.minecraft.client.resources.I18n;
@@ -10,6 +11,8 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
@@ -17,7 +20,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.IForgeRegistry;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -51,9 +57,19 @@ public class Soulbook extends ModItem {
 	}
 
 	public static class SoulbookRecipe extends ShapelessRecipes {
-		public SoulbookRecipe(ResourceLocation name) {
-			super(null, ItemStack.EMPTY, NonNullList.create());
-			setRegistryName(name);
+		public static NonNullList<Ingredient> getIngredients(int size) {
+
+			List<Ingredient> ingredients = new ArrayList<>();
+
+			ingredients.addAll(Collections.nCopies(size * size - 1, IngredientPotentialEssence.INSTANCE));
+			ingredients.add(Ingredient.fromItem(INSTANCE));
+
+			return NonNullList.from(Ingredient.EMPTY, ingredients.toArray(new Ingredient[0]));
+		}
+
+		public SoulbookRecipe(ResourceLocation name, int size) {
+			super("", getFilled("unfocused"), getIngredients(size));
+			setRegistryName(name + "" + size);
 		}
 
 		@ParametersAreNonnullByDefault
@@ -107,12 +123,6 @@ public class Soulbook extends ModItem {
 			}
 			return null;
 		}
-
-		@Nullable
-		@Override
-		public ItemStack getRecipeOutput() {
-			return INSTANCE.getItemStack(1);
-		}
 	}
 
 	public Soulbook() {
@@ -121,12 +131,20 @@ public class Soulbook extends ModItem {
 	}
 
 	@Override
+	public void onRegisterRecipes(IForgeRegistry<IRecipe> registry) {
+		registry.registerAll( //
+				new SoulbookRecipe(getRegistryName(), 2), //
+				new SoulbookRecipe(getRegistryName(), 3) //
+		);
+	}
+
+	@Override
 	public boolean hasEffect(ItemStack stack) {
 		String essenceType = EssenceType.getEssenceType(stack);
 		if (essenceType == null)
 			return false;
 		int containedEssence = getContainedEssence(stack);
-		return containedEssence == Soulus.config.getSoulbookQuantity(essenceType);
+		return containedEssence >= Soulus.config.getSoulbookQuantity(essenceType);
 	}
 
 	@Nonnull

@@ -11,6 +11,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.IForgeRegistry;
 
 public interface IModThing {
 	abstract String getName();
@@ -26,11 +27,7 @@ public interface IModThing {
 		return new ArrayList<>();
 	}
 
-	default List<IRecipe> getRecipes() {
-		return new ArrayList<>();
-	}
-
-	default void addRecipe(IRecipe recipe) {
+	default void onRegisterRecipes(IForgeRegistry<IRecipe> registry) {
 	}
 
 	default ItemStack getItemStack() {

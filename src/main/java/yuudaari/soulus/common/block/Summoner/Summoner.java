@@ -35,7 +35,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.common.block.EndersteelType;
 import yuudaari.soulus.common.block.UpgradeableBlock;
 import yuudaari.soulus.common.CreativeTab;
-import yuudaari.soulus.common.item.BloodCrystal;
+import yuudaari.soulus.common.item.CrystalBlood;
 import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.item.Soulbook;
 import yuudaari.soulus.common.ModItems;
@@ -51,7 +51,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	//
 
 	public static enum Upgrade implements IUpgrade {
-		COUNT(0, "count", ModItems.BLOOD_CRYSTAL.getItemStack()), DELAY(1, "delay",
+		COUNT(0, "count", ModItems.CRYSTAL_BLOOD.getItemStack()), DELAY(1, "delay",
 				ModItems.GEAR_OSCILLATING.getItemStack()), RANGE(2, "range", ModItems.ORB_MURKY.getItemStack());
 
 		private final int index;
@@ -93,7 +93,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 				return false;
 
 			if (name == "count") {
-				return BloodCrystal.isFilled(stack);
+				return CrystalBlood.isFilled(stack);
 			} else if (name == "range") {
 				return OrbMurky.isFilled(stack);
 			}
@@ -105,7 +105,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		public ItemStack getItemStack(int quantity) {
 			ItemStack stack = new ItemStack(this.stack.getItem(), quantity);
 			if (name == "count") {
-				BloodCrystal.setFilled(stack);
+				CrystalBlood.setFilled(stack);
 			} else if (name == "range") {
 				OrbMurky.setFilled(stack);
 			}

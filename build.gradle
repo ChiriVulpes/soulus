@@ -56,6 +56,12 @@ repositories {
         url "http://maven.blamejared.com"
     }
 
+    // Required for JEI
+    maven {
+        name "DVS1 Maven FS" 
+        url "http://dvs1.progwml6.com/files/maven" 
+    }
+    
     // Required for HWYLA
     maven {
         name "tehnut"
@@ -63,12 +69,6 @@ repositories {
     }
     
     repositories {
-        // Required for JEI and Mantle
-        maven {
-            name "DVS1 Maven FS" 
-            url "http://dvs1.progwml6.com/files/maven" 
-        }
-
         // Required for TheOneProbe
         maven {
             name "tterrag"
@@ -88,6 +88,7 @@ repositories {
 dependencies {
     provided "exnihilocreatio:exnihilocreatio:1.12-0.1.5.9"
     provided "mcp.mobius.waila:Hwyla:1.8.20-B38_1.12:api"
+    provided "mezz.jei:jei_1.12.2:4.8.5.138:api"
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
