@@ -139,7 +139,7 @@ Using 8 Endersteel bars and an ender bonemeal in the center, you can craft an Em
 
 ![Empty Summoner](./preview/summoner.png)
 
-You can also find empty summoners in the world, in the places where mob spawners would normally generate. (This replacement can be configured/disabled with [`CONFIG::summoner_replacer`](./docs/CONFIG.md#configsummoner-replacer-), but fair warning: the vanilla mob spawner is unable to spawn entities unless you also change the [Creatures Config](./docs/CONFIG.md#configcreatures-))
+You can also find empty summoners in the world, in the places where mob spawners would normally generate. (This replacement can be configured/disabled with [`CONFIG::summoner_replacer`](./docs/CONFIG.md#configsummoner_replacer-), but fair warning: the vanilla mob spawner is unable to spawn entities unless you also change the [Creatures Config](./docs/CONFIG.md#configcreatures-))
 
 If you right click on an empty summoner with a filled soulbook, a summoner is created. By default, summoning a mob takes around 10 minutes, only summons one, and you have to be within 3 blocks to increase the summon percentage. (Eg: you can spend 5 minutes at the summoner, then come back later and complete the summon)
 

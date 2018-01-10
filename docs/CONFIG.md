@@ -3,7 +3,7 @@
 ## Table of Contents
 - [Creatures](#configcreatures-)
 - [Essences](#configessences-)
-- [Summoner Replacement](#configsummoner-replacer-)
+- [Summoner Replacement](#configsummoner_replacer-)
 
 ## `CONFIG::creatures` [↑](#table-of-contents)
 
