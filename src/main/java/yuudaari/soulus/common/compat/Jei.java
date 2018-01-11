@@ -3,12 +3,12 @@ package yuudaari.soulus.common.compat;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
+import mezz.jei.api.ISubtypeRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.plugins.vanilla.crafting.ShapedOreRecipeWrapper;
 import mezz.jei.plugins.vanilla.crafting.ShapedRecipesWrapper;
 import mezz.jei.plugins.vanilla.crafting.ShapelessRecipeWrapper;
-import mezz.jei.runtime.JeiHelpers;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -17,11 +17,18 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.compat.jei.RecipeCategoryComposer;
 import yuudaari.soulus.common.compat.jei.RecipeWrapperComposer;
+import yuudaari.soulus.common.compat.jei.SubtypeInterpreterEssence;
+import yuudaari.soulus.common.item.Essence;
 import yuudaari.soulus.common.recipe.RecipeComposerShaped;
 import yuudaari.soulus.common.recipe.RecipeComposerShapeless;
 
 @JEIPlugin
 public class Jei implements IModPlugin {
+
+	@Override
+	public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
+		subtypeRegistry.registerSubtypeInterpreter(Essence.INSTANCE, new SubtypeInterpreterEssence());
+	}
 
 	@Override
 	public void registerCategories(IRecipeCategoryRegistration registry) {

@@ -13,13 +13,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class OrbMurky extends SummonerUpgrade {
 
 	public int requiredEssence = 128;
 
-	public static class OrbMurkyFillRecipe extends ShapelessRecipes {
+	public static class OrbMurkyFillRecipe extends ShapelessOreRecipe {
 		public static NonNullList<Ingredient> getIngredients(int size) {
 
 			List<Ingredient> ingredients = new ArrayList<>();
@@ -50,7 +50,7 @@ public class OrbMurky extends SummonerUpgrade {
 		}
 
 		public OrbMurkyFillRecipe(ResourceLocation name, int size) {
-			super("", INSTANCE.getFilledStack(), getIngredients(size));
+			super(new ResourceLocation(""), getIngredients(size), INSTANCE.getFilledStack());
 			setRegistryName(name + "" + size);
 		}
 

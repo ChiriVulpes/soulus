@@ -1,14 +1,13 @@
 package yuudaari.soulus.common.config;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-
 import yuudaari.soulus.common.util.BoneType;
 
 public class EssenceConfig {
@@ -60,6 +59,8 @@ public class EssenceConfig {
 				new ManualSerializer(EssenceConfig::serializeLoot, EssenceConfig::deserializeLoot));
 		serializer.fieldHandlers.put("spawns",
 				new ManualSerializer(EssenceConfig::serializeSpawns, EssenceConfig::deserializeSpawns));
+		serializer.fieldHandlers.put("colors",
+				new ManualSerializer(EssenceConfig::serializeColors, EssenceConfig::deserializeColors));
 	}
 
 	public static JsonElement serializeLoot(Object obj) {
@@ -123,7 +124,22 @@ public class EssenceConfig {
 		return spawns;
 	}
 
+	public static JsonElement serializeColors(Object obj) {
+		ColorConfig config = (ColorConfig) obj;
+		return config.wasSet ? ColorConfig.serializer.serialize(obj) : JsonNull.INSTANCE;
+	}
+
+	public static Object deserializeColors(JsonElement json, Object current) {
+		ColorConfig config = (ColorConfig) current;
+		if (json != null && json.isJsonObject()) {
+			ColorConfig.serializer.deserialize(json, config);
+			config.wasSet = true;
+		}
+		return config;
+	}
+
 	public String essence;
+	public ColorConfig colors = new ColorConfig();
 	public Map<String, Double> spawns = new HashMap<>();
 	public Map<String, CreatureLootConfig> loot = new HashMap<>();
 	public CreatureBoneConfig bones = new CreatureBoneConfig();

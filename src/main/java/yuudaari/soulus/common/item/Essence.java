@@ -1,12 +1,15 @@
 package yuudaari.soulus.common.item;
 
-import yuudaari.soulus.common.config.ColourConfig;
+import yuudaari.soulus.Soulus;
+import yuudaari.soulus.common.config.ColorConfig;
+import yuudaari.soulus.common.config.EssenceConfig;
 import yuudaari.soulus.common.util.EssenceType;
 import yuudaari.soulus.common.util.ModItem;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -37,20 +40,20 @@ public class Essence extends ModItem {
 				if (essenceType == null)
 					return -1;
 
-				EntityList.EntityEggInfo eggInfo = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(essenceType))
-						.getEgg();
+				EntityEntry entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(essenceType));
+				if (entry == null)
+					return -1;
+
+				EntityList.EntityEggInfo eggInfo = entry.getEgg();
 				if (eggInfo == null)
 					return -1;
-				ColourConfig colourInfo = new ColourConfig(eggInfo);
-				/*
-				SoulConfig soulInfo = Soulus.getSoulInfo(mobTarget, false);
-				if (soulInfo == null)
-					return -1;
-				ColourConfig colourInfo = soulInfo.colourInfo;
-				if (colourInfo == null) {
-				}
-				*/
-				return tintIndex == 0 ? colourInfo.primaryColour : colourInfo.secondaryColour;
+				ColorConfig colors = new ColorConfig(eggInfo);
+
+				EssenceConfig essenceConfig = Soulus.config.essences.get(essenceType);
+				if (essenceConfig.colors.wasSet)
+					colors = essenceConfig.colors;
+
+				return tintIndex == 0 ? colors.primary : colors.secondary;
 			});
 		}
 	}

@@ -41,7 +41,7 @@ public class BoneChunk extends ModItem {
 		addOreDict("boneChunk");
 
 		Soulus.onInit((FMLInitializationEvent e) -> {
-			for (EssenceConfig essenceConfig : Soulus.config.essences) {
+			for (EssenceConfig essenceConfig : Soulus.config.essences.values()) {
 				if (essenceConfig.bones.type != boneType) {
 					continue;
 				}

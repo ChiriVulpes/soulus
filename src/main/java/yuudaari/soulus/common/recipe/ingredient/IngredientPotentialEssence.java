@@ -21,7 +21,10 @@ public class IngredientPotentialEssence extends Ingredient {
 	public static ItemStack[] getMatchingStacks1() {
 		List<ItemStack> stacks = new ArrayList<>();
 		stacks.add(ItemStack.EMPTY);
-		for (EssenceConfig essenceConfig : Soulus.config.essences) {
+		stacks.add(ModItems.ASH.getItemStack());
+		for (EssenceConfig essenceConfig : Soulus.config.essences.values()) {
+			if (essenceConfig.essence.equals("NONE"))
+				continue;
 			stacks.add(Essence.getStack(essenceConfig.essence));
 		}
 		return stacks.toArray(new ItemStack[0]);

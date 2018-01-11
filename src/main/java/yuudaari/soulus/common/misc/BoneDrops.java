@@ -146,7 +146,7 @@ public class BoneDrops {
 		}
 
 		// Logger.info("added bone drops");
-		for (EssenceConfig essenceConfig : Soulus.config.essences) {
+		for (EssenceConfig essenceConfig : Soulus.config.essences.values()) {
 			for (Map.Entry<String, CreatureLootConfig> lootConfig : essenceConfig.loot.entrySet()) {
 				ResourceLocation name = EntityList.getKey(entity);
 				if (name != null && lootConfig.getKey().equals(name.toString())) {

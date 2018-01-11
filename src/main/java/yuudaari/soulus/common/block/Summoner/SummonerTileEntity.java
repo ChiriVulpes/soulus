@@ -95,17 +95,15 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	}
 
 	private void resetEssenceType() {
-		for (EssenceConfig config : Soulus.config.essences) {
-			if (config.essence.equals(essenceType)) {
-				spawnMobConfig = config;
+		EssenceConfig config = Soulus.config.essences.get(essenceType);
+		if (config == null)
+			return;
 
-				spawnMobChanceTotal = 0;
-				for (double dropChance : config.spawns.values()) {
-					spawnMobChanceTotal += dropChance;
-				}
+		spawnMobConfig = config;
 
-				break;
-			}
+		spawnMobChanceTotal = 0;
+		for (double dropChance : config.spawns.values()) {
+			spawnMobChanceTotal += dropChance;
 		}
 	}
 

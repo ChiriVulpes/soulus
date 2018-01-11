@@ -25,22 +25,27 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Config {
 
 	private static final String configFileName = "soulus.json";
 
 	public int boneChunkParticleCount = 3;
-	public List<EssenceConfig> essences = EssenceConfig.getDefaultCreatureConfigs();
+	public Map<String, EssenceConfig> essences;
+
+	public Config() {
+		essences = new HashMap<>();
+		for (EssenceConfig config : EssenceConfig.getDefaultCreatureConfigs())
+			essences.put(config.essence, config);
+	}
 
 	public int getSoulbookQuantity(String essenceType) {
-		for (EssenceConfig config : essences) {
-			if (config.essence.equals(essenceType)) {
-				return config.soulbookQuantity;
-			}
-		}
-		return essenceType == "unfocused" ? 1 : -1;
+		EssenceConfig config = essences.get(essenceType);
+		return config != null ? config.soulbookQuantity : essenceType == "unfocused" ? 1 : -1;
 	}
 
 	/* SERIALIZER */
@@ -146,7 +151,7 @@ public class Config {
 
 	private static JsonElement serializeEssences(Object obj) {
 		@SuppressWarnings("unchecked")
-		List<EssenceConfig> essenceConfigs = (List<EssenceConfig>) obj;
+		Collection<EssenceConfig> essenceConfigs = ((Map<String, EssenceConfig>) obj).values();
 
 		JsonArray essences = new JsonArray();
 
@@ -159,7 +164,7 @@ public class Config {
 
 	private static Object deserializeEssences(JsonElement json, Object current) {
 		@SuppressWarnings("unchecked")
-		List<EssenceConfig> essenceConfigs = (List<EssenceConfig>) current;
+		Map<String, EssenceConfig> essenceConfigs = (Map<String, EssenceConfig>) current;
 
 		JsonArray essences = (JsonArray) json;
 		if (essences == null) {
@@ -169,8 +174,9 @@ public class Config {
 		essenceConfigs.clear();
 
 		for (JsonElement essenceConfig : essences) {
-			essenceConfigs
-					.add((EssenceConfig) EssenceConfig.serializer.deserialize(essenceConfig, new EssenceConfig()));
+			EssenceConfig config = (EssenceConfig) EssenceConfig.serializer.deserialize(essenceConfig,
+					new EssenceConfig());
+			essenceConfigs.put(config.essence, config);
 		}
 
 		return essenceConfigs;
