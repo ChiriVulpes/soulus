@@ -1,19 +1,19 @@
 package yuudaari.soulus.common.item;
 
-import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.ModItems;
-import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
-import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
-import yuudaari.soulus.common.util.EssenceType;
-import yuudaari.soulus.common.util.ModItem;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -22,14 +22,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
+import yuudaari.soulus.common.util.EssenceType;
+import yuudaari.soulus.common.util.ModItem;
+import yuudaari.soulus.Soulus;
 
 public class Soulbook extends ModItem {
 

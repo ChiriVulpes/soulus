@@ -1,9 +1,6 @@
 package yuudaari.soulus.common.compat;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
@@ -13,21 +10,19 @@ import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.plugins.vanilla.crafting.ShapedOreRecipeWrapper;
 import mezz.jei.plugins.vanilla.crafting.ShapedRecipesWrapper;
 import mezz.jei.plugins.vanilla.crafting.ShapelessRecipeWrapper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import scala.Tuple2;
-import scala.Tuple3;
-import yuudaari.soulus.common.ModBlocks;
-import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.compat.jei.RecipeCategoryComposer;
 import yuudaari.soulus.common.compat.jei.RecipeWrapperComposer;
 import yuudaari.soulus.common.compat.jei.SubtypeInterpreterEssence;
 import yuudaari.soulus.common.item.Essence;
+import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.recipe.RecipeComposerShaped;
 import yuudaari.soulus.common.recipe.RecipeComposerShapeless;
 
