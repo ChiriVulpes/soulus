@@ -3,7 +3,6 @@ package yuudaari.soulus.common.util;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
-
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -29,12 +28,15 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModItem extends Item implements IModThing {
+
 	public interface ConsumeHandler {
-		void consume(ItemStack item, World world, EntityLivingBase entity);
+
+		void consume (ItemStack item, World world, EntityLivingBase entity);
 	}
 
 	public interface CanConsumeHandler {
-		boolean canConsume(World worldIn, EntityPlayer playerIn, EnumHand handIn);
+
+		boolean canConsume (World worldIn, EntityPlayer playerIn, EnumHand handIn);
 	}
 
 	protected Boolean glint = false;
@@ -50,89 +52,89 @@ public class ModItem extends Item implements IModThing {
 	public ConsumeHandler foodHandler;
 	public CanConsumeHandler foodCanEatHandler;
 
-	public ModItem(String name) {
+	public ModItem (String name) {
 		setName(name);
 	}
 
-	public ModItem(String name, Integer maxStackSize) {
+	public ModItem (String name, Integer maxStackSize) {
 		this(name);
 		setMaxStackSize(maxStackSize);
 	}
 
 	@Override
-	public CreativeTabs getCreativeTab() {
+	public CreativeTabs getCreativeTab () {
 		return CreativeTab.INSTANCE;
 	}
 
-	public String getName() {
+	public String getName () {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName (String name) {
 		this.name = name;
 		setRegistryName(Soulus.MODID, name);
 		setUnlocalizedName(getRegistryName().toString());
 	}
 
-	public ModItem addOreDict(String... name) {
+	public ModItem addOreDict (String... name) {
 		for (String dict : name)
 			oreDicts.add(dict);
 
 		return this;
 	}
 
-	public ModItem removeOreDict(String... name) {
+	public ModItem removeOreDict (String... name) {
 		for (String dict : name)
 			oreDicts.remove(dict);
 
 		return this;
 	}
 
-	public List<String> getOreDicts() {
+	public List<String> getOreDicts () {
 		return oreDicts;
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean hasEffect(ItemStack stack) {
+	public boolean hasEffect (ItemStack stack) {
 		return glint;
 	}
 
 	private int burnTime = 0;
 
 	@Override
-	public int getItemBurnTime(ItemStack itemStack) {
+	public int getItemBurnTime (ItemStack itemStack) {
 		return burnTime;
 	}
 
-	public ModItem setBurnTime(int burnTime) {
+	public ModItem setBurnTime (int burnTime) {
 		this.burnTime = burnTime;
 		return this;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void registerColorHandler(IItemColor itemColor) {
-		Soulus.onInit((FMLInitializationEvent event) -> {
+	public void registerColorHandler (IItemColor itemColor) {
+		Soulus.onInit( (FMLInitializationEvent event) -> {
 			Minecraft.getMinecraft().getItemColors().registerItemColorHandler(itemColor, this);
 		});
 	}
 
-	public boolean isFood() {
+	public boolean isFood () {
 		return foodIsFood;
 	}
 
-	public void setFood(int amount, float saturation) {
+	public void setFood (int amount, float saturation) {
 		foodIsFood = true;
 		foodAmount = amount;
 		foodSaturation = saturation;
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+	public ActionResult<ItemStack> onItemRightClick (World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		ItemStack itemstack = playerIn.getHeldItem(handIn);
 		if (foodIsFood) {
-			if ((foodCanEatHandler != null && foodCanEatHandler.canConsume(worldIn, playerIn, handIn))
-					|| (playerIn.canEat(foodAlwaysEdible) && itemstack.getCount() >= foodQuantity)) {
+			if ((foodCanEatHandler != null && foodCanEatHandler.canConsume(worldIn, playerIn, handIn)) || (playerIn
+				.canEat(foodAlwaysEdible) && itemstack.getCount() >= foodQuantity)) {
 				playerIn.setActiveHand(handIn);
 				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
 			}
@@ -141,22 +143,23 @@ public class ModItem extends Item implements IModThing {
 	}
 
 	@Override
-	public EnumAction getItemUseAction(ItemStack stack) {
+	public EnumAction getItemUseAction (ItemStack stack) {
 		return EnumAction.EAT;
 	}
 
 	@Override
-	public int getMaxItemUseDuration(ItemStack stack) {
+	public int getMaxItemUseDuration (ItemStack stack) {
 		return foodDuration;
 	}
 
 	@Override
-	public ItemStack onItemUseFinish(ItemStack stack, World world, EntityLivingBase entityLiving) {
+	public ItemStack onItemUseFinish (ItemStack stack, World world, EntityLivingBase entityLiving) {
 		if (entityLiving instanceof EntityPlayer) {
 			EntityPlayer entityplayer = (EntityPlayer) entityLiving;
 			entityplayer.getFoodStats().addStats(foodAmount, foodSaturation);
-			world.playSound((EntityPlayer) null, entityplayer.posX, entityplayer.posY, entityplayer.posZ,
-					SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
+			world
+				.playSound((EntityPlayer) null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, world.rand
+					.nextFloat() * 0.1F + 0.9F);
 
 			if (foodEffects != null) {
 				for (PotionEffect effect : foodEffects) {
@@ -180,13 +183,13 @@ public class ModItem extends Item implements IModThing {
 
 	public boolean hasDescription = false;
 
-	public ModItem setHasDescription() {
+	public ModItem setHasDescription () {
 		hasDescription = true;
 		return this;
 	}
 
 	@Override
-	public void onRegisterDescription(JeiDescriptionRegistry registry) {
+	public void onRegisterDescription (JeiDescriptionRegistry registry) {
 		if (hasDescription)
 			registry.add(this);
 	}

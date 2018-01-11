@@ -41,8 +41,8 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	//
 
 	public static enum Upgrade implements IUpgrade {
-		CRYSTAL_BLOOD(0, "crystal_blood", ModItems.CRYSTAL_BLOOD.getItemStack()), //
-		DAMAGE(1, "damage", new ItemStack(Items.QUARTZ))
+		CRYSTAL_BLOOD (0, "crystal_blood", ModItems.CRYSTAL_BLOOD.getItemStack()), //
+		DAMAGE (1, "damage", new ItemStack(Items.QUARTZ))
 		//, POISON(2, "poison",
 		//		new ItemStack(Items.SPIDER_EYE)), POWER(3, "power", new ItemStack(Blocks.REDSTONE_TORCH))
 		;
@@ -53,24 +53,24 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		// by default all upgrades are capped at 16
 		private Integer maxQuantity;
 
-		private Upgrade(int index, String name, ItemStack item) {
+		private Upgrade (int index, String name, ItemStack item) {
 			this.index = index;
 			this.name = name;
 			this.stack = item;
 		}
 
 		@Override
-		public int getIndex() {
+		public int getIndex () {
 			return index;
 		}
 
 		@Override
-		public String getName() {
+		public String getName () {
 			return name;
 		}
 
 		@Override
-		public int getMaxQuantity() {
+		public int getMaxQuantity () {
 			// all upgrades by default are capped at 16
 			if (maxQuantity == null) {
 				if (name == "crystal_blood")
@@ -87,12 +87,12 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		}
 
 		@Override
-		public void setMaxQuantity(int quantity) {
+		public void setMaxQuantity (int quantity) {
 			maxQuantity = quantity;
 		}
 
 		@Override
-		public boolean isItemStack(ItemStack stack) {
+		public boolean isItemStack (ItemStack stack) {
 			if (stack.getItem() != this.stack.getItem())
 				return false;
 
@@ -103,18 +103,18 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		}
 
 		@Override
-		public ItemStack getItemStack(int quantity) {
+		public ItemStack getItemStack (int quantity) {
 			return new ItemStack(this.stack.getItem(), quantity);
 		}
 
 		@Override
-		public ItemStack getItemStackForTileEntity(UpgradeableBlockTileEntity te, int quantity) {
+		public ItemStack getItemStackForTileEntity (UpgradeableBlockTileEntity te, int quantity) {
 			ItemStack stack = getItemStack(quantity);
 
 			if (name == "crystal_blood") {
 				SkewerTileEntity ste = (SkewerTileEntity) te;
-				CrystalBlood.setContainedBlood(stack,
-						Math.min(CrystalBlood.INSTANCE.requiredBlood, ste.crystalBloodContainedBlood));
+				CrystalBlood.setContainedBlood(stack, Math
+					.min(CrystalBlood.INSTANCE.requiredBlood, ste.crystalBloodContainedBlood));
 			}
 
 			return stack;
@@ -122,7 +122,7 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	}
 
 	@Override
-	public IUpgrade[] getUpgrades() {
+	public IUpgrade[] getUpgrades () {
 		return Upgrade.values();
 	}
 
@@ -131,7 +131,7 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	//
 
 	@Override
-	public Class<? extends UpgradeableBlock<SkewerTileEntity>> getSerializationClass() {
+	public Class<? extends UpgradeableBlock<SkewerTileEntity>> getSerializationClass () {
 		return Skewer.class;
 	}
 
@@ -142,8 +142,8 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	public int ticksBetweenDamage = 15;
 
 	{
-		serializer.fields.addAll(
-				Arrays.asList("baseDamage", "upgradeDamageEffectiveness", "bloodPerDamage", "ticksBetweenDamage"));
+		serializer.fields
+			.addAll(Arrays.asList("baseDamage", "upgradeDamageEffectiveness", "bloodPerDamage", "ticksBetweenDamage"));
 	}
 
 	/////////////////////////////////////////
@@ -153,7 +153,7 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing");
 	public static final PropertyBool EXTENDED = PropertyBool.create("extended");
 
-	public Skewer() {
+	public Skewer () {
 		super("skewer", new Material(MapColor.GRAY));
 		setHasItem();
 		setDefaultState(getDefaultState().withProperty(EXTENDED, false).withProperty(FACING, EnumFacing.NORTH));
@@ -166,12 +166,12 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	public static Skewer INSTANCE = new Skewer();
 
 	@Override
-	public UpgradeableBlock<SkewerTileEntity> getInstance() {
+	public UpgradeableBlock<SkewerTileEntity> getInstance () {
 		return INSTANCE;
 	}
 
 	@Override
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getBlockLayer () {
 		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
 
@@ -180,7 +180,7 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	//
 
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
+	public void neighborChanged (IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		int power = world.isBlockIndirectlyGettingPowered(pos);
 
 		EnumFacing facing = state.getValue(FACING);
@@ -194,11 +194,11 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 
 		if (state.getValue(EXTENDED) != shouldBeExtended) {
 
-			world.setBlockState(pos,
-					getDefaultState().withProperty(FACING, facing).withProperty(EXTENDED, shouldBeExtended), 11);
+			world.setBlockState(pos, getDefaultState().withProperty(FACING, facing)
+				.withProperty(EXTENDED, shouldBeExtended), 11);
 
-			world.playSound(null, pos, SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F,
-					world.rand.nextFloat() * 0.25F + 0.6F);
+			world.playSound(null, pos, SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, world.rand
+				.nextFloat() * 0.25F + 0.6F);
 
 		}
 	}
@@ -208,34 +208,35 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	//
 
 	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty<?>[] { FACING, EXTENDED });
+	protected BlockStateContainer createBlockState () {
+		return new BlockStateContainer(this, new IProperty<?>[] {
+			FACING, EXTENDED
+		});
 	}
 
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(EXTENDED, (meta & 1) == 0 ? false : true).withProperty(FACING,
-				EnumFacing.getFront(meta / 2));
+	public IBlockState getStateFromMeta (int meta) {
+		return getDefaultState().withProperty(EXTENDED, (meta & 1) == 0 ? false : true)
+			.withProperty(FACING, EnumFacing.getFront(meta / 2));
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
+	public int getMetaFromState (IBlockState state) {
 		return state.getValue(FACING).getIndex() * 2 + (state.getValue(EXTENDED) ? 1 : 0);
 	}
 
-	public IBlockState withRotation(IBlockState state, Rotation rot) {
+	public IBlockState withRotation (IBlockState state, Rotation rot) {
 		return state.withProperty(FACING, rot.rotate((EnumFacing) state.getValue(FACING)));
 	}
 
-	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
+	public IBlockState withMirror (IBlockState state, Mirror mirrorIn) {
 		return state.withRotation(mirrorIn.toRotation((EnumFacing) state.getValue(FACING)));
 	}
 
-	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY,
-			float hitZ, int meta, EntityLivingBase placer) {
+	public IBlockState getStateForPlacement (World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
 		int power = world.isBlockIndirectlyGettingPowered(pos);
 		return getDefaultState().withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer))
-				.withProperty(EXTENDED, power > 0);
+			.withProperty(EXTENDED, power > 0);
 	}
 
 	/////////////////////////////////////////
@@ -243,17 +244,17 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	//
 
 	@Override
-	public boolean hasTileEntity(IBlockState blockState) {
+	public boolean hasTileEntity (IBlockState blockState) {
 		return true;
 	}
 
 	@Override
-	public Class<? extends UpgradeableBlockTileEntity> getTileEntityClass() {
+	public Class<? extends UpgradeableBlockTileEntity> getTileEntityClass () {
 		return SkewerTileEntity.class;
 	}
 
 	@Override
-	public UpgradeableBlockTileEntity createTileEntity(World worldIn, IBlockState blockState) {
+	public UpgradeableBlockTileEntity createTileEntity (World worldIn, IBlockState blockState) {
 		return new SkewerTileEntity();
 	}
 
@@ -262,8 +263,7 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	//
 
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox,
-			List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean isActualState) {
+	public void addCollisionBoxToList (IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean isActualState) {
 
 		addCollisionBoxToList(pos, entityBox, collidingBoxes, state.getCollisionBoundingBox(worldIn, pos));
 
@@ -282,37 +282,36 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		}
 	}
 
-	public AxisAlignedBB bottomBox(EnumFacing facing, BlockPos pos) {
+	public AxisAlignedBB bottomBox (EnumFacing facing, BlockPos pos) {
 		return contract(getSpikeHitbox(facing, pos), facing, 0.69);
 	}
 
-	public AxisAlignedBB topBox(EnumFacing facing, BlockPos pos) {
+	public AxisAlignedBB topBox (EnumFacing facing, BlockPos pos) {
 		return offset(bottomBox(facing, pos), facing, 0.69);
 	}
 
-	public AxisAlignedBB offset(AxisAlignedBB box, EnumFacing facing, double n) {
+	public AxisAlignedBB offset (AxisAlignedBB box, EnumFacing facing, double n) {
 		return box.offset(facing.getFrontOffsetX() * n, facing.getFrontOffsetY() * n, facing.getFrontOffsetZ() * n);
 	}
 
-	public AxisAlignedBB expand(AxisAlignedBB box, EnumFacing facing, double n) {
+	public AxisAlignedBB expand (AxisAlignedBB box, EnumFacing facing, double n) {
 		return box.expand(facing.getFrontOffsetX() * n, facing.getFrontOffsetY() * n, facing.getFrontOffsetZ() * n);
 	}
 
-	public AxisAlignedBB contract(AxisAlignedBB box, EnumFacing facing, double n) {
+	public AxisAlignedBB contract (AxisAlignedBB box, EnumFacing facing, double n) {
 		return box.contract(facing.getFrontOffsetX() * n, facing.getFrontOffsetY() * n, facing.getFrontOffsetZ() * n);
 	}
 
-	public static AxisAlignedBB getSpikeHitbox(EnumFacing facing, BlockPos pos) {
+	public static AxisAlignedBB getSpikeHitbox (EnumFacing facing, BlockPos pos) {
 		AxisAlignedBB result = new AxisAlignedBB(pos.offset(facing));
 		double topPadding = 0.3;
 		double sidePadding = 0.2;
 		return result
-				.contract(facing.getFrontOffsetX() == 1 ? topPadding : sidePadding * 2,
-						facing.getFrontOffsetY() == 1 ? topPadding : sidePadding * 2,
-						facing.getFrontOffsetZ() == 1 ? topPadding : sidePadding * 2)
-				.offset(facing.getFrontOffsetX() == 1 ? 0 : sidePadding,
-						facing.getFrontOffsetY() == 1 ? 0 : sidePadding,
-						facing.getFrontOffsetZ() == 1 ? 0 : sidePadding);
+			.contract(facing.getFrontOffsetX() == 1 ? topPadding : sidePadding * 2, facing
+				.getFrontOffsetY() == 1 ? topPadding : sidePadding * 2, facing
+					.getFrontOffsetZ() == 1 ? topPadding : sidePadding * 2)
+			.offset(facing.getFrontOffsetX() == 1 ? 0 : sidePadding, facing
+				.getFrontOffsetY() == 1 ? 0 : sidePadding, facing.getFrontOffsetZ() == 1 ? 0 : sidePadding);
 	}
 
 	/////////////////////////////////////////
@@ -322,15 +321,14 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	@Override
-	protected void onWailaTooltipHeader(List<String> currentTooltip, IBlockState blockState, SkewerTileEntity te,
-			boolean isSneaking) {
+	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, SkewerTileEntity te, boolean isSneaking) {
 
-		currentTooltip.add(I18n.format("waila." + Soulus.MODID
-				+ (blockState.getValue(Skewer.EXTENDED) ? ":skewer.extended" : ":skewer.not_extended")));
+		currentTooltip.add(I18n.format("waila." + Soulus.MODID + (blockState
+			.getValue(Skewer.EXTENDED) ? ":skewer.extended" : ":skewer.not_extended")));
 
 		if (te.upgrades.get(Upgrade.CRYSTAL_BLOOD) == 1) {
-			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":skewer.crystal_blood_stored_blood",
-					te.crystalBloodContainedBlood, CrystalBlood.INSTANCE.requiredBlood));
+			currentTooltip.add(I18n
+				.format("waila." + Soulus.MODID + ":skewer.crystal_blood_stored_blood", te.crystalBloodContainedBlood, CrystalBlood.INSTANCE.requiredBlood));
 		}
 	}
 

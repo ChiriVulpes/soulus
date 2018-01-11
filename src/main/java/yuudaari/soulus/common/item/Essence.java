@@ -20,23 +20,23 @@ public class Essence extends ModItem {
 
 	public static Essence INSTANCE = new Essence();
 
-	public static ItemStack getStack(String essenceType) {
+	public static ItemStack getStack (String essenceType) {
 		return getStack(essenceType, 1);
 	}
 
-	public static ItemStack getStack(String essenceType, Integer count) {
+	public static ItemStack getStack (String essenceType, Integer count) {
 		ItemStack stack = new ItemStack(INSTANCE, count);
 		EssenceType.setEssenceType(stack, essenceType);
 		return stack;
 	}
 
-	public Essence() {
+	public Essence () {
 		super("essence");
 		setMaxStackSize(64);
 		setCreativeTab(null);
 
 		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
-			registerColorHandler((ItemStack stack, int tintIndex) -> {
+			registerColorHandler( (ItemStack stack, int tintIndex) -> {
 				String essenceType = EssenceType.getEssenceType(stack);
 				if (essenceType == null)
 					return -1;
@@ -61,7 +61,7 @@ public class Essence extends ModItem {
 
 	@Nonnull
 	@Override
-	public String getUnlocalizedNameInefficiently(@Nonnull ItemStack stack) {
+	public String getUnlocalizedNameInefficiently (@Nonnull ItemStack stack) {
 		String mobTarget = EssenceType.getEssenceType(stack);
 		if (mobTarget == null)
 			mobTarget = "unfocused";
@@ -69,7 +69,7 @@ public class Essence extends ModItem {
 	}
 
 	@Override
-	public void onRegisterDescription(JeiDescriptionRegistry registry) {
+	public void onRegisterDescription (JeiDescriptionRegistry registry) {
 		registry.add(new IngredientPotentialEssence(true), getRegistryName());
 	}
 }

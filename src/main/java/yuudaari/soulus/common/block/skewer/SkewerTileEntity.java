@@ -22,7 +22,7 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 	private Map<EntityLivingBase, Long> entityHitTimes = new HashMap<>();
 
 	@Override
-	public Skewer getBlock() {
+	public Skewer getBlock () {
 		return Skewer.INSTANCE;
 	}
 
@@ -31,7 +31,7 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 	//
 
 	@Override
-	public void update() {
+	public void update () {
 		if (world.isRemote)
 			return;
 
@@ -42,10 +42,10 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 			long time = world.getTotalWorldTime();
 
 			entityHitTimes.entrySet()
-					.removeIf(entityHitTime -> time - entityHitTime.getValue() > getBlock().ticksBetweenDamage);
+				.removeIf(entityHitTime -> time - entityHitTime.getValue() > getBlock().ticksBetweenDamage);
 
-			for (EntityLivingBase entity : world.getEntitiesWithinAABB(EntityLivingBase.class,
-					Skewer.getSpikeHitbox(facing, pos))) {
+			for (EntityLivingBase entity : world
+				.getEntitiesWithinAABB(EntityLivingBase.class, Skewer.getSpikeHitbox(facing, pos))) {
 
 				if (!entity.getIsInvulnerable() && !entityHitTimes.containsKey(entity)) {
 
@@ -59,8 +59,8 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 					entity.attackEntityFrom(ModDamageSource.SKEWER, damage);
 					entity.hurtResistantTime = rtime;
 
-					if (world.rand.nextDouble() < skewer.chanceForBloodPerHit
-							&& upgrades.get(Upgrade.CRYSTAL_BLOOD) == 1) {
+					if (world.rand.nextDouble() < skewer.chanceForBloodPerHit && upgrades
+						.get(Upgrade.CRYSTAL_BLOOD) == 1) {
 						crystalBloodContainedBlood += getBlock().bloodPerDamage * damage;
 						if (crystalBloodContainedBlood > CrystalBlood.INSTANCE.requiredBlood) {
 							crystalBloodContainedBlood = CrystalBlood.INSTANCE.requiredBlood;
@@ -74,12 +74,12 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 	}
 
 	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+	public boolean shouldRefresh (World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
 		return oldState.getBlock() != newState.getBlock();
 	}
 
 	@Override
-	public void onInsertUpgrade(ItemStack stack, IUpgrade upgrade, int newQuantity) {
+	public void onInsertUpgrade (ItemStack stack, IUpgrade upgrade, int newQuantity) {
 		if (upgrade == Upgrade.CRYSTAL_BLOOD) {
 			this.crystalBloodContainedBlood = CrystalBlood.getContainedBlood(stack);
 
@@ -95,12 +95,12 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 	//
 
 	@Override
-	public void onReadFromNBT(NBTTagCompound compound) {
+	public void onReadFromNBT (NBTTagCompound compound) {
 		crystalBloodContainedBlood = compound.getInteger("crystal_blood_stored_blood");
 	}
 
 	@Override
-	public void onWriteToNBT(NBTTagCompound compound) {
+	public void onWriteToNBT (NBTTagCompound compound) {
 		compound.setInteger("crystal_blood_stored_blood", crystalBloodContainedBlood);
 	}
 

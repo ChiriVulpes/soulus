@@ -38,8 +38,8 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	//
 
 	public static enum Upgrade implements IUpgrade {
-		RANGE(0, "range", ModItems.ORB_MURKY.getItemStack()), //
-		DELAY(1, "delay", ModItems.GEAR_OSCILLATING.getItemStack());
+		RANGE (0, "range", ModItems.ORB_MURKY.getItemStack()), //
+		DELAY (1, "delay", ModItems.GEAR_OSCILLATING.getItemStack());
 
 		private final int index;
 		private final String name;
@@ -47,24 +47,24 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 		// by default all upgrades are capped at 16
 		private Integer maxQuantity;
 
-		private Upgrade(int index, String name, ItemStack item) {
+		private Upgrade (int index, String name, ItemStack item) {
 			this.index = index;
 			this.name = name;
 			this.stack = item;
 		}
 
 		@Override
-		public int getIndex() {
+		public int getIndex () {
 			return index;
 		}
 
 		@Override
-		public String getName() {
+		public String getName () {
 			return name;
 		}
 
 		@Override
-		public int getMaxQuantity() {
+		public int getMaxQuantity () {
 			// all upgrades by default are capped at 16
 			if (maxQuantity == null) {
 				if (name == "range")
@@ -77,12 +77,12 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 		}
 
 		@Override
-		public void setMaxQuantity(int quantity) {
+		public void setMaxQuantity (int quantity) {
 			maxQuantity = quantity;
 		}
 
 		@Override
-		public boolean isItemStack(ItemStack stack) {
+		public boolean isItemStack (ItemStack stack) {
 			if (stack.getItem() != this.stack.getItem())
 				return false;
 
@@ -93,7 +93,7 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 		}
 
 		@Override
-		public ItemStack getItemStack(int quantity) {
+		public ItemStack getItemStack (int quantity) {
 			ItemStack stack = new ItemStack(this.stack.getItem(), quantity);
 
 			if (name == "range")
@@ -104,7 +104,7 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	}
 
 	@Override
-	public IUpgrade[] getUpgrades() {
+	public IUpgrade[] getUpgrades () {
 		return Upgrade.values();
 	}
 
@@ -122,8 +122,8 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	public double poofChance = 0.001;
 
 	{
-		serializer.fields.addAll(Arrays.asList("nonUpgradedRange", "upgradeRangeEffectiveness",
-				"particleCountActivated", "particleCountMobPoof", "poofChance"));
+		serializer.fields.addAll(Arrays
+			.asList("nonUpgradedRange", "upgradeRangeEffectiveness", "particleCountActivated", "particleCountMobPoof", "poofChance"));
 
 		serializer.fieldHandlers.put("nonUpgradedCount", Range.serializer);
 		serializer.fieldHandlers.put("nonUpgradedDelay", Range.serializer);
@@ -131,7 +131,7 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	}
 
 	@Override
-	public Class<? extends UpgradeableBlock<ComposerTileEntity>> getSerializationClass() {
+	public Class<? extends UpgradeableBlock<ComposerTileEntity>> getSerializationClass () {
 		return Composer.class;
 	}
 
@@ -142,7 +142,7 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing");
 	public static final PropertyBool CONNECTED = PropertyBool.create("connected");
 
-	public Composer() {
+	public Composer () {
 		super("composer", new Material(MapColor.GRASS).setTransparent());
 		setHasItem();
 		setHardness(5F);
@@ -157,18 +157,18 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	public static Composer INSTANCE = new Composer();
 
 	@Override
-	public UpgradeableBlock<ComposerTileEntity> getInstance() {
+	public UpgradeableBlock<ComposerTileEntity> getInstance () {
 		return INSTANCE;
 	}
 
 	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+	public BlockFaceShape getBlockFaceShape (IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
 		face = rotateFace(state.getValue(FACING), face);
 
 		return Arrays.asList(EnumFacing.HORIZONTALS).contains(face) ? BlockFaceShape.UNDEFINED : BlockFaceShape.SOLID;
 	}
 
-	public EnumFacing rotateFace(EnumFacing rotateFace, EnumFacing face) {
+	public EnumFacing rotateFace (EnumFacing rotateFace, EnumFacing face) {
 		if (rotateFace == EnumFacing.SOUTH)
 			return face.getOpposite();
 		else if (rotateFace == EnumFacing.EAST)
@@ -184,7 +184,7 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	}
 
 	@Override
-	public void onBlockDestroy(World world, BlockPos pos, int fortune, boolean creative) {
+	public void onBlockDestroy (World world, BlockPos pos, int fortune, boolean creative) {
 		super.onBlockDestroy(world, pos, fortune, creative);
 
 		IBlockState state = world.getBlockState(pos);
@@ -195,8 +195,8 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 				IBlockState currentState = world.getBlockState(pos2);
 
 				if (currentState.getBlock() == ComposerCell.INSTANCE) {
-					world.setBlockState(pos2,
-							currentState.withProperty(ComposerCell.CELL_STATE, ComposerCell.CellState.DISCONNECTED), 3);
+					world.setBlockState(pos2, currentState
+						.withProperty(ComposerCell.CELL_STATE, ComposerCell.CellState.DISCONNECTED), 3);
 
 					ComposerCellTileEntity ccte = (ComposerCellTileEntity) world.getTileEntity(pos2);
 					ccte.composerLocation = null;
@@ -210,12 +210,12 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	}
 
 	@Override
-	public boolean hasComparatorInputOverride(IBlockState state) {
+	public boolean hasComparatorInputOverride (IBlockState state) {
 		return true;
 	}
 
 	@Override
-	public int getComparatorInputOverride(IBlockState state, World world, BlockPos pos) {
+	public int getComparatorInputOverride (IBlockState state, World world, BlockPos pos) {
 		ComposerTileEntity te = (ComposerTileEntity) world.getTileEntity(pos);
 		return te.getSignalStrength();
 	}
@@ -225,31 +225,32 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	//
 
 	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty<?>[] { FACING, CONNECTED });
+	protected BlockStateContainer createBlockState () {
+		return new BlockStateContainer(this, new IProperty<?>[] {
+			FACING, CONNECTED
+		});
 	}
 
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(CONNECTED, (meta & 1) == 0 ? false : true).withProperty(FACING,
-				EnumFacing.getFront(meta / 2));
+	public IBlockState getStateFromMeta (int meta) {
+		return getDefaultState().withProperty(CONNECTED, (meta & 1) == 0 ? false : true)
+			.withProperty(FACING, EnumFacing.getFront(meta / 2));
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
+	public int getMetaFromState (IBlockState state) {
 		return state.getValue(FACING).getIndex() * 2 + (state.getValue(CONNECTED) ? 1 : 0);
 	}
 
-	public IBlockState withRotation(IBlockState state, Rotation rot) {
+	public IBlockState withRotation (IBlockState state, Rotation rot) {
 		return state.withProperty(FACING, rot.rotate((EnumFacing) state.getValue(FACING)));
 	}
 
-	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
+	public IBlockState withMirror (IBlockState state, Mirror mirrorIn) {
 		return state.withRotation(mirrorIn.toRotation((EnumFacing) state.getValue(FACING)));
 	}
 
-	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY,
-			float hitZ, int meta, EntityLivingBase placer) {
+	public IBlockState getStateForPlacement (World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
 
 		EnumFacing defaultDirection = EnumFacing.getDirectionFromEntityLiving(pos, placer);
 		IBlockState state = getDefaultState().withProperty(FACING, defaultDirection);
@@ -268,8 +269,8 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 			if (state.getBlock() != ComposerCell.INSTANCE)
 				return false;
 			ComposerCellTileEntity te = (ComposerCellTileEntity) world.getTileEntity(checkPos);
-			boolean result = te == null || (te.composerLocation == null && te.changeComposerCooldown < 0)
-					|| pos.equals(te.composerLocation);
+			boolean result = te == null || (te.composerLocation == null && te.changeComposerCooldown < 0) || pos
+				.equals(te.composerLocation);
 			return result;
 		};
 		BlockValidator obsidian = BlockValidator.byBlock(Blocks.OBSIDIAN);
@@ -321,7 +322,7 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 		structure.addBlock(2, 2, -1, endersteel);
 	}
 
-	public EnumFacing validateStructure(World world, BlockPos pos, EnumFacing currentDirection) {
+	public EnumFacing validateStructure (World world, BlockPos pos, EnumFacing currentDirection) {
 
 		boolean checkCurrentDirection = currentDirection != EnumFacing.DOWN && currentDirection != EnumFacing.UP;
 
@@ -346,17 +347,17 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	//
 
 	@Override
-	public boolean hasTileEntity(IBlockState blockState) {
+	public boolean hasTileEntity (IBlockState blockState) {
 		return true;
 	}
 
 	@Override
-	public Class<? extends UpgradeableBlockTileEntity> getTileEntityClass() {
+	public Class<? extends UpgradeableBlockTileEntity> getTileEntityClass () {
 		return ComposerTileEntity.class;
 	}
 
 	@Override
-	public UpgradeableBlockTileEntity createTileEntity(World worldIn, IBlockState blockState) {
+	public UpgradeableBlockTileEntity createTileEntity (World worldIn, IBlockState blockState) {
 		return new ComposerTileEntity();
 	}
 
@@ -365,12 +366,11 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	//
 
 	@Override
-	protected void onWailaTooltipHeader(List<String> currentTooltip, IBlockState blockState, ComposerTileEntity te,
-			boolean isSneaking) {
+	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, ComposerTileEntity te, boolean isSneaking) {
 
 		if (te.hasValidRecipe()) {
-			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":composer.craft_percentage",
-					(int) Math.floor(te.getCompositionPercent() * 100)));
+			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":composer.craft_percentage", (int) Math
+				.floor(te.getCompositionPercent() * 100)));
 		} else {
 			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":composer.no_recipe"));
 		}

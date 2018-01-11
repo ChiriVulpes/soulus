@@ -8,27 +8,27 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class CrystalBloodHitEntity implements IMessage {
-	public CrystalBloodHitEntity() {
-	}
+
+	public CrystalBloodHitEntity () {}
 
 	private int entityId;
 
-	public CrystalBloodHitEntity(EntityLivingBase entity) {
+	public CrystalBloodHitEntity (EntityLivingBase entity) {
 		entityId = entity.getEntityId();
 	}
 
 	@SideOnly(Side.CLIENT)
-	public EntityLivingBase getEntity() {
+	public EntityLivingBase getEntity () {
 		return (EntityLivingBase) Minecraft.getMinecraft().world.getEntityByID(entityId);
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
+	public void toBytes (ByteBuf buf) {
 		buf.writeInt(entityId);
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public void fromBytes (ByteBuf buf) {
 		entityId = buf.readInt();
 	}
 

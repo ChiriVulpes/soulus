@@ -5,8 +5,9 @@ import net.minecraft.item.ItemStack;
 import yuudaari.soulus.common.util.EssenceType;
 
 public class SubtypeInterpreterEssence implements ISubtypeInterpreter {
+
 	@Override
-	public String apply(ItemStack stack) {
+	public String apply (ItemStack stack) {
 		return EssenceType.getEssenceType(stack);
 	}
 }

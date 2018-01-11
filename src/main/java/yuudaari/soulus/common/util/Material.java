@@ -3,34 +3,35 @@ package yuudaari.soulus.common.util;
 import net.minecraft.block.material.MapColor;
 
 public class Material extends net.minecraft.block.material.Material {
-	public Material(MapColor color) {
+
+	public Material (MapColor color) {
 		super(color);
 	}
 
 	private Boolean toolRequired = true;
 
-	public Material setToolNotRequired() {
+	public Material setToolNotRequired () {
 		toolRequired = false;
 		return this;
 	}
 
 	private Boolean isLiquid = false;
 
-	public Material setLiquid() {
+	public Material setLiquid () {
 		isLiquid = true;
 		return this;
 	}
 
 	private Boolean isSolid = true;
 
-	public Material setNonsolid() {
+	public Material setNonsolid () {
 		isSolid = false;
 		return this;
 	}
 
 	private Boolean blocksLight = true;
 
-	public Material setTransparent() {
+	public Material setTransparent () {
 		blocksLight = false;
 		isOpaque = false;
 		return this;
@@ -38,59 +39,59 @@ public class Material extends net.minecraft.block.material.Material {
 
 	private Boolean isOpaque = true;
 
-	public Material setTranslucent() {
+	public Material setTranslucent () {
 		isOpaque = false;
 		return this;
 	}
 
 	private Boolean blocksMovement = true;
 
-	public Material setPermissible() {
+	public Material setPermissible () {
 		blocksMovement = false;
 		return this;
 	}
 
-	public Material setFlammable() {
+	public Material setFlammable () {
 		return this;
 	}
 
-	public Material setImmovable() {
+	public Material setImmovable () {
 		setImmovableMobility();
 		return this;
 	}
 
-	public Material setDestroyOnPushed() {
+	public Material setDestroyOnPushed () {
 		setNoPushMobility();
 		return this;
 	}
 
 	@Override
-	public boolean isToolNotRequired() {
+	public boolean isToolNotRequired () {
 		return !toolRequired;
 	}
 
 	@Override
-	public boolean isSolid() {
+	public boolean isSolid () {
 		return isSolid;
 	}
 
 	@Override
-	public boolean isLiquid() {
+	public boolean isLiquid () {
 		return isLiquid;
 	}
 
 	@Override
-	public boolean blocksLight() {
+	public boolean blocksLight () {
 		return blocksLight;
 	}
 
 	@Override
-	public boolean blocksMovement() {
+	public boolean blocksMovement () {
 		return blocksMovement;
 	}
 
 	@Override
-	public boolean isOpaque() {
+	public boolean isOpaque () {
 		return isOpaque;
 	}
 }

@@ -8,7 +8,6 @@ import yuudaari.soulus.common.ModGenerators;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.compat.ExNihiloCreatioRecipes;
 import yuudaari.soulus.server.command.SoulusLocation;
-
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.block.Block;
@@ -39,15 +38,18 @@ public class Soulus {
 	}
 
 	public interface PreInitEventHandler {
-		void handle(FMLPreInitializationEvent event);
+
+		void handle (FMLPreInitializationEvent event);
 	}
 
 	public interface InitEventHandler {
-		void handle(FMLInitializationEvent event);
+
+		void handle (FMLInitializationEvent event);
 	}
 
 	public interface PostInitEventHandler {
-		void handle(FMLPostInitializationEvent event);
+
+		void handle (FMLPostInitializationEvent event);
 	}
 
 	/* CONSTANTS */
@@ -58,7 +60,7 @@ public class Soulus {
 
 	/* UTILITY */
 
-	public static ResourceLocation getRegistryName(String name) {
+	public static ResourceLocation getRegistryName (String name) {
 		int index = name.lastIndexOf(':');
 		String prefix = index == -1 ? Soulus.MODID : name.substring(0, index);
 		name = index == -1 ? name : name.substring(index + 1);
@@ -71,20 +73,20 @@ public class Soulus {
 	public static final List<InitEventHandler> initHandlers = new ArrayList<>();
 	public static final List<PostInitEventHandler> postInitHandlers = new ArrayList<>();
 
-	public static void onPreInit(PreInitEventHandler handler) {
+	public static void onPreInit (PreInitEventHandler handler) {
 		preInitHandlers.add(handler);
 	}
 
-	public static void onInit(InitEventHandler handler) {
+	public static void onInit (InitEventHandler handler) {
 		initHandlers.add(handler);
 	}
 
-	public static void onPostInit(PostInitEventHandler handler) {
+	public static void onPostInit (PostInitEventHandler handler) {
 		postInitHandlers.add(handler);
 	}
 
 	@EventHandler
-	public void preinit(FMLPreInitializationEvent event) {
+	public void preinit (FMLPreInitializationEvent event) {
 		config = Config.loadConfig(event.getModConfigurationDirectory().getAbsolutePath());
 		for (PreInitEventHandler handler : preInitHandlers) {
 			handler.handle(event);
@@ -92,7 +94,7 @@ public class Soulus {
 	}
 
 	@EventHandler
-	public void init(FMLInitializationEvent event) {
+	public void init (FMLInitializationEvent event) {
 		for (InitEventHandler handler : initHandlers) {
 			handler.handle(event);
 		}
@@ -103,7 +105,7 @@ public class Soulus {
 	}
 
 	@EventHandler
-	public void postinit(FMLPostInitializationEvent event) {
+	public void postinit (FMLPostInitializationEvent event) {
 		for (PostInitEventHandler handler : postInitHandlers) {
 			handler.handle(event);
 		}
@@ -115,12 +117,12 @@ public class Soulus {
 	}
 
 	@SubscribeEvent
-	public static void registerBlocks(RegistryEvent.Register<Block> event) {
+	public static void registerBlocks (RegistryEvent.Register<Block> event) {
 		ModBlocks.registerBlocks(event.getRegistry());
 	}
 
 	@SubscribeEvent
-	public static void registerItems(RegistryEvent.Register<Item> event) {
+	public static void registerItems (RegistryEvent.Register<Item> event) {
 		IForgeRegistry<Item> registry = event.getRegistry();
 
 		ModItems.registerItems(registry);
@@ -129,13 +131,13 @@ public class Soulus {
 
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
-	public static void registerModels(ModelRegistryEvent event) {
+	public static void registerModels (ModelRegistryEvent event) {
 		ModItems.registerModels();
 		ModBlocks.registerModels();
 	}
 
 	@SubscribeEvent
-	public static void registerRecipes(RegistryEvent.Register<IRecipe> event) {
+	public static void registerRecipes (RegistryEvent.Register<IRecipe> event) {
 		IForgeRegistry<IRecipe> registry = event.getRegistry();
 
 		ModItems.registerRecipes(registry);
@@ -143,7 +145,7 @@ public class Soulus {
 	}
 
 	@EventHandler
-	public void serverLoad(FMLServerStartingEvent event) {
+	public void serverLoad (FMLServerStartingEvent event) {
 		event.registerServerCommand(new SoulusLocation());
 	}
 }

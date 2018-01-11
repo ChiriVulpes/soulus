@@ -11,23 +11,24 @@ public class IngredientOrbMurky extends Ingredient {
 
 	public static IngredientOrbMurky INSTANCE = new IngredientOrbMurky();
 
-	public IngredientOrbMurky() {
+	public IngredientOrbMurky () {
 		super(OrbMurky.INSTANCE.getFilledStack());
 	}
 
 	@Override
-	public boolean apply(ItemStack stack) {
+	public boolean apply (ItemStack stack) {
 		return OrbMurky.isFilled(stack);
 	}
 
 	@Override
-	public boolean isSimple() {
+	public boolean isSimple () {
 		return false;
 	}
 
 	public static class Factory implements IIngredientFactory {
+
 		@Override
-		public Ingredient parse(JsonContext context, JsonObject json) {
+		public Ingredient parse (JsonContext context, JsonObject json) {
 			return new IngredientOrbMurky();
 		}
 	}

@@ -3,11 +3,9 @@ package yuudaari.soulus.common.misc;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -21,12 +19,12 @@ import yuudaari.soulus.common.util.Range;
 
 @Mod.EventBusSubscriber
 public class BoneChunksFromFossils {
+
 	public static BoneChunksFromFossils INSTANCE = new BoneChunksFromFossils();
 
-	public static ManualSerializer serializer = new ManualSerializer(BoneChunksFromFossils::serialize,
-			BoneChunksFromFossils::deserialize);
+	public static ManualSerializer serializer = new ManualSerializer(BoneChunksFromFossils::serialize, BoneChunksFromFossils::deserialize);
 
-	public static JsonElement serialize(Object obj) {
+	public static JsonElement serialize (Object obj) {
 		JsonObject result = new JsonObject();
 
 		BoneChunksFromFossils config = (BoneChunksFromFossils) obj;
@@ -37,7 +35,7 @@ public class BoneChunksFromFossils {
 		return result;
 	}
 
-	public static Object deserialize(JsonElement json, Object current) {
+	public static Object deserialize (JsonElement json, Object current) {
 		if (json == null || !(json instanceof JsonObject)) {
 			Logger.error("fossils", "Must be an object");
 			return current;
@@ -49,30 +47,30 @@ public class BoneChunksFromFossils {
 		boneChunksFromFossils.fossils.clear();
 
 		for (Map.Entry<String, JsonElement> fossilConfig : config.entrySet()) {
-			boneChunksFromFossils.fossils.put(fossilConfig.getKey(),
-					(FossilConfig) FossilConfig.serializer.deserialize(fossilConfig.getValue(), new FossilConfig()));
+			boneChunksFromFossils.fossils.put(fossilConfig.getKey(), (FossilConfig) FossilConfig.serializer
+				.deserialize(fossilConfig.getValue(), new FossilConfig()));
 		}
 
 		return boneChunksFromFossils;
 	}
 
 	public static class FossilConfig {
+
 		public static Serializer<FossilConfig> serializer = new Serializer<>(FossilConfig.class, "min", "max");
 
 		static {
-			serializer.fieldHandlers.put("type",
-					new ManualSerializer(boneType -> new JsonPrimitive(BoneType.getString((BoneType) boneType)),
-							(boneTypeName, into) -> BoneType.getBoneType(boneTypeName.getAsString())));
+			serializer.fieldHandlers.put("type", new ManualSerializer(boneType -> new JsonPrimitive(BoneType
+				.getString((BoneType) boneType)), (boneTypeName, into) -> BoneType
+					.getBoneType(boneTypeName.getAsString())));
 		}
 
 		public BoneType type;
 		public int min;
 		public int max;
 
-		public FossilConfig() {
-		}
+		public FossilConfig () {}
 
-		public FossilConfig(BoneType boneType, int min, int max) {
+		public FossilConfig (BoneType boneType, int min, int max) {
 			this.type = boneType;
 			this.min = min;
 			this.max = max;
@@ -97,7 +95,7 @@ public class BoneChunksFromFossils {
 	}
 
 	@SubscribeEvent
-	public static void onHarvest(HarvestDropsEvent event) {
+	public static void onHarvest (HarvestDropsEvent event) {
 		if (event.getHarvester() != null) {
 			String blockId = event.getState().getBlock().getRegistryName().toString();
 			if (INSTANCE.fossils.containsKey(blockId)) {
@@ -107,8 +105,9 @@ public class BoneChunksFromFossils {
 				drops.clear();
 
 				BoneChunk boneChunk = BoneChunk.boneChunkTypes.get(fossilConfig.type);
-				int count = new Range(fossilConfig.min * (1 + event.getFortuneLevel() / 3),
-						fossilConfig.max * (1 + event.getFortuneLevel() / 3)).getInt(event.getWorld().rand);
+				int count = new Range(fossilConfig.min * (1 + event
+					.getFortuneLevel() / 3), fossilConfig.max * (1 + event.getFortuneLevel() / 3))
+						.getInt(event.getWorld().rand);
 				drops.add(boneChunk.getItemStack(count));
 			}
 		}

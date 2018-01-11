@@ -1,7 +1,6 @@
 package yuudaari.soulus.common.item;
 
 import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoublePlant;
 import net.minecraft.block.IGrowable;
@@ -28,13 +27,12 @@ public class BonemealNether extends Bonemeal {
 
 	public int particleCount = 50;
 
-	public BonemealNether() {
+	public BonemealNether () {
 		super("bone_meal_nether");
 	}
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing,
-			float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse (EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 
 		IBlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
@@ -56,7 +54,7 @@ public class BonemealNether extends Bonemeal {
 	}
 
 	@SideOnly(Side.CLIENT)
-	private static void particles(World world, BlockPos pos) {
+	private static void particles (World world, BlockPos pos) {
 		Random rand = world.rand;
 
 		for (int i = 0; i < INSTANCE.particleCount; ++i) {
@@ -66,8 +64,8 @@ public class BonemealNether extends Bonemeal {
 			double d3o = (d3 - pos.getX()) / 4;
 			double d4o = (d4 - pos.getY()) / 5;
 			double d5o = (d5 - pos.getZ()) / 4;
-			ParticleManager.spawnParticle(world, ParticleType.BLACKENED_BONEMEAL.getId(), false, d3 + 0.5F, d4,
-					d5 + 0.5F, d3o, d4o, d5o, 1);
+			ParticleManager.spawnParticle(world, ParticleType.BLACKENED_BONEMEAL
+				.getId(), false, d3 + 0.5F, d4, d5 + 0.5F, d3o, d4o, d5o, 1);
 		}
 	}
 }

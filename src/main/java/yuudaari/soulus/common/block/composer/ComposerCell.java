@@ -31,7 +31,7 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	//
 
 	@Override
-	public IUpgrade[] getUpgrades() {
+	public IUpgrade[] getUpgrades () {
 		return new IUpgrade[0];
 	}
 
@@ -42,7 +42,7 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	public int maxQuantity = 16;
 
 	@Override
-	public Class<? extends UpgradeableBlock<ComposerCellTileEntity>> getSerializationClass() {
+	public Class<? extends UpgradeableBlock<ComposerCellTileEntity>> getSerializationClass () {
 		return ComposerCell.class;
 	}
 
@@ -51,24 +51,26 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	//
 
 	public static enum CellState implements IStringSerializable {
-		DISCONNECTED("disconnected"), CONNECTED_CENTER("connected_center"), CONNECTED_EDGE("connected_edge");
+		DISCONNECTED ("disconnected"),
+		CONNECTED_CENTER ("connected_center"),
+		CONNECTED_EDGE ("connected_edge");
 
 		public String name;
 
-		CellState(String name) {
+		CellState (String name) {
 			this.name = name;
 		}
 
 		@Override
-		public String getName() {
+		public String getName () {
 			return name;
 		}
 
-		public static CellState fromMeta(int meta) {
+		public static CellState fromMeta (int meta) {
 			return values()[meta];
 		}
 
-		public int getMeta() {
+		public int getMeta () {
 			for (int i = 0; i < values().length; i++) {
 				if (values()[i].equals(this))
 					return i;
@@ -79,7 +81,7 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 
 	public static final IProperty<CellState> CELL_STATE = PropertyEnum.create("cell_state", CellState.class);
 
-	public ComposerCell() {
+	public ComposerCell () {
 		super("composer_cell", new Material(MapColor.STONE).setTransparent());
 		setHasItem();
 		setHardness(5F);
@@ -94,11 +96,11 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	public static ComposerCell INSTANCE = new ComposerCell();
 
 	@Override
-	public UpgradeableBlock<ComposerCellTileEntity> getInstance() {
+	public UpgradeableBlock<ComposerCellTileEntity> getInstance () {
 		return INSTANCE;
 	}
 
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+	public BlockFaceShape getBlockFaceShape (IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
 		return BlockFaceShape.UNDEFINED;
 	}
 
@@ -107,17 +109,19 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	//
 
 	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty<?>[] { CELL_STATE });
+	protected BlockStateContainer createBlockState () {
+		return new BlockStateContainer(this, new IProperty<?>[] {
+			CELL_STATE
+		});
 	}
 
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
+	public IBlockState getStateFromMeta (int meta) {
 		return getDefaultState().withProperty(CELL_STATE, CellState.values()[meta]);
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
+	public int getMetaFromState (IBlockState state) {
 		return state.getValue(CELL_STATE).getMeta();
 	}
 
@@ -141,17 +145,17 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	//
 
 	@Override
-	public boolean hasTileEntity(IBlockState blockState) {
+	public boolean hasTileEntity (IBlockState blockState) {
 		return true;
 	}
 
 	@Override
-	public Class<? extends UpgradeableBlockTileEntity> getTileEntityClass() {
+	public Class<? extends UpgradeableBlockTileEntity> getTileEntityClass () {
 		return ComposerCellTileEntity.class;
 	}
 
 	@Override
-	public UpgradeableBlockTileEntity createTileEntity(World worldIn, IBlockState blockState) {
+	public UpgradeableBlockTileEntity createTileEntity (World worldIn, IBlockState blockState) {
 		return new ComposerCellTileEntity();
 	}
 
@@ -160,13 +164,13 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	//
 
 	@Override
-	public boolean canActivateWithItem(ItemStack stack, World world, BlockPos pos) {
+	public boolean canActivateWithItem (ItemStack stack, World world, BlockPos pos) {
 		ComposerCellTileEntity te = (ComposerCellTileEntity) world.getTileEntity(pos);
 		return te.storedQuantity < maxQuantity;
 	}
 
 	@Override
-	public boolean onActivateInsert(World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
+	public boolean onActivateInsert (World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
 		ComposerCellTileEntity te = (ComposerCellTileEntity) world.getTileEntity(pos);
 
 		ItemStack currentStack = te.storedItem;
@@ -194,7 +198,7 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	}
 
 	@Override
-	public boolean onActivateEmptyHand(World world, BlockPos pos, EntityPlayer player) {
+	public boolean onActivateEmptyHand (World world, BlockPos pos, EntityPlayer player) {
 		ComposerCellTileEntity te = (ComposerCellTileEntity) world.getTileEntity(pos);
 
 		if (te.storedItem == null) {
@@ -215,11 +219,11 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	}
 
 	@Override
-	public boolean onActivateEmptyHandSneaking(World world, BlockPos pos, EntityPlayer player) {
+	public boolean onActivateEmptyHandSneaking (World world, BlockPos pos, EntityPlayer player) {
 		return onActivateEmptyHand(world, pos, player);
 	}
 
-	public void addItemStackToList(ItemStack item, List<ItemStack> list, int quantity) {
+	public void addItemStackToList (ItemStack item, List<ItemStack> list, int quantity) {
 		int maxStackSize = item.getMaxStackSize();
 		while (quantity > 0) {
 			int stackSize = Math.min(maxStackSize, quantity);
@@ -231,7 +235,7 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	}
 
 	@Override
-	public void addOtherDropStacksToList(List<ItemStack> list, World world, BlockPos pos, IBlockState state) {
+	public void addOtherDropStacksToList (List<ItemStack> list, World world, BlockPos pos, IBlockState state) {
 		ComposerCellTileEntity te = (ComposerCellTileEntity) world.getTileEntity(pos);
 
 		if (te.storedItem == null)
@@ -244,7 +248,7 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	// Utility
 	//
 
-	public static boolean areItemStacksEqual(ItemStack stackA, ItemStack stackB) {
+	public static boolean areItemStacksEqual (ItemStack stackA, ItemStack stackB) {
 		if (stackA.isEmpty() && stackB.isEmpty()) {
 			return true;
 		} else if (stackA.isEmpty() != stackB.isEmpty()) {
@@ -256,8 +260,8 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 		} else if (stackA.getTagCompound() == null && stackB.getTagCompound() != null) {
 			return false;
 		} else {
-			return (stackA.getTagCompound() == null || stackA.getTagCompound().equals(stackB.getTagCompound()))
-					&& stackA.areCapsCompatible(stackB);
+			return (stackA.getTagCompound() == null || stackA.getTagCompound()
+				.equals(stackB.getTagCompound())) && stackA.areCapsCompatible(stackB);
 		}
 	}
 
@@ -268,16 +272,16 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	@Override
-	protected void onWailaTooltipHeader(List<String> currentTooltip, IBlockState blockState, ComposerCellTileEntity te,
-			boolean isSneaking) {
+	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, ComposerCellTileEntity te, boolean isSneaking) {
 
 		// currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":composer_cell.slot", te.slot));
 
 		if (te.storedQuantity == 0) {
 			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":composer_cell.no_items"));
 		} else {
-			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":composer_cell.contained_item", te.storedQuantity,
-					maxQuantity, te.storedItem.getDisplayName()));
+			currentTooltip.add(I18n
+				.format("waila." + Soulus.MODID + ":composer_cell.contained_item", te.storedQuantity, maxQuantity, te.storedItem
+					.getDisplayName()));
 		}
 	}
 }

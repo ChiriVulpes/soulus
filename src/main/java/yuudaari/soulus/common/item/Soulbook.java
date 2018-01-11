@@ -32,22 +32,22 @@ public class Soulbook extends ModItem {
 
 	public final static Soulbook INSTANCE = new Soulbook();
 
-	public static ItemStack getFilled(String essenceType) {
+	public static ItemStack getFilled (String essenceType) {
 		return getStack(essenceType, Soulus.config.getSoulbookQuantity(essenceType));
 	}
 
-	public static ItemStack getStack(String essenceType) {
+	public static ItemStack getStack (String essenceType) {
 		return getStack(essenceType, 0);
 	}
 
-	public static ItemStack getStack(String essenceType, int essenceAmount) {
+	public static ItemStack getStack (String essenceType, int essenceAmount) {
 		ItemStack stack = new ItemStack(INSTANCE, 1);
 		EssenceType.setEssenceType(stack, essenceType);
 		setContainedEssence(stack, essenceAmount);
 		return stack;
 	}
 
-	public static boolean isFilled(ItemStack stack) {
+	public static boolean isFilled (ItemStack stack) {
 		String essenceType = EssenceType.getEssenceType(stack);
 		if (essenceType == null)
 			return false;
@@ -55,7 +55,8 @@ public class Soulbook extends ModItem {
 	}
 
 	public static class SoulbookRecipe extends ShapelessOreRecipe {
-		public static NonNullList<Ingredient> getIngredients(int size) {
+
+		public static NonNullList<Ingredient> getIngredients (int size) {
 
 			List<Ingredient> ingredients = new ArrayList<>();
 
@@ -65,21 +66,21 @@ public class Soulbook extends ModItem {
 			return NonNullList.from(Ingredient.EMPTY, ingredients.toArray(new Ingredient[0]));
 		}
 
-		public SoulbookRecipe(ResourceLocation name, int size) {
+		public SoulbookRecipe (ResourceLocation name, int size) {
 			super(new ResourceLocation(""), getIngredients(size), getFilled("unfocused"));
 			setRegistryName(name + "" + size);
 		}
 
 		@ParametersAreNonnullByDefault
 		@Override
-		public boolean matches(InventoryCrafting inv, World worldIn) {
+		public boolean matches (InventoryCrafting inv, World worldIn) {
 			return getCraftingResult(inv) != null;
 		}
 
 		@ParametersAreNonnullByDefault
 		@Nullable
 		@Override
-		public ItemStack getCraftingResult(InventoryCrafting inv) {
+		public ItemStack getCraftingResult (InventoryCrafting inv) {
 			int essenceCount = 0;
 			ItemStack soulbook = null;
 			String essenceType = null;
@@ -112,8 +113,8 @@ public class Soulbook extends ModItem {
 				}
 				return null;
 			}
-			if (soulbook != null && essenceCount > 0
-					&& containedEssence + essenceCount <= Soulus.config.getSoulbookQuantity(essenceType)) {
+			if (soulbook != null && essenceCount > 0 && containedEssence + essenceCount <= Soulus.config
+				.getSoulbookQuantity(essenceType)) {
 				ItemStack newStack = soulbook.copy();
 				EssenceType.setEssenceType(newStack, essenceType);
 				setContainedEssence(newStack, containedEssence + essenceCount);
@@ -123,22 +124,22 @@ public class Soulbook extends ModItem {
 		}
 	}
 
-	public Soulbook() {
+	public Soulbook () {
 		super("soulbook", 1);
 		this.glint = true;
 		setHasDescription();
 	}
 
 	@Override
-	public void onRegisterRecipes(IForgeRegistry<IRecipe> registry) {
+	public void onRegisterRecipes (IForgeRegistry<IRecipe> registry) {
 		registry.registerAll( //
-				new SoulbookRecipe(getRegistryName(), 2), //
-				new SoulbookRecipe(getRegistryName(), 3) //
+			new SoulbookRecipe(getRegistryName(), 2), //
+			new SoulbookRecipe(getRegistryName(), 3) //
 		);
 	}
 
 	@Override
-	public boolean hasEffect(ItemStack stack) {
+	public boolean hasEffect (ItemStack stack) {
 		String essenceType = EssenceType.getEssenceType(stack);
 		if (essenceType == null)
 			return false;
@@ -148,7 +149,7 @@ public class Soulbook extends ModItem {
 
 	@Nonnull
 	@Override
-	public String getUnlocalizedNameInefficiently(@Nonnull ItemStack stack) {
+	public String getUnlocalizedNameInefficiently (@Nonnull ItemStack stack) {
 		String essenceType = EssenceType.getEssenceType(stack);
 		if (essenceType == null)
 			essenceType = "unfocused";
@@ -156,7 +157,7 @@ public class Soulbook extends ModItem {
 	}
 
 	@Override
-	public boolean showDurabilityBar(ItemStack stack) {
+	public boolean showDurabilityBar (ItemStack stack) {
 		String essenceType = EssenceType.getEssenceType(stack);
 		int containedEssence = getContainedEssence(stack);
 		if (essenceType == null)
@@ -165,7 +166,7 @@ public class Soulbook extends ModItem {
 	}
 
 	@Override
-	public double getDurabilityForDisplay(ItemStack stack) {
+	public double getDurabilityForDisplay (ItemStack stack) {
 		String essenceType = EssenceType.getEssenceType(stack);
 		if (essenceType == null)
 			return 1;
@@ -173,7 +174,7 @@ public class Soulbook extends ModItem {
 		return (1 - containedEssence / (double) Soulus.config.getSoulbookQuantity(essenceType));
 	}
 
-	public static int getContainedEssence(ItemStack stack) {
+	public static int getContainedEssence (ItemStack stack) {
 		NBTTagCompound tag = stack.getTagCompound();
 		if (tag != null && tag.hasKey("essence_quantity", 3)) {
 			return tag.getInteger("essence_quantity");
@@ -181,7 +182,7 @@ public class Soulbook extends ModItem {
 		return 0;
 	}
 
-	public static ItemStack setContainedEssence(ItemStack stack, int count) {
+	public static ItemStack setContainedEssence (ItemStack stack, int count) {
 		NBTTagCompound tag = stack.getTagCompound();
 		if (tag == null) {
 			tag = new NBTTagCompound();
@@ -193,14 +194,14 @@ public class Soulbook extends ModItem {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+	public void addInformation (ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		int containedEssence = Soulbook.getContainedEssence(stack);
 		String mobTarget = EssenceType.getEssenceType(stack);
 		if (mobTarget != null) {
 			int requiredEssence = Soulus.config.getSoulbookQuantity(mobTarget);
 			if (containedEssence < requiredEssence) {
-				tooltip.add(I18n.format("tooltip." + Soulus.MODID + ":soulbook.contained_essence", containedEssence,
-						requiredEssence));
+				tooltip.add(I18n
+					.format("tooltip." + Soulus.MODID + ":soulbook.contained_essence", containedEssence, requiredEssence));
 			}
 		}
 	}

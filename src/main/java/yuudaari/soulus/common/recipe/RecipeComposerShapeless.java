@@ -20,24 +20,25 @@ import net.minecraftforge.common.crafting.JsonContext;
 import yuudaari.soulus.common.block.composer.ComposerTileEntity;
 
 public class RecipeComposerShapeless extends Recipe {
+
 	@Nonnull
 	protected ItemStack output = ItemStack.EMPTY;
 	protected NonNullList<Ingredient> input = NonNullList.create();
 
-	public RecipeComposerShapeless(Block result, Object... recipe) {
+	public RecipeComposerShapeless (Block result, Object... recipe) {
 		this(new ItemStack(result), recipe);
 	}
 
-	public RecipeComposerShapeless(Item result, Object... recipe) {
+	public RecipeComposerShapeless (Item result, Object... recipe) {
 		this(new ItemStack(result), recipe);
 	}
 
-	public RecipeComposerShapeless(NonNullList<Ingredient> input, @Nonnull ItemStack result) {
+	public RecipeComposerShapeless (NonNullList<Ingredient> input, @Nonnull ItemStack result) {
 		output = result.copy();
 		this.input = input;
 	}
 
-	public RecipeComposerShapeless(@Nonnull ItemStack result, Object... recipe) {
+	public RecipeComposerShapeless (@Nonnull ItemStack result, Object... recipe) {
 		output = result.copy();
 		for (Object in : recipe) {
 			Ingredient ing = CraftingHelper.getIngredient(in);
@@ -56,7 +57,7 @@ public class RecipeComposerShapeless extends Recipe {
 
 	@Override
 	@Nonnull
-	public ItemStack getRecipeOutput() {
+	public ItemStack getRecipeOutput () {
 		return output;
 	}
 
@@ -65,7 +66,7 @@ public class RecipeComposerShapeless extends Recipe {
 	 */
 	@Override
 	@Nonnull
-	public ItemStack getCraftingResult(@Nonnull InventoryCrafting var1) {
+	public ItemStack getCraftingResult (@Nonnull InventoryCrafting var1) {
 		return output.copy();
 	}
 
@@ -73,7 +74,7 @@ public class RecipeComposerShapeless extends Recipe {
 	 * Used to check if a recipe matches current crafting inventory
 	 */
 	@Override
-	public boolean matches(@Nonnull InventoryCrafting var1, @Nonnull World world) {
+	public boolean matches (@Nonnull InventoryCrafting var1, @Nonnull World world) {
 		if (!(var1 instanceof ComposerTileEntity.ComposerContainer.CraftingMatrix))
 			return false;
 
@@ -106,13 +107,13 @@ public class RecipeComposerShapeless extends Recipe {
 
 	@Override
 	@Nonnull
-	public NonNullList<Ingredient> getIngredients() {
+	public NonNullList<Ingredient> getIngredients () {
 		return this.input;
 	}
 
 	@Override
 	@Nonnull
-	public String getGroup() {
+	public String getGroup () {
 		return this.group == null ? "" : this.group.toString();
 	}
 
@@ -120,14 +121,14 @@ public class RecipeComposerShapeless extends Recipe {
 	 * Used to determine if this recipe can fit in a grid of the given width/height
 	 */
 	@Override
-	public boolean canFit(int width, int height) {
+	public boolean canFit (int width, int height) {
 		return width * height >= this.input.size();
 	}
 
 	public static class Factory implements IRecipeFactory {
 
 		@Override
-		public IRecipe parse(JsonContext context, JsonObject json) {
+		public IRecipe parse (JsonContext context, JsonObject json) {
 			NonNullList<Ingredient> ings = NonNullList.create();
 			for (JsonElement ele : JsonUtils.getJsonArray(json, "ingredients"))
 				ings.add(CraftingHelper.getIngredient(ele, context));

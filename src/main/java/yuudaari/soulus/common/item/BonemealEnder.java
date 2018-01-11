@@ -1,7 +1,8 @@
 package yuudaari.soulus.common.item;
 
 public class BonemealEnder extends Bonemeal {
-	public BonemealEnder() {
+
+	public BonemealEnder () {
 		super("dust_ender");
 		glint = true;
 		addOreDict("dustEnder");

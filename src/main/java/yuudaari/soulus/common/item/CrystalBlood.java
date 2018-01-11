@@ -32,7 +32,6 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import java.util.List;
 import java.util.Random;
 import javax.annotation.Nonnull;
@@ -41,6 +40,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.common.collect.Multimap;
 
 public class CrystalBlood extends SummonerUpgrade {
+
 	private static final int defaultRequiredBlood = 1000;
 	private static final int defaultPrickAmount = 9;
 	private static final int defaultPrickWorth = 90;
@@ -49,12 +49,12 @@ public class CrystalBlood extends SummonerUpgrade {
 	private static final int defaultCreaturePrickWorth = 3;
 	private static final int defaultParticleCount = 50;
 	private static final ModPotionEffect[] defaultPrickEffects = new ModPotionEffect[] {
-			new ModPotionEffect("hunger", 100), new ModPotionEffect("nausea", 200) };
+		new ModPotionEffect("hunger", 100), new ModPotionEffect("nausea", 200)
+	};
 
 	public static final Serializer<CrystalBlood> serializer;
 	static {
-		serializer = new Serializer<>(CrystalBlood.class, "requiredBlood", "prickAmount", "prickWorth",
-				"creaturePrickRequiredHealth", "creaturePrickAmount", "creaturePrickWorth", "particleCount");
+		serializer = new Serializer<>(CrystalBlood.class, "requiredBlood", "prickAmount", "prickWorth", "creaturePrickRequiredHealth", "creaturePrickAmount", "creaturePrickWorth", "particleCount");
 
 		serializer.fieldHandlers.put("prickEffects", PotionEffectSerializer.INSTANCE);
 	}
@@ -73,11 +73,11 @@ public class CrystalBlood extends SummonerUpgrade {
 	public int particleCount = defaultParticleCount;
 	public ModPotionEffect[] prickEffects = defaultPrickEffects;
 
-	public CrystalBlood() {
+	public CrystalBlood () {
 		super("crystal_blood");
 
 		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
-			registerColorHandler((ItemStack stack, int tintIndex) -> {
+			registerColorHandler( (ItemStack stack, int tintIndex) -> {
 				float percentage = getContainedBlood(stack) / (float) requiredBlood;
 				return Colour.mix(colourEmpty, colourFilled, percentage).get();
 			});
@@ -87,55 +87,55 @@ public class CrystalBlood extends SummonerUpgrade {
 	}
 
 	@Override
-	public int getItemStackLimit(ItemStack stack) {
+	public int getItemStackLimit (ItemStack stack) {
 		// if it's full, allow them to be stacked
 		return getContainedBlood(stack) >= requiredBlood ? 16 : 1;
 	}
 
 	@Override
-	public ItemStack getFilledStack() {
+	public ItemStack getFilledStack () {
 		return getStack(requiredBlood);
 	}
 
-	public ItemStack getStack(int blood) {
+	public ItemStack getStack (int blood) {
 		ItemStack stack = new ItemStack(this);
 		setContainedBlood(stack, blood);
 		return stack;
 	}
 
 	@Override
-	public ItemStack getItemStack() {
+	public ItemStack getItemStack () {
 		return getStack(0);
 	}
 
 	@Override
-	public boolean hasEffect(ItemStack stack) {
+	public boolean hasEffect (ItemStack stack) {
 		int containedBlood = getContainedBlood(stack);
 		return containedBlood >= requiredBlood;
 	}
 
 	@Nonnull
 	@Override
-	public String getUnlocalizedNameInefficiently(@Nonnull ItemStack stack) {
+	public String getUnlocalizedNameInefficiently (@Nonnull ItemStack stack) {
 		int containedBlood = getContainedBlood(stack);
 		String name = super.getUnlocalizedNameInefficiently(stack);
 		return containedBlood >= requiredBlood ? name + ".filled" : name;
 	}
 
 	@Override
-	public boolean showDurabilityBar(ItemStack stack) {
+	public boolean showDurabilityBar (ItemStack stack) {
 		return getContainedBlood(stack) < requiredBlood;
 	}
 
 	@Override
-	public double getDurabilityForDisplay(ItemStack stack) {
+	public double getDurabilityForDisplay (ItemStack stack) {
 		return 1 - Math.min(requiredBlood, getContainedBlood(stack)) / (double) requiredBlood;
 	}
 
 	@ParametersAreNonnullByDefault
 	@Nonnull
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick (World worldIn, EntityPlayer player, EnumHand hand) {
 
 		ItemStack heldItem = player.getHeldItem(hand);
 		int containedBlood = getContainedBlood(heldItem);
@@ -143,8 +143,8 @@ public class CrystalBlood extends SummonerUpgrade {
 
 			if (player instanceof FakePlayer) {
 				heldItem.setCount(0);
-				EntityItem dropEntity = new EntityItem(player.world, player.posX, player.posY, player.posZ,
-						ModItems.CRYSTAL_BLOOD_BROKEN.getItemStack());
+				EntityItem dropEntity = new EntityItem(player.world, player.posX, player.posY, player.posZ, ModItems.CRYSTAL_BLOOD_BROKEN
+					.getItemStack());
 				dropEntity.setNoPickupDelay();
 				player.world.spawnEntity(dropEntity);
 
@@ -169,7 +169,7 @@ public class CrystalBlood extends SummonerUpgrade {
 	}
 
 	@Override
-	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+	public boolean hitEntity (ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 		if (target.getHealth() <= this.creaturePrickRequiredHealth) {
 			target.attackEntityFrom(ModDamageSource.CRYSTAL_BLOOD, this.creaturePrickAmount);
 			int blood = getContainedBlood(stack);
@@ -180,24 +180,23 @@ public class CrystalBlood extends SummonerUpgrade {
 	}
 
 	@Override
-	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot equipmentSlot,
-			ItemStack stack) {
+	public Multimap<String, AttributeModifier> getAttributeModifiers (EntityEquipmentSlot equipmentSlot, ItemStack stack) {
 		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(equipmentSlot, stack);
 
 		if (equipmentSlot == EntityEquipmentSlot.MAINHAND) {
 			int containedBlood = getContainedBlood(stack);
 			if (containedBlood < requiredBlood) {
-				multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(),
-						new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", 0, 0));
-				multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(),
-						new AttributeModifier(ATTACK_SPEED_MODIFIER, "Tool modifier", (double) 0, 0));
+				multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE
+					.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", 0, 0));
+				multimap.put(SharedMonsterAttributes.ATTACK_SPEED
+					.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Tool modifier", (double) 0, 0));
 			}
 		}
 
 		return multimap;
 	}
 
-	public static int getContainedBlood(ItemStack stack) {
+	public static int getContainedBlood (ItemStack stack) {
 		NBTTagCompound tag = stack.getTagCompound();
 		if (tag != null && tag.hasKey("contained_blood", 3)) {
 			return tag.getInteger("contained_blood");
@@ -205,11 +204,11 @@ public class CrystalBlood extends SummonerUpgrade {
 		return 0;
 	}
 
-	public static boolean isFilled(ItemStack stack) {
+	public static boolean isFilled (ItemStack stack) {
 		return getContainedBlood(stack) >= INSTANCE.requiredBlood;
 	}
 
-	public static ItemStack setContainedBlood(ItemStack stack, int count) {
+	public static ItemStack setContainedBlood (ItemStack stack, int count) {
 		NBTTagCompound tag = stack.getTagCompound();
 		if (tag == null) {
 			tag = new NBTTagCompound();
@@ -219,21 +218,21 @@ public class CrystalBlood extends SummonerUpgrade {
 		return stack;
 	}
 
-	public static ItemStack setFilled(ItemStack stack) {
+	public static ItemStack setFilled (ItemStack stack) {
 		return setContainedBlood(stack, INSTANCE.requiredBlood);
 	}
 
-	public static void bloodParticles(EntityLivingBase entity) {
+	public static void bloodParticles (EntityLivingBase entity) {
 		if (entity.world.isRemote) {
 			particles(entity);
 		} else {
-			SoulsPacketHandler.INSTANCE.sendToAllAround(new CrystalBloodHitEntity(entity),
-					new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 128));
+			SoulsPacketHandler.INSTANCE
+				.sendToAllAround(new CrystalBloodHitEntity(entity), new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 128));
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
-	private static void particles(EntityLivingBase entity) {
+	private static void particles (EntityLivingBase entity) {
 		World world = entity.getEntityWorld();
 		Random rand = world.rand;
 
@@ -249,7 +248,7 @@ public class CrystalBlood extends SummonerUpgrade {
 	}
 
 	@Override
-	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+	public void getSubItems (CreativeTabs tab, NonNullList<ItemStack> items) {
 		if (this.isInCreativeTab(tab)) {
 			items.add(this.getItemStack());
 			items.add(this.getFilledStack());
@@ -258,11 +257,11 @@ public class CrystalBlood extends SummonerUpgrade {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+	public void addInformation (ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		int containedBlood = CrystalBlood.getContainedBlood(stack);
 		if (containedBlood < requiredBlood) {
-			tooltip.add(I18n.format("tooltip." + Soulus.MODID + ":crystal_blood.contained_blood", containedBlood,
-					requiredBlood));
+			tooltip.add(I18n
+				.format("tooltip." + Soulus.MODID + ":crystal_blood.contained_blood", containedBlood, requiredBlood));
 		}
 	}
 }

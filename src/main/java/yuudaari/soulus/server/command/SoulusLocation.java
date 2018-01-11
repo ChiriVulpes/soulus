@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -25,17 +24,17 @@ import yuudaari.soulus.common.util.GeneratorName;
 public class SoulusLocation extends CommandBase {
 
 	@Override
-	public String getName() {
+	public String getName () {
 		return "souluslocation";
 	}
 
 	@Override
-	public String getUsage(ICommandSender sender) {
+	public String getUsage (ICommandSender sender) {
 		return "Usage: /" + getName();
 	}
 
 	@Override
-	public void execute(MinecraftServer server, ICommandSender ics, String[] args) throws CommandException {
+	public void execute (MinecraftServer server, ICommandSender ics, String[] args) throws CommandException {
 		List<String> result = new ArrayList<>();
 
 		BlockPos pos = ics.getPosition();
@@ -44,12 +43,13 @@ public class SoulusLocation extends CommandBase {
 
 		Biome biome = world.getBiome(pos);
 		ResourceLocation biomeId = biome.getRegistryName();
-		result.add("Biome: " + TextFormatting.RED + biomeId.getResourceDomain() + ":" + TextFormatting.GOLD
-				+ biomeId.getResourcePath());
+		result.add("Biome: " + TextFormatting.RED + biomeId.getResourceDomain() + ":" + TextFormatting.GOLD + biomeId
+			.getResourcePath());
 
 		Set<Type> biomeTypes = BiomeDictionary.getTypes(biome);
-		result.add("Biome Types: " + TextFormatting.RED + biomeTypes.stream().map(b -> b.getName())
-				.collect(Collectors.joining(TextFormatting.WHITE + ", " + TextFormatting.RED)));
+		result.add("Biome Types: " + TextFormatting.RED + biomeTypes.stream()
+			.map(b -> b.getName())
+			.collect(Collectors.joining(TextFormatting.WHITE + ", " + TextFormatting.RED)));
 
 		ChunkProviderServer cps = (ChunkProviderServer) world.getChunkProvider();
 		result.add("Structures: " + TextFormatting.RED + Arrays.asList(EventType.values()).stream().map(eventType -> {
@@ -59,8 +59,9 @@ public class SoulusLocation extends CommandBase {
 			//		+ ", is inside? " + isInsideStructure);
 
 			return isInsideStructure ? eventType.name() : null;
-		}).filter(eventTypeName -> eventTypeName != null)
-				.collect(Collectors.joining(TextFormatting.WHITE + ", " + TextFormatting.RED)));
+		})
+			.filter(eventTypeName -> eventTypeName != null)
+			.collect(Collectors.joining(TextFormatting.WHITE + ", " + TextFormatting.RED)));
 
 		if (result.remove("Structures: " + TextFormatting.RED))
 			result.add("Structures: None");

@@ -29,17 +29,17 @@ public class OreVein {
 	static {
 		serializer = new Serializer<>(OreVein.class, "block", "replace", "chances");
 
-		serializer.fieldHandlers.put("dimension",
-				new ManualSerializer(OreVein::serializeDimension, OreVein::deserializeDimension));
+		serializer.fieldHandlers
+			.put("dimension", new ManualSerializer(OreVein::serializeDimension, OreVein::deserializeDimension));
 		serializer.fieldHandlers.put("size", Range.serializer);
 		serializer.fieldHandlers.put("height", Range.serializer);
-		serializer.fieldHandlers.put("biomeTypesWhitelist",
-				new ManualSerializer(OreVein::serializeBiomeTypes, OreVein::deserializeBiomeTypes));
-		serializer.fieldHandlers.put("biomeTypesBlacklist",
-				new ManualSerializer(OreVein::serializeBiomeTypes, OreVein::deserializeBiomeTypes));
+		serializer.fieldHandlers
+			.put("biomeTypesWhitelist", new ManualSerializer(OreVein::serializeBiomeTypes, OreVein::deserializeBiomeTypes));
+		serializer.fieldHandlers
+			.put("biomeTypesBlacklist", new ManualSerializer(OreVein::serializeBiomeTypes, OreVein::deserializeBiomeTypes));
 	}
 
-	public static JsonElement serializeBiomeTypes(Object from) {
+	public static JsonElement serializeBiomeTypes (Object from) {
 		Type[] biomeTypes = (Type[]) from;
 
 		JsonArray result = new JsonArray();
@@ -51,7 +51,7 @@ public class OreVein {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static Object deserializeBiomeTypes(JsonElement from, Object current) {
+	public static Object deserializeBiomeTypes (JsonElement from, Object current) {
 		if (from == null || !from.isJsonArray()) {
 			Logger.warn("Biome types must be an array");
 			return current;
@@ -71,7 +71,8 @@ public class OreVein {
 
 		JsonArray types = from.getAsJsonArray();
 
-		deserialization: for (JsonElement type : types) {
+		deserialization:
+		for (JsonElement type : types) {
 			if (type == null || !type.isJsonPrimitive() || !type.getAsJsonPrimitive().isString()) {
 				Logger.warn("Biome type must be a string");
 				continue;
@@ -93,11 +94,11 @@ public class OreVein {
 		return result.toArray(new Type[result.size()]);
 	}
 
-	public static JsonElement serializeDimension(Object obj) {
+	public static JsonElement serializeDimension (Object obj) {
 		return obj == null ? JsonNull.INSTANCE : new JsonPrimitive(((DimensionType) obj).getName());
 	}
 
-	public static Object deserializeDimension(JsonElement json, Object current) {
+	public static Object deserializeDimension (JsonElement json, Object current) {
 		if (json == null || !json.isJsonPrimitive() || !json.getAsJsonPrimitive().isString()) {
 			return null;
 		}
@@ -113,47 +114,47 @@ public class OreVein {
 	public Type[] biomeTypesWhitelist = new Type[0];
 	public Type[] biomeTypesBlacklist = new Type[0];
 
-	public OreVein setBlock(String block) {
+	public OreVein setBlock (String block) {
 		this.block = block;
 		return this;
 	}
 
-	public OreVein setToReplace(String block) {
+	public OreVein setToReplace (String block) {
 		replace = block;
 		return this;
 	}
 
-	public OreVein setDimension(DimensionType dimension) {
+	public OreVein setDimension (DimensionType dimension) {
 		this.dimension = dimension;
 		return this;
 	}
 
-	public OreVein setSize(int min, int max) {
+	public OreVein setSize (int min, int max) {
 		this.size = new Range(min, max);
 		return this;
 	}
 
-	public OreVein setChances(int chances) {
+	public OreVein setChances (int chances) {
 		this.chances = chances;
 		return this;
 	}
 
-	public OreVein setHeight(int min, int max) {
+	public OreVein setHeight (int min, int max) {
 		this.height = new Range(min, max);
 		return this;
 	}
 
-	public OreVein setBiomes(Type... types) {
+	public OreVein setBiomes (Type... types) {
 		this.biomeTypesWhitelist = types;
 		return this;
 	}
 
-	public OreVein setBiomesBlacklist(Type... types) {
+	public OreVein setBiomesBlacklist (Type... types) {
 		this.biomeTypesBlacklist = types;
 		return this;
 	}
 
-	public void generate(World world, Random random, int chunkX, int chunkZ) {
+	public void generate (World world, Random random, int chunkX, int chunkZ) {
 		if (dimension == null || world.provider.getDimensionType() == dimension) {
 			int veinSize = size.min.intValue() + random.nextInt(size.max.intValue() - size.min.intValue());
 			int heightRange = height.max.intValue() - height.min.intValue();

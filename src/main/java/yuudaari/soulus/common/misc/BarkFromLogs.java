@@ -2,7 +2,6 @@ package yuudaari.soulus.common.misc;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
@@ -15,12 +14,13 @@ import yuudaari.soulus.common.config.Serializer;
 
 @Mod.EventBusSubscriber
 public class BarkFromLogs {
+
 	public static BarkFromLogs INSTANCE = new BarkFromLogs();
 
 	public static Serializer<BarkFromLogs> serializer = new Serializer<>(BarkFromLogs.class, "barkChance");
 	static {
-		serializer.fieldHandlers.put("logWhitelist",
-				new ManualSerializer(Config::serializeList, Config::deserializeList));
+		serializer.fieldHandlers
+			.put("logWhitelist", new ManualSerializer(Config::serializeList, Config::deserializeList));
 	}
 
 	public float barkChance = 0.01f;
@@ -31,7 +31,7 @@ public class BarkFromLogs {
 	}
 
 	@SubscribeEvent
-	public static void onHarvest(HarvestDropsEvent event) {
+	public static void onHarvest (HarvestDropsEvent event) {
 		if (event.getHarvester() != null) {
 			if (INSTANCE.logWhitelist.contains(event.getState().getBlock().getRegistryName().toString())) {
 				if (event.getWorld().rand.nextFloat() < INSTANCE.barkChance) {

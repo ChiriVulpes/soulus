@@ -6,13 +6,14 @@ import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
 import yuudaari.soulus.common.util.ModItem;
 
 public class Bone extends ModItem {
-	public Bone(String name) {
+
+	public Bone (String name) {
 		super(name);
 		addOreDict("bone");
 	}
 
 	@Override
-	public void onRegisterDescription(JeiDescriptionRegistry registry) {
+	public void onRegisterDescription (JeiDescriptionRegistry registry) {
 		registry.add(Ingredient.fromItem(this), Soulus.MODID + ":bone");
 	}
 }

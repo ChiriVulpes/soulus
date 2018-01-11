@@ -31,8 +31,9 @@ import yuudaari.soulus.Soulus;
 
 @Mod.EventBusSubscriber
 public class BoneDrops {
+
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public static void onMobDrops(LivingDropsEvent event) {
+	public static void onMobDrops (LivingDropsEvent event) {
 
 		// first we check if we should even try to do drops
 		EntityLivingBase entity = event.getEntityLiving();
@@ -75,7 +76,7 @@ public class BoneDrops {
 		CreatureConfig creatureConfig = biomeConfig.creatureConfigs.get(entityName);
 		if (creatureConfig == null) {
 			creatureConfig = biomeConfig.creatureConfigs
-					.get(new ResourceLocation(entityName).getResourceDomain() + ":*");
+				.get(new ResourceLocation(entityName).getResourceDomain() + ":*");
 			if (creatureConfig == null) {
 				creatureConfig = biomeConfig.creatureConfigs.get("*");
 				if (creatureConfig == null) {
@@ -88,7 +89,7 @@ public class BoneDrops {
 		doMobDrops(creatureConfig, drops, entity);
 	}
 
-	private static void doMobDrops(CreatureConfig config, List<EntityItem> drops, EntityLivingBase entity) {
+	private static void doMobDrops (CreatureConfig config, List<EntityItem> drops, EntityLivingBase entity) {
 
 		if (config != null) {
 			boolean wasSummoned = entity.getEntityData().getByte("soulus:spawn_whitelisted") == (byte) 2;
@@ -117,8 +118,8 @@ public class BoneDrops {
 					return;
 				}
 
-				if (!(whitelistedDrops.contains("*") || whitelistedDropsAll.contains("*"))
-						|| blacklistedDrops.size() + blacklistedDropsAll.size() > 0) {
+				if (!(whitelistedDrops.contains("*") || whitelistedDropsAll.contains("*")) || blacklistedDrops
+					.size() + blacklistedDropsAll.size() > 0) {
 					drops.removeIf(existingDrop -> {
 						ResourceLocation res = existingDrop.getItem().getItem().getRegistryName();
 						String modWild = res.getResourceDomain() + ":*";
@@ -131,11 +132,11 @@ public class BoneDrops {
 							}
 						}
 
-						if (allBlacklisted || blacklistedDrops.contains(modWild) || blacklistedDrops.contains(name)
-								|| (blacklistedDropsAll.contains(modWild)
-										&& !(whitelistedDrops.contains(modWild) || whitelistedDrops.contains(name)))
-								|| (blacklistedDropsAll.contains(name)
-										&& !(whitelistedDrops.contains(modWild) || whitelistedDrops.contains(name)))) {
+						if (allBlacklisted || blacklistedDrops.contains(modWild) || blacklistedDrops
+							.contains(name) || (blacklistedDropsAll.contains(modWild) && !(whitelistedDrops
+								.contains(modWild) || whitelistedDrops.contains(name))) || (blacklistedDropsAll
+									.contains(name) && !(whitelistedDrops.contains(modWild) || whitelistedDrops
+										.contains(name)))) {
 							return true;
 						}
 
@@ -160,7 +161,7 @@ public class BoneDrops {
 		}
 	}
 
-	private static ItemStack getStack(Random rand, BoneType boneType, CreatureLootConfig lootConfig) {
+	private static ItemStack getStack (Random rand, BoneType boneType, CreatureLootConfig lootConfig) {
 		if (lootConfig.chance < rand.nextDouble()) {
 			return null;
 		}

@@ -2,16 +2,12 @@ package yuudaari.soulus.common.util;
 
 import net.minecraft.nbt.NBTTagCompound;
 /*
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-*/
+ * import net.minecraft.nbt.NBTBase; import net.minecraft.nbt.NBTTagList; import net.minecraft.nbt.NBTTagString; import
+ * java.util.ArrayList; import java.util.List; import java.util.Set;
+ */
 
 public class NBTHelper {
+
 	public NBTTagCompound nbt;
 
 	/*
@@ -26,11 +22,11 @@ public class NBTHelper {
 	}
 	*/
 
-	public NBTHelper() {
+	public NBTHelper () {
 		this.nbt = new NBTTagCompound();
 	}
 
-	public NBTHelper(NBTTagCompound nbt) {
+	public NBTHelper (NBTTagCompound nbt) {
 		this.nbt = nbt;
 	}
 

@@ -37,13 +37,13 @@ public class Config {
 	public int boneChunkParticleCount = 3;
 	public Map<String, EssenceConfig> essences;
 
-	public Config() {
+	public Config () {
 		essences = new HashMap<>();
 		for (EssenceConfig config : EssenceConfig.getDefaultCreatureConfigs())
 			essences.put(config.essence, config);
 	}
 
-	public int getSoulbookQuantity(String essenceType) {
+	public int getSoulbookQuantity (String essenceType) {
 		EssenceConfig config = essences.get(essenceType);
 		return config != null ? config.soulbookQuantity : essenceType == "unfocused" ? 1 : -1;
 	}
@@ -54,58 +54,57 @@ public class Config {
 	static {
 		serializer = new Serializer<>(Config.class, "boneChunkParticleCount");
 
-		serializer.otherHandlers.put("glue", new ManualSerializer(from -> Glue.serializer.serialize(ModItems.GLUE),
-				(from, into) -> Glue.serializer.deserialize(from, ModItems.GLUE)));
+		serializer.otherHandlers.put("glue", new ManualSerializer(from -> Glue.serializer
+			.serialize(ModItems.GLUE), (from, into) -> Glue.serializer.deserialize(from, ModItems.GLUE)));
 
-		serializer.otherHandlers.put("barkFromLogs",
-				new ManualSerializer(from -> BarkFromLogs.serializer.serialize(BarkFromLogs.INSTANCE),
-						(from, into) -> BarkFromLogs.serializer.deserialize(from, BarkFromLogs.INSTANCE)));
+		serializer.otherHandlers.put("barkFromLogs", new ManualSerializer(from -> BarkFromLogs.serializer
+			.serialize(BarkFromLogs.INSTANCE), (from, into) -> BarkFromLogs.serializer
+				.deserialize(from, BarkFromLogs.INSTANCE)));
 
-		serializer.otherHandlers.put("fossilBlocks", new ManualSerializer(
-				from -> BoneChunksFromFossils.serializer.serialize(BoneChunksFromFossils.INSTANCE),
-				(from, into) -> BoneChunksFromFossils.serializer.deserialize(from, BoneChunksFromFossils.INSTANCE)));
+		serializer.otherHandlers.put("fossilBlocks", new ManualSerializer(from -> BoneChunksFromFossils.serializer
+			.serialize(BoneChunksFromFossils.INSTANCE), (from, into) -> BoneChunksFromFossils.serializer
+				.deserialize(from, BoneChunksFromFossils.INSTANCE)));
 
-		serializer.otherHandlers.put("sledgehammer",
-				new ManualSerializer(from -> Sledgehammer.serializer.serialize(ModItems.SLEDGEHAMMER),
-						(from, into) -> Sledgehammer.serializer.deserialize(from, ModItems.SLEDGEHAMMER)));
+		serializer.otherHandlers.put("sledgehammer", new ManualSerializer(from -> Sledgehammer.serializer
+			.serialize(ModItems.SLEDGEHAMMER), (from, into) -> Sledgehammer.serializer
+				.deserialize(from, ModItems.SLEDGEHAMMER)));
 
-		serializer.otherHandlers.put("bloodCrystal",
-				new ManualSerializer(from -> CrystalBlood.serializer.serialize(ModItems.CRYSTAL_BLOOD),
-						(from, into) -> CrystalBlood.serializer.deserialize(from, ModItems.CRYSTAL_BLOOD)));
+		serializer.otherHandlers.put("bloodCrystal", new ManualSerializer(from -> CrystalBlood.serializer
+			.serialize(ModItems.CRYSTAL_BLOOD), (from, into) -> CrystalBlood.serializer
+				.deserialize(from, ModItems.CRYSTAL_BLOOD)));
 
-		serializer.otherHandlers.put("murkyOrb",
-				new ManualSerializer(from -> OrbMurky.serializer.serialize(ModItems.ORB_MURKY),
-						(from, into) -> OrbMurky.serializer.deserialize(from, ModItems.ORB_MURKY)));
+		serializer.otherHandlers.put("murkyOrb", new ManualSerializer(from -> OrbMurky.serializer
+			.serialize(ModItems.ORB_MURKY), (from, into) -> OrbMurky.serializer.deserialize(from, ModItems.ORB_MURKY)));
 
-		serializer.otherHandlers.put("summoner", new ManualSerializer(from -> ModBlocks.SUMMONER.serialize(),
-				(from, into) -> ModBlocks.SUMMONER.deserialize(from)));
+		serializer.otherHandlers.put("summoner", new ManualSerializer(from -> ModBlocks.SUMMONER
+			.serialize(), (from, into) -> ModBlocks.SUMMONER.deserialize(from)));
 
-		serializer.otherHandlers.put("skewer", new ManualSerializer(from -> ModBlocks.SKEWER.serialize(),
-				(from, into) -> ModBlocks.SKEWER.deserialize(from)));
+		serializer.otherHandlers.put("skewer", new ManualSerializer(from -> ModBlocks.SKEWER
+			.serialize(), (from, into) -> ModBlocks.SKEWER.deserialize(from)));
 
-		serializer.otherHandlers.put("composer", new ManualSerializer(from -> ModBlocks.COMPOSER.serialize(),
-				(from, into) -> ModBlocks.COMPOSER.deserialize(from)));
+		serializer.otherHandlers.put("composer", new ManualSerializer(from -> ModBlocks.COMPOSER
+			.serialize(), (from, into) -> ModBlocks.COMPOSER.deserialize(from)));
 
-		serializer.otherHandlers.put("creatures",
-				new ManualSerializer(from -> NoMobSpawning.serializer.serialize(NoMobSpawning.INSTANCE),
-						(from, into) -> NoMobSpawning.serializer.deserialize(from, NoMobSpawning.INSTANCE)));
+		serializer.otherHandlers.put("creatures", new ManualSerializer(from -> NoMobSpawning.serializer
+			.serialize(NoMobSpawning.INSTANCE), (from, into) -> NoMobSpawning.serializer
+				.deserialize(from, NoMobSpawning.INSTANCE)));
 
-		serializer.otherHandlers.put("summonerReplacer",
-				new ManualSerializer(from -> SummonerReplacer.serializer.serialize(SummonerReplacer.INSTANCE),
-						(from, into) -> SummonerReplacer.serializer.deserialize(from, SummonerReplacer.INSTANCE)));
+		serializer.otherHandlers.put("summonerReplacer", new ManualSerializer(from -> SummonerReplacer.serializer
+			.serialize(SummonerReplacer.INSTANCE), (from, into) -> SummonerReplacer.serializer
+				.deserialize(from, SummonerReplacer.INSTANCE)));
 
-		serializer.otherHandlers.put("fossilVeins",
-				new ManualSerializer(from -> GeneratorFossils.serialize(ModGenerators.GENERATOR_FOSSILS),
-						(from, into) -> GeneratorFossils.deserialize(from, ModGenerators.GENERATOR_FOSSILS)));
+		serializer.otherHandlers.put("fossilVeins", new ManualSerializer(from -> GeneratorFossils
+			.serialize(ModGenerators.GENERATOR_FOSSILS), (from, into) -> GeneratorFossils
+				.deserialize(from, ModGenerators.GENERATOR_FOSSILS)));
 
-		serializer.fieldHandlers.put("essences",
-				new ManualSerializer(Config::serializeEssences, Config::deserializeEssences));
+		serializer.fieldHandlers
+			.put("essences", new ManualSerializer(Config::serializeEssences, Config::deserializeEssences));
 
 	}
 
 	/* STATIC METHODS */
 
-	public static Config loadConfig(String configDirectory) {
+	public static Config loadConfig (String configDirectory) {
 		Config config = new Config();
 
 		File configFile = new File(configDirectory + "/soulus/" + configFileName);
@@ -149,7 +148,7 @@ public class Config {
 
 	/* SERIALIZERS */
 
-	private static JsonElement serializeEssences(Object obj) {
+	private static JsonElement serializeEssences (Object obj) {
 		@SuppressWarnings("unchecked")
 		Collection<EssenceConfig> essenceConfigs = ((Map<String, EssenceConfig>) obj).values();
 
@@ -162,7 +161,7 @@ public class Config {
 		return essences;
 	}
 
-	private static Object deserializeEssences(JsonElement json, Object current) {
+	private static Object deserializeEssences (JsonElement json, Object current) {
 		@SuppressWarnings("unchecked")
 		Map<String, EssenceConfig> essenceConfigs = (Map<String, EssenceConfig>) current;
 
@@ -174,15 +173,15 @@ public class Config {
 		essenceConfigs.clear();
 
 		for (JsonElement essenceConfig : essences) {
-			EssenceConfig config = (EssenceConfig) EssenceConfig.serializer.deserialize(essenceConfig,
-					new EssenceConfig());
+			EssenceConfig config = (EssenceConfig) EssenceConfig.serializer
+				.deserialize(essenceConfig, new EssenceConfig());
 			essenceConfigs.put(config.essence, config);
 		}
 
 		return essenceConfigs;
 	}
 
-	public static JsonElement serializeList(Object obj) {
+	public static JsonElement serializeList (Object obj) {
 		@SuppressWarnings("unchecked")
 		List<String> list = (List<String>) obj;
 
@@ -193,7 +192,7 @@ public class Config {
 		return result;
 	}
 
-	public static List<String> deserializeList(JsonElement listElement, Object currentObject) {
+	public static List<String> deserializeList (JsonElement listElement, Object currentObject) {
 		@SuppressWarnings("unchecked")
 		List<String> list = (List<String>) currentObject;
 

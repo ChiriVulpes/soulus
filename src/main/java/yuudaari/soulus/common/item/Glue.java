@@ -9,18 +9,19 @@ public class Glue extends ModItem {
 
 	public static Serializer<Glue> serializer;
 	static {
-		serializer = new Serializer<>(Glue.class, "foodAmount", "foodSaturation", "foodDuration", "foodQuantity",
-				"foodAlwaysEdible");
+		serializer = new Serializer<>(Glue.class, "foodAmount", "foodSaturation", "foodDuration", "foodQuantity", "foodAlwaysEdible");
 
 		serializer.fieldHandlers.put("foodEffects", PotionEffectSerializer.INSTANCE);
 	}
 
-	public Glue() {
+	public Glue () {
 		super("glue");
 		addOreDict("slimeball");
 		setFood(1, 0F);
 		foodAlwaysEdible = true;
-		foodEffects = new ModPotionEffect[] { new ModPotionEffect("nausea", 200) };
+		foodEffects = new ModPotionEffect[] {
+			new ModPotionEffect("nausea", 200)
+		};
 		setHasDescription();
 	}
 }

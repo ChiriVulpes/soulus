@@ -6,11 +6,12 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 
 public class FossilGravel extends ModBlock {
-	public FossilGravel() {
+
+	public FossilGravel () {
 		this("fossil_gravel_scale");
 	}
 
-	public FossilGravel(String name) {
+	public FossilGravel (String name) {
 		super(name, new Material(MapColor.STONE).setToolNotRequired());
 		setHasItem();
 		setHardness(0.6F);

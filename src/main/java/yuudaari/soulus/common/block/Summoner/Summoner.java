@@ -51,8 +51,10 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	//
 
 	public static enum Upgrade implements IUpgrade {
-		COUNT(0, "count", ModItems.CRYSTAL_BLOOD.getItemStack()), DELAY(1, "delay",
-				ModItems.GEAR_OSCILLATING.getItemStack()), RANGE(2, "range", ModItems.ORB_MURKY.getItemStack());
+		COUNT (0, "count", ModItems.CRYSTAL_BLOOD.getItemStack()),
+		DELAY (1, "delay",
+			ModItems.GEAR_OSCILLATING.getItemStack()),
+		RANGE (2, "range", ModItems.ORB_MURKY.getItemStack());
 
 		private final int index;
 		private final String name;
@@ -60,35 +62,35 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		// by default all upgrades are capped at 16
 		private int maxQuantity = 16;
 
-		private Upgrade(int index, String name, ItemStack item) {
+		private Upgrade (int index, String name, ItemStack item) {
 			this.index = index;
 			this.name = name;
 			this.stack = item;
 		}
 
 		@Override
-		public int getIndex() {
+		public int getIndex () {
 			return index;
 		}
 
 		@Override
-		public String getName() {
+		public String getName () {
 			return name;
 		}
 
 		@Override
-		public int getMaxQuantity() {
+		public int getMaxQuantity () {
 			// all upgrades by default are capped at 16
 			return maxQuantity;
 		}
 
 		@Override
-		public void setMaxQuantity(int quantity) {
+		public void setMaxQuantity (int quantity) {
 			maxQuantity = quantity;
 		}
 
 		@Override
-		public boolean isItemStack(ItemStack stack) {
+		public boolean isItemStack (ItemStack stack) {
 			if (stack.getItem() != this.stack.getItem())
 				return false;
 
@@ -102,7 +104,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		}
 
 		@Override
-		public ItemStack getItemStack(int quantity) {
+		public ItemStack getItemStack (int quantity) {
 			ItemStack stack = new ItemStack(this.stack.getItem(), quantity);
 			if (name == "count") {
 				CrystalBlood.setFilled(stack);
@@ -115,7 +117,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	}
 
 	@Override
-	public IUpgrade[] getUpgrades() {
+	public IUpgrade[] getUpgrades () {
 		return Upgrade.values();
 	}
 
@@ -124,7 +126,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	//
 
 	@Override
-	public Class<? extends UpgradeableBlock<SummonerTileEntity>> getSerializationClass() {
+	public Class<? extends UpgradeableBlock<SummonerTileEntity>> getSerializationClass () {
 		return Summoner.class;
 	}
 
@@ -142,9 +144,8 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	public double soulbookEssenceRequiredToInsert = 0.5;
 
 	{
-		serializer.fields.addAll(Arrays.asList("nonUpgradedSpawningRadius", "nonUpgradedRange",
-				"upgradeCountRadiusEffectiveness", "upgradeRangeEffectiveness", "particleCountActivated",
-				"particleCountSpawn", "soulbookUses", "soulbookEssenceRequiredToInsert"));
+		serializer.fields.addAll(Arrays
+			.asList("nonUpgradedSpawningRadius", "nonUpgradedRange", "upgradeCountRadiusEffectiveness", "upgradeRangeEffectiveness", "particleCountActivated", "particleCountSpawn", "soulbookUses", "soulbookEssenceRequiredToInsert"));
 
 		serializer.fieldHandlers.put("nonUpgradedCount", Range.serializer);
 		serializer.fieldHandlers.put("nonUpgradedDelay", Range.serializer);
@@ -159,7 +160,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	public static final IProperty<EndersteelType> VARIANT = PropertyEnum.create("variant", EndersteelType.class);
 	public static final PropertyBool HAS_SOULBOOK = PropertyBool.create("has_soulbook");
 
-	public Summoner() {
+	public Summoner () {
 		super("summoner", new Material(MapColor.STONE).setTransparent());
 		setHasItem();
 		setHardness(5F);
@@ -167,56 +168,58 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		setHarvestLevel("pickaxe", 1);
 		setSoundType(SoundType.METAL);
 		disableStats();
-		setDefaultState(
-				getDefaultState().withProperty(HAS_SOULBOOK, false).withProperty(VARIANT, EndersteelType.NORMAL));
+		setDefaultState(getDefaultState().withProperty(HAS_SOULBOOK, false)
+			.withProperty(VARIANT, EndersteelType.NORMAL));
 		setHasDescription();
 	}
 
 	public static Summoner INSTANCE = new Summoner();
 
 	@Override
-	public UpgradeableBlock<SummonerTileEntity> getInstance() {
+	public UpgradeableBlock<SummonerTileEntity> getInstance () {
 		return INSTANCE;
 	}
 
 	@Override
-	public boolean hasComparatorInputOverride(IBlockState state) {
+	public boolean hasComparatorInputOverride (IBlockState state) {
 		return true;
 	}
 
 	@Override
-	public int getComparatorInputOverride(IBlockState state, World world, BlockPos pos) {
+	public int getComparatorInputOverride (IBlockState state, World world, BlockPos pos) {
 		SummonerTileEntity te = (SummonerTileEntity) world.getTileEntity(pos);
 		return te.getSignalStrength();
 	}
 
 	@Override
-	public void addBlockToList(List<ItemStack> list, World world, BlockPos pos) {
+	public void addBlockToList (List<ItemStack> list, World world, BlockPos pos) {
 		list.add(getItemStack(1, getMetaFromState(getDefaultState().withProperty(HAS_SOULBOOK, false)
-				.withProperty(VARIANT, world.getBlockState(pos).getValue(VARIANT)))));
+			.withProperty(VARIANT, world.getBlockState(pos).getValue(VARIANT)))));
 	}
 
 	@Override
-	public void getSubBlocks(CreativeTab tab, NonNullList<ItemStack> list) {
+	public void getSubBlocks (CreativeTab tab, NonNullList<ItemStack> list) {
 		for (EndersteelType variant : EndersteelType.values()) {
-			list.add(new ItemStack(this, 1, getMetaFromState(
-					getDefaultState().withProperty(VARIANT, variant).withProperty(HAS_SOULBOOK, false))));
+			list.add(new ItemStack(this, 1, getMetaFromState(getDefaultState().withProperty(VARIANT, variant)
+				.withProperty(HAS_SOULBOOK, false))));
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerItemModel() {
+	public void registerItemModel () {
 		NonNullList<ItemStack> stacks = NonNullList.create();
 		getSubBlocks(CreativeTab.INSTANCE, stacks);
 		for (ItemStack stack : stacks) {
 			IBlockState state = getStateFromMeta(stack.getMetadata());
-			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), stack.getMetadata(),
-					new ModelResourceLocation(this.getRegistryName(), HAS_SOULBOOK.getName() + "=false,"
-							+ VARIANT.getName() + "=" + state.getValue(VARIANT).getName().toLowerCase()));
-			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), stack.getMetadata() + 1,
-					new ModelResourceLocation(this.getRegistryName(), HAS_SOULBOOK.getName() + "=true,"
-							+ VARIANT.getName() + "=" + state.getValue(VARIANT).getName().toLowerCase()));
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), stack
+				.getMetadata(), new ModelResourceLocation(this
+					.getRegistryName(), HAS_SOULBOOK.getName() + "=false," + VARIANT
+						.getName() + "=" + state.getValue(VARIANT).getName().toLowerCase()));
+			ModelLoader.setCustomModelResourceLocation(Item
+				.getItemFromBlock(this), stack.getMetadata() + 1, new ModelResourceLocation(this
+					.getRegistryName(), HAS_SOULBOOK.getName() + "=true," + VARIANT
+						.getName() + "=" + state.getValue(VARIANT).getName().toLowerCase()));
 		}
 	}
 
@@ -225,18 +228,20 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	//
 
 	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty<?>[] { VARIANT, HAS_SOULBOOK });
+	protected BlockStateContainer createBlockState () {
+		return new BlockStateContainer(this, new IProperty<?>[] {
+			VARIANT, HAS_SOULBOOK
+		});
 	}
 
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(HAS_SOULBOOK, (meta & 1) == 0 ? false : true).withProperty(VARIANT,
-				EndersteelType.byMetadata(meta / 2));
+	public IBlockState getStateFromMeta (int meta) {
+		return getDefaultState().withProperty(HAS_SOULBOOK, (meta & 1) == 0 ? false : true)
+			.withProperty(VARIANT, EndersteelType.byMetadata(meta / 2));
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
+	public int getMetaFromState (IBlockState state) {
 		return state.getValue(VARIANT).getMeta() * 2 + (state.getValue(HAS_SOULBOOK) ? 1 : 0);
 	}
 
@@ -245,39 +250,40 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	//
 
 	public static class SummonerItemBlock extends ItemMultiTexture {
-		public SummonerItemBlock(Block b) {
+
+		public SummonerItemBlock (Block b) {
 			super(b, b, i -> EndersteelType.byMetadata(i.getItemDamage()).getName());
 			setRegistryName(Soulus.MODID + ":summoner");
 		}
 
 		@Override
-		public int getMetadata(int damage) {
+		public int getMetadata (int damage) {
 			return damage;
 		}
 
 		@Override
-		public String getUnlocalizedNameInefficiently(@Nonnull ItemStack stack) {
+		public String getUnlocalizedNameInefficiently (@Nonnull ItemStack stack) {
 			String essenceType = EssenceType.getEssenceType(stack);
 			return "tile." + getRegistryName() + (essenceType == null ? "_empty" : "." + essenceType);
 		}
 
 		@Override
 		@SideOnly(Side.CLIENT)
-		public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip,
-				ITooltipFlag flagIn) {
-			tooltip.add(I18n.format("tooltip." + Soulus.MODID + ":summoner.style."
-					+ EndersteelType.byMetadata(stack.getItemDamage() / 2).getName()));
+		public void addInformation (ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+			tooltip.add(I18n.format("tooltip." + Soulus.MODID + ":summoner.style." + EndersteelType
+				.byMetadata(stack.getItemDamage() / 2)
+				.getName()));
 		}
 	}
 
 	private final SummonerItemBlock ITEM = new SummonerItemBlock(this);
 
 	@Override
-	public ItemBlock getItemBlock() {
+	public ItemBlock getItemBlock () {
 		return ITEM;
 	}
 
-	public ItemStack getItemStack(SummonerTileEntity te, int count, int metadata) {
+	public ItemStack getItemStack (SummonerTileEntity te, int count, int metadata) {
 		ItemStack itemStack = new ItemStack(ITEM, count, metadata);
 
 		itemStack.setTagCompound(te.writeToNBT(new NBTTagCompound()));
@@ -290,17 +296,17 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	//
 
 	@Override
-	public boolean hasTileEntity(IBlockState blockState) {
+	public boolean hasTileEntity (IBlockState blockState) {
 		return blockState.getValue(HAS_SOULBOOK);
 	}
 
 	@Override
-	public Class<? extends UpgradeableBlockTileEntity> getTileEntityClass() {
+	public Class<? extends UpgradeableBlockTileEntity> getTileEntityClass () {
 		return SummonerTileEntity.class;
 	}
 
 	@Override
-	public UpgradeableBlockTileEntity createTileEntity(World worldIn, IBlockState blockState) {
+	public UpgradeableBlockTileEntity createTileEntity (World worldIn, IBlockState blockState) {
 		return new SummonerTileEntity();
 	}
 
@@ -309,7 +315,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	//
 
 	@Override
-	public boolean onActivateEmptyHand(World world, BlockPos pos, EntityPlayer player) {
+	public boolean onActivateEmptyHand (World world, BlockPos pos, EntityPlayer player) {
 		IBlockState state = world.getBlockState(pos);
 		if (!state.getValue(HAS_SOULBOOK))
 			return false;
@@ -330,7 +336,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	}
 
 	@Override
-	public boolean onActivateEmptyHandSneaking(World world, BlockPos pos, EntityPlayer player) {
+	public boolean onActivateEmptyHandSneaking (World world, BlockPos pos, EntityPlayer player) {
 		super.onActivateEmptyHandSneaking(world, pos, player);
 
 		IBlockState state = world.getBlockState(pos);
@@ -340,7 +346,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	}
 
 	@Override
-	public void addOtherDropStacksToList(List<ItemStack> list, World world, BlockPos pos, IBlockState state) {
+	public void addOtherDropStacksToList (List<ItemStack> list, World world, BlockPos pos, IBlockState state) {
 		TileEntity te = world.getTileEntity(pos);
 
 		if (te != null && te instanceof SummonerTileEntity) {
@@ -350,7 +356,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	}
 
 	@Override
-	public boolean onActivateInsert(World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
+	public boolean onActivateInsert (World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
 		Item item = stack.getItem();
 		IBlockState state = world.getBlockState(pos);
 
@@ -377,14 +383,14 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 		// try to insert a soulbook
 		if (item == Soulbook.INSTANCE) {
-			if ((soulbookUses <= 0 && !Soulbook.isFilled(stack))
-					|| Soulbook.getContainedEssence(stack) < soulbookEssenceRequiredToInsert
-							* Soulus.config.getSoulbookQuantity(EssenceType.getEssenceType(stack)))
+			if ((soulbookUses <= 0 && !Soulbook.isFilled(stack)) || Soulbook
+				.getContainedEssence(stack) < soulbookEssenceRequiredToInsert * Soulus.config
+					.getSoulbookQuantity(EssenceType.getEssenceType(stack)))
 				return false;
 
 			if (!state.getValue(HAS_SOULBOOK)) {
 				world.setBlockState(pos, getDefaultState().withProperty(VARIANT, state.getValue(VARIANT))
-						.withProperty(HAS_SOULBOOK, true));
+					.withProperty(HAS_SOULBOOK, true));
 			}
 
 			SummonerTileEntity te = (SummonerTileEntity) world.getTileEntity(pos);
@@ -398,8 +404,8 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 			String newEssenceType = EssenceType.getEssenceType(stack);
 			te.setEssenceType(newEssenceType);
-			te.soulbookUses = (int) (Soulbook.getContainedEssence(stack)
-					/ (double) Soulus.config.getSoulbookQuantity(newEssenceType) * this.soulbookUses);
+			te.soulbookUses = (int) (Soulbook.getContainedEssence(stack) / (double) Soulus.config
+				.getSoulbookQuantity(newEssenceType) * this.soulbookUses);
 
 			stack.shrink(1);
 
@@ -416,15 +422,12 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		return super.onActivateInsert(world, pos, player, stack);
 	}
 
-	public ItemStack getSoulbook(SummonerTileEntity te) {
+	public ItemStack getSoulbook (SummonerTileEntity te) {
 		String essenceType = te.getEssenceType();
 
-		return soulbookUses > 0
-				? Soulbook.getStack(essenceType,
-						(int) Math.max(0,
-								te.soulbookUses / (double) soulbookUses
-										* Soulus.config.getSoulbookQuantity(essenceType)))
-				: Soulbook.getFilled(essenceType);
+		return soulbookUses > 0 ? Soulbook
+			.getStack(essenceType, (int) Math.max(0, te.soulbookUses / (double) soulbookUses * Soulus.config
+				.getSoulbookQuantity(essenceType))) : Soulbook.getFilled(essenceType);
 	}
 
 	/////////////////////////////////////////
@@ -434,15 +437,14 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	@Override
-	protected void onWailaTooltipHeader(List<String> currentTooltip, IBlockState blockState, SummonerTileEntity te,
-			boolean isSneaking) {
+	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, SummonerTileEntity te, boolean isSneaking) {
 
-		currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":summoner.summon_percentage",
-				(int) Math.floor(te.getSpawnPercent() * 100)));
+		currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":summoner.summon_percentage", (int) Math
+			.floor(te.getSpawnPercent() * 100)));
 
 		if (soulbookUses > 0) {
-			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":summoner.summons_remaining",
-					Math.max(0, te.soulbookUses), soulbookUses));
+			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":summoner.summons_remaining", Math
+				.max(0, te.soulbookUses), soulbookUses));
 		}
 
 	}
@@ -450,17 +452,16 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	@Override
-	protected void onWailaTooltipFooter(List<String> currentTooltip, IBlockState blockState, SummonerTileEntity te,
-			boolean isSneaking) {
+	protected void onWailaTooltipFooter (List<String> currentTooltip, IBlockState blockState, SummonerTileEntity te, boolean isSneaking) {
 
-		currentTooltip.add(
-				I18n.format("tooltip." + Soulus.MODID + ":summoner.style." + blockState.getValue(VARIANT).getName()));
+		currentTooltip
+			.add(I18n.format("tooltip." + Soulus.MODID + ":summoner.style." + blockState.getValue(VARIANT).getName()));
 	}
 
 	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	@Override
-	public ItemStack getWailaStack(IWailaDataAccessor accessor) {
+	public ItemStack getWailaStack (IWailaDataAccessor accessor) {
 		TileEntity te = accessor.getTileEntity();
 		if (te == null || !(te instanceof SummonerTileEntity))
 			return null;

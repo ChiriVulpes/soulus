@@ -11,23 +11,24 @@ public class IngredientCrystalBlood extends Ingredient {
 
 	public static IngredientCrystalBlood INSTANCE = new IngredientCrystalBlood();
 
-	public IngredientCrystalBlood() {
+	public IngredientCrystalBlood () {
 		super(CrystalBlood.INSTANCE.getFilledStack());
 	}
 
 	@Override
-	public boolean apply(ItemStack stack) {
+	public boolean apply (ItemStack stack) {
 		return CrystalBlood.isFilled(stack);
 	}
 
 	@Override
-	public boolean isSimple() {
+	public boolean isSimple () {
 		return false;
 	}
 
 	public static class Factory implements IIngredientFactory {
+
 		@Override
-		public Ingredient parse(JsonContext context, JsonObject json) {
+		public Ingredient parse (JsonContext context, JsonObject json) {
 			return new IngredientCrystalBlood();
 		}
 	}

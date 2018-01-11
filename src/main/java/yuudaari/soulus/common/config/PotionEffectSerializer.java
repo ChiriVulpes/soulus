@@ -12,7 +12,7 @@ public class PotionEffectSerializer extends Serializer<ModPotionEffect[]> {
 	public static final PotionEffectSerializer INSTANCE = new PotionEffectSerializer();
 
 	@Override
-	public JsonElement serialize(Object from) {
+	public JsonElement serialize (Object from) {
 		ModPotionEffect[] effects = (ModPotionEffect[]) from;
 
 		JsonArray result = new JsonArray();
@@ -24,7 +24,7 @@ public class PotionEffectSerializer extends Serializer<ModPotionEffect[]> {
 	}
 
 	@Override
-	public Object deserialize(JsonElement from, Object current) {
+	public Object deserialize (JsonElement from, Object current) {
 		if (from == null || !from.isJsonArray()) {
 			Logger.warn("Must be an array of effects");
 			return current;

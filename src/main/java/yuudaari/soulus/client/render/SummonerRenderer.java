@@ -15,11 +15,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class SummonerRenderer extends TileEntityRenderer<SummonerTileEntity> {
 
-	public Class<SummonerTileEntity> getTileEntityClass() {
+	public Class<SummonerTileEntity> getTileEntityClass () {
 		return SummonerTileEntity.class;
 	}
 
-	private void spawnRenderMob(SummonerTileEntity tileEntity) {
+	private void spawnRenderMob (SummonerTileEntity tileEntity) {
 		NBTTagCompound entityNbt = tileEntity.getEntityNbt();
 		World world = tileEntity.getWorld();
 
@@ -34,8 +34,7 @@ public class SummonerRenderer extends TileEntityRenderer<SummonerTileEntity> {
 	}
 
 	@Override
-	public void render(SummonerTileEntity te, double x, double y, double z, float partialTicks, int destroyStage,
-			float alpha) {
+	public void render (SummonerTileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 
 		if (te.getEssenceType() == null)
 			return;
@@ -51,7 +50,7 @@ public class SummonerRenderer extends TileEntityRenderer<SummonerTileEntity> {
 		GlStateManager.popMatrix();
 	}
 
-	public void renderMob(SummonerTileEntity te, double posX, double posY, double posZ, float partialTicks) {
+	public void renderMob (SummonerTileEntity te, double posX, double posY, double posZ, float partialTicks) {
 		EntityLiving renderMob = te.renderMob;
 		double mobRotation = te.mobRotation;
 		double prevMobRotation = te.prevMobRotation;
@@ -71,7 +70,8 @@ public class SummonerRenderer extends TileEntityRenderer<SummonerTileEntity> {
 		GlStateManager.translate(0.0F, -0.2F, 0.0F);
 		GlStateManager.scale(f, f, f);
 		renderMob.setLocationAndAngles(posX, posY, posZ, 0.0F, 0.0F);
-		Minecraft.getMinecraft().getRenderManager().renderEntity(renderMob, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks,
-				false);
+		Minecraft.getMinecraft()
+			.getRenderManager()
+			.renderEntity(renderMob, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, false);
 	}
 }

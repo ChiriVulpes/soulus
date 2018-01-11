@@ -11,18 +11,17 @@ public class ColorConfig {
 
 	public boolean wasSet = false;
 
-	public ColorConfig() {
-	}
+	public ColorConfig () {}
 
-	public ColorConfig(int primaryColour, int secondaryColour) {
+	public ColorConfig (int primaryColour, int secondaryColour) {
 		setColors(primaryColour, secondaryColour);
 	}
 
-	public ColorConfig(EntityList.EntityEggInfo eggInfo) {
+	public ColorConfig (EntityList.EntityEggInfo eggInfo) {
 		setColors(eggInfo.primaryColor, eggInfo.secondaryColor);
 	}
 
-	public ColorConfig setColors(int primaryColour, int secondaryColour) {
+	public ColorConfig setColors (int primaryColour, int secondaryColour) {
 		primary = primaryColour;
 		secondary = secondaryColour;
 		wasSet = true;

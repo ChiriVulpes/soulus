@@ -15,7 +15,7 @@ public class Sledgehammer extends ModItem {
 
 	public int durability = 256;
 
-	public Sledgehammer() {
+	public Sledgehammer () {
 		super("sledgehammer");
 		setMaxStackSize(1);
 		setMaxDamage(durability);
@@ -23,7 +23,7 @@ public class Sledgehammer extends ModItem {
 	}
 
 	@Override
-	public boolean hasContainerItem(ItemStack stack) {
+	public boolean hasContainerItem (ItemStack stack) {
 		return true;
 	}
 
@@ -32,7 +32,7 @@ public class Sledgehammer extends ModItem {
 	@ParametersAreNonnullByDefault
 	@Nonnull
 	@Override
-	public ItemStack getContainerItem(ItemStack stack) {
+	public ItemStack getContainerItem (ItemStack stack) {
 		stack.attemptDamageItem(1, random, null);
 		ItemStack newStack = new ItemStack(stack.getItem());
 		newStack.setItemDamage(stack.getItemDamage());
@@ -40,7 +40,7 @@ public class Sledgehammer extends ModItem {
 	}
 
 	@Override
-	public int getMaxDamage(ItemStack stack) {
+	public int getMaxDamage (ItemStack stack) {
 		return durability;
 	}
 }

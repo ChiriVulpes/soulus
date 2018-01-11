@@ -1,7 +1,6 @@
 package yuudaari.soulus.common.compat.jei;
 
 import java.util.List;
-
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.ICraftingGridHelper;
 import mezz.jei.api.gui.IDrawable;
@@ -37,34 +36,34 @@ public class RecipeCategoryComposer implements IRecipeCategory<IRecipeWrapper> {
 	private final IDrawable background;
 	private final ICraftingGridHelper craftingGridHelper;
 
-	public RecipeCategoryComposer(IGuiHelper guiHelper) {
+	public RecipeCategoryComposer (IGuiHelper guiHelper) {
 		ResourceLocation location = Constants.RECIPE_GUI_VANILLA;
 		background = guiHelper.createDrawable(location, 0, 60, width, height);
 		craftingGridHelper = guiHelper.createCraftingGridHelper(craftInputSlot1, craftOutputSlot);
 	}
 
 	@Override
-	public String getUid() {
+	public String getUid () {
 		return UID;
 	}
 
 	@Override
-	public String getTitle() {
+	public String getTitle () {
 		return I18n.format("jei.recipe." + getUid() + ".name");
 	}
 
 	@Override
-	public String getModName() {
+	public String getModName () {
 		return Soulus.MODID;
 	}
 
 	@Override
-	public IDrawable getBackground() {
+	public IDrawable getBackground () {
 		return background;
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper, IIngredients ingredients) {
+	public void setRecipe (IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper, IIngredients ingredients) {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 
 		guiItemStacks.init(craftOutputSlot, false, 94, 18);
@@ -88,8 +87,8 @@ public class RecipeCategoryComposer implements IRecipeCategory<IRecipeWrapper> {
 		if (recipeWrapper instanceof IShapedCraftingRecipeWrapper) {
 			IShapedCraftingRecipeWrapper wrapper = (IShapedCraftingRecipeWrapper) recipeWrapper;
 			craftingGridHelper.setInputs(guiItemStacks, inputs, wrapper.getWidth(), wrapper.getHeight());
-		} else if (recipeWrapper instanceof RecipeWrapperComposer
-				&& ((RecipeWrapperComposer) recipeWrapper).isShaped()) {
+		} else if (recipeWrapper instanceof RecipeWrapperComposer && ((RecipeWrapperComposer) recipeWrapper)
+			.isShaped()) {
 			RecipeWrapperComposer wrapper = (RecipeWrapperComposer) recipeWrapper;
 			craftingGridHelper.setInputs(guiItemStacks, inputs, wrapper.getWidth(), wrapper.getHeight());
 		} else {
@@ -111,7 +110,7 @@ public class RecipeCategoryComposer implements IRecipeCategory<IRecipeWrapper> {
 
 		if (registryName != null) {
 			final ResourceLocation actualRegistryName = registryName;
-			guiItemStacks.addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
+			guiItemStacks.addTooltipCallback( (slotIndex, input, ingredient, tooltip) -> {
 				if (slotIndex == craftOutputSlot) {
 					String recipeModId = actualRegistryName.getResourceDomain();
 
@@ -124,12 +123,12 @@ public class RecipeCategoryComposer implements IRecipeCategory<IRecipeWrapper> {
 
 					if (modIdDifferent) {
 						String modName = ForgeModIdHelper.getInstance().getFormattedModNameForModId(recipeModId);
-						tooltip.add(TextFormatting.GRAY
-								+ Translator.translateToLocalFormatted("jei.tooltip.recipe.by", modName));
+						tooltip.add(TextFormatting.GRAY + Translator
+							.translateToLocalFormatted("jei.tooltip.recipe.by", modName));
 					}
 
-					boolean showAdvanced = Minecraft.getMinecraft().gameSettings.advancedItemTooltips
-							|| GuiScreen.isShiftKeyDown();
+					boolean showAdvanced = Minecraft.getMinecraft().gameSettings.advancedItemTooltips || GuiScreen
+						.isShiftKeyDown();
 					if (showAdvanced) {
 						tooltip.add(TextFormatting.GRAY + actualRegistryName.getResourcePath());
 					}

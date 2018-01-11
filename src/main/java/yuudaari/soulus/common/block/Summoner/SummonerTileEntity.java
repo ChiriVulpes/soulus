@@ -25,7 +25,7 @@ import yuudaari.soulus.Soulus;
 public class SummonerTileEntity extends UpgradeableBlockTileEntity implements ITickable {
 
 	@Override
-	public Summoner getBlock() {
+	public Summoner getBlock () {
 		return Summoner.INSTANCE;
 	}
 
@@ -49,25 +49,23 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	public double prevMobRotation;
 	public EntityLiving renderMob;
 
-	public void reset() {
+	public void reset () {
 		this.renderMob = null;
 		this.resetTimer();
 	}
 
 	@Override
-	public void onUpdateUpgrades(boolean readFromNBT) {
+	public void onUpdateUpgrades (boolean readFromNBT) {
 
 		Summoner block = getBlock();
 
 		int countUpgrades = upgrades.get(Upgrade.COUNT);
-		spawnCount = new Range(block.nonUpgradedCount.min + countUpgrades * block.upgradeCountEffectiveness.min,
-				block.nonUpgradedCount.max + countUpgrades * block.upgradeCountEffectiveness.max);
+		spawnCount = new Range(block.nonUpgradedCount.min + countUpgrades * block.upgradeCountEffectiveness.min, block.nonUpgradedCount.max + countUpgrades * block.upgradeCountEffectiveness.max);
 		spawningRadius = (int) Math
-				.floor(block.nonUpgradedSpawningRadius + countUpgrades * block.upgradeCountRadiusEffectiveness);
+			.floor(block.nonUpgradedSpawningRadius + countUpgrades * block.upgradeCountRadiusEffectiveness);
 
 		int delayUpgrades = upgrades.get(Upgrade.DELAY);
-		spawnDelay = new Range(block.nonUpgradedDelay.min / (1 + delayUpgrades * block.upgradeDelayEffectiveness.min),
-				block.nonUpgradedDelay.max / (1 + delayUpgrades * block.upgradeDelayEffectiveness.max));
+		spawnDelay = new Range(block.nonUpgradedDelay.min / (1 + delayUpgrades * block.upgradeDelayEffectiveness.min), block.nonUpgradedDelay.max / (1 + delayUpgrades * block.upgradeDelayEffectiveness.max));
 
 		int rangeUpgrades = upgrades.get(Upgrade.RANGE);
 		activatingRange = block.nonUpgradedRange + rangeUpgrades * block.upgradeRangeEffectiveness;
@@ -84,17 +82,17 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	private int spawnMobChanceTotal;
 	public String lastRenderedEssenceType;
 
-	public String getEssenceType() {
+	public String getEssenceType () {
 		return essenceType;
 	}
 
-	public void setEssenceType(String essenceType) {
+	public void setEssenceType (String essenceType) {
 		this.essenceType = essenceType;
 		this.soulbookUses = Soulus.config.getSoulbookQuantity(essenceType);
 		resetEssenceType();
 	}
 
-	private void resetEssenceType() {
+	private void resetEssenceType () {
 		EssenceConfig config = Soulus.config.essences.get(essenceType);
 		if (config == null)
 			return;
@@ -107,18 +105,18 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		}
 	}
 
-	public int getSignalStrength() {
+	public int getSignalStrength () {
 		return signalStrength;
 	}
 
-	public NBTTagCompound getEntityNbt() {
+	public NBTTagCompound getEntityNbt () {
 		NBTTagCompound result = new NBTTagCompound();
 		result.setString("id", getSpawnMob());
 		result.setByte("PersistenceRequired", (byte) 1);
 		return result;
 	}
 
-	private String getSpawnMob() {
+	private String getSpawnMob () {
 		if (spawnMobChanceTotal > 0) {
 			int choice = new Random().nextInt(spawnMobChanceTotal);
 			for (Map.Entry<String, Double> spawnConfig : spawnMobConfig.spawns.entrySet()) {
@@ -131,11 +129,11 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		return essenceType;
 	}
 
-	public float getSpawnPercent() {
+	public float getSpawnPercent () {
 		return (lastTimeTillSpawn - timeTillSpawn) / (float) lastTimeTillSpawn;
 	}
 
-	private double activationAmount() {
+	private double activationAmount () {
 		// when powered by redstone, don't run
 		if (world.isBlockIndirectlyGettingPowered(pos) != 0) {
 			return 0;
@@ -162,7 +160,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	}
 
 	@Override
-	public void update() {
+	public void update () {
 		if (essenceType == null) {
 			world.setBlockState(pos, world.getBlockState(pos).withProperty(Summoner.HAS_SOULBOOK, false));
 			return;
@@ -204,11 +202,11 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		resetTimer();
 	}
 
-	private void resetTimer() {
+	private void resetTimer () {
 		resetTimer(true);
 	}
 
-	private void resetTimer(boolean update) {
+	private void resetTimer (boolean update) {
 		timeTillSpawn = spawnDelay.get(world.rand).intValue();
 		lastTimeTillSpawn = timeTillSpawn;
 
@@ -217,7 +215,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	}
 
 	@Override
-	public void onReadFromNBT(NBTTagCompound compound) {
+	public void onReadFromNBT (NBTTagCompound compound) {
 		hasInit = true;
 
 		essenceType = compound.getString("entity_type");
@@ -231,7 +229,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 	@Nonnull
 	@Override
-	public void onWriteToNBT(NBTTagCompound compound) {
+	public void onWriteToNBT (NBTTagCompound compound) {
 		if (essenceType == null) {
 			world.setBlockState(pos, world.getBlockState(pos).withProperty(Summoner.HAS_SOULBOOK, false));
 			return;
@@ -243,11 +241,11 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		compound.setFloat("delay_last", lastTimeTillSpawn);
 	}
 
-	private boolean isPlayerInRangeForEffects() {
+	private boolean isPlayerInRangeForEffects () {
 		return world.isAnyPlayerWithinRangeAt(pos.getX(), pos.getY(), pos.getZ(), 64);
 	}
 
-	private void updateRenderer() {
+	private void updateRenderer () {
 		Summoner block = getBlock();
 
 		if (isPlayerInRangeForEffects()) {
@@ -264,8 +262,8 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 				double d3 = (pos.getX() + world.rand.nextFloat());
 				double d4 = (pos.getY() + world.rand.nextFloat());
 				double d5 = (pos.getZ() + world.rand.nextFloat());
-				world.spawnParticle(EnumParticleTypes.PORTAL, d3, d4, d5, (d3 - pos.getX() - 0.5F), -0.3D,
-						(d5 - pos.getZ() - 0.5F));
+				world.spawnParticle(EnumParticleTypes.PORTAL, d3, d4, d5, (d3 - pos.getX() - 0.5F), -0.3D, (d5 - pos
+					.getZ() - 0.5F));
 			}
 
 			double diff = mobRotation - prevMobRotation;
@@ -274,30 +272,31 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		}
 	}
 
-	private int spawn() {
+	private int spawn () {
 
 		int spawnCount = this.spawnCount.get(world.rand).intValue();
 		int spawned = 0;
 
-		MainSpawningLoop: for (int i = 0; i < spawnCount; i++) {
+		MainSpawningLoop:
+		for (int i = 0; i < spawnCount; i++) {
 			NBTTagCompound entityNbt = getEntityNbt();
 			for (int tries = 0; tries < 5; tries++) {
 				double x = pos.getX() + world.rand.nextDouble() * spawningRadius * 2 + 0.5D - spawningRadius;
 				double y = pos.getY() + world.rand.nextDouble() * spawningRadius / 2 + 0.5D - spawningRadius / 4;
 				double z = pos.getZ() + world.rand.nextDouble() * spawningRadius * 2 + 0.5D - spawningRadius;
-				EntityLiving entity = (EntityLiving) AnvilChunkLoader.readWorldEntityPos(entityNbt, world, x, y, z,
-						false);
+				EntityLiving entity = (EntityLiving) AnvilChunkLoader
+					.readWorldEntityPos(entityNbt, world, x, y, z, false);
 
 				if (entity == null) {
 					return 0;
 				}
 
-				AxisAlignedBB boundingBox = new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1,
-						pos.getY() + 1, pos.getZ() + 1).grow(spawningRadius);
+				AxisAlignedBB boundingBox = new AxisAlignedBB(pos.getX(), pos.getY(), pos
+					.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1).grow(spawningRadius);
 
 				// check if there's too many entities in the way
 				if (world.getEntitiesWithinAABB(entity.getClass(), boundingBox)
-						.size() >= Math.pow(spawningRadius * 2, 2) / 10) {
+					.size() >= Math.pow(spawningRadius * 2, 2) / 10) {
 					// we can return here because this check won't change next loop
 					break MainSpawningLoop;
 				}
@@ -312,11 +311,11 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 				NBTTagCompound entityData = entity.getEntityData();
 				entityData.setByte("soulus:spawn_whitelisted", (byte) 2);
 
-				entity.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, world.rand.nextFloat() * 360.0F,
-						0.0F);
+				entity
+					.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, world.rand.nextFloat() * 360.0F, 0.0F);
 
-				if (!ForgeEventFactory.doSpecialSpawn(entity, world, (float) entity.posX, (float) entity.posY,
-						(float) entity.posZ)) {
+				if (!ForgeEventFactory
+					.doSpecialSpawn(entity, world, (float) entity.posX, (float) entity.posY, (float) entity.posZ)) {
 					entity.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(entity)), null);
 				}
 
@@ -337,7 +336,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		return spawned;
 	}
 
-	private void explosionParticles(EntityLiving entity) {
+	private void explosionParticles (EntityLiving entity) {
 		Random rand = world.rand;
 
 		WorldServer worldServer = world.getMinecraftServer().getWorld(entity.dimension);
@@ -346,12 +345,11 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 			double d0 = rand.nextGaussian() * 0.02D;
 			double d1 = rand.nextGaussian() * 0.02D;
 			double d2 = rand.nextGaussian() * 0.02D;
-			worldServer.spawnParticle(EnumParticleTypes.DRAGON_BREATH,
-					entity.posX + (double) (rand.nextFloat() * entity.width * 2.0F) - (double) entity.width
-							- d0 * 10.0D,
-					entity.posY + (double) (rand.nextFloat() * entity.height) - d1 * 10.0D, entity.posZ
-							+ (double) (rand.nextFloat() * entity.width * 2.0F) - (double) entity.width - d2 * 10.0D,
-					1, d0, d1, d2, Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2));
+			worldServer.spawnParticle(EnumParticleTypes.DRAGON_BREATH, entity.posX + (double) (rand
+				.nextFloat() * entity.width * 2.0F) - (double) entity.width - d0 * 10.0D, entity.posY + (double) (rand
+					.nextFloat() * entity.height) - d1 * 10.0D, entity.posZ + (double) (rand
+						.nextFloat() * entity.width * 2.0F) - (double) entity.width - d2 * 10.0D, 1, d0, d1, d2, Math
+							.sqrt(d0 * d0 + d1 * d1 + d2 * d2));
 
 			double d3 = (pos.getX() + rand.nextFloat());
 			double d4 = (pos.getY() + rand.nextFloat());
@@ -359,14 +357,14 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 			double d3o = (pos.getX() - d3 - 0.5F) / 20;
 			double d4o = (pos.getY() - d4) / 20;
 			double d5o = (pos.getZ() - d5 - 0.5F) / 20;
-			worldServer.spawnParticle(EnumParticleTypes.DRAGON_BREATH, d3, d4, d5, 1, d3o, d4o, d5o,
-					Math.sqrt(d3o * d3o + d4o * d4o + d5o * d5o) * 2);
+			worldServer.spawnParticle(EnumParticleTypes.DRAGON_BREATH, d3, d4, d5, 1, d3o, d4o, d5o, Math
+				.sqrt(d3o * d3o + d4o * d4o + d5o * d5o) * 2);
 		}
 	}
 
 	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
-		return oldState.getBlock() != newState.getBlock()
-				|| oldState.getValue(Summoner.HAS_SOULBOOK) != newState.getValue(Summoner.HAS_SOULBOOK);
+	public boolean shouldRefresh (World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock() || oldState.getValue(Summoner.HAS_SOULBOOK) != newState
+			.getValue(Summoner.HAS_SOULBOOK);
 	}
 }

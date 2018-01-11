@@ -2,11 +2,11 @@ package yuudaari.soulus.client.util;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
 import net.minecraft.world.World;
 import yuudaari.soulus.common.util.Logger;
 
 public class ParticleManager {
+
 	private static Method m;
 	static {
 		try {
@@ -25,8 +25,8 @@ public class ParticleManager {
 			*/
 			Method[] methods = World.class.getDeclaredMethods();
 			for (Method method : methods) {
-				if ((method.getName().equals("spawnParticle") || method.getName().equals("func_175720_a"))
-						&& method.getParameterTypes()[0] == int.class) {
+				if ((method.getName().equals("spawnParticle") || method.getName().equals("func_175720_a")) && method
+					.getParameterTypes()[0] == int.class) {
 					m = method;
 				}
 			}
@@ -40,8 +40,7 @@ public class ParticleManager {
 		}
 	}
 
-	public static void spawnParticle(World world, int particleId, boolean ignoreRange, double xCoord, double yCoord,
-			double zCoord, double xSpeed, double ySpeed, double zSpeed, int... parameters) {
+	public static void spawnParticle (World world, int particleId, boolean ignoreRange, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed, int... parameters) {
 		try {
 			if (m != null) {
 				m.invoke(world, particleId, ignoreRange, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, parameters);

@@ -1,7 +1,6 @@
 package yuudaari.soulus.common.compat;
 
 import java.util.List;
-
 import mcp.mobius.waila.api.*;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -14,7 +13,7 @@ import yuudaari.soulus.common.util.IBlock;
 public class Waila implements IWailaPlugin, IWailaDataProvider {
 
 	@Override
-	public void register(IWailaRegistrar registrar) {
+	public void register (IWailaRegistrar registrar) {
 		for (Class<? extends Block> cls : WailaProviders.providers) {
 			registrar.registerBodyProvider(this, cls);
 			registrar.registerStackProvider(this, cls);
@@ -23,8 +22,7 @@ public class Waila implements IWailaPlugin, IWailaDataProvider {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor,
-			IWailaConfigHandler config) {
+	public List<String> getWailaBody (ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
 
 		Block block = accessor.getBlock();
 		if (block != null && block instanceof IBlock) {
@@ -36,7 +34,7 @@ public class Waila implements IWailaPlugin, IWailaDataProvider {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
+	public ItemStack getWailaStack (IWailaDataAccessor accessor, IWailaConfigHandler config) {
 		ItemStack result = null;
 
 		Block block = accessor.getBlock();

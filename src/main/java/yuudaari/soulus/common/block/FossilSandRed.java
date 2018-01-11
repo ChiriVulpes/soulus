@@ -6,11 +6,12 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 
 public class FossilSandRed extends ModBlock {
-	public FossilSandRed() {
+
+	public FossilSandRed () {
 		this("fossil_sand_red_dry");
 	}
 
-	public FossilSandRed(String name) {
+	public FossilSandRed (String name) {
 		super(name, new Material(MapColor.RED).setToolNotRequired());
 		setHasItem();
 		setHardness(0.5F);

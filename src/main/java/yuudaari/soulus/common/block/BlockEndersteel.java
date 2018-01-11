@@ -3,7 +3,6 @@ package yuudaari.soulus.common.block;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.ModBlock;
-
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.BlockRedstoneComparator;
 import net.minecraft.block.SoundType;
@@ -22,7 +21,7 @@ public class BlockEndersteel extends ModBlock {
 
 	public static final PropertyBool HAS_COMPARATOR = PropertyBool.create("has_comparator");
 
-	public BlockEndersteel() {
+	public BlockEndersteel () {
 		super("block_endersteel", new Material(MapColor.GRASS));
 		setHasItem();
 		setHardness(5F);
@@ -35,27 +34,29 @@ public class BlockEndersteel extends ModBlock {
 	}
 
 	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty<?>[] { HAS_COMPARATOR });
+	protected BlockStateContainer createBlockState () {
+		return new BlockStateContainer(this, new IProperty<?>[] {
+			HAS_COMPARATOR
+		});
 	}
 
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
+	public IBlockState getStateFromMeta (int meta) {
 		return getDefaultState().withProperty(HAS_COMPARATOR, meta == 1 ? true : false);
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
+	public int getMetaFromState (IBlockState state) {
 		return state.getValue(HAS_COMPARATOR) ? 1 : 0;
 	}
 
 	@Override
-	public boolean hasComparatorInputOverride(IBlockState state) {
+	public boolean hasComparatorInputOverride (IBlockState state) {
 		return true;
 	}
 
 	@Override
-	public int getComparatorInputOverride(IBlockState state, World world, BlockPos pos) {
+	public int getComparatorInputOverride (IBlockState state, World world, BlockPos pos) {
 		if (!state.getValue(HAS_COMPARATOR)) {
 			world.setBlockState(pos, getDefaultState().withProperty(HAS_COMPARATOR, true), 7);
 		}
@@ -65,17 +66,17 @@ public class BlockEndersteel extends ModBlock {
 	}
 
 	@Override
-	public boolean hasTileEntity(IBlockState state) {
+	public boolean hasTileEntity (IBlockState state) {
 		return state.getValue(HAS_COMPARATOR);
 	}
 
 	@Override
-	public Class<? extends TileEntity> getTileEntityClass() {
+	public Class<? extends TileEntity> getTileEntityClass () {
 		return BlockEndersteelTileEntity.class;
 	}
 
 	@Override
-	public TileEntity createTileEntity(World worldIn, IBlockState blockState) {
+	public TileEntity createTileEntity (World worldIn, IBlockState blockState) {
 		return new BlockEndersteelTileEntity();
 	}
 
@@ -84,7 +85,7 @@ public class BlockEndersteel extends ModBlock {
 		public int power = 0;
 
 		@Override
-		public void update() {
+		public void update () {
 			if (hasComparator()) {
 
 				int powerIn = world.isBlockIndirectlyGettingPowered(pos);
@@ -93,9 +94,8 @@ public class BlockEndersteel extends ModBlock {
 					newPower = 0;
 
 				} else {
-					newPower = (int) Math.floor(
-							Math.sin((double) world.getTotalWorldTime() / (5 * (1 + Math.pow(15 - powerIn, 3)))) * 8
-									+ 8);
+					newPower = (int) Math.floor(Math
+						.sin((double) world.getTotalWorldTime() / (5 * (1 + Math.pow(15 - powerIn, 3)))) * 8 + 8);
 				}
 
 				if (this.power != newPower) {
@@ -104,12 +104,12 @@ public class BlockEndersteel extends ModBlock {
 				}
 
 			} else {
-				world.setBlockState(pos,
-						ModBlocks.BLOCK_ENDERSTEEL.getDefaultState().withProperty(HAS_COMPARATOR, false), 7);
+				world.setBlockState(pos, ModBlocks.BLOCK_ENDERSTEEL.getDefaultState()
+					.withProperty(HAS_COMPARATOR, false), 7);
 			}
 		}
 
-		private boolean hasComparator() {
+		private boolean hasComparator () {
 			IBlockState b1 = world.getBlockState(offsetBlockPos(0, -1));
 			IBlockState b2 = world.getBlockState(offsetBlockPos(0, -2));
 			if (isComparatorCheckingMeOut(b1, b2, EnumFacing.SOUTH))
@@ -133,23 +133,23 @@ public class BlockEndersteel extends ModBlock {
 			return false;
 		}
 
-		private boolean isComparatorCheckingMeOut(IBlockState block1, IBlockState block2, EnumFacing facing) {
+		private boolean isComparatorCheckingMeOut (IBlockState block1, IBlockState block2, EnumFacing facing) {
 			if (isComparator(block1)) {
 				return block1.getValue(BlockHorizontal.FACING) == facing;
 
 			} else if (isComparator(block2)) {
-				return !block1.isTranslucent() && !(block1.getBlock() instanceof BlockEndersteel)
-						&& block2.getValue(BlockHorizontal.FACING) == facing;
+				return !block1.isTranslucent() && !(block1.getBlock() instanceof BlockEndersteel) && block2
+					.getValue(BlockHorizontal.FACING) == facing;
 			}
 
 			return false;
 		}
 
-		private boolean isComparator(IBlockState block) {
+		private boolean isComparator (IBlockState block) {
 			return block.getBlock() instanceof BlockRedstoneComparator;
 		}
 
-		private BlockPos offsetBlockPos(int x, int z) {
+		private BlockPos offsetBlockPos (int x, int z) {
 			return new BlockPos(pos.getX() + x, pos.getY(), pos.getZ() + z);
 		}
 	}

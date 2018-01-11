@@ -13,20 +13,20 @@ public final class CreativeTab extends CreativeTabs {
 
 	public static final CreativeTab INSTANCE = new CreativeTab();
 
-	private CreativeTab() {
+	private CreativeTab () {
 		super(Soulus.MODID);
 	}
 
 	@Nonnull
 	@Override
-	public ItemStack getTabIconItem() {
+	public ItemStack getTabIconItem () {
 		ItemStack soulbook = ModItems.SOULBOOK.getItemStack();
 		Soulbook.setContainedEssence(soulbook, 1);
 		return soulbook;
 	}
 
 	@Override
-	public void displayAllRelevantItems(NonNullList<ItemStack> list) {
+	public void displayAllRelevantItems (NonNullList<ItemStack> list) {
 		for (IBlock block : ModBlocks.blocks) {
 			if (block.getCreativeTabToDisplayOn() == this) {
 				block.getSubBlocks(this, list);

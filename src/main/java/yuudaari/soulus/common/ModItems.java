@@ -15,6 +15,7 @@ import yuudaari.soulus.common.util.IProvidesJeiDescription;
 import yuudaari.soulus.common.util.ModItem;
 
 public class ModItems {
+
 	public static Barket BARKET = new Barket();
 	public static BoneChunkDry BONE_CHUNK_DRY = new BoneChunkDry();
 	public static BoneChunkEnder BONE_CHUNK_ENDER = new BoneChunkEnder();
@@ -61,55 +62,57 @@ public class ModItems {
 	public static Soulbook SOULBOOK = Soulbook.INSTANCE;
 	public static SoulCatalyst SOUL_CATALYST = new SoulCatalyst();
 
-	public static Item[] items = new Item[] { //
-			ASH, // 
-			BARK, // 
-			BARKET, //
-			BONE_CHUNK_DRY, //  
-			BONE_CHUNK_ENDER, // 
-			BONE_CHUNK_FROZEN, // 
-			BONE_CHUNK_FUNGAL, // 
-			BONE_CHUNK_NETHER, // 
-			BONE_CHUNK_NORMAL, // 
-			BONE_CHUNK_SCALE, // 
-			BONE_DRY, // 
-			BONE_ENDER, // 
-			BONE_FROZEN, //  
-			BONE_FUNGAL, // 
-			BONE_NETHER, //  
-			BONE_NORMAL, // 
-			BONE_SCALE, // 
-			BONEMEAL_ENDER, //
-			BONEMEAL_NETHER, // 
-			CRYSTAL_BLOOD_BROKEN, // 
-			CRYSTAL_BLOOD, // 
-			DUST_ENDER_IRON_ASHEN, // 
-			DUST_ENDER_IRON, //  
-			DUST_IRON, // 
-			DUST_STONE, // 
-			DUST_WOOD, // 
-			EMERALD_BURNT, // 
-			EMERALD_COATED, //  
-			ESSENCE, //  
-			GEAR_BONE_DRY, //  
-			GEAR_BONE_ENDER, // 
-			GEAR_BONE_FROZEN, //  
-			GEAR_BONE_FUNGAL, // 
-			GEAR_BONE_NETHER, //  
-			GEAR_BONE, //  
-			GEAR_OSCILLATING, // 
-			GLUE, // 
-			INGOT_ENDERSTEEL_DARK, // 
-			INGOT_ENDERSTEEL, // 
-			NUGGET_ENDERSTEEL_DARK, //
-			NUGGET_ENDERSTEEL, //
-			ORB_MURKY, // 
-			SLEDGEHAMMER, // 
-			SOUL_CATALYST, //
-			SOULBOOK //
+	public static Item[] items = new Item[] {
+		// @formatter:off
+		ASH,
+		BARK,
+		BARKET,
+		BONE_CHUNK_DRY, 
+		BONE_CHUNK_ENDER,
+		BONE_CHUNK_FROZEN,
+		BONE_CHUNK_FUNGAL,
+		BONE_CHUNK_NETHER,
+		BONE_CHUNK_NORMAL,
+		BONE_CHUNK_SCALE,
+		BONE_DRY,
+		BONE_ENDER,
+		BONE_FROZEN, 
+		BONE_FUNGAL,
+		BONE_NETHER, 
+		BONE_NORMAL,
+		BONE_SCALE,
+		BONEMEAL_ENDER,
+		BONEMEAL_NETHER,
+		CRYSTAL_BLOOD_BROKEN,
+		CRYSTAL_BLOOD,
+		DUST_ENDER_IRON_ASHEN,
+		DUST_ENDER_IRON, 
+		DUST_IRON,
+		DUST_STONE,
+		DUST_WOOD,
+		EMERALD_BURNT,
+		EMERALD_COATED, 
+		ESSENCE, 
+		GEAR_BONE_DRY, 
+		GEAR_BONE_ENDER,
+		GEAR_BONE_FROZEN, 
+		GEAR_BONE_FUNGAL,
+		GEAR_BONE_NETHER, 
+		GEAR_BONE, 
+		GEAR_OSCILLATING,
+		GLUE,
+		INGOT_ENDERSTEEL_DARK,
+		INGOT_ENDERSTEEL,
+		NUGGET_ENDERSTEEL_DARK,
+		NUGGET_ENDERSTEEL,
+		ORB_MURKY,
+		SLEDGEHAMMER,
+		SOUL_CATALYST,
+		SOULBOOK
+		// @formatter:on
 	};
 
-	public static void registerItems(IForgeRegistry<Item> registry) {
+	public static void registerItems (IForgeRegistry<Item> registry) {
 		OreDictionary.registerOre("bonemeal", new ItemStack(Items.DYE, 1, 15));
 
 		for (Item item : items) {
@@ -123,21 +126,21 @@ public class ModItems {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static void registerModels() {
+	public static void registerModels () {
 		for (Item item : items) {
 			if (item instanceof IModThing)
 				((IModThing) item).registerModels();
 		}
 	}
 
-	public static void registerRecipes(IForgeRegistry<IRecipe> registry) {
+	public static void registerRecipes (IForgeRegistry<IRecipe> registry) {
 		for (Item item : items) {
 			if (item instanceof IModThing)
 				((IModThing) item).onRegisterRecipes(registry);
 		}
 	}
 
-	public static void registerDescriptions(JeiDescriptionRegistry registry) {
+	public static void registerDescriptions (JeiDescriptionRegistry registry) {
 		for (Item item : items) {
 			if (item instanceof IProvidesJeiDescription)
 				((IProvidesJeiDescription) item).onRegisterDescription(registry);

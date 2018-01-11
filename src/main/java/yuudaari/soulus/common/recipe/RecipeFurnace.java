@@ -12,7 +12,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IRecipeFactory;
 import net.minecraftforge.common.crafting.JsonContext;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
@@ -23,39 +22,39 @@ public class RecipeFurnace implements IRecipe {
 
 	private ResourceLocation name;
 
-	public boolean canFit(int width, int height) {
+	public boolean canFit (int width, int height) {
 		return true;
 	}
 
-	public RecipeFurnace setRegistryName(ResourceLocation name) {
+	public RecipeFurnace setRegistryName (ResourceLocation name) {
 		this.name = name;
 		return this;
 	}
 
-	public ResourceLocation getRegistryName() {
+	public ResourceLocation getRegistryName () {
 		return name;
 	}
 
-	public ItemStack getRecipeOutput() {
+	public ItemStack getRecipeOutput () {
 		return new ItemStack(Items.AIR);
 	}
 
-	public boolean matches(InventoryCrafting inv, World world) {
+	public boolean matches (InventoryCrafting inv, World world) {
 		return false;
 	}
 
-	public ItemStack getCraftingResult(InventoryCrafting inv) {
+	public ItemStack getCraftingResult (InventoryCrafting inv) {
 		return new ItemStack(Items.AIR);
 	}
 
-	public Class<IRecipe> getRegistryType() {
+	public Class<IRecipe> getRegistryType () {
 		return IRecipe.class;
 	}
 
 	public static class Factory implements IRecipeFactory {
 
 		@Override
-		public IRecipe parse(JsonContext context, JsonObject json) {
+		public IRecipe parse (JsonContext context, JsonObject json) {
 			if (json.has("override")) {
 				// remove all furnace recipes that match 
 				Ingredient ing = CraftingHelper.getIngredient(JsonUtils.getJsonObject(json, "override"), context);

@@ -11,11 +11,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ParticleMobPoof extends Particle {
+
 	private final float oSize;
 	private boolean hasHitGround;
 
-	protected ParticleMobPoof(World worldIn, double x, double y, double z, double xSpeed, double ySpeed,
-			double zSpeed) {
+	protected ParticleMobPoof (World worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
 		super(worldIn, x, y, z, xSpeed, ySpeed, zSpeed);
 		this.motionX = xSpeed;
 		this.motionY = ySpeed;
@@ -30,7 +30,7 @@ public class ParticleMobPoof extends Particle {
 		this.hasHitGround = false;
 	}
 
-	public void onUpdate() {
+	public void onUpdate () {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
@@ -68,17 +68,16 @@ public class ParticleMobPoof extends Particle {
 	/**
 	 * Renders the particle
 	 */
-	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX,
-			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+	public void renderParticle (BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		this.particleScale = this.oSize * MathHelper
-				.clamp(((float) this.particleAge + partialTicks) / (float) this.particleMaxAge * 32.0F, 0.0F, 1.0F);
+			.clamp(((float) this.particleAge + partialTicks) / (float) this.particleMaxAge * 32.0F, 0.0F, 1.0F);
 		super.renderParticle(buffer, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
 	}
 
 	@SideOnly(Side.CLIENT)
 	public static class Factory implements IParticleFactory {
-		public Particle createParticle(int particleID, World worldIn, double xCoordIn, double yCoordIn, double zCoordIn,
-				double xSpeedIn, double ySpeedIn, double zSpeedIn, int... p_178902_15_) {
+
+		public Particle createParticle (int particleID, World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, int... p_178902_15_) {
 			return new ParticleMobPoof(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
 		}
 	}

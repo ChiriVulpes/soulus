@@ -21,11 +21,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -39,7 +37,8 @@ public class OrbMurky extends SummonerUpgrade {
 	public int requiredEssence = 128;
 
 	public static class OrbMurkyFillRecipe extends ShapelessOreRecipe {
-		public static NonNullList<Ingredient> getIngredients(int size) {
+
+		public static NonNullList<Ingredient> getIngredients (int size) {
 
 			List<Ingredient> ingredients = new ArrayList<>();
 
@@ -49,21 +48,21 @@ public class OrbMurky extends SummonerUpgrade {
 			return NonNullList.from(Ingredient.EMPTY, ingredients.toArray(new Ingredient[0]));
 		}
 
-		public OrbMurkyFillRecipe(ResourceLocation name, int size) {
+		public OrbMurkyFillRecipe (ResourceLocation name, int size) {
 			super(new ResourceLocation(""), getIngredients(size), INSTANCE.getFilledStack());
 			setRegistryName(name + "" + size);
 		}
 
 		@ParametersAreNonnullByDefault
 		@Override
-		public boolean matches(InventoryCrafting inv, World worldIn) {
+		public boolean matches (InventoryCrafting inv, World worldIn) {
 			return getCraftingResult(inv) != null;
 		}
 
 		@ParametersAreNonnullByDefault
 		@Nullable
 		@Override
-		public ItemStack getCraftingResult(InventoryCrafting inv) {
+		public ItemStack getCraftingResult (InventoryCrafting inv) {
 			int essenceCount = 0;
 			ItemStack orb = null;
 			int containedEssence = 0;
@@ -94,67 +93,67 @@ public class OrbMurky extends SummonerUpgrade {
 		}
 	}
 
-	public OrbMurky() {
+	public OrbMurky () {
 		super("orb_murky");
 		setHasDescription();
 	}
 
 	@Override
-	public void onRegisterRecipes(IForgeRegistry<IRecipe> registry) {
+	public void onRegisterRecipes (IForgeRegistry<IRecipe> registry) {
 		registry.registerAll( //
-				new OrbMurkyFillRecipe(getRegistryName(), 2), //
-				new OrbMurkyFillRecipe(getRegistryName(), 3) //
+			new OrbMurkyFillRecipe(getRegistryName(), 2), //
+			new OrbMurkyFillRecipe(getRegistryName(), 3) //
 		);
 	}
 
 	@Override
-	public int getItemStackLimit(ItemStack stack) {
+	public int getItemStackLimit (ItemStack stack) {
 		// if it's full, allow them to be stacked
 		return getContainedEssence(stack) == requiredEssence ? 16 : 1;
 	}
 
 	@Override
-	public ItemStack getFilledStack() {
+	public ItemStack getFilledStack () {
 		return getStack(requiredEssence);
 	}
 
-	public ItemStack getStack(int essence) {
+	public ItemStack getStack (int essence) {
 		ItemStack stack = new ItemStack(this);
 		setContainedEssence(stack, essence);
 		return stack;
 	}
 
 	@Override
-	public ItemStack getItemStack() {
+	public ItemStack getItemStack () {
 		return getStack(0);
 	}
 
 	@Override
-	public boolean hasEffect(ItemStack stack) {
+	public boolean hasEffect (ItemStack stack) {
 		return getContainedEssence(stack) == requiredEssence;
 	}
 
 	@Nonnull
 	@Override
-	public String getUnlocalizedNameInefficiently(@Nonnull ItemStack stack) {
+	public String getUnlocalizedNameInefficiently (@Nonnull ItemStack stack) {
 		String result = super.getUnlocalizedNameInefficiently(stack);
 		int containedEssence = getContainedEssence(stack);
 		return containedEssence == requiredEssence ? result + ".filled" : result;
 	}
 
 	@Override
-	public boolean showDurabilityBar(ItemStack stack) {
+	public boolean showDurabilityBar (ItemStack stack) {
 		int containedEssence = getContainedEssence(stack);
 		return containedEssence < requiredEssence;
 	}
 
 	@Override
-	public double getDurabilityForDisplay(ItemStack stack) {
+	public double getDurabilityForDisplay (ItemStack stack) {
 		int containedEssence = getContainedEssence(stack);
 		return (1 - containedEssence / (double) requiredEssence);
 	}
 
-	public static int getContainedEssence(ItemStack stack) {
+	public static int getContainedEssence (ItemStack stack) {
 		NBTTagCompound tag = stack.getTagCompound();
 		if (tag != null && tag.hasKey("essence_quantity", 3)) {
 			return tag.getInteger("essence_quantity");
@@ -162,11 +161,11 @@ public class OrbMurky extends SummonerUpgrade {
 		return 0;
 	}
 
-	public static boolean isFilled(ItemStack stack) {
+	public static boolean isFilled (ItemStack stack) {
 		return getContainedEssence(stack) >= INSTANCE.requiredEssence;
 	}
 
-	public static ItemStack setContainedEssence(ItemStack stack, int count) {
+	public static ItemStack setContainedEssence (ItemStack stack, int count) {
 		NBTTagCompound tag = stack.getTagCompound();
 		if (tag == null) {
 			tag = new NBTTagCompound();
@@ -176,12 +175,12 @@ public class OrbMurky extends SummonerUpgrade {
 		return stack;
 	}
 
-	public static ItemStack setFilled(ItemStack stack) {
+	public static ItemStack setFilled (ItemStack stack) {
 		return setContainedEssence(stack, INSTANCE.requiredEssence);
 	}
 
 	@Override
-	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+	public void getSubItems (CreativeTabs tab, NonNullList<ItemStack> items) {
 		if (this.isInCreativeTab(tab)) {
 			items.add(this.getItemStack());
 			items.add(this.getFilledStack());
@@ -190,11 +189,11 @@ public class OrbMurky extends SummonerUpgrade {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+	public void addInformation (ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		int containedEssence = OrbMurky.getContainedEssence(stack);
 		if (containedEssence < requiredEssence) {
-			tooltip.add(I18n.format("tooltip." + Soulus.MODID + ":orb_murky.contained_essence", containedEssence,
-					requiredEssence));
+			tooltip.add(I18n
+				.format("tooltip." + Soulus.MODID + ":orb_murky.contained_essence", containedEssence, requiredEssence));
 		}
 	}
 }

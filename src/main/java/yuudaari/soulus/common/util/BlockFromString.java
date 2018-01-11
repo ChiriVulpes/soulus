@@ -2,13 +2,13 @@ package yuudaari.soulus.common.util;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 
 public class BlockFromString {
+
 	@SuppressWarnings("deprecation")
-	public static IBlockState get(String name) {
+	public static IBlockState get (String name) {
 		Matcher matcher = Pattern.compile("@(\\d+)$").matcher(name);
 		int metadata = -1;
 		if (matcher.find()) {

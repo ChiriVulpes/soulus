@@ -3,7 +3,6 @@ package yuudaari.soulus.common.util;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
-
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.block.BlockPane;
@@ -14,39 +13,40 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 
 public class ModBlockPane extends BlockPane implements IBlock {
+
 	private String name;
 	private List<String> oreDicts = new ArrayList<>();
 	private Boolean hasItem = false;
 	private ItemBlock itemBlock;
 
-	public ModBlockPane(String name, Material material) {
+	public ModBlockPane (String name, Material material) {
 		super(material, true);
 		setName(name);
 		setCreativeTab(CreativeTab.INSTANCE);
 	}
 
-	public String getName() {
+	public String getName () {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName (String name) {
 		this.name = name;
 		setRegistryName(Soulus.MODID, name);
 		setUnlocalizedName(getRegistryName().toString());
 	}
 
-	public ModBlockPane addOreDict(String... name) {
+	public ModBlockPane addOreDict (String... name) {
 		for (String dict : name)
 			oreDicts.add(dict);
 
 		return this;
 	}
 
-	public List<String> getOreDicts() {
+	public List<String> getOreDicts () {
 		return oreDicts;
 	}
 
-	public void setHasItem() {
+	public void setHasItem () {
 		if (!hasItem) {
 			hasItem = true;
 			itemBlock = new ItemBlock(this);
@@ -54,39 +54,39 @@ public class ModBlockPane extends BlockPane implements IBlock {
 		}
 	}
 
-	public boolean hasItem() {
+	public boolean hasItem () {
 		return hasItem;
 	}
 
-	public ItemBlock getItemBlock() {
+	public ItemBlock getItemBlock () {
 		if (!hasItem)
 			throw new IllegalArgumentException("This block has no registered item");
 		return itemBlock;
 	}
 
-	public Class<? extends TileEntity> getTileEntityClass() {
+	public Class<? extends TileEntity> getTileEntityClass () {
 		return null;
 	}
 
 	@Override
-	public CreativeTab getCreativeTabToDisplayOn() {
+	public CreativeTab getCreativeTabToDisplayOn () {
 		return CreativeTab.INSTANCE;
 	}
 
 	@Override
-	public void getSubBlocks(CreativeTab itemIn, NonNullList<ItemStack> items) {
+	public void getSubBlocks (CreativeTab itemIn, NonNullList<ItemStack> items) {
 		items.add(new ItemStack(this));
 	}
 
 	public boolean hasDescription = false;
 
-	public ModBlockPane setHasDescription() {
+	public ModBlockPane setHasDescription () {
 		hasDescription = true;
 		return this;
 	}
 
 	@Override
-	public void onRegisterDescription(JeiDescriptionRegistry registry) {
+	public void onRegisterDescription (JeiDescriptionRegistry registry) {
 		if (hasDescription)
 			registry.add(this.getItemStack());
 	}

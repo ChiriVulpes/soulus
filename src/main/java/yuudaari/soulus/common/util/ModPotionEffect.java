@@ -2,26 +2,25 @@ package yuudaari.soulus.common.util;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import yuudaari.soulus.common.config.ManualSerializer;
 
 public class ModPotionEffect extends PotionEffect {
-	public static ManualSerializer serializer = new ManualSerializer(ModPotionEffect::serialize,
-			ModPotionEffect::deserialize);
+
+	public static ManualSerializer serializer = new ManualSerializer(ModPotionEffect::serialize, ModPotionEffect::deserialize);
 
 	private final String effect;
 	private final int duration;
 
-	public ModPotionEffect(String which, int duration) {
+	public ModPotionEffect (String which, int duration) {
 		super(ForgeRegistries.POTIONS.getValue(new ResourceLocation(which)), duration);
 		this.effect = which;
 		this.duration = duration;
 	}
 
-	public static JsonElement serialize(Object from) {
+	public static JsonElement serialize (Object from) {
 		ModPotionEffect effect = (ModPotionEffect) from;
 
 		JsonObject result = new JsonObject();
@@ -32,7 +31,7 @@ public class ModPotionEffect extends PotionEffect {
 		return result;
 	}
 
-	public static Object deserialize(JsonElement from, Object current) {
+	public static Object deserialize (JsonElement from, Object current) {
 		if (from == null || !from.isJsonObject()) {
 			Logger.warn("Must be a json object");
 			return current;

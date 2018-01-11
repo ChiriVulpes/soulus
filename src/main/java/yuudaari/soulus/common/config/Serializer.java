@@ -16,11 +16,13 @@ import yuudaari.soulus.common.util.Logger;
 public class Serializer<T> {
 
 	public static interface SerializeOtherHandler {
-		public JsonElement serialize(Object obj);
+
+		public JsonElement serialize (Object obj);
 	}
 
 	public static interface DeserializeOtherHandler {
-		public Object deserialize(JsonElement json, Object current);
+
+		public Object deserialize (JsonElement json, Object current);
 	}
 
 	public Class<T> targetClass;
@@ -31,21 +33,20 @@ public class Serializer<T> {
 	public Map<String, Serializer<?>> fieldHandlers = new HashMap<>();
 	public Map<String, Serializer<?>> otherHandlers = new HashMap<>();
 
-	public Serializer() {
-	}
+	public Serializer () {}
 
-	public Serializer(Class<T> cls, String... primitiveFields) {
+	public Serializer (Class<T> cls, String... primitiveFields) {
 		this.targetClass = cls;
 		this.fields.addAll(Arrays.asList(primitiveFields));
 	}
 
-	public Serializer(Class<T> cls, Map<String, Serializer<?>> handlers, String... primitiveFields) {
+	public Serializer (Class<T> cls, Map<String, Serializer<?>> handlers, String... primitiveFields) {
 		this.targetClass = cls;
 		this.fields.addAll(Arrays.asList(primitiveFields));
 		this.fieldHandlers = handlers;
 	}
 
-	public JsonElement serialize(Object from) {
+	public JsonElement serialize (Object from) {
 		JsonObject result = new JsonObject();
 
 		// serialize primitive fields
@@ -61,8 +62,8 @@ public class Serializer<T> {
 			Class<?> type = field.getType();
 
 			if (!isPrimitiveType(type)) {
-				Logger.warn("Field '" + fieldName + "' is not a primitive ('" + type.getName()
-						+ "'), it can't be serialized");
+				Logger.warn("Field '" + fieldName + "' is not a primitive ('" + type
+					.getName() + "'), it can't be serialized");
 				continue;
 			}
 
@@ -117,7 +118,7 @@ public class Serializer<T> {
 		return result;
 	}
 
-	public T deserialize(JsonElement from) {
+	public T deserialize (JsonElement from) {
 		T into = null;
 		try {
 			into = targetClass.newInstance();
@@ -130,7 +131,7 @@ public class Serializer<T> {
 		return into;
 	}
 
-	public Object deserialize(JsonElement from, Object into) {
+	public Object deserialize (JsonElement from, Object into) {
 		Logger.scopes.add(targetClass.getSimpleName());
 
 		if (into != null) {
@@ -227,7 +228,7 @@ public class Serializer<T> {
 		return into;
 	}
 
-	private Object getAsType(JsonElement jsonElement, Class<?> type) {
+	private Object getAsType (JsonElement jsonElement, Class<?> type) {
 		if (jsonElement != null) {
 
 			if (jsonElement.isJsonPrimitive()) {
@@ -263,7 +264,7 @@ public class Serializer<T> {
 		return null;
 	}
 
-	private static JsonPrimitive getPrimitive(Object val) {
+	private static JsonPrimitive getPrimitive (Object val) {
 		if (val instanceof String)
 			return new JsonPrimitive((String) val);
 		else if (val instanceof Boolean)
@@ -274,15 +275,14 @@ public class Serializer<T> {
 			return null;
 	}
 
-	private static boolean isPrimitiveType(Class<?> type) {
-		return type == String.class || type == Boolean.class || type == boolean.class
-				|| Number.class.isAssignableFrom(type) || type == int.class || type == short.class || type == byte.class
-				|| type == double.class || type == float.class;
+	private static boolean isPrimitiveType (Class<?> type) {
+		return type == String.class || type == Boolean.class || type == boolean.class || Number.class
+			.isAssignableFrom(type) || type == int.class || type == short.class || type == byte.class || type == double.class || type == float.class;
 	}
 
 	private static final Pattern camelCaseRegex = Pattern.compile("[A-Z]");
 
-	private static String toSnakeCase(String camelCase) {
+	private static String toSnakeCase (String camelCase) {
 		return stringReplaceAll(camelCase, camelCaseRegex, (Matcher matcher) -> {
 			String match = matcher.group();
 			return "_" + match.toLowerCase();
@@ -301,10 +301,11 @@ public class Serializer<T> {
 	*/
 
 	private static interface ReplaceHandler {
-		public String handle(Matcher matcher);
+
+		public String handle (Matcher matcher);
 	}
 
-	private static String stringReplaceAll(String string, Pattern pattern, ReplaceHandler handler) {
+	private static String stringReplaceAll (String string, Pattern pattern, ReplaceHandler handler) {
 		Matcher matcher = pattern.matcher(string);
 		StringBuffer buffer = new StringBuffer();
 		while (matcher.find()) {

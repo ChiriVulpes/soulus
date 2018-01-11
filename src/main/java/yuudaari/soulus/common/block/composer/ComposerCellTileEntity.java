@@ -18,17 +18,17 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 	public int storedQuantity;
 
 	@Override
-	public ComposerCell getBlock() {
+	public ComposerCell getBlock () {
 		return ComposerCell.INSTANCE;
 	}
 
 	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+	public boolean shouldRefresh (World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
 		return oldState.getBlock() != newState.getBlock();
 	}
 
 	@Override
-	public void update() {
+	public void update () {
 		changeComposerCooldown--;
 
 		double diff = itemRotation - prevItemRotation;
@@ -36,7 +36,7 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 		itemRotation = itemRotation + 0.05F + diff * 0.8;
 	}
 
-	public void onChangeItem() {
+	public void onChangeItem () {
 		if (composerLocation == null)
 			return;
 		TileEntity te = world.getTileEntity(composerLocation);
@@ -47,12 +47,13 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 			changeItemHandler.handle(this);
 	}
 
-	public void onChangeItem(ChangeItemHandler handler) {
+	public void onChangeItem (ChangeItemHandler handler) {
 		changeItemHandler = handler;
 	}
 
 	public static interface ChangeItemHandler {
-		public Boolean handle(ComposerCellTileEntity ccte);
+
+		public Boolean handle (ComposerCellTileEntity ccte);
 	}
 
 	/////////////////////////////////////////
@@ -60,7 +61,7 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 	//
 
 	@Override
-	public void onWriteToNBT(NBTTagCompound compound) {
+	public void onWriteToNBT (NBTTagCompound compound) {
 		compound.setBoolean("has_composer", composerLocation != null);
 
 		if (composerLocation != null) {
@@ -79,10 +80,10 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 	}
 
 	@Override
-	public void onReadFromNBT(NBTTagCompound compound) {
+	public void onReadFromNBT (NBTTagCompound compound) {
 		if (compound.getBoolean("has_composer")) {
-			composerLocation = new BlockPos(compound.getInteger("composer_x"), compound.getInteger("composer_y"),
-					compound.getInteger("composer_z"));
+			composerLocation = new BlockPos(compound.getInteger("composer_x"), compound
+				.getInteger("composer_y"), compound.getInteger("composer_z"));
 		}
 
 		storedQuantity = compound.getInteger("stored_quantity");
@@ -103,17 +104,17 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 	private double prevItemRotation = 0;
 
 	@Override
-	public double getItemRotation() {
+	public double getItemRotation () {
 		return itemRotation;
 	}
 
 	@Override
-	public double getPrevItemRotation() {
+	public double getPrevItemRotation () {
 		return prevItemRotation;
 	}
 
 	@Override
-	public ItemStack getStoredItem() {
+	public ItemStack getStoredItem () {
 		return storedItem;
 	}
 }

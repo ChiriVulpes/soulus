@@ -30,17 +30,17 @@ import yuudaari.soulus.common.recipe.RecipeComposerShapeless;
 public class Jei implements IModPlugin {
 
 	@Override
-	public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
+	public void registerItemSubtypes (ISubtypeRegistry subtypeRegistry) {
 		subtypeRegistry.registerSubtypeInterpreter(Essence.INSTANCE, new SubtypeInterpreterEssence());
 	}
 
 	@Override
-	public void registerCategories(IRecipeCategoryRegistration registry) {
+	public void registerCategories (IRecipeCategoryRegistration registry) {
 		registry.addRecipeCategories(new RecipeCategoryComposer(registry.getJeiHelpers().getGuiHelper()));
 	}
 
 	@Override
-	public void register(IModRegistry registry) {
+	public void register (IModRegistry registry) {
 
 		JeiDescriptionRegistry descriptionRegistry = new JeiDescriptionRegistry();
 
@@ -58,14 +58,14 @@ public class Jei implements IModPlugin {
 		registry.handleRecipes(RecipeComposerShaped.class, RecipeWrapperComposer::new, RecipeCategoryComposer.UID);
 		registry.handleRecipes(RecipeComposerShapeless.class, RecipeWrapperComposer::new, RecipeCategoryComposer.UID);
 
-		registry.handleRecipes(ShapedOreRecipe.class, recipe -> new ShapedOreRecipeWrapper(jeiHelpers, recipe),
-				RecipeCategoryComposer.UID);
-		registry.handleRecipes(ShapedRecipes.class, recipe -> new ShapedRecipesWrapper(jeiHelpers, recipe),
-				RecipeCategoryComposer.UID);
-		registry.handleRecipes(ShapelessOreRecipe.class, recipe -> new ShapelessRecipeWrapper<>(jeiHelpers, recipe),
-				RecipeCategoryComposer.UID);
-		registry.handleRecipes(ShapelessRecipes.class, recipe -> new ShapelessRecipeWrapper<>(jeiHelpers, recipe),
-				RecipeCategoryComposer.UID);
+		registry
+			.handleRecipes(ShapedOreRecipe.class, recipe -> new ShapedOreRecipeWrapper(jeiHelpers, recipe), RecipeCategoryComposer.UID);
+		registry
+			.handleRecipes(ShapedRecipes.class, recipe -> new ShapedRecipesWrapper(jeiHelpers, recipe), RecipeCategoryComposer.UID);
+		registry
+			.handleRecipes(ShapelessOreRecipe.class, recipe -> new ShapelessRecipeWrapper<>(jeiHelpers, recipe), RecipeCategoryComposer.UID);
+		registry
+			.handleRecipes(ShapelessRecipes.class, recipe -> new ShapelessRecipeWrapper<>(jeiHelpers, recipe), RecipeCategoryComposer.UID);
 
 		registry.addRecipes(ForgeRegistries.RECIPES.getValues(), RecipeCategoryComposer.UID);
 

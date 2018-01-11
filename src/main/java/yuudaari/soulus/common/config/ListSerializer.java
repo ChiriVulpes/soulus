@@ -8,7 +8,7 @@ import yuudaari.soulus.common.util.Logger;
 public class ListSerializer extends Serializer<List<String>> {
 
 	@Override
-	public JsonElement serialize(Object obj) {
+	public JsonElement serialize (Object obj) {
 		@SuppressWarnings("unchecked")
 		List<String> list = (List<String>) obj;
 
@@ -20,7 +20,7 @@ public class ListSerializer extends Serializer<List<String>> {
 	}
 
 	@Override
-	public List<String> deserialize(JsonElement listElement, Object currentObject) {
+	public List<String> deserialize (JsonElement listElement, Object currentObject) {
 		@SuppressWarnings("unchecked")
 		List<String> list = (List<String>) currentObject;
 

@@ -2,9 +2,7 @@ package yuudaari.soulus.common.recipe.ingredient;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.google.gson.JsonObject;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.IIngredientFactory;
@@ -18,7 +16,7 @@ public class IngredientPotentialEssence extends Ingredient {
 
 	public static IngredientPotentialEssence INSTANCE = new IngredientPotentialEssence();
 
-	public static ItemStack[] getMatchingStacks1(boolean justEssence) {
+	public static ItemStack[] getMatchingStacks1 (boolean justEssence) {
 		List<ItemStack> stacks = new ArrayList<>();
 
 		if (!justEssence) {
@@ -35,28 +33,29 @@ public class IngredientPotentialEssence extends Ingredient {
 		return stacks.toArray(new ItemStack[0]);
 	}
 
-	public IngredientPotentialEssence() {
+	public IngredientPotentialEssence () {
 		this(false);
 	}
 
-	public IngredientPotentialEssence(boolean justEssence) {
+	public IngredientPotentialEssence (boolean justEssence) {
 		super(getMatchingStacks1(justEssence));
 	}
 
 	@Override
-	public boolean apply(ItemStack input) {
-		return input == null || input.isEmpty() || input.getItem() == ModItems.ESSENCE
-				|| input.getItem() == ModItems.ASH;
+	public boolean apply (ItemStack input) {
+		return input == null || input.isEmpty() || input.getItem() == ModItems.ESSENCE || input
+			.getItem() == ModItems.ASH;
 	}
 
 	@Override
-	public boolean isSimple() {
+	public boolean isSimple () {
 		return false;
 	}
 
 	public static class Factory implements IIngredientFactory {
+
 		@Override
-		public Ingredient parse(JsonContext context, JsonObject json) {
+		public Ingredient parse (JsonContext context, JsonObject json) {
 			return new IngredientPotentialEssence();
 		}
 	}

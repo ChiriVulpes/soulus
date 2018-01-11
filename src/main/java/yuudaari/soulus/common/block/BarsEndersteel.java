@@ -2,34 +2,24 @@ package yuudaari.soulus.common.block;
 
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.ModBlockPane;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 
 /*
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import yuudaari.soulus.common.CreativeTab;
-*/
+ * import net.minecraft.block.state.BlockStateContainer; import net.minecraft.block.state.IBlockState; import
+ * net.minecraft.client.renderer.block.model.ModelResourceLocation; import net.minecraft.entity.player.EntityPlayer;
+ * import net.minecraft.item.ItemStack; import net.minecraft.util.EnumFacing; import net.minecraft.util.EnumHand; import
+ * net.minecraft.util.NonNullList; import net.minecraft.util.math.BlockPos; import net.minecraft.world.World; import
+ * net.minecraftforge.client.model.ModelLoader; import java.util.ArrayList; import java.util.List; import
+ * yuudaari.soulus.common.CreativeTab;
+ */
 public class BarsEndersteel extends ModBlockPane {
+
 	public static final IProperty<EndersteelType> VARIANT = PropertyEnum.create("variant", EndersteelType.class);
 
-	public BarsEndersteel() {
+	public BarsEndersteel () {
 		super("bars_endersteel", new Material(MapColor.GRASS));
 		setHasItem();
 		setHardness(5F);

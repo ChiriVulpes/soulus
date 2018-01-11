@@ -9,9 +9,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.common.block.composer.ComposerTileEntity;
 
 public class MobPoofHandler implements IMessageHandler<MobPoof, IMessage> {
+
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IMessage onMessage(MobPoof message, MessageContext ctx) {
+	public IMessage onMessage (MobPoof message, MessageContext ctx) {
 		ComposerTileEntity.mobPoofParticles(Minecraft.getMinecraft().world, message.getPos());
 		return null;
 	}

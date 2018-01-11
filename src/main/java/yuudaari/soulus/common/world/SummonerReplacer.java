@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTBase;
@@ -36,10 +35,9 @@ public class SummonerReplacer {
 
 	public static class SummonerReplacerStructureConfig {
 
-		public static ManualSerializer serializer = new ManualSerializer(SummonerReplacerStructureConfig::serialize,
-				SummonerReplacerStructureConfig::deserialize);
+		public static ManualSerializer serializer = new ManualSerializer(SummonerReplacerStructureConfig::serialize, SummonerReplacerStructureConfig::deserialize);
 
-		public static JsonElement serialize(Object obj) {
+		public static JsonElement serialize (Object obj) {
 			JsonObject result = new JsonObject();
 
 			SummonerReplacerStructureConfig config = (SummonerReplacerStructureConfig) obj;
@@ -50,7 +48,7 @@ public class SummonerReplacer {
 			return result;
 		}
 
-		public static Object deserialize(JsonElement json, Object current) {
+		public static Object deserialize (JsonElement json, Object current) {
 			if (json == null || !(json instanceof JsonObject)) {
 				Logger.error("summonerReplacer[structure]", "Must be an object");
 				return current;
@@ -62,9 +60,10 @@ public class SummonerReplacer {
 			structureConfig.endersteelTypesByCreature.clear();
 
 			for (Map.Entry<String, JsonElement> creatureConfig : config.entrySet()) {
-				Optional<EndersteelType> endersteelType = Arrays.asList(EndersteelType.values()).stream()
-						.filter(type -> type.getName().equalsIgnoreCase(creatureConfig.getValue().getAsString()))
-						.findFirst();
+				Optional<EndersteelType> endersteelType = Arrays.asList(EndersteelType.values())
+					.stream()
+					.filter(type -> type.getName().equalsIgnoreCase(creatureConfig.getValue().getAsString()))
+					.findFirst();
 				if (endersteelType.isPresent()) {
 					structureConfig.endersteelTypesByCreature.put(creatureConfig.getKey(), endersteelType.get());
 				}
@@ -75,16 +74,15 @@ public class SummonerReplacer {
 
 		public Map<String, EndersteelType> endersteelTypesByCreature = new HashMap<>();
 
-		public SummonerReplacerStructureConfig addCreatureReplacement(String creature, EndersteelType type) {
+		public SummonerReplacerStructureConfig addCreatureReplacement (String creature, EndersteelType type) {
 			endersteelTypesByCreature.put(creature, type);
 			return this;
 		}
 	}
 
-	public static ManualSerializer serializer = new ManualSerializer(SummonerReplacer::serialize,
-			SummonerReplacer::deserialize);
+	public static ManualSerializer serializer = new ManualSerializer(SummonerReplacer::serialize, SummonerReplacer::deserialize);
 
-	public static JsonElement serialize(Object obj) {
+	public static JsonElement serialize (Object obj) {
 		JsonObject result = new JsonObject();
 
 		SummonerReplacer config = (SummonerReplacer) obj;
@@ -95,7 +93,7 @@ public class SummonerReplacer {
 		return result;
 	}
 
-	public static Object deserialize(JsonElement json, Object current) {
+	public static Object deserialize (JsonElement json, Object current) {
 		if (json == null || !(json instanceof JsonObject)) {
 			Logger.error("creatures", "Must be an object");
 			return current;
@@ -107,9 +105,9 @@ public class SummonerReplacer {
 		summonerReplacer.structureConfigs.clear();
 
 		for (Map.Entry<String, JsonElement> dimensionConfig : config.entrySet()) {
-			summonerReplacer.structureConfigs.put(dimensionConfig.getKey(),
-					(SummonerReplacerStructureConfig) SummonerReplacerStructureConfig.serializer
-							.deserialize(dimensionConfig.getValue(), new SummonerReplacerStructureConfig()));
+			summonerReplacer.structureConfigs.put(dimensionConfig
+				.getKey(), (SummonerReplacerStructureConfig) SummonerReplacerStructureConfig.serializer
+					.deserialize(dimensionConfig.getValue(), new SummonerReplacerStructureConfig()));
 		}
 
 		return summonerReplacer;
@@ -117,14 +115,14 @@ public class SummonerReplacer {
 
 	public Map<String, SummonerReplacerStructureConfig> structureConfigs = new HashMap<>();
 	{
-		structureConfigs.put("*",
-				new SummonerReplacerStructureConfig().addCreatureReplacement("*", EndersteelType.NORMAL));
+		structureConfigs
+			.put("*", new SummonerReplacerStructureConfig().addCreatureReplacement("*", EndersteelType.NORMAL));
 	}
 
 	public static SummonerReplacer INSTANCE = new SummonerReplacer();
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public static void populateChunkPost(PopulateChunkEvent.Post event) {
+	public static void populateChunkPost (PopulateChunkEvent.Post event) {
 		World world = event.getWorld();
 		Chunk chunk = world.getChunkFromChunkCoords(event.getChunkX(), event.getChunkZ());
 		IChunkGenerator cg = event.getGenerator();
@@ -143,7 +141,7 @@ public class SummonerReplacer {
 				// Logger.info("found a spawner " + pos);
 				SummonerReplacerStructureConfig structureConfig = defaultStructureConfig;
 				for (Map.Entry<String, SummonerReplacerStructureConfig> structureConfigEntry : INSTANCE.structureConfigs
-						.entrySet()) {
+					.entrySet()) {
 					if (cg.isInsideStructure(world, GeneratorName.get(structureConfigEntry.getKey()), pos)) {
 						structureConfig = structureConfigEntry.getValue();
 					}
@@ -155,7 +153,7 @@ public class SummonerReplacer {
 				EndersteelType endersteelType = structureConfig.endersteelTypesByCreature.get(entityType);
 				if (endersteelType == null) {
 					endersteelType = structureConfig.endersteelTypesByCreature
-							.get(new ResourceLocation(entityType).getResourceDomain() + ":*");
+						.get(new ResourceLocation(entityType).getResourceDomain() + ":*");
 					if (endersteelType == null) {
 						endersteelType = structureConfig.endersteelTypesByCreature.get("*");
 						if (endersteelType == null) {
@@ -166,13 +164,13 @@ public class SummonerReplacer {
 
 				// Logger.info("endersteel type " + endersteelType);
 
-				world.setBlockState(pos,
-						Summoner.INSTANCE.getDefaultState().withProperty(Summoner.VARIANT, endersteelType), 7);
+				world.setBlockState(pos, Summoner.INSTANCE.getDefaultState()
+					.withProperty(Summoner.VARIANT, endersteelType), 7);
 			}
 		}
 	}
 
-	public static String getTheIdFromAStupidMobSpawnerTileEntity(TileEntity te) {
+	public static String getTheIdFromAStupidMobSpawnerTileEntity (TileEntity te) {
 		if (!(te instanceof TileEntityMobSpawner))
 			return null;
 

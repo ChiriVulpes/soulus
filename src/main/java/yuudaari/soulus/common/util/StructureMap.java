@@ -12,12 +12,12 @@ public class StructureMap {
 
 	public final Map<BlockPos, BlockValidator> blocks = new HashMap<>();
 
-	public StructureMap addBlock(int x, int y, int z, BlockValidator validator) {
+	public StructureMap addBlock (int x, int y, int z, BlockValidator validator) {
 		blocks.put(new BlockPos(x, y, z), validator);
 		return this;
 	}
 
-	public StructureMap addRowX(int x, int y, int z, int length, BlockValidator validator) {
+	public StructureMap addRowX (int x, int y, int z, int length, BlockValidator validator) {
 		for (int i = 0; i < length; i++) {
 			addBlock(x + i, y, z, validator);
 		}
@@ -25,7 +25,7 @@ public class StructureMap {
 		return this;
 	}
 
-	public StructureMap addRowZ(int x, int y, int z, int length, BlockValidator validator) {
+	public StructureMap addRowZ (int x, int y, int z, int length, BlockValidator validator) {
 		for (int i = 0; i < length; i++) {
 			addBlock(x, y, z + i, validator);
 		}
@@ -33,7 +33,7 @@ public class StructureMap {
 		return this;
 	}
 
-	public StructureMap addColumn(int x, int y, int z, int height, BlockValidator validator) {
+	public StructureMap addColumn (int x, int y, int z, int height, BlockValidator validator) {
 		for (int i = 0; i < height; i++) {
 			addBlock(x, y + i, z, validator);
 		}
@@ -41,7 +41,7 @@ public class StructureMap {
 		return this;
 	}
 
-	public boolean isValid(World world, BlockPos pos, EnumFacing facing) {
+	public boolean isValid (World world, BlockPos pos, EnumFacing facing) {
 		return loopBlocks(world, pos, facing, (BlockPos pos2, BlockValidator validator) -> {
 			if (!validator.validate(pos, world, pos2, world.getBlockState(pos2)))
 				return false;
@@ -49,11 +49,11 @@ public class StructureMap {
 		}, true);
 	}
 
-	public Boolean loopBlocks(World world, BlockPos pos, EnumFacing facing, BlockLoop loop) {
+	public Boolean loopBlocks (World world, BlockPos pos, EnumFacing facing, BlockLoop loop) {
 		return loopBlocks(world, pos, facing, loop, null);
 	}
 
-	public Boolean loopBlocks(World world, BlockPos pos, EnumFacing facing, BlockLoop loop, Boolean defaultResult) {
+	public Boolean loopBlocks (World world, BlockPos pos, EnumFacing facing, BlockLoop loop, Boolean defaultResult) {
 		EnumFacing z = facing;
 		EnumFacing x = rotateY(facing);
 		EnumFacing y = facing.rotateAround(x.getAxis());
@@ -71,13 +71,15 @@ public class StructureMap {
 	}
 
 	public static interface BlockLoop {
-		public Boolean handle(BlockPos pos, BlockValidator validator);
+
+		public Boolean handle (BlockPos pos, BlockValidator validator);
 	}
 
 	public static interface BlockValidator {
-		public boolean validate(BlockPos pos, World world, BlockPos checkPos, IBlockState state);
 
-		public static BlockValidator byBlockState(IBlockState... validStates) {
+		public boolean validate (BlockPos pos, World world, BlockPos checkPos, IBlockState state);
+
+		public static BlockValidator byBlockState (IBlockState... validStates) {
 			return (pos, world, checkPos, state) -> {
 				for (IBlockState validState : validStates)
 					if (state.equals(validState))
@@ -86,7 +88,7 @@ public class StructureMap {
 			};
 		}
 
-		public static BlockValidator byBlock(Block... validBlocks) {
+		public static BlockValidator byBlock (Block... validBlocks) {
 			return (pos, world, checkPos, state) -> {
 				for (Block validBlock : validBlocks)
 					if (state.getBlock().equals(validBlock))
@@ -96,7 +98,7 @@ public class StructureMap {
 		}
 	}
 
-	private EnumFacing rotateY(EnumFacing f) {
+	private EnumFacing rotateY (EnumFacing f) {
 		if (f == EnumFacing.DOWN || f == EnumFacing.UP)
 			return f;
 		return f.rotateY();

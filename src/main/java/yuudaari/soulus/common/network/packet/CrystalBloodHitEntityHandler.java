@@ -9,9 +9,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.common.item.CrystalBlood;
 
 public class CrystalBloodHitEntityHandler implements IMessageHandler<CrystalBloodHitEntity, IMessage> {
+
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IMessage onMessage(CrystalBloodHitEntity message, MessageContext ctx) {
+	public IMessage onMessage (CrystalBloodHitEntity message, MessageContext ctx) {
 		EntityLivingBase entity = message.getEntity();
 		if (entity != null) {
 			CrystalBlood.bloodParticles(entity);

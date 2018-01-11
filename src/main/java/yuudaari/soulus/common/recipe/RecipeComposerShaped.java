@@ -14,13 +14,10 @@ import net.minecraftforge.common.crafting.IRecipeFactory;
 import net.minecraftforge.common.crafting.CraftingHelper.ShapedPrimer;
 import yuudaari.soulus.common.block.composer.ComposerTileEntity;
 import net.minecraftforge.common.crafting.JsonContext;
-
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
-
 import javax.annotation.Nonnull;
-
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonArray;
@@ -29,6 +26,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 public class RecipeComposerShaped extends Recipe {
+
 	//Added in for future ease of change, but hard coded for now.
 	public static final int MAX_CRAFT_GRID_WIDTH = 3;
 	public static final int MAX_CRAFT_GRID_HEIGHT = 3;
@@ -40,19 +38,19 @@ public class RecipeComposerShaped extends Recipe {
 	protected int height = 0;
 	protected boolean mirrored = true;
 
-	public RecipeComposerShaped(Block result, Object... recipe) {
+	public RecipeComposerShaped (Block result, Object... recipe) {
 		this(new ItemStack(result), recipe);
 	}
 
-	public RecipeComposerShaped(Item result, Object... recipe) {
+	public RecipeComposerShaped (Item result, Object... recipe) {
 		this(new ItemStack(result), recipe);
 	}
 
-	public RecipeComposerShaped(@Nonnull ItemStack result, Object... recipe) {
+	public RecipeComposerShaped (@Nonnull ItemStack result, Object... recipe) {
 		this(result, CraftingHelper.parseShaped(recipe));
 	}
 
-	public RecipeComposerShaped(@Nonnull ItemStack result, ShapedPrimer primer) {
+	public RecipeComposerShaped (@Nonnull ItemStack result, ShapedPrimer primer) {
 		output = result.copy();
 		this.width = primer.width;
 		this.height = primer.height;
@@ -65,13 +63,13 @@ public class RecipeComposerShaped extends Recipe {
 	 */
 	@Override
 	@Nonnull
-	public ItemStack getCraftingResult(@Nonnull InventoryCrafting var1) {
+	public ItemStack getCraftingResult (@Nonnull InventoryCrafting var1) {
 		return output.copy();
 	}
 
 	@Override
 	@Nonnull
-	public ItemStack getRecipeOutput() {
+	public ItemStack getRecipeOutput () {
 		return output;
 	}
 
@@ -79,7 +77,7 @@ public class RecipeComposerShaped extends Recipe {
 	 * Used to check if a recipe matches current crafting inventory
 	 */
 	@Override
-	public boolean matches(@Nonnull InventoryCrafting inv, @Nonnull World world) {
+	public boolean matches (@Nonnull InventoryCrafting inv, @Nonnull World world) {
 		if (!(inv instanceof ComposerTileEntity.ComposerContainer.CraftingMatrix))
 			return false;
 
@@ -101,7 +99,7 @@ public class RecipeComposerShaped extends Recipe {
 	/**
 	 * Based on {@link net.minecraft.item.crafting.ShapedRecipes#checkMatch(InventoryCrafting, int, int, boolean)}
 	 */
-	protected boolean checkMatch(InventoryCrafting inv, int startX, int startY, boolean mirror) {
+	protected boolean checkMatch (InventoryCrafting inv, int startX, int startY, boolean mirror) {
 		for (int x = 0; x < MAX_CRAFT_GRID_WIDTH; x++) {
 			for (int y = 0; y < MAX_CRAFT_GRID_HEIGHT; y++) {
 				int subX = x - startX;
@@ -125,28 +123,28 @@ public class RecipeComposerShaped extends Recipe {
 		return true;
 	}
 
-	public RecipeComposerShaped setMirrored(boolean mirror) {
+	public RecipeComposerShaped setMirrored (boolean mirror) {
 		mirrored = mirror;
 		return this;
 	}
 
 	@Override
 	@Nonnull
-	public NonNullList<Ingredient> getIngredients() {
+	public NonNullList<Ingredient> getIngredients () {
 		return this.input;
 	}
 
-	public int getWidth() {
+	public int getWidth () {
 		return width;
 	}
 
-	public int getHeight() {
+	public int getHeight () {
 		return height;
 	}
 
 	@Override
 	@Nonnull
-	public String getGroup() {
+	public String getGroup () {
 		return this.group == null ? "" : this.group.toString();
 	}
 
@@ -154,19 +152,19 @@ public class RecipeComposerShaped extends Recipe {
 	 * Used to determine if this recipe can fit in a grid of the given width/height
 	 */
 	@Override
-	public boolean canFit(int width, int height) {
+	public boolean canFit (int width, int height) {
 		return width >= this.width && height >= this.height;
 	}
 
 	public static class Factory implements IRecipeFactory {
 
 		@Override
-		public IRecipe parse(JsonContext context, JsonObject json) {
+		public IRecipe parse (JsonContext context, JsonObject json) {
 			Map<Character, Ingredient> ingMap = Maps.newHashMap();
 			for (Entry<String, JsonElement> entry : JsonUtils.getJsonObject(json, "key").entrySet()) {
 				if (entry.getKey().length() != 1)
-					throw new JsonSyntaxException("Invalid key entry: '" + entry.getKey()
-							+ "' is an invalid symbol (must be 1 character only).");
+					throw new JsonSyntaxException("Invalid key entry: '" + entry
+						.getKey() + "' is an invalid symbol (must be 1 character only).");
 				if (" ".equals(entry.getKey()))
 					throw new JsonSyntaxException("Invalid key entry: ' ' is a reserved symbol.");
 
@@ -202,8 +200,7 @@ public class RecipeComposerShaped extends Recipe {
 				for (char chr : line.toCharArray()) {
 					Ingredient ing = ingMap.get(chr);
 					if (ing == null)
-						throw new JsonSyntaxException(
-								"Pattern references symbol '" + chr + "' but it's not defined in the key");
+						throw new JsonSyntaxException("Pattern references symbol '" + chr + "' but it's not defined in the key");
 					primer.input.set(x++, ing);
 					keys.remove(chr);
 				}

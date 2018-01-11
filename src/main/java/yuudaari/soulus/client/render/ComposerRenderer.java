@@ -13,18 +13,19 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ComposerRenderer<T extends HasRenderItemTileEntity> extends TileEntityRenderer<T> {
+
 	private Class<T> cls;
 
-	public ComposerRenderer(Class<T> cls) {
+	public ComposerRenderer (Class<T> cls) {
 		this.cls = cls;
 	}
 
-	public Class<T> getTileEntityClass() {
+	public Class<T> getTileEntityClass () {
 		return cls;
 	}
 
 	@Override
-	public void render(T te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+	public void render (T te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 
 		if (te.getStoredItem() == null)
 			return;
@@ -40,8 +41,8 @@ public class ComposerRenderer<T extends HasRenderItemTileEntity> extends TileEnt
 
 		GlStateManager.translate(.5, 1.25, .5);
 
-		float rotate = (float) (te.getPrevItemRotation()
-				+ (te.getItemRotation() - te.getPrevItemRotation()) * partialTicks);
+		float rotate = (float) (te
+			.getPrevItemRotation() + (te.getItemRotation() - te.getPrevItemRotation()) * partialTicks);
 		GlStateManager.translate(0, Math.sin(rotate / 5) / 20, 0);
 
 		GlStateManager.rotate(rotate * 10.0F, 0.0F, 1.0F, 0.0F);

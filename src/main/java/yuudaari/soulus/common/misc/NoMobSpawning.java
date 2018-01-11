@@ -5,10 +5,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -29,12 +27,12 @@ import yuudaari.soulus.common.util.Logger;
 
 @Mod.EventBusSubscriber
 public class NoMobSpawning {
+
 	public static NoMobSpawning INSTANCE = new NoMobSpawning();
 
-	public static ManualSerializer serializer = new ManualSerializer(NoMobSpawning::serialize,
-			NoMobSpawning::deserialize);
+	public static ManualSerializer serializer = new ManualSerializer(NoMobSpawning::serialize, NoMobSpawning::deserialize);
 
-	public static JsonElement serialize(Object obj) {
+	public static JsonElement serialize (Object obj) {
 		JsonObject result = new JsonObject();
 
 		NoMobSpawning config = (NoMobSpawning) obj;
@@ -45,7 +43,7 @@ public class NoMobSpawning {
 		return result;
 	}
 
-	public static Object deserialize(JsonElement json, Object current) {
+	public static Object deserialize (JsonElement json, Object current) {
 		if (json == null || !(json instanceof JsonObject)) {
 			Logger.error("creatures", "Must be an object");
 			return current;
@@ -58,7 +56,7 @@ public class NoMobSpawning {
 
 		for (Map.Entry<String, JsonElement> dimensionConfig : config.entrySet()) {
 			noMobSpawning.dimensionConfigs.put(dimensionConfig.getKey(), (DimensionConfig) DimensionConfig.serializer
-					.deserialize(dimensionConfig.getValue(), new DimensionConfig()));
+				.deserialize(dimensionConfig.getValue(), new DimensionConfig()));
 		}
 
 		return noMobSpawning;
@@ -66,10 +64,9 @@ public class NoMobSpawning {
 
 	public static class DimensionConfig {
 
-		public static ManualSerializer serializer = new ManualSerializer(DimensionConfig::serialize,
-				DimensionConfig::deserialize);
+		public static ManualSerializer serializer = new ManualSerializer(DimensionConfig::serialize, DimensionConfig::deserialize);
 
-		public static JsonElement serialize(Object obj) {
+		public static JsonElement serialize (Object obj) {
 			JsonObject result = new JsonObject();
 
 			DimensionConfig config = (DimensionConfig) obj;
@@ -80,7 +77,7 @@ public class NoMobSpawning {
 			return result;
 		}
 
-		public static Object deserialize(JsonElement json, Object current) {
+		public static Object deserialize (JsonElement json, Object current) {
 			if (json == null || !(json instanceof JsonObject)) {
 				Logger.error("dimension", "Must be an object");
 				return current;
@@ -92,8 +89,8 @@ public class NoMobSpawning {
 			dimensionConfig.biomeConfigs.clear();
 
 			for (Map.Entry<String, JsonElement> biomeConfig : config.entrySet()) {
-				dimensionConfig.biomeConfigs.put(biomeConfig.getKey(),
-						(BiomeConfig) BiomeConfig.serializer.deserialize(biomeConfig.getValue(), new BiomeConfig()));
+				dimensionConfig.biomeConfigs.put(biomeConfig.getKey(), (BiomeConfig) BiomeConfig.serializer
+					.deserialize(biomeConfig.getValue(), new BiomeConfig()));
 			}
 
 			return dimensionConfig;
@@ -101,10 +98,9 @@ public class NoMobSpawning {
 
 		public static class BiomeConfig {
 
-			public static ManualSerializer serializer = new ManualSerializer(BiomeConfig::serialize,
-					BiomeConfig::deserialize);
+			public static ManualSerializer serializer = new ManualSerializer(BiomeConfig::serialize, BiomeConfig::deserialize);
 
-			public static JsonElement serialize(Object obj) {
+			public static JsonElement serialize (Object obj) {
 				JsonObject result = new JsonObject();
 
 				BiomeConfig config = (BiomeConfig) obj;
@@ -115,7 +111,7 @@ public class NoMobSpawning {
 				return result;
 			}
 
-			public static Object deserialize(JsonElement json, Object current) {
+			public static Object deserialize (JsonElement json, Object current) {
 				if (json == null || !(json instanceof JsonObject)) {
 					Logger.error("dimension.biome", "Must be an object");
 					return current;
@@ -128,7 +124,7 @@ public class NoMobSpawning {
 
 				for (Map.Entry<String, JsonElement> creatureConfig : config.entrySet()) {
 					biomeConfig.creatureConfigs.put(creatureConfig.getKey(), (CreatureConfig) CreatureConfig.serializer
-							.deserialize(creatureConfig.getValue(), new CreatureConfig()));
+						.deserialize(creatureConfig.getValue(), new CreatureConfig()));
 				}
 
 				return biomeConfig;
@@ -147,24 +143,22 @@ public class NoMobSpawning {
 					public List<String> whitelistedDrops = new ArrayList<>();
 					public List<String> blacklistedDrops = new ArrayList<>();
 
-					public DropConfig() {
-					}
+					public DropConfig () {}
 
-					public DropConfig(boolean whitelistAll) {
+					public DropConfig (boolean whitelistAll) {
 						if (whitelistAll) {
 							whitelistedDrops.add("*");
 						}
 					}
 				}
 
-				public static Serializer<CreatureConfig> serializer = new Serializer<>(CreatureConfig.class,
-						"spawnChance");
+				public static Serializer<CreatureConfig> serializer = new Serializer<>(CreatureConfig.class, "spawnChance");
 				static {
-					serializer.fieldHandlers.put("drops",
-							new ManualSerializer(CreatureConfig::serializeDrops, CreatureConfig::deserializeDrops));
+					serializer.fieldHandlers
+						.put("drops", new ManualSerializer(CreatureConfig::serializeDrops, CreatureConfig::deserializeDrops));
 				}
 
-				public static JsonElement serializeDrops(Object obj) {
+				public static JsonElement serializeDrops (Object obj) {
 					JsonObject result = new JsonObject();
 
 					@SuppressWarnings("unchecked")
@@ -176,7 +170,7 @@ public class NoMobSpawning {
 					return result;
 				}
 
-				public static Object deserializeDrops(JsonElement json, Object current) {
+				public static Object deserializeDrops (JsonElement json, Object current) {
 					if (json == null || !(json instanceof JsonObject)) {
 						Logger.error("dimension.biome.drops", "Must be an object");
 						return current;
@@ -190,16 +184,15 @@ public class NoMobSpawning {
 
 					for (Map.Entry<String, JsonElement> dropConfig : config.entrySet()) {
 						drops.put(dropConfig.getKey(), (DropConfig) DropConfig.serializer
-								.deserialize(dropConfig.getValue(), new DropConfig()));
+							.deserialize(dropConfig.getValue(), new DropConfig()));
 					}
 
 					return drops;
 				}
 
-				public CreatureConfig() {
-				}
+				public CreatureConfig () {}
 
-				public CreatureConfig(double spawnChance) {
+				public CreatureConfig (double spawnChance) {
 					this.spawnChance = spawnChance;
 				}
 
@@ -207,7 +200,7 @@ public class NoMobSpawning {
 				public double spawnChance = 0;
 				public Map<String, DropConfig> drops = new HashMap<>();
 
-				public CreatureConfig setWhitelistedDrops(String spawnType, String... whitelistedDrops) {
+				public CreatureConfig setWhitelistedDrops (String spawnType, String... whitelistedDrops) {
 					DropConfig dc = drops.get(spawnType);
 					if (dc == null)
 						drops.put(spawnType, dc = new DropConfig());
@@ -215,7 +208,7 @@ public class NoMobSpawning {
 					return this;
 				}
 
-				public CreatureConfig setBlacklistedDrops(String spawnType, String... blacklistedDrops) {
+				public CreatureConfig setBlacklistedDrops (String spawnType, String... blacklistedDrops) {
 					DropConfig dc = drops.get(spawnType);
 					if (dc == null)
 						drops.put(spawnType, dc = new DropConfig(true));
@@ -224,10 +217,9 @@ public class NoMobSpawning {
 				}
 			}
 
-			public BiomeConfig() {
-			}
+			public BiomeConfig () {}
 
-			public BiomeConfig(Map<String, CreatureConfig> creatureConfigs) {
+			public BiomeConfig (Map<String, CreatureConfig> creatureConfigs) {
 				this.creatureConfigs = creatureConfigs;
 			}
 
@@ -235,10 +227,9 @@ public class NoMobSpawning {
 			public Map<String, CreatureConfig> creatureConfigs = new HashMap<>();
 		}
 
-		public DimensionConfig() {
-		}
+		public DimensionConfig () {}
 
-		public DimensionConfig(Map<String, BiomeConfig> creatureConfigs) {
+		public DimensionConfig (Map<String, BiomeConfig> creatureConfigs) {
 			this.biomeConfigs = creatureConfigs;
 		}
 
@@ -251,8 +242,8 @@ public class NoMobSpawning {
 		Map<String, CreatureConfig> creatureConfigs = new HashMap<>();
 		creatureConfigs.put("*", new CreatureConfig(0.0).setWhitelistedDrops("summoned", "*"));
 		creatureConfigs.put("minecraft:skeleton", new CreatureConfig(0.0).setBlacklistedDrops("all", "minecraft:bone"));
-		creatureConfigs.put("minecraft:wither_skeleton",
-				new CreatureConfig(0.0).setBlacklistedDrops("all", "minecraft:bone"));
+		creatureConfigs
+			.put("minecraft:wither_skeleton", new CreatureConfig(0.0).setBlacklistedDrops("all", "minecraft:bone"));
 
 		Map<String, BiomeConfig> biomeConfigs = new HashMap<>();
 		biomeConfigs.put("*", new BiomeConfig(creatureConfigs));
@@ -262,7 +253,7 @@ public class NoMobSpawning {
 	}
 
 	@SubscribeEvent
-	public static void onMobJoinWorld(EntityJoinWorldEvent event) {
+	public static void onMobJoinWorld (EntityJoinWorldEvent event) {
 
 		// first we check if we should even try to cancel the spawn
 		Entity entity = event.getEntity();
@@ -308,7 +299,7 @@ public class NoMobSpawning {
 		CreatureConfig creatureConfig = biomeConfig.creatureConfigs.get(entityName);
 		if (creatureConfig == null) {
 			creatureConfig = biomeConfig.creatureConfigs
-					.get(new ResourceLocation(entityName).getResourceDomain() + ":*");
+				.get(new ResourceLocation(entityName).getResourceDomain() + ":*");
 			if (creatureConfig == null) {
 				creatureConfig = biomeConfig.creatureConfigs.get("*");
 				if (creatureConfig == null) {
@@ -330,7 +321,7 @@ public class NoMobSpawning {
 		}
 	}
 
-	private static void approveSpawn(Entity entity) {
+	private static void approveSpawn (Entity entity) {
 		entity.getEntityData().setByte("soulus:spawn_whitelisted", (byte) 1);
 	}
 }

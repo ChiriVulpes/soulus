@@ -1,7 +1,6 @@
 package yuudaari.soulus.common.item;
 
 import javax.annotation.Nullable;
-
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
@@ -37,11 +36,12 @@ import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
 import yuudaari.soulus.common.util.IModThing;
 
 public class Barket extends UniversalBucket implements IModThing {
+
 	private final ItemStack EMPTY = new ItemStack(this);
 
 	public int maxDamage = 100;
 
-	public Barket() {
+	public Barket () {
 		super(1000, ItemStack.EMPTY, true);
 		setCreativeTab(CreativeTab.INSTANCE);
 		setRegistryName(Soulus.MODID + ":" + getName());
@@ -50,17 +50,17 @@ public class Barket extends UniversalBucket implements IModThing {
 	}
 
 	@Override
-	public int getItemBurnTime(ItemStack itemStack) {
+	public int getItemBurnTime (ItemStack itemStack) {
 		return getFluid(itemStack) == null ? 120 : 0;
 	}
 
 	@Override
-	public String getName() {
+	public String getName () {
 		return "barket";
 	}
 
 	@Override
-	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+	public void onUpdate (ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		FluidStack fluid = getFluid(stack);
 		if (fluid != null) {
 			stack.damageItem(1, (EntityLivingBase) entityIn);
@@ -73,18 +73,18 @@ public class Barket extends UniversalBucket implements IModThing {
 	}
 
 	@Override
-	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+	public boolean shouldCauseReequipAnimation (ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
 		return slotChanged || !fluidsEqual(oldStack, newStack);
 	}
 
-	public boolean fluidsEqual(ItemStack s1, ItemStack s2) {
+	public boolean fluidsEqual (ItemStack s1, ItemStack s2) {
 		FluidStack f1 = getFluid(s1);
 		FluidStack f2 = getFluid(s2);
 		return f1 == null ? f2 == null : f1.equals(f2);
 	}
 
 	@Override
-	public void getSubItems(@Nullable CreativeTabs tab, NonNullList<ItemStack> subItems) {
+	public void getSubItems (@Nullable CreativeTabs tab, NonNullList<ItemStack> subItems) {
 		if (!this.isInCreativeTab(tab))
 			return;
 
@@ -92,8 +92,8 @@ public class Barket extends UniversalBucket implements IModThing {
 
 		FluidStack fs = new FluidStack(FluidRegistry.WATER, getCapacity());
 		ItemStack stack = new ItemStack(this);
-		IFluidHandlerItem fluidHandler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY,
-				null);
+		IFluidHandlerItem fluidHandler = stack
+			.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
 		if (fluidHandler != null && fluidHandler.fill(fs, true) == fs.amount) {
 			ItemStack filled = fluidHandler.getContainer();
 			subItems.add(filled);
@@ -101,7 +101,7 @@ public class Barket extends UniversalBucket implements IModThing {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick (World world, EntityPlayer player, EnumHand hand) {
 		ItemStack heldItem = player.getHeldItem(hand);
 		FluidStack fluidStack = getFluid(heldItem);
 
@@ -142,13 +142,13 @@ public class Barket extends UniversalBucket implements IModThing {
 	}
 
 	@Override
-	public String getUnlocalizedNameInefficiently(ItemStack stack) {
+	public String getUnlocalizedNameInefficiently (ItemStack stack) {
 		FluidStack fluidStack = getFluid(stack);
 		return super.getUnlocalizedNameInefficiently(stack) + (fluidStack == null ? "" : "_filled");
 	}
 
 	@Override
-	public String getItemStackDisplayName(ItemStack stack) {
+	public String getItemStackDisplayName (ItemStack stack) {
 		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
 			return I18n.format(getUnlocalizedNameInefficiently(stack) + ".name");
 		}
@@ -156,42 +156,43 @@ public class Barket extends UniversalBucket implements IModThing {
 	}
 
 	@Override
-	public ItemStack getEmpty() {
+	public ItemStack getEmpty () {
 		return EMPTY;
 	}
 
 	@Nullable
 	@Override
-	public FluidStack getFluid(ItemStack container) {
+	public FluidStack getFluid (ItemStack container) {
 		return FluidUtil.getFluidContained(container);
 	}
 
 	@Override
-	public void registerModels() {
+	public void registerModels () {
 		ModelResourceLocation loc = new ModelResourceLocation(getRegistryName(), "inventory");
 		ModelLoader.setCustomMeshDefinition(this, stack -> loc);
 		ModelBakery.registerItemVariants(this, loc);
 	}
 
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+	public ICapabilityProvider initCapabilities (ItemStack stack, NBTTagCompound nbt) {
 		// FluidBucketWrapper only works with Forge's UniversalBucket instance, use a different IFluidHandlerItem implementation instead
 		return new FluidHandler(stack, getCapacity());
 	}
 
 	public static class FluidHandler extends FluidHandlerItemStackSimple {
-		public FluidHandler(final ItemStack container, final int capacity) {
+
+		public FluidHandler (final ItemStack container, final int capacity) {
 			super(container, capacity);
 		}
 
 		@Override
-		public boolean canFillFluidType(final FluidStack fluid) {
+		public boolean canFillFluidType (final FluidStack fluid) {
 			return fluid.getFluid() == FluidRegistry.WATER;
 		}
 	}
 
 	@Override
-	public void onRegisterDescription(JeiDescriptionRegistry registry) {
+	public void onRegisterDescription (JeiDescriptionRegistry registry) {
 		registry.add(this);
 	}
 }

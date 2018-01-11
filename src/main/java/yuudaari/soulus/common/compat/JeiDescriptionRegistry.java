@@ -10,21 +10,22 @@ import net.minecraft.util.ResourceLocation;
 import scala.Tuple2;
 
 public class JeiDescriptionRegistry {
+
 	public List<Tuple2<List<ItemStack>, String>> ingredients = new ArrayList<>();
 
-	public <T extends Ingredient> void add(T ing, String description) {
+	public <T extends Ingredient> void add (T ing, String description) {
 		ingredients.add(new Tuple2<>(new ArrayList<>(Arrays.asList(ing.getMatchingStacks())), description));
 	}
 
-	public <T extends Ingredient> void add(T ing, ResourceLocation name) {
+	public <T extends Ingredient> void add (T ing, ResourceLocation name) {
 		add(ing, name.toString());
 	}
 
-	public void add(Item item) {
+	public void add (Item item) {
 		add(Ingredient.fromItem(item), item.getRegistryName());
 	}
 
-	public void add(ItemStack... items) {
+	public void add (ItemStack... items) {
 		add(Ingredient.fromStacks(items), items[0].getItem().getRegistryName());
 	}
 }

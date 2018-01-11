@@ -3,9 +3,7 @@ package yuudaari.soulus.common;
 import yuudaari.soulus.common.util.IBlock;
 import yuudaari.soulus.common.util.IModThing;
 import yuudaari.soulus.common.util.IProvidesJeiDescription;
-
 import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -23,6 +21,7 @@ import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
 import yuudaari.soulus.common.block.skewer.Skewer;
 
 public class ModBlocks {
+
 	public static final AshBlock ASH = new AshBlock();
 	public static final BarsEndersteel BARS_ENDERSTEEL = new BarsEndersteel();
 	public static final BlockEndersteel BLOCK_ENDERSTEEL = new BlockEndersteel();
@@ -45,37 +44,39 @@ public class ModBlocks {
 	public static final Skewer SKEWER = Skewer.INSTANCE;
 	public static final Summoner SUMMONER = Summoner.INSTANCE;
 
-	public static IBlock[] blocks = new IBlock[] { //
-			ASH, //
-			BARS_ENDERSTEEL, //
-			BLOCK_ENDERSTEEL, //
-			BLOCK_ENDERSTEEL_DARK, //
-			COMPOSER, //
-			COMPOSER_CELL, //
-			FOSSIL_DIRT_ENDER, //
-			FOSSIL_DIRT_FROZEN, //
-			FOSSIL_DIRT_FUNGAL, //
-			FOSSIL_DIRT, //
-			FOSSIL_END_STONE, // 
-			FOSSIL_GRAVEL, // 
-			FOSSIL_NETHERRACK_ENDER, //
-			FOSSIL_NETHERRACK, //
-			FOSSIL_SAND_ENDER, //
-			FOSSIL_SAND_SCALE, //
-			FOSSIL_SAND, //
-			FOSSIL_SAND_RED, //
-			FOSSIL_SAND_RED_SCALE, //
-			SKEWER, //
-			SUMMONER //
+	public static IBlock[] blocks = new IBlock[] {
+		// @formatter:off
+		ASH,
+		BARS_ENDERSTEEL,
+		BLOCK_ENDERSTEEL,
+		BLOCK_ENDERSTEEL_DARK,
+		COMPOSER,
+		COMPOSER_CELL,
+		FOSSIL_DIRT_ENDER,
+		FOSSIL_DIRT_FROZEN,
+		FOSSIL_DIRT_FUNGAL,
+		FOSSIL_DIRT,
+		FOSSIL_END_STONE, 
+		FOSSIL_GRAVEL, 
+		FOSSIL_NETHERRACK_ENDER,
+		FOSSIL_NETHERRACK,
+		FOSSIL_SAND_ENDER,
+		FOSSIL_SAND_SCALE,
+		FOSSIL_SAND,
+		FOSSIL_SAND_RED,
+		FOSSIL_SAND_RED_SCALE,
+		SKEWER,
+		SUMMONER
+		// @formatter:on
 	};
 
-	public static void registerBlocks(IForgeRegistry<Block> registry) {
+	public static void registerBlocks (IForgeRegistry<Block> registry) {
 		for (IBlock block : blocks) {
 			registry.register((Block) block);
 		}
 	}
 
-	public static void registerItems(IForgeRegistry<Item> registry) {
+	public static void registerItems (IForgeRegistry<Item> registry) {
 		for (IBlock block : blocks) {
 			if (block.hasItem()) {
 				List<ItemBlock> items = block.getItemBlocks();
@@ -95,7 +96,7 @@ public class ModBlocks {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static void registerModels() {
+	public static void registerModels () {
 		for (IBlock block : blocks) {
 			if (block.hasItem()) {
 				block.registerItemModel();
@@ -103,14 +104,14 @@ public class ModBlocks {
 		}
 	}
 
-	public static void registerRecipes(IForgeRegistry<IRecipe> registry) {
+	public static void registerRecipes (IForgeRegistry<IRecipe> registry) {
 		for (IBlock block : blocks) {
 			if (block instanceof IModThing)
 				((IModThing) block).onRegisterRecipes(registry);
 		}
 	}
 
-	public static void registerDescriptions(JeiDescriptionRegistry registry) {
+	public static void registerDescriptions (JeiDescriptionRegistry registry) {
 		for (IBlock block : blocks) {
 			if (block instanceof IProvidesJeiDescription)
 				((IProvidesJeiDescription) block).onRegisterDescription(registry);
