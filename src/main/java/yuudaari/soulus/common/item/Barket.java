@@ -33,6 +33,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.items.ItemHandlerHelper;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.CreativeTab;
+import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
 import yuudaari.soulus.common.util.IModThing;
 
 public class Barket extends UniversalBucket implements IModThing {
@@ -187,5 +188,10 @@ public class Barket extends UniversalBucket implements IModThing {
 		public boolean canFillFluidType(final FluidStack fluid) {
 			return fluid.getFluid() == FluidRegistry.WATER;
 		}
+	}
+
+	@Override
+	public void onRegisterDescription(JeiDescriptionRegistry registry) {
+		registry.add(this);
 	}
 }

@@ -169,6 +169,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		disableStats();
 		setDefaultState(
 				getDefaultState().withProperty(HAS_SOULBOOK, false).withProperty(VARIANT, EndersteelType.NORMAL));
+		setHasDescription();
 	}
 
 	public static Summoner INSTANCE = new Summoner();

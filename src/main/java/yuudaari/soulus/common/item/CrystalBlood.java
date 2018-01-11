@@ -82,6 +82,8 @@ public class CrystalBlood extends SummonerUpgrade {
 				return Colour.mix(colourEmpty, colourFilled, percentage).get();
 			});
 		}
+
+		setHasDescription();
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package yuudaari.soulus.common.item;
 
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
 import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
 import yuudaari.soulus.common.util.EssenceType;
 import yuudaari.soulus.common.util.ModItem;
@@ -128,6 +129,7 @@ public class Soulbook extends ModItem {
 	public Soulbook() {
 		super("soulbook", 1);
 		this.glint = true;
+		setHasDescription();
 	}
 
 	@Override

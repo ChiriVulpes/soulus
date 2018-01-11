@@ -12,8 +12,9 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
+import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
 
-public interface IModThing {
+public interface IModThing extends IProvidesJeiDescription {
 	abstract String getName();
 
 	default void setName(String name) {
@@ -28,6 +29,10 @@ public interface IModThing {
 	}
 
 	default void onRegisterRecipes(IForgeRegistry<IRecipe> registry) {
+	}
+
+	@Override
+	default void onRegisterDescription(JeiDescriptionRegistry registry) {
 	}
 
 	default ItemStack getItemStack() {

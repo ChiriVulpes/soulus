@@ -8,8 +8,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
+import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
 import yuudaari.soulus.common.item.*;
 import yuudaari.soulus.common.util.IModThing;
+import yuudaari.soulus.common.util.IProvidesJeiDescription;
 import yuudaari.soulus.common.util.ModItem;
 
 public class ModItems {
@@ -35,24 +37,24 @@ public class ModItems {
 	public static GearBoneEnder GEAR_BONE_ENDER = new GearBoneEnder();
 	public static GearOscillating GEAR_OSCILLATING = new GearOscillating();
 	public static Glue GLUE = new Glue();
-	public static ModItem ASH = new ModItem("ash");
-	public static ModItem BARK = new ModItem("bark").setBurnTime(40);
-	public static ModItem BONE_DRY = new ModItem("bone_dry").addOreDict("bone");
-	public static ModItem BONE_FROZEN = new ModItem("bone_frozen").addOreDict("bone");
-	public static ModItem BONE_FUNGAL = new ModItem("bone_fungal").addOreDict("bone");
-	public static ModItem BONE_NETHER = new ModItem("bone_nether");
-	public static ModItem BONE_NORMAL = new ModItem("bone_normal").addOreDict("bone");
-	public static ModItem BONE_SCALE = new ModItem("bone_scale");
-	public static ModItem CRYSTAL_BLOOD_BROKEN = new ModItem("crystal_blood_broken");
-	public static ModItem DUST_ENDER_IRON_ASHEN = new ModItem("dust_ender_iron_ashen");
-	public static ModItem DUST_IRON = new ModItem("dust_iron").addOreDict("dustIron");
-	public static ModItem DUST_STONE = new ModItem("dust_stone").addOreDict("dustStone");
-	public static ModItem DUST_WOOD = new ModItem("dust_wood").addOreDict("dustWood");
-	public static ModItem EMERALD_BURNT = new ModItem("emerald_burnt");
-	public static ModItem EMERALD_COATED = new ModItem("emerald_coated");
-	public static ModItem INGOT_ENDERSTEEL = new ModItem("ingot_endersteel");
-	public static ModItem INGOT_ENDERSTEEL_DARK = new ModItem("ingot_endersteel_dark");
-	public static ModItem NUGGET_ENDERSTEEL_DARK = new ModItem("nugget_endersteel_dark");
+	public static ModItem ASH = new ModItem("ash").setHasDescription();
+	public static ModItem BARK = new ModItem("bark").setBurnTime(40).setHasDescription();
+	public static Bone BONE_DRY = new Bone("bone_dry");
+	public static Bone BONE_FROZEN = new Bone("bone_frozen");
+	public static Bone BONE_FUNGAL = new Bone("bone_fungal");
+	public static ModItem BONE_NETHER = new ModItem("bone_nether").setHasDescription();
+	public static Bone BONE_NORMAL = new Bone("bone_normal");
+	public static Bone BONE_SCALE = new Bone("bone_scale");
+	public static ModItem CRYSTAL_BLOOD_BROKEN = new ModItem("crystal_blood_broken").setHasDescription();
+	public static ModItem DUST_ENDER_IRON_ASHEN = new ModItem("dust_ender_iron_ashen").setHasDescription();
+	public static ModItem DUST_IRON = new ModItem("dust_iron").addOreDict("dustIron").setHasDescription();
+	public static ModItem DUST_STONE = new ModItem("dust_stone").addOreDict("dustStone").setHasDescription();
+	public static ModItem DUST_WOOD = new ModItem("dust_wood").addOreDict("dustWood").setHasDescription();
+	public static ModItem EMERALD_BURNT = new ModItem("emerald_burnt").setHasDescription();
+	public static ModItem EMERALD_COATED = new ModItem("emerald_coated").setHasDescription();
+	public static ModItem INGOT_ENDERSTEEL = new ModItem("ingot_endersteel").setHasDescription();
+	public static ModItem INGOT_ENDERSTEEL_DARK = new ModItem("ingot_endersteel_dark").setHasDescription();
+	public static ModItem NUGGET_ENDERSTEEL_DARK = new ModItem("nugget_endersteel_dark").setHasDescription();
 	public static NuggetEndersteel NUGGET_ENDERSTEEL = new NuggetEndersteel();
 	public static OrbMurky ORB_MURKY = OrbMurky.INSTANCE;
 	public static Sledgehammer SLEDGEHAMMER = new Sledgehammer();
@@ -132,6 +134,13 @@ public class ModItems {
 		for (Item item : items) {
 			if (item instanceof IModThing)
 				((IModThing) item).onRegisterRecipes(registry);
+		}
+	}
+
+	public static void registerDescriptions(JeiDescriptionRegistry registry) {
+		for (Item item : items) {
+			if (item instanceof IProvidesJeiDescription)
+				((IProvidesJeiDescription) item).onRegisterDescription(registry);
 		}
 	}
 }

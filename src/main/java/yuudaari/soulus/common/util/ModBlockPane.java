@@ -2,6 +2,8 @@ package yuudaari.soulus.common.util;
 
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.CreativeTab;
+import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
+
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.block.BlockPane;
@@ -74,5 +76,18 @@ public class ModBlockPane extends BlockPane implements IBlock {
 	@Override
 	public void getSubBlocks(CreativeTab itemIn, NonNullList<ItemStack> items) {
 		items.add(new ItemStack(this));
+	}
+
+	public boolean hasDescription = false;
+
+	public ModBlockPane setHasDescription() {
+		hasDescription = true;
+		return this;
+	}
+
+	@Override
+	public void onRegisterDescription(JeiDescriptionRegistry registry) {
+		if (hasDescription)
+			registry.add(this.getItemStack());
 	}
 }

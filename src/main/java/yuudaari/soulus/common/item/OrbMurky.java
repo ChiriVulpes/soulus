@@ -96,6 +96,7 @@ public class OrbMurky extends SummonerUpgrade {
 
 	public OrbMurky() {
 		super("orb_murky");
+		setHasDescription();
 	}
 
 	@Override

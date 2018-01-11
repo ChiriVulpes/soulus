@@ -160,6 +160,7 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		setHarvestLevel("pickaxe", 1);
 		setSoundType(SoundType.STONE);
 		setHardness(3F);
+		setHasDescription();
 	}
 
 	public static Skewer INSTANCE = new Skewer();

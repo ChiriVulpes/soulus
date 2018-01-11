@@ -1,6 +1,7 @@
 package yuudaari.soulus.common.item;
 
 import yuudaari.soulus.Soulus;
+import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
 import yuudaari.soulus.common.config.EssenceConfig;
 import yuudaari.soulus.common.util.BoneType;
 import yuudaari.soulus.common.util.ModItem;
@@ -9,6 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -117,5 +119,10 @@ public class BoneChunk extends ModItem {
 
 		player.playSound(SoundEvents.BLOCK_GRAVEL_HIT, 0.5F + 0.5F * (float) world.rand.nextInt(2),
 				(world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F + 1.0F);
+	}
+
+	@Override
+	public void onRegisterDescription(JeiDescriptionRegistry registry) {
+		registry.add(Ingredient.fromItem(this), Soulus.MODID + ":bone_chunk");
 	}
 }

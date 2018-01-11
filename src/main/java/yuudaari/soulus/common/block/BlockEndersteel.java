@@ -31,6 +31,7 @@ public class BlockEndersteel extends ModBlock {
 		setSoundType(SoundType.METAL);
 		setTickRandomly(false);
 		setDefaultState(super.getDefaultState().withProperty(HAS_COMPARATOR, false));
+		setHasDescription();
 	}
 
 	@Override

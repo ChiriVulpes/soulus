@@ -6,6 +6,7 @@ public class GearOscillating extends SummonerUpgrade {
 	public GearOscillating() {
 		super("gear_oscillating", 16);
 		glint = true;
+		setHasDescription();
 	}
 
 	public ItemStack getFilledStack() {

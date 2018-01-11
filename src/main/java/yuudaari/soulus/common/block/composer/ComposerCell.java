@@ -88,6 +88,7 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 		setSoundType(SoundType.METAL);
 		disableStats();
 		setDefaultState(getDefaultState().withProperty(CELL_STATE, CellState.DISCONNECTED));
+		setHasDescription();
 	}
 
 	public static ComposerCell INSTANCE = new ComposerCell();

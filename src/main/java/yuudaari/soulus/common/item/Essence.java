@@ -1,10 +1,6 @@
 package yuudaari.soulus.common.item;
 
-import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.config.ColorConfig;
-import yuudaari.soulus.common.config.EssenceConfig;
-import yuudaari.soulus.common.util.EssenceType;
-import yuudaari.soulus.common.util.ModItem;
+import javax.annotation.Nonnull;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -12,8 +8,13 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
-
-import javax.annotation.Nonnull;
+import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
+import yuudaari.soulus.common.config.ColorConfig;
+import yuudaari.soulus.common.config.EssenceConfig;
+import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
+import yuudaari.soulus.common.util.EssenceType;
+import yuudaari.soulus.common.util.ModItem;
+import yuudaari.soulus.Soulus;
 
 public class Essence extends ModItem {
 
@@ -65,5 +66,10 @@ public class Essence extends ModItem {
 		if (mobTarget == null)
 			mobTarget = "unfocused";
 		return super.getUnlocalizedNameInefficiently(stack) + "." + mobTarget;
+	}
+
+	@Override
+	public void onRegisterDescription(JeiDescriptionRegistry registry) {
+		registry.add(new IngredientPotentialEssence(true), getRegistryName());
 	}
 }

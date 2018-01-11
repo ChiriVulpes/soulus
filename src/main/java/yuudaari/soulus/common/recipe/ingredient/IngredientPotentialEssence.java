@@ -18,20 +18,29 @@ public class IngredientPotentialEssence extends Ingredient {
 
 	public static IngredientPotentialEssence INSTANCE = new IngredientPotentialEssence();
 
-	public static ItemStack[] getMatchingStacks1() {
+	public static ItemStack[] getMatchingStacks1(boolean justEssence) {
 		List<ItemStack> stacks = new ArrayList<>();
-		stacks.add(ItemStack.EMPTY);
-		stacks.add(ModItems.ASH.getItemStack());
+
+		if (!justEssence) {
+			stacks.add(ItemStack.EMPTY);
+			stacks.add(ModItems.ASH.getItemStack());
+		}
+
 		for (EssenceConfig essenceConfig : Soulus.config.essences.values()) {
 			if (essenceConfig.essence.equals("NONE"))
 				continue;
 			stacks.add(Essence.getStack(essenceConfig.essence));
 		}
+
 		return stacks.toArray(new ItemStack[0]);
 	}
 
 	public IngredientPotentialEssence() {
-		super(getMatchingStacks1());
+		this(false);
+	}
+
+	public IngredientPotentialEssence(boolean justEssence) {
+		super(getMatchingStacks1(justEssence));
 	}
 
 	@Override

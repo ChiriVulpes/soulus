@@ -6,5 +6,6 @@ public class BoneEnder extends ModItem {
 	public BoneEnder() {
 		super("bone_ender");
 		glint = true;
+		setHasDescription();
 	}
 }

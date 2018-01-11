@@ -37,6 +37,7 @@ public class BarsEndersteel extends ModBlockPane {
 		setHarvestLevel("pickaxe", 1);
 		setSoundType(SoundType.METAL);
 		//setDefaultState(getDefaultState().withProperty(VARIANT, EndersteelType.NORMAL));
+		setHasDescription();
 	}
 
 	/*

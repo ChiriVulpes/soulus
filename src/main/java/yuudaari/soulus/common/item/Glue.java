@@ -21,5 +21,6 @@ public class Glue extends ModItem {
 		setFood(1, 0F);
 		foodAlwaysEdible = true;
 		foodEffects = new ModPotionEffect[] { new ModPotionEffect("nausea", 200) };
+		setHasDescription();
 	}
 }

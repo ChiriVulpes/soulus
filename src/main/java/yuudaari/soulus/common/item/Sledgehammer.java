@@ -19,6 +19,7 @@ public class Sledgehammer extends ModItem {
 		super("sledgehammer");
 		setMaxStackSize(1);
 		setMaxDamage(durability);
+		setHasDescription();
 	}
 
 	@Override

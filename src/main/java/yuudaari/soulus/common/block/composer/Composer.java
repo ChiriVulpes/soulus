@@ -151,6 +151,7 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 		setSoundType(SoundType.METAL);
 		disableStats();
 		setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.NORTH).withProperty(CONNECTED, false));
+		setHasDescription();
 	}
 
 	public static Composer INSTANCE = new Composer();

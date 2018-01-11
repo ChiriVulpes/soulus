@@ -6,5 +6,6 @@ public class DustEnderIron extends ModItem {
 	public DustEnderIron() {
 		super("dust_ender_iron");
 		glint = true;
+		setHasDescription();
 	}
 }

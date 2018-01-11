@@ -6,5 +6,6 @@ public class NuggetEndersteel extends ModItem {
 	public NuggetEndersteel() {
 		super("nugget_endersteel");
 		glint = true;
+		setHasDescription();
 	}
 }

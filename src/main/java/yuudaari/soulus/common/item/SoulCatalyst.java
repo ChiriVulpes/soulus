@@ -12,6 +12,7 @@ public class SoulCatalyst extends ModItem {
 	public SoulCatalyst() {
 		super("soul_catalyst");
 		glint = true;
+		setHasDescription();
 	}
 	/*
 		@Override

@@ -2,6 +2,8 @@ package yuudaari.soulus.common.util;
 
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.CreativeTab;
+import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
+
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -174,5 +176,18 @@ public class ModItem extends Item implements IModThing {
 
 		stack.shrink(foodQuantity);
 		return stack;
+	}
+
+	public boolean hasDescription = false;
+
+	public ModItem setHasDescription() {
+		hasDescription = true;
+		return this;
+	}
+
+	@Override
+	public void onRegisterDescription(JeiDescriptionRegistry registry) {
+		if (hasDescription)
+			registry.add(this);
 	}
 }

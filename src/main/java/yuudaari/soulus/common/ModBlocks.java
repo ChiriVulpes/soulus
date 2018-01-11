@@ -2,6 +2,7 @@ package yuudaari.soulus.common;
 
 import yuudaari.soulus.common.util.IBlock;
 import yuudaari.soulus.common.util.IModThing;
+import yuudaari.soulus.common.util.IProvidesJeiDescription;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.common.block.*;
 import yuudaari.soulus.common.block.composer.*;
 import yuudaari.soulus.common.block.summoner.Summoner;
+import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
 import yuudaari.soulus.common.block.skewer.Skewer;
 
 public class ModBlocks {
@@ -105,6 +107,13 @@ public class ModBlocks {
 		for (IBlock block : blocks) {
 			if (block instanceof IModThing)
 				((IModThing) block).onRegisterRecipes(registry);
+		}
+	}
+
+	public static void registerDescriptions(JeiDescriptionRegistry registry) {
+		for (IBlock block : blocks) {
+			if (block instanceof IProvidesJeiDescription)
+				((IProvidesJeiDescription) block).onRegisterDescription(registry);
 		}
 	}
 }
