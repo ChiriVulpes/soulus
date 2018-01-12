@@ -1,4 +1,4 @@
-package yuudaari.soulus.common.config;
+package yuudaari.soulus.common.config_old;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

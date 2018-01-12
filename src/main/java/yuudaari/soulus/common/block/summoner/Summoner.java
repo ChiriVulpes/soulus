@@ -384,7 +384,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		// try to insert a soulbook
 		if (item == Soulbook.INSTANCE) {
 			if ((soulbookUses <= 0 && !Soulbook.isFilled(stack)) || Soulbook
-				.getContainedEssence(stack) < soulbookEssenceRequiredToInsert * Soulus.config
+				.getContainedEssence(stack) < soulbookEssenceRequiredToInsert * Soulus.config_old
 					.getSoulbookQuantity(EssenceType.getEssenceType(stack)))
 				return false;
 
@@ -404,7 +404,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 			String newEssenceType = EssenceType.getEssenceType(stack);
 			te.setEssenceType(newEssenceType);
-			te.soulbookUses = (int) (Soulbook.getContainedEssence(stack) / (double) Soulus.config
+			te.soulbookUses = (int) (Soulbook.getContainedEssence(stack) / (double) Soulus.config_old
 				.getSoulbookQuantity(newEssenceType) * this.soulbookUses);
 
 			stack.shrink(1);
@@ -426,7 +426,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		String essenceType = te.getEssenceType();
 
 		return soulbookUses > 0 ? Soulbook
-			.getStack(essenceType, (int) Math.max(0, te.soulbookUses / (double) soulbookUses * Soulus.config
+			.getStack(essenceType, (int) Math.max(0, te.soulbookUses / (double) soulbookUses * Soulus.config_old
 				.getSoulbookQuantity(essenceType))) : Soulbook.getFilled(essenceType);
 	}
 

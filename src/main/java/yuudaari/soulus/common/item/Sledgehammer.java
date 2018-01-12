@@ -1,7 +1,7 @@
 package yuudaari.soulus.common.item;
 
 import net.minecraft.item.ItemStack;
-import yuudaari.soulus.common.config.Serializer;
+import yuudaari.soulus.common.config_old.Serializer;
 import yuudaari.soulus.common.util.ModItem;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;

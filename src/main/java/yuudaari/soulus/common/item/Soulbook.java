@@ -33,7 +33,7 @@ public class Soulbook extends ModItem {
 	public final static Soulbook INSTANCE = new Soulbook();
 
 	public static ItemStack getFilled (String essenceType) {
-		return getStack(essenceType, Soulus.config.getSoulbookQuantity(essenceType));
+		return getStack(essenceType, Soulus.config_old.getSoulbookQuantity(essenceType));
 	}
 
 	public static ItemStack getStack (String essenceType) {
@@ -51,7 +51,7 @@ public class Soulbook extends ModItem {
 		String essenceType = EssenceType.getEssenceType(stack);
 		if (essenceType == null)
 			return false;
-		return getContainedEssence(stack) >= Soulus.config.getSoulbookQuantity(essenceType);
+		return getContainedEssence(stack) >= Soulus.config_old.getSoulbookQuantity(essenceType);
 	}
 
 	public static class SoulbookRecipe extends ShapelessOreRecipe {
@@ -113,7 +113,7 @@ public class Soulbook extends ModItem {
 				}
 				return null;
 			}
-			if (soulbook != null && essenceCount > 0 && containedEssence + essenceCount <= Soulus.config
+			if (soulbook != null && essenceCount > 0 && containedEssence + essenceCount <= Soulus.config_old
 				.getSoulbookQuantity(essenceType)) {
 				ItemStack newStack = soulbook.copy();
 				EssenceType.setEssenceType(newStack, essenceType);
@@ -144,7 +144,7 @@ public class Soulbook extends ModItem {
 		if (essenceType == null)
 			return false;
 		int containedEssence = getContainedEssence(stack);
-		return containedEssence >= Soulus.config.getSoulbookQuantity(essenceType);
+		return containedEssence >= Soulus.config_old.getSoulbookQuantity(essenceType);
 	}
 
 	@Nonnull
@@ -162,7 +162,7 @@ public class Soulbook extends ModItem {
 		int containedEssence = getContainedEssence(stack);
 		if (essenceType == null)
 			return containedEssence == 0;
-		return containedEssence < Soulus.config.getSoulbookQuantity(essenceType);
+		return containedEssence < Soulus.config_old.getSoulbookQuantity(essenceType);
 	}
 
 	@Override
@@ -171,7 +171,7 @@ public class Soulbook extends ModItem {
 		if (essenceType == null)
 			return 1;
 		int containedEssence = getContainedEssence(stack);
-		return (1 - containedEssence / (double) Soulus.config.getSoulbookQuantity(essenceType));
+		return (1 - containedEssence / (double) Soulus.config_old.getSoulbookQuantity(essenceType));
 	}
 
 	public static int getContainedEssence (ItemStack stack) {
@@ -198,7 +198,7 @@ public class Soulbook extends ModItem {
 		int containedEssence = Soulbook.getContainedEssence(stack);
 		String mobTarget = EssenceType.getEssenceType(stack);
 		if (mobTarget != null) {
-			int requiredEssence = Soulus.config.getSoulbookQuantity(mobTarget);
+			int requiredEssence = Soulus.config_old.getSoulbookQuantity(mobTarget);
 			if (containedEssence < requiredEssence) {
 				tooltip.add(I18n
 					.format("tooltip." + Soulus.MODID + ":soulbook.contained_essence", containedEssence, requiredEssence));

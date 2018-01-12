@@ -9,7 +9,7 @@ import net.minecraftforge.common.crafting.IIngredientFactory;
 import net.minecraftforge.common.crafting.JsonContext;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModItems;
-import yuudaari.soulus.common.config.EssenceConfig;
+import yuudaari.soulus.common.config_old.EssenceConfig;
 import yuudaari.soulus.common.item.Essence;
 
 public class IngredientPotentialEssence extends Ingredient {
@@ -24,7 +24,7 @@ public class IngredientPotentialEssence extends Ingredient {
 			stacks.add(ModItems.ASH.getItemStack());
 		}
 
-		for (EssenceConfig essenceConfig : Soulus.config.essences.values()) {
+		for (EssenceConfig essenceConfig : Soulus.config_old.essences.values()) {
 			if (essenceConfig.essence.equals("NONE"))
 				continue;
 			stacks.add(Essence.getStack(essenceConfig.essence));

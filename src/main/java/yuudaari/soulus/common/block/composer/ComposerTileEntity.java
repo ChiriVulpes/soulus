@@ -90,7 +90,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		if (spawnDelay == null)
 			return;
 
-		timeTillCraft = spawnDelay.get(world.rand).intValue();
+		timeTillCraft = spawnDelay.getInt(world.rand);
 		lastTimeTillCraft = timeTillCraft;
 
 		if (update)

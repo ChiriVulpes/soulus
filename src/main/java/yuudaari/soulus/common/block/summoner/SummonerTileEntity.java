@@ -18,7 +18,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.ForgeEventFactory;
 import yuudaari.soulus.common.block.summoner.Summoner.Upgrade;
 import yuudaari.soulus.common.block.UpgradeableBlock.UpgradeableBlockTileEntity;
-import yuudaari.soulus.common.config.EssenceConfig;
+import yuudaari.soulus.common.config_old.EssenceConfig;
 import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.Soulus;
 
@@ -88,12 +88,12 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 	public void setEssenceType (String essenceType) {
 		this.essenceType = essenceType;
-		this.soulbookUses = Soulus.config.getSoulbookQuantity(essenceType);
+		this.soulbookUses = Soulus.config_old.getSoulbookQuantity(essenceType);
 		resetEssenceType();
 	}
 
 	private void resetEssenceType () {
-		EssenceConfig config = Soulus.config.essences.get(essenceType);
+		EssenceConfig config = Soulus.config_old.essences.get(essenceType);
 		if (config == null)
 			return;
 
@@ -207,7 +207,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	}
 
 	private void resetTimer (boolean update) {
-		timeTillSpawn = spawnDelay.get(world.rand).intValue();
+		timeTillSpawn = spawnDelay.getInt(world.rand);
 		lastTimeTillSpawn = timeTillSpawn;
 
 		if (update)
@@ -274,7 +274,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 	private int spawn () {
 
-		int spawnCount = this.spawnCount.get(world.rand).intValue();
+		int spawnCount = this.spawnCount.getInt(world.rand);
 		int spawned = 0;
 
 		MainSpawningLoop:

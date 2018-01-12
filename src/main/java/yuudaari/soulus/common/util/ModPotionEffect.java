@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import yuudaari.soulus.common.config.ManualSerializer;
+import yuudaari.soulus.common.config_old.ManualSerializer;
 
 public class ModPotionEffect extends PotionEffect {
 

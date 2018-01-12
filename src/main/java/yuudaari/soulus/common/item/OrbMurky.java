@@ -2,7 +2,7 @@ package yuudaari.soulus.common.item;
 
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModItems;
-import yuudaari.soulus.common.config.Serializer;
+import yuudaari.soulus.common.config_old.Serializer;
 import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;

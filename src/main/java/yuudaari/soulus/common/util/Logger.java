@@ -18,7 +18,7 @@ public class Logger {
 	public static final Stack<String> scopes = new Stack<>();
 
 	private static String getScopes () {
-		return scopes.size() == 0 ? "" : "[" + String.join(":", scopes) + "] ";
+		return scopes.size() == 0 ? "" : "[" + String.join(" | ", scopes) + "] ";
 	}
 
 	public static void inScope (String scope, ScopeHandler handler) {

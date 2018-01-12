@@ -1,7 +1,7 @@
 package yuudaari.soulus.common.item;
 
-import yuudaari.soulus.common.config.PotionEffectSerializer;
-import yuudaari.soulus.common.config.Serializer;
+import yuudaari.soulus.common.config_old.PotionEffectSerializer;
+import yuudaari.soulus.common.config_old.Serializer;
 import yuudaari.soulus.common.util.ModItem;
 import yuudaari.soulus.common.util.ModPotionEffect;
 

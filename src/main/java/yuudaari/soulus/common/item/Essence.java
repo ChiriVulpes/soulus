@@ -9,8 +9,8 @@ import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
-import yuudaari.soulus.common.config.ColorConfig;
-import yuudaari.soulus.common.config.EssenceConfig;
+import yuudaari.soulus.common.config_old.ColorConfig;
+import yuudaari.soulus.common.config_old.EssenceConfig;
 import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
 import yuudaari.soulus.common.util.EssenceType;
 import yuudaari.soulus.common.util.ModItem;
@@ -50,7 +50,7 @@ public class Essence extends ModItem {
 					return -1;
 				ColorConfig colors = new ColorConfig(eggInfo);
 
-				EssenceConfig essenceConfig = Soulus.config.essences.get(essenceType);
+				EssenceConfig essenceConfig = Soulus.config_old.essences.get(essenceType);
 				if (essenceConfig.colors.wasSet)
 					colors = essenceConfig.colors;
 

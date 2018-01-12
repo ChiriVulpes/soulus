@@ -18,8 +18,8 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import yuudaari.soulus.common.config.EssenceConfig;
-import yuudaari.soulus.common.config.EssenceConfig.CreatureLootConfig;
+import yuudaari.soulus.common.config_old.EssenceConfig;
+import yuudaari.soulus.common.config_old.EssenceConfig.CreatureLootConfig;
 import yuudaari.soulus.common.misc.NoMobSpawning.DimensionConfig;
 import yuudaari.soulus.common.misc.NoMobSpawning.DimensionConfig.BiomeConfig;
 import yuudaari.soulus.common.misc.NoMobSpawning.DimensionConfig.BiomeConfig.CreatureConfig;
@@ -147,7 +147,7 @@ public class BoneDrops {
 		}
 
 		// Logger.info("added bone drops");
-		for (EssenceConfig essenceConfig : Soulus.config.essences.values()) {
+		for (EssenceConfig essenceConfig : Soulus.config_old.essences.values()) {
 			for (Map.Entry<String, CreatureLootConfig> lootConfig : essenceConfig.loot.entrySet()) {
 				ResourceLocation name = EntityList.getKey(entity);
 				if (name != null && lootConfig.getKey().equals(name.toString())) {

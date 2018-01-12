@@ -17,7 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.client.util.ParticleManager;
 import yuudaari.soulus.client.util.ParticleType;
 import yuudaari.soulus.common.ModBlocks;
-import yuudaari.soulus.common.config.Serializer;
+import yuudaari.soulus.common.config_old.Serializer;
 
 public class BonemealNether extends Bonemeal {
 

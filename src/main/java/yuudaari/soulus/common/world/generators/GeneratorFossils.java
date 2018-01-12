@@ -1,7 +1,7 @@
 package yuudaari.soulus.common.world.generators;
 
 import yuudaari.soulus.common.util.Logger;
-import yuudaari.soulus.common.config.ManualSerializer;
+import yuudaari.soulus.common.config_old.ManualSerializer;
 import yuudaari.soulus.common.world.ModGenerator;
 import yuudaari.soulus.common.world.OreVein;
 import com.google.gson.JsonArray;

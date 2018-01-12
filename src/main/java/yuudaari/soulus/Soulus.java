@@ -1,12 +1,14 @@
 package yuudaari.soulus;
 
 import yuudaari.soulus.client.ModRenderers;
-import yuudaari.soulus.common.config.Config;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
+import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.ModGenerators;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.compat.ExNihiloCreatioRecipes;
+import yuudaari.soulus.common.config.Config;
+import yuudaari.soulus.common.config.block.ConfigSummoner;
 import yuudaari.soulus.server.command.SoulusLocation;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +58,7 @@ public class Soulus {
 
 	public static final String NAME = "Soulus";
 	public static final String MODID = "soulus";
+	public static yuudaari.soulus.common.config_old.Config config_old;
 	public static Config config;
 
 	/* UTILITY */
@@ -87,7 +90,18 @@ public class Soulus {
 
 	@EventHandler
 	public void preinit (FMLPreInitializationEvent event) {
-		config = Config.loadConfig(event.getModConfigurationDirectory().getAbsolutePath());
+		config = new Config(event.getAsmData(), event.getModConfigurationDirectory().getAbsolutePath() + "/soulus/");
+		try {
+			config.deserialize();
+			Logger.info(config.get(ConfigSummoner.class).nonUpgradedSpawningRadius + ", " + config
+				.get(ConfigSummoner.class).nonUpgradedDelay);
+		} catch (Exception e) {
+			Logger.error(e);
+		}
+
+		config_old = yuudaari.soulus.common.config_old.Config
+			.loadConfig(event.getModConfigurationDirectory().getAbsolutePath());
+
 		for (PreInitEventHandler handler : preInitHandlers) {
 			handler.handle(event);
 		}

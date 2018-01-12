@@ -26,7 +26,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import yuudaari.soulus.common.block.EndersteelType;
 import yuudaari.soulus.common.block.summoner.Summoner;
-import yuudaari.soulus.common.config.ManualSerializer;
+import yuudaari.soulus.common.config_old.ManualSerializer;
 import yuudaari.soulus.common.util.GeneratorName;
 import yuudaari.soulus.common.util.Logger;
 

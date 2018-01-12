@@ -2,7 +2,7 @@ package yuudaari.soulus.common.item;
 
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
-import yuudaari.soulus.common.config.EssenceConfig;
+import yuudaari.soulus.common.config_old.EssenceConfig;
 import yuudaari.soulus.common.util.BoneType;
 import yuudaari.soulus.common.util.ModItem;
 import net.minecraft.entity.item.EntityItem;
@@ -42,7 +42,7 @@ public class BoneChunk extends ModItem {
 		addOreDict("boneChunk");
 
 		Soulus.onInit( (FMLInitializationEvent e) -> {
-			for (EssenceConfig essenceConfig : Soulus.config.essences.values()) {
+			for (EssenceConfig essenceConfig : Soulus.config_old.essences.values()) {
 				if (essenceConfig.bones.type != boneType) {
 					continue;
 				}
@@ -102,7 +102,7 @@ public class BoneChunk extends ModItem {
 	}
 
 	private void particles (World world, EntityPlayer player) {
-		for (int i = 0; i < Soulus.config.boneChunkParticleCount; ++i) {
+		for (int i = 0; i < Soulus.config_old.boneChunkParticleCount; ++i) {
 			Vec3d v = new Vec3d(((double) world.rand.nextFloat() - 0.5D) * 0.1D, Math.random() * 0.1D + 0.1D, 0.0D);
 			v = v.rotatePitch(-player.rotationPitch * 0.017453292F);
 			v = v.rotateYaw(-player.rotationYaw * 0.017453292F);

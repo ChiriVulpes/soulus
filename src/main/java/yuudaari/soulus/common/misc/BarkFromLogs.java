@@ -8,9 +8,9 @@ import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import yuudaari.soulus.common.ModItems;
-import yuudaari.soulus.common.config.Config;
-import yuudaari.soulus.common.config.ManualSerializer;
-import yuudaari.soulus.common.config.Serializer;
+import yuudaari.soulus.common.config_old.Config;
+import yuudaari.soulus.common.config_old.ManualSerializer;
+import yuudaari.soulus.common.config_old.Serializer;
 
 @Mod.EventBusSubscriber
 public class BarkFromLogs {
