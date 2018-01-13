@@ -4,8 +4,9 @@ import yuudaari.soulus.common.config.ConfigFile;
 import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
+import yuudaari.soulus.Soulus;
 
-@ConfigFile(file = "summoner")
+@ConfigFile(file = "summoner", id = Soulus.MODID)
 @Serializable
 public class ConfigSummoner {
 

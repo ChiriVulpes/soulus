@@ -27,13 +27,26 @@ import yuudaari.soulus.common.config.ConfigFile;
 
 public class Config {
 
+	public static Map<String, Config> INSTANCES = new HashMap<>();
+
 	private final Map<String, List<Class<?>>> configFileClasses;
 	private final Map<Class<?>, Object> configs = new HashMap<>();
 	private final String directory;
 
-	public Config (final ASMDataTable asmDataTable, final String directory) {
+	public Config (final ASMDataTable asmDataTable, final String directory, final String id) {
 		this.directory = directory;
-		configFileClasses = getConfigFileClasses(asmDataTable);
+		configFileClasses = getConfigFileClasses(asmDataTable, id);
+
+		INSTANCES.put(id, this);
+	}
+
+	/**
+	 * Returns the configuration instance of a config class
+	 */
+	@SuppressWarnings("unchecked")
+	@Nullable
+	public static <T> T get (final String id, final Class<T> cls) {
+		return (T) INSTANCES.get(id).configs.get(cls);
 	}
 
 	/**
@@ -106,11 +119,10 @@ public class Config {
 			final JsonObject json = parseJsonConfigFile(configFile);
 			if (json == null) {
 				Logger.warn("Not a valid Json Object");
-			} else {
-				for (final Map.Entry<Class<?>, Object> deserializationEntry : toDeserialize.entrySet()) {
-					deserializationEntry
-						.setValue(tryDeserializeClass(deserializationEntry.getKey(), json));
-				}
+			}
+			for (final Map.Entry<Class<?>, Object> deserializationEntry : toDeserialize.entrySet()) {
+				deserializationEntry
+					.setValue(tryDeserializeClass(deserializationEntry.getKey(), json));
 			}
 		} else {
 			createConfigFile(configFile);
@@ -153,19 +165,17 @@ public class Config {
 		Object result = null;
 
 		containingObject = getActualContainingObject(containingObject, cls);
-		if (containingObject != null) {
 
-			final IClassDeserializationHandler<Object> deserializer = DefaultFieldSerializer.getClassDeserializer(cls);
-			if (deserializer != null) {
-				try {
-					result = DefaultFieldSerializer.deserializeClass(deserializer, cls, containingObject);
-				} catch (final Exception e) {
-					Logger
-						.warn("Could not deserialize class: " + (e.getClass() == Exception.class ? e.getMessage() : e));
-				}
-			} else {
-				Logger.warn("Class is not @Serializable");
+		final IClassDeserializationHandler<Object> deserializer = DefaultFieldSerializer.getClassDeserializer(cls);
+		if (deserializer != null) {
+			try {
+				result = DefaultFieldSerializer.deserializeClass(deserializer, cls, containingObject);
+			} catch (final Exception e) {
+				Logger
+					.warn("Could not deserialize class: " + (e.getClass() == Exception.class ? e.getMessage() : e));
 			}
+		} else {
+			Logger.warn("Class is not @Serializable");
 		}
 
 		Logger.scopes.pop();
@@ -188,7 +198,7 @@ public class Config {
 	private JsonObject getActualContainingObject (final JsonObject containingObject, final Class<?> cls, final boolean createMissing) {
 		JsonObject result = containingObject;
 
-		final String[] propertyPath = ConfigFileUtil.getConfigProperty(cls);
+		final String[] propertyPath = ConfigFileUtil.getConfigPropertyPath(cls);
 
 		if (result != null) {
 			for (final String property : propertyPath) {
@@ -293,7 +303,7 @@ public class Config {
 	/**
 	 * Returns a list of all serializable classes, from the ASM data table
 	 */
-	private List<Class<?>> getSerializableClasses (final ASMDataTable asmDataTable) {
+	private static List<Class<?>> getSerializableClasses (final ASMDataTable asmDataTable) {
 		final List<Class<?>> classes = new ArrayList<>();
 
 		final String annotationClassName = ConfigFile.class.getCanonicalName();
@@ -315,7 +325,7 @@ public class Config {
 	/**
 	 * Maps the list of serializable classes to their respective config files
 	 */
-	private Map<String, List<Class<?>>> getConfigFileClasses (final ASMDataTable asmDataTable) {
+	private static Map<String, List<Class<?>>> getConfigFileClasses (final ASMDataTable asmDataTable, final String id) {
 		Logger.scopes.push("Config File class registration");
 
 		final Map<String, List<Class<?>>> result = new HashMap<>();
@@ -323,6 +333,11 @@ public class Config {
 		final List<Class<?>> classes = getSerializableClasses(asmDataTable);
 
 		for (final Class<?> cls : classes) {
+			final String configFileId = ConfigFileUtil.getConfigId(cls);
+			if (!id.equals(configFileId)) {
+				continue;
+			}
+
 			final String configFile = ConfigFileUtil.getConfigFile(cls);
 			if (configFile == null) {
 				Logger.warn("Cannot get the config file for '" + cls.getSimpleName() + "'");

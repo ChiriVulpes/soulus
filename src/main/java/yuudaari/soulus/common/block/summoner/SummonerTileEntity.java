@@ -17,6 +17,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.ForgeEventFactory;
 import yuudaari.soulus.common.block.summoner.Summoner.Upgrade;
+import yuudaari.soulus.common.config.Config;
+import yuudaari.soulus.common.config.block.ConfigSummoner;
 import yuudaari.soulus.common.block.UpgradeableBlock.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.config_old.EssenceConfig;
 import yuudaari.soulus.common.util.Range;
@@ -24,17 +26,20 @@ import yuudaari.soulus.Soulus;
 
 public class SummonerTileEntity extends UpgradeableBlockTileEntity implements ITickable {
 
+	public static ConfigSummoner CONFIG = Config.get(Soulus.MODID, ConfigSummoner.class);
+
 	@Override
 	public Summoner getBlock () {
 		return Summoner.INSTANCE;
 	}
+
 
 	/* OTHER */
 	private boolean hasInit = false;
 	private String essenceType;
 	private float timeTillSpawn = 0;
 	private float lastTimeTillSpawn;
-	public int soulbookUses = getBlock().soulbookUses;
+	public int soulbookUses = CONFIG.soulbookUses;
 
 	private int spawningRadius;
 	private int activatingRange;
@@ -57,18 +62,16 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	@Override
 	public void onUpdateUpgrades (boolean readFromNBT) {
 
-		Summoner block = getBlock();
-
 		int countUpgrades = upgrades.get(Upgrade.COUNT);
-		spawnCount = new Range(block.nonUpgradedCount.min + countUpgrades * block.upgradeCountEffectiveness.min, block.nonUpgradedCount.max + countUpgrades * block.upgradeCountEffectiveness.max);
+		spawnCount = new Range(CONFIG.nonUpgradedCount.min + countUpgrades * CONFIG.upgradeCountEffectiveness.min, CONFIG.nonUpgradedCount.max + countUpgrades * CONFIG.upgradeCountEffectiveness.max);
 		spawningRadius = (int) Math
-			.floor(block.nonUpgradedSpawningRadius + countUpgrades * block.upgradeCountRadiusEffectiveness);
+			.floor(CONFIG.nonUpgradedSpawningRadius + countUpgrades * CONFIG.upgradeCountRadiusEffectiveness);
 
 		int delayUpgrades = upgrades.get(Upgrade.DELAY);
-		spawnDelay = new Range(block.nonUpgradedDelay.min / (1 + delayUpgrades * block.upgradeDelayEffectiveness.min), block.nonUpgradedDelay.max / (1 + delayUpgrades * block.upgradeDelayEffectiveness.max));
+		spawnDelay = new Range(CONFIG.nonUpgradedDelay.min / (1 + delayUpgrades * CONFIG.upgradeDelayEffectiveness.min), CONFIG.nonUpgradedDelay.max / (1 + delayUpgrades * CONFIG.upgradeDelayEffectiveness.max));
 
 		int rangeUpgrades = upgrades.get(Upgrade.RANGE);
-		activatingRange = block.nonUpgradedRange + rangeUpgrades * block.upgradeRangeEffectiveness;
+		activatingRange = CONFIG.nonUpgradedRange + rangeUpgrades * CONFIG.upgradeRangeEffectiveness;
 
 		if (world != null && !world.isRemote) {
 			if (!readFromNBT)
@@ -129,6 +132,9 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		return essenceType;
 	}
 
+	/**
+	 * Returns a number between 0 and 1 representing the % summoned
+	 */
 	public float getSpawnPercent () {
 		return (lastTimeTillSpawn - timeTillSpawn) / (float) lastTimeTillSpawn;
 	}
@@ -140,7 +146,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		}
 
 		// when the soulbook is empty, don't run
-		if (getBlock().soulbookUses > 0 && soulbookUses <= 0) {
+		if (CONFIG.soulbookUses > 0 && soulbookUses <= 0) {
 			return 0;
 		}
 
@@ -184,7 +190,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 			timeTillSpawn -= activationAmount;
 
 			if (world.isRemote) {
-				updateRenderer();
+				updateRenderer(activationAmount);
 			} else {
 				int signalStrength = (int) Math.floor(16 * getSpawnPercent());
 				if (signalStrength != this.signalStrength) {
@@ -245,12 +251,12 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		return world.isAnyPlayerWithinRangeAt(pos.getX(), pos.getY(), pos.getZ(), 64);
 	}
 
-	private void updateRenderer () {
-		Summoner block = getBlock();
-
+	private void updateRenderer (double activationAmount) {
 		if (isPlayerInRangeForEffects()) {
-			if (block.particleCountActivated < 1) {
-				timeTillParticle += block.particleCountActivated;
+			double particleCount = CONFIG.particleCountActivated * Math
+				.min(1, activationAmount * activationAmount) * (0.5 + getSpawnPercent() / 2);
+			if (particleCount < 1) {
+				timeTillParticle += 0.01 + particleCount;
 
 				if (timeTillParticle < 1)
 					return;
@@ -258,7 +264,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 			timeTillParticle = 0;
 
-			for (int i = 0; i < block.particleCountActivated; i++) {
+			for (int i = 0; i < particleCount; i++) {
 				double d3 = (pos.getX() + world.rand.nextFloat());
 				double d4 = (pos.getY() + world.rand.nextFloat());
 				double d5 = (pos.getZ() + world.rand.nextFloat());
@@ -341,7 +347,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 		WorldServer worldServer = world.getMinecraftServer().getWorld(entity.dimension);
 
-		for (int i = 0; i < getBlock().particleCountSpawn; ++i) {
+		for (int i = 0; i < CONFIG.particleCountSpawn; ++i) {
 			double d0 = rand.nextGaussian() * 0.02D;
 			double d1 = rand.nextGaussian() * 0.02D;
 			double d2 = rand.nextGaussian() * 0.02D;

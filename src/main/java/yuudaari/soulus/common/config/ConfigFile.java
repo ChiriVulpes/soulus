@@ -16,4 +16,8 @@ public @interface ConfigFile {
 	 * The properties in the json where this class will serialize to/deserialize from, separated by `.`
 	 */
 	String path () default "";
+
+	String folder () default "";
+
+	String id ();
 }

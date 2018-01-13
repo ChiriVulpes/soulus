@@ -89,6 +89,10 @@ public class DefaultFieldSerializer extends FieldSerializer<Object> {
 	@Nullable
 	public static final Object deserializeClass (final IClassDeserializationHandler<Object> deserializer, final Class<?> requestedType, final JsonElement element) {
 		final Object instance = deserializer.instantiate(requestedType);
+
+		if (element == null)
+			return instance;
+
 		return deserializer.deserialize(instance, element);
 	}
 

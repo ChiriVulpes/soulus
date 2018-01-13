@@ -88,23 +88,33 @@ public class Soulus {
 		postInitHandlers.add(handler);
 	}
 
-	@EventHandler
-	public void preinit (FMLPreInitializationEvent event) {
-		config = new Config(event.getAsmData(), event.getModConfigurationDirectory().getAbsolutePath() + "/soulus/");
+	/**
+	 * Refreshes the soulus config
+	 */
+	public static void reloadConfig () {
+		config.deserialize();
+
+		Logger.info(Config.get(Soulus.MODID, ConfigSummoner.class).toString());
+		Logger.info(Config.get(Soulus.MODID, ConfigSummoner.class).nonUpgradedSpawningRadius + ", " + Config
+			.get(Soulus.MODID, ConfigSummoner.class).nonUpgradedDelay);
+
 		try {
-			config.deserialize();
-			Logger.info(config.get(ConfigSummoner.class).toString());
-			Logger.info(config.get(ConfigSummoner.class).nonUpgradedSpawningRadius + ", " + config
-				.get(ConfigSummoner.class).nonUpgradedDelay);
 			config.serialize();
 		} catch (Exception e) {
 			Logger.error(e);
 		}
+	}
+
+	@EventHandler
+	public void preinit (final FMLPreInitializationEvent event) {
+		final String configPath = event.getModConfigurationDirectory().getAbsolutePath() + "/soulus/";
+		config = new Config(event.getAsmData(), configPath, Soulus.MODID);
+		reloadConfig();
 
 		config_old = yuudaari.soulus.common.config_old.Config
 			.loadConfig(event.getModConfigurationDirectory().getAbsolutePath());
 
-		for (PreInitEventHandler handler : preInitHandlers) {
+		for (final PreInitEventHandler handler : preInitHandlers) {
 			handler.handle(event);
 		}
 	}

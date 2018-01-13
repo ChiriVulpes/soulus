@@ -1,6 +1,5 @@
 package yuudaari.soulus.common.block.summoner;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -34,6 +33,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.common.block.EndersteelType;
 import yuudaari.soulus.common.block.UpgradeableBlock;
+import yuudaari.soulus.common.config.Config;
+import yuudaari.soulus.common.config.block.ConfigSummoner;
 import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.item.CrystalBlood;
 import yuudaari.soulus.common.item.OrbMurky;
@@ -41,7 +42,6 @@ import yuudaari.soulus.common.item.Soulbook;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.util.EssenceType;
 import yuudaari.soulus.common.util.Material;
-import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.Soulus;
 
 public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
@@ -130,28 +130,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		return Summoner.class;
 	}
 
-	public int nonUpgradedSpawningRadius = 4;
-	public Range nonUpgradedCount = new Range(1, 2);
-	public Range nonUpgradedDelay = new Range(10000, 20000);
-	public int nonUpgradedRange = 4;
-	public Range upgradeCountEffectiveness = new Range(0.2, 0.5);
-	public double upgradeCountRadiusEffectiveness = 0.15;
-	public Range upgradeDelayEffectiveness = new Range(0.8, 1);
-	public int upgradeRangeEffectiveness = 4;
-	public double particleCountActivated = 3;
-	public int particleCountSpawn = 50;
-	public int soulbookUses = -1;
-	public double soulbookEssenceRequiredToInsert = 0.5;
-
-	{
-		serializer.fields.addAll(Arrays
-			.asList("nonUpgradedSpawningRadius", "nonUpgradedRange", "upgradeCountRadiusEffectiveness", "upgradeRangeEffectiveness", "particleCountActivated", "particleCountSpawn", "soulbookUses", "soulbookEssenceRequiredToInsert"));
-
-		serializer.fieldHandlers.put("nonUpgradedCount", Range.serializer);
-		serializer.fieldHandlers.put("nonUpgradedDelay", Range.serializer);
-		serializer.fieldHandlers.put("upgradeCountEffectiveness", Range.serializer);
-		serializer.fieldHandlers.put("upgradeDelayEffectiveness", Range.serializer);
-	}
+	public final ConfigSummoner CONFIG = Config.get(Soulus.MODID, ConfigSummoner.class);
 
 	/////////////////////////////////////////
 	// Properties
@@ -383,8 +362,8 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 		// try to insert a soulbook
 		if (item == Soulbook.INSTANCE) {
-			if ((soulbookUses <= 0 && !Soulbook.isFilled(stack)) || Soulbook
-				.getContainedEssence(stack) < soulbookEssenceRequiredToInsert * Soulus.config_old
+			if ((CONFIG.soulbookUses <= 0 && !Soulbook.isFilled(stack)) || Soulbook
+				.getContainedEssence(stack) < CONFIG.soulbookEssenceRequiredToInsert * Soulus.config_old
 					.getSoulbookQuantity(EssenceType.getEssenceType(stack)))
 				return false;
 
@@ -405,7 +384,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 			String newEssenceType = EssenceType.getEssenceType(stack);
 			te.setEssenceType(newEssenceType);
 			te.soulbookUses = (int) (Soulbook.getContainedEssence(stack) / (double) Soulus.config_old
-				.getSoulbookQuantity(newEssenceType) * this.soulbookUses);
+				.getSoulbookQuantity(newEssenceType) * CONFIG.soulbookUses);
 
 			stack.shrink(1);
 
@@ -425,8 +404,8 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	public ItemStack getSoulbook (SummonerTileEntity te) {
 		String essenceType = te.getEssenceType();
 
-		return soulbookUses > 0 ? Soulbook
-			.getStack(essenceType, (int) Math.max(0, te.soulbookUses / (double) soulbookUses * Soulus.config_old
+		return CONFIG.soulbookUses > 0 ? Soulbook
+			.getStack(essenceType, (int) Math.max(0, te.soulbookUses / (double) CONFIG.soulbookUses * Soulus.config_old
 				.getSoulbookQuantity(essenceType))) : Soulbook.getFilled(essenceType);
 	}
 
@@ -442,9 +421,9 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":summoner.summon_percentage", (int) Math
 			.floor(te.getSpawnPercent() * 100)));
 
-		if (soulbookUses > 0) {
+		if (CONFIG.soulbookUses > 0) {
 			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":summoner.summons_remaining", Math
-				.max(0, te.soulbookUses), soulbookUses));
+				.max(0, te.soulbookUses), CONFIG.soulbookUses));
 		}
 
 	}
