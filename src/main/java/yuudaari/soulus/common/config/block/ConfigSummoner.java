@@ -2,9 +2,11 @@ package yuudaari.soulus.common.config.block;
 
 import yuudaari.soulus.common.config.ConfigFile;
 import yuudaari.soulus.common.util.Range;
+import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
 
 @ConfigFile(file = "summoner")
+@Serializable
 public class ConfigSummoner {
 
 	@Serialized public int nonUpgradedSpawningRadius = 4;

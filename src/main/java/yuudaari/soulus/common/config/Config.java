@@ -46,9 +46,7 @@ public class Config {
 	 */
 	public void deserialize () {
 		for (final Map.Entry<String, List<Class<?>>> entry : configFileClasses.entrySet()) {
-			Logger.scopes.push("Config Instantiation");
-			final Map<Class<?>, Object> configs = instantiateConfigClasses(entry.getValue());
-			Logger.scopes.pop();
+			final Map<Class<?>, Object> configs = createConfigClassMap(entry.getValue());
 
 			Logger.scopes.push("Config Deserialization");
 			tryDeserializeConfigFile(entry.getKey(), configs);
@@ -72,8 +70,8 @@ public class Config {
 				Logger.warn("Not a valid Json Object");
 			} else {
 				for (final Map.Entry<Class<?>, Object> deserializationEntry : toDeserialize.entrySet()) {
-					ConfigDeserialization
-						.tryDeserializeClass(json, deserializationEntry.getKey(), deserializationEntry.getValue());
+					deserializationEntry
+						.setValue(ConfigDeserialization.tryDeserializeClass(deserializationEntry.getKey(), json));
 				}
 			}
 		} else {
@@ -119,19 +117,11 @@ public class Config {
 	/**
 	 * Instantiates instances of the serializable classes
 	 */
-	private Map<Class<?>, Object> instantiateConfigClasses (final List<Class<?>> classes) {
+	private Map<Class<?>, Object> createConfigClassMap (final List<Class<?>> classes) {
 		final Map<Class<?>, Object> result = new HashMap<>();
 
 		for (final Class<?> cls : classes) {
-			Logger.scopes.push(cls.getSimpleName());
-
-			try {
-				result.put(cls, cls.newInstance());
-			} catch (final InstantiationException | IllegalAccessException e) {
-				Logger.warn("Could not instantiate the class '" + cls.getSimpleName() + "'");
-			}
-
-			Logger.scopes.pop();
+			result.put(cls, null);
 		}
 
 		return result;

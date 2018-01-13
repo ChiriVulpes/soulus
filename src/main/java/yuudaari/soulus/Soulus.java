@@ -93,6 +93,7 @@ public class Soulus {
 		config = new Config(event.getAsmData(), event.getModConfigurationDirectory().getAbsolutePath() + "/soulus/");
 		try {
 			config.deserialize();
+			Logger.info(config.get(ConfigSummoner.class).toString());
 			Logger.info(config.get(ConfigSummoner.class).nonUpgradedSpawningRadius + ", " + config
 				.get(ConfigSummoner.class).nonUpgradedDelay);
 		} catch (Exception e) {
