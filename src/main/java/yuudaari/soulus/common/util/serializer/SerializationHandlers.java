@@ -2,12 +2,13 @@ package yuudaari.soulus.common.util.serializer;
 
 import javax.annotation.Nullable;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 public class SerializationHandlers {
 
 	public static interface IFieldSerializationHandler<T> {
 
-		JsonElement serialize (T object);
+		JsonElement serialize (Class<?> objectType, T object);
 	}
 
 	public static interface IFieldDeserializationHandler<T extends Object> {
@@ -17,7 +18,7 @@ public class SerializationHandlers {
 
 	public static interface IClassSerializationHandler<T> {
 
-		JsonElement serialize (T object);
+		void serialize (T object, JsonObject into);
 	}
 
 	public static interface IClassDeserializationHandler<T extends Object> {

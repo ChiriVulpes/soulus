@@ -96,6 +96,7 @@ public class Soulus {
 			Logger.info(config.get(ConfigSummoner.class).toString());
 			Logger.info(config.get(ConfigSummoner.class).nonUpgradedSpawningRadius + ", " + config
 				.get(ConfigSummoner.class).nonUpgradedDelay);
+			config.serialize();
 		} catch (Exception e) {
 			Logger.error(e);
 		}

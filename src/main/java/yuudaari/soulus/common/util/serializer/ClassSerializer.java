@@ -2,6 +2,7 @@ package yuudaari.soulus.common.util.serializer;
 
 import javax.annotation.Nullable;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import yuudaari.soulus.common.util.serializer.SerializationHandlers.IClassDeserializationHandler;
 import yuudaari.soulus.common.util.serializer.SerializationHandlers.IClassSerializationHandler;
 
@@ -12,7 +13,7 @@ public abstract class ClassSerializer<T extends Object> implements IClassSeriali
 	public abstract T instantiate (Class<?> cls);
 
 	@Override
-	public abstract JsonElement serialize (T object);
+	public abstract void serialize (T instance, JsonObject object);
 
 	@Override
 	public abstract T deserialize (T instance, JsonElement element);

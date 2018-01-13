@@ -7,7 +7,7 @@ import yuudaari.soulus.common.util.serializer.SerializationHandlers.IFieldSerial
 public abstract class FieldSerializer<T> implements IFieldSerializationHandler<T>, IFieldDeserializationHandler<T> {
 
 	@Override
-	public abstract JsonElement serialize (final T object);
+	public abstract JsonElement serialize (Class<?> objectType, T object);
 
 	@Override
 	public abstract T deserialize (Class<?> requestedType, JsonElement element);

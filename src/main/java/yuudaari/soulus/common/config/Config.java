@@ -3,18 +3,26 @@ package yuudaari.soulus.common.config;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringWriter;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
+import com.google.gson.internal.Streams;
+import com.google.gson.stream.JsonWriter;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import yuudaari.soulus.common.util.Logger;
+import yuudaari.soulus.common.util.serializer.DefaultFieldSerializer;
+import yuudaari.soulus.common.util.serializer.SerializationHandlers.IClassDeserializationHandler;
+import yuudaari.soulus.common.util.serializer.SerializationHandlers.IClassSerializationHandler;
 import yuudaari.soulus.common.config.ConfigFile;
 
 public class Config {
@@ -42,9 +50,22 @@ public class Config {
 	}
 
 	/**
+	 * Serializes the serializable classes from each config file
+	 */
+	public void serialize () {
+		for (final Map.Entry<String, List<Class<?>>> entry : configFileClasses.entrySet()) {
+			Logger.scopes.push("Config Serialization");
+			trySerializeConfigFile(entry.getKey(), filterConfigMap(entry.getValue()));
+			Logger.scopes.pop();
+		}
+	}
+
+	/**
 	 * Deserializes the serializable classes from each config file
 	 */
 	public void deserialize () {
+		this.configs.clear();
+
 		for (final Map.Entry<String, List<Class<?>>> entry : configFileClasses.entrySet()) {
 			final Map<Class<?>, Object> configs = createConfigClassMap(entry.getValue());
 
@@ -56,6 +77,23 @@ public class Config {
 		}
 	}
 
+	/**
+	 * Attempts to deserialize a config file into all of the classes that serialize into it
+	 */
+	private void trySerializeConfigFile (final String fileName, final Map<Class<?>, Object> toSerialize) {
+		Logger.scopes.push(fileName);
+
+		final File configFile = new File(directory + fileName);
+		if (configFile.exists() || createConfigFile(configFile)) {
+			final JsonObject json = new JsonObject();
+			for (final Map.Entry<Class<?>, Object> serializationEntry : toSerialize.entrySet()) {
+				trySerializeClass(serializationEntry.getKey(), serializationEntry.getValue(), json);
+			}
+			writeJsonConfigFile(configFile, json, new File(configFile.getAbsolutePath().replace(".json", ".err.json")));
+		}
+
+		Logger.scopes.pop();
+	}
 
 	/**
 	 * Attempts to deserialize a config file into all of the classes that serialize into it
@@ -71,7 +109,7 @@ public class Config {
 			} else {
 				for (final Map.Entry<Class<?>, Object> deserializationEntry : toDeserialize.entrySet()) {
 					deserializationEntry
-						.setValue(ConfigDeserialization.tryDeserializeClass(deserializationEntry.getKey(), json));
+						.setValue(tryDeserializeClass(deserializationEntry.getKey(), json));
 				}
 			}
 		} else {
@@ -79,6 +117,101 @@ public class Config {
 		}
 
 		Logger.scopes.pop();
+	}
+
+	/**
+	 * Deserialize all of the @Serialized fields in a class
+	 */
+	private void trySerializeClass (final Class<?> cls, final Object toSerialize, JsonObject containingObject) {
+		Logger.scopes.push(cls.getSimpleName());
+
+		containingObject = getActualContainingObject(containingObject, cls, true);
+		if (containingObject != null) {
+
+			final IClassSerializationHandler<Object> deserializer = DefaultFieldSerializer.getClassSerializer(cls);
+			if (deserializer != null) {
+				try {
+					DefaultFieldSerializer.serializeClass(deserializer, toSerialize, containingObject);
+				} catch (final Exception e) {
+					Logger
+						.warn("Could not serialize class: " + (e.getClass() == Exception.class ? e.getMessage() : e));
+				}
+			} else {
+				Logger.warn("Class is not @Serializable");
+			}
+		}
+
+		Logger.scopes.pop();
+	}
+
+	/**
+	 * Deserialize all of the @Serialized fields in a class
+	 */
+	private Object tryDeserializeClass (final Class<?> cls, JsonObject containingObject) {
+		Logger.scopes.push(cls.getSimpleName());
+
+		Object result = null;
+
+		containingObject = getActualContainingObject(containingObject, cls);
+		if (containingObject != null) {
+
+			final IClassDeserializationHandler<Object> deserializer = DefaultFieldSerializer.getClassDeserializer(cls);
+			if (deserializer != null) {
+				try {
+					result = DefaultFieldSerializer.deserializeClass(deserializer, cls, containingObject);
+				} catch (final Exception e) {
+					Logger
+						.warn("Could not deserialize class: " + (e.getClass() == Exception.class ? e.getMessage() : e));
+				}
+			} else {
+				Logger.warn("Class is not @Serializable");
+			}
+		}
+
+		Logger.scopes.pop();
+
+		return result;
+	}
+
+	/**
+	 * Gets the containing json object of the serializable class based on the @ConfigFile path. Does not create missing JsonObjects
+	 */
+	@Nullable
+	private JsonObject getActualContainingObject (final JsonObject containingObject, final Class<?> cls) {
+		return getActualContainingObject(containingObject, cls, false);
+	}
+
+	/**
+	 * Gets the containing json object of the serializable class based on the @ConfigFile path
+	 */
+	@Nullable
+	private JsonObject getActualContainingObject (final JsonObject containingObject, final Class<?> cls, final boolean createMissing) {
+		JsonObject result = containingObject;
+
+		final String[] propertyPath = ConfigFileUtil.getConfigProperty(cls);
+
+		if (result != null) {
+			for (final String property : propertyPath) {
+				JsonElement propertyValue = result.get(property);
+				if (propertyValue == null || !propertyValue.isJsonObject()) {
+					if (createMissing) {
+						propertyValue = new JsonObject();
+						result.add(property, propertyValue);
+
+					} else {
+						result = null;
+						break;
+					}
+				}
+
+				result = propertyValue.getAsJsonObject();
+			}
+		}
+
+		if (result == null)
+			Logger.warn("Config file must include the path: '" + String.join(".", propertyPath) + "'");
+
+		return result;
 	}
 
 	/**
@@ -96,6 +229,36 @@ public class Config {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Replaces the contents of a config file with a string representation of a Json Object.
+	 * @param saveOld If not null, and the file contents are changing, the old version is saved to this file.
+	 */
+	private static void writeJsonConfigFile (final File configFile, final JsonObject json, @Nullable final File saveOld) {
+		try {
+
+			StringWriter stringWriter = new StringWriter();
+			JsonWriter jsonWriter = new JsonWriter(stringWriter);
+			jsonWriter.setLenient(true);
+			jsonWriter.setIndent("\t");
+			Streams.write(json, jsonWriter);
+			final String newFileText = stringWriter.toString();
+
+			final String oldFileText = new String(Files.readAllBytes(configFile.toPath()));
+			if (oldFileText.equals(newFileText)) {
+				return;
+			}
+
+			if (saveOld != null) {
+				Files.write(saveOld.toPath(), oldFileText.getBytes());
+			}
+
+			Files.write(configFile.toPath(), newFileText.getBytes());
+
+		} catch (final IOException | JsonParseException e) {
+			Logger.warn("Could not write the config file: " + e.getMessage());
+		}
 	}
 
 	/**
@@ -179,5 +342,15 @@ public class Config {
 		Logger.scopes.pop();
 
 		return result;
+	}
+
+	/**
+	 * Filters the config map to only include classes specified in the list
+	 */
+	private Map<Class<?>, Object> filterConfigMap (List<Class<?>> validKeys) {
+		return configs.entrySet()
+			.stream()
+			.filter(e -> validKeys.contains(e.getKey()))
+			.collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
 	}
 }
