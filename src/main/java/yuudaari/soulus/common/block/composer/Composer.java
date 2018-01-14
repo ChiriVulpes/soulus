@@ -23,7 +23,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
-import yuudaari.soulus.common.config.Config;
+import yuudaari.soulus.common.config.ConfigInjected;
+import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigComposer;
 import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.ModBlocks;
@@ -33,6 +34,7 @@ import yuudaari.soulus.common.util.StructureMap;
 import yuudaari.soulus.common.util.StructureMap.BlockValidator;
 import yuudaari.soulus.Soulus;
 
+@ConfigInjected(Soulus.MODID)
 public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 
 	/////////////////////////////////////////
@@ -114,7 +116,7 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	// Config
 	//
 
-	public final ConfigComposer CONFIG = Config.get(Soulus.MODID, ConfigComposer.class);
+	@Inject(ConfigComposer.class) public static ConfigComposer CONFIG;
 
 	/////////////////////////////////////////
 	// Properties

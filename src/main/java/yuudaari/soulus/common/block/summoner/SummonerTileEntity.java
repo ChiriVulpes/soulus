@@ -17,16 +17,18 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.ForgeEventFactory;
 import yuudaari.soulus.common.block.summoner.Summoner.Upgrade;
-import yuudaari.soulus.common.config.Config;
+import yuudaari.soulus.common.config.ConfigInjected;
+import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSummoner;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.config_old.EssenceConfig;
 import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.Soulus;
 
+@ConfigInjected(Soulus.MODID)
 public class SummonerTileEntity extends UpgradeableBlockTileEntity implements ITickable {
 
-	public static ConfigSummoner CONFIG = Config.get(Soulus.MODID, ConfigSummoner.class);
+	@Inject(ConfigSummoner.class) public static ConfigSummoner CONFIG;
 
 	@Override
 	public Summoner getBlock () {

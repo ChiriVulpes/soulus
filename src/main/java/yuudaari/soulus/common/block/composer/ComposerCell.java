@@ -22,11 +22,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
-import yuudaari.soulus.common.config.Config;
+import yuudaari.soulus.common.config.ConfigInjected;
+import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigComposerCell;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.Soulus;
 
+@ConfigInjected(Soulus.MODID)
 public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 
 	/////////////////////////////////////////
@@ -42,7 +44,7 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	// Config
 	//
 
-	public final ConfigComposerCell CONFIG = Config.get(Soulus.MODID, ConfigComposerCell.class);
+	@Inject(ConfigComposerCell.class) public static ConfigComposerCell CONFIG;
 
 	/////////////////////////////////////////
 	// Properties

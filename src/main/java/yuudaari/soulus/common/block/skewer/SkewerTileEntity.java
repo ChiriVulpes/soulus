@@ -10,7 +10,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock.IUpgrade;
-import yuudaari.soulus.common.config.Config;
+import yuudaari.soulus.common.config.ConfigInjected;
+import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSkewer;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.Soulus;
@@ -18,6 +19,7 @@ import yuudaari.soulus.common.block.skewer.Skewer.Upgrade;
 import yuudaari.soulus.common.item.CrystalBlood;
 import yuudaari.soulus.common.misc.ModDamageSource;
 
+@ConfigInjected(Soulus.MODID)
 public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 
 	public int crystalBloodContainedBlood = 0;
@@ -33,7 +35,7 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 	// Config
 	//
 
-	public static final ConfigSkewer CONFIG = Config.get(Soulus.MODID, ConfigSkewer.class);
+	@Inject(ConfigSkewer.class) public static ConfigSkewer CONFIG;
 
 	/////////////////////////////////////////
 	// Events

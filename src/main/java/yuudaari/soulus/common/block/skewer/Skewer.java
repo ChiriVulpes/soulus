@@ -29,13 +29,15 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
-import yuudaari.soulus.common.config.Config;
+import yuudaari.soulus.common.config.ConfigInjected;
+import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSkewer;
 import yuudaari.soulus.common.item.CrystalBlood;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.Soulus;
 
+@ConfigInjected(Soulus.MODID)
 public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 
 	/////////////////////////////////////////
@@ -137,7 +139,7 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	// Config
 	//
 
-	public final ConfigSkewer CONFIG = Config.get(Soulus.MODID, ConfigSkewer.class);
+	@Inject(ConfigSkewer.class) public static ConfigSkewer CONFIG;
 
 	/////////////////////////////////////////
 	// Properties

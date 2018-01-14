@@ -8,7 +8,6 @@ import yuudaari.soulus.common.ModGenerators;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.compat.ExNihiloCreatioRecipes;
 import yuudaari.soulus.common.config.Config;
-import yuudaari.soulus.common.config.block.ConfigSummoner;
 import yuudaari.soulus.server.command.SoulusLocation;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,10 +92,6 @@ public class Soulus {
 	 */
 	public static void reloadConfig () {
 		config.deserialize();
-
-		Logger.info(Config.get(Soulus.MODID, ConfigSummoner.class).toString());
-		Logger.info(Config.get(Soulus.MODID, ConfigSummoner.class).nonUpgradedSpawningRadius + ", " + Config
-			.get(Soulus.MODID, ConfigSummoner.class).nonUpgradedDelay);
 
 		try {
 			config.serialize();

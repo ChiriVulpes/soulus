@@ -36,7 +36,8 @@ import yuudaari.soulus.Soulus;
 import yuudaari.soulus.client.util.ParticleManager;
 import yuudaari.soulus.client.util.ParticleType;
 import yuudaari.soulus.common.block.composer.Composer.Upgrade;
-import yuudaari.soulus.common.config.Config;
+import yuudaari.soulus.common.config.ConfigInjected;
+import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigComposer;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.MobPoof;
@@ -44,6 +45,7 @@ import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.common.util.StructureMap.BlockValidator;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
+@ConfigInjected(Soulus.MODID)
 public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 	private boolean isConnected = false;
@@ -80,7 +82,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	// Config
 	//
 
-	public static final ConfigComposer CONFIG = Config.get(Soulus.MODID, ConfigComposer.class);
+	@Inject(ConfigComposer.class) public static ConfigComposer CONFIG;
 
 	/////////////////////////////////////////
 	// Update

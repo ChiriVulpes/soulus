@@ -3,7 +3,6 @@ package yuudaari.soulus.common.util;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
-import yuudaari.soulus.common.config.Config;
 import yuudaari.soulus.common.config.item.ConfigFood;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,9 +43,14 @@ public class ModItem extends Item implements IModThing {
 	protected Boolean glint = false;
 	private String name;
 	private List<String> oreDicts = new ArrayList<>();
-	private Class<? extends ConfigFood> foodConfig = null;
+	private IFoodConfigGetter foodConfig = null;
 	public ConsumeHandler foodHandler;
 	public CanConsumeHandler foodCanEatHandler;
+
+	public static interface IFoodConfigGetter {
+
+		public ConfigFood get ();
+	}
 
 	public ModItem (String name) {
 		setName(name);
@@ -55,11 +59,6 @@ public class ModItem extends Item implements IModThing {
 	public ModItem (String name, Integer maxStackSize) {
 		this(name);
 		setMaxStackSize(maxStackSize);
-	}
-
-	@SuppressWarnings("unchecked")
-	protected <T extends ConfigFood> T getFoodConfig () {
-		return (T) Config.INSTANCES.get(Soulus.MODID).get(foodConfig);
 	}
 
 	@Override
@@ -124,8 +123,8 @@ public class ModItem extends Item implements IModThing {
 		return foodConfig != null;
 	}
 
-	public void setFood (final Class<? extends ConfigFood> config) {
-		foodConfig = config;
+	public void setFood (final IFoodConfigGetter getter) {
+		foodConfig = getter;
 	}
 
 	@Override
@@ -133,7 +132,7 @@ public class ModItem extends Item implements IModThing {
 		ItemStack itemstack = playerIn.getHeldItem(handIn);
 		if (isFood()) {
 			if ((foodCanEatHandler != null && foodCanEatHandler.canConsume(worldIn, playerIn, handIn)) || (playerIn
-				.canEat(getFoodConfig().foodAlwaysEdible) && itemstack.getCount() >= getFoodConfig().foodQuantity)) {
+				.canEat(foodConfig.get().foodAlwaysEdible) && itemstack.getCount() >= foodConfig.get().foodQuantity)) {
 				playerIn.setActiveHand(handIn);
 				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
 			}
@@ -148,20 +147,20 @@ public class ModItem extends Item implements IModThing {
 
 	@Override
 	public int getMaxItemUseDuration (ItemStack stack) {
-		return getFoodConfig().foodDuration;
+		return foodConfig.get().foodDuration;
 	}
 
 	@Override
 	public ItemStack onItemUseFinish (ItemStack stack, World world, EntityLivingBase entityLiving) {
 		if (entityLiving instanceof EntityPlayer) {
 			EntityPlayer entityplayer = (EntityPlayer) entityLiving;
-			entityplayer.getFoodStats().addStats(getFoodConfig().foodAmount, getFoodConfig().foodSaturation);
+			entityplayer.getFoodStats().addStats(foodConfig.get().foodAmount, foodConfig.get().foodSaturation);
 			world
 				.playSound((EntityPlayer) null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, world.rand
 					.nextFloat() * 0.1F + 0.9F);
 
-			if (getFoodConfig().foodEffects != null) {
-				for (PotionEffect effect : getFoodConfig().foodEffects) {
+			if (foodConfig.get().foodEffects != null) {
+				for (PotionEffect effect : foodConfig.get().foodEffects) {
 					entityLiving.addPotionEffect(new PotionEffect(effect));
 				}
 			}
@@ -176,7 +175,7 @@ public class ModItem extends Item implements IModThing {
 			}
 		}
 
-		stack.shrink(getFoodConfig().foodQuantity);
+		stack.shrink(foodConfig.get().foodQuantity);
 		return stack;
 	}
 

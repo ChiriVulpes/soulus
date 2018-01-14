@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,17 +24,23 @@ import yuudaari.soulus.common.util.serializer.DefaultFieldSerializer;
 import yuudaari.soulus.common.util.serializer.SerializationHandlers.IClassDeserializationHandler;
 import yuudaari.soulus.common.util.serializer.SerializationHandlers.IClassSerializationHandler;
 import yuudaari.soulus.common.config.ConfigFile;
+import yuudaari.soulus.common.config.ConfigInjected.Inject;
 
 public class Config {
 
 	public static Map<String, Config> INSTANCES = new HashMap<>();
 
 	private final Map<String, List<Class<?>>> configFileClasses;
+	private Map<Field, Class<?>> configInjections = null;
 	private final Map<Class<?>, Object> configs = new HashMap<>();
 	private final String directory;
+	private final ASMDataTable asmDataTable;
+	private final String id;
 
 	public Config (final ASMDataTable asmDataTable, final String directory, final String id) {
+		this.asmDataTable = asmDataTable;
 		this.directory = directory;
+		this.id = id;
 		configFileClasses = getConfigFileClasses(asmDataTable, id);
 
 		INSTANCES.put(id, this);
@@ -87,6 +94,27 @@ public class Config {
 
 			this.configs.putAll(configs);
 		}
+
+		inject();
+	}
+
+	/**
+	 * Injects all the configs into fields marked with @ConfigInject.
+	 */
+	private void inject () {
+		if (configInjections == null) {
+			configInjections = getConfigInjections(asmDataTable, id);
+		}
+
+		for (final Map.Entry<Field, Class<?>> configInjection : configInjections.entrySet()) {
+			final Field field = configInjection.getKey();
+			try {
+				field.set(null, get(configInjection.getValue()));
+			} catch (final Exception e) {
+				Logger.warn("Unable to inject config '" + configInjection.getValue()
+					.getSimpleName() + "' into field: " + field.getName());
+			}
+		}
 	}
 
 	/**
@@ -123,7 +151,6 @@ public class Config {
 
 		for (final Map.Entry<Class<?>, Object> deserializationEntry : toDeserialize.entrySet()) {
 			Object deserialized = tryDeserializeClass(deserializationEntry.getKey(), json);
-			Logger.info(deserialized.toString());
 			deserializationEntry.setValue(deserialized);
 		}
 
@@ -315,6 +342,49 @@ public class Config {
 				classes.add(asmClass);
 
 			} catch (final ClassNotFoundException | LinkageError e) {
+				Logger.warn("Failed to get class from ASM data: " + asmData.getClassName() + e);
+			}
+		}
+
+		return classes;
+	}
+
+	/**
+	 * Returns a list of fields that configs are injected into.
+	 */
+	private static Map<Field, Class<?>> getConfigInjections (final ASMDataTable asmDataTable, final String id) {
+		final Map<Field, Class<?>> result = new HashMap<>();
+
+		final List<Class<?>> classes = getInjectedClasses(asmDataTable, id);
+		for (final Class<?> injectionClass : classes) {
+			for (final Field field : injectionClass.getDeclaredFields()) {
+				final Inject injectAnnotation = field.getAnnotation(Inject.class);
+				if (injectAnnotation != null) {
+					result.put(field, injectAnnotation.value());
+				}
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	* Returns a list of all serializable classes, from the ASM data table
+	*/
+	private static List<Class<?>> getInjectedClasses (final ASMDataTable asmDataTable, final String id) {
+		final List<Class<?>> classes = new ArrayList<>();
+
+		final String annotationClassName = ConfigInjected.class.getCanonicalName();
+		final Set<ASMDataTable.ASMData> asmDatas = asmDataTable.getAll(annotationClassName);
+
+		for (ASMDataTable.ASMData asmData : asmDatas) {
+			try {
+				final Class<?> annotatedClass = Class.forName(asmData.getClassName());
+				final ConfigInjected injected = annotatedClass.getAnnotation(ConfigInjected.class);
+				if (injected.value().equals(id))
+					classes.add(annotatedClass);
+
+			} catch (final ClassNotFoundException | LinkageError | NullPointerException e) {
 				Logger.warn("Failed to get class from ASM data: " + asmData.getClassName() + e);
 			}
 		}

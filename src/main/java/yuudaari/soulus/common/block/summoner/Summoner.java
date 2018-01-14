@@ -34,7 +34,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.common.block.EndersteelType;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
-import yuudaari.soulus.common.config.Config;
+import yuudaari.soulus.common.config.ConfigInjected;
+import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSummoner;
 import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.item.CrystalBlood;
@@ -45,6 +46,7 @@ import yuudaari.soulus.common.util.EssenceType;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.Soulus;
 
+@ConfigInjected(Soulus.MODID)
 public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 	/////////////////////////////////////////
@@ -126,7 +128,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	// Config
 	//
 
-	public final ConfigSummoner CONFIG = Config.get(Soulus.MODID, ConfigSummoner.class);
+	@Inject(ConfigSummoner.class) public static ConfigSummoner CONFIG;
 
 	/////////////////////////////////////////
 	// Properties
