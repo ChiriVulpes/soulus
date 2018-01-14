@@ -32,10 +32,12 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import yuudaari.soulus.Soulus;
 import yuudaari.soulus.client.util.ParticleManager;
 import yuudaari.soulus.client.util.ParticleType;
-import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.block.composer.Composer.Upgrade;
+import yuudaari.soulus.common.config.Config;
+import yuudaari.soulus.common.config.block.ConfigComposer;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.MobPoof;
 import yuudaari.soulus.common.util.Range;
@@ -73,6 +75,12 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	public int getSignalStrength () {
 		return isConnected && hasValidRecipe() ? signalStrength : 0;
 	}
+
+	/////////////////////////////////////////
+	// Config
+	//
+
+	public static final ConfigComposer CONFIG = Config.get(Soulus.MODID, ConfigComposer.class);
 
 	/////////////////////////////////////////
 	// Update
@@ -118,7 +126,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 				activationAmount += 1;
 
-				if (!world.isRemote && isConnected && hasValidRecipe() && getBlock().poofChance > world.rand
+				if (!world.isRemote && isConnected && hasValidRecipe() && CONFIG.poofChance > world.rand
 					.nextDouble()) {
 					entity.setDead();
 					mobPoofParticles(world, pos);
@@ -144,7 +152,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		World world = Minecraft.getMinecraft().world;
 		Random rand = world.rand;
 
-		for (int i = 0; i < ModBlocks.COMPOSER.particleCountMobPoof; ++i) {
+		for (int i = 0; i < CONFIG.particleCountMobPoof; ++i) {
 			double d3 = (pos.getX() - 0.5F + rand.nextFloat());
 			double d4 = (pos.getY() + rand.nextFloat());
 			double d5 = (pos.getZ() - 0.5F + rand.nextFloat());
@@ -322,13 +330,11 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	@Override
 	public void onUpdateUpgrades (boolean readFromNBT) {
 
-		Composer block = getBlock();
-
 		int delayUpgrades = upgrades.get(Upgrade.DELAY);
-		spawnDelay = new Range(block.nonUpgradedDelay.min / (1 + delayUpgrades * block.upgradeDelayEffectiveness.min), block.nonUpgradedDelay.max / (1 + delayUpgrades * block.upgradeDelayEffectiveness.max));
+		spawnDelay = new Range(CONFIG.nonUpgradedDelay.min / (1 + delayUpgrades * CONFIG.upgradeDelayEffectiveness.min), CONFIG.nonUpgradedDelay.max / (1 + delayUpgrades * CONFIG.upgradeDelayEffectiveness.max));
 
 		int rangeUpgrades = upgrades.get(Upgrade.RANGE);
-		activatingRange = block.nonUpgradedRange + rangeUpgrades * block.upgradeRangeEffectiveness;
+		activatingRange = CONFIG.nonUpgradedRange + rangeUpgrades * CONFIG.upgradeRangeEffectiveness;
 
 		if (world != null && !world.isRemote) {
 			if (!readFromNBT)
@@ -408,9 +414,8 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		if (!hasValidRecipe() || !isPlayerInRangeForEffects() || activationAmount == 0)
 			return;
 
-		Composer composer = getBlock();
-		if (composer.particleCountActivated < 1) {
-			timeTillParticle += composer.particleCountActivated;
+		if (CONFIG.particleCountActivated < 1) {
+			timeTillParticle += CONFIG.particleCountActivated;
 
 			if (timeTillParticle < 1)
 				return;
@@ -418,7 +423,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 		timeTillParticle = 0;
 
-		for (int i = 0; i < composer.particleCountActivated; i++) {
+		for (int i = 0; i < CONFIG.particleCountActivated; i++) {
 			double d3 = (pos.getX() + world.rand.nextFloat());
 			double d4 = (pos.getY() + world.rand.nextFloat());
 			double d5 = (pos.getZ() + world.rand.nextFloat());

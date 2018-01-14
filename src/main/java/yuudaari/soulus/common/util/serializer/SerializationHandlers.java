@@ -26,6 +26,6 @@ public class SerializationHandlers {
 		@Nullable
 		T instantiate (Class<?> cls);
 
-		T deserialize (T instance, JsonElement element);
+		T deserialize (@Nullable T instance, JsonElement element);
 	}
 }

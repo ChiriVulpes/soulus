@@ -2,9 +2,7 @@ package yuudaari.soulus.common.config_old;
 
 import yuudaari.soulus.common.ModGenerators;
 import yuudaari.soulus.common.ModItems;
-import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.item.CrystalBlood;
-import yuudaari.soulus.common.item.Glue;
 import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.item.Sledgehammer;
 import yuudaari.soulus.common.misc.BarkFromLogs;
@@ -54,9 +52,6 @@ public class Config {
 	static {
 		serializer = new Serializer<>(Config.class, "boneChunkParticleCount");
 
-		serializer.otherHandlers.put("glue", new ManualSerializer(from -> Glue.serializer
-			.serialize(ModItems.GLUE), (from, into) -> Glue.serializer.deserialize(from, ModItems.GLUE)));
-
 		serializer.otherHandlers.put("barkFromLogs", new ManualSerializer(from -> BarkFromLogs.serializer
 			.serialize(BarkFromLogs.INSTANCE), (from, into) -> BarkFromLogs.serializer
 				.deserialize(from, BarkFromLogs.INSTANCE)));
@@ -75,15 +70,6 @@ public class Config {
 
 		serializer.otherHandlers.put("murkyOrb", new ManualSerializer(from -> OrbMurky.serializer
 			.serialize(ModItems.ORB_MURKY), (from, into) -> OrbMurky.serializer.deserialize(from, ModItems.ORB_MURKY)));
-
-		serializer.otherHandlers.put("summoner", new ManualSerializer(from -> ModBlocks.SUMMONER
-			.serialize(), (from, into) -> ModBlocks.SUMMONER.deserialize(from)));
-
-		serializer.otherHandlers.put("skewer", new ManualSerializer(from -> ModBlocks.SKEWER
-			.serialize(), (from, into) -> ModBlocks.SKEWER.deserialize(from)));
-
-		serializer.otherHandlers.put("composer", new ManualSerializer(from -> ModBlocks.COMPOSER
-			.serialize(), (from, into) -> ModBlocks.COMPOSER.deserialize(from)));
 
 		serializer.otherHandlers.put("creatures", new ManualSerializer(from -> NoMobSpawning.serializer
 			.serialize(NoMobSpawning.INSTANCE), (from, into) -> NoMobSpawning.serializer

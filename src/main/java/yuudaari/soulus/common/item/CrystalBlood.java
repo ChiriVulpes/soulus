@@ -4,7 +4,6 @@ import yuudaari.soulus.Soulus;
 import yuudaari.soulus.client.util.ParticleManager;
 import yuudaari.soulus.client.util.ParticleType;
 import yuudaari.soulus.common.ModItems;
-import yuudaari.soulus.common.config_old.PotionEffectSerializer;
 import yuudaari.soulus.common.config_old.Serializer;
 import yuudaari.soulus.common.misc.ModDamageSource;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
@@ -56,7 +55,7 @@ public class CrystalBlood extends SummonerUpgrade {
 	static {
 		serializer = new Serializer<>(CrystalBlood.class, "requiredBlood", "prickAmount", "prickWorth", "creaturePrickRequiredHealth", "creaturePrickAmount", "creaturePrickWorth", "particleCount");
 
-		serializer.fieldHandlers.put("prickEffects", PotionEffectSerializer.INSTANCE);
+		// serializer.fieldHandlers.put("prickEffects", PotionEffectSerializer.INSTANCE);
 	}
 
 	private static final int colourEmpty = 0x281313;

@@ -1,12 +1,16 @@
 package yuudaari.soulus.common.util.serializer;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import javax.annotation.Nullable;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import yuudaari.soulus.common.config.CaseConversion;
 import yuudaari.soulus.common.util.Logger;
+import yuudaari.soulus.common.util.serializer.ClassSerializationEventHandlers.DeserializationEventHandler;
+import yuudaari.soulus.common.util.serializer.ClassSerializationEventHandlers.SerializationEventHandler;
 import yuudaari.soulus.common.util.serializer.SerializationHandlers.IFieldDeserializationHandler;
 import yuudaari.soulus.common.util.serializer.SerializationHandlers.IFieldSerializationHandler;
 
@@ -16,14 +20,27 @@ public class DefaultClassSerializer extends ClassSerializer<Object> {
 	 * Serialize an object into the given JsonObject.
 	 */
 	@Override
-	public void serialize (Object instance, JsonObject object) {
+	public void serialize (final Object instance, final JsonObject object) {
 		if (object == null) {
 			Logger.warn("Did not receive a Json object to serialize into");
 			return;
 		}
 
-		for (final Field field : instance.getClass().getFields()) {
+		final Class<?> cls = instance.getClass();
+
+		for (final Field field : cls.getFields()) {
 			trySerializeField(instance, field, object);
+		}
+
+		for (final Method method : cls.getMethods()) {
+			if (method.isAnnotationPresent(SerializationEventHandler.class)) {
+				try {
+					method.invoke(null, instance, object);
+				} catch (final InvocationTargetException | IllegalAccessException e) {
+					Logger.warn("Failed to run class serialization handler:");
+					Logger.error(e);
+				}
+			}
 		}
 	}
 
@@ -31,14 +48,32 @@ public class DefaultClassSerializer extends ClassSerializer<Object> {
 	 * Deserialize a JsonElement into a given object instance.
 	 */
 	@Override
-	public Object deserialize (final Object instance, final JsonElement element) {
+	public Object deserialize (@Nullable final Object instance, final JsonElement element) {
+		if (instance == null) {
+			Logger.warn("Not instantiated");
+			return null;
+		}
+
 		if (element == null || !element.isJsonObject()) {
 			Logger.warn("Json value must be an object. Using base instance.");
 			return instance;
 		}
 
-		for (final Field field : instance.getClass().getFields()) {
+		final Class<?> cls = instance.getClass();
+
+		for (final Field field : cls.getFields()) {
 			tryDeserializeField(field, instance, element.getAsJsonObject());
+		}
+
+		for (final Method method : cls.getMethods()) {
+			if (method.isAnnotationPresent(DeserializationEventHandler.class)) {
+				try {
+					method.invoke(null, instance, element.getAsJsonObject());
+				} catch (final InvocationTargetException | IllegalAccessException e) {
+					Logger.warn("Failed to run class serialization handler:");
+					Logger.error(e);
+				}
+			}
 		}
 
 		return instance;
@@ -55,7 +90,7 @@ public class DefaultClassSerializer extends ClassSerializer<Object> {
 			final String jsonFieldName = CaseConversion.toSnakeCase(field.getName());
 			try {
 
-				Object value = field.get(instance);
+				final Object value = field.get(instance);
 
 				JsonElement serializedValue = JsonNull.INSTANCE;
 
@@ -77,7 +112,11 @@ public class DefaultClassSerializer extends ClassSerializer<Object> {
 				containingObject.add(jsonFieldName, serializedValue);
 
 			} catch (final Exception e) {
-				Logger.warn("Could not deserialize field: " + (e.getClass() == Exception.class ? e.getMessage() : e));
+				final boolean isNormalException = e.getClass() == Exception.class;
+				Logger.warn("Could not serialize field: " + (isNormalException ? e.getMessage() : ""));
+				if (!isNormalException) {
+					Logger.error(e);
+				}
 			}
 		}
 
@@ -107,12 +146,19 @@ public class DefaultClassSerializer extends ClassSerializer<Object> {
 					}
 				} else {
 					deserializedValue = deserializer.deserialize(field.getType(), jsonValue);
+					if (deserializedValue == null && !field.isAnnotationPresent(Nullable.class)) {
+						throw new Exception("Recieved null, field cannot be null.");
+					}
 				}
 
 				field.set(instance, deserializedValue);
 
 			} catch (final Exception e) {
-				Logger.warn("Could not deserialize field: " + (e.getClass() == Exception.class ? e.getMessage() : e));
+				final boolean isNormalException = e.getClass() == Exception.class;
+				Logger.warn("Could not deserialize field: " + (isNormalException ? e.getMessage() : ""));
+				if (!isNormalException) {
+					Logger.error(e);
+				}
 			}
 		}
 

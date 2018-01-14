@@ -17,7 +17,13 @@ public @interface ConfigFile {
 	 */
 	String path () default "";
 
+	/**
+	 * The folder that the file will be placed in
+	 */
 	String folder () default "";
 
+	/**
+	 * The ID of the Config instance this file should be serialized with
+	 */
 	String id ();
 }

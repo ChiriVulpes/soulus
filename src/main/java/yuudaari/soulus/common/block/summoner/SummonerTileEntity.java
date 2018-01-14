@@ -19,7 +19,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 import yuudaari.soulus.common.block.summoner.Summoner.Upgrade;
 import yuudaari.soulus.common.config.Config;
 import yuudaari.soulus.common.config.block.ConfigSummoner;
-import yuudaari.soulus.common.block.UpgradeableBlock.UpgradeableBlockTileEntity;
+import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.config_old.EssenceConfig;
 import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.Soulus;

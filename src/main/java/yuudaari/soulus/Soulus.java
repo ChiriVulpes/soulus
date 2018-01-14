@@ -109,7 +109,6 @@ public class Soulus {
 	public void preinit (final FMLPreInitializationEvent event) {
 		final String configPath = event.getModConfigurationDirectory().getAbsolutePath() + "/soulus/";
 		config = new Config(event.getAsmData(), configPath, Soulus.MODID);
-		reloadConfig();
 
 		config_old = yuudaari.soulus.common.config_old.Config
 			.loadConfig(event.getModConfigurationDirectory().getAbsolutePath());
@@ -135,6 +134,8 @@ public class Soulus {
 		for (PostInitEventHandler handler : postInitHandlers) {
 			handler.handle(event);
 		}
+
+		reloadConfig();
 
 		SoulsPacketHandler.register();
 		if (Loader.isModLoaded("exnihilocreatio")) {

@@ -21,12 +21,14 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import yuudaari.soulus.common.block.UpgradeableBlock;
+import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
+import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
+import yuudaari.soulus.common.config.Config;
+import yuudaari.soulus.common.config.block.ConfigComposer;
 import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.util.Material;
-import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.common.util.StructureMap;
 import yuudaari.soulus.common.util.StructureMap.BlockValidator;
 import yuudaari.soulus.Soulus;
@@ -109,31 +111,10 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	}
 
 	/////////////////////////////////////////
-	// Serializer
+	// Config
 	//
 
-	public Range nonUpgradedCount = new Range(1, 2);
-	public Range nonUpgradedDelay = new Range(500, 1000);
-	public int nonUpgradedRange = 4;
-	public Range upgradeDelayEffectiveness = new Range(0.8, 1);
-	public int upgradeRangeEffectiveness = 1;
-	public int particleCountActivated = 3;
-	public int particleCountMobPoof = 50;
-	public double poofChance = 0.001;
-
-	{
-		serializer.fields.addAll(Arrays
-			.asList("nonUpgradedRange", "upgradeRangeEffectiveness", "particleCountActivated", "particleCountMobPoof", "poofChance"));
-
-		serializer.fieldHandlers.put("nonUpgradedCount", Range.serializer);
-		serializer.fieldHandlers.put("nonUpgradedDelay", Range.serializer);
-		serializer.fieldHandlers.put("upgradeDelayEffectiveness", Range.serializer);
-	}
-
-	@Override
-	public Class<? extends UpgradeableBlock<ComposerTileEntity>> getSerializationClass () {
-		return Composer.class;
-	}
+	public final ConfigComposer CONFIG = Config.get(Soulus.MODID, ConfigComposer.class);
 
 	/////////////////////////////////////////
 	// Properties

@@ -1,6 +1,5 @@
 package yuudaari.soulus.common.block.skewer;
 
-import java.util.Arrays;
 import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -28,7 +27,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import yuudaari.soulus.common.block.UpgradeableBlock;
+import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
+import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
+import yuudaari.soulus.common.config.Config;
+import yuudaari.soulus.common.config.block.ConfigSkewer;
 import yuudaari.soulus.common.item.CrystalBlood;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.util.Material;
@@ -73,17 +75,22 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		public int getMaxQuantity () {
 			// all upgrades by default are capped at 16
 			if (maxQuantity == null) {
-				if (name == "crystal_blood")
+				if (name.equals("crystal_blood"))
 					return 1;
-				if (name == "damage")
+				if (name.equals("damage"))
 					return 256;
-				if (name == "poison")
+				if (name.equals("poison"))
 					return 16;
-				if (name == "power")
+				if (name.equals("power"))
 					return 1;
 			}
 
 			return maxQuantity;
+		}
+
+		@Override
+		public boolean canOverrideMaxQuantity () {
+			return !name.equals("crystal_blood");
 		}
 
 		@Override
@@ -127,24 +134,10 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	}
 
 	/////////////////////////////////////////
-	// Serializer
+	// Config
 	//
 
-	@Override
-	public Class<? extends UpgradeableBlock<SkewerTileEntity>> getSerializationClass () {
-		return Skewer.class;
-	}
-
-	public float baseDamage = 1;
-	public float upgradeDamageEffectiveness = 0.04f;
-	public int bloodPerDamage = 1;
-	public double chanceForBloodPerHit = 0.5;
-	public int ticksBetweenDamage = 15;
-
-	{
-		serializer.fields
-			.addAll(Arrays.asList("baseDamage", "upgradeDamageEffectiveness", "bloodPerDamage", "ticksBetweenDamage"));
-	}
+	public final ConfigSkewer CONFIG = Config.get(Soulus.MODID, ConfigSkewer.class);
 
 	/////////////////////////////////////////
 	// Properties

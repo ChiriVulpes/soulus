@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -115,17 +114,17 @@ public class Config {
 		Logger.scopes.push(fileName);
 
 		final File configFile = new File(directory + fileName);
-		if (configFile.exists()) {
-			final JsonObject json = parseJsonConfigFile(configFile);
-			if (json == null) {
-				Logger.warn("Not a valid Json Object");
-			}
-			for (final Map.Entry<Class<?>, Object> deserializationEntry : toDeserialize.entrySet()) {
-				deserializationEntry
-					.setValue(tryDeserializeClass(deserializationEntry.getKey(), json));
-			}
-		} else {
+		if (!configFile.exists())
 			createConfigFile(configFile);
+
+		final JsonObject json = parseJsonConfigFile(configFile);
+		if (json == null)
+			Logger.warn("Not a valid Json Object");
+
+		for (final Map.Entry<Class<?>, Object> deserializationEntry : toDeserialize.entrySet()) {
+			Object deserialized = tryDeserializeClass(deserializationEntry.getKey(), json);
+			Logger.info(deserialized.toString());
+			deserializationEntry.setValue(deserialized);
 		}
 
 		Logger.scopes.pop();
@@ -145,8 +144,11 @@ public class Config {
 				try {
 					DefaultFieldSerializer.serializeClass(deserializer, toSerialize, containingObject);
 				} catch (final Exception e) {
-					Logger
-						.warn("Could not serialize class: " + (e.getClass() == Exception.class ? e.getMessage() : e));
+					final boolean isNormalException = e.getClass() == Exception.class;
+					Logger.warn("Could not serialize class: " + (isNormalException ? e.getMessage() : ""));
+					if (!isNormalException) {
+						Logger.error(e);
+					}
 				}
 			} else {
 				Logger.warn("Class is not @Serializable");
@@ -256,13 +258,11 @@ public class Config {
 			final String newFileText = stringWriter.toString();
 
 			final String oldFileText = new String(Files.readAllBytes(configFile.toPath()));
-			if (oldFileText.equals(newFileText)) {
+			if (oldFileText.equals(newFileText))
 				return;
-			}
 
-			if (saveOld != null) {
+			if (saveOld != null && oldFileText.length() > 0)
 				Files.write(saveOld.toPath(), oldFileText.getBytes());
-			}
 
 			Files.write(configFile.toPath(), newFileText.getBytes());
 
@@ -349,7 +349,7 @@ public class Config {
 				result.put(configFile, configFileClasses = new ArrayList<>());
 			}
 
-			Logger.info("Added config class, file: " + configFile + ", class: " + cls.getSimpleName());
+			// Logger.info("Added config class, file: " + configFile + ", class: " + cls.getSimpleName());
 
 			configFileClasses.add(cls);
 		}
@@ -366,6 +366,6 @@ public class Config {
 		return configs.entrySet()
 			.stream()
 			.filter(e -> validKeys.contains(e.getKey()))
-			.collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+			.collect(HashMap::new, (m, v) -> m.put(v.getKey(), v.getValue()), HashMap::putAll);
 	}
 }

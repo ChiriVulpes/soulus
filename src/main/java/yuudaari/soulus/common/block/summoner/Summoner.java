@@ -32,7 +32,8 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.common.block.EndersteelType;
-import yuudaari.soulus.common.block.UpgradeableBlock;
+import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
+import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.config.Config;
 import yuudaari.soulus.common.config.block.ConfigSummoner;
 import yuudaari.soulus.common.CreativeTab;
@@ -122,13 +123,8 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	}
 
 	/////////////////////////////////////////
-	// Serializer
+	// Config
 	//
-
-	@Override
-	public Class<? extends UpgradeableBlock<SummonerTileEntity>> getSerializationClass () {
-		return Summoner.class;
-	}
 
 	public final ConfigSummoner CONFIG = Config.get(Soulus.MODID, ConfigSummoner.class);
 

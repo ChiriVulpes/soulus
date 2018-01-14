@@ -1,14 +1,20 @@
 package yuudaari.soulus.common.config.block;
 
+import yuudaari.soulus.common.block.summoner.Summoner;
 import yuudaari.soulus.common.config.ConfigFile;
 import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
 import yuudaari.soulus.Soulus;
 
-@ConfigFile(file = "summoner", id = Soulus.MODID)
+@ConfigFile(file = "block/summoner", id = Soulus.MODID)
 @Serializable
-public class ConfigSummoner {
+public class ConfigSummoner extends ConfigUpgradeableBlock<Summoner> {
+
+	@Override
+	protected Summoner getBlock () {
+		return Summoner.INSTANCE;
+	}
 
 	@Serialized public int nonUpgradedSpawningRadius = 4;
 	@Serialized public Range nonUpgradedCount = new Range(1, 2);

@@ -9,8 +9,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import yuudaari.soulus.common.block.UpgradeableBlock.IUpgrade;
-import yuudaari.soulus.common.block.UpgradeableBlock.UpgradeableBlockTileEntity;
+import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock.IUpgrade;
+import yuudaari.soulus.common.config.Config;
+import yuudaari.soulus.common.config.block.ConfigSkewer;
+import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
+import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.block.skewer.Skewer.Upgrade;
 import yuudaari.soulus.common.item.CrystalBlood;
 import yuudaari.soulus.common.misc.ModDamageSource;
@@ -27,6 +30,12 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 	}
 
 	/////////////////////////////////////////
+	// Config
+	//
+
+	public static final ConfigSkewer CONFIG = Config.get(Soulus.MODID, ConfigSkewer.class);
+
+	/////////////////////////////////////////
 	// Events
 	//
 
@@ -35,14 +44,13 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 		if (world.isRemote)
 			return;
 
-		Skewer skewer = getBlock();
 		IBlockState state = world.getBlockState(pos);
 		if (state.getValue(Skewer.EXTENDED)) {
 			EnumFacing facing = state.getValue(Skewer.FACING);
 			long time = world.getTotalWorldTime();
 
 			entityHitTimes.entrySet()
-				.removeIf(entityHitTime -> time - entityHitTime.getValue() > getBlock().ticksBetweenDamage);
+				.removeIf(entityHitTime -> time - entityHitTime.getValue() > CONFIG.ticksBetweenDamage);
 
 			for (EntityLivingBase entity : world
 				.getEntitiesWithinAABB(EntityLivingBase.class, Skewer.getSpikeHitbox(facing, pos))) {
@@ -51,17 +59,17 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 
 					entityHitTimes.put(entity, world.getTotalWorldTime());
 
-					float damage = skewer.baseDamage;
+					float damage = CONFIG.baseDamage;
 
-					damage += skewer.upgradeDamageEffectiveness * upgrades.get(Upgrade.DAMAGE);
+					damage += CONFIG.upgradeDamageEffectiveness * upgrades.get(Upgrade.DAMAGE);
 
 					int rtime = entity.hurtResistantTime;
 					entity.attackEntityFrom(ModDamageSource.SKEWER, damage);
 					entity.hurtResistantTime = rtime;
 
-					if (world.rand.nextDouble() < skewer.chanceForBloodPerHit && upgrades
+					if (world.rand.nextDouble() < CONFIG.chanceForBloodPerHit && upgrades
 						.get(Upgrade.CRYSTAL_BLOOD) == 1) {
-						crystalBloodContainedBlood += getBlock().bloodPerDamage * damage;
+						crystalBloodContainedBlood += CONFIG.bloodPerDamage * damage;
 						if (crystalBloodContainedBlood > CrystalBlood.INSTANCE.requiredBlood) {
 							crystalBloodContainedBlood = CrystalBlood.INSTANCE.requiredBlood;
 						}

@@ -1,14 +1,9 @@
-package yuudaari.soulus.common.block;
+package yuudaari.soulus.common.block.upgradeable_block;
 
 import com.google.common.collect.Lists;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Stack;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -17,19 +12,10 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.Explosion;
@@ -43,15 +29,12 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import yuudaari.soulus.common.config_old.ManualSerializer;
-import yuudaari.soulus.common.config_old.Serializer;
-import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.ModBlock;
 import yuudaari.soulus.Soulus;
 
 @Mod.EventBusSubscriber(modid = Soulus.MODID)
-public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.UpgradeableBlockTileEntity> extends ModBlock {
+public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockTileEntity> extends ModBlock {
 
 	/////////////////////////////////////////
 	// Upgrades
@@ -78,6 +61,10 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.
 			}
 		}
 
+		public default boolean canOverrideMaxQuantity () {
+			return true;
+		}
+
 		public boolean isItemStack (ItemStack stack);
 
 		public int getIndex ();
@@ -90,71 +77,6 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.
 	}
 
 	public abstract IUpgrade[] getUpgrades ();
-
-	/////////////////////////////////////////
-	// Serializer
-	//
-
-	public abstract Class<? extends UpgradeableBlock<TileEntityClass>> getSerializationClass ();
-
-	public final JsonElement serialize () {
-		return serializer.serialize(this);
-	}
-
-	public final Object deserialize (JsonElement from) {
-		serializer.deserialize(from, this);
-		return null;
-	}
-
-	public final Serializer<? extends UpgradeableBlock<TileEntityClass>> serializer = new Serializer<>(getSerializationClass());
-	{
-		serializer.otherHandlers
-			.put("upgradeMaxCounts", new ManualSerializer(this::serializeMaxUpgrades, this::deserializeMaxUpgrades));
-	}
-
-	private final JsonElement serializeMaxUpgrades (Object from) {
-		JsonObject result = new JsonObject();
-
-		for (IUpgrade upgrade : getUpgrades()) {
-			String key = upgrade.getName().toLowerCase();
-			result.addProperty(key, upgrade.getMaxQuantity());
-		}
-
-		return result;
-	}
-
-	private final Object deserializeMaxUpgrades (JsonElement from, Object current) {
-		if (from == null || !from.isJsonObject()) {
-			Logger.warn("Max upgrades must be an object");
-			return current;
-		}
-
-		JsonObject upgrades = from.getAsJsonObject();
-		for (Map.Entry<String, JsonElement> entry : upgrades.entrySet()) {
-			JsonElement val = entry.getValue();
-
-			if (val == null || !val.isJsonPrimitive() || !val.getAsJsonPrimitive().isNumber()) {
-				Logger.warn("Upgrade maximum must be an number");
-				continue;
-			}
-
-			String key = entry.getKey();
-			IUpgrade upgrade = null;
-			for (IUpgrade checkUpgrade : getUpgrades()) {
-				if (key.equalsIgnoreCase(checkUpgrade.getName())) {
-					upgrade = checkUpgrade;
-				}
-			}
-			if (upgrade == null) {
-				Logger.warn("Upgrade type '" + key + "' is invalid");
-				continue;
-			}
-
-			upgrade.setMaxQuantity(val.getAsInt());
-		}
-
-		return current;
-	}
 
 	/////////////////////////////////////////
 	// Constructor
@@ -381,206 +303,6 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlock.
 
 	@Override
 	public abstract Class<? extends UpgradeableBlockTileEntity> getTileEntityClass ();
-
-	public static abstract class UpgradeableBlockTileEntity extends TileEntity implements ITickable {
-
-		public UpgradeableBlockTileEntity () {
-			this.onUpdateUpgrades(false);
-		}
-
-		public abstract UpgradeableBlock<? extends UpgradeableBlockTileEntity> getBlock ();
-
-		public Map<IUpgrade, Integer> upgrades = new HashMap<>();
-		{
-			for (IUpgrade upgrade : getBlock().getUpgrades()) {
-				upgrades.put(upgrade, 0);
-			}
-		}
-
-		public Stack<IUpgrade> insertionOrder = new Stack<>();
-
-		public void addUpgradeStacksToList (List<ItemStack> list) {
-			for (Map.Entry<IUpgrade, Integer> upgrade : upgrades.entrySet()) {
-				upgrade.getKey().addItemStackToList(this, list, (int) upgrade.getValue());
-			}
-		}
-
-		public IUpgrade getUpgradeForItem (ItemStack stack) {
-			for (Map.Entry<IUpgrade, Integer> upgradeEntry : upgrades.entrySet()) {
-				IUpgrade upgrade = upgradeEntry.getKey();
-				if (upgrade.isItemStack(stack))
-					return upgrade;
-			}
-
-			return null;
-		}
-
-		public final void insertUpgrade (ItemStack stack, IUpgrade upgrade, int quantity) {
-			this.insertionOrder.remove(upgrade);
-			this.insertionOrder.push(upgrade);
-
-			int currentQuantity = upgrades.get(upgrade);
-			int maxQuantity = upgrade.getMaxQuantity();
-			int insertQuantity = Math.min(quantity, maxQuantity - currentQuantity);
-			int newQuantity = currentQuantity + insertQuantity;
-
-			upgrades.put(upgrade, newQuantity);
-			onInsertUpgrade(stack, upgrade, newQuantity);
-
-			stack.shrink(insertQuantity);
-
-			onUpdateUpgrades(false);
-			blockUpdate();
-		}
-
-		public void onInsertUpgrade (ItemStack stack, IUpgrade upgrade, int newQuantity) {}
-
-		public final IUpgrade popLastUpgrade () {
-			return insertionOrder.size() == 0 ? null : insertionOrder.pop();
-		}
-
-		public int removeUpgrade (IUpgrade upgrade) {
-			int result = upgrades.get(upgrade);
-			upgrades.put(upgrade, 0);
-
-			onUpdateUpgrades(false);
-			blockUpdate();
-			return result;
-		}
-
-		public void clear () {
-			for (IUpgrade upgrade : getBlock().getUpgrades()) {
-				upgrades.put(upgrade, 0);
-			}
-
-			onUpdateUpgrades(false);
-			blockUpdate();
-		}
-
-		public static void dispenseItem (ItemStack stack, World world, BlockPos pos, EnumFacing facing) {
-			if (!stack.isEmpty()) {
-				BlockPos facingPos = pos.offset(facing);
-				IInventory facingInventory = TileEntityHopper.getInventoryAtPosition(world, (double) facingPos
-					.getX(), (double) facingPos.getY(), (double) facingPos.getZ());
-
-				if (facingInventory != null) {
-					stack = TileEntityHopper
-						.putStackInInventoryAllSlots(null, facingInventory, stack.copy(), facing.getOpposite());
-				}
-
-				if (facingInventory == null) {
-					double d0 = pos.getX() + 0.5 + facing.getFrontOffsetX() / 1.5;
-					double d1 = pos.getY() + 0.5 + facing.getFrontOffsetY() / 1.5;
-					double d2 = pos.getZ() + 0.5 + facing.getFrontOffsetZ() / 1.5;
-
-					if (facing.getAxis() == EnumFacing.Axis.Y) {
-						d1 = d1 - 0.125D;
-					} else {
-						d1 = d1 - 0.15625D;
-					}
-
-					EntityItem itemEntity = new EntityItem(world, d0, d1, d2, stack);
-					double d3 = world.rand.nextDouble() * 0.1D + 0.2D;
-					itemEntity.motionX = facing.getFrontOffsetX() * d3;
-					itemEntity.motionY = facing.getFrontOffsetY() * d3;
-					itemEntity.motionZ = facing.getFrontOffsetZ() * d3;
-					double speed = 1.5;
-					itemEntity.motionX += world.rand.nextGaussian() * 0.0075D * speed;
-					itemEntity.motionY += world.rand.nextGaussian() * 0.0075D * speed;
-					itemEntity.motionZ += world.rand.nextGaussian() * 0.0075D * speed;
-					world.spawnEntity(itemEntity);
-				}
-			}
-		}
-
-		/////////////////////////////////////////
-		// Events
-		//
-
-		public void onUpdateUpgrades (boolean readFromNBT) {}
-
-		public void onReadFromNBT (NBTTagCompound compound) {}
-
-		public void onWriteToNBT (NBTTagCompound compound) {}
-
-		/////////////////////////////////////////
-		// NBT
-		//
-
-		@Override
-		public final void readFromNBT (NBTTagCompound compound) {
-			super.readFromNBT(compound);
-
-			IUpgrade[] upgrades = getBlock().getUpgrades();
-
-			NBTTagCompound upgradeTag = compound.getCompoundTag("upgrades");
-			for (IUpgrade upgrade : upgrades) {
-				this.upgrades.put(upgrade, upgradeTag.getInteger(upgrade.getName()));
-			}
-
-			this.insertionOrder = new Stack<>();
-			NBTTagList value = (NBTTagList) compound.getTag("insertion_order");
-			for (NBTBase s : value) {
-				if (s instanceof NBTTagString) {
-					String str = ((NBTTagString) s).getString();
-					for (IUpgrade u : upgrades) {
-						if (u.getName().equals(str)) {
-							this.insertionOrder.add(u);
-						}
-					}
-				}
-			}
-
-			this.onUpdateUpgrades(true);
-
-			onReadFromNBT(compound);
-		}
-
-		@Override
-		public NBTTagCompound writeToNBT (NBTTagCompound compound) {
-			super.writeToNBT(compound);
-
-			onWriteToNBT(compound);
-
-			NBTTagList list = new NBTTagList();
-			for (IUpgrade upgrade : insertionOrder) {
-				list.appendTag(new NBTTagString(upgrade.getName()));
-			}
-			compound.setTag("insertion_order", list);
-
-			IUpgrade[] upgrades = getBlock().getUpgrades();
-
-			NBTTagCompound upgradeTag = new NBTTagCompound();
-			for (IUpgrade upgrade : upgrades) {
-				upgradeTag.setInteger(upgrade.getName(), this.upgrades.get(upgrade));
-			}
-			compound.setTag("upgrades", upgradeTag);
-
-			return compound;
-		}
-
-		@Override
-		public final NBTTagCompound getUpdateTag () {
-			return writeToNBT(new NBTTagCompound());
-		}
-
-		@Override
-		public final SPacketUpdateTileEntity getUpdatePacket () {
-			return new SPacketUpdateTileEntity(pos, 1, getUpdateTag());
-		}
-
-		@Override
-		public final void onDataPacket (NetworkManager net, SPacketUpdateTileEntity pkt) {
-			readFromNBT(pkt.getNbtCompound());
-		}
-
-		public final void blockUpdate () {
-			if (world != null) {
-				IBlockState blockState = world.getBlockState(pos);
-				world.notifyBlockUpdate(pos, blockState, blockState, 3);
-			}
-		}
-	}
 
 	/////////////////////////////////////////
 	// Waila

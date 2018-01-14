@@ -1,6 +1,8 @@
 package yuudaari.soulus.common.util.serializer;
 
+import java.lang.reflect.Array;
 import javax.annotation.Nullable;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -19,10 +21,9 @@ public class DefaultFieldSerializer extends FieldSerializer<Object> {
 		final IClassSerializationHandler<Object> serializer = getClassSerializer(requestedType);
 		if (serializer == null) {
 			// if there's no serializer for this class, it must be a primitive
-			if (requestedType.isPrimitive() || requestedType == String.class || Number.class
-				.isAssignableFrom(requestedType)) {
-				result = serializePrimitive(requestedType, object);
-			} else {
+			result = trySerializePrimitive(requestedType, object);
+			if (result == null) result = trySerializeArray(requestedType, object);
+			if (result == null) {
 				Logger.warn("Unable to automatically deserialize the type '" + requestedType.getSimpleName() + "'");
 			}
 		} else {
@@ -50,19 +51,14 @@ public class DefaultFieldSerializer extends FieldSerializer<Object> {
 
 		final IClassDeserializationHandler<Object> deserializer = getClassDeserializer(requestedType);
 		if (deserializer == null) {
-			// if there's no deserializer for this class, it must be a primitive
-			if (requestedType.isPrimitive() || requestedType == String.class || Number.class
-				.isAssignableFrom(requestedType)) {
-				if (element.isJsonPrimitive()) {
-					result = deserializePrimitive(requestedType, element);
-				} else {
-					Logger.warn("Json value is the wrong type");
-				}
-			} else {
+			// there's no deserializer registered for this class
+			result = tryDeserializePrimitive(requestedType, element);
+			if (result == null) result = tryDeserializeArray(requestedType, element);
+			if (result == null) {
 				Logger.warn("Unable to automatically deserialize the type '" + requestedType.getSimpleName() + "'");
 			}
 		} else {
-			// there's a deserializer for this class, so try to use it
+			// there's a deserializer registered for this class, so try to use it
 			try {
 				result = deserializeClass(deserializer, requestedType, element);
 			} catch (Exception e) {
@@ -89,9 +85,6 @@ public class DefaultFieldSerializer extends FieldSerializer<Object> {
 	@Nullable
 	public static final Object deserializeClass (final IClassDeserializationHandler<Object> deserializer, final Class<?> requestedType, final JsonElement element) {
 		final Object instance = deserializer.instantiate(requestedType);
-
-		if (element == null)
-			return instance;
 
 		return deserializer.deserialize(instance, element);
 	}
@@ -131,6 +124,38 @@ public class DefaultFieldSerializer extends FieldSerializer<Object> {
 	}
 
 	/**
+	 * Attempts to deserialize a primitive. 
+	 * If the requested type is not a primitive, or the types don't line up, returns null.
+	 */
+	@Nullable
+	private final Object tryDeserializePrimitive (final Class<?> requestedType, final JsonElement element) {
+		if (requestedType.isPrimitive() || requestedType == String.class || Number.class
+			.isAssignableFrom(requestedType)) {
+			if (element.isJsonPrimitive()) {
+				return deserializePrimitive(requestedType, element);
+			} else {
+				Logger.warn("Json value is the wrong type");
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Attempts to serialize a primitive. 
+	 * If the requested type is not a primitive, returns null.
+	 */
+	@Nullable
+	private final JsonElement trySerializePrimitive (final Class<?> requestedType, final Object object) {
+		if (requestedType.isPrimitive() || requestedType == String.class || Number.class
+			.isAssignableFrom(requestedType)) {
+			return serializePrimitive(requestedType, object);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Deserializes a primitive JSON value. Returns null if the requested type and given JSON value do not match.
 	 */
 	@Nullable
@@ -159,6 +184,74 @@ public class DefaultFieldSerializer extends FieldSerializer<Object> {
 
 		Logger.warn("Can't deserialize primitive '" + primitive.getClass().getSimpleName() + "'");
 		return null;
+	}
+
+	/**
+	 * Attempts to serialize an array. 
+	 * Returns null if the requested type is not an array.
+	 */
+	@Nullable
+	private final JsonElement trySerializeArray (final Class<?> requestedType, final Object object) {
+		if (requestedType.isArray()) {
+			return serializeArray(requestedType, object);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Attempts to deserialize an array. 
+	 * Returns null if the requested type is not an array, or the types don't match.
+	 */
+	@Nullable
+	private final Object tryDeserializeArray (final Class<?> requestedType, final JsonElement element) {
+		if (requestedType.isArray()) {
+			if (element.isJsonArray()) {
+				return deserializeArray(requestedType, element.getAsJsonArray());
+			} else {
+				Logger.warn("Json value is not an array");
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Serializes an array. Skips any entries which are "null".
+	 */
+	@Nullable
+	private final JsonArray serializeArray (final Class<?> requestedType, final Object object) {
+		final Class<?> containedType = requestedType.getComponentType();
+
+		final Object[] arr = (Object[]) object;
+
+		final JsonArray result = new JsonArray();
+
+		for (int i = 0; i < arr.length; i++) {
+			JsonElement value = serialize(containedType, arr[i]);
+			if (value == null) continue;
+			result.add(value);
+		}
+
+		return result;
+	}
+
+	/**
+	 * Deserializes an array. If any of the values are null, returns null for the entire array.
+	 */
+	@Nullable
+	private final Object deserializeArray (final Class<?> requestedType, final JsonArray element) {
+		final Class<?> containedType = requestedType.getComponentType();
+
+		final Object[] result = (Object[]) Array.newInstance(containedType, element.size());
+
+		for (int i = 0; i < element.size(); i++) {
+			Object value = deserialize(containedType, element.get(i));
+			if (value == null) return null;
+			result[i] = value;
+		}
+
+		return result;
 	}
 
 	/**

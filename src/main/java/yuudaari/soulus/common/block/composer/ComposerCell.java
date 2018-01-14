@@ -20,7 +20,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import yuudaari.soulus.common.block.UpgradeableBlock;
+import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
+import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
+import yuudaari.soulus.common.config.Config;
+import yuudaari.soulus.common.config.block.ConfigComposerCell;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.Soulus;
 
@@ -36,15 +39,10 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	}
 
 	/////////////////////////////////////////
-	// Serializer
+	// Config
 	//
 
-	public int maxQuantity = 16;
-
-	@Override
-	public Class<? extends UpgradeableBlock<ComposerCellTileEntity>> getSerializationClass () {
-		return ComposerCell.class;
-	}
+	public final ConfigComposerCell CONFIG = Config.get(Soulus.MODID, ConfigComposerCell.class);
 
 	/////////////////////////////////////////
 	// Properties
@@ -166,7 +164,7 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	@Override
 	public boolean canActivateWithItem (ItemStack stack, World world, BlockPos pos) {
 		ComposerCellTileEntity te = (ComposerCellTileEntity) world.getTileEntity(pos);
-		return te.storedQuantity < maxQuantity;
+		return te.storedQuantity < CONFIG.maxQuantity;
 	}
 
 	@Override
@@ -176,7 +174,7 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 		ItemStack currentStack = te.storedItem;
 		if (currentStack == null || areItemStacksEqual(stack, currentStack)) {
 			int requestedInsertQuantity = player.isSneaking() ? stack.getCount() : 1;
-			int canStillBeInsertedQuantity = maxQuantity - (currentStack == null ? 0 : te.storedQuantity);
+			int canStillBeInsertedQuantity = CONFIG.maxQuantity - (currentStack == null ? 0 : te.storedQuantity);
 			int insertQuantity = Math.min(requestedInsertQuantity, canStillBeInsertedQuantity);
 
 			if (currentStack == null) {
@@ -280,7 +278,7 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":composer_cell.no_items"));
 		} else {
 			currentTooltip.add(I18n
-				.format("waila." + Soulus.MODID + ":composer_cell.contained_item", te.storedQuantity, maxQuantity, te.storedItem
+				.format("waila." + Soulus.MODID + ":composer_cell.contained_item", te.storedQuantity, CONFIG.maxQuantity, te.storedItem
 					.getDisplayName()));
 		}
 	}

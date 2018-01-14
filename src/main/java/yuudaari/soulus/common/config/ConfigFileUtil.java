@@ -37,7 +37,7 @@ public class ConfigFileUtil {
 		try {
 			final String property = classWithConfigFileAnnotation.getAnnotation(ConfigFile.class).path();
 			if (!property.equals(""))
-				return property.split(".");
+				return property.split("\\.");
 		} catch (final NullPointerException e) {}
 
 		return new String[0];
