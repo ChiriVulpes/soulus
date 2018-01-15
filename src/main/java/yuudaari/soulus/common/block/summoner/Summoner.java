@@ -382,10 +382,9 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 			te.setEssenceType(newEssenceType);
 			te.soulbookUses = (int) (Soulbook.getContainedEssence(stack) / (double) Soulus.config_old
 				.getSoulbookQuantity(newEssenceType) * CONFIG.soulbookUses);
+			te.reset();
 
 			stack.shrink(1);
-
-			te.blockUpdate();
 
 			return true;
 		}
