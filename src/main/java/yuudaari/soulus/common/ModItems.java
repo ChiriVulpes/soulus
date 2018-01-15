@@ -25,9 +25,9 @@ public class ModItems {
 	public static BoneChunkNormal BONE_CHUNK_NORMAL = new BoneChunkNormal();
 	public static BoneChunkScale BONE_CHUNK_SCALE = new BoneChunkScale();
 	public static BoneEnder BONE_ENDER = new BoneEnder();
-	public static Bonemeal BONEMEAL_NETHER = BonemealNether.INSTANCE;
+	public static Bonemeal BONEMEAL_NETHER = new BonemealNether();
 	public static BonemealEnder BONEMEAL_ENDER = new BonemealEnder();
-	public static CrystalBlood CRYSTAL_BLOOD = CrystalBlood.INSTANCE;
+	public static CrystalBlood CRYSTAL_BLOOD = new CrystalBlood();
 	public static DustEnderIron DUST_ENDER_IRON = new DustEnderIron();
 	public static Essence ESSENCE = Essence.INSTANCE;
 	public static GearBone GEAR_BONE = new GearBone("gear_bone");
@@ -57,7 +57,7 @@ public class ModItems {
 	public static ModItem INGOT_ENDERSTEEL_DARK = new ModItem("ingot_endersteel_dark").setHasDescription();
 	public static ModItem NUGGET_ENDERSTEEL_DARK = new ModItem("nugget_endersteel_dark").setHasDescription();
 	public static NuggetEndersteel NUGGET_ENDERSTEEL = new NuggetEndersteel();
-	public static OrbMurky ORB_MURKY = OrbMurky.INSTANCE;
+	public static OrbMurky ORB_MURKY = new OrbMurky();
 	public static Sledgehammer SLEDGEHAMMER = new Sledgehammer();
 	public static Soulbook SOULBOOK = Soulbook.INSTANCE;
 	public static SoulCatalyst SOUL_CATALYST = new SoulCatalyst();

@@ -14,18 +14,18 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import yuudaari.soulus.Soulus;
 import yuudaari.soulus.client.util.ParticleManager;
 import yuudaari.soulus.client.util.ParticleType;
 import yuudaari.soulus.common.ModBlocks;
-import yuudaari.soulus.common.config_old.Serializer;
+import yuudaari.soulus.common.config.ConfigInjected;
+import yuudaari.soulus.common.config.ConfigInjected.Inject;
+import yuudaari.soulus.common.config.item.ConfigBonemealNether;
 
+@ConfigInjected(Soulus.MODID)
 public class BonemealNether extends Bonemeal {
 
-	public static final Serializer<BonemealNether> serializer = new Serializer<>(BonemealNether.class, "particleCount");
-
-	public static BonemealNether INSTANCE = new BonemealNether();
-
-	public int particleCount = 50;
+	@Inject(ConfigBonemealNether.class) public static ConfigBonemealNether CONFIG;
 
 	public BonemealNether () {
 		super("bone_meal_nether");
@@ -57,7 +57,7 @@ public class BonemealNether extends Bonemeal {
 	private static void particles (World world, BlockPos pos) {
 		Random rand = world.rand;
 
-		for (int i = 0; i < INSTANCE.particleCount; ++i) {
+		for (int i = 0; i < CONFIG.particleCount; ++i) {
 			double d3 = (pos.getX() - 0.5F + rand.nextFloat());
 			double d4 = (pos.getY() + rand.nextFloat());
 			double d5 = (pos.getZ() - 0.5F + rand.nextFloat());

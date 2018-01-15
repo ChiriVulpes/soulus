@@ -38,6 +38,7 @@ import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSummoner;
 import yuudaari.soulus.common.CreativeTab;
+import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.item.CrystalBlood;
 import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.item.Soulbook;
@@ -150,11 +151,9 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		setHasDescription();
 	}
 
-	public static Summoner INSTANCE = new Summoner();
-
 	@Override
 	public UpgradeableBlock<SummonerTileEntity> getInstance () {
-		return INSTANCE;
+		return ModBlocks.SUMMONER;
 	}
 
 	@Override

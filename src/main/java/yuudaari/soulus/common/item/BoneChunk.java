@@ -2,9 +2,15 @@ package yuudaari.soulus.common.item;
 
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
+import yuudaari.soulus.common.config.ConfigInjected;
+import yuudaari.soulus.common.config.ConfigInjected.Inject;
+import yuudaari.soulus.common.config.item.ConfigBoneChunks;
+import yuudaari.soulus.common.config.misc.ConfigFossils;
+import yuudaari.soulus.common.config.misc.ConfigFossils.ConfigFossil;
 import yuudaari.soulus.common.config_old.EssenceConfig;
 import yuudaari.soulus.common.util.BoneType;
 import yuudaari.soulus.common.util.ModItem;
+import yuudaari.soulus.common.util.Range;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -18,16 +24,31 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+@Mod.EventBusSubscriber
+@ConfigInjected(Soulus.MODID)
 public class BoneChunk extends ModItem {
+
+	/////////////////////////////////////////
+	// Configs
+	//
+
+	@Inject(ConfigBoneChunks.class) public static ConfigBoneChunks CONFIG;
+	@Inject(ConfigFossils.class) public static ConfigFossils CONFIG_FOSSILS;
+
+	/////////////////////////////////////////
+	// Basics
+	//
 
 	public static Map<BoneType, BoneChunk> boneChunkTypes = new HashMap<>();
 
@@ -81,8 +102,10 @@ public class BoneChunk extends ModItem {
 		throw new RuntimeException("Bonechunk drop failed!");
 	}
 
-	@ParametersAreNonnullByDefault
-	@Nonnull
+	/////////////////////////////////////////
+	// Events
+	//
+
 	@Override
 	public ActionResult<ItemStack> onItemRightClick (World world, EntityPlayer player, EnumHand hand) {
 		ItemStack heldItem = player.getHeldItem(hand);
@@ -101,8 +124,31 @@ public class BoneChunk extends ModItem {
 		return new ActionResult<>(EnumActionResult.PASS, heldItem);
 	}
 
+	@SubscribeEvent
+	public static void onHarvest (HarvestDropsEvent event) {
+		if (event.getHarvester() != null) {
+			String blockId = event.getState().getBlock().getRegistryName().toString();
+			ConfigFossil fossilConfig = CONFIG_FOSSILS.get(blockId);
+
+			if (fossilConfig != null) {
+				List<ItemStack> drops = event.getDrops();
+				drops.clear();
+
+				BoneChunk boneChunk = BoneChunk.boneChunkTypes.get(fossilConfig.type);
+				int count = new Range(fossilConfig.min * (1 + event
+					.getFortuneLevel() / 3), fossilConfig.max * (1 + event.getFortuneLevel() / 3))
+						.getInt(event.getWorld().rand);
+				drops.add(boneChunk.getItemStack(count));
+			}
+		}
+	}
+
+	/////////////////////////////////////////
+	// Util
+	//
+
 	private void particles (World world, EntityPlayer player) {
-		for (int i = 0; i < Soulus.config_old.boneChunkParticleCount; ++i) {
+		for (int i = 0; i < CONFIG.particleCount; ++i) {
 			Vec3d v = new Vec3d(((double) world.rand.nextFloat() - 0.5D) * 0.1D, Math.random() * 0.1D + 0.1D, 0.0D);
 			v = v.rotatePitch(-player.rotationPitch * 0.017453292F);
 			v = v.rotateYaw(-player.rotationYaw * 0.017453292F);
@@ -119,6 +165,10 @@ public class BoneChunk extends ModItem {
 		player.playSound(SoundEvents.BLOCK_GRAVEL_HIT, 0.5F + 0.5F * (float) world.rand
 			.nextInt(2), (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F + 1.0F);
 	}
+
+	/////////////////////////////////////////
+	// Jei
+	//
 
 	@Override
 	public void onRegisterDescription (JeiDescriptionRegistry registry) {

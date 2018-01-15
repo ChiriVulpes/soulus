@@ -1,6 +1,7 @@
 package yuudaari.soulus.common.config.block;
 
 import yuudaari.soulus.common.block.skewer.Skewer;
+import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock.IUpgrade;
 import yuudaari.soulus.common.config.ConfigFile;
 import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
@@ -11,8 +12,8 @@ import yuudaari.soulus.Soulus;
 public class ConfigSkewer extends ConfigUpgradeableBlock<Skewer> {
 
 	@Override
-	protected Skewer getBlock () {
-		return Skewer.INSTANCE;
+	protected IUpgrade[] getUpgrades () {
+		return Skewer.Upgrade.values();
 	}
 
 	@Serialized public float baseDamage = 1;

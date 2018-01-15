@@ -1,12 +1,7 @@
 package yuudaari.soulus.common.config_old;
 
 import yuudaari.soulus.common.ModGenerators;
-import yuudaari.soulus.common.ModItems;
-import yuudaari.soulus.common.item.CrystalBlood;
-import yuudaari.soulus.common.item.OrbMurky;
-import yuudaari.soulus.common.item.Sledgehammer;
 import yuudaari.soulus.common.misc.BarkFromLogs;
-import yuudaari.soulus.common.misc.BoneChunksFromFossils;
 import yuudaari.soulus.common.misc.NoMobSpawning;
 import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.world.SummonerReplacer;
@@ -32,7 +27,6 @@ public class Config {
 
 	private static final String configFileName = "soulus.json";
 
-	public int boneChunkParticleCount = 3;
 	public Map<String, EssenceConfig> essences;
 
 	public Config () {
@@ -50,26 +44,11 @@ public class Config {
 
 	private static final Serializer<Config> serializer;
 	static {
-		serializer = new Serializer<>(Config.class, "boneChunkParticleCount");
+		serializer = new Serializer<>(Config.class);
 
 		serializer.otherHandlers.put("barkFromLogs", new ManualSerializer(from -> BarkFromLogs.serializer
 			.serialize(BarkFromLogs.INSTANCE), (from, into) -> BarkFromLogs.serializer
 				.deserialize(from, BarkFromLogs.INSTANCE)));
-
-		serializer.otherHandlers.put("fossilBlocks", new ManualSerializer(from -> BoneChunksFromFossils.serializer
-			.serialize(BoneChunksFromFossils.INSTANCE), (from, into) -> BoneChunksFromFossils.serializer
-				.deserialize(from, BoneChunksFromFossils.INSTANCE)));
-
-		serializer.otherHandlers.put("sledgehammer", new ManualSerializer(from -> Sledgehammer.serializer
-			.serialize(ModItems.SLEDGEHAMMER), (from, into) -> Sledgehammer.serializer
-				.deserialize(from, ModItems.SLEDGEHAMMER)));
-
-		serializer.otherHandlers.put("bloodCrystal", new ManualSerializer(from -> CrystalBlood.serializer
-			.serialize(ModItems.CRYSTAL_BLOOD), (from, into) -> CrystalBlood.serializer
-				.deserialize(from, ModItems.CRYSTAL_BLOOD)));
-
-		serializer.otherHandlers.put("murkyOrb", new ManualSerializer(from -> OrbMurky.serializer
-			.serialize(ModItems.ORB_MURKY), (from, into) -> OrbMurky.serializer.deserialize(from, ModItems.ORB_MURKY)));
 
 		serializer.otherHandlers.put("creatures", new ManualSerializer(from -> NoMobSpawning.serializer
 			.serialize(NoMobSpawning.INSTANCE), (from, into) -> NoMobSpawning.serializer

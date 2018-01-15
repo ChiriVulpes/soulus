@@ -137,11 +137,9 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 		setHasDescription();
 	}
 
-	public static Composer INSTANCE = new Composer();
-
 	@Override
 	public UpgradeableBlock<ComposerTileEntity> getInstance () {
-		return INSTANCE;
+		return ModBlocks.COMPOSER;
 	}
 
 	@Override
@@ -177,7 +175,7 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 			structure.loopBlocks(world, pos, state.getValue(FACING), (BlockPos pos2, BlockValidator validator) -> {
 				IBlockState currentState = world.getBlockState(pos2);
 
-				if (currentState.getBlock() == ComposerCell.INSTANCE) {
+				if (currentState.getBlock() == getInstance()) {
 					world.setBlockState(pos2, currentState
 						.withProperty(ComposerCell.CELL_STATE, ComposerCell.CellState.DISCONNECTED), 3);
 
@@ -249,7 +247,7 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	{
 		BlockValidator bars = BlockValidator.byBlock(ModBlocks.BARS_ENDERSTEEL);
 		BlockValidator cell = (pos, world, checkPos, state) -> {
-			if (state.getBlock() != ComposerCell.INSTANCE)
+			if (state.getBlock() != getInstance())
 				return false;
 			ComposerCellTileEntity te = (ComposerCellTileEntity) world.getTileEntity(checkPos);
 			boolean result = te == null || (te.composerLocation == null && te.changeComposerCooldown < 0) || pos

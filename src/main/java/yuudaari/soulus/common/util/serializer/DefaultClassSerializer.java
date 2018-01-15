@@ -89,25 +89,10 @@ public class DefaultClassSerializer extends ClassSerializer<Object> {
 		if (serializer != null) {
 			final String jsonFieldName = CaseConversion.toSnakeCase(field.getName());
 			try {
-
 				final Object value = field.get(instance);
 
-				JsonElement serializedValue = JsonNull.INSTANCE;
-
-				if (value == null) {
-					final boolean isPrimitive = field.getType().isPrimitive();
-					if (!field.isAnnotationPresent(Nullable.class)) {
-						throw new Exception("Recieved null, field cannot be null.");
-
-					} else if (isPrimitive) {
-						throw new Exception("Recieved null, primitive fields cannot be null.");
-					}
-				} else {
-					serializedValue = serializer.serialize(field.getType(), value);
-					if (serializedValue == null) {
-						throw new Exception("Cannot serialize null");
-					}
-				}
+				final JsonElement serializedValue = serializeValue(serializer, field.getType(), field
+					.isAnnotationPresent(Nullable.class), value);
 
 				containingObject.add(jsonFieldName, serializedValue);
 
@@ -123,6 +108,29 @@ public class DefaultClassSerializer extends ClassSerializer<Object> {
 		Logger.scopes.pop();
 	}
 
+	public static JsonElement serializeValue (final IFieldSerializationHandler<Object> serializer, final Class<?> requestedType, final boolean nullable, final Object value)
+		throws Exception {
+
+		JsonElement serializedValue = JsonNull.INSTANCE;
+
+		if (value == null) {
+			final boolean isPrimitive = requestedType.isPrimitive();
+			if (!nullable) {
+				throw new Exception("Recieved null, cannot be null.");
+
+			} else if (isPrimitive) {
+				throw new Exception("Recieved null, primitives cannot be null.");
+			}
+		} else {
+			serializedValue = serializer.serialize(requestedType, value);
+			if (serializedValue == null) {
+				throw new Exception("Cannot serialize null");
+			}
+		}
+
+		return serializedValue;
+	}
+
 	/**
 	 * Deserialize a field into the instance object
 	 */
@@ -134,22 +142,8 @@ public class DefaultClassSerializer extends ClassSerializer<Object> {
 			final String jsonFieldName = CaseConversion.toSnakeCase(field.getName());
 			try {
 				final JsonElement jsonValue = containingObject.get(jsonFieldName);
-				Object deserializedValue = null;
-
-				if (jsonValue == null || jsonValue.isJsonNull()) {
-					final boolean isPrimitive = field.getType().isPrimitive();
-					if (!field.isAnnotationPresent(Nullable.class)) {
-						throw new Exception("Recieved null, field cannot be null.");
-
-					} else if (isPrimitive) {
-						throw new Exception("Recieved null, primitive fields cannot be null.");
-					}
-				} else {
-					deserializedValue = deserializer.deserialize(field.getType(), jsonValue);
-					if (deserializedValue == null && !field.isAnnotationPresent(Nullable.class)) {
-						throw new Exception("Recieved null, field cannot be null.");
-					}
-				}
+				Object deserializedValue = deserializeValue(deserializer, field.getType(), field
+					.isAnnotationPresent(Nullable.class), jsonValue);
 
 				field.set(instance, deserializedValue);
 
@@ -165,6 +159,27 @@ public class DefaultClassSerializer extends ClassSerializer<Object> {
 		Logger.scopes.pop();
 	}
 
+	public static Object deserializeValue (final IFieldDeserializationHandler<Object> deserializer, final Class<?> requestedType, final boolean nullable, final JsonElement jsonValue)
+		throws Exception {
+		Object deserializedValue = null;
+
+		if (jsonValue == null || jsonValue.isJsonNull()) {
+			final boolean isPrimitive = requestedType.isPrimitive();
+			if (!nullable) {
+				throw new Exception("Recieved null, cannot be null.");
+
+			} else if (isPrimitive) {
+				throw new Exception("Recieved null, primitives cannot be null.");
+			}
+		} else {
+			deserializedValue = deserializer.deserialize(requestedType, jsonValue);
+			if (deserializedValue == null && !nullable) {
+				throw new Exception("Recieved null, cannot be null.");
+			}
+		}
+
+		return deserializedValue;
+	}
 
 	/**
 	 * Instantiate a class. Returns null if it's unable to be instantiated.
@@ -176,7 +191,8 @@ public class DefaultClassSerializer extends ClassSerializer<Object> {
 		try {
 			instance = cls.newInstance();
 		} catch (final InstantiationException | IllegalAccessException e) {
-			Logger.warn("Could not instantiate: " + e);
+			Logger.warn("Could not instantiate: ");
+			Logger.error(e);
 		}
 
 		return instance;
@@ -187,16 +203,16 @@ public class DefaultClassSerializer extends ClassSerializer<Object> {
 	 */
 	@SuppressWarnings("unchecked")
 	@Nullable
-	private static IFieldSerializationHandler<Object> getFieldSerializer (final Field field) {
-		final Serialized serializableClassAnnotation = field.getAnnotation(Serialized.class);
-		if (serializableClassAnnotation == null) return null;
+	public static IFieldSerializationHandler<Object> getFieldSerializer (final Field field) {
+		final Serialized serializedFieldAnnotation = field.getAnnotation(Serialized.class);
+		if (serializedFieldAnnotation == null) return null;
 
 		@SuppressWarnings("rawtypes")
-		Class<? extends IFieldSerializationHandler> serializerClass = serializableClassAnnotation.serializer();
+		Class<? extends IFieldSerializationHandler> serializerClass = serializedFieldAnnotation.serializer();
 		// use "value" if that's set but the deserializer isn't
-		if (serializerClass == DefaultFieldSerializer.class && serializableClassAnnotation
+		if (serializerClass == DefaultFieldSerializer.class && serializedFieldAnnotation
 			.value() != DefaultFieldSerializer.class) {
-			serializerClass = (Class<DefaultFieldSerializer>) serializableClassAnnotation.value();
+			serializerClass = (Class<DefaultFieldSerializer>) serializedFieldAnnotation.value();
 		}
 
 		try {
@@ -215,15 +231,15 @@ public class DefaultClassSerializer extends ClassSerializer<Object> {
 	@SuppressWarnings("unchecked")
 	@Nullable
 	private static IFieldDeserializationHandler<Object> getFieldDeserializer (final Field field) {
-		final Serialized serializableClassAnnotation = field.getAnnotation(Serialized.class);
-		if (serializableClassAnnotation == null) return null;
+		final Serialized serializedFieldAnnotation = field.getAnnotation(Serialized.class);
+		if (serializedFieldAnnotation == null) return null;
 
 		@SuppressWarnings("rawtypes")
-		Class<? extends IFieldDeserializationHandler> deserializerClass = serializableClassAnnotation.deserializer();
+		Class<? extends IFieldDeserializationHandler> deserializerClass = serializedFieldAnnotation.deserializer();
 		// use "value" if that's set but the deserializer isn't
-		if (deserializerClass == DefaultFieldSerializer.class && serializableClassAnnotation
+		if (deserializerClass == DefaultFieldSerializer.class && serializedFieldAnnotation
 			.value() != DefaultFieldSerializer.class) {
-			deserializerClass = (Class<DefaultFieldSerializer>) serializableClassAnnotation.value();
+			deserializerClass = (Class<DefaultFieldSerializer>) serializedFieldAnnotation.value();
 		}
 
 		try {

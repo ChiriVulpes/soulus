@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.config.ConfigInjected;
@@ -93,11 +94,9 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 		setHasDescription();
 	}
 
-	public static ComposerCell INSTANCE = new ComposerCell();
-
 	@Override
 	public UpgradeableBlock<ComposerCellTileEntity> getInstance () {
-		return INSTANCE;
+		return ModBlocks.COMPOSER_CELL;
 	}
 
 	public BlockFaceShape getBlockFaceShape (IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {

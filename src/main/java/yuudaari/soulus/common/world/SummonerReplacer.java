@@ -24,6 +24,7 @@ import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.block.EndersteelType;
 import yuudaari.soulus.common.block.summoner.Summoner;
 import yuudaari.soulus.common.config_old.ManualSerializer;
@@ -164,7 +165,7 @@ public class SummonerReplacer {
 
 				// Logger.info("endersteel type " + endersteelType);
 
-				world.setBlockState(pos, Summoner.INSTANCE.getDefaultState()
+				world.setBlockState(pos, ModBlocks.SUMMONER.getDefaultState()
 					.withProperty(Summoner.VARIANT, endersteelType), 7);
 			}
 		}

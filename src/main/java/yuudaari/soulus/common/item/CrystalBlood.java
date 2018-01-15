@@ -4,7 +4,9 @@ import yuudaari.soulus.Soulus;
 import yuudaari.soulus.client.util.ParticleManager;
 import yuudaari.soulus.client.util.ParticleType;
 import yuudaari.soulus.common.ModItems;
-import yuudaari.soulus.common.config_old.Serializer;
+import yuudaari.soulus.common.config.ConfigInjected;
+import yuudaari.soulus.common.config.ConfigInjected.Inject;
+import yuudaari.soulus.common.config.item.ConfigCrystalBlood;
 import yuudaari.soulus.common.misc.ModDamageSource;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.CrystalBloodHitEntity;
@@ -38,46 +40,20 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.common.collect.Multimap;
 
+@ConfigInjected(Soulus.MODID)
 public class CrystalBlood extends SummonerUpgrade {
 
-	private static final int defaultRequiredBlood = 1000;
-	private static final int defaultPrickAmount = 9;
-	private static final int defaultPrickWorth = 90;
-	private static final int defaultCreaturePrickRequiredHealth = 9999999;
-	private static final int defaultCreaturePrickAmount = 1;
-	private static final int defaultCreaturePrickWorth = 3;
-	private static final int defaultParticleCount = 50;
-	private static final ModPotionEffect[] defaultPrickEffects = new ModPotionEffect[] {
-		new ModPotionEffect("hunger", 100), new ModPotionEffect("nausea", 200)
-	};
-
-	public static final Serializer<CrystalBlood> serializer;
-	static {
-		serializer = new Serializer<>(CrystalBlood.class, "requiredBlood", "prickAmount", "prickWorth", "creaturePrickRequiredHealth", "creaturePrickAmount", "creaturePrickWorth", "particleCount");
-
-		// serializer.fieldHandlers.put("prickEffects", PotionEffectSerializer.INSTANCE);
-	}
+	@Inject(ConfigCrystalBlood.class) public static ConfigCrystalBlood CONFIG;
 
 	private static final int colourEmpty = 0x281313;
 	private static final int colourFilled = 0xBC2044;
-
-	public static final CrystalBlood INSTANCE = new CrystalBlood();
-
-	public int requiredBlood = defaultRequiredBlood;
-	public int prickAmount = defaultPrickAmount;
-	public int prickWorth = defaultPrickWorth;
-	public int creaturePrickRequiredHealth = defaultCreaturePrickRequiredHealth;
-	public int creaturePrickAmount = defaultCreaturePrickAmount;
-	public int creaturePrickWorth = defaultCreaturePrickWorth;
-	public int particleCount = defaultParticleCount;
-	public ModPotionEffect[] prickEffects = defaultPrickEffects;
 
 	public CrystalBlood () {
 		super("crystal_blood");
 
 		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
 			registerColorHandler( (ItemStack stack, int tintIndex) -> {
-				float percentage = getContainedBlood(stack) / (float) requiredBlood;
+				float percentage = getContainedBlood(stack) / (float) CONFIG.requiredBlood;
 				return Colour.mix(colourEmpty, colourFilled, percentage).get();
 			});
 		}
@@ -88,12 +64,12 @@ public class CrystalBlood extends SummonerUpgrade {
 	@Override
 	public int getItemStackLimit (ItemStack stack) {
 		// if it's full, allow them to be stacked
-		return getContainedBlood(stack) >= requiredBlood ? 16 : 1;
+		return getContainedBlood(stack) >= CONFIG.requiredBlood ? 16 : 1;
 	}
 
 	@Override
 	public ItemStack getFilledStack () {
-		return getStack(requiredBlood);
+		return getStack(CONFIG.requiredBlood);
 	}
 
 	public ItemStack getStack (int blood) {
@@ -110,7 +86,7 @@ public class CrystalBlood extends SummonerUpgrade {
 	@Override
 	public boolean hasEffect (ItemStack stack) {
 		int containedBlood = getContainedBlood(stack);
-		return containedBlood >= requiredBlood;
+		return containedBlood >= CONFIG.requiredBlood;
 	}
 
 	@Nonnull
@@ -118,17 +94,17 @@ public class CrystalBlood extends SummonerUpgrade {
 	public String getUnlocalizedNameInefficiently (@Nonnull ItemStack stack) {
 		int containedBlood = getContainedBlood(stack);
 		String name = super.getUnlocalizedNameInefficiently(stack);
-		return containedBlood >= requiredBlood ? name + ".filled" : name;
+		return containedBlood >= CONFIG.requiredBlood ? name + ".filled" : name;
 	}
 
 	@Override
 	public boolean showDurabilityBar (ItemStack stack) {
-		return getContainedBlood(stack) < requiredBlood;
+		return getContainedBlood(stack) < CONFIG.requiredBlood;
 	}
 
 	@Override
 	public double getDurabilityForDisplay (ItemStack stack) {
-		return 1 - Math.min(requiredBlood, getContainedBlood(stack)) / (double) requiredBlood;
+		return 1 - Math.min(CONFIG.requiredBlood, getContainedBlood(stack)) / (double) CONFIG.requiredBlood;
 	}
 
 	@ParametersAreNonnullByDefault
@@ -138,7 +114,7 @@ public class CrystalBlood extends SummonerUpgrade {
 
 		ItemStack heldItem = player.getHeldItem(hand);
 		int containedBlood = getContainedBlood(heldItem);
-		if (containedBlood < requiredBlood) {
+		if (containedBlood < CONFIG.requiredBlood) {
 
 			if (player instanceof FakePlayer) {
 				heldItem.setCount(0);
@@ -149,10 +125,10 @@ public class CrystalBlood extends SummonerUpgrade {
 
 			} else {
 				if (!worldIn.isRemote) {
-					setContainedBlood(heldItem, containedBlood + prickWorth);
-					player.attackEntityFrom(ModDamageSource.CRYSTAL_BLOOD, prickAmount);
+					setContainedBlood(heldItem, containedBlood + CONFIG.prickWorth);
+					player.attackEntityFrom(ModDamageSource.CRYSTAL_BLOOD, CONFIG.prickAmount);
 
-					for (ModPotionEffect effect : prickEffects)
+					for (ModPotionEffect effect : CONFIG.prickEffects)
 						player.addPotionEffect(effect);
 
 					return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, heldItem);
@@ -169,10 +145,10 @@ public class CrystalBlood extends SummonerUpgrade {
 
 	@Override
 	public boolean hitEntity (ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-		if (target.getHealth() <= this.creaturePrickRequiredHealth) {
-			target.attackEntityFrom(ModDamageSource.CRYSTAL_BLOOD, this.creaturePrickAmount);
+		if (target.getHealth() <= CONFIG.creaturePrickRequiredHealth) {
+			target.attackEntityFrom(ModDamageSource.CRYSTAL_BLOOD, CONFIG.creaturePrickAmount);
 			int blood = getContainedBlood(stack);
-			setContainedBlood(stack, blood + this.creaturePrickWorth);
+			setContainedBlood(stack, blood + CONFIG.creaturePrickWorth);
 			CrystalBlood.bloodParticles(target);
 		}
 		return true;
@@ -184,7 +160,7 @@ public class CrystalBlood extends SummonerUpgrade {
 
 		if (equipmentSlot == EntityEquipmentSlot.MAINHAND) {
 			int containedBlood = getContainedBlood(stack);
-			if (containedBlood < requiredBlood) {
+			if (containedBlood < CONFIG.requiredBlood) {
 				multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE
 					.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", 0, 0));
 				multimap.put(SharedMonsterAttributes.ATTACK_SPEED
@@ -204,7 +180,7 @@ public class CrystalBlood extends SummonerUpgrade {
 	}
 
 	public static boolean isFilled (ItemStack stack) {
-		return getContainedBlood(stack) >= INSTANCE.requiredBlood;
+		return getContainedBlood(stack) >= CONFIG.requiredBlood;
 	}
 
 	public static ItemStack setContainedBlood (ItemStack stack, int count) {
@@ -218,7 +194,7 @@ public class CrystalBlood extends SummonerUpgrade {
 	}
 
 	public static ItemStack setFilled (ItemStack stack) {
-		return setContainedBlood(stack, INSTANCE.requiredBlood);
+		return setContainedBlood(stack, CONFIG.requiredBlood);
 	}
 
 	public static void bloodParticles (EntityLivingBase entity) {
@@ -235,7 +211,7 @@ public class CrystalBlood extends SummonerUpgrade {
 		World world = entity.getEntityWorld();
 		Random rand = world.rand;
 
-		for (int i = 0; i < ModItems.CRYSTAL_BLOOD.particleCount; ++i) {
+		for (int i = 0; i < CONFIG.particleCount; ++i) {
 			double d3 = (entity.posX - 0.5F + rand.nextFloat());
 			double d4 = (entity.posY + rand.nextFloat());
 			double d5 = (entity.posZ - 0.5F + rand.nextFloat());
@@ -258,9 +234,9 @@ public class CrystalBlood extends SummonerUpgrade {
 	@SideOnly(Side.CLIENT)
 	public void addInformation (ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		int containedBlood = CrystalBlood.getContainedBlood(stack);
-		if (containedBlood < requiredBlood) {
+		if (containedBlood < CONFIG.requiredBlood) {
 			tooltip.add(I18n
-				.format("tooltip." + Soulus.MODID + ":crystal_blood.contained_blood", containedBlood, requiredBlood));
+				.format("tooltip." + Soulus.MODID + ":crystal_blood.contained_blood", containedBlood, CONFIG.requiredBlood));
 		}
 	}
 }

@@ -6,7 +6,7 @@ import yuudaari.soulus.common.util.ModPotionEffect;
 import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
 
-@ConfigFile(file = "item/glue", id = Soulus.MODID)
+@ConfigFile(file = "item/misc", id = Soulus.MODID, path = "glue")
 @Serializable
 public class ConfigGlue extends ConfigFood {
 

@@ -41,13 +41,13 @@ See below for an in-depth list of features in the mod.
 - [Contributing](#contributing-)
 
 
-## Download [↑](#table-of-contents)
+## Download [🡅](#table-of-contents)
 
 [Github](https://github.com/Yuudaari/soulus/releases/latest)
 
 [CurseForge](https://minecraft.curseforge.com/projects/soulus)
 
-## Previews [↑](#table-of-contents)
+## Previews [🡅](#table-of-contents)
 
 ![Items](./preview/items.png)
 
@@ -55,19 +55,19 @@ See below for an in-depth list of features in the mod.
 
 ![Example Autocrafter](./preview/example_composer.png)
 
-## No Mob Spawning and No Mob Drops [↑](#table-of-contents)
+## No Mob Spawning and No Mob Drops [🡅](#table-of-contents)
 
 All mob spawning is disabled by default, but you can configure this functionality per dimension, biome, and creature, and even enable/disable drops for each. See [Creatures Config](./docs/CONFIG.md#configcreatures-)
 
 Summoner-summoned mobs are exempt from this config. They will always be summoned, and they will always have drops.
 
-## Sledgehammer [↑](#table-of-contents)
+## Sledgehammer [🡅](#table-of-contents)
 
 ![Sledgehammer](./preview/sledgehammer.png)
 
 The Sledgehammer is used to smash materials. It is only used as a crafting ingredient, and currently only comes in iron. Using it as a weapon and more materials for it are planned.
 
-## Fossils [↑](#table-of-contents)
+## Fossils [🡅](#table-of-contents)
 
 Fossils generate around the world, different types based on the biome and block. Fossils even generate in the nether! These are the kinds of fossils you can expect to see in the world:
 
@@ -81,13 +81,13 @@ When you destroy a fossil, it will drop 4 bone chunks for that kind of fossil.
 
 Fossil veins are configurable (and you can even use the config to generate veins of other kinds of blocks, it's pretty vague). See `config.fossil_veins`
 
-## Bone Chunks and Essences [↑](#table-of-contents)
+## Bone Chunks and Essences [🡅](#table-of-contents)
 
 ![Bone Chunks](./preview/bone_chunks.png)
 
-A bone chunk can be crafted with a Sledgehammer to produce bonemeal. Normal bone chunks, dry, frozen, and mossy all produce normal bonemeal, while ender bone chunks produce "ender bonemeal" and blackened bone chunks produce "blackened bonemeal". There is a planned use for blackened bonemeal but it has not yet been implemented.
+A bone chunk can be crafted with a Sledgehammer to produce bonemeal. Normal bone chunks, dry, frozen, and mossy all produce normal bonemeal, while ender bone chunks produce "ender bonemeal" and blackened bone chunks produce "blackened bonemeal".
 
-The main use of bone chunks, however, is to collect Mob Essence! By right clicking with a bone chunk, you break it open and collect the essence inside. The possible Essences produced by each bone type is configurable in the [Essences Config](./docs/CONFIG.md#configessences-), but the defaults are as follows:
+The main use of bone chunks, however, is to collect the essence of creatures! By right clicking with a bone chunk, you break it open and collect the essence inside. The possible Essences produced by each bone type is configurable in the [Essences Config](./docs/CONFIG.md#configessences-), but the defaults are as follows:
 
 | Bone Type | Essences |
 | --- | --- |
@@ -99,7 +99,7 @@ The main use of bone chunks, however, is to collect Mob Essence! By right clicki
 | Nether | Zombie Pigman (20), Blaze (3), Wither Skeleton (1), Ghast (1), None (10) |
 | Ender | Shulker (1), Endermite (15), Creeper (10), Enderman (2), None (20) |
 
-## Soulbook [↑](#table-of-contents)
+## Soulbook [🡅](#table-of-contents)
 
 ![Soulbook](./preview/soulbook.png)
 
@@ -110,7 +110,7 @@ You craft a Soulbook using a book and some ender bonemeal/ender dust. Soulbooks 
 
 You can fill a soulbook by crafting it with any number of your chosen type of essence. By default all mob types only require 16 essence to reconstruct their soul. That's two crafts if you craft the soulbook with 8 essence each time.
 
-## Endersteel [↑](#table-of-contents)
+## Endersteel [🡅](#table-of-contents)
 
 
 1. Crush an iron ingot into iron dust.  
@@ -133,7 +133,7 @@ Here's what they look like in the world:
 
 ![Endersteel Bars Preview](./preview/endersteel_bars_preview.png)
 
-## Summoner [↑](#table-of-contents)
+## Summoner [🡅](#table-of-contents)
 
 Using 8 Endersteel bars and an ender bonemeal in the center, you can craft an Empty Summoner.
 
@@ -151,11 +151,11 @@ If a summoner is receiving a redstone signal it will not be active.
 
 Summoners support comparators, they will output a signal strength of 0 if they are at 0% summoned and 15 if they are at 100% summoned.
 
-## Summoner Upgrades [↑](#table-of-contents)
+## Summoner Upgrades [🡅](#table-of-contents)
 
 There are three upgrades for a summoner. An Oscillating Gear increases the speed, a Blood Crystal increases the quantity, and a Murky Orb increases the activation range.
 
-### Oscillating Gear [↑](#table-of-contents)
+### Oscillating Gear [🡅](#table-of-contents)
 
 All bone types can be used to create bone gears of varying types.
 
@@ -171,7 +171,7 @@ Surrounding an ender bone gear in iron creates 2 oscillating gears.
 
 By default, a summoner can hold 16 oscillating gears, ranging from around 10 minutes per summon to around 30 seconds per summon.
 
-### Murky Orb [↑](#table-of-contents)
+### Murky Orb [🡅](#table-of-contents)
 
 Surrounding ender bonemeal with slimeballs (or glue) produces a Strange Sticky Ball. 
 
@@ -186,7 +186,7 @@ When a Murky Orb has been filled, its stack limit is 16.
 
 By default, a summoner can hold 16 murky orbs, ranging from around a range of 5 blocks to be active to around 70 blocks to be active.
 
-### Blood Crystal [↑](#table-of-contents)
+### Blood Crystal [🡅](#table-of-contents)
 
 
 1. Smelting an emerald or soul sand produces a Burnt Emerald.   
@@ -208,7 +208,7 @@ When a Blood Crystal has been filled, its stack limit is 16.
 
 By default, a summoner can hold 16 Blood Crystals, ranging from 1 entity summoned to around 6 entities summoned, max.
 
-## Skewer [↑](#table-of-contents)
+## Skewer [🡅](#table-of-contents)
 
 ![Skewer](./preview/skewer.png)
 
@@ -222,17 +222,17 @@ The second upgrade for the Skewer is Nether Quartz. By default, the Skewer only 
 
 Other upgrades for the Skewer are planned.
 
-## Bone Drops [↑](#table-of-contents)
+## Bone Drops [🡅](#table-of-contents)
 
 By default, most mobs drop bones matching the bone type their essence comes from. This is configurable in the [Essences Config](./docs/CONFIG.md#configessences-)
 
-## Ash [↑](#table-of-contents)
+## Ash [🡅](#table-of-contents)
 
 After collecting Blackened Bonemeal, you may use it on plants! This is a horrible, terrible fertilizer which in fact does not grow the plant, but reduces it to a pile of ash. It's also not very nice to do. Plant murderer.
 
 You can use ash as a replacement for essence in a Murky Orb, or to create Dark Endersteel.
 
-## Dark Endersteel [↑](#table-of-contents)
+## Dark Endersteel [🡅](#table-of-contents)
 
 1. Crush an iron ingot into iron dust.  
 ![Iron Dust](./preview/iron_dust.png)
@@ -246,7 +246,7 @@ You can use ash as a replacement for essence in a Murky Orb, or to create Dark E
 4. Smelt the ash-ender-iron dust blend to get a dark endersteel ingot!  
 ![Dark Endersteel](./preview/dark_endersteel.png)
 
-## Composer [↑](#table-of-contents)
+## Composer [🡅](#table-of-contents)
 
 The Composer is a block which requires a multiblock structure to be built. It is an autocrafting table, more or less, which is very expensive and slow, but can be upgraded to be very fast. To build a Composer, here's what you will need:
 
@@ -273,33 +273,33 @@ The Composer can craft any normal or shapeless recipe, and you can add recipes v
 
 The Composer comes with one recipe, currently. The Soul Catalyst. (Currently has no uses, but will be a big part of late-game Soulus soon)
 
-## Misc [↑](#table-of-contents)
+## Misc [🡅](#table-of-contents)
 
-### Glue [↑](#table-of-contents)
+### Glue [🡅](#table-of-contents)
 
 ![Glue](./preview/glue.gif)
 
 Glue is crafted from sugar, bonemeal, and a bucket of water. It can be used anywhere a slimeball can. You can consume glue.
 
-### Bark [↑](#table-of-contents)
+### Bark [🡅](#table-of-contents)
 
 Every 100 or so logs produces 8 bark instead of a log. You can use 2 bark and 3 paper to make a book.
 
-### Barket [↑](#table-of-contents)
+### Barket [🡅](#table-of-contents)
 
 ![Barket](./preview/barket.png)
 
 Make a bucket shape with Bark to get a "Barket". It can only pick up water and will likely break in a matter of seconds. If you let it break, you'll spill your water!
 
-### Endersteel Block [↑](#table-of-contents)
+### Endersteel Block [🡅](#table-of-contents)
 
 Crafting 9 endersteel bars into a block produces a Block of Endersteel. When placed into the world, you can use it as a clock, by reading its value via a comparator. The value is 0 when the block is receiving no power. When receiving power, it oscillates in a sin-wave from 0-15, at a speed dependent on the power received.
 
-### Dark Endersteel Block [↑](#table-of-contents)
+### Dark Endersteel Block [🡅](#table-of-contents)
 
 Crafting 9 dark endersteel bars into a block produces a Block of Dark Endersteel. When placed into the world, you can use it as a random number generator, by reading its value via a comparator. The value is 0 when the block is receiving no power. Whenever it receives a new power level, it chooses a random output level 1-15.
 
-## Mod Support [↑](#table-of-contents)
+## Mod Support [🡅](#table-of-contents)
 
 ### Ex Nihilo Creatio
 
@@ -309,7 +309,7 @@ Drops are added automatically to Ex Nihilo Creatio Sieves. The default values ar
 
 Waila (Hwyla)
 
-## Contributing [↑](#table-of-contents)
+## Contributing [🡅](#table-of-contents)
 
 If you have an error, bug, or have found an oversight please leave an issue about it. I'll try to get to them as fast as I can. If you want to help develop Soulus and already know how to mod, great, make an issue and then a PR if you know what you want to do. If you don't know how to mod, I probably won't have the time to help teach you, but you're welcome to join my [Discord server](https://discord.gg/fwvBfus) and chat/ask questions.
 

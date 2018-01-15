@@ -1,6 +1,7 @@
 package yuudaari.soulus.common.config.block;
 
 import yuudaari.soulus.common.block.composer.Composer;
+import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock.IUpgrade;
 import yuudaari.soulus.common.config.ConfigFile;
 import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.common.util.serializer.Serializable;
@@ -12,8 +13,8 @@ import yuudaari.soulus.Soulus;
 public class ConfigComposer extends ConfigUpgradeableBlock<Composer> {
 
 	@Override
-	protected Composer getBlock () {
-		return Composer.INSTANCE;
+	protected IUpgrade[] getUpgrades () {
+		return Composer.Upgrade.values();
 	}
 
 	@Serialized public Range nonUpgradedCount = new Range(1, 2);

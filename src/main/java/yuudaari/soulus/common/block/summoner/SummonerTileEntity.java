@@ -16,6 +16,7 @@ import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.ForgeEventFactory;
+import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.block.summoner.Summoner.Upgrade;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
@@ -32,9 +33,8 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 	@Override
 	public Summoner getBlock () {
-		return Summoner.INSTANCE;
+		return ModBlocks.SUMMONER;
 	}
-
 
 	/* OTHER */
 	private boolean hasInit = false;

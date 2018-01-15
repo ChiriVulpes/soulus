@@ -12,7 +12,7 @@ import yuudaari.soulus.common.util.serializer.ClassSerializationEventHandlers.Se
 
 public abstract class ConfigUpgradeableBlock<T extends UpgradeableBlock<? extends UpgradeableBlockTileEntity>> {
 
-	protected abstract T getBlock ();
+	protected abstract IUpgrade[] getUpgrades ();
 
 	@SerializationEventHandler
 	public static void onSerialization (final Object instance, final JsonObject object) {
@@ -21,7 +21,7 @@ public abstract class ConfigUpgradeableBlock<T extends UpgradeableBlock<? extend
 		@SuppressWarnings("rawtypes")
 		ConfigUpgradeableBlock config = (ConfigUpgradeableBlock) instance;
 
-		for (IUpgrade upgrade : config.getBlock().getUpgrades()) {
+		for (IUpgrade upgrade : config.getUpgrades()) {
 			if (!upgrade.canOverrideMaxQuantity()) continue;
 
 			String key = upgrade.getName().toLowerCase();
@@ -54,7 +54,7 @@ public abstract class ConfigUpgradeableBlock<T extends UpgradeableBlock<? extend
 
 			String key = entry.getKey();
 			IUpgrade upgrade = null;
-			for (IUpgrade checkUpgrade : config.getBlock().getUpgrades()) {
+			for (IUpgrade checkUpgrade : config.getUpgrades()) {
 				if (key.equalsIgnoreCase(checkUpgrade.getName())) {
 					if (checkUpgrade.canOverrideMaxQuantity())
 						upgrade = checkUpgrade;

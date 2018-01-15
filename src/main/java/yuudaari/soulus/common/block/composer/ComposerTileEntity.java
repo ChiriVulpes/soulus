@@ -35,6 +35,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.client.util.ParticleManager;
 import yuudaari.soulus.client.util.ParticleType;
+import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.block.composer.Composer.Upgrade;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
@@ -57,7 +58,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 	@Override
 	public Composer getBlock () {
-		return Composer.INSTANCE;
+		return ModBlocks.COMPOSER;
 	}
 
 	@Override
@@ -239,7 +240,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 				.loopBlocks(world, pos, state.getValue(Composer.FACING), (BlockPos pos2, BlockValidator validator) -> {
 					IBlockState currentState = world.getBlockState(pos2);
 
-					if (currentState.getBlock() == ComposerCell.INSTANCE) {
+					if (currentState.getBlock() == getBlock()) {
 						ComposerCellTileEntity ccte = (ComposerCellTileEntity) world.getTileEntity(pos2);
 						BlockPos ccPos = ccte.getPos();
 						world.setBlockState(ccPos, currentState

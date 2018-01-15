@@ -1,6 +1,7 @@
 package yuudaari.soulus.common.config.block;
 
 import yuudaari.soulus.common.block.summoner.Summoner;
+import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock.IUpgrade;
 import yuudaari.soulus.common.config.ConfigFile;
 import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.common.util.serializer.Serializable;
@@ -12,8 +13,8 @@ import yuudaari.soulus.Soulus;
 public class ConfigSummoner extends ConfigUpgradeableBlock<Summoner> {
 
 	@Override
-	protected Summoner getBlock () {
-		return Summoner.INSTANCE;
+	protected IUpgrade[] getUpgrades () {
+		return Summoner.Upgrade.values();
 	}
 
 	@Serialized public int nonUpgradedSpawningRadius = 4;

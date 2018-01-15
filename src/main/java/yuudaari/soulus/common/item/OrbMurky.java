@@ -2,7 +2,9 @@ package yuudaari.soulus.common.item;
 
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModItems;
-import yuudaari.soulus.common.config_old.Serializer;
+import yuudaari.soulus.common.config.ConfigInjected;
+import yuudaari.soulus.common.config.ConfigInjected.Inject;
+import yuudaari.soulus.common.config.item.ConfigOrbMurky;
 import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -28,13 +30,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+@ConfigInjected(Soulus.MODID)
 public class OrbMurky extends SummonerUpgrade {
 
-	public static final Serializer<OrbMurky> serializer = new Serializer<>(OrbMurky.class, "requiredEssence");
-
-	public static final OrbMurky INSTANCE = new OrbMurky();
-
-	public int requiredEssence = 128;
+	@Inject(ConfigOrbMurky.class) public static ConfigOrbMurky CONFIG;
 
 	public static class OrbMurkyFillRecipe extends ShapelessOreRecipe {
 
@@ -43,13 +42,13 @@ public class OrbMurky extends SummonerUpgrade {
 			List<Ingredient> ingredients = new ArrayList<>();
 
 			ingredients.addAll(Collections.nCopies(size * size - 1, IngredientPotentialEssence.INSTANCE));
-			ingredients.add(Ingredient.fromItem(INSTANCE));
+			ingredients.add(Ingredient.fromItem(ModItems.ORB_MURKY));
 
 			return NonNullList.from(Ingredient.EMPTY, ingredients.toArray(new Ingredient[0]));
 		}
 
 		public OrbMurkyFillRecipe (ResourceLocation name, int size) {
-			super(new ResourceLocation(""), getIngredients(size), INSTANCE.getFilledStack());
+			super(new ResourceLocation(""), getIngredients(size), ModItems.ORB_MURKY.getFilledStack());
 			setRegistryName(name + "" + size);
 		}
 
@@ -72,7 +71,7 @@ public class OrbMurky extends SummonerUpgrade {
 				Item stackItem = stack.getItem();
 				if (stack == null || stackItem == Items.AIR)
 					continue;
-				if (stackItem == INSTANCE) {
+				if (stackItem == ModItems.ORB_MURKY) {
 					if (orb != null)
 						return null;
 					containedEssence = getContainedEssence(stack);
@@ -84,7 +83,7 @@ public class OrbMurky extends SummonerUpgrade {
 				}
 				return null;
 			}
-			if (orb != null && essenceCount > 0 && containedEssence + essenceCount <= INSTANCE.requiredEssence) {
+			if (orb != null && essenceCount > 0 && containedEssence + essenceCount <= CONFIG.requiredEssence) {
 				ItemStack newStack = orb.copy();
 				setContainedEssence(newStack, containedEssence + essenceCount);
 				return newStack;
@@ -109,12 +108,12 @@ public class OrbMurky extends SummonerUpgrade {
 	@Override
 	public int getItemStackLimit (ItemStack stack) {
 		// if it's full, allow them to be stacked
-		return getContainedEssence(stack) == requiredEssence ? 16 : 1;
+		return getContainedEssence(stack) == CONFIG.requiredEssence ? 16 : 1;
 	}
 
 	@Override
 	public ItemStack getFilledStack () {
-		return getStack(requiredEssence);
+		return getStack(CONFIG.requiredEssence);
 	}
 
 	public ItemStack getStack (int essence) {
@@ -130,7 +129,7 @@ public class OrbMurky extends SummonerUpgrade {
 
 	@Override
 	public boolean hasEffect (ItemStack stack) {
-		return getContainedEssence(stack) == requiredEssence;
+		return getContainedEssence(stack) == CONFIG.requiredEssence;
 	}
 
 	@Nonnull
@@ -138,19 +137,19 @@ public class OrbMurky extends SummonerUpgrade {
 	public String getUnlocalizedNameInefficiently (@Nonnull ItemStack stack) {
 		String result = super.getUnlocalizedNameInefficiently(stack);
 		int containedEssence = getContainedEssence(stack);
-		return containedEssence == requiredEssence ? result + ".filled" : result;
+		return containedEssence == CONFIG.requiredEssence ? result + ".filled" : result;
 	}
 
 	@Override
 	public boolean showDurabilityBar (ItemStack stack) {
 		int containedEssence = getContainedEssence(stack);
-		return containedEssence < requiredEssence;
+		return containedEssence < CONFIG.requiredEssence;
 	}
 
 	@Override
 	public double getDurabilityForDisplay (ItemStack stack) {
 		int containedEssence = getContainedEssence(stack);
-		return (1 - containedEssence / (double) requiredEssence);
+		return (1 - containedEssence / (double) CONFIG.requiredEssence);
 	}
 
 	public static int getContainedEssence (ItemStack stack) {
@@ -162,7 +161,7 @@ public class OrbMurky extends SummonerUpgrade {
 	}
 
 	public static boolean isFilled (ItemStack stack) {
-		return getContainedEssence(stack) >= INSTANCE.requiredEssence;
+		return getContainedEssence(stack) >= CONFIG.requiredEssence;
 	}
 
 	public static ItemStack setContainedEssence (ItemStack stack, int count) {
@@ -176,7 +175,7 @@ public class OrbMurky extends SummonerUpgrade {
 	}
 
 	public static ItemStack setFilled (ItemStack stack) {
-		return setContainedEssence(stack, INSTANCE.requiredEssence);
+		return setContainedEssence(stack, CONFIG.requiredEssence);
 	}
 
 	@Override
@@ -191,9 +190,9 @@ public class OrbMurky extends SummonerUpgrade {
 	@SideOnly(Side.CLIENT)
 	public void addInformation (ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		int containedEssence = OrbMurky.getContainedEssence(stack);
-		if (containedEssence < requiredEssence) {
+		if (containedEssence < CONFIG.requiredEssence) {
 			tooltip.add(I18n
-				.format("tooltip." + Soulus.MODID + ":orb_murky.contained_essence", containedEssence, requiredEssence));
+				.format("tooltip." + Soulus.MODID + ":orb_murky.contained_essence", containedEssence, CONFIG.requiredEssence));
 		}
 	}
 }

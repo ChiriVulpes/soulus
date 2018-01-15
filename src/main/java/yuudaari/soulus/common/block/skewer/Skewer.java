@@ -33,6 +33,7 @@ import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSkewer;
 import yuudaari.soulus.common.item.CrystalBlood;
+import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.Soulus;
@@ -123,7 +124,7 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 			if (name == "crystal_blood") {
 				SkewerTileEntity ste = (SkewerTileEntity) te;
 				CrystalBlood.setContainedBlood(stack, Math
-					.min(CrystalBlood.INSTANCE.requiredBlood, ste.crystalBloodContainedBlood));
+					.min(CrystalBlood.CONFIG.requiredBlood, ste.crystalBloodContainedBlood));
 			}
 
 			return stack;
@@ -158,11 +159,9 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		setHasDescription();
 	}
 
-	public static Skewer INSTANCE = new Skewer();
-
 	@Override
 	public UpgradeableBlock<SkewerTileEntity> getInstance () {
-		return INSTANCE;
+		return ModBlocks.SKEWER;
 	}
 
 	@Override
@@ -323,7 +322,7 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 
 		if (te.upgrades.get(Upgrade.CRYSTAL_BLOOD) == 1) {
 			currentTooltip.add(I18n
-				.format("waila." + Soulus.MODID + ":skewer.crystal_blood_stored_blood", te.crystalBloodContainedBlood, CrystalBlood.INSTANCE.requiredBlood));
+				.format("waila." + Soulus.MODID + ":skewer.crystal_blood_stored_blood", te.crystalBloodContainedBlood, CrystalBlood.CONFIG.requiredBlood));
 		}
 	}
 

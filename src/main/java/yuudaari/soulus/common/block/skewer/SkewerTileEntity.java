@@ -15,6 +15,7 @@ import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSkewer;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.Soulus;
+import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.block.skewer.Skewer.Upgrade;
 import yuudaari.soulus.common.item.CrystalBlood;
 import yuudaari.soulus.common.misc.ModDamageSource;
@@ -28,7 +29,7 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 
 	@Override
 	public Skewer getBlock () {
-		return Skewer.INSTANCE;
+		return ModBlocks.SKEWER;
 	}
 
 	/////////////////////////////////////////
@@ -72,8 +73,8 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 					if (world.rand.nextDouble() < CONFIG.chanceForBloodPerHit && upgrades
 						.get(Upgrade.CRYSTAL_BLOOD) == 1) {
 						crystalBloodContainedBlood += CONFIG.bloodPerDamage * damage;
-						if (crystalBloodContainedBlood > CrystalBlood.INSTANCE.requiredBlood) {
-							crystalBloodContainedBlood = CrystalBlood.INSTANCE.requiredBlood;
+						if (crystalBloodContainedBlood > CrystalBlood.CONFIG.requiredBlood) {
+							crystalBloodContainedBlood = CrystalBlood.CONFIG.requiredBlood;
 						}
 						CrystalBlood.bloodParticles(entity);
 						blockUpdate();

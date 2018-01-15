@@ -26,8 +26,8 @@ public class ModBlocks {
 	public static final BarsEndersteel BARS_ENDERSTEEL = new BarsEndersteel();
 	public static final BlockEndersteel BLOCK_ENDERSTEEL = new BlockEndersteel();
 	public static final BlockEndersteelDark BLOCK_ENDERSTEEL_DARK = new BlockEndersteelDark();
-	public static final Composer COMPOSER = Composer.INSTANCE;
-	public static final ComposerCell COMPOSER_CELL = ComposerCell.INSTANCE;
+	public static final Composer COMPOSER = new Composer();
+	public static final ComposerCell COMPOSER_CELL = new ComposerCell();
 	public static final FossilDirt FOSSIL_DIRT = new FossilDirt();
 	public static final FossilDirtEnder FOSSIL_DIRT_ENDER = new FossilDirtEnder();
 	public static final FossilDirtFrozen FOSSIL_DIRT_FROZEN = new FossilDirtFrozen();
@@ -41,8 +41,8 @@ public class ModBlocks {
 	public static final FossilSandScale FOSSIL_SAND_SCALE = new FossilSandScale();
 	public static final FossilSandRed FOSSIL_SAND_RED = new FossilSandRed();
 	public static final FossilSandRedScale FOSSIL_SAND_RED_SCALE = new FossilSandRedScale();
-	public static final Skewer SKEWER = Skewer.INSTANCE;
-	public static final Summoner SUMMONER = Summoner.INSTANCE;
+	public static final Skewer SKEWER = new Skewer();
+	public static final Summoner SUMMONER = new Summoner();
 
 	public static IBlock[] blocks = new IBlock[] {
 		// @formatter:off

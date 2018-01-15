@@ -6,6 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import yuudaari.soulus.common.ModBlocks;
 
 public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 
@@ -19,7 +20,7 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 
 	@Override
 	public ComposerCell getBlock () {
-		return ComposerCell.INSTANCE;
+		return ModBlocks.COMPOSER_CELL;
 	}
 
 	@Override

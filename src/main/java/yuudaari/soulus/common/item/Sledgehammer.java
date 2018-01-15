@@ -1,24 +1,24 @@
 package yuudaari.soulus.common.item;
 
 import net.minecraft.item.ItemStack;
-import yuudaari.soulus.common.config_old.Serializer;
+import yuudaari.soulus.Soulus;
+import yuudaari.soulus.common.config.ConfigInjected;
+import yuudaari.soulus.common.config.ConfigInjected.Inject;
+import yuudaari.soulus.common.config.item.ConfigSledgehammer;
 import yuudaari.soulus.common.util.ModItem;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
 
+@ConfigInjected(Soulus.MODID)
 public class Sledgehammer extends ModItem {
 
-	public static Serializer<Sledgehammer> serializer = new Serializer<>(Sledgehammer.class, "durability");
-
-	public static Sledgehammer INSTANCE = new Sledgehammer();
-
-	public int durability = 256;
+	@Inject(ConfigSledgehammer.class) public static ConfigSledgehammer CONFIG;
 
 	public Sledgehammer () {
 		super("sledgehammer");
 		setMaxStackSize(1);
-		setMaxDamage(durability);
+		setMaxDamage(256);
 		setHasDescription();
 	}
 
@@ -41,6 +41,6 @@ public class Sledgehammer extends ModItem {
 
 	@Override
 	public int getMaxDamage (ItemStack stack) {
-		return durability;
+		return CONFIG.durability;
 	}
 }
