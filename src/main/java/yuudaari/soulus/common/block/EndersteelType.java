@@ -1,8 +1,11 @@
 package yuudaari.soulus.common.block;
 
-import java.util.Comparator;
-import java.util.stream.Stream;
+import java.util.Arrays;
+import java.util.Optional;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 import net.minecraft.util.IStringSerializable;
+import yuudaari.soulus.common.util.serializer.FieldSerializer;
 
 public enum EndersteelType implements IStringSerializable {
 	NORMAL (0, "normal"),
@@ -10,10 +13,6 @@ public enum EndersteelType implements IStringSerializable {
 	STONE (2, "stone"),
 	END_STONE (3, "end_stone"),
 	BLAZE (4, "blaze");
-
-	private static final EndersteelType[] META_LOOKUP = Stream.of(values())
-		.sorted(Comparator.comparing(EndersteelType::getMeta))
-		.toArray(EndersteelType[]::new);
 
 	private final int meta;
 	private final String name;
@@ -33,14 +32,27 @@ public enum EndersteelType implements IStringSerializable {
 	}
 
 	public static EndersteelType byMetadata (int meta) {
-		if (meta < 0 || meta >= META_LOOKUP.length) {
-			meta = 0;
-		}
-
-		return META_LOOKUP[meta];
+		return meta < 0 || meta >= values().length ? EndersteelType.NORMAL : values()[meta];
 	}
 
-	public static String[] getNames () {
-		return Stream.of(META_LOOKUP).map(EndersteelType::getName).toArray(String[]::new);
+	public static EndersteelType byName (String name) {
+		Optional<EndersteelType> endersteelType = Arrays.asList(EndersteelType.values())
+			.stream()
+			.filter(type -> type.getName().equalsIgnoreCase(name))
+			.findFirst();
+		return endersteelType.isPresent() ? endersteelType.get() : EndersteelType.NORMAL;
+	}
+
+	public static class Serializer extends FieldSerializer<EndersteelType> {
+
+		@Override
+		public JsonElement serialize (Class<?> objectType, EndersteelType type) {
+			return new JsonPrimitive(type.name);
+		}
+
+		@Override
+		public EndersteelType deserialize (Class<?> requestedType, JsonElement element) {
+			return EndersteelType.byName(element.getAsString());
+		}
 	}
 }

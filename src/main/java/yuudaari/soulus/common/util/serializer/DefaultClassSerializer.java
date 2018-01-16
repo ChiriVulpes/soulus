@@ -3,6 +3,7 @@ package yuudaari.soulus.common.util.serializer;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Map;
 import javax.annotation.Nullable;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
@@ -87,14 +88,24 @@ public class DefaultClassSerializer extends ClassSerializer<Object> {
 
 		final IFieldSerializationHandler<Object> serializer = getFieldSerializer(field);
 		if (serializer != null) {
-			final String jsonFieldName = CaseConversion.toSnakeCase(field.getName());
 			try {
 				final Object value = field.get(instance);
 
 				final JsonElement serializedValue = serializeValue(serializer, field.getType(), field
 					.isAnnotationPresent(Nullable.class), value);
 
-				containingObject.add(jsonFieldName, serializedValue);
+				if (getIsTopLevel(field)) {
+					if (!serializedValue.isJsonObject()) {
+						throw new Exception("Serializing a property to top-level must return a JsonObject.");
+					}
+					for (Map.Entry<String, JsonElement> entry : serializedValue.getAsJsonObject().entrySet()) {
+						containingObject.add(entry.getKey(), entry.getValue());
+					}
+
+				} else {
+					final String jsonFieldName = CaseConversion.toSnakeCase(field.getName());
+					containingObject.add(jsonFieldName, serializedValue);
+				}
 
 			} catch (final Exception e) {
 				final boolean isNormalException = e.getClass() == Exception.class;
@@ -139,9 +150,13 @@ public class DefaultClassSerializer extends ClassSerializer<Object> {
 
 		final IFieldDeserializationHandler<Object> deserializer = getFieldDeserializer(field);
 		if (deserializer != null) {
-			final String jsonFieldName = CaseConversion.toSnakeCase(field.getName());
 			try {
-				final JsonElement jsonValue = containingObject.get(jsonFieldName);
+				JsonElement jsonValue = containingObject;
+				if (!getIsTopLevel(field)) {
+					final String jsonFieldName = CaseConversion.toSnakeCase(field.getName());
+					jsonValue = containingObject.get(jsonFieldName);
+				}
+
 				Object deserializedValue = deserializeValue(deserializer, field.getType(), field
 					.isAnnotationPresent(Nullable.class), jsonValue);
 
@@ -223,6 +238,14 @@ public class DefaultClassSerializer extends ClassSerializer<Object> {
 			Logger.error(e);
 			return null;
 		}
+	}
+
+	/**
+	 * Only call this method if you have already confirmed that the field is @Serialized.
+	 */
+	public static boolean getIsTopLevel (final Field field) {
+		final Serialized serializedFieldAnnotation = field.getAnnotation(Serialized.class);
+		return serializedFieldAnnotation.topLevel();
 	}
 
 	/**

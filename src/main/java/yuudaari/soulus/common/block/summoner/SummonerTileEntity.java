@@ -21,8 +21,9 @@ import yuudaari.soulus.common.block.summoner.Summoner.Upgrade;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSummoner;
+import yuudaari.soulus.common.config.essence.ConfigEssences;
+import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
-import yuudaari.soulus.common.config_old.EssenceConfig;
 import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.Soulus;
 
@@ -30,6 +31,7 @@ import yuudaari.soulus.Soulus;
 public class SummonerTileEntity extends UpgradeableBlockTileEntity implements ITickable {
 
 	@Inject(ConfigSummoner.class) public static ConfigSummoner CONFIG;
+	@Inject(ConfigEssences.class) public static ConfigEssences CONFIG_ESSENCES;
 
 	@Override
 	public Summoner getBlock () {
@@ -83,7 +85,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 	}
 
-	private EssenceConfig spawnMobConfig;
+	private ConfigEssence spawnMobConfig;
 	private int spawnMobChanceTotal;
 	public String lastRenderedEssenceType;
 
@@ -93,20 +95,22 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 	public void setEssenceType (String essenceType) {
 		this.essenceType = essenceType;
-		this.soulbookUses = Soulus.config_old.getSoulbookQuantity(essenceType);
+		this.soulbookUses = CONFIG_ESSENCES.getSoulbookQuantity(essenceType);
 		resetEssenceType();
 	}
 
 	private void resetEssenceType () {
-		EssenceConfig config = Soulus.config_old.essences.get(essenceType);
+		ConfigEssence config = CONFIG_ESSENCES.get(essenceType);
 		if (config == null)
 			return;
 
 		spawnMobConfig = config;
 
 		spawnMobChanceTotal = 0;
-		for (double dropChance : config.spawns.values()) {
-			spawnMobChanceTotal += dropChance;
+		if (config.spawns != null) {
+			for (double dropChance : config.spawns.values()) {
+				spawnMobChanceTotal += dropChance;
+			}
 		}
 	}
 

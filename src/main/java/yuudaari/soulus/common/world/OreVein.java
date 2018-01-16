@@ -10,109 +10,76 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import yuudaari.soulus.common.util.BlockFromString;
 import yuudaari.soulus.common.util.Logger;
-import yuudaari.soulus.common.config_old.ManualSerializer;
-import yuudaari.soulus.common.config_old.Serializer;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonPrimitive;
 import yuudaari.soulus.common.util.Range;
+import yuudaari.soulus.common.util.serializer.FieldSerializer;
+import yuudaari.soulus.common.util.serializer.ListSerializer;
+import yuudaari.soulus.common.util.serializer.Serializable;
+import yuudaari.soulus.common.util.serializer.Serialized;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import javax.annotation.Nullable;
 
+@Serializable
 public class OreVein {
 
-	public static Serializer<OreVein> serializer;
+	public static final Map<String, Type> BIOME_TYPES = new HashMap<>();
 	static {
-		serializer = new Serializer<>(OreVein.class, "block", "replace", "chances");
-
-		serializer.fieldHandlers
-			.put("dimension", new ManualSerializer(OreVein::serializeDimension, OreVein::deserializeDimension));
-		serializer.fieldHandlers.put("size", Range.serializer);
-		serializer.fieldHandlers.put("height", Range.serializer);
-		serializer.fieldHandlers
-			.put("biomeTypesWhitelist", new ManualSerializer(OreVein::serializeBiomeTypes, OreVein::deserializeBiomeTypes));
-		serializer.fieldHandlers
-			.put("biomeTypesBlacklist", new ManualSerializer(OreVein::serializeBiomeTypes, OreVein::deserializeBiomeTypes));
-	}
-
-	public static JsonElement serializeBiomeTypes (Object from) {
-		Type[] biomeTypes = (Type[]) from;
-
-		JsonArray result = new JsonArray();
-		for (Type type : biomeTypes) {
-			result.add(type.getName().toLowerCase());
-		}
-
-		return result;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Object deserializeBiomeTypes (JsonElement from, Object current) {
-		if (from == null || !from.isJsonArray()) {
-			Logger.warn("Biome types must be an array");
-			return current;
-		}
-
-		List<Type> result = new ArrayList<>();
-
-		Map<String, Type> biomeTypes;
 		try {
 			Field f = Type.class.getDeclaredField("byName");
 			f.setAccessible(true);
-			biomeTypes = (Map<String, Type>) f.get(null);
-		} catch (NoSuchFieldException | IllegalAccessException e) {
+
+			@SuppressWarnings("unchecked")
+			Map<String, Type> biomeTypes = (Map<String, Type>) f.get(null);
+			OreVein.BIOME_TYPES.putAll(biomeTypes);
+
+		} catch (final IllegalAccessException | NoSuchFieldException e) {
 			Logger.error(e);
-			return current;
+			throw new RuntimeException("Unable to generate biome types list");
 		}
-
-		JsonArray types = from.getAsJsonArray();
-
-		deserialization:
-		for (JsonElement type : types) {
-			if (type == null || !type.isJsonPrimitive() || !type.getAsJsonPrimitive().isString()) {
-				Logger.warn("Biome type must be a string");
-				continue;
-			}
-
-			String biome = type.getAsString();
-
-			for (Map.Entry<String, Type> biomeType : biomeTypes.entrySet()) {
-				String typeName = biomeType.getKey();
-				if (typeName.equalsIgnoreCase(biome)) {
-					result.add(biomeType.getValue());
-					continue deserialization;
-				}
-			}
-
-			Logger.warn("Biome type '" + biome + "' does not exist");
-		}
-
-		return result.toArray(new Type[result.size()]);
 	}
 
-	public static JsonElement serializeDimension (Object obj) {
-		return obj == null ? JsonNull.INSTANCE : new JsonPrimitive(((DimensionType) obj).getName());
-	}
+	@Serialized public String block;
+	@Serialized public String replace;
+	@Serialized public int chances = 4;
+	@Serialized public Range size = new Range(2, 6);
+	@Serialized public Range height = new Range(0, 255);
+	@Serialized(DimensionTypeSerializer.class) @Nullable public DimensionType dimension = null;
+	@Serialized(BiomeTypeListSerializer.class) public List<Type> biomeTypesWhitelist = new ArrayList<>();
+	@Serialized(BiomeTypeListSerializer.class) public List<Type> biomeTypesBlacklist = new ArrayList<>();
 
-	public static Object deserializeDimension (JsonElement json, Object current) {
-		if (json == null || !json.isJsonPrimitive() || !json.getAsJsonPrimitive().isString()) {
-			return null;
+	public static class DimensionTypeSerializer extends FieldSerializer<DimensionType> {
+
+		@Override
+		public JsonElement serialize (Class<?> objectType, DimensionType object) {
+			return object == null ? JsonNull.INSTANCE : new JsonPrimitive(object.getName());
 		}
-		return DimensionType.byName(json.getAsString());
+
+		@Override
+		public DimensionType deserialize (Class<?> requestedType, JsonElement element) {
+			return element.isJsonNull() ? null : DimensionType.byName(element.getAsString());
+		}
 	}
 
-	public String block;
-	public String replace;
-	public int chances = 4;
-	public Range size = new Range(2, 6);
-	public Range height = new Range(0, 255);
-	public DimensionType dimension = null;
-	public Type[] biomeTypesWhitelist = new Type[0];
-	public Type[] biomeTypesBlacklist = new Type[0];
+	public static class BiomeTypeListSerializer extends ListSerializer<Type> {
+
+		@Override
+		public JsonElement serializeValue (Type value) throws Exception {
+			return new JsonPrimitive(value.getName());
+		}
+
+		@Override
+		public Type deserializeValue (JsonElement value) throws Exception {
+			return BIOME_TYPES.get(value.getAsString());
+		}
+	}
 
 	public OreVein setBlock (String block) {
 		this.block = block;
@@ -145,12 +112,12 @@ public class OreVein {
 	}
 
 	public OreVein setBiomes (Type... types) {
-		this.biomeTypesWhitelist = types;
+		this.biomeTypesWhitelist = Arrays.asList(types);
 		return this;
 	}
 
 	public OreVein setBiomesBlacklist (Type... types) {
-		this.biomeTypesBlacklist = types;
+		this.biomeTypesBlacklist = Arrays.asList(types);
 		return this;
 	}
 
@@ -175,17 +142,10 @@ public class OreVein {
 
 				BlockPos pos = new BlockPos(x, y, z);
 
-				if (biomeTypesWhitelist.length > 0) {
+				if (biomeTypesWhitelist.size() > 0) {
 					Biome biome = world.getBiome(pos);
 
-					boolean matched = false;
-					for (Type type : biomeTypesWhitelist) {
-						if (BiomeDictionary.hasType(biome, type)) {
-							matched = true;
-							break;
-						}
-					}
-					if (!matched) {
+					if (!biomeTypesWhitelist.stream().anyMatch(type -> BiomeDictionary.hasType(biome, type))) {
 						/*
 						Logger.info(
 								"Can't put '" + block + "' in biome '" + biome.getBiomeName() + "' (not whitelisted)");
@@ -200,17 +160,10 @@ public class OreVein {
 					}
 				}
 
-				if (biomeTypesBlacklist.length > 0) {
+				if (biomeTypesBlacklist.size() > 0) {
 					Biome biome = world.getBiome(pos);
 
-					boolean matched = false;
-					for (Type type : biomeTypesBlacklist) {
-						if (BiomeDictionary.hasType(biome, type)) {
-							matched = true;
-							break;
-						}
-					}
-					if (matched) {
+					if (biomeTypesBlacklist.stream().anyMatch(type -> BiomeDictionary.hasType(biome, type))) {
 						// Logger.info("Can't put '" + block + "' in biome '" + biome.getBiomeName() + "' (blacklisted)");
 						// don't even bother, we failed once, it's likely we'll fail again
 						// might as well speed up gen speeds slightly

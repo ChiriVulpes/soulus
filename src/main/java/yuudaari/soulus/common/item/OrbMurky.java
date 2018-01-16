@@ -41,7 +41,7 @@ public class OrbMurky extends SummonerUpgrade {
 
 			List<Ingredient> ingredients = new ArrayList<>();
 
-			ingredients.addAll(Collections.nCopies(size * size - 1, IngredientPotentialEssence.INSTANCE));
+			ingredients.addAll(Collections.nCopies(size * size - 1, IngredientPotentialEssence.getInstance()));
 			ingredients.add(Ingredient.fromItem(ModItems.ORB_MURKY));
 
 			return NonNullList.from(Ingredient.EMPTY, ingredients.toArray(new Ingredient[0]));

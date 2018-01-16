@@ -18,19 +18,27 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import yuudaari.soulus.common.config_old.EssenceConfig;
-import yuudaari.soulus.common.config_old.EssenceConfig.CreatureLootConfig;
-import yuudaari.soulus.common.misc.NoMobSpawning.DimensionConfig;
-import yuudaari.soulus.common.misc.NoMobSpawning.DimensionConfig.BiomeConfig;
-import yuudaari.soulus.common.misc.NoMobSpawning.DimensionConfig.BiomeConfig.CreatureConfig;
-import yuudaari.soulus.common.misc.NoMobSpawning.DimensionConfig.BiomeConfig.CreatureConfig.DropConfig;
+import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.config.ConfigInjected;
+import yuudaari.soulus.common.config.ConfigInjected.Inject;
+import yuudaari.soulus.common.config.creature.ConfigCreature;
+import yuudaari.soulus.common.config.creature.ConfigCreatureBiome;
+import yuudaari.soulus.common.config.creature.ConfigCreatureDimension;
+import yuudaari.soulus.common.config.creature.ConfigCreatureDrops;
+import yuudaari.soulus.common.config.creature.ConfigCreatures;
+import yuudaari.soulus.common.config.essence.ConfigCreatureLoot;
+import yuudaari.soulus.common.config.essence.ConfigEssences;
+import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.util.BoneType;
 import yuudaari.soulus.common.util.Range;
-import yuudaari.soulus.Soulus;
 
 @Mod.EventBusSubscriber
+@ConfigInjected(Soulus.MODID)
 public class BoneDrops {
+
+	@Inject(ConfigCreatures.class) public static ConfigCreatures CONFIG_CREATURES;
+	@Inject(ConfigEssences.class) public static ConfigEssences CONFIG_ESSENCES;
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onMobDrops (LivingDropsEvent event) {
@@ -45,9 +53,9 @@ public class BoneDrops {
 		// then we get the dimension config for this potential spawn
 		DimensionType dimension = entity.world.provider.getDimensionType();
 		//Logger.info(dimension.getName());
-		DimensionConfig dimensionConfig = NoMobSpawning.INSTANCE.dimensionConfigs.get(dimension.getName());
+		ConfigCreatureDimension dimensionConfig = CONFIG_CREATURES.dimensionConfigs.get(dimension.getName());
 		if (dimensionConfig == null) {
-			dimensionConfig = NoMobSpawning.INSTANCE.dimensionConfigs.get("*");
+			dimensionConfig = CONFIG_CREATURES.dimensionConfigs.get("*");
 			if (dimensionConfig == null) {
 				doMobDrops(null, drops, entity);
 				return;
@@ -58,7 +66,7 @@ public class BoneDrops {
 		BlockPos pos = entity.getPosition();
 		Biome biome = entity.world.getBiome(pos);
 		//Logger.info(biome.getRegistryName().toString());
-		BiomeConfig biomeConfig = dimensionConfig.biomeConfigs.get(biome.getRegistryName().toString());
+		ConfigCreatureBiome biomeConfig = dimensionConfig.biomeConfigs.get(biome.getRegistryName().toString());
 		if (biomeConfig == null) {
 			biomeConfig = dimensionConfig.biomeConfigs.get(biome.getRegistryName().getResourceDomain() + ":*");
 			if (biomeConfig == null) {
@@ -73,7 +81,7 @@ public class BoneDrops {
 		// then we get the creature config for this potential spawn
 		String entityName = EntityList.getKey(entity).toString();
 		//Logger.info(entityName);
-		CreatureConfig creatureConfig = biomeConfig.creatureConfigs.get(entityName);
+		ConfigCreature creatureConfig = biomeConfig.creatureConfigs.get(entityName);
 		if (creatureConfig == null) {
 			creatureConfig = biomeConfig.creatureConfigs
 				.get(new ResourceLocation(entityName).getResourceDomain() + ":*");
@@ -89,14 +97,14 @@ public class BoneDrops {
 		doMobDrops(creatureConfig, drops, entity);
 	}
 
-	private static void doMobDrops (CreatureConfig config, List<EntityItem> drops, EntityLivingBase entity) {
+	private static void doMobDrops (ConfigCreature config, List<EntityItem> drops, EntityLivingBase entity) {
 
 		if (config != null) {
 			boolean wasSummoned = entity.getEntityData().getByte("soulus:spawn_whitelisted") == (byte) 2;
 			String spawnType = wasSummoned ? "summoned" : "spawned";
 
-			DropConfig dropConfig = config.drops.get(spawnType);
-			DropConfig dropConfigAll = config.drops.get("all");
+			ConfigCreatureDrops dropConfig = config.drops.get(spawnType);
+			ConfigCreatureDrops dropConfigAll = config.drops.get("all");
 
 			if (dropConfig == null && dropConfigAll == null) {
 				// Logger.info("all cleared null");
@@ -147,8 +155,10 @@ public class BoneDrops {
 		}
 
 		// Logger.info("added bone drops");
-		for (EssenceConfig essenceConfig : Soulus.config_old.essences.values()) {
-			for (Map.Entry<String, CreatureLootConfig> lootConfig : essenceConfig.loot.entrySet()) {
+		for (ConfigEssence essenceConfig : CONFIG_ESSENCES.essences) {
+			if (essenceConfig.loot == null) continue;
+
+			for (Map.Entry<String, ConfigCreatureLoot> lootConfig : essenceConfig.loot.entrySet()) {
 				ResourceLocation name = EntityList.getKey(entity);
 				if (name != null && lootConfig.getKey().equals(name.toString())) {
 					ItemStack stack = getStack(entity.world.rand, essenceConfig.bones.type, lootConfig.getValue());
@@ -161,7 +171,7 @@ public class BoneDrops {
 		}
 	}
 
-	private static ItemStack getStack (Random rand, BoneType boneType, CreatureLootConfig lootConfig) {
+	private static ItemStack getStack (Random rand, BoneType boneType, ConfigCreatureLoot lootConfig) {
 		if (lootConfig.chance < rand.nextDouble()) {
 			return null;
 		}

@@ -37,6 +37,7 @@ import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSummoner;
+import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.item.CrystalBlood;
@@ -130,6 +131,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	//
 
 	@Inject(ConfigSummoner.class) public static ConfigSummoner CONFIG;
+	@Inject(ConfigEssences.class) public static ConfigEssences CONFIG_ESSENCES;
 
 	/////////////////////////////////////////
 	// Properties
@@ -360,7 +362,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		// try to insert a soulbook
 		if (item == Soulbook.INSTANCE) {
 			if ((CONFIG.soulbookUses <= 0 && !Soulbook.isFilled(stack)) || Soulbook
-				.getContainedEssence(stack) < CONFIG.soulbookEssenceRequiredToInsert * Soulus.config_old
+				.getContainedEssence(stack) < CONFIG.soulbookEssenceRequiredToInsert * CONFIG_ESSENCES
 					.getSoulbookQuantity(EssenceType.getEssenceType(stack)))
 				return false;
 
@@ -380,7 +382,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 			String newEssenceType = EssenceType.getEssenceType(stack);
 			te.setEssenceType(newEssenceType);
-			te.soulbookUses = (int) (Soulbook.getContainedEssence(stack) / (double) Soulus.config_old
+			te.soulbookUses = (int) (Soulbook.getContainedEssence(stack) / (double) CONFIG_ESSENCES
 				.getSoulbookQuantity(newEssenceType) * CONFIG.soulbookUses);
 			te.reset();
 
@@ -401,7 +403,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		String essenceType = te.getEssenceType();
 
 		return CONFIG.soulbookUses > 0 ? Soulbook
-			.getStack(essenceType, (int) Math.max(0, te.soulbookUses / (double) CONFIG.soulbookUses * Soulus.config_old
+			.getStack(essenceType, (int) Math.max(0, te.soulbookUses / (double) CONFIG.soulbookUses * CONFIG_ESSENCES
 				.getSoulbookQuantity(essenceType))) : Soulbook.getFilled(essenceType);
 	}
 

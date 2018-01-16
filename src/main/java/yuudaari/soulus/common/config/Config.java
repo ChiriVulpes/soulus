@@ -258,13 +258,21 @@ public class Config {
 	 */
 	@Nullable
 	private static JsonObject parseJsonConfigFile (final File configFile) {
+		return parseJsonConfigFile(configFile, true);
+	}
+
+	/**
+	 * Returns the JsonObject of a config file
+	 */
+	@Nullable
+	private static JsonObject parseJsonConfigFile (final File configFile, boolean warn) {
 		try {
 			final JsonElement json = new JsonParser().parse(new FileReader(configFile));
 			if (json != null && json.isJsonObject())
 				return json.getAsJsonObject();
 
 		} catch (final IOException | JsonParseException e) {
-			Logger.warn("Could not parse the config file: " + e.getMessage());
+			if (warn) Logger.warn("Could not parse the config file: " + e.getMessage());
 		}
 
 		return null;
@@ -277,15 +285,20 @@ public class Config {
 	private static void writeJsonConfigFile (final File configFile, final JsonObject json, @Nullable final File saveOld) {
 		try {
 
-			StringWriter stringWriter = new StringWriter();
-			JsonWriter jsonWriter = new JsonWriter(stringWriter);
+			final JsonElement oldConfig = parseJsonConfigFile(configFile, false);
+			if (json.equals(oldConfig))
+				return;
+
+			final StringWriter stringWriter = new StringWriter();
+			final JsonWriter jsonWriter = new JsonWriter(stringWriter);
 			jsonWriter.setLenient(true);
 			jsonWriter.setIndent("\t");
 			Streams.write(json, jsonWriter);
 			final String newFileText = stringWriter.toString();
 
 			final String oldFileText = new String(Files.readAllBytes(configFile.toPath()));
-			if (oldFileText.equals(newFileText))
+
+			if (newFileText.equals(oldFileText))
 				return;
 
 			if (saveOld != null && oldFileText.length() > 0)

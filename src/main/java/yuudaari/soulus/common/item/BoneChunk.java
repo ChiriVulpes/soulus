@@ -5,9 +5,10 @@ import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.item.ConfigBoneChunks;
+import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.config.misc.ConfigFossils;
+import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.config.misc.ConfigFossils.ConfigFossil;
-import yuudaari.soulus.common.config_old.EssenceConfig;
 import yuudaari.soulus.common.util.BoneType;
 import yuudaari.soulus.common.util.ModItem;
 import yuudaari.soulus.common.util.Range;
@@ -26,7 +27,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLStateEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import javax.annotation.Nullable;
@@ -45,6 +46,7 @@ public class BoneChunk extends ModItem {
 
 	@Inject(ConfigBoneChunks.class) public static ConfigBoneChunks CONFIG;
 	@Inject(ConfigFossils.class) public static ConfigFossils CONFIG_FOSSILS;
+	@Inject(ConfigEssences.class) public static ConfigEssences CONFIG_ESSENCES;
 
 	/////////////////////////////////////////
 	// Basics
@@ -54,36 +56,40 @@ public class BoneChunk extends ModItem {
 
 	private Map<String, Double> drops = new HashMap<>();
 	private int chanceTotal = 0;
+	private BoneType boneType;
 
 	public BoneChunk (String name, BoneType boneType) {
 		super(name);
 
+		this.boneType = boneType;
 		boneChunkTypes.put(boneType, this);
 
 		addOreDict("boneChunk");
 
-		Soulus.onInit( (FMLInitializationEvent e) -> {
-			for (EssenceConfig essenceConfig : Soulus.config_old.essences.values()) {
-				if (essenceConfig.bones.type != boneType) {
-					continue;
-				}
+		Soulus.onPostInit(this::registerEssenceDrops);
+	}
 
-				if (essenceConfig.essence.equals("NONE")) {
-					drops.put(null, essenceConfig.bones.dropWeight);
+	private void registerEssenceDrops (FMLStateEvent e) {
+		for (ConfigEssence essenceConfig : CONFIG_ESSENCES.essences) {
+			if (essenceConfig.bones.type != boneType) {
+				continue;
+			}
+
+			if (essenceConfig.essence.equals("NONE")) {
+				drops.put(null, essenceConfig.bones.dropWeight);
+			} else {
+				if (ForgeRegistries.ENTITIES.containsKey(new ResourceLocation(essenceConfig.essence))) {
+					drops.put(essenceConfig.essence, essenceConfig.bones.dropWeight);
 				} else {
-					if (ForgeRegistries.ENTITIES.containsKey(new ResourceLocation(essenceConfig.essence))) {
-						drops.put(essenceConfig.essence, essenceConfig.bones.dropWeight);
-					} else {
-						System.out.println(String
-							.format("Colour entry missing for %s:%s", boneType.name(), essenceConfig.essence));
-					}
+					System.out.println(String
+						.format("Colour entry missing for %s:%s", boneType.name(), essenceConfig.essence));
 				}
 			}
+		}
 
-			for (double dropChance : drops.values()) {
-				chanceTotal += dropChance;
-			}
-		});
+		for (double dropChance : drops.values()) {
+			chanceTotal += dropChance;
+		}
 	}
 
 	@Nullable

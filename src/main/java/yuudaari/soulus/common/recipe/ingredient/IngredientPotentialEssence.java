@@ -9,12 +9,23 @@ import net.minecraftforge.common.crafting.IIngredientFactory;
 import net.minecraftforge.common.crafting.JsonContext;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModItems;
-import yuudaari.soulus.common.config_old.EssenceConfig;
+import yuudaari.soulus.common.config.ConfigInjected;
+import yuudaari.soulus.common.config.ConfigInjected.Inject;
+import yuudaari.soulus.common.config.essence.ConfigEssences;
+import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.item.Essence;
 
+@ConfigInjected(Soulus.MODID)
 public class IngredientPotentialEssence extends Ingredient {
 
-	public static IngredientPotentialEssence INSTANCE = new IngredientPotentialEssence();
+	@Inject(ConfigEssences.class) public static ConfigEssences CONFIG;
+
+	private static IngredientPotentialEssence INSTANCE = null;
+
+	public static IngredientPotentialEssence getInstance () {
+		if (INSTANCE == null) INSTANCE = new IngredientPotentialEssence();
+		return INSTANCE;
+	}
 
 	public static ItemStack[] getMatchingStacks1 (boolean justEssence) {
 		List<ItemStack> stacks = new ArrayList<>();
@@ -24,7 +35,7 @@ public class IngredientPotentialEssence extends Ingredient {
 			stacks.add(ModItems.ASH.getItemStack());
 		}
 
-		for (EssenceConfig essenceConfig : Soulus.config_old.essences.values()) {
+		for (ConfigEssence essenceConfig : CONFIG.essences) {
 			if (essenceConfig.essence.equals("NONE"))
 				continue;
 			stacks.add(Essence.getStack(essenceConfig.essence));

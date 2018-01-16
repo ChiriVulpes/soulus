@@ -19,4 +19,13 @@ public @interface Serialized {
 
 	@SuppressWarnings("rawtypes")
 	Class<? extends IFieldDeserializationHandler> deserializer () default DefaultFieldSerializer.class;
+
+	/**
+	 * Whether the value should be serialized as "top-level" in the JsonObject.
+	 * If false, it will use the name of the field as the Json property to serialize to.
+	 * If true, it will serialize into the top level JsonObject.
+	 * An error will be thrown if the value returned by the serialization of this field is not a JsonObject.
+	 */
+	boolean topLevel () default false;
+
 }

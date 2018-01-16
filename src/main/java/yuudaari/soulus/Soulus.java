@@ -57,7 +57,6 @@ public class Soulus {
 
 	public static final String NAME = "Soulus";
 	public static final String MODID = "soulus";
-	public static yuudaari.soulus.common.config_old.Config config_old;
 	public static Config config;
 
 	/* UTILITY */
@@ -106,9 +105,6 @@ public class Soulus {
 		final String configPath = event.getModConfigurationDirectory().getAbsolutePath() + "/soulus/";
 		config = new Config(event.getAsmData(), configPath, Soulus.MODID);
 		reloadConfig();
-
-		config_old = yuudaari.soulus.common.config_old.Config
-			.loadConfig(event.getModConfigurationDirectory().getAbsolutePath());
 
 		for (final PreInitEventHandler handler : preInitHandlers) {
 			handler.handle(event);

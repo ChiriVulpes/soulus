@@ -9,14 +9,20 @@ import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
-import yuudaari.soulus.common.config_old.ColorConfig;
-import yuudaari.soulus.common.config_old.EssenceConfig;
+import yuudaari.soulus.common.config.ConfigInjected;
+import yuudaari.soulus.common.config.ConfigInjected.Inject;
+import yuudaari.soulus.common.config.essence.ConfigColor;
+import yuudaari.soulus.common.config.essence.ConfigEssences;
+import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
 import yuudaari.soulus.common.util.EssenceType;
 import yuudaari.soulus.common.util.ModItem;
 import yuudaari.soulus.Soulus;
 
+@ConfigInjected(Soulus.MODID)
 public class Essence extends ModItem {
+
+	@Inject(ConfigEssences.class) public static ConfigEssences CONFIG;
 
 	public static Essence INSTANCE = new Essence();
 
@@ -48,10 +54,10 @@ public class Essence extends ModItem {
 				EntityList.EntityEggInfo eggInfo = entry.getEgg();
 				if (eggInfo == null)
 					return -1;
-				ColorConfig colors = new ColorConfig(eggInfo);
+				ConfigColor colors = new ConfigColor(eggInfo);
 
-				EssenceConfig essenceConfig = Soulus.config_old.essences.get(essenceType);
-				if (essenceConfig.colors.wasSet)
+				ConfigEssence essenceConfig = CONFIG.get(essenceType);
+				if (essenceConfig.colors != null)
 					colors = essenceConfig.colors;
 
 				return tintIndex == 0 ? colors.primary : colors.secondary;
