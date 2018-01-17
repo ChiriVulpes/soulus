@@ -10,7 +10,9 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkProviderServer;
@@ -79,31 +81,27 @@ public class SoulusCommand extends CommandBase {
 	}
 
 	private void executeLocation (ICommandSender ics) {
-		List<TextComponentTranslation> result = new ArrayList<>();
+		List<Object> result = new ArrayList<>();
 
 		BlockPos pos = ics.getPosition();
 		World world = ics.getEntityWorld();
-		result.add(new TextComponentTranslation("command.soulus:soulus.location.dimension", //
-			world.provider.getDimensionType().getName()));
-		result.add(new TextComponentTranslation("command.soulus:soulus.location.separator"));
+		result.add(new TextComponentString(TextFormatting.GOLD + world.provider.getDimensionType().getName()));
 
 		Biome biome = world.getBiome(pos);
 		ResourceLocation biomeId = biome.getRegistryName();
-		result.add(new TextComponentTranslation("command.soulus:soulus.location.biome", //
-			biomeId.getResourceDomain(), biomeId.getResourcePath()));
-		result.add(new TextComponentTranslation("command.soulus:soulus.location.separator"));
+		result.add(new TextComponentString(TextFormatting.RED + biomeId.getResourceDomain()));
+		result.add(new TextComponentString(TextFormatting.GOLD + biomeId.getResourcePath()));
 
 		Set<Type> biomeTypes = BiomeDictionary.getTypes(biome);
 		Stack<Object> biomeTypeArgs = new Stack<>();
 		for (Type t : biomeTypes) {
-			biomeTypeArgs.push(t.getName());
-			biomeTypeArgs.push(new TextComponentTranslation("command.soulus:soulus.location.biome_types_separator"));
+			biomeTypeArgs.push(new TextComponentString(TextFormatting.RED + t.getName()));
+			biomeTypeArgs.push(new TextComponentTranslation("command.soulus:soulus.location.separator"));
 		}
 		biomeTypeArgs.pop();
 
-		result.add(new TextComponentTranslation("command.soulus:soulus.location.biome_types", //
-			new TextComponentList(biomeTypeArgs.toArray(new Object[0]))));
-		result.add(new TextComponentTranslation("command.soulus:soulus.location.separator"));
+		result.add(new TextComponentList(biomeTypeArgs.toArray(new Object[0])));
+		//result.add(new TextComponentString("blank"));
 
 		ChunkProviderServer cps = (ChunkProviderServer) world.getChunkProvider();
 		Stack<Object> structureArgs = new Stack<>();
@@ -114,16 +112,15 @@ public class SoulusCommand extends CommandBase {
 			//		+ ", is inside? " + isInsideStructure);
 
 			if (isInsideStructure) {
-				structureArgs.push(t.name());
-				structureArgs.push(new TextComponentTranslation("command.soulus:soulus.location.structures_separator"));
+				structureArgs.push(new TextComponentString(TextFormatting.RED + t.name()));
+				structureArgs.push(new TextComponentTranslation("command.soulus:soulus.location.separator"));
 			}
 		}
-		result.add(new TextComponentTranslation("command.soulus:soulus.location.structures", //
-			structureArgs.size() > 0 ? //
-				new TextComponentList(structureArgs.toArray(new Object[0])) : //
-				new TextComponentTranslation("command.soulus:soulus.location.structures_none")));
+		result.add(structureArgs.size() > 0 ? //
+			new TextComponentList(structureArgs.toArray(new Object[0])) : //
+			new TextComponentTranslation("command.soulus:soulus.location.structures_none"));
 
-		ics.sendMessage(new TextComponentList(result.toArray(new Object[0])));
+		ics.sendMessage(new TextComponentTranslation("command.soulus:soulus.location", result.toArray(new Object[0])));
 	}
 
 	public static class SoulusCommandException extends CommandException {

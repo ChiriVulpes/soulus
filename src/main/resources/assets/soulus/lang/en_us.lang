@@ -283,13 +283,6 @@ command.soulus:soulus.usage=Usage: /soulus location|reload
 command.soulus:soulus.invalid_syntax=Command syntax invalid. %1$s
 command.soulus:reload.failed=§cCould not reload configs. See log for more information. Error: %1$s
 command.soulus:reload.success=§aReloaded configs.
-
-# the following lines are for future translation support, currently it's hardcoded
-command.soulus:soulus.location.dimension=Dimension: §6%1$s
-command.soulus:soulus.location.biome=Biome: §c%1$s:§6%2$s
-command.soulus:soulus.location.biome_types=Biome Types: §c%1$s
-command.soulus:soulus.location.biome_types_separator=§f, §c
-command.soulus:soulus.location.structures=Structures: §c%1$s
-command.soulus:soulus.location.structures_none=None
-command.soulus:soulus.location.structures_separator=§f, §c
-command.soulus:soulus.location.separator=§f, 
+command.soulus:soulus.location=§rDimension: %1$s§7, §rBiome: %2$s§c:%3$s§7, §rBiome Types: %4$s§7, §rStructures: %5$s
+command.soulus:soulus.location.structures_none=§7None
+command.soulus:soulus.location.separator=§7, §r
