@@ -1,23 +1,16 @@
 package yuudaari.soulus.server.command;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
-import java.util.stream.Collectors;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentBase;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkProviderServer;
@@ -37,7 +30,7 @@ public class SoulusCommand extends CommandBase {
 
 	@Override
 	public String getUsage (ICommandSender sender) {
-		return "Usage: /" + getName();
+		return "command.soulus:soulus.usage";
 	}
 
 	private static final String[] COMMANDS = new String[] {
@@ -72,7 +65,7 @@ public class SoulusCommand extends CommandBase {
 			}
 		}
 
-		throw new SoulusCommandException("soulus", "invalid_syntax");
+		throw new SoulusCommandException("soulus", "invalid_syntax", new TextComponentTranslation(getUsage(ics)));
 	}
 
 	private void executeReload (ICommandSender ics) throws SoulusCommandException {

@@ -279,7 +279,8 @@ jei.description.soulus:composer_cell=It can hold multiple of anything, whether o
 jei.description.soulus:skewer=A block that, when powered by redstone, will extend spikes outwards. It can be used to slaughter the creatures one has summoned. When quartz, from the netherworld, is added, it will likely be more effective. One may also insert a Blood Crystal to fill it.
 jei.description.soulus:summoner=A machine created from the remains of alien creatures and metal, which summons a creature from a Soulbook. With this, life may soon return to the world.
 
-command.soulus:soulus.invalid_syntax=Command syntax invalid. Usage: /soulus location|reload
+command.soulus:soulus.usage=Usage: /soulus location|reload
+command.soulus:soulus.invalid_syntax=Command syntax invalid. %1$s
 command.soulus:reload.failed=§cCould not reload configs. See log for more information. Error: %1$s
 command.soulus:reload.success=§aReloaded configs.
 
