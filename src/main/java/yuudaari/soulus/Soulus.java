@@ -3,12 +3,12 @@ package yuudaari.soulus;
 import yuudaari.soulus.client.ModRenderers;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.util.Logger;
+import yuudaari.soulus.server.command.SoulusCommand;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.ModGenerators;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.compat.ExNihiloCreatioRecipes;
 import yuudaari.soulus.common.config.Config;
-import yuudaari.soulus.server.command.SoulusLocation;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.block.Block;
@@ -89,7 +89,7 @@ public class Soulus {
 	/**
 	 * Refreshes the soulus config
 	 */
-	public static void reloadConfig () {
+	public static void reloadConfig () throws Exception {
 		config.deserialize();
 
 		try {
@@ -104,7 +104,11 @@ public class Soulus {
 
 		final String configPath = event.getModConfigurationDirectory().getAbsolutePath() + "/soulus/";
 		config = new Config(event.getAsmData(), configPath, Soulus.MODID);
-		reloadConfig();
+		try {
+			reloadConfig();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 
 		for (final PreInitEventHandler handler : preInitHandlers) {
 			handler.handle(event);
@@ -164,6 +168,6 @@ public class Soulus {
 
 	@EventHandler
 	public void serverLoad (FMLServerStartingEvent event) {
-		event.registerServerCommand(new SoulusLocation());
+		event.registerServerCommand(new SoulusCommand());
 	}
 }
