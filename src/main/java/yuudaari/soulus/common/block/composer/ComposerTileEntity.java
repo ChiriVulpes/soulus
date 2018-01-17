@@ -240,7 +240,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 				.loopBlocks(world, pos, state.getValue(Composer.FACING), (BlockPos pos2, BlockValidator validator) -> {
 					IBlockState currentState = world.getBlockState(pos2);
 
-					if (currentState.getBlock() == getBlock()) {
+					if (currentState.getBlock() == ModBlocks.COMPOSER_CELL) {
 						ComposerCellTileEntity ccte = (ComposerCellTileEntity) world.getTileEntity(pos2);
 						BlockPos ccPos = ccte.getPos();
 						world.setBlockState(ccPos, currentState
