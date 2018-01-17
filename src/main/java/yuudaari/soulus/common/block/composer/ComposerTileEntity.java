@@ -416,9 +416,10 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 		if (!hasValidRecipe() || !isPlayerInRangeForEffects() || activationAmount == 0)
 			return;
-
-		if (CONFIG.particleCountActivated < 1) {
-			timeTillParticle += CONFIG.particleCountActivated;
+		double particleCount = CONFIG.particleCountActivated * Math
+			.min(1, activationAmount * activationAmount) * (0.5 + getCompositionPercent() / 2);
+		if (particleCount < 1) {
+			timeTillParticle += 0.01 + particleCount;
 
 			if (timeTillParticle < 1)
 				return;
