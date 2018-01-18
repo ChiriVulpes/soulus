@@ -184,34 +184,27 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		}
 
 		double activationAmount = activationAmount();
-		if (activationAmount <= 0) {
-			// ease rotation to a stop
-			double diff = mobRotation - prevMobRotation;
-			prevMobRotation = mobRotation;
-			mobRotation = mobRotation + diff * 0.9;
-			return;
+		if (world.isRemote) {
+			updateRenderer(activationAmount);
+		} else {
+			updateSignalStrength(activationAmount);
 		}
 
-		if (timeTillSpawn > 0) {
-			timeTillSpawn -= activationAmount;
+		timeTillSpawn -= activationAmount;
 
-			if (world.isRemote) {
-				updateRenderer(activationAmount);
-			} else {
-				int signalStrength = (int) Math.floor(16 * getSpawnPercent());
-				if (signalStrength != this.signalStrength) {
-					this.signalStrength = signalStrength;
-					markDirty();
-				}
-			}
-
-			return;
+		if (timeTillSpawn <= 0) {
+			resetTimer();
+			if (!world.isRemote)
+				spawn();
 		}
+	}
 
-		if (!world.isRemote)
-			spawn();
-
-		resetTimer();
+	private void updateSignalStrength (double activationAmount) {
+		int signalStrength = activationAmount <= 0 ? 0 : (int) Math.floor(15 * getSpawnPercent()) + 1;
+		if (signalStrength != this.signalStrength) {
+			this.signalStrength = signalStrength;
+			markDirty();
+		}
 	}
 
 	private void resetTimer () {
@@ -258,6 +251,12 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	}
 
 	private void updateRenderer (double activationAmount) {
+		double diff = mobRotation - prevMobRotation;
+		prevMobRotation = mobRotation;
+		mobRotation += activationAmount <= 0 ? diff * 0.9 : getSpawnPercent() + diff * 0.8;
+
+		if (activationAmount <= 0) return;
+
 		if (isPlayerInRangeForEffects()) {
 			double particleCount = CONFIG.particleCountActivated * Math
 				.min(1, activationAmount * activationAmount) * (0.5 + getSpawnPercent() / 2);
@@ -277,10 +276,6 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 				world.spawnParticle(EnumParticleTypes.PORTAL, d3, d4, d5, (d3 - pos.getX() - 0.5F), -0.3D, (d5 - pos
 					.getZ() - 0.5F));
 			}
-
-			double diff = mobRotation - prevMobRotation;
-			prevMobRotation = mobRotation;
-			mobRotation = mobRotation + 1.0F * getSpawnPercent() + diff * 0.8;
 		}
 	}
 

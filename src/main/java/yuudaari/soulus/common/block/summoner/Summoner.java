@@ -166,7 +166,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	@Override
 	public int getComparatorInputOverride (IBlockState state, World world, BlockPos pos) {
 		SummonerTileEntity te = (SummonerTileEntity) world.getTileEntity(pos);
-		return te.getSignalStrength();
+		return te == null ? 0 : te.getSignalStrength();
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package yuudaari.soulus.common.block.composer;
 
 import java.util.List;
-import net.minecraft.block.BlockHopper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
