@@ -416,6 +416,8 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	@Override
 	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, SummonerTileEntity te, boolean isSneaking) {
 
+		if (te == null) return;
+
 		currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":summoner.summon_percentage", (int) Math
 			.floor(te.getSpawnPercent() * 100)));
 

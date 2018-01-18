@@ -25,18 +25,22 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
-public class RecipeComposerShaped extends Recipe {
+public class RecipeComposerShaped extends Recipe implements IRecipeComposer {
 
 	//Added in for future ease of change, but hard coded for now.
 	public static final int MAX_CRAFT_GRID_WIDTH = 3;
 	public static final int MAX_CRAFT_GRID_HEIGHT = 3;
 
-	@Nonnull
-	protected ItemStack output = ItemStack.EMPTY;
+	@Nonnull protected ItemStack output = ItemStack.EMPTY;
 	protected NonNullList<Ingredient> input = null;
 	protected int width = 0;
 	protected int height = 0;
 	protected boolean mirrored = true;
+	protected float time = 1;
+
+	public float getTime () {
+		return time;
+	}
 
 	public RecipeComposerShaped (Block result, Object... recipe) {
 		this(new ItemStack(result), recipe);
@@ -211,6 +215,8 @@ public class RecipeComposerShaped extends Recipe {
 
 			ItemStack output = CraftingHelper.getItemStack(JsonUtils.getJsonObject(json, "result"), context);
 			RecipeComposerShaped result = new RecipeComposerShaped(output, primer);
+
+			result.time = JsonUtils.getFloat(json, "time", result.time);
 
 			return result;
 		}

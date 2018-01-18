@@ -43,6 +43,7 @@ import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigComposer;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.MobPoof;
+import yuudaari.soulus.common.recipe.IRecipeComposer;
 import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.common.util.StructureMap.BlockValidator;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
@@ -102,14 +103,14 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		if (spawnDelay == null)
 			return;
 
-		timeTillCraft = spawnDelay.getInt(world.rand);
+		timeTillCraft = spawnDelay.getInt(world.rand) * (this.container == null ? 1 : this.container.time);
 		lastTimeTillCraft = timeTillCraft;
 
 		if (update)
 			blockUpdate();
 	}
 
-	private double activationAmount () {
+	public double activationAmount () {
 		// when powered by redstone, don't run
 		if (world.isBlockIndirectlyGettingPowered(pos) != 0) {
 			return 0;
@@ -490,6 +491,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 		public InventoryCrafting craftingMatrix;
 		public InventoryCraftResult craftResult;
+		public float time = 1;
 		private final World world;
 		private final EntityPlayer player;
 		private RecipeChangedHandler onRecipeChanged;
@@ -524,9 +526,11 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 			if (!world.isRemote) {
 				ItemStack stack = ItemStack.EMPTY;
 				IRecipe recipe = CraftingManager.findMatchingRecipe(craftingMatrix, world);
+				time = 1;
 
 				if (recipe != null) {
 					craftResult.setRecipeUsed(recipe);
+					if (recipe instanceof IRecipeComposer) time = ((IRecipeComposer) recipe).getTime();
 					stack = recipe.getCraftingResult(craftingMatrix);
 					onRecipeChanged();
 				}

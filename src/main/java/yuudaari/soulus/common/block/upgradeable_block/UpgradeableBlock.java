@@ -320,36 +320,42 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 	@Override
 	public final List<String> getWailaTooltip (List<String> currentTooltip, IWailaDataAccessor accessor) {
 		TileEntity te = accessor.getTileEntity();
-		if (te == null || !(te instanceof UpgradeableBlockTileEntity))
-			return currentTooltip;
-
-		UpgradeableBlockTileEntity ute = (UpgradeableBlockTileEntity) te;
 
 		boolean isSneaking = accessor.getPlayer().isSneaking();
 
 		onWailaTooltipHeader(currentTooltip, accessor.getBlockState(), (TileEntityClass) te, isSneaking);
 
-		List<IUpgrade> upgrades = new ArrayList<>(Arrays.asList(getUpgrades()));
-
-		if (isSneaking || upgrades.size() < 2) {
-			for (IUpgrade upgrade : Lists.reverse(ute.insertionOrder)) {
-				upgrades.remove(upgrade);
-				currentTooltip
-					.add(I18n.format("waila." + getRegistryName() + ".upgrades_" + upgrade.getName()
-						.toLowerCase(), ute.upgrades.get(upgrade), upgrade.getMaxQuantity()));
-			}
-			for (IUpgrade upgrade : upgrades) {
-				currentTooltip
-					.add(I18n.format("waila." + getRegistryName() + ".upgrades_" + upgrade.getName()
-						.toLowerCase(), ute.upgrades.get(upgrade), upgrade.getMaxQuantity()));
-			}
-		} else {
-			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":upgradeable_block.show_upgrades"));
-		}
+		onWailaTooltipShowUpgrades(currentTooltip, te, isSneaking);
 
 		onWailaTooltipFooter(currentTooltip, accessor.getBlockState(), (TileEntityClass) te, isSneaking);
 
 		return currentTooltip;
+	}
+
+	@Optional.Method(modid = "waila")
+	@SideOnly(Side.CLIENT)
+	protected void onWailaTooltipShowUpgrades (List<String> currentTooltip, TileEntity te, boolean isSneaking) {
+		if (te != null && te instanceof UpgradeableBlockTileEntity) {
+			UpgradeableBlockTileEntity ute = (UpgradeableBlockTileEntity) te;
+
+			List<IUpgrade> upgrades = new ArrayList<>(Arrays.asList(getUpgrades()));
+
+			if (isSneaking || upgrades.size() < 2) {
+				for (IUpgrade upgrade : Lists.reverse(ute.insertionOrder)) {
+					upgrades.remove(upgrade);
+					currentTooltip
+						.add(I18n.format("waila." + getRegistryName() + ".upgrades_" + upgrade.getName()
+							.toLowerCase(), ute.upgrades.get(upgrade), upgrade.getMaxQuantity()));
+				}
+				for (IUpgrade upgrade : upgrades) {
+					currentTooltip
+						.add(I18n.format("waila." + getRegistryName() + ".upgrades_" + upgrade.getName()
+							.toLowerCase(), ute.upgrades.get(upgrade), upgrade.getMaxQuantity()));
+				}
+			} else {
+				currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":upgradeable_block.show_upgrades"));
+			}
+		}
 	}
 
 	@Optional.Method(modid = "waila")

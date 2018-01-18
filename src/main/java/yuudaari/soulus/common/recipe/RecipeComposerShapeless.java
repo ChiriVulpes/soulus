@@ -19,11 +19,15 @@ import net.minecraftforge.common.crafting.IRecipeFactory;
 import net.minecraftforge.common.crafting.JsonContext;
 import yuudaari.soulus.common.block.composer.ComposerTileEntity;
 
-public class RecipeComposerShapeless extends Recipe {
+public class RecipeComposerShapeless extends Recipe implements IRecipeComposer {
 
-	@Nonnull
-	protected ItemStack output = ItemStack.EMPTY;
+	@Nonnull protected ItemStack output = ItemStack.EMPTY;
 	protected NonNullList<Ingredient> input = NonNullList.create();
+	protected float time = 1;
+
+	public float getTime () {
+		return time;
+	}
 
 	public RecipeComposerShapeless (Block result, Object... recipe) {
 		this(new ItemStack(result), recipe);
@@ -138,6 +142,8 @@ public class RecipeComposerShapeless extends Recipe {
 
 			ItemStack itemstack = CraftingHelper.getItemStack(JsonUtils.getJsonObject(json, "result"), context);
 			RecipeComposerShapeless result = new RecipeComposerShapeless(ings, itemstack);
+
+			result.time = JsonUtils.getFloat(json, "time", result.time);
 
 			return result;
 		}

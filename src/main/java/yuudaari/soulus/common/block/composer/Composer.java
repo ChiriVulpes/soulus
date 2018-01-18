@@ -350,6 +350,8 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, ComposerTileEntity te, boolean isSneaking) {
 
 		if (te.hasValidRecipe()) {
+			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":composer.activation", (int) Math
+				.floor(te.activationAmount())));
 			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":composer.craft_percentage", (int) Math
 				.floor(te.getCompositionPercent() * 100)));
 		} else {
