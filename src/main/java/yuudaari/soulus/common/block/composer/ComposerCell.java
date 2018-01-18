@@ -172,28 +172,7 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	public boolean onActivateInsert (World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
 		ComposerCellTileEntity te = (ComposerCellTileEntity) world.getTileEntity(pos);
 
-		ItemStack currentStack = te.storedItem;
-		if (currentStack == null || areItemStacksEqual(stack, currentStack)) {
-			int requestedInsertQuantity = player.isSneaking() ? stack.getCount() : 1;
-			int canStillBeInsertedQuantity = CONFIG.maxQuantity - (currentStack == null ? 0 : te.storedQuantity);
-			int insertQuantity = Math.min(requestedInsertQuantity, canStillBeInsertedQuantity);
-
-			if (currentStack == null) {
-				te.storedItem = stack.copy();
-				te.storedItem.setCount(1);
-				te.storedQuantity = insertQuantity;
-			} else {
-				te.storedQuantity += insertQuantity;
-			}
-
-			stack.shrink(insertQuantity);
-			te.onChangeItem();
-			te.blockUpdate();
-
-			return true;
-		}
-
-		return false;
+		return te.tryInsert(stack, player.isSneaking() ? stack.getCount() : 1);
 	}
 
 	@Override
@@ -241,27 +220,6 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 			return;
 
 		addItemStackToList(te.storedItem, list, te.storedQuantity);
-	}
-
-	/////////////////////////////////////////
-	// Utility
-	//
-
-	public static boolean areItemStacksEqual (ItemStack stackA, ItemStack stackB) {
-		if (stackA.isEmpty() && stackB.isEmpty()) {
-			return true;
-		} else if (stackA.isEmpty() != stackB.isEmpty()) {
-			return false;
-		} else if (stackA.getItem() != stackB.getItem()) {
-			return false;
-		} else if (stackA.getItemDamage() != stackB.getItemDamage()) {
-			return false;
-		} else if (stackA.getTagCompound() == null && stackB.getTagCompound() != null) {
-			return false;
-		} else {
-			return (stackA.getTagCompound() == null || stackA.getTagCompound()
-				.equals(stackB.getTagCompound())) && stackA.areCapsCompatible(stackB);
-		}
 	}
 
 	/////////////////////////////////////////

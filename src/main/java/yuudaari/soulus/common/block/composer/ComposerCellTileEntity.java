@@ -1,14 +1,31 @@
 package yuudaari.soulus.common.block.composer;
 
+import java.util.List;
+import net.minecraft.block.BlockHopper;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.config.ConfigInjected;
+import yuudaari.soulus.common.config.ConfigInjected.Inject;
+import yuudaari.soulus.common.config.block.ConfigComposerCell;
 
+@ConfigInjected(Soulus.MODID)
 public class ComposerCellTileEntity extends HasRenderItemTileEntity {
+
+	/////////////////////////////////////////
+	// Config
+	//
+
+	@Inject(ConfigComposerCell.class) public static ConfigComposerCell CONFIG;
 
 	public ChangeItemHandler changeItemHandler;
 	public BlockPos composerLocation;
@@ -35,6 +52,8 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 		double diff = itemRotation - prevItemRotation;
 		prevItemRotation = itemRotation;
 		itemRotation = itemRotation + 0.05F + diff * 0.8;
+
+		if (storedQuantity < CONFIG.maxQuantity) pullItems();
 	}
 
 	public void onChangeItem () {
@@ -55,6 +74,65 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 	public static interface ChangeItemHandler {
 
 		public Boolean handle (ComposerCellTileEntity ccte);
+	}
+
+	public boolean pullItems () {
+
+		for (EntityItem item : getCaptureItems()) {
+			if (item.ticksExisted < 2) continue;
+			ItemStack stack = item.getItem();
+			if (tryInsert(stack, stack.getCount())) return true;
+		}
+
+		return false;
+	}
+
+	public boolean tryInsert (ItemStack stack, int requestedQuantity) {
+		ItemStack currentStack = storedItem;
+		if (currentStack == null || areItemStacksEqual(stack, currentStack)) {
+			int canStillBeInsertedQuantity = CONFIG.maxQuantity - (currentStack == null ? 0 : storedQuantity);
+			int insertQuantity = Math.min(requestedQuantity, canStillBeInsertedQuantity);
+
+			if (currentStack == null) {
+				storedItem = stack.copy();
+				storedItem.setCount(1);
+				storedQuantity = insertQuantity;
+			} else {
+				storedQuantity += insertQuantity;
+			}
+
+			stack.shrink(insertQuantity);
+			onChangeItem();
+			blockUpdate();
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/////////////////////////////////////////
+	// Utility
+	//
+
+	public static boolean areItemStacksEqual (ItemStack stackA, ItemStack stackB) {
+		if (stackA.getItem() != stackB.getItem()) {
+			return false;
+		} else if (stackA.getItemDamage() != stackB.getItemDamage()) {
+			return false;
+		} else if (stackA.getTagCompound() == null && stackB.getTagCompound() != null) {
+			return false;
+		} else {
+			return (stackA.getTagCompound() == null || stackA.getTagCompound()
+				.equals(stackB.getTagCompound())) && stackA.areCapsCompatible(stackB);
+		}
+	}
+
+	public List<EntityItem> getCaptureItems () {
+		return world
+			.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(pos)
+				.offset(new BlockPos(EnumFacing.UP.getDirectionVec()))
+				.contract(0, 0.8, 0), EntitySelectors.IS_ALIVE);
 	}
 
 	/////////////////////////////////////////

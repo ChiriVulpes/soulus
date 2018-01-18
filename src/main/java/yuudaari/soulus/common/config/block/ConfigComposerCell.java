@@ -16,5 +16,5 @@ public class ConfigComposerCell extends ConfigUpgradeableBlock<ComposerCell> {
 		return new IUpgrade[0];
 	}
 
-	@Serialized public int maxQuantity = 16;
+	@Serialized public int maxQuantity = 64;
 }
