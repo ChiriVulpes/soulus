@@ -38,6 +38,7 @@ See below for an in-depth list of features in the mod.
 	- [Endersteel Block](#endersteel-block-)
 	- [Dark Endersteel Block](#dark-endersteel-block-)
 - [Mod Support](#mod-support-)
+- [Language Support](#language-support-)
 - [Contributing](#contributing-)
 
 
@@ -309,11 +310,22 @@ Drops are added automatically to Ex Nihilo Creatio Sieves. The default values ar
 
 Waila (Hwyla)
 
+## Language Support [🡅](#table-of-contents)
+Soulus supports English, by default. The following languages are also supported, but were translated by the community:
+
+- Spanish, by Jairo0108
+
+Thank you for contributing!
+
 ## Contributing [🡅](#table-of-contents)
 
-If you have an error, bug, or have found an oversight please leave an issue about it. I'll try to get to them as fast as I can. If you want to help develop Soulus and already know how to mod, great, make an issue and then a PR if you know what you want to do. If you don't know how to mod, I probably won't have the time to help teach you, but you're welcome to join my [Discord server](https://discord.gg/fwvBfus) and chat/ask questions.
+If you have an error, bug, or have found an oversight please [leave an issue about it](https://github.com/Yuudaari/soulus/issues). I'll try to get to them as fast as I can. 
 
-If you have a suggestion you can also leave them as an issue. I will close suggestions that I dislike or are out of scope for the mod.
+If you'd like to translate Soulus to another language, I really appreciate the contribution! See the [English language file](./src/main/resources/assets/soulus/lang/en_us.lang). If you need help, are finished, or just want to ask questions, you can either [make an issue](https://github.com/Yuudaari/soulus/issues) or join my [Discord server](https://discord.gg/fwvBfus).
+
+If you want to help develop Soulus and already know how to mod, great, make an issue and then a PR if you know what you want to do. If you don't know how to mod, I probably won't have the time to help teach you, but you're welcome to join my [Discord server](https://discord.gg/fwvBfus) and chat/ask questions.
+
+If you have a suggestion you can also [leave them as an issue](https://github.com/Yuudaari/soulus/issues). I will close suggestions that I dislike or are out of scope for the mod.
 
 If you want to support me financially, consider supporting me on [Patreon](https://www.patreon.com/yuudaari)!
 
