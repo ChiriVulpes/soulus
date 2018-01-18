@@ -16,6 +16,7 @@ import com.google.gson.JsonPrimitive;
 import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.common.util.serializer.FieldSerializer;
 import yuudaari.soulus.common.util.serializer.ListSerializer;
+import yuudaari.soulus.common.util.serializer.NullableField;
 import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
 import java.lang.reflect.Field;
@@ -25,7 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import javax.annotation.Nullable;
 
 @Serializable
 public class OreVein {
@@ -51,7 +51,7 @@ public class OreVein {
 	@Serialized public int chances = 4;
 	@Serialized public Range size = new Range(2, 6);
 	@Serialized public Range height = new Range(0, 255);
-	@Serialized(DimensionTypeSerializer.class) @Nullable public DimensionType dimension = null;
+	@Serialized(DimensionTypeSerializer.class) @NullableField public DimensionType dimension = null;
 	@Serialized(BiomeTypeListSerializer.class) public List<Type> biomeTypesWhitelist = new ArrayList<>();
 	@Serialized(BiomeTypeListSerializer.class) public List<Type> biomeTypesBlacklist = new ArrayList<>();
 

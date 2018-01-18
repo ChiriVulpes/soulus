@@ -2,8 +2,8 @@ package yuudaari.soulus.common.config.essence;
 
 import java.util.HashMap;
 import java.util.Map;
-import javax.annotation.Nullable;
 import yuudaari.soulus.common.util.serializer.DefaultMapSerializer;
+import yuudaari.soulus.common.util.serializer.NullableField;
 import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
 
@@ -11,11 +11,11 @@ import yuudaari.soulus.common.util.serializer.Serialized;
 public class ConfigEssence {
 
 	@Serialized public String essence;
-	@Serialized @Nullable public ConfigColor colors;
+	@Serialized @NullableField public ConfigColor colors;
 	@Serialized public ConfigCreatureBone bones = new ConfigCreatureBone();
 	@Serialized public int soulbookQuantity = 16;
-	@Serialized(DoubleMapSerializer.class) @Nullable public Map<String, Double> spawns;
-	@Serialized(LootMapSerializer.class) @Nullable public Map<String, ConfigCreatureLoot> loot;
+	@Serialized(DoubleMapSerializer.class) @NullableField public Map<String, Double> spawns;
+	@Serialized(LootMapSerializer.class) @NullableField public Map<String, ConfigCreatureLoot> loot;
 
 
 	public ConfigEssence () {}

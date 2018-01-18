@@ -92,7 +92,7 @@ public class DefaultClassSerializer extends ClassSerializer<Object> {
 				final Object value = field.get(instance);
 
 				final JsonElement serializedValue = serializeValue(serializer, field.getType(), field
-					.isAnnotationPresent(Nullable.class), value);
+					.isAnnotationPresent(NullableField.class), value);
 
 				if (getIsTopLevel(field)) {
 					if (!serializedValue.isJsonObject()) {
@@ -158,7 +158,7 @@ public class DefaultClassSerializer extends ClassSerializer<Object> {
 				}
 
 				Object deserializedValue = deserializeValue(deserializer, field.getType(), field
-					.isAnnotationPresent(Nullable.class), jsonValue);
+					.isAnnotationPresent(NullableField.class), jsonValue);
 
 				field.set(instance, deserializedValue);
 

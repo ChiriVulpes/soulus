@@ -5,10 +5,10 @@ import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock.IUpgrade;
 import yuudaari.soulus.common.config.ConfigFile;
 import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.common.util.serializer.ListSerializer;
+import yuudaari.soulus.common.util.serializer.NullableField;
 import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
 import java.util.List;
-import javax.annotation.Nullable;
 import yuudaari.soulus.Soulus;
 
 @ConfigFile(file = "block/composer", id = Soulus.MODID)
@@ -29,6 +29,6 @@ public class ConfigComposer extends ConfigUpgradeableBlock<Composer> {
 	@Serialized public int particleCountMax = 6;
 	@Serialized public int particleCountMobPoof = 50;
 	@Serialized public double poofChance = 0.001;
-	@Serialized(ListSerializer.OfStrings.class) @Nullable public List<String> whitelistedCreatures;
-	@Serialized(ListSerializer.OfStrings.class) @Nullable public List<String> blacklistedCreatures;
+	@Serialized(ListSerializer.OfStrings.class) @NullableField public List<String> whitelistedCreatures;
+	@Serialized(ListSerializer.OfStrings.class) @NullableField public List<String> blacklistedCreatures;
 }
