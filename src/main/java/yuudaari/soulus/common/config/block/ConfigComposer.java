@@ -7,8 +7,6 @@ import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.common.util.serializer.ListSerializer;
 import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.annotation.Nullable;
 import yuudaari.soulus.Soulus;
