@@ -186,6 +186,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		double activationAmount = activationAmount();
 		if (world.isRemote) {
 			updateRenderer(activationAmount);
+
 		} else {
 			updateSignalStrength(activationAmount);
 		}

@@ -78,7 +78,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	}
 
 	public int getSignalStrength () {
-		return isConnected && hasValidRecipe() ? signalStrength : 0;
+		return signalStrength;
 	}
 
 	/////////////////////////////////////////
@@ -113,6 +113,10 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	public double activationAmount () {
 		// when powered by redstone, don't run
 		if (world.isBlockIndirectlyGettingPowered(pos) != 0) {
+			return 0;
+		}
+
+		if (!hasValidRecipe()) {
 			return 0;
 		}
 
@@ -187,9 +191,6 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	@Override
 	public void update () {
 		double activationAmount = activationAmount();
-		if (timeTillCraft > 0) {
-			timeTillCraft -= activationAmount;
-		}
 
 		if (world.isRemote) {
 			updateRenderer(activationAmount);
@@ -201,20 +202,25 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 				refreshRecipe();
 			}
 
-			if (isConnected && hasValidRecipe()) {
-				if (timeTillCraft > 0) {
-					int signalStrength = (int) Math.floor(16 * getCompositionPercent());
-					if (signalStrength != this.signalStrength) {
-						this.signalStrength = signalStrength;
-						markDirty();
-					}
+			updateSignalStrength(activationAmount);
+		}
 
-					return;
-				}
+		timeTillCraft -= activationAmount;
 
-				if (!world.isRemote)
-					completeCraft();
-			}
+		if (timeTillCraft <= 0) {
+			if (!world.isRemote)
+				completeCraft();
+
+			resetTimer();
+		}
+	}
+
+	private void updateSignalStrength (double activationAmount) {
+		int signalStrength = activationAmount > 0 ? //
+			(int) Math.floor(15 * getCompositionPercent()) + 1 : 0;
+		if (signalStrength != this.signalStrength) {
+			this.signalStrength = signalStrength;
+			markDirty();
 		}
 	}
 
@@ -333,6 +339,9 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 			if (ccte.storedQuantity <= 0) {
 				ccte.storedQuantity = 0;
 				ccte.storedItem = null;
+				if (container == null || container.craftingMatrix == null) {
+					refreshContainer();
+				}
 				container.craftingMatrix.setInventorySlotContents(ccte.slot, ItemStack.EMPTY);
 			}
 
@@ -340,10 +349,6 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 			return null;
 		});
-
-		blockUpdate();
-
-		resetTimer();
 	}
 
 	/////////////////////////////////////////
