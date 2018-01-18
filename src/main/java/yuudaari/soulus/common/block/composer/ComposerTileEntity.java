@@ -24,6 +24,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -121,11 +122,26 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		for (EntityLivingBase entity : world
 			.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos).grow(activatingRange))) {
 
+			List<String> whitelist = CONFIG.whitelistedCreatures;
+			List<String> blacklist = CONFIG.blacklistedCreatures;
+			boolean whitelistAll = whitelist == null ? false : whitelist.contains("*");
+			boolean blacklistAll = blacklist == null ? false : blacklist.contains("*");
+
 			if (!(entity instanceof EntityPlayer)) {
-				String entityType = EntityList.getKey(entity).toString();
-				if (entityTypes.contains(entityType))
+				ResourceLocation entityType = EntityList.getKey(entity);
+				if (entityTypes.contains(entityType.toString()))
 					continue;
-				entityTypes.add(entityType);
+
+				int whitelistLevel = (whitelistAll ? 1 : 0) + //
+					(whitelist != null && whitelist.contains(entityType.getResourceDomain() + ":*") ? 2 : 0) + //
+					(whitelist != null && whitelist.contains(entityType.toString()) ? 4 : 0) - //
+					(blacklistAll ? 1 : 0) - //
+					(blacklist != null && blacklist.contains(entityType.getResourceDomain() + ":*") ? 2 : 0) - //
+					(blacklist != null && blacklist.contains(entityType.toString()) ? 4 : 0);
+
+				if (whitelistLevel < 0) continue;
+
+				entityTypes.add(entityType.toString());
 
 				activationAmount += 1;
 
