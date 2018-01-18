@@ -214,6 +214,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 		if (isConnected && currentDirection != direction) {
 			state = state.withProperty(Composer.FACING, direction);
+			currentDirection = direction;
 			changedState = true;
 		}
 
@@ -236,27 +237,29 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 				}
 			}
 
-			getBlock().structure
-				.loopBlocks(world, pos, state.getValue(Composer.FACING), (BlockPos pos2, BlockValidator validator) -> {
-					IBlockState currentState = world.getBlockState(pos2);
+			if (currentDirection != EnumFacing.UP && currentDirection != EnumFacing.DOWN)
+				getBlock().structure
+					.loopBlocks(world, pos, state
+						.getValue(Composer.FACING), (BlockPos pos2, BlockValidator validator) -> {
+							IBlockState currentState = world.getBlockState(pos2);
 
-					if (currentState.getBlock() == ModBlocks.COMPOSER_CELL) {
-						ComposerCellTileEntity ccte = (ComposerCellTileEntity) world.getTileEntity(pos2);
-						BlockPos ccPos = ccte.getPos();
-						world.setBlockState(ccPos, currentState
-							.withProperty(ComposerCell.CELL_STATE, !isConnected ? ComposerCell.CellState.DISCONNECTED : ccPos
-								.equals(center) ? ComposerCell.CellState.CONNECTED_CENTER : ComposerCell.CellState.CONNECTED_EDGE), 3);
+							if (currentState.getBlock() == ModBlocks.COMPOSER_CELL) {
+								ComposerCellTileEntity ccte = (ComposerCellTileEntity) world.getTileEntity(pos2);
+								BlockPos ccPos = ccte.getPos();
+								world.setBlockState(ccPos, currentState
+									.withProperty(ComposerCell.CELL_STATE, !isConnected ? ComposerCell.CellState.DISCONNECTED : ccPos
+										.equals(center) ? ComposerCell.CellState.CONNECTED_CENTER : ComposerCell.CellState.CONNECTED_EDGE), 3);
 
-						ccte.composerLocation = isConnected ? pos : null;
-						ccte.changeComposerCooldown = 20;
-						Byte slot = cellMap.get(ccPos);
-						ccte.slot = slot == null ? -1 : slot;
-						ccte.blockUpdate();
-						ccte.onChangeItem(isConnected ? this::updateCCTEItem : null);
-					}
+								ccte.composerLocation = isConnected ? pos : null;
+								ccte.changeComposerCooldown = 20;
+								Byte slot = cellMap.get(ccPos);
+								ccte.slot = slot == null ? -1 : slot;
+								ccte.blockUpdate();
+								ccte.onChangeItem(isConnected ? this::updateCCTEItem : null);
+							}
 
-					return null;
-				});
+							return null;
+						});
 
 			needsRecipeRefresh = true;
 		}
@@ -417,7 +420,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		if (!hasValidRecipe() || !isPlayerInRangeForEffects() || activationAmount == 0)
 			return;
 		double particleCount = CONFIG.particleCountActivated * Math
-			.min(1, activationAmount * activationAmount) * (0.5 + getCompositionPercent() / 2);
+			.max(1, Math.min(CONFIG.particleCountMax, activationAmount)) * (0.5 + getCompositionPercent() / 2);
 		if (particleCount < 1) {
 			timeTillParticle += 0.01 + particleCount;
 

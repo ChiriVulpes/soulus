@@ -41,6 +41,9 @@ public class StructureMap {
 		return this;
 	}
 
+	/**
+	 * @param facing Do not call with EnumFacing.DOWN or EnumFacing.UP
+	 */
 	public boolean isValid (World world, BlockPos pos, EnumFacing facing) {
 		return loopBlocks(world, pos, facing, (BlockPos pos2, BlockValidator validator) -> {
 			if (!validator.validate(pos, world, pos2, world.getBlockState(pos2)))
@@ -49,14 +52,20 @@ public class StructureMap {
 		}, true);
 	}
 
+	/**
+	 * @param facing Do not call with EnumFacing.DOWN or EnumFacing.UP
+	 */
 	public Boolean loopBlocks (World world, BlockPos pos, EnumFacing facing, BlockLoop loop) {
 		return loopBlocks(world, pos, facing, loop, null);
 	}
 
+	/**
+	 * @param facing Do not call with EnumFacing.DOWN or EnumFacing.UP
+	 */
 	public Boolean loopBlocks (World world, BlockPos pos, EnumFacing facing, BlockLoop loop, Boolean defaultResult) {
 		EnumFacing z = facing;
-		EnumFacing x = rotateY(facing);
-		EnumFacing y = facing.rotateAround(x.getAxis());
+		EnumFacing x = facing.rotateY();
+		EnumFacing y = EnumFacing.UP;
 
 		for (Map.Entry<BlockPos, BlockValidator> entry : blocks.entrySet()) {
 			BlockPos mapPos = entry.getKey();
@@ -96,11 +105,5 @@ public class StructureMap {
 				return false;
 			};
 		}
-	}
-
-	private EnumFacing rotateY (EnumFacing f) {
-		if (f == EnumFacing.DOWN || f == EnumFacing.UP)
-			return f;
-		return f.rotateY();
 	}
 }

@@ -22,7 +22,8 @@ public class ConfigComposer extends ConfigUpgradeableBlock<Composer> {
 	@Serialized public int nonUpgradedRange = 4;
 	@Serialized public Range upgradeDelayEffectiveness = new Range(0.8, 1);
 	@Serialized public int upgradeRangeEffectiveness = 1;
-	@Serialized public int particleCountActivated = 3;
+	@Serialized public double particleCountActivated = 1;
+	@Serialized public int particleCountMax = 6;
 	@Serialized public int particleCountMobPoof = 50;
 	@Serialized public double poofChance = 0.001;
 }
