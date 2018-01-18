@@ -156,6 +156,7 @@ tile.soulus:block_endersteel_dark.name=Block of Dark Endersteel
 tile.soulus:bars_endersteel.name=Endersteel Bars
 
 tile.soulus:skewer.name=Skewer
+tile.soulus:unloader.name=Unloader
 
 tile.soulus:composer.name=Composer
 tile.soulus:composer_cell.name=Composer Cell
@@ -224,11 +225,11 @@ waila.soulus:skewer.extended=§8Extended
 waila.soulus:skewer.not_extended=§8Not Extended
 waila.soulus:skewer.crystal_blood_stored_blood=§4Blood Crystal: §8%1$s/%2$s Blood
 waila.soulus:skewer.upgrades_crystal_blood=%1$s/%2$s §4Blood Crystal
-waila.soulus:skewer.upgrades_damage=%1$s/%2$s §6Nether Quartz
+waila.soulus:skewer.upgrades_damage=%1$s/%2$s §fNether Quartz
 waila.soulus:skewer.upgrades_poison=%1$s/%2$s §2Spider Eyes
 waila.soulus:skewer.upgrades_power=%1$s/%2$s §cRedstone Torch
-waila.soulus:skewer.upgrades_player=%1$s/%2$s §cSoul Catalyst
-waila.soulus:skewer.upgrades_player=%1$s/%2$s §cSoul Catalyst
+waila.soulus:skewer.upgrades_player=%1$s/%2$s §gSoul Catalyst
+waila.soulus:skewer.upgrades_slowness=%1$s/%2$s §7Ash
 
 waila.soulus:composer.activation=Activation: %1$sx 
 waila.soulus:composer.upgrades_range=%1$s/%2$s §6Murky Orbs

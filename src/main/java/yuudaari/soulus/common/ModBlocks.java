@@ -43,9 +43,9 @@ public class ModBlocks {
 	public static final FossilSandRedScale FOSSIL_SAND_RED_SCALE = new FossilSandRedScale();
 	public static final Skewer SKEWER = new Skewer();
 	public static final Summoner SUMMONER = new Summoner();
+	public static final Unloader UNLOADER = new Unloader();
 
 	public static IBlock[] blocks = new IBlock[] {
-		// @formatter:off
 		ASH,
 		BARS_ENDERSTEEL,
 		BLOCK_ENDERSTEEL,
@@ -56,8 +56,8 @@ public class ModBlocks {
 		FOSSIL_DIRT_FROZEN,
 		FOSSIL_DIRT_FUNGAL,
 		FOSSIL_DIRT,
-		FOSSIL_END_STONE, 
-		FOSSIL_GRAVEL, 
+		FOSSIL_END_STONE,
+		FOSSIL_GRAVEL,
 		FOSSIL_NETHERRACK_ENDER,
 		FOSSIL_NETHERRACK,
 		FOSSIL_SAND_ENDER,
@@ -66,8 +66,8 @@ public class ModBlocks {
 		FOSSIL_SAND_RED,
 		FOSSIL_SAND_RED_SCALE,
 		SKEWER,
-		SUMMONER
-		// @formatter:on
+		SUMMONER,
+		UNLOADER
 	};
 
 	public static void registerBlocks (IForgeRegistry<Block> registry) {
