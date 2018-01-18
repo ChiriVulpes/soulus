@@ -13,5 +13,6 @@ public class SoulsPacketHandler {
 	public static void register () {
 		INSTANCE.registerMessage(CrystalBloodHitEntityHandler.class, CrystalBloodHitEntity.class, 0, Side.CLIENT);
 		INSTANCE.registerMessage(MobPoofHandler.class, MobPoof.class, 1, Side.CLIENT);
+		INSTANCE.registerMessage(LocationCommandHandler.class, LocationCommand.class, 2, Side.CLIENT);
 	}
 }

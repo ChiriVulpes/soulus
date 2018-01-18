@@ -80,4 +80,16 @@ public class TextComponentList extends TextComponentBase {
 			.<ITextComponent>concat(createDeepCopyIterator(Arrays
 				.asList(this.children)), createDeepCopyIterator(this.siblings));
 	}
+
+	@Override
+	public String toString () {
+		return "ListComponent{args=" + Arrays
+			.toString(this.children) + ", siblings=" + this.siblings + ", style=" + this.getStyle() + '}';
+	}
+
+	public int hashCode () {
+		int i = super.hashCode();
+		i = 31 * i + Arrays.hashCode(this.children);
+		return i;
+	}
 }
