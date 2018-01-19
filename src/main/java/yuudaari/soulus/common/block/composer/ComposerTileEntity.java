@@ -559,9 +559,9 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		}
 	}
 
+	private UUID uuid;
 	private FakePlayer fakePlayer;
 	private ComposerContainer container;
-	private UUID uuid;
 	private boolean needsRecipeRefresh = true;
 
 	public void refreshRecipe () {

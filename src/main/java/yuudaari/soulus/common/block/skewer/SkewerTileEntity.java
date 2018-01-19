@@ -6,9 +6,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock.IUpgrade;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
@@ -30,6 +32,20 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 	@Override
 	public Skewer getBlock () {
 		return ModBlocks.SKEWER;
+	}
+
+	@Override
+	public boolean shouldRefresh (World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
+	}
+
+	private DamageSource getDamageSource () {
+		if (!world.isRemote && upgrades.get(Upgrade.PLAYER) > 0) {
+			return ModDamageSource.getSkewerPlayer((WorldServer) world);
+
+		} else {
+			return ModDamageSource.SKEWER;
+		}
 	}
 
 	/////////////////////////////////////////
@@ -67,7 +83,7 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 					damage += CONFIG.upgradeDamageEffectiveness * upgrades.get(Upgrade.DAMAGE);
 
 					int rtime = entity.hurtResistantTime;
-					entity.attackEntityFrom(ModDamageSource.SKEWER, damage);
+					entity.attackEntityFrom(getDamageSource(), damage);
 					entity.hurtResistantTime = rtime;
 
 					if (world.rand.nextDouble() < CONFIG.chanceForBloodPerHit && upgrades
@@ -82,11 +98,6 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 				}
 			}
 		}
-	}
-
-	@Override
-	public boolean shouldRefresh (World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
-		return oldState.getBlock() != newState.getBlock();
 	}
 
 	@Override

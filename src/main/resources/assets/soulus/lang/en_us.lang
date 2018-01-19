@@ -204,6 +204,8 @@ tile.soulus:summoner.minecraft:zombie.name=Summoner of Zombie
 
 death.attack.soulus:crystal_blood=%1$s sacrificed themselves to a blood crystal
 death.attack.soulus:skewer=%1$s became a shishkebab
+death.attack.soulus:skewer_player=%1$s became a shishkebab
+
 
 waila.soulus:upgradeable_block.show_upgrades=§8§oSneak to show upgrades
 
@@ -228,7 +230,7 @@ waila.soulus:skewer.upgrades_crystal_blood=%1$s/%2$s §4Blood Crystal
 waila.soulus:skewer.upgrades_damage=%1$s/%2$s §fNether Quartz
 waila.soulus:skewer.upgrades_poison=%1$s/%2$s §2Spider Eyes
 waila.soulus:skewer.upgrades_power=%1$s/%2$s §cRedstone Torch
-waila.soulus:skewer.upgrades_player=%1$s/%2$s §gSoul Catalyst
+waila.soulus:skewer.upgrades_player=%1$s/%2$s §6Soul Catalyst
 waila.soulus:skewer.upgrades_slowness=%1$s/%2$s §7Ash
 
 waila.soulus:composer.activation=Activation: %1$sx 

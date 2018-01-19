@@ -46,8 +46,9 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	//
 
 	public static enum Upgrade implements IUpgrade {
-		CRYSTAL_BLOOD (0, "crystal_blood", ModItems.CRYSTAL_BLOOD.getItemStack()), //
-		DAMAGE (1, "damage", new ItemStack(Items.QUARTZ))
+		CRYSTAL_BLOOD (0, "crystal_blood", ModItems.CRYSTAL_BLOOD.getItemStack()),
+		DAMAGE (1, "damage", new ItemStack(Items.QUARTZ)),
+		PLAYER (2, "player", ModItems.SOUL_CATALYST.getItemStack())
 		//, POISON(2, "poison",
 		//		new ItemStack(Items.SPIDER_EYE)), POWER(3, "power", new ItemStack(Blocks.REDSTONE_TORCH))
 		;
@@ -80,6 +81,8 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 			if (maxQuantity == null) {
 				if (name.equals("crystal_blood"))
 					return 1;
+				if (name.equals("player"))
+					return 1;
 				if (name.equals("damage"))
 					return 256;
 				if (name.equals("poison"))
@@ -93,7 +96,7 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 
 		@Override
 		public boolean canOverrideMaxQuantity () {
-			return !name.equals("crystal_blood");
+			return !name.equals("crystal_blood") && !name.equals("player");
 		}
 
 		@Override
