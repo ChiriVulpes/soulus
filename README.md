@@ -150,7 +150,7 @@ If you right click a summoner, all inserted items of the last type inserted are 
 
 If a summoner is receiving a redstone signal it will not be active.
 
-Summoners support comparators, they will output a signal strength of 0 if they are at 0% summoned and 15 if they are at 100% summoned.
+Summoners support comparators, they will output a signal strength of 1 if they are at 0% summoned and 15 if they are at 100% summoned. If they're not active, they will output a signal strength of 0.
 
 ## Summoner Upgrades [🡅](#table-of-contents)
 
@@ -266,13 +266,21 @@ The composer can be on any side, as long as it's in the middle of that side. Mul
 
 The orientation of the composer is like a crafting table GUI. When looking at the structure from the composer, the right side is the top row of the crafting grid.
 
-Each composer cell can hold up to 16 of the same item. *This ignores normal stack limitations.* Any container items will be dropped underneath their cells after a composition completes. (You may put another block with an inventory underneath to deposit them into this inventory instead)
+To put items into a composer cell, you may either right click with a stack to put one item into the cell, sneak + right click to put the entire stack into the cell, or simply drop a stack on top of it. The [Unloader](#unloader-) is useful for automating insertion into Composer Cells.
+
+Each composer cell can hold up to 64 of the same item. *This ignores normal stack limitations.* Any container items will be dropped underneath their cells after a composition completes. (You may put another block with an inventory underneath to deposit them into this inventory instead)
 
 The Composer doesn't work quite like the Summoner, in which it would require nearby players to function. Instead, it uses creatures! Each unique creature type nearby makes it go slightly faster. However, each creature type nearby has a 2% chance of "poofing", or being used up by the Composer, every second. (The creature will vanish entirely in a puff of smoke) EG: To keep a Composer running around the clock, you must feed it creatures with Summoner(s).
 
 The Composer can craft any normal or shapeless recipe, and you can add recipes via json (`soulus:composer_shapeless` or `soulus:composer_shaped`). These recipes will work *only* in the Composer, and not in any other table or autocrafter.
 
-The Composer comes with one recipe, currently. The Soul Catalyst. (Currently has no uses, but will be a big part of late-game Soulus soon)
+Composers support comparators, they will output a signal strength of 1 if they are at 0% composed and 15 if they are at 100% composed. If they're not active, they will output a signal strength of 0.
+
+## Unloader [🡅](#table-of-contents)
+
+![Unloader](./preview/unloader.png)
+
+The Unloader is a block that will automatically drop any items put into it. It has no redstone support; to change how fast it drops items, you may feed it with a dropper or dispenser, and power those via redstone.
 
 ## Misc [🡅](#table-of-contents)
 
@@ -291,6 +299,10 @@ Every 100 or so logs produces 8 bark instead of a log. You can use 2 bark and 3 
 ![Barket](./preview/barket.png)
 
 Make a bucket shape with Bark to get a "Barket". It can only pick up water and will likely break in a matter of seconds. If you let it break, you'll spill your water!
+
+### Endersteel Alchemy [🡅](#table-of-contents)
+
+Once you have a composer, you may create Endersteel from *any ingot*. The recipe is 8 ingots surrounding a single ender dust, and will return 8 Endersteel ingots. It takes 16x as long as a normal crafting recipe in the Composer.
 
 ### Endersteel Block [🡅](#table-of-contents)
 

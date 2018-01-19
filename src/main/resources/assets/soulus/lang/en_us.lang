@@ -282,6 +282,7 @@ jei.description.soulus:composer=A machine engineered with the wisdom from previo
 jei.description.soulus:composer_cell=It can hold multiple of anything, whether or not a person could. When part of a Composer, becomes a crafting slot.
 jei.description.soulus:skewer=A block that, when powered by redstone, will extend spikes outwards. It can be used to slaughter the creatures one has summoned. When quartz, from the netherworld, is added, it will likely be more effective. One may also insert a Blood Crystal to fill it.
 jei.description.soulus:summoner=A machine created from the remains of alien creatures and metal, which summons a creature from a Soulbook. With this, life may soon return to the world.
+jei.description.soulus:unloader=A block with a hole in the bottom. Not useful for storing things, as they will simply fall out.
 
 command.soulus:soulus.usage=Usage: /soulus location|reload
 command.soulus:soulus.invalid_syntax=Command syntax invalid. %1$s
