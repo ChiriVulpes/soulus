@@ -16,6 +16,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -48,11 +49,10 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	public static enum Upgrade implements IUpgrade {
 		CRYSTAL_BLOOD (0, "crystal_blood", ModItems.CRYSTAL_BLOOD.getItemStack()),
 		DAMAGE (1, "damage", new ItemStack(Items.QUARTZ)),
-		PLAYER (2, "player", ModItems.SOUL_CATALYST.getItemStack()),
-		TETHER (3, "tether", ModItems.ASH.getItemStack())
-		//, POISON(2, "poison",
-		//		new ItemStack(Items.SPIDER_EYE)), POWER(3, "power", new ItemStack(Blocks.REDSTONE_TORCH))
-		;
+		POISON (2, "poison", new ItemStack(Items.SPIDER_EYE)),
+		POWER (3, "power", new ItemStack(Blocks.REDSTONE_TORCH)),
+		TETHER (4, "tether", ModItems.ASH.getItemStack()),
+		PLAYER (5, "player", ModItems.SOUL_CATALYST.getItemStack());
 
 		private final int index;
 		private final String name;
@@ -82,15 +82,15 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 			if (maxQuantity == null) {
 				if (name.equals("crystal_blood"))
 					return 1;
-				if (name.equals("player"))
-					return 1;
-				if (name.equals("tether"))
-					return 16;
 				if (name.equals("damage"))
 					return 64;
 				if (name.equals("poison"))
 					return 16;
 				if (name.equals("power"))
+					return 1;
+				if (name.equals("tether"))
+					return 16;
+				if (name.equals("player"))
 					return 1;
 			}
 
@@ -181,6 +181,10 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 
 	@Override
 	public void neighborChanged (IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
+		updateExtendedState(state, world, pos);
+	}
+
+	public void updateExtendedState (IBlockState state, World world, BlockPos pos) {
 		int power = world.isBlockIndirectlyGettingPowered(pos);
 
 		EnumFacing facing = state.getValue(FACING);
@@ -191,6 +195,13 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		boolean spikeBlocked = !blockAtSpikePos.equals(Blocks.AIR) && !blockAtSpikePos.isReplaceable(world, spikePos);
 
 		boolean shouldBeExtended = power > 0 && !spikeBlocked;
+
+		TileEntity te = world.getTileEntity(pos);
+
+		if (te != null && te instanceof SkewerTileEntity && //
+			((SkewerTileEntity) te).upgrades.get(Upgrade.POWER) > 0) {
+			shouldBeExtended = !shouldBeExtended;
+		}
 
 		if (state.getValue(EXTENDED) != shouldBeExtended) {
 

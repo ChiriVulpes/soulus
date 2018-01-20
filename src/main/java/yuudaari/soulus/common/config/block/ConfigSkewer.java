@@ -3,6 +3,7 @@ package yuudaari.soulus.common.config.block;
 import yuudaari.soulus.common.block.skewer.Skewer;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock.IUpgrade;
 import yuudaari.soulus.common.config.ConfigFile;
+import yuudaari.soulus.common.util.ModPotionEffect;
 import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
@@ -23,4 +24,9 @@ public class ConfigSkewer extends ConfigUpgradeableBlock<Skewer> {
 	@Serialized public float chanceForBloodPerHit = 0.5f;
 	@Serialized public int ticksBetweenDamage = 15;
 	@Serialized public Range tetherChance = new Range(0.2, 1);
+	@Serialized public Range poisonChance = new Range(0.2, 1);
+	@Serialized public ModPotionEffect[] poisonEffects = new ModPotionEffect[] {
+		new ModPotionEffect("nausea", 100),
+		new ModPotionEffect("poison", 300)
+	};
 }

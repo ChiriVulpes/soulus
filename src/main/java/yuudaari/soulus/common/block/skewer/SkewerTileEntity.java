@@ -8,6 +8,7 @@ import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -28,6 +29,7 @@ import yuudaari.soulus.common.item.CrystalBlood;
 import yuudaari.soulus.common.misc.ModDamageSource;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.TetherEntity;
+import yuudaari.soulus.common.util.ModPotionEffect;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 @Mod.EventBusSubscriber
@@ -95,6 +97,12 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 					entity.attackEntityFrom(getDamageSource(), damage);
 					entity.hurtResistantTime = rtime;
 
+					if (upgrades.get(Upgrade.POISON) > 0 && world.rand.nextFloat() < CONFIG.poisonChance
+						.get(upgrades.get(Upgrade.POISON))) {
+
+						for (ModPotionEffect effect : CONFIG.poisonEffects)
+							entity.addPotionEffect(new PotionEffect(effect));
+					}
 
 					if (upgrades.get(Upgrade.TETHER) > 0 && world.rand.nextFloat() < CONFIG.tetherChance
 						.get(upgrades.get(Upgrade.TETHER))) {
@@ -136,6 +144,21 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 			this.insertionOrder.remove(Upgrade.CRYSTAL_BLOOD);
 			this.insertionOrder.push(Upgrade.CRYSTAL_BLOOD);
 		}
+
+		if (upgrade == Upgrade.POWER) {
+			getBlock().updateExtendedState(world.getBlockState(pos), world, pos);
+		}
+	}
+
+	@Override
+	public int removeUpgrade (IUpgrade upgrade) {
+		int result = super.removeUpgrade(upgrade);
+
+		if (upgrade == Upgrade.POWER && result > 0) {
+			getBlock().updateExtendedState(world.getBlockState(pos), world, pos);
+		}
+
+		return result;
 	}
 
 	@SubscribeEvent
