@@ -51,6 +51,7 @@ item.soulus:orb_murky.name=Strange Sticky Ball
 item.soulus:orb_murky.filled.name=Murky Orb
 
 item.soulus:soul_catalyst.name=Soul Catalyst
+item.soulus:crystal_dark.name=Midnight Jewel
 
 item.soulus:sledgehammer.name=Sledgehammer
 item.soulus:barket.name=Barket
@@ -202,7 +203,8 @@ tile.soulus:summoner.minecraft:zombie_pigman.name=Summoner of Zombie Pigman
 tile.soulus:summoner.minecraft:zombie.name=Summoner of Zombie
 
 
-death.attack.soulus:crystal_blood=%1$s sacrificed themselves to a blood crystal
+death.attack.soulus:crystal_blood=%1$s sacrificed themselves to a Blood Crystal
+death.attack.soulus:crystal_dark=%1$s was consumed by a Midnight Crystal
 death.attack.soulus:skewer=%1$s became a shishkebab
 death.attack.soulus:skewer_player=%1$s became a shishkebab
 
@@ -231,7 +233,7 @@ waila.soulus:skewer.upgrades_damage=%1$s/%2$s §fNether Quartz
 waila.soulus:skewer.upgrades_poison=%1$s/%2$s §2Spider Eyes
 waila.soulus:skewer.upgrades_power=%1$s/%2$s §cRedstone Torch
 waila.soulus:skewer.upgrades_player=%1$s/%2$s §6Soul Catalyst
-waila.soulus:skewer.upgrades_slowness=%1$s/%2$s §7Ash
+waila.soulus:skewer.upgrades_tether=%1$s/%2$s §7Ash
 
 waila.soulus:composer.activation=Activation: %1$sx 
 waila.soulus:composer.upgrades_range=%1$s/%2$s §6Murky Orbs
@@ -285,6 +287,7 @@ jei.description.soulus:composer_cell=It can hold multiple of anything, whether o
 jei.description.soulus:skewer=A block that, when powered by redstone, will extend spikes outwards. It can be used to slaughter the creatures one has summoned. When quartz, from the netherworld, is added, it will likely be more effective. One may also insert a Blood Crystal to fill it.
 jei.description.soulus:summoner=A machine created from the remains of alien creatures and metal, which summons a creature from a Soulbook. With this, life may soon return to the world.
 jei.description.soulus:unloader=A block with a hole in the bottom. Not useful for storing things, as they will simply fall out.
+jei.description.soulus:crystal_dark=A crystal forged from fire, covered in the blood of many. Looking at the crystal is like looking into a void. Holding the crystal for an extended period of time is painful.
 
 command.soulus:soulus.usage=Usage: /soulus location|reload
 command.soulus:soulus.invalid_syntax=Command syntax invalid. %1$s

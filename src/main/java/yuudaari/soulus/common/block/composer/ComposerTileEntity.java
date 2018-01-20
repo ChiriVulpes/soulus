@@ -34,7 +34,6 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.client.util.ParticleManager;
 import yuudaari.soulus.client.util.ParticleType;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.block.composer.Composer.Upgrade;
@@ -59,25 +58,25 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	private int signalStrength;
 
 	@Override
-	public Composer getBlock () {
+	public Composer getBlock() {
 		return ModBlocks.COMPOSER;
 	}
 
 	@Override
-	public boolean shouldRefresh (World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
 		return oldState.getBlock() != newState.getBlock();
 	}
 
-	public boolean isConnected () {
+	public boolean isConnected() {
 		return isConnected;
 	}
 
-	public boolean hasValidRecipe () {
+	public boolean hasValidRecipe() {
 		ItemStack storedItem = getStoredItem();
 		return storedItem != null && !storedItem.isEmpty();
 	}
 
-	public int getSignalStrength () {
+	public int getSignalStrength() {
 		return signalStrength;
 	}
 
@@ -85,21 +84,22 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	// Config
 	//
 
-	@Inject(ConfigComposer.class) public static ConfigComposer CONFIG;
+	@Inject(ConfigComposer.class)
+	public static ConfigComposer CONFIG;
 
 	/////////////////////////////////////////
 	// Update
 	//
 
-	public void reset () {
+	public void reset() {
 		this.resetTimer();
 	}
 
-	private void resetTimer () {
+	private void resetTimer() {
 		resetTimer(true);
 	}
 
-	private void resetTimer (boolean update) {
+	private void resetTimer(boolean update) {
 		if (spawnDelay == null)
 			return;
 
@@ -110,7 +110,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 			blockUpdate();
 	}
 
-	public double activationAmount () {
+	public double activationAmount() {
 		// when powered by redstone, don't run
 		if (world.isBlockIndirectlyGettingPowered(pos) != 0) {
 			return 0;
@@ -124,8 +124,8 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 		List<String> entityTypes = new ArrayList<>();
 
-		for (EntityLivingBase entity : world
-			.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos).grow(activatingRange))) {
+		for (EntityLivingBase entity : world.getEntitiesWithinAABB(EntityLivingBase.class,
+				new AxisAlignedBB(pos).grow(activatingRange))) {
 
 			List<String> whitelist = CONFIG.whitelistedCreatures;
 			List<String> blacklist = CONFIG.blacklistedCreatures;
@@ -138,20 +138,20 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 					continue;
 
 				int whitelistLevel = (whitelistAll ? 1 : 0) + //
-					(whitelist != null && whitelist.contains(entityType.getResourceDomain() + ":*") ? 2 : 0) + //
-					(whitelist != null && whitelist.contains(entityType.toString()) ? 4 : 0) - //
-					(blacklistAll ? 1 : 0) - //
-					(blacklist != null && blacklist.contains(entityType.getResourceDomain() + ":*") ? 2 : 0) - //
-					(blacklist != null && blacklist.contains(entityType.toString()) ? 4 : 0);
+						(whitelist != null && whitelist.contains(entityType.getResourceDomain() + ":*") ? 2 : 0) + //
+						(whitelist != null && whitelist.contains(entityType.toString()) ? 4 : 0) - //
+						(blacklistAll ? 1 : 0) - //
+						(blacklist != null && blacklist.contains(entityType.getResourceDomain() + ":*") ? 2 : 0) - //
+						(blacklist != null && blacklist.contains(entityType.toString()) ? 4 : 0);
 
-				if (whitelistLevel < 0) continue;
+				if (whitelistLevel < 0)
+					continue;
 
 				entityTypes.add(entityType.toString());
 
 				activationAmount += 1;
 
-				if (!world.isRemote && isConnected && hasValidRecipe() && CONFIG.poofChance > world.rand
-					.nextDouble()) {
+				if (!world.isRemote && isConnected && hasValidRecipe() && CONFIG.poofChance > world.rand.nextDouble()) {
 					entity.setDead();
 					mobPoofParticles(world, pos);
 					mobPoofParticles(world, entity.getPosition());
@@ -162,17 +162,17 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		return activationAmount;
 	}
 
-	public static void mobPoofParticles (World world, BlockPos pos) {
+	public static void mobPoofParticles(World world, BlockPos pos) {
 		if (world.isRemote) {
 			particles(pos);
 		} else {
-			SoulsPacketHandler.INSTANCE.sendToAllAround(new MobPoof(pos), new TargetPoint(world.provider
-				.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 128));
+			SoulsPacketHandler.INSTANCE.sendToAllAround(new MobPoof(pos),
+					new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 128));
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
-	private static void particles (BlockPos pos) {
+	private static void particles(BlockPos pos) {
 		World world = Minecraft.getMinecraft().world;
 		Random rand = world.rand;
 
@@ -183,13 +183,12 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 			double d3o = (d3 - pos.getX()) / 4;
 			double d4o = (d4 - pos.getY()) / 5;
 			double d5o = (d5 - pos.getZ()) / 4;
-			ParticleManager
-				.spawnParticle(world, ParticleType.MOB_POOF.getId(), false, d3 + 0.5F, d4, d5 + 0.5F, d3o, d4o, d5o, 1);
+			world.spawnParticle(ParticleType.MOB_POOF.getId(), false, d3 + 0.5F, d4, d5 + 0.5F, d3o, d4o, d5o, 1);
 		}
 	}
 
 	@Override
-	public void update () {
+	public void update() {
 		double activationAmount = activationAmount();
 
 		if (world.isRemote) {
@@ -215,9 +214,9 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		}
 	}
 
-	private void updateSignalStrength (double activationAmount) {
+	private void updateSignalStrength(double activationAmount) {
 		int signalStrength = activationAmount > 0 ? //
-			(int) Math.floor(15 * getCompositionPercent()) + 1 : 0;
+				(int) Math.floor(15 * getCompositionPercent()) + 1 : 0;
 		if (signalStrength != this.signalStrength) {
 			this.signalStrength = signalStrength;
 			markDirty();
@@ -226,7 +225,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 	private Map<BlockPos, Byte> cellMap = new HashMap<>();
 
-	public void validateStructure () {
+	public void validateStructure() {
 		IBlockState state = world.getBlockState(pos);
 		EnumFacing currentDirection = state.getValue(Composer.FACING);
 
@@ -261,17 +260,19 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 			}
 
 			if (currentDirection != EnumFacing.UP && currentDirection != EnumFacing.DOWN)
-				getBlock().structure
-					.loopBlocks(world, pos, state
-						.getValue(Composer.FACING), (BlockPos pos2, BlockValidator validator) -> {
+				getBlock().structure.loopBlocks(world, pos, state.getValue(Composer.FACING),
+						(BlockPos pos2, BlockValidator validator) -> {
 							IBlockState currentState = world.getBlockState(pos2);
 
 							if (currentState.getBlock() == ModBlocks.COMPOSER_CELL) {
 								ComposerCellTileEntity ccte = (ComposerCellTileEntity) world.getTileEntity(pos2);
 								BlockPos ccPos = ccte.getPos();
-								world.setBlockState(ccPos, currentState
-									.withProperty(ComposerCell.CELL_STATE, !isConnected ? ComposerCell.CellState.DISCONNECTED : ccPos
-										.equals(center) ? ComposerCell.CellState.CONNECTED_CENTER : ComposerCell.CellState.CONNECTED_EDGE), 3);
+								world.setBlockState(ccPos,
+										currentState.withProperty(ComposerCell.CELL_STATE,
+												!isConnected ? ComposerCell.CellState.DISCONNECTED
+														: ccPos.equals(center) ? ComposerCell.CellState.CONNECTED_CENTER
+																: ComposerCell.CellState.CONNECTED_EDGE),
+										3);
 
 								ccte.composerLocation = isConnected ? pos : null;
 								ccte.changeComposerCooldown = 20;
@@ -291,15 +292,15 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 			world.setBlockState(pos, state, 3);
 	}
 
-	private BlockPos offset (BlockPos a, BlockPos b, double amt) {
+	private BlockPos offset(BlockPos a, BlockPos b, double amt) {
 		return a.add(b.getX() * amt, b.getY() * amt, b.getZ() * amt);
 	}
 
-	public float getCompositionPercent () {
+	public float getCompositionPercent() {
 		return (lastTimeTillCraft - timeTillCraft) / (float) lastTimeTillCraft;
 	}
 
-	public boolean loopComposerCells (ComposerCellHandler handler) {
+	public boolean loopComposerCells(ComposerCellHandler handler) {
 		for (Map.Entry<BlockPos, Byte> composerCell : cellMap.entrySet()) {
 			TileEntity te = world.getTileEntity(composerCell.getKey());
 			if (te == null || !(te instanceof ComposerCellTileEntity))
@@ -315,10 +316,10 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 	public static interface ComposerCellHandler {
 
-		public Boolean handle (ComposerCellTileEntity te);
+		public Boolean handle(ComposerCellTileEntity te);
 	}
 
-	public void completeCraft () {
+	public void completeCraft() {
 		if (!hasValidRecipe())
 			return;
 
@@ -356,10 +357,11 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	//
 
 	@Override
-	public void onUpdateUpgrades (boolean readFromNBT) {
+	public void onUpdateUpgrades(boolean readFromNBT) {
 
 		int delayUpgrades = upgrades.get(Upgrade.DELAY);
-		spawnDelay = new Range(CONFIG.nonUpgradedDelay.min / (1 + delayUpgrades * CONFIG.upgradeDelayEffectiveness.min), CONFIG.nonUpgradedDelay.max / (1 + delayUpgrades * CONFIG.upgradeDelayEffectiveness.max));
+		spawnDelay = new Range(CONFIG.nonUpgradedDelay.min / (1 + delayUpgrades * CONFIG.upgradeDelayEffectiveness.min),
+				CONFIG.nonUpgradedDelay.max / (1 + delayUpgrades * CONFIG.upgradeDelayEffectiveness.max));
 
 		int rangeUpgrades = upgrades.get(Upgrade.RANGE);
 		activatingRange = CONFIG.nonUpgradedRange + rangeUpgrades * CONFIG.upgradeRangeEffectiveness;
@@ -376,7 +378,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	//
 
 	@Override
-	public void onWriteToNBT (NBTTagCompound compound) {
+	public void onWriteToNBT(NBTTagCompound compound) {
 
 		compound.setFloat("delay", timeTillCraft);
 		compound.setFloat("delay_last", lastTimeTillCraft);
@@ -397,7 +399,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	}
 
 	@Override
-	public void onReadFromNBT (NBTTagCompound compound) {
+	public void onReadFromNBT(NBTTagCompound compound) {
 
 		timeTillCraft = compound.getFloat("delay");
 		lastTimeTillCraft = compound.getFloat("delay_last");
@@ -405,8 +407,8 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		NBTTagCompound cellTag = compound.getCompoundTag("cell_map");
 		for (Integer slot = 0; slot < 9; slot++) {
 			NBTTagCompound posTag = cellTag.getCompoundTag(slot.toString());
-			cellMap.put(new BlockPos(posTag.getInteger("x"), posTag.getInteger("y"), posTag
-				.getInteger("z")), (byte) (int) slot);
+			cellMap.put(new BlockPos(posTag.getInteger("x"), posTag.getInteger("y"), posTag.getInteger("z")),
+					(byte) (int) slot);
 		}
 
 		needsRecipeRefresh = true;
@@ -426,23 +428,24 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	private ItemStack renderItem;
 
 	@SideOnly(Side.CLIENT)
-	private boolean isPlayerInRangeForEffects () {
+	private boolean isPlayerInRangeForEffects() {
 		return world.isAnyPlayerWithinRangeAt(pos.getX(), pos.getY(), pos.getZ(), 64);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void updateRenderer (double activationAmount) {
+	public void updateRenderer(double activationAmount) {
 
 		double diff = itemRotation - prevItemRotation;
 		prevItemRotation = itemRotation;
 		itemRotation += activationAmount <= 0 ? //
-			diff * 0.9 // ease rotation to a stop
-			: 1.0F * getCompositionPercent() + diff * 0.8; // normal rotation
+				diff * 0.9 // ease rotation to a stop
+				: 1.0F * getCompositionPercent() + diff * 0.8; // normal rotation
 
 		if (!hasValidRecipe() || !isPlayerInRangeForEffects() || activationAmount == 0)
 			return;
-		double particleCount = CONFIG.particleCountActivated * Math
-			.max(1, Math.min(CONFIG.particleCountMax, activationAmount)) * (0.5 + getCompositionPercent() / 2);
+		double particleCount = CONFIG.particleCountActivated
+				* Math.max(1, Math.min(CONFIG.particleCountMax, activationAmount))
+				* (0.5 + getCompositionPercent() / 2);
 		if (particleCount < 1) {
 			timeTillParticle += 0.01 + particleCount;
 
@@ -456,25 +459,25 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 			double d3 = (pos.getX() + world.rand.nextFloat());
 			double d4 = (pos.getY() + world.rand.nextFloat());
 			double d5 = (pos.getZ() + world.rand.nextFloat());
-			world.spawnParticle(EnumParticleTypes.PORTAL, d3, d4, d5, (d3 - pos.getX() - 0.5F), -0.3D, (d5 - pos
-				.getZ() - 0.5F));
+			world.spawnParticle(EnumParticleTypes.PORTAL, d3, d4, d5, (d3 - pos.getX() - 0.5F), -0.3D,
+					(d5 - pos.getZ() - 0.5F));
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public double getItemRotation () {
+	public double getItemRotation() {
 		return itemRotation;
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public double getPrevItemRotation () {
+	public double getPrevItemRotation() {
 		return prevItemRotation;
 	}
 
 	@Override
-	public ItemStack getStoredItem () {
+	public ItemStack getStoredItem() {
 		if (renderItem != null)
 			return renderItem;
 		if (container == null)
@@ -484,7 +487,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean shouldComplexRotate () {
+	public boolean shouldComplexRotate() {
 		return true;
 	}
 
@@ -503,12 +506,12 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 		public static class CraftingMatrix extends InventoryCrafting {
 
-			public CraftingMatrix (ComposerContainer c, int width, int height) {
+			public CraftingMatrix(ComposerContainer c, int width, int height) {
 				super(c, width, height);
 			}
 		}
 
-		public ComposerContainer (World world, EntityPlayer player) {
+		public ComposerContainer(World world, EntityPlayer player) {
 			this.world = world;
 			this.player = player;
 			this.craftingMatrix = new CraftingMatrix(this, 3, 3);
@@ -516,17 +519,18 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		}
 
 		@Override
-		public boolean canInteractWith (EntityPlayer playerIn) {
+		public boolean canInteractWith(EntityPlayer playerIn) {
 			return true;
 		}
 
 		@Override
-		public void onCraftMatrixChanged (IInventory inventoryIn) {
+		public void onCraftMatrixChanged(IInventory inventoryIn) {
 			this.slotChangedCraftingGrid(this.world, this.player, this.craftingMatrix, this.craftResult);
 		}
 
 		@Override
-		protected void slotChangedCraftingGrid (World world, EntityPlayer player, InventoryCrafting craftingMatrix, InventoryCraftResult craftResult) {
+		protected void slotChangedCraftingGrid(World world, EntityPlayer player, InventoryCrafting craftingMatrix,
+				InventoryCraftResult craftResult) {
 
 			if (!world.isRemote) {
 				ItemStack stack = ItemStack.EMPTY;
@@ -535,7 +539,8 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 				if (recipe != null) {
 					craftResult.setRecipeUsed(recipe);
-					if (recipe instanceof IRecipeComposer) time = ((IRecipeComposer) recipe).getTime();
+					if (recipe instanceof IRecipeComposer)
+						time = ((IRecipeComposer) recipe).getTime();
 					stack = recipe.getCraftingResult(craftingMatrix);
 					onRecipeChanged();
 				}
@@ -544,18 +549,18 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 			}
 		}
 
-		public void onRecipeChanged () {
+		public void onRecipeChanged() {
 			if (onRecipeChanged != null)
 				onRecipeChanged.handle();
 		}
 
-		public void onRecipeChanged (RecipeChangedHandler handler) {
+		public void onRecipeChanged(RecipeChangedHandler handler) {
 			onRecipeChanged = handler;
 		}
 
 		public static interface RecipeChangedHandler {
 
-			public void handle ();
+			public void handle();
 		}
 	}
 
@@ -564,7 +569,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	private ComposerContainer container;
 	private boolean needsRecipeRefresh = true;
 
-	public void refreshRecipe () {
+	public void refreshRecipe() {
 		needsRecipeRefresh = false;
 
 		if (container == null) {
@@ -580,19 +585,19 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		blockUpdate();
 	}
 
-	public void refreshContainer () {
+	public void refreshContainer() {
 		uuid = UUID.randomUUID();
 		fakePlayer = new FakePlayer((WorldServer) world, new GameProfile(uuid, "composer_tile_entity"));
 		container = new ComposerContainer(world, fakePlayer);
-		container.onRecipeChanged( () -> {
+		container.onRecipeChanged(() -> {
 			resetTimer();
 		});
 	}
 
-	public Boolean updateCCTEItem (ComposerCellTileEntity ccte, boolean blockUpdate) {
+	public Boolean updateCCTEItem(ComposerCellTileEntity ccte, boolean blockUpdate) {
 		ccte.onChangeItem(this::updateCCTEItem);
-		container.craftingMatrix
-			.setInventorySlotContents(ccte.slot, ccte.storedItem == null ? ItemStack.EMPTY : ccte.storedItem);
+		container.craftingMatrix.setInventorySlotContents(ccte.slot,
+				ccte.storedItem == null ? ItemStack.EMPTY : ccte.storedItem);
 
 		if (blockUpdate)
 			blockUpdate();
@@ -600,7 +605,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		return null;
 	}
 
-	public Boolean updateCCTEItem (ComposerCellTileEntity ccte) {
+	public Boolean updateCCTEItem(ComposerCellTileEntity ccte) {
 		return updateCCTEItem(ccte, true);
 	}
 }

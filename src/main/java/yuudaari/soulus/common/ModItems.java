@@ -46,6 +46,7 @@ public class ModItems {
 	public static ModItem BONE_NETHER = new ModItem("bone_nether").setHasDescription();
 	public static Bone BONE_NORMAL = new Bone("bone_normal");
 	public static Bone BONE_SCALE = new Bone("bone_scale");
+	public static CrystalDark CRYSTAL_DARK = new CrystalDark();
 	public static ModItem CRYSTAL_BLOOD_BROKEN = new ModItem("crystal_blood_broken").setHasDescription();
 	public static ModItem DUST_ENDER_IRON_ASHEN = new ModItem("dust_ender_iron_ashen").setHasDescription();
 	public static ModItem DUST_IRON = new ModItem("dust_iron").addOreDict("dustIron").setHasDescription();
@@ -85,6 +86,7 @@ public class ModItems {
 		BONEMEAL_NETHER,
 		CRYSTAL_BLOOD_BROKEN,
 		CRYSTAL_BLOOD,
+		CRYSTAL_DARK,
 		DUST_ENDER_IRON_ASHEN,
 		DUST_ENDER_IRON, 
 		DUST_IRON,

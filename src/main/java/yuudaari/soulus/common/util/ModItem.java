@@ -147,7 +147,7 @@ public class ModItem extends Item implements IModThing {
 
 	@Override
 	public int getMaxItemUseDuration (ItemStack stack) {
-		return foodConfig.get().foodDuration;
+		return isFood() ? foodConfig.get().foodDuration : super.getMaxItemUseDuration(stack);
 	}
 
 	@Override

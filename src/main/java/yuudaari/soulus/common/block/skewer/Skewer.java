@@ -48,7 +48,8 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	public static enum Upgrade implements IUpgrade {
 		CRYSTAL_BLOOD (0, "crystal_blood", ModItems.CRYSTAL_BLOOD.getItemStack()),
 		DAMAGE (1, "damage", new ItemStack(Items.QUARTZ)),
-		PLAYER (2, "player", ModItems.SOUL_CATALYST.getItemStack())
+		PLAYER (2, "player", ModItems.SOUL_CATALYST.getItemStack()),
+		TETHER (3, "tether", ModItems.ASH.getItemStack())
 		//, POISON(2, "poison",
 		//		new ItemStack(Items.SPIDER_EYE)), POWER(3, "power", new ItemStack(Blocks.REDSTONE_TORCH))
 		;
@@ -83,8 +84,10 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 					return 1;
 				if (name.equals("player"))
 					return 1;
+				if (name.equals("tether"))
+					return 16;
 				if (name.equals("damage"))
-					return 256;
+					return 64;
 				if (name.equals("poison"))
 					return 16;
 				if (name.equals("power"))

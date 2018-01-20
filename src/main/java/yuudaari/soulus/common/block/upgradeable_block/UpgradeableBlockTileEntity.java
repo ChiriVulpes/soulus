@@ -62,14 +62,18 @@ public abstract class UpgradeableBlockTileEntity extends TileEntity implements I
 		int currentQuantity = upgrades.get(upgrade);
 		int maxQuantity = upgrade.getMaxQuantity();
 		int insertQuantity = Math.min(quantity, maxQuantity - currentQuantity);
-		int newQuantity = currentQuantity + insertQuantity;
 
-		upgrades.put(upgrade, newQuantity);
-		onInsertUpgrade(stack, upgrade, newQuantity);
+		if (insertQuantity > 0) {
+			int newQuantity = currentQuantity + insertQuantity;
 
-		stack.shrink(insertQuantity);
+			upgrades.put(upgrade, newQuantity);
+			onInsertUpgrade(stack, upgrade, newQuantity);
 
-		onUpdateUpgrades(false);
+			stack.shrink(insertQuantity);
+
+			onUpdateUpgrades(false);
+		}
+
 		blockUpdate();
 	}
 

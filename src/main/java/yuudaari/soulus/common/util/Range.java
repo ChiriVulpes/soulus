@@ -25,6 +25,14 @@ public class Range {
 		return (int) Math.floor(get(random));
 	}
 
+	public double get (double percent) {
+		return min + (max - min) * percent;
+	}
+
+	public int getInt (double percent) {
+		return (int) Math.floor(get(percent));
+	}
+
 	@Override
 	public String toString () {
 		return "{Range: " + min + " - " + max + "}";

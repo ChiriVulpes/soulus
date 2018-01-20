@@ -15,7 +15,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.client.util.ParticleManager;
 import yuudaari.soulus.client.util.ParticleType;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.config.ConfigInjected;
@@ -25,14 +24,16 @@ import yuudaari.soulus.common.config.item.ConfigBonemealNether;
 @ConfigInjected(Soulus.MODID)
 public class BonemealNether extends Bonemeal {
 
-	@Inject(ConfigBonemealNether.class) public static ConfigBonemealNether CONFIG;
+	@Inject(ConfigBonemealNether.class)
+	public static ConfigBonemealNether CONFIG;
 
-	public BonemealNether () {
+	public BonemealNether() {
 		super("bone_meal_nether");
 	}
 
 	@Override
-	public EnumActionResult onItemUse (EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing,
+			float hitX, float hitY, float hitZ) {
 
 		IBlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
@@ -54,18 +55,17 @@ public class BonemealNether extends Bonemeal {
 	}
 
 	@SideOnly(Side.CLIENT)
-	private static void particles (World world, BlockPos pos) {
+	private static void particles(World world, BlockPos pos) {
 		Random rand = world.rand;
 
 		for (int i = 0; i < CONFIG.particleCount; ++i) {
-			double d3 = (pos.getX() - 0.5F + rand.nextFloat());
-			double d4 = (pos.getY() + rand.nextFloat());
-			double d5 = (pos.getZ() - 0.5F + rand.nextFloat());
-			double d3o = (d3 - pos.getX()) / 4;
-			double d4o = (d4 - pos.getY()) / 5;
-			double d5o = (d5 - pos.getZ()) / 4;
-			ParticleManager.spawnParticle(world, ParticleType.BLACKENED_BONEMEAL
-				.getId(), false, d3 + 0.5F, d4, d5 + 0.5F, d3o, d4o, d5o, 1);
+			double x = (pos.getX() - 0.5F + rand.nextFloat());
+			double y = (pos.getY() + rand.nextFloat());
+			double z = (pos.getZ() - 0.5F + rand.nextFloat());
+			double xv = (x - pos.getX()) / 4;
+			double yv = (y - pos.getY()) / 5;
+			double zv = (z - pos.getZ()) / 4;
+			world.spawnParticle(ParticleType.BONEMEAL_NETHER.getId(), false, x + 0.5F, y, z + 0.5F, xv, yv, zv, 1);
 		}
 	}
 }

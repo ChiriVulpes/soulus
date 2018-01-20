@@ -14,5 +14,7 @@ public class SoulsPacketHandler {
 		INSTANCE.registerMessage(CrystalBloodHitEntityHandler.class, CrystalBloodHitEntity.class, 0, Side.CLIENT);
 		INSTANCE.registerMessage(MobPoofHandler.class, MobPoof.class, 1, Side.CLIENT);
 		INSTANCE.registerMessage(LocationCommandHandler.class, LocationCommand.class, 2, Side.CLIENT);
+		INSTANCE.registerMessage(CrystalDarkPrickHandler.class, CrystalDarkPrick.class, 3, Side.CLIENT);
+		INSTANCE.registerMessage(TetherEntityHandler.class, TetherEntity.class, 4, Side.CLIENT);
 	}
 }
