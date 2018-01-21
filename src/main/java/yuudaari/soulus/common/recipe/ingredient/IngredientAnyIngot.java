@@ -32,8 +32,19 @@ public class IngredientAnyIngot extends Ingredient {
 		stacks.addAll(OreDictionary.getOres("ingotSteel"));
 		stacks.addAll(OreDictionary.getOres("ingotRedstone"));
 		stacks.addAll(OreDictionary.getOres("ingotElectrum"));
+		stacks.addAll(OreDictionary.getOres("ingotNickel"));
+		stacks.addAll(OreDictionary.getOres("ingotIridium"));
+		stacks.addAll(OreDictionary.getOres("ingotMithril"));
+		stacks.addAll(OreDictionary.getOres("ingotInvar"));
+		stacks.addAll(OreDictionary.getOres("ingotConstantan"));
+		stacks.addAll(OreDictionary.getOres("ingotSignalum"));
+		stacks.addAll(OreDictionary.getOres("ingotLumium"));
+		stacks.addAll(OreDictionary.getOres("ingotEnderium"));
 		stacks.addAll(OreDictionary.getOres("ingotTungsten"));
 		stacks.addAll(OreDictionary.getOres("ingotUranium"));
+		stacks.addAll(OreDictionary.getOres("ingotManasteel"));
+		stacks.addAll(OreDictionary.getOres("ingotTerrasteel"));
+		stacks.addAll(OreDictionary.getOres("ingotElvenElementium"));
 		stacks.addAll(OreDictionary.getOres("ingotBrick"));
 		stacks.addAll(OreDictionary.getOres("ingotBrickNether"));
 

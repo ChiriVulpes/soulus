@@ -140,8 +140,8 @@ public class RecipeComposerShapeless extends Recipe implements IRecipeComposer {
 			if (ings.isEmpty())
 				throw new JsonParseException("No ingredients for shapeless recipe");
 
-			ItemStack itemstack = CraftingHelper.getItemStack(JsonUtils.getJsonObject(json, "result"), context);
-			RecipeComposerShapeless result = new RecipeComposerShapeless(ings, itemstack);
+			ItemStack output = RecipeUtils.getOutput(json.get("result"), context);
+			RecipeComposerShapeless result = new RecipeComposerShapeless(ings, output);
 
 			result.time = JsonUtils.getFloat(json, "time", result.time);
 

@@ -213,10 +213,11 @@ public class RecipeComposerShaped extends Recipe implements IRecipeComposer {
 			if (!keys.isEmpty())
 				throw new JsonSyntaxException("Key defines symbols that aren't used in pattern: " + keys);
 
-			ItemStack output = CraftingHelper.getItemStack(JsonUtils.getJsonObject(json, "result"), context);
+			ItemStack output = RecipeUtils.getOutput(json.get("result"), context);
 			RecipeComposerShaped result = new RecipeComposerShaped(output, primer);
 
 			result.time = JsonUtils.getFloat(json, "time", result.time);
+
 
 			return result;
 		}
