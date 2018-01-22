@@ -22,11 +22,15 @@ import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSummoner;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
+import yuudaari.soulus.common.network.SoulsPacketHandler;
+import yuudaari.soulus.common.network.packet.MobSummon;
+import yuudaari.soulus.common.network.packet.MobSummonHandler;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.util.ModPotionEffect;
 import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.Soulus;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 @ConfigInjected(Soulus.MODID)
 public class SummonerTileEntity extends UpgradeableBlockTileEntity implements ITickable {
@@ -253,6 +257,8 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	}
 
 	private void updateRenderer (double activationAmount) {
+		MobSummonHandler.processMobSummons();
+
 		double diff = mobRotation - prevMobRotation;
 		prevMobRotation = mobRotation;
 		mobRotation += activationAmount <= 0 ? diff * 0.9 : getSpawnPercent() + diff * 0.8;
@@ -340,6 +346,9 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 				if (isPlayerInRangeForEffects())
 					explosionParticles(entity);
+
+				SoulsPacketHandler.INSTANCE.sendToAllAround(new MobSummon(entity), new TargetPoint(world.provider
+					.getDimension(), entity.posX, entity.posY, entity.posZ, 128));
 
 				spawned++;
 
