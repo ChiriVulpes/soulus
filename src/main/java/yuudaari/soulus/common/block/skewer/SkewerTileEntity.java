@@ -8,7 +8,6 @@ import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -101,7 +100,7 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 						.get(upgrades.get(Upgrade.POISON))) {
 
 						for (ModPotionEffect effect : CONFIG.poisonEffects)
-							entity.addPotionEffect(new PotionEffect(effect));
+							effect.apply(entity);
 					}
 
 					if (upgrades.get(Upgrade.TETHER) > 0 && world.rand.nextFloat() < CONFIG.tetherChance

@@ -17,7 +17,6 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -151,27 +150,27 @@ public class ModItem extends Item implements IModThing {
 	}
 
 	@Override
-	public ItemStack onItemUseFinish (ItemStack stack, World world, EntityLivingBase entityLiving) {
-		if (entityLiving instanceof EntityPlayer) {
-			EntityPlayer entityplayer = (EntityPlayer) entityLiving;
-			entityplayer.getFoodStats().addStats(foodConfig.get().foodAmount, foodConfig.get().foodSaturation);
+	public ItemStack onItemUseFinish (ItemStack stack, World world, EntityLivingBase entity) {
+		if (entity instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) entity;
+			player.getFoodStats().addStats(foodConfig.get().foodAmount, foodConfig.get().foodSaturation);
 			world
-				.playSound((EntityPlayer) null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, world.rand
+				.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, world.rand
 					.nextFloat() * 0.1F + 0.9F);
 
 			if (foodConfig.get().foodEffects != null) {
-				for (PotionEffect effect : foodConfig.get().foodEffects) {
-					entityLiving.addPotionEffect(new PotionEffect(effect));
+				for (ModPotionEffect effect : foodConfig.get().foodEffects) {
+					effect.apply(player);
 				}
 			}
 
 			if (foodHandler != null)
-				foodHandler.consume(stack, world, entityLiving);
+				foodHandler.consume(stack, world, entity);
 
-			entityplayer.addStat(StatList.getObjectUseStats(this));
+			player.addStat(StatList.getObjectUseStats(this));
 
-			if (entityplayer instanceof EntityPlayerMP) {
-				CriteriaTriggers.CONSUME_ITEM.trigger((EntityPlayerMP) entityplayer, stack);
+			if (player instanceof EntityPlayerMP) {
+				CriteriaTriggers.CONSUME_ITEM.trigger((EntityPlayerMP) player, stack);
 			}
 		}
 

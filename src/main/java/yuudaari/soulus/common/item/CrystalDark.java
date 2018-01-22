@@ -5,7 +5,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.client.util.ParticleType;
@@ -42,7 +41,7 @@ public class CrystalDark extends ModItem {
 
 			for (int i = 0; i < stack.getCount(); i++) {
 				for (ModPotionEffect effect : CONFIG.heldEffects)
-					entity.addPotionEffect(new PotionEffect(effect));
+					effect.apply(entity);
 
 				if (world.rand.nextFloat() <= CONFIG.prickChance) {
 					if (CONFIG.prickAmount > 0) {
@@ -50,7 +49,7 @@ public class CrystalDark extends ModItem {
 					}
 
 					for (ModPotionEffect effect : CONFIG.prickEffects)
-						entity.addPotionEffect(new PotionEffect(effect));
+						effect.apply(entity);
 
 					SoulsPacketHandler.INSTANCE
 						.sendToAllAround(new CrystalDarkPrick(entity), new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 128));

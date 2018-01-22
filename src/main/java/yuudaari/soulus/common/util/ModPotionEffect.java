@@ -1,64 +1,51 @@
 package yuudaari.soulus.common.util;
 
+import java.util.Random;
 import javax.annotation.Nullable;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import yuudaari.soulus.common.util.serializer.ClassSerializer;
 import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
 
-@Serializable(ModPotionEffect.Serializer.class)
-public class ModPotionEffect extends PotionEffect {
+@Serializable
+public class ModPotionEffect {
 
-	public static class Serializer extends ClassSerializer<ModPotionEffect> {
+	@Serialized public String effect;
+	@Serialized public int duration;
+	@Serialized public float chance;
 
-		@Override
-		@Nullable
-		public ModPotionEffect instantiate (final Class<?> cls) {
-			return null;
-		}
+	/**
+	 * Do not use, for serialization only
+	 */
+	public ModPotionEffect () {}
 
-		@Override
-		public void serialize (ModPotionEffect effect, JsonObject object) {
-			object.addProperty("effect", effect.effect);
-			object.addProperty("duration", effect.duration);
-		}
-
-		@Override
-		@Nullable
-		public ModPotionEffect deserialize (final ModPotionEffect _null, final JsonElement element) {
-			if (element == null || !element.isJsonObject()) {
-				Logger.warn("Must be a json object");
-				return null;
-			}
-
-			JsonObject effectJson = (JsonObject) element;
-
-			JsonElement effect = effectJson.get("effect");
-			if (effect == null || !effect.isJsonPrimitive() || !effect.getAsJsonPrimitive().isString()) {
-				Logger.warn("Must have property 'effect' set to a string");
-				return null;
-			}
-
-			JsonElement duration = effectJson.get("duration");
-			if (duration == null || !duration.isJsonPrimitive() || !duration.getAsJsonPrimitive().isNumber()) {
-				Logger.warn("Must have property 'duration' set to a number");
-				return null;
-			}
-
-			return new ModPotionEffect(effect.getAsString(), duration.getAsInt());
-		}
+	public ModPotionEffect (String which) {
+		this(which, 200);
 	}
 
-	@Serialized private final String effect;
-	@Serialized private final int duration;
-
 	public ModPotionEffect (String which, int duration) {
-		super(ForgeRegistries.POTIONS.getValue(new ResourceLocation(which)), duration);
+		this(which, duration, 1);
+	}
+
+	public ModPotionEffect (String which, int duration, float chance) {
 		this.effect = which;
 		this.duration = duration;
+		this.chance = chance;
+	}
+
+	@Nullable
+	public PotionEffect get (Random rand) {
+		return rand.nextFloat() < chance ? new PotionEffect(ForgeRegistries.POTIONS
+			.getValue(new ResourceLocation(effect)), duration) : null;
+	}
+
+	public void apply (EntityLivingBase entity) {
+		PotionEffect effect = get(entity.world.rand);
+
+		if (effect != null) {
+			entity.addPotionEffect(effect);
+		}
 	}
 }

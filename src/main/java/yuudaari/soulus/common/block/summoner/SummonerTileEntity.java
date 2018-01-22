@@ -24,6 +24,7 @@ import yuudaari.soulus.common.config.block.ConfigSummoner;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
+import yuudaari.soulus.common.util.ModPotionEffect;
 import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.Soulus;
 
@@ -321,6 +322,14 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 				entity
 					.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, world.rand.nextFloat() * 360.0F, 0.0F);
+
+
+				ModPotionEffect[] potionEffects = CONFIG.stylePotionEffects
+					.get(world.getBlockState(pos).getValue(Summoner.VARIANT));
+				if (potionEffects != null) for (ModPotionEffect effect : potionEffects) {
+					effect.apply(entity);
+				}
+
 
 				if (!ForgeEventFactory
 					.doSpecialSpawn(entity, world, (float) entity.posX, (float) entity.posY, (float) entity.posZ)) {
