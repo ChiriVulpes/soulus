@@ -95,7 +95,7 @@ public class BlockEndersteel extends ModBlock {
 
 				} else {
 					newPower = (int) Math.floor(Math
-						.sin((double) world.getTotalWorldTime() / (5 * (1 + Math.pow(15 - powerIn, 3)))) * 8 + 8);
+						.sin((double) world.getTotalWorldTime() / (5 * (1 + Math.pow(15 - powerIn, 3)))) * 7.5 + 8.5);
 				}
 
 				if (this.power != newPower) {

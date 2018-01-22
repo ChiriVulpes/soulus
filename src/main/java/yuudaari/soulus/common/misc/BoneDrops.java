@@ -15,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -50,54 +51,7 @@ public class BoneDrops {
 
 		List<EntityItem> drops = event.getDrops();
 
-		// then we get the dimension config for this potential spawn
-		DimensionType dimension = entity.world.provider.getDimensionType();
-		//Logger.info(dimension.getName());
-		ConfigCreatureDimension dimensionConfig = CONFIG_CREATURES.dimensionConfigs.get(dimension.getName());
-		if (dimensionConfig == null) {
-			dimensionConfig = CONFIG_CREATURES.dimensionConfigs.get("*");
-			if (dimensionConfig == null) {
-				doMobDrops(null, drops, entity);
-				return;
-			}
-		}
-
-		// then we get the biome config for this potential spawn
-		BlockPos pos = entity.getPosition();
-		Biome biome = entity.world.getBiome(pos);
-		//Logger.info(biome.getRegistryName().toString());
-		ConfigCreatureBiome biomeConfig = dimensionConfig.biomeConfigs.get(biome.getRegistryName().toString());
-		if (biomeConfig == null) {
-			biomeConfig = dimensionConfig.biomeConfigs.get(biome.getRegistryName().getResourceDomain() + ":*");
-			if (biomeConfig == null) {
-				biomeConfig = dimensionConfig.biomeConfigs.get("*");
-				if (biomeConfig == null) {
-					doMobDrops(null, drops, entity);
-					return;
-				}
-			}
-		}
-
-		// then we get the creature config for this potential spawn
-		String entityName = EntityList.getKey(entity).toString();
-		//Logger.info(entityName);
-		ConfigCreature creatureConfig = biomeConfig.creatureConfigs.get(entityName);
-		if (creatureConfig == null) {
-			creatureConfig = biomeConfig.creatureConfigs
-				.get(new ResourceLocation(entityName).getResourceDomain() + ":*");
-			if (creatureConfig == null) {
-				creatureConfig = biomeConfig.creatureConfigs.get("*");
-				if (creatureConfig == null) {
-					doMobDrops(null, drops, entity);
-					return;
-				}
-			}
-		}
-
-		doMobDrops(creatureConfig, drops, entity);
-	}
-
-	private static void doMobDrops (ConfigCreature config, List<EntityItem> drops, EntityLivingBase entity) {
+		ConfigCreature config = getCreatureConfig(entity);
 
 		if (config != null) {
 			boolean wasSummoned = entity.getEntityData().getByte("soulus:spawn_whitelisted") == (byte) 2;
@@ -171,6 +125,51 @@ public class BoneDrops {
 		}
 	}
 
+	private static ConfigCreature getCreatureConfig (EntityLivingBase entity) {
+		// then we get the dimension config for this potential spawn
+		DimensionType dimension = entity.world.provider.getDimensionType();
+		//Logger.info(dimension.getName());
+		ConfigCreatureDimension dimensionConfig = CONFIG_CREATURES.dimensionConfigs.get(dimension.getName());
+		if (dimensionConfig == null) {
+			dimensionConfig = CONFIG_CREATURES.dimensionConfigs.get("*");
+			if (dimensionConfig == null) {
+				return null;
+			}
+		}
+
+		// then we get the biome config for this potential spawn
+		BlockPos pos = entity.getPosition();
+		Biome biome = entity.world.getBiome(pos);
+		//Logger.info(biome.getRegistryName().toString());
+		ConfigCreatureBiome biomeConfig = dimensionConfig.biomeConfigs.get(biome.getRegistryName().toString());
+		if (biomeConfig == null) {
+			biomeConfig = dimensionConfig.biomeConfigs.get(biome.getRegistryName().getResourceDomain() + ":*");
+			if (biomeConfig == null) {
+				biomeConfig = dimensionConfig.biomeConfigs.get("*");
+				if (biomeConfig == null) {
+					return null;
+				}
+			}
+		}
+
+		// then we get the creature config for this potential spawn
+		String entityName = EntityList.getKey(entity).toString();
+		//Logger.info(entityName);
+		ConfigCreature creatureConfig = biomeConfig.creatureConfigs.get(entityName);
+		if (creatureConfig == null) {
+			creatureConfig = biomeConfig.creatureConfigs
+				.get(new ResourceLocation(entityName).getResourceDomain() + ":*");
+			if (creatureConfig == null) {
+				creatureConfig = biomeConfig.creatureConfigs.get("*");
+				if (creatureConfig == null) {
+					return null;
+				}
+			}
+		}
+
+		return creatureConfig;
+	}
+
 	private static ItemStack getStack (Random rand, BoneType boneType, ConfigCreatureLoot lootConfig) {
 		if (lootConfig.chance < rand.nextDouble()) {
 			return null;
@@ -198,5 +197,34 @@ public class BoneDrops {
 		ItemStack result = new ItemStack(item);
 		result.setCount(new Range(lootConfig.min, lootConfig.max).getInt(rand));
 		return result;
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void onMobXp (LivingExperienceDropEvent event) {
+
+		// first we check if we should even try to do drops
+		EntityLivingBase entity = event.getEntityLiving();
+		if (entity == null || !(entity instanceof EntityLiving)) return;
+
+		// then we check if there's a config for this entity
+		ConfigCreature config = getCreatureConfig(entity);
+		if (config == null) return;
+
+		boolean wasSummoned = entity.getEntityData().getByte("soulus:spawn_whitelisted") == (byte) 2;
+		String spawnType = wasSummoned ? "summoned" : "spawned";
+
+		ConfigCreatureDrops dropConfig = config.drops.get(spawnType);
+		ConfigCreatureDrops dropConfigAll = config.drops.get("all");
+
+		// then we check if drops are configured for this entity
+		if (dropConfig == null && dropConfigAll == null) return;
+
+		boolean dc = dropConfig != null;
+		boolean dca = dropConfigAll != null;
+
+		// check if it's configured not to have xp in this situation
+		if (!(dc ? dropConfig.hasXp : dca ? dropConfigAll.hasXp : true)) {
+			event.setCanceled(true);
+		}
 	}
 }

@@ -63,7 +63,7 @@ public class BlockEndersteelDark extends ModBlock {
 		}
 
 		BlockEndersteelTileEntity te = (BlockEndersteelTileEntity) world.getTileEntity(pos);
-		return te == null ? 0 : te.power;
+		return te == null ? 0 : te.signalOut;
 	}
 
 	@Override
@@ -83,27 +83,35 @@ public class BlockEndersteelDark extends ModBlock {
 
 	public static class BlockEndersteelTileEntity extends TileEntity implements ITickable {
 
-		public int power = 0;
-		public int lastPower = 0;
+		public int signalOut = 0;
+		public int signalIn = 0;
 
 		@Override
 		public void update () {
 			if (hasComparator()) {
-				int powerIn = world.isBlockIndirectlyGettingPowered(pos);
+				int signalIn = world.isBlockIndirectlyGettingPowered(pos);
 
-				if (powerIn != lastPower) {
-					lastPower = powerIn;
+				if (signalIn != this.signalIn) {
+					this.signalIn = signalIn;
 
-					int newPower = powerIn > 0 ? 1 + world.rand.nextInt(15) : 0;
-					if (this.power != newPower) {
-						this.power = newPower;
-						markDirty();
+					int signalOut = signalIn > 0 ? 1 + world.rand.nextInt(15) : 0;
+					if (this.signalOut != signalOut) {
+						this.signalOut = signalOut;
+						blockUpdate();
 					}
 				}
 
 			} else {
 				world.setBlockState(pos, ModBlocks.BLOCK_ENDERSTEEL.getDefaultState()
 					.withProperty(HAS_COMPARATOR, false), 7);
+			}
+		}
+
+		private final void blockUpdate () {
+			if (world != null) {
+				IBlockState blockState = world.getBlockState(pos);
+				world.notifyBlockUpdate(pos, blockState, blockState, 3);
+				markDirty();
 			}
 		}
 
@@ -153,15 +161,22 @@ public class BlockEndersteelDark extends ModBlock {
 
 		@Override
 		public void readFromNBT (NBTTagCompound compound) {
-			power = compound.getByte("signal");
+			signalOut = compound.getByte("signalOut");
+			signalIn = compound.getByte("signalIn");
 			super.readFromNBT(compound);
 		}
 
 		@Override
 		public NBTTagCompound writeToNBT (NBTTagCompound compound) {
 			compound = super.writeToNBT(compound);
-			compound.setByte("signal", (byte) power);
+			compound.setByte("signalOut", (byte) signalOut);
+			compound.setByte("signalIn", (byte) signalIn);
 			return compound;
+		}
+
+		@Override
+		public boolean shouldRefresh (World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+			return oldState.getBlock() != newState.getBlock() || !oldState.equals(newState);
 		}
 	}
 }

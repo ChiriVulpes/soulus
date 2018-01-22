@@ -9,6 +9,7 @@ import yuudaari.soulus.common.util.serializer.Serialized;
 @Serializable
 public class ConfigCreatureDrops {
 
+	@Serialized public boolean hasXp = true;
 	@Serialized(ListSerializer.OfStrings.class) public List<String> whitelistedDrops = new ArrayList<>();
 	@Serialized(ListSerializer.OfStrings.class) public List<String> blacklistedDrops = new ArrayList<>();
 
