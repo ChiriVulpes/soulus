@@ -153,9 +153,9 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 		if (rotateFace == EnumFacing.SOUTH)
 			return face.getOpposite();
 		else if (rotateFace == EnumFacing.EAST)
-			return face.rotateY();
+			return face == EnumFacing.UP || face == EnumFacing.DOWN ? face : face.rotateY();
 		else if (rotateFace == EnumFacing.WEST)
-			return face.rotateYCCW();
+			return face == EnumFacing.UP || face == EnumFacing.DOWN ? face : face.rotateYCCW();
 		else if (rotateFace == EnumFacing.UP)
 			return face.rotateAround(Axis.X);
 		else if (rotateFace == EnumFacing.DOWN)
