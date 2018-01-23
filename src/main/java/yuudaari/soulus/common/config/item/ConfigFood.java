@@ -2,12 +2,25 @@ package yuudaari.soulus.common.config.item;
 
 import yuudaari.soulus.common.util.ModPotionEffect;
 
-public class ConfigFood {
+public abstract class ConfigFood {
 
-	public boolean foodAlwaysEdible;
-	public int foodAmount;
-	public float foodSaturation;
-	public int foodDuration = 32;
-	public int foodQuantity = 1;
-	public ModPotionEffect[] foodEffects;
+	public boolean isAlwaysEdible () {
+		return false;
+	}
+
+	public abstract int getAmount ();
+
+	public abstract float getSaturation ();
+
+	public int getDuration () {
+		return 32;
+	}
+
+	public int getQuantity () {
+		return 1;
+	}
+
+	public ModPotionEffect[] getEffects () {
+		return new ModPotionEffect[0];
+	}
 }

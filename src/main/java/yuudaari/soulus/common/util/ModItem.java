@@ -42,7 +42,7 @@ public class ModItem extends Item implements IModThing {
 	protected Boolean glint = false;
 	private String name;
 	private List<String> oreDicts = new ArrayList<>();
-	private IFoodConfigGetter foodConfig = null;
+	private IFoodConfigGetter foodConfigGetter = null;
 	public ConsumeHandler foodHandler;
 	public CanConsumeHandler foodCanEatHandler;
 
@@ -119,11 +119,11 @@ public class ModItem extends Item implements IModThing {
 	}
 
 	public boolean isFood () {
-		return foodConfig != null;
+		return foodConfigGetter != null;
 	}
 
 	public void setFood (final IFoodConfigGetter getter) {
-		foodConfig = getter;
+		foodConfigGetter = getter;
 	}
 
 	@Override
@@ -131,7 +131,8 @@ public class ModItem extends Item implements IModThing {
 		ItemStack itemstack = playerIn.getHeldItem(handIn);
 		if (isFood()) {
 			if ((foodCanEatHandler != null && foodCanEatHandler.canConsume(worldIn, playerIn, handIn)) || (playerIn
-				.canEat(foodConfig.get().foodAlwaysEdible) && itemstack.getCount() >= foodConfig.get().foodQuantity)) {
+				.canEat(foodConfigGetter.get().isAlwaysEdible()) && itemstack
+					.getCount() >= foodConfigGetter.get().getQuantity())) {
 				playerIn.setActiveHand(handIn);
 				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
 			}
@@ -146,23 +147,20 @@ public class ModItem extends Item implements IModThing {
 
 	@Override
 	public int getMaxItemUseDuration (ItemStack stack) {
-		return isFood() ? foodConfig.get().foodDuration : super.getMaxItemUseDuration(stack);
+		return isFood() ? foodConfigGetter.get().getDuration() : super.getMaxItemUseDuration(stack);
 	}
 
 	@Override
 	public ItemStack onItemUseFinish (ItemStack stack, World world, EntityLivingBase entity) {
 		if (entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
-			player.getFoodStats().addStats(foodConfig.get().foodAmount, foodConfig.get().foodSaturation);
+			player.getFoodStats().addStats(foodConfigGetter.get().getAmount(), foodConfigGetter.get().getSaturation());
 			world
 				.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, world.rand
 					.nextFloat() * 0.1F + 0.9F);
 
-			if (foodConfig.get().foodEffects != null) {
-				for (ModPotionEffect effect : foodConfig.get().foodEffects) {
-					effect.apply(player);
-				}
-			}
+			for (ModPotionEffect effect : foodConfigGetter.get().getEffects())
+				effect.apply(player);
 
 			if (foodHandler != null)
 				foodHandler.consume(stack, world, entity);
@@ -174,7 +172,7 @@ public class ModItem extends Item implements IModThing {
 			}
 		}
 
-		stack.shrink(foodConfig.get().foodQuantity);
+		stack.shrink(foodConfigGetter.get().getQuantity());
 		return stack;
 	}
 
