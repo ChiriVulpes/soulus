@@ -3,11 +3,11 @@ package yuudaari.soulus.common.item;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.EntityList;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.crafting.Ingredient;
@@ -25,6 +25,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
+import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
 import yuudaari.soulus.common.util.EssenceType;
@@ -151,13 +152,24 @@ public class Soulbook extends ModItem {
 		return containedEssence >= CONFIG.getSoulbookQuantity(essenceType);
 	}
 
-	@Nonnull
 	@Override
-	public String getUnlocalizedNameInefficiently (@Nonnull ItemStack stack) {
+	public String getItemStackDisplayName (ItemStack stack) {
 		String essenceType = EssenceType.getEssenceType(stack);
-		if (essenceType == null)
-			essenceType = "unfocused";
-		return super.getUnlocalizedNameInefficiently(stack) + "." + essenceType;
+		ConfigEssence config = CONFIG.get(essenceType);
+		if (essenceType == null || config == null)
+			return I18n.format(this.getUnlocalizedName() + ".unfocused.name").trim();
+
+		String alignment = config.name;
+		if (alignment == null) {
+			String translationKey = "entity." + essenceType + ".name";
+			alignment = I18n.format(translationKey);
+			if (translationKey.equals(alignment)) {
+				alignment = I18n
+					.format("entity." + EntityList.getTranslationName(new ResourceLocation(essenceType)) + ".name");
+			}
+		}
+
+		return I18n.format(this.getUnlocalizedName() + ".focused.name", alignment).trim();
 	}
 
 	@Override

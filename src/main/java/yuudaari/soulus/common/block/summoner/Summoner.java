@@ -2,7 +2,6 @@ package yuudaari.soulus.common.block.summoner;
 
 import java.util.Collections;
 import java.util.List;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
@@ -16,6 +15,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -26,6 +26,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.Optional;
@@ -37,6 +38,7 @@ import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSummoner;
+import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.ModBlocks;
@@ -240,9 +242,23 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		}
 
 		@Override
-		public String getUnlocalizedNameInefficiently (@Nonnull ItemStack stack) {
+		public String getItemStackDisplayName (ItemStack stack) {
 			String essenceType = EssenceType.getEssenceType(stack);
-			return "tile." + getRegistryName() + (essenceType == null ? "_empty" : "." + essenceType);
+			ConfigEssence config = CONFIG_ESSENCES.get(essenceType);
+			if (essenceType == null || config == null)
+				return I18n.format(this.getUnlocalizedName() + ".unfocused.name").trim();
+
+			String alignment = config.name;
+			if (alignment == null) {
+				String translationKey = "entity." + essenceType + ".name";
+				alignment = I18n.format(translationKey);
+				if (translationKey.equals(alignment)) {
+					alignment = I18n
+						.format("entity." + EntityList.getTranslationName(new ResourceLocation(essenceType)) + ".name");
+				}
+			}
+
+			return I18n.format(this.getUnlocalizedName() + ".focused.name", alignment).trim();
 		}
 
 		@Override

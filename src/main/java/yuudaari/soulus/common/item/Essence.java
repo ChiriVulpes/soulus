@@ -1,6 +1,6 @@
 package yuudaari.soulus.common.item;
 
-import javax.annotation.Nonnull;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -50,27 +50,41 @@ public class Essence extends ModItem {
 				if (entry == null)
 					return -1;
 
-				EntityList.EntityEggInfo eggInfo = entry.getEgg();
-				if (eggInfo == null)
-					return -1;
-				ConfigColor colors = new ConfigColor(eggInfo);
-
 				ConfigEssence essenceConfig = CONFIG.get(essenceType);
-				if (essenceConfig.colors != null)
-					colors = essenceConfig.colors;
+				if (essenceConfig == null)
+					return -1;
+
+				ConfigColor colors = essenceConfig.colors;
+				if (colors == null) {
+					EntityList.EntityEggInfo eggInfo = entry.getEgg();
+					if (eggInfo == null)
+						return -1;
+					colors = new ConfigColor(eggInfo);
+				}
 
 				return tintIndex == 0 ? colors.primary : colors.secondary;
 			});
 		}
 	}
 
-	@Nonnull
 	@Override
-	public String getUnlocalizedNameInefficiently (@Nonnull ItemStack stack) {
-		String mobTarget = EssenceType.getEssenceType(stack);
-		if (mobTarget == null)
-			mobTarget = "unfocused";
-		return super.getUnlocalizedNameInefficiently(stack) + "." + mobTarget;
+	public String getItemStackDisplayName (ItemStack stack) {
+		String essenceType = EssenceType.getEssenceType(stack);
+		ConfigEssence config = CONFIG.get(essenceType);
+		if (essenceType == null || config == null)
+			return I18n.format(this.getUnlocalizedName() + ".unfocused.name").trim();
+
+		String alignment = config.name;
+		if (alignment == null) {
+			String translationKey = "entity." + essenceType + ".name";
+			alignment = I18n.format(translationKey);
+			if (translationKey.equals(alignment)) {
+				alignment = I18n
+					.format("entity." + EntityList.getTranslationName(new ResourceLocation(essenceType)) + ".name");
+			}
+		}
+
+		return I18n.format(this.getUnlocalizedName() + ".focused.name", alignment).trim();
 	}
 
 	@Override

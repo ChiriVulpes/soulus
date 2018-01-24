@@ -11,6 +11,7 @@ import yuudaari.soulus.common.util.serializer.Serialized;
 public class ConfigEssence {
 
 	@Serialized public String essence;
+	@Serialized @NullableField public String name;
 	@Serialized @NullableField public ConfigColor colors;
 	@Serialized public ConfigCreatureBone bones = new ConfigCreatureBone();
 	@Serialized public int soulbookQuantity = 16;
