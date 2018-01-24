@@ -19,6 +19,7 @@ import yuudaari.soulus.common.block.composer.*;
 import yuudaari.soulus.common.block.summoner.Summoner;
 import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
 import yuudaari.soulus.common.block.skewer.Skewer;
+import yuudaari.soulus.common.block.soul_totem.SoulTotem;
 
 public class ModBlocks {
 
@@ -26,6 +27,7 @@ public class ModBlocks {
 	public static final BarsEndersteel BARS_ENDERSTEEL = new BarsEndersteel();
 	public static final BlockEndersteel BLOCK_ENDERSTEEL = new BlockEndersteel();
 	public static final BlockEndersteelDark BLOCK_ENDERSTEEL_DARK = new BlockEndersteelDark();
+	public static final BlockNiobium BLOCK_NIOBIUM = new BlockNiobium();
 	public static final Composer COMPOSER = new Composer();
 	public static final ComposerCell COMPOSER_CELL = new ComposerCell();
 	public static final FossilDirt FOSSIL_DIRT = new FossilDirt();
@@ -44,12 +46,14 @@ public class ModBlocks {
 	public static final Skewer SKEWER = new Skewer();
 	public static final Summoner SUMMONER = new Summoner();
 	public static final Unloader UNLOADER = new Unloader();
+	public static final SoulTotem SOUL_TOTEM = new SoulTotem();
 
 	public static IBlock[] blocks = new IBlock[] {
 		ASH,
 		BARS_ENDERSTEEL,
 		BLOCK_ENDERSTEEL,
 		BLOCK_ENDERSTEEL_DARK,
+		BLOCK_NIOBIUM,
 		COMPOSER,
 		COMPOSER_CELL,
 		FOSSIL_DIRT_ENDER,

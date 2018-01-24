@@ -1,0 +1,20 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		" E ",
+		"EgE",
+		" E "
+	],
+	"key": {
+		"E": {
+			"item": "soulus:ingot_niobium"
+		},
+		"g": {
+			"type": "forge:ore_dict",
+			"ore": "gearBone"
+		}
+	},
+	"result": {
+		"item": "soulus:gear_niobium"
+	}
+}

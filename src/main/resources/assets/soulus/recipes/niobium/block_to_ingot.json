@@ -1,0 +1,12 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"item": "soulus:block_niobium"
+		}
+	],
+	"result": {
+		"item": "soulus:ingot_niobium",
+		"count": 9
+	}
+}

@@ -20,7 +20,6 @@ import scala.Tuple2;
 import yuudaari.soulus.common.compat.jei.RecipeCategoryComposer;
 import yuudaari.soulus.common.compat.jei.RecipeWrapperComposer;
 import yuudaari.soulus.common.compat.jei.SubtypeInterpreterEssence;
-import yuudaari.soulus.common.item.Essence;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.recipe.RecipeComposerShaped;
@@ -31,7 +30,7 @@ public class Jei implements IModPlugin {
 
 	@Override
 	public void registerItemSubtypes (ISubtypeRegistry subtypeRegistry) {
-		subtypeRegistry.registerSubtypeInterpreter(Essence.INSTANCE, new SubtypeInterpreterEssence());
+		subtypeRegistry.registerSubtypeInterpreter(ModItems.ESSENCE, new SubtypeInterpreterEssence());
 	}
 
 	@Override

@@ -23,11 +23,14 @@ item.soulus:dust_wood.name=Wood Dust
 item.soulus:dust_stone.name=Stone Dust
 item.soulus:dust_ender_iron.name=Ender-Iron Dust Blend
 item.soulus:dust_ender_iron_ashen.name=Ash-Ender-Iron Dust Blend
+item.soulus:dust_niobium.name=Niobium Dust
 
 item.soulus:ingot_endersteel.name=Endersteel Ingot
-item.soulus:nugget_endersteel.name=Endersteel Nugget
+item.soulus:nugget_endersteel.name=Endersteel Shard
 item.soulus:ingot_endersteel_dark.name=Dark Endersteel Ingot
-item.soulus:nugget_endersteel_dark.name=Dark Endersteel Nugget
+item.soulus:nugget_endersteel_dark.name=Dark Endersteel Shard
+item.soulus:ingot_niobium.name=Niobium Ingot
+item.soulus:nugget_niobium.name=Niobium Shard
 
 item.soulus:glue.name=Glue
 item.soulus:bark.name=Bark
@@ -46,6 +49,7 @@ item.soulus:gear_bone_frozen.name=Frozen Bone Gear
 item.soulus:gear_bone_fungal.name=Mossy Bone Gear
 item.soulus:gear_bone_dry.name=Dry Bone Gear
 item.soulus:gear_oscillating.name=Oscillating Gear
+item.soulus:gear_niobium.name=Niobium Gear
 
 item.soulus:orb_murky.name=Strange Sticky Ball
 item.soulus:orb_murky.filled.name=Murky Orb
@@ -154,7 +158,10 @@ tile.soulus:fossil_sand_red_scale.name=Red Sand with Scale Fossils
 
 tile.soulus:block_endersteel.name=Block of Endersteel
 tile.soulus:block_endersteel_dark.name=Block of Dark Endersteel
+tile.soulus:block_niobium.name=Block of Niobium
+
 tile.soulus:bars_endersteel.name=Endersteel Bars
+
 
 tile.soulus:skewer.name=Skewer
 tile.soulus:unloader.name=Unloader
@@ -288,6 +295,14 @@ jei.description.soulus:skewer=A block that, when powered by redstone, will exten
 jei.description.soulus:summoner=A machine created from the remains of alien creatures and metal, which summons a creature from a Soulbook. With this, life may soon return to the world.
 jei.description.soulus:unloader=A block with a hole in the bottom. Not useful for storing things, as they will simply fall out.
 jei.description.soulus:crystal_dark=A crystal forged from fire, covered in the blood of many. Looking at the crystal is like looking into a void. Holding the crystal for an extended period of time is painful.
+jei.description.soulus:dust_niobium=Metal forged from the souls of many, crushed into a fine powder.
+jei.description.soulus:nugget_niobium=A shard metal forged from the souls of many.
+jei.description.soulus:ingot_niobium=An ingot of metal, forged from souls too numerous to count. It emanates sadness.
+jei.description.soulus:block_niobium=A block of metal forged from souls too numerous to count.
+jei.description.soulus:gear_niobium=A gear made of metal forged from the souls of many.
+jei.description.soulus:soul_totem=A machine powered by compressed souls which can be used as a player surrogate to the summoner.
+
+jei.recipe.soulus:composer.recipe_time=%1$st
 
 command.soulus:soulus.usage=Usage: /soulus location|reload
 command.soulus:soulus.invalid_syntax=Command syntax invalid. %1$s

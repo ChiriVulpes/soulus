@@ -36,8 +36,6 @@ public class Soulbook extends ModItem {
 
 	@Inject(ConfigEssences.class) public static ConfigEssences CONFIG;
 
-	public final static Soulbook INSTANCE = new Soulbook();
-
 	public static ItemStack getFilled (String essenceType) {
 		return getStack(essenceType, CONFIG.getSoulbookQuantity(essenceType));
 	}
@@ -47,7 +45,7 @@ public class Soulbook extends ModItem {
 	}
 
 	public static ItemStack getStack (String essenceType, int essenceAmount) {
-		ItemStack stack = new ItemStack(INSTANCE, 1);
+		ItemStack stack = new ItemStack(ModItems.SOULBOOK, 1);
 		EssenceType.setEssenceType(stack, essenceType);
 		setContainedEssence(stack, essenceAmount);
 		return stack;
@@ -67,7 +65,7 @@ public class Soulbook extends ModItem {
 			List<Ingredient> ingredients = new ArrayList<>();
 
 			ingredients.addAll(Collections.nCopies(size * size - 1, IngredientPotentialEssence.getInstance()));
-			ingredients.add(Ingredient.fromItem(INSTANCE));
+			ingredients.add(Ingredient.fromItem(ModItems.SOULBOOK));
 
 			return NonNullList.from(Ingredient.EMPTY, ingredients.toArray(new Ingredient[0]));
 		}
@@ -97,7 +95,7 @@ public class Soulbook extends ModItem {
 				Item stackItem = stack.getItem();
 				if (stack == null || stackItem == Items.AIR)
 					continue;
-				if (stackItem == INSTANCE) {
+				if (stackItem == ModItems.SOULBOOK) {
 					if (soulbook != null)
 						return null;
 					String itemTarget = EssenceType.getEssenceType(stack);

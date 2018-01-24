@@ -93,6 +93,11 @@ public class ModItem extends Item implements IModThing {
 		return oreDicts;
 	}
 
+	public ModItem setHasGlint () {
+		glint = true;
+		return this;
+	}
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public boolean hasEffect (ItemStack stack) {

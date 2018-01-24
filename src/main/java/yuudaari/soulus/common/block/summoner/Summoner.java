@@ -360,7 +360,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		}
 
 		// try to insert a soulbook
-		if (item == Soulbook.INSTANCE) {
+		if (item == ModItems.SOULBOOK) {
 			if ((CONFIG.soulbookUses <= 0 && !Soulbook.isFilled(stack)) || Soulbook
 				.getContainedEssence(stack) < CONFIG.soulbookEssenceRequiredToInsert * CONFIG_ESSENCES
 					.getSoulbookQuantity(EssenceType.getEssenceType(stack)))

@@ -13,17 +13,4 @@ public class SoulCatalyst extends ModItem {
 		glint = true;
 		setHasDescription();
 	}
-	/*
-		@Override
-		public void onRegisterRecipes(IForgeRegistry<IRecipe> registry) {
-			registry.register(new RecipeComposerShaped(this, //
-					"MGM", //
-					"GBG", //
-					"MGM", //
-					'M', OrbMurky.INSTANCE.getFilledStack(), // 
-					'G', ModItems.GEAR_OSCILLATING, 'B', CrystalBlood.INSTANCE.getFilledStack() //
-			).setRegistryName(getRegistryName()));
-		}
-	*/
-
 }

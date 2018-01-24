@@ -17,6 +17,7 @@ public class RecipeWrapperComposer implements IRecipeWrapper {
 	private ItemStack output;
 
 	private boolean isShaped;
+	private float recipeTime;
 
 	public int getWidth () {
 		return isShaped ? 3 : 0;
@@ -48,6 +49,8 @@ public class RecipeWrapperComposer implements IRecipeWrapper {
 		isShaped = true;
 
 		registryName = recipe.getRegistryName();
+
+		recipeTime = recipe.getTime();
 	}
 
 	public RecipeWrapperComposer (RecipeComposerShapeless recipe) {
@@ -68,5 +71,9 @@ public class RecipeWrapperComposer implements IRecipeWrapper {
 	public void getIngredients (IIngredients ingredients) {
 		ingredients.setInputLists(ItemStack.class, inputs);
 		ingredients.setOutput(ItemStack.class, output);
+	}
+
+	public float getRecipeTime () {
+		return recipeTime;
 	}
 }

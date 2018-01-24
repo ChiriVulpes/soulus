@@ -1,5 +1,6 @@
 package yuudaari.soulus.common.compat.jei;
 
+import java.awt.Color;
 import java.util.List;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.ICraftingGridHelper;
@@ -13,14 +14,17 @@ import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
 import mezz.jei.api.recipe.wrapper.ICustomCraftingRecipeWrapper;
 import mezz.jei.api.recipe.wrapper.IShapedCraftingRecipeWrapper;
 import mezz.jei.config.Constants;
+import mezz.jei.gui.GuiHelper;
 import mezz.jei.startup.ForgeModIdHelper;
 import mezz.jei.util.Translator;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.client.config.GuiUtils;
 import yuudaari.soulus.Soulus;
 
 public class RecipeCategoryComposer implements IRecipeCategory<IRecipeWrapper> {
@@ -35,6 +39,7 @@ public class RecipeCategoryComposer implements IRecipeCategory<IRecipeWrapper> {
 
 	private final IDrawable background;
 	private final ICraftingGridHelper craftingGridHelper;
+	private float recipeTime = 1;
 
 	public RecipeCategoryComposer (IGuiHelper guiHelper) {
 		ResourceLocation location = Constants.RECIPE_GUI_VANILLA;
@@ -64,6 +69,8 @@ public class RecipeCategoryComposer implements IRecipeCategory<IRecipeWrapper> {
 
 	@Override
 	public void setRecipe (IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper, IIngredients ingredients) {
+		recipeTime = getRecipeTime(recipeWrapper);
+
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 
 		guiItemStacks.init(craftOutputSlot, false, 94, 18);
@@ -135,6 +142,24 @@ public class RecipeCategoryComposer implements IRecipeCategory<IRecipeWrapper> {
 				}
 			});
 		}
+	}
+
+	@Override
+	public void drawExtras (Minecraft minecraft) {
+		String timeString = "" + recipeTime;
+		if (timeString.endsWith(".0"))
+			timeString = timeString.substring(0, timeString.length() - 2);
+		String renderString = I18n.format("jei.recipe.soulus:composer.recipe_time", timeString);
+		int stringWidth = minecraft.fontRenderer.getStringWidth(renderString);
+		minecraft.fontRenderer.drawString(renderString, 72 - stringWidth / 2, 9, Color.DARK_GRAY.getRGB(), false);
+	}
+
+	public float getRecipeTime (IRecipeWrapper wrapper) {
+		if (wrapper instanceof RecipeWrapperComposer) {
+			return ((RecipeWrapperComposer) wrapper).getRecipeTime();
+		}
+
+		return 1;
 	}
 
 }

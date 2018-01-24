@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
+import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
@@ -24,14 +25,12 @@ public class Essence extends ModItem {
 
 	@Inject(ConfigEssences.class) public static ConfigEssences CONFIG;
 
-	public static Essence INSTANCE = new Essence();
-
 	public static ItemStack getStack (String essenceType) {
 		return getStack(essenceType, 1);
 	}
 
 	public static ItemStack getStack (String essenceType, Integer count) {
-		ItemStack stack = new ItemStack(INSTANCE, count);
+		ItemStack stack = new ItemStack(ModItems.ESSENCE, count);
 		EssenceType.setEssenceType(stack, essenceType);
 		return stack;
 	}
