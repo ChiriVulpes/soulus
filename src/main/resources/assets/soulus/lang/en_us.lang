@@ -62,7 +62,7 @@ item.soulus:barket.name=Barket
 item.soulus:barket_filled.name=Barket of Water
 
 item.soulus:soulbook.name=Soulbook
-item.soulus:soulbook.unfocused.name=Unfocused Soulbook
+item.soulus:soulbook.unfocused.name=Soulbook
 item.soulus:soulbook.focused.name=Soulbook of %1$s
 
 
