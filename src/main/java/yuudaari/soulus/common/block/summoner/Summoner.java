@@ -241,6 +241,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 			return damage;
 		}
 
+		@SideOnly(Side.CLIENT)
 		@Override
 		public String getItemStackDisplayName (ItemStack stack) {
 			String essenceType = EssenceType.getEssenceType(stack);

@@ -152,6 +152,7 @@ public class Soulbook extends ModItem {
 		return containedEssence >= CONFIG.getSoulbookQuantity(essenceType);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public String getItemStackDisplayName (ItemStack stack) {
 		String essenceType = EssenceType.getEssenceType(stack);

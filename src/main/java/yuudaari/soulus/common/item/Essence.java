@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
 import yuudaari.soulus.common.config.ConfigInjected;
@@ -67,6 +68,7 @@ public class Essence extends ModItem {
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public String getItemStackDisplayName (ItemStack stack) {
 		String essenceType = EssenceType.getEssenceType(stack);
