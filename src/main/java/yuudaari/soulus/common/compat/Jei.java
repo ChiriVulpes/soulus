@@ -1,15 +1,11 @@
 package yuudaari.soulus.common.compat;
 
 import java.util.List;
-import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.ISubtypeRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
-import mezz.jei.plugins.vanilla.crafting.ShapedOreRecipeWrapper;
-import mezz.jei.plugins.vanilla.crafting.ShapedRecipesWrapper;
-import mezz.jei.plugins.vanilla.crafting.ShapelessRecipeWrapper;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.item.ItemStack;

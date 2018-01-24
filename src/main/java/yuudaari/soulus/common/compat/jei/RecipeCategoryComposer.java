@@ -1,6 +1,5 @@
 package yuudaari.soulus.common.compat.jei;
 
-import java.awt.Color;
 import java.util.List;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.ICraftingGridHelper;
