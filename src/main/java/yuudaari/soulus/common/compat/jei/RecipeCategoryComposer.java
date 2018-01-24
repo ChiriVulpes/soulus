@@ -36,7 +36,6 @@ public class RecipeCategoryComposer implements IRecipeCategory<IRecipeWrapper> {
 
 	private final IDrawable background;
 	private final ICraftingGridHelper craftingGridHelper;
-	private float recipeTime = 1;
 
 	public RecipeCategoryComposer (IGuiHelper guiHelper) {
 		ResourceLocation location = Constants.RECIPE_GUI_VANILLA;
@@ -66,8 +65,6 @@ public class RecipeCategoryComposer implements IRecipeCategory<IRecipeWrapper> {
 
 	@Override
 	public void setRecipe (IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper, IIngredients ingredients) {
-		recipeTime = getRecipeTime(recipeWrapper);
-
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 
 		guiItemStacks.init(craftOutputSlot, false, 94, 18);
@@ -139,24 +136,6 @@ public class RecipeCategoryComposer implements IRecipeCategory<IRecipeWrapper> {
 				}
 			});
 		}
-	}
-
-	@Override
-	public void drawExtras (Minecraft minecraft) {
-		String timeString = "" + recipeTime;
-		if (timeString.endsWith(".0"))
-			timeString = timeString.substring(0, timeString.length() - 2);
-		String renderString = I18n.format("jei.recipe.soulus:composer.recipe_time", timeString);
-		int stringWidth = minecraft.fontRenderer.getStringWidth(renderString);
-		minecraft.fontRenderer.drawString(renderString, 72 - stringWidth / 2, 9, Color.DARK_GRAY.getRGB(), false);
-	}
-
-	public float getRecipeTime (IRecipeWrapper wrapper) {
-		if (wrapper instanceof RecipeWrapperComposer) {
-			return ((RecipeWrapperComposer) wrapper).getRecipeTime();
-		}
-
-		return 1;
 	}
 
 }

@@ -50,21 +50,19 @@ public class Jei implements IModPlugin {
 			registry.addIngredientInfo(description._1(), ItemStack.class, "jei.description." + description._2());
 		}
 
-		IJeiHelpers jeiHelpers = registry.getJeiHelpers();
-
 		registry.addRecipeCatalyst(ModBlocks.COMPOSER.getItemStack(), RecipeCategoryComposer.UID);
 
 		registry.handleRecipes(RecipeComposerShaped.class, RecipeWrapperComposer::new, RecipeCategoryComposer.UID);
 		registry.handleRecipes(RecipeComposerShapeless.class, RecipeWrapperComposer::new, RecipeCategoryComposer.UID);
 
 		registry
-			.handleRecipes(ShapedOreRecipe.class, recipe -> new ShapedOreRecipeWrapper(jeiHelpers, recipe), RecipeCategoryComposer.UID);
+			.handleRecipes(ShapedOreRecipe.class, recipe -> new RecipeWrapperComposer(recipe, true), RecipeCategoryComposer.UID);
 		registry
-			.handleRecipes(ShapedRecipes.class, recipe -> new ShapedRecipesWrapper(jeiHelpers, recipe), RecipeCategoryComposer.UID);
+			.handleRecipes(ShapedRecipes.class, recipe -> new RecipeWrapperComposer(recipe, true), RecipeCategoryComposer.UID);
 		registry
-			.handleRecipes(ShapelessOreRecipe.class, recipe -> new ShapelessRecipeWrapper<>(jeiHelpers, recipe), RecipeCategoryComposer.UID);
+			.handleRecipes(ShapelessOreRecipe.class, recipe -> new RecipeWrapperComposer(recipe, false), RecipeCategoryComposer.UID);
 		registry
-			.handleRecipes(ShapelessRecipes.class, recipe -> new ShapelessRecipeWrapper<>(jeiHelpers, recipe), RecipeCategoryComposer.UID);
+			.handleRecipes(ShapelessRecipes.class, recipe -> new RecipeWrapperComposer(recipe, false), RecipeCategoryComposer.UID);
 
 		registry.addRecipes(ForgeRegistries.RECIPES.getValues(), RecipeCategoryComposer.UID);
 
