@@ -41,6 +41,10 @@ public class StructureMap {
 		return this;
 	}
 
+	public boolean isValid (World world, BlockPos pos) {
+		return isValid(world, pos, EnumFacing.NORTH);
+	}
+
 	/**
 	 * @param facing Do not call with EnumFacing.DOWN or EnumFacing.UP
 	 */

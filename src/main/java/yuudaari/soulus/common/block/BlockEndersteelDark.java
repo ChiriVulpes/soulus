@@ -1,8 +1,10 @@
 package yuudaari.soulus.common.block;
 
 import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.block.soul_totem.SoulTotem;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.ModBlock;
+import java.util.List;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.BlockRedstoneComparator;
 import net.minecraft.block.SoundType;
@@ -11,10 +13,12 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -64,6 +68,36 @@ public class BlockEndersteelDark extends ModBlock {
 
 		BlockEndersteelTileEntity te = (BlockEndersteelTileEntity) world.getTileEntity(pos);
 		return te == null ? 0 : te.signalOut;
+	}
+
+	@Override
+	public void addCollisionBoxToList (IBlockState state, World world, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean isActualState) {
+		addCollisionBoxToList(pos, entityBox, collidingBoxes, state.getCollisionBoundingBox(world, pos));
+
+		/*
+		 * The following code is to assure that when connected to a soul totem, the soul totem has collision detection on the corners
+		 */
+		IBlockState connectedTotem = ModBlocks.SOUL_TOTEM.getDefaultState().withProperty(SoulTotem.CONNECTED, true);
+
+		BlockPos totemPos = pos.add(-1, 1, -1);
+		if (world.getBlockState(totemPos).equals(connectedTotem))
+			ModBlocks.SOUL_TOTEM
+				.addCollisionBoxToList(connectedTotem, world, totemPos, entityBox, collidingBoxes, entityIn, isActualState);
+
+		totemPos = pos.add(1, 1, -1);
+		if (world.getBlockState(totemPos).equals(connectedTotem))
+			ModBlocks.SOUL_TOTEM
+				.addCollisionBoxToList(connectedTotem, world, totemPos, entityBox, collidingBoxes, entityIn, isActualState);
+
+		totemPos = pos.add(-1, 1, 1);
+		if (world.getBlockState(totemPos).equals(connectedTotem))
+			ModBlocks.SOUL_TOTEM
+				.addCollisionBoxToList(connectedTotem, world, totemPos, entityBox, collidingBoxes, entityIn, isActualState);
+
+		totemPos = pos.add(1, 1, 1);
+		if (world.getBlockState(totemPos).equals(connectedTotem))
+			ModBlocks.SOUL_TOTEM
+				.addCollisionBoxToList(connectedTotem, world, totemPos, entityBox, collidingBoxes, entityIn, isActualState);
 	}
 
 	@Override

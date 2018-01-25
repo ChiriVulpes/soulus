@@ -1,0 +1,22 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"bbb",
+		"bSb",
+		"ooo"
+	],
+	"key": {
+		"b": {
+			"item": "soulus:ingot_niobium"
+		},
+		"o": {
+			"item": "minecraft:obsidian"
+		},
+		"S": {
+			"item": "soulus:soul_catalyst"
+		}
+	},
+	"result": {
+		"item": "soulus:soul_totem"
+	}
+}

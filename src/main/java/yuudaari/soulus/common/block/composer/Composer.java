@@ -243,6 +243,10 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 		return state;
 	}
 
+	/////////////////////////////////////////
+	// Structure
+	//
+
 	public StructureMap structure = new StructureMap();
 	{
 		BlockValidator bars = BlockValidator.byBlock(ModBlocks.BARS_ENDERSTEEL);

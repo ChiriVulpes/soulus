@@ -71,7 +71,8 @@ public class ModBlocks {
 		FOSSIL_SAND_RED_SCALE,
 		SKEWER,
 		SUMMONER,
-		UNLOADER
+		UNLOADER,
+		SOUL_TOTEM
 	};
 
 	public static void registerBlocks (IForgeRegistry<Block> registry) {

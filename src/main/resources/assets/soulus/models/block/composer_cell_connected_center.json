@@ -2,7 +2,7 @@
     "parent": "block/block",
     "textures": {
 		"top": "soulus:blocks/composer_cell_connected",
-		"bottom": "soulus:blocks/composer_cell_connected_bottom",
+		"bottom": "soulus:blocks/composer_cell_connected_bottom_and_soul_totem_rim",
 		"particle": "soulus:blocks/composer_cell_top"
     },
     "elements": [

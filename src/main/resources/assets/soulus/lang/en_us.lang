@@ -101,6 +101,8 @@ tile.soulus:summoner.unfocused.name=Empty Summoner
 tile.soulus:summoner.name=Summoner
 tile.soulus:summoner.focused.name=Summoner of %1$s
 
+tile.soulus:soul_totem.name=Soul Totem
+
 
 death.attack.soulus:crystal_blood=%1$s sacrificed themselves to a Blood Crystal
 death.attack.soulus:crystal_dark=%1$s was consumed by a Midnight Crystal
@@ -142,6 +144,9 @@ waila.soulus:composer.no_recipe=§8No Valid Recipe
 waila.soulus:composer_cell.no_items=§8Contains No Items
 waila.soulus:composer_cell.contained_item=%1$s/%2$s §6%3$s
 waila.soulus:composer_cell.slot=Slot %1$s
+
+waila.soulus:soul_totem.upgrades_soul_catalyst=%1$s/%2$s §6Soul Catalyst §8(Fuel)
+waila.soulus:soul_totem.upgrades_efficiency=%1$s/%2$s §3Niobium Gears §8(Efficiency)
 
 jei.recipe.soulus:composer.name=Composition
 

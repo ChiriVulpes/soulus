@@ -57,7 +57,6 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		private final int index;
 		private final String name;
 		private final ItemStack stack;
-		// by default all upgrades are capped at 16
 		private Integer maxQuantity;
 
 		private Upgrade (int index, String name, ItemStack item) {
@@ -78,7 +77,6 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 
 		@Override
 		public int getMaxQuantity () {
-			// all upgrades by default are capped at 16
 			if (maxQuantity == null) {
 				if (name.equals("crystal_blood"))
 					return 1;

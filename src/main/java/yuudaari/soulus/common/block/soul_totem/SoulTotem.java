@@ -1,9 +1,15 @@
 package yuudaari.soulus.common.block.soul_totem;
 
+import java.util.List;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import yuudaari.soulus.Soulus;
@@ -15,6 +21,8 @@ import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSoulTotem;
 import yuudaari.soulus.common.util.Material;
+import yuudaari.soulus.common.util.StructureMap;
+import yuudaari.soulus.common.util.StructureMap.BlockValidator;
 
 @ConfigInjected(Soulus.MODID)
 public class SoulTotem extends UpgradeableBlock<SoulTotemTileEntity> {
@@ -30,8 +38,7 @@ public class SoulTotem extends UpgradeableBlock<SoulTotemTileEntity> {
 		private final int index;
 		private final String name;
 		private final ItemStack stack;
-		// by default all upgrades are capped at 16
-		private int maxQuantity = 16;
+		private Integer maxQuantity;
 
 		private Upgrade (int index, String name, ItemStack item) {
 			this.index = index;
@@ -51,7 +58,13 @@ public class SoulTotem extends UpgradeableBlock<SoulTotemTileEntity> {
 
 		@Override
 		public int getMaxQuantity () {
-			// all upgrades by default are capped at 16
+			if (maxQuantity == null) {
+				if (name.equals("soul_catalyst"))
+					return 1;
+				if (name.equals("efficiency"))
+					return 16;
+			}
+
 			return maxQuantity;
 		}
 
@@ -95,6 +108,7 @@ public class SoulTotem extends UpgradeableBlock<SoulTotemTileEntity> {
 		setSoundType(SoundType.METAL);
 		disableStats();
 		setHasDescription();
+		setDefaultState(getDefaultState().withProperty(CONNECTED, false));
 	}
 
 	@Override
@@ -113,6 +127,63 @@ public class SoulTotem extends UpgradeableBlock<SoulTotemTileEntity> {
 		return te == null ? 0 : te.getSignalStrength();
 	}
 
+	@Override
+	public void addCollisionBoxToList (IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean isActualState) {
+
+		addCollisionBoxToList(pos, entityBox, collidingBoxes, state.getCollisionBoundingBox(worldIn, pos));
+
+		if (state.getValue(CONNECTED)) {
+			addCollisionBoxToList(pos, entityBox, collidingBoxes, new AxisAlignedBB(-.4375, -.1875, -.4375, 1.4375, .25, 0));
+			addCollisionBoxToList(pos, entityBox, collidingBoxes, new AxisAlignedBB(-.4375, -.1875, 1, 1.4375, .25, 1.4375));
+			addCollisionBoxToList(pos, entityBox, collidingBoxes, new AxisAlignedBB(-.4375, -.1875, 0, 0, .25, 1));
+			addCollisionBoxToList(pos, entityBox, collidingBoxes, new AxisAlignedBB(1, -.1875, 0, 1.4375, .25, 1));
+		}
+	}
+
+	/////////////////////////////////////////
+	// Blockstate
+	//
+
+	public static final PropertyBool CONNECTED = PropertyBool.create("connected");
+
+	@Override
+	protected BlockStateContainer createBlockState () {
+		return new BlockStateContainer(this, new IProperty<?>[] {
+			CONNECTED
+		});
+	}
+
+	@Override
+	public IBlockState getStateFromMeta (int meta) {
+		return getDefaultState().withProperty(CONNECTED, meta == 0 ? false : true);
+	}
+
+	@Override
+	public int getMetaFromState (IBlockState state) {
+		return state.getValue(CONNECTED) ? 1 : 0;
+	}
+
+	/////////////////////////////////////////
+	// Structure
+	//
+
+	public StructureMap structure = new StructureMap();
+	{
+		BlockValidator bars = BlockValidator.byBlock(ModBlocks.BARS_ENDERSTEEL);
+		BlockValidator endersteel = BlockValidator.byBlock(ModBlocks.BLOCK_ENDERSTEEL_DARK);
+
+		// layer -1
+		structure.addBlock(-1, -1, -1, endersteel);
+		structure.addBlock(0, -1, -1, bars);
+		structure.addBlock(1, -1, -1, endersteel);
+
+		structure.addBlock(-1, -1, 0, bars);
+		structure.addBlock(1, -1, 0, bars);
+
+		structure.addBlock(-1, -1, 1, endersteel);
+		structure.addBlock(0, -1, 1, bars);
+		structure.addBlock(1, -1, 1, endersteel);
+	}
 
 	/////////////////////////////////////////
 	// Tile Entity
