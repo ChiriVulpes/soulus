@@ -226,6 +226,7 @@ public abstract class UpgradeableBlockTileEntity extends TileEntity implements I
 		if (world != null) {
 			IBlockState blockState = world.getBlockState(pos);
 			world.notifyBlockUpdate(pos, blockState, blockState, 3);
+			markDirty();
 		}
 	}
 }

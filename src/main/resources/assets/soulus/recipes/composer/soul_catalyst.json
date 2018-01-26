@@ -2,19 +2,16 @@
 	"type": "soulus:composer_shaped",
 	"time": 32,
 	"pattern": [
-		"MGM",
-		"GBG",
-		"MGM"
+		" n ",
+		"nCn",
+		" n "
 	],
 	"key": {
-		"B": {
-			"type": "soulus:crystal_blood"
+		"n": {
+			"item": "soulus:dust_niobium"
 		},
-		"M": {
-			"type": "soulus:orb_murky"
-		},
-		"G": {
-			"item": "soulus:gear_oscillating"
+		"C": {
+			"item": "soulus:crystal_dark"
 		}
 	},
 	"result": {

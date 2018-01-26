@@ -65,9 +65,9 @@ public class ModItems {
 	public static ModItem NUGGET_ENDERSTEEL_DARK = new ModItem("nugget_endersteel_dark").setHasDescription();
 	public static ModItem NUGGET_NIOBIUM = new ModItem("nugget_niobium").setHasGlint().setHasDescription();
 	public static ModItem SLEDGEHAMMER = new Sledgehammer();
-	public static ModItem SOUL_CATALYST = new ModItem("soul_catalyst").setHasGlint().setHasDescription();
 	public static ModItem SOULBOOK = new Soulbook();
 	public static OrbMurky ORB_MURKY = new OrbMurky();
+	public static SoulCatalyst SOUL_CATALYST = new SoulCatalyst();
 
 	public static Item[] items = new Item[] {
 		ASH,

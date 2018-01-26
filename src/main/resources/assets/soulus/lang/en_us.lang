@@ -55,6 +55,7 @@ item.soulus:orb_murky.name=Strange Sticky Ball
 item.soulus:orb_murky.filled.name=Murky Orb
 
 item.soulus:soul_catalyst.name=Soul Catalyst
+item.soulus:soul_catalyst.filled.name=Soul Catalyst
 item.soulus:crystal_dark.name=Midnight Jewel
 
 item.soulus:sledgehammer.name=Sledgehammer
@@ -119,6 +120,7 @@ waila.soulus:summoner.upgrades_count=%1$s/%2$s §4Blood Crystals §8(Quantity)
 waila.soulus:summoner.upgrades_range=%1$s/%2$s §6Murky Orbs §8(Range)
 tooltip.soulus:soulbook.contained_essence=%1$s/%2$s Essence
 tooltip.soulus:orb_murky.contained_essence=%1$s/%2$s Essence
+tooltip.soulus:soul_catalyst.contained_essence=%1$s/%2$s Essence
 tooltip.soulus:crystal_blood.contained_blood=%1$s/%2$s Blood
 tooltip.soulus:summoner.style.normal=§8Style: §3Normal
 tooltip.soulus:summoner.style.wood=§8Style: §6Earthy
@@ -145,6 +147,7 @@ waila.soulus:composer_cell.no_items=§8Contains No Items
 waila.soulus:composer_cell.contained_item=%1$s/%2$s §6%3$s
 waila.soulus:composer_cell.slot=Slot %1$s
 
+waila.soulus:soul_totem.fuel_percentage=%1$s%% catalyst remaining
 waila.soulus:soul_totem.upgrades_soul_catalyst=%1$s/%2$s §6Soul Catalyst §8(Fuel)
 waila.soulus:soul_totem.upgrades_efficiency=%1$s/%2$s §3Niobium Gears §8(Efficiency)
 

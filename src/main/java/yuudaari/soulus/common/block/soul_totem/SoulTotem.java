@@ -7,6 +7,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -20,9 +21,13 @@ import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSoulTotem;
+import yuudaari.soulus.common.item.SoulCatalyst;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.StructureMap;
 import yuudaari.soulus.common.util.StructureMap.BlockValidator;
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @ConfigInjected(Soulus.MODID)
 public class SoulTotem extends UpgradeableBlock<SoulTotemTileEntity> {
@@ -78,12 +83,19 @@ public class SoulTotem extends UpgradeableBlock<SoulTotemTileEntity> {
 			if (stack.getItem() != this.stack.getItem())
 				return false;
 
+			if (name.equals("soul_catalyst"))
+				return SoulCatalyst.isFilled(stack);
+
 			return true;
 		}
 
 		@Override
 		public ItemStack getItemStack (int quantity) {
 			ItemStack stack = new ItemStack(this.stack.getItem(), quantity);
+
+			if (name.equals("soul_catalyst"))
+				SoulCatalyst.setFilled(stack);
+
 			return stack;
 		}
 	}
@@ -202,5 +214,18 @@ public class SoulTotem extends UpgradeableBlock<SoulTotemTileEntity> {
 	@Override
 	public UpgradeableBlockTileEntity createTileEntity (World worldIn, IBlockState blockState) {
 		return new SoulTotemTileEntity();
+	}
+
+	/////////////////////////////////////////
+	// Waila
+	//
+
+	@Optional.Method(modid = "waila")
+	@SideOnly(Side.CLIENT)
+	@Override
+	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, SoulTotemTileEntity te, boolean isSneaking) {
+
+		currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":soul_totem.fuel_percentage", (int) Math
+			.floor(te.getFuelPercent() * 100)));
 	}
 }

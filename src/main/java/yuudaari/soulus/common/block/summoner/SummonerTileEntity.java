@@ -7,6 +7,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
@@ -17,6 +18,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.ForgeEventFactory;
 import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.block.soul_totem.SoulTotemTileEntity;
 import yuudaari.soulus.common.block.summoner.Summoner.Upgrade;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
@@ -169,6 +171,16 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 			}
 		}
 
+		for (TileEntity te : world.loadedTileEntityList) {
+			if (te instanceof SoulTotemTileEntity && ((SoulTotemTileEntity) te).isActive()) {
+				BlockPos tePos = te.getPos();
+				double d0 = pos.distanceSqToCenter(tePos.getX() + 0.5, tePos.getY() + 0.5, tePos.getZ() + 0.5);
+
+				double nearAmt = (d0 / (activatingRange * activatingRange));
+				activationAmount += Math.max(0, (1 - (nearAmt * nearAmt)) * 2);
+			}
+		}
+
 		return activationAmount;
 	}
 
@@ -303,9 +315,9 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 				AxisAlignedBB boundingBox = new AxisAlignedBB(pos.getX(), pos.getY(), pos
 					.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1).grow(spawningRadius);
 
-				// check if there's too many entities in the way
+				// check if there's too many entities in the spawning area
 				if (world.getEntitiesWithinAABB(entity.getClass(), boundingBox)
-					.size() >= Math.pow(spawningRadius * 2, 2) / 10) {
+					.size() >= Math.pow(spawningRadius * 2, 2) / 8) {
 					// we can return here because this check won't change next loop
 					break MainSpawningLoop;
 				}
