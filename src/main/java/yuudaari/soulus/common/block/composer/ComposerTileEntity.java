@@ -150,10 +150,14 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 				activationAmount += 1;
 
-				if (!world.isRemote && isConnected && hasValidRecipe() && CONFIG.poofChance > world.rand.nextDouble()) {
-					entity.setDead();
-					mobPoofParticles(world, pos);
-					mobPoofParticles(world, entity.getPosition());
+				if (!world.isRemote && isConnected && hasValidRecipe()) {
+					double poofChance = CONFIG.poofChance.get( //
+						upgrades.get(Upgrade.EFFICIENCY) / (double) Upgrade.EFFICIENCY.getMaxQuantity());
+					if (poofChance > world.rand.nextDouble()) {
+						entity.setDead();
+						mobPoofParticles(world, pos);
+						mobPoofParticles(world, entity.getPosition());
+					}
 				}
 			}
 		}

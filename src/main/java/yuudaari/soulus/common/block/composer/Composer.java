@@ -44,12 +44,12 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 
 	public static enum Upgrade implements IUpgrade {
 		RANGE (0, "range", ModItems.ORB_MURKY.getItemStack()), //
-		DELAY (1, "delay", ModItems.GEAR_OSCILLATING.getItemStack());
+		DELAY (1, "delay", ModItems.GEAR_OSCILLATING.getItemStack()), //
+		EFFICIENCY (2, "efficiency", ModItems.GEAR_NIOBIUM.getItemStack());
 
 		private final int index;
 		private final String name;
 		private final ItemStack stack;
-		// by default all upgrades are capped at 16
 		private Integer maxQuantity;
 
 		private Upgrade (int index, String name, ItemStack item) {
@@ -72,10 +72,7 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 		public int getMaxQuantity () {
 			// all upgrades by default are capped at 16
 			if (maxQuantity == null) {
-				if (name == "range")
-					return 16;
-				if (name == "delay")
-					return 16;
+				return 16;
 			}
 
 			return maxQuantity;

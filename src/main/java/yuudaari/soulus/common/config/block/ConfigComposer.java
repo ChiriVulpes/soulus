@@ -20,7 +20,6 @@ public class ConfigComposer extends ConfigUpgradeableBlock<Composer> {
 		return Composer.Upgrade.values();
 	}
 
-	@Serialized public Range nonUpgradedCount = new Range(1, 2);
 	@Serialized public Range nonUpgradedDelay = new Range(500, 1000);
 	@Serialized public int nonUpgradedRange = 4;
 	@Serialized public Range upgradeDelayEffectiveness = new Range(0.8, 1);
@@ -28,7 +27,7 @@ public class ConfigComposer extends ConfigUpgradeableBlock<Composer> {
 	@Serialized public double particleCountActivated = 1;
 	@Serialized public int particleCountMax = 6;
 	@Serialized public int particleCountMobPoof = 50;
-	@Serialized public double poofChance = 0.001;
+	@Serialized public Range poofChance = new Range(0.001, 0.0003);
 	@Serialized(ListSerializer.OfStrings.class) @NullableField public List<String> whitelistedCreatures;
 	@Serialized(ListSerializer.OfStrings.class) @NullableField public List<String> blacklistedCreatures;
 }
