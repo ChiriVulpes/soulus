@@ -14,6 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigComposerCell;
@@ -53,7 +54,7 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 		prevItemRotation = itemRotation;
 		itemRotation = itemRotation + 0.05F + diff * 0.8;
 
-		if (storedQuantity < CONFIG.maxQuantity) pullItems();
+		if (!world.isRemote && storedQuantity < CONFIG.maxQuantity) pullItems();
 	}
 
 	public void onChangeItem () {
@@ -106,9 +107,24 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 			blockUpdate();
 
 			return true;
+
+		} else if (composerLocation == null && stack.getItem() == ModItems.ESSENCE && //
+			currentStack.getItem() instanceof IFillableWithEssence && storedQuantity == 1) {
+
+			IFillableWithEssence fillable = (IFillableWithEssence) currentStack.getItem();
+			int insertQuantity = fillable.fill(currentStack, stack, requestedQuantity);
+			if (insertQuantity > 0) {
+				stack.shrink(insertQuantity);
+				markDirty();
+			}
 		}
 
 		return false;
+	}
+
+	public static interface IFillableWithEssence {
+
+		public int fill (ItemStack currentStack, ItemStack fillWith, int quantity);
 	}
 
 	/////////////////////////////////////////

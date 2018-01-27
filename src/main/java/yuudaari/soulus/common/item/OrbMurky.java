@@ -3,6 +3,7 @@ package yuudaari.soulus.common.item;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.block.composer.ComposerCell.IHasImportantInfos;
+import yuudaari.soulus.common.block.composer.ComposerCellTileEntity.IFillableWithEssence;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.item.ConfigOrbMurky;
@@ -32,7 +33,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ConfigInjected(Soulus.MODID)
-public class OrbMurky extends SummonerUpgrade implements IHasImportantInfos {
+public class OrbMurky extends SummonerUpgrade implements IHasImportantInfos, IFillableWithEssence {
 
 	@Inject public static ConfigOrbMurky CONFIG;
 
@@ -126,6 +127,16 @@ public class OrbMurky extends SummonerUpgrade implements IHasImportantInfos {
 	@Override
 	public ItemStack getItemStack () {
 		return getStack(0);
+	}
+
+	@Override
+	public int fill (ItemStack currentStack, ItemStack fillWith, int quantity) {
+		int currentEssence = getContainedEssence(currentStack);
+		int insertQuantity = Math.max(0, Math.min(quantity, CONFIG.requiredEssence - currentEssence));
+
+		if (insertQuantity > 0) setContainedEssence(currentStack, currentEssence + insertQuantity);
+
+		return insertQuantity;
 	}
 
 	@Override

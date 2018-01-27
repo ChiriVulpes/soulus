@@ -24,6 +24,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.block.composer.ComposerCell.IHasImportantInfos;
+import yuudaari.soulus.common.block.composer.ComposerCellTileEntity.IFillableWithEssence;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
@@ -34,7 +35,7 @@ import yuudaari.soulus.common.util.ModItem;
 import yuudaari.soulus.Soulus;
 
 @ConfigInjected(Soulus.MODID)
-public class Soulbook extends ModItem implements IHasImportantInfos {
+public class Soulbook extends ModItem implements IHasImportantInfos, IFillableWithEssence {
 
 	@Inject public static ConfigEssences CONFIG;
 
@@ -190,6 +191,22 @@ public class Soulbook extends ModItem implements IHasImportantInfos {
 			return 1;
 		int containedEssence = getContainedEssence(stack);
 		return (1 - containedEssence / (double) CONFIG.getSoulbookQuantity(essenceType));
+	}
+
+	@Override
+	public int fill (ItemStack currentStack, ItemStack fillWith, int quantity) {
+		int currentEssence = getContainedEssence(currentStack);
+		String essenceType = EssenceType.getEssenceType(currentStack);
+		String fillWithEssenceType = EssenceType.getEssenceType(fillWith);
+		if (essenceType != null && !essenceType.equals(fillWithEssenceType)) return 0;
+		if (essenceType == null) EssenceType.setEssenceType(currentStack, fillWithEssenceType);
+
+		int requiredEssence = CONFIG.getSoulbookQuantity(essenceType);
+		int insertQuantity = Math.max(0, Math.min(quantity, requiredEssence - currentEssence));
+
+		if (insertQuantity > 0) setContainedEssence(currentStack, currentEssence + insertQuantity);
+
+		return insertQuantity;
 	}
 
 	public static int getContainedEssence (ItemStack stack) {
