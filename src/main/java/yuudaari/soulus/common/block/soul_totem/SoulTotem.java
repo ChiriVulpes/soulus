@@ -9,6 +9,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -223,7 +224,7 @@ public class SoulTotem extends UpgradeableBlock<SoulTotemTileEntity> {
 	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	@Override
-	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, SoulTotemTileEntity te, boolean isSneaking) {
+	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, SoulTotemTileEntity te, EntityPlayer player) {
 
 		currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":soul_totem.fuel_percentage", (int) Math
 			.ceil(te.getFuelPercent() * 100)));

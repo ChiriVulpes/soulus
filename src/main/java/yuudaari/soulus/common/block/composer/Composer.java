@@ -12,6 +12,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -351,7 +352,7 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	//
 
 	@Override
-	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, ComposerTileEntity te, boolean isSneaking) {
+	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, ComposerTileEntity te, EntityPlayer player) {
 
 		if (te.hasValidRecipe()) {
 			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":composer.activation", (int) Math

@@ -438,27 +438,24 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	@Override
-	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, SummonerTileEntity te, boolean isSneaking) {
+	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, SummonerTileEntity te, EntityPlayer player) {
 
 		if (te == null) return;
 
-		currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":summoner.summon_percentage", //
-			(int) Math.floor(te.getSpawnPercent() * 100)));
+		int summonPercentage = (int) Math.floor(te.getSpawnPercent() * 100);
+		currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":summoner.summon_percentage", summonPercentage));
 
 		if (CONFIG.soulbookUses != null && CONFIG.soulbookUses > 0) {
-			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":summoner.summons_remaining", //
-				(int) Math.ceil(te.getSoulbookUses() / CONFIG.soulbookUses * 100)));
+			int summonsRemaining = (int) Math.ceil(te.getSoulbookUses() / CONFIG.soulbookUses * 100);
+			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":summoner.summons_remaining", summonsRemaining));
 		}
 
 	}
 
-	@Optional.Method(modid = "waila")
-	@SideOnly(Side.CLIENT)
 	@Override
-	protected void onWailaTooltipFooter (List<String> currentTooltip, IBlockState blockState, SummonerTileEntity te, boolean isSneaking) {
-
-		currentTooltip
-			.add(I18n.format("tooltip." + Soulus.MODID + ":summoner.style." + blockState.getValue(VARIANT).getName()));
+	protected List<String> onWailaTooltipMore (IBlockState blockState, SummonerTileEntity te, EntityPlayer player) {
+		String variant = blockState.getValue(VARIANT).getName();
+		return Collections.singletonList(I18n.format("tooltip." + Soulus.MODID + ":summoner.style." + variant));
 	}
 
 	@Optional.Method(modid = "waila")

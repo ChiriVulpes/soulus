@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.annotation.Nullable;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -321,37 +322,33 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 	public final List<String> getWailaTooltip (List<String> currentTooltip, IWailaDataAccessor accessor) {
 		TileEntity te = accessor.getTileEntity();
 
-		boolean isSneaking = accessor.getPlayer().isSneaking();
+		EntityPlayer player = accessor.getPlayer();
 
-		onWailaTooltipHeader(currentTooltip, accessor.getBlockState(), (TileEntityClass) te, isSneaking);
+		IBlockState blockState = accessor.getBlockState();
+		TileEntityClass ute = (TileEntityClass) te;
 
-		onWailaTooltipShowUpgrades(currentTooltip, te, isSneaking);
+		onWailaTooltipHeader(currentTooltip, blockState, ute, player);
 
-		onWailaTooltipFooter(currentTooltip, accessor.getBlockState(), (TileEntityClass) te, isSneaking);
+		onWailaTooltipBody(currentTooltip, blockState, ute, player);
+
+		onWailaTooltipFooter(currentTooltip, blockState, ute, player);
 
 		return currentTooltip;
 	}
 
 	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
-	protected void onWailaTooltipShowUpgrades (List<String> currentTooltip, TileEntity te, boolean isSneaking) {
-		if (te != null && te instanceof UpgradeableBlockTileEntity) {
-			UpgradeableBlockTileEntity ute = (UpgradeableBlockTileEntity) te;
+	private final void onWailaTooltipBody (List<String> currentTooltip, IBlockState blockState, TileEntityClass te, EntityPlayer player) {
+		List<String> upgrades = onWailaTooltipShowUpgrades(te);
+		List<String> more = onWailaTooltipMore(blockState, te, player);
+		int moreSize = more == null ? 0 : more.size();
 
-			List<IUpgrade> upgrades = new ArrayList<>(Arrays.asList(getUpgrades()));
-
-			if (isSneaking || upgrades.size() < 2) {
-				for (IUpgrade upgrade : Lists.reverse(ute.insertionOrder)) {
-					upgrades.remove(upgrade);
-					currentTooltip
-						.add(I18n.format("waila." + getRegistryName() + ".upgrades_" + upgrade.getName()
-							.toLowerCase(), ute.upgrades.get(upgrade), upgrade.getMaxQuantity()));
-				}
-				for (IUpgrade upgrade : upgrades) {
-					currentTooltip
-						.add(I18n.format("waila." + getRegistryName() + ".upgrades_" + upgrade.getName()
-							.toLowerCase(), ute.upgrades.get(upgrade), upgrade.getMaxQuantity()));
-				}
+		if (player.isSneaking() || upgrades.size() + moreSize < 2) {
+			currentTooltip.addAll(upgrades);
+			if (more != null) currentTooltip.addAll(more);
+		} else if (upgrades.size() + moreSize > 0) {
+			if (moreSize > 0) {
+				currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":upgradeable_block.show_more"));
 			} else {
 				currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":upgradeable_block.show_upgrades"));
 			}
@@ -360,10 +357,48 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 
 	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
-	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, TileEntityClass te, boolean isSneaking) {}
+	private final List<String> onWailaTooltipShowUpgrades (TileEntity te) {
+		List<String> tooltip = new ArrayList<>();
+
+		if (te != null && te instanceof UpgradeableBlockTileEntity) {
+			UpgradeableBlockTileEntity ute = (UpgradeableBlockTileEntity) te;
+
+			onWailaTooltipUpgrades(tooltip, ute);
+		}
+
+		return tooltip;
+	}
 
 	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
-	protected void onWailaTooltipFooter (List<String> currentTooltip, IBlockState blockState, TileEntityClass te, boolean isSneaking) {}
+	protected void onWailaTooltipUpgrades (List<String> currentTooltip, UpgradeableBlockTileEntity te) {
+		List<IUpgrade> upgrades = new ArrayList<>(Arrays.asList(getUpgrades()));
+		for (IUpgrade upgrade : Lists.reverse(te.insertionOrder)) {
+			upgrades.remove(upgrade);
+			currentTooltip
+				.add(I18n.format("waila." + getRegistryName() + ".upgrades_" + upgrade.getName()
+					.toLowerCase(), te.upgrades.get(upgrade), upgrade.getMaxQuantity()));
+		}
+		for (IUpgrade upgrade : upgrades) {
+			currentTooltip
+				.add(I18n.format("waila." + getRegistryName() + ".upgrades_" + upgrade.getName()
+					.toLowerCase(), te.upgrades.get(upgrade), upgrade.getMaxQuantity()));
+		}
+	}
+
+	@Optional.Method(modid = "waila")
+	@SideOnly(Side.CLIENT)
+	@Nullable
+	protected List<String> onWailaTooltipMore (IBlockState blockState, TileEntityClass te, EntityPlayer player) {
+		return null;
+	}
+
+	@Optional.Method(modid = "waila")
+	@SideOnly(Side.CLIENT)
+	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, TileEntityClass te, EntityPlayer player) {}
+
+	@Optional.Method(modid = "waila")
+	@SideOnly(Side.CLIENT)
+	protected void onWailaTooltipFooter (List<String> currentTooltip, IBlockState blockState, TileEntityClass te, EntityPlayer player) {}
 
 }

@@ -23,6 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.block.composer.ComposerCell.IHasImportantInfos;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
@@ -33,7 +34,7 @@ import yuudaari.soulus.common.util.ModItem;
 import yuudaari.soulus.Soulus;
 
 @ConfigInjected(Soulus.MODID)
-public class Soulbook extends ModItem {
+public class Soulbook extends ModItem implements IHasImportantInfos {
 
 	@Inject public static ConfigEssences CONFIG;
 
@@ -209,9 +210,15 @@ public class Soulbook extends ModItem {
 		return stack;
 	}
 
-	@Override
 	@SideOnly(Side.CLIENT)
+	@Override
 	public void addInformation (ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		addImportantInformation(tooltip, stack);
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void addImportantInformation (List<String> tooltip, ItemStack stack) {
 		int containedEssence = Soulbook.getContainedEssence(stack);
 		String mobTarget = EssenceType.getEssenceType(stack);
 		if (mobTarget != null) {

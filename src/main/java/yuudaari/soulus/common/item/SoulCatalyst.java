@@ -2,6 +2,7 @@ package yuudaari.soulus.common.item;
 
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.block.composer.ComposerCell.IHasImportantInfos;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.item.ConfigSoulCatalyst;
@@ -34,7 +35,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ConfigInjected(Soulus.MODID)
-public class SoulCatalyst extends ModItem {
+public class SoulCatalyst extends ModItem implements IHasImportantInfos {
 
 	@Inject public static ConfigSoulCatalyst CONFIG;
 
@@ -198,14 +199,21 @@ public class SoulCatalyst extends ModItem {
 		}
 	}
 
-	@Override
 	@SideOnly(Side.CLIENT)
+	@Override
 	public void addInformation (ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		addImportantInformation(tooltip, stack);
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void addImportantInformation (List<String> tooltip, ItemStack stack) {
 		int containedEssence = OrbMurky.getContainedEssence(stack);
 		if (containedEssence < CONFIG.requiredEssence) {
 			tooltip.add(I18n
 				.format("tooltip." + Soulus.MODID + ":soul_catalyst.contained_essence", containedEssence, CONFIG.requiredEssence));
 		}
 	}
+
 }
 

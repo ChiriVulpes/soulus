@@ -10,6 +10,7 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag.TooltipFlags;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -229,7 +230,7 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	@Override
-	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, ComposerCellTileEntity te, boolean isSneaking) {
+	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, ComposerCellTileEntity te, EntityPlayer player) {
 
 		// currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":composer_cell.slot", te.slot));
 
@@ -239,6 +240,25 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 			currentTooltip.add(I18n
 				.format("waila." + Soulus.MODID + ":composer_cell.contained_item", te.storedQuantity, CONFIG.maxQuantity, te.storedItem
 					.getDisplayName()));
+
+			ItemStack storedItem = te.getStoredItem();
+			if (!player.isSneaking() && storedItem != null && storedItem.getItem() instanceof IHasImportantInfos) {
+				((IHasImportantInfos) storedItem.getItem()).addImportantInformation(currentTooltip, storedItem);
+			}
 		}
+	}
+
+	@Override
+	protected List<String> onWailaTooltipMore (IBlockState blockState, ComposerCellTileEntity te, EntityPlayer player) {
+		ItemStack storedItem = te.getStoredItem();
+		if (storedItem != null) {
+			return storedItem.getTooltip(player, TooltipFlags.ADVANCED);
+		}
+		return null;
+	}
+
+	public static interface IHasImportantInfos {
+
+		abstract void addImportantInformation (List<String> currentTooltip, ItemStack stack);
 	}
 }

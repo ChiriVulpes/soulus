@@ -1,6 +1,7 @@
 package yuudaari.soulus.common.block.composer;
 
 import java.util.List;
+import javax.annotation.Nullable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -31,7 +32,7 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 	public int changeComposerCooldown = 0;
 	public byte slot = -1;
 
-	public ItemStack storedItem;
+	@Nullable public ItemStack storedItem;
 	public int storedQuantity;
 
 	@Override
@@ -192,6 +193,7 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 	}
 
 	@Override
+	@Nullable
 	public ItemStack getStoredItem () {
 		return storedItem;
 	}
