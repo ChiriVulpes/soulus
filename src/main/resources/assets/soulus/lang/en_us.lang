@@ -114,10 +114,11 @@ death.attack.soulus:skewer_player=%1$s became a shishkebab
 waila.soulus:upgradeable_block.show_upgrades=§8§oSneak to show upgrades
 
 waila.soulus:summoner.summon_percentage=%1$s%% summoned
-waila.soulus:summoner.summons_remaining=%1$s/%2$s Summons Remaining
+waila.soulus:summoner.summons_remaining=%1$s%% souls remaining
 waila.soulus:summoner.upgrades_delay=%1$s/%2$s §3Oscillating Gears §8(Speed)
 waila.soulus:summoner.upgrades_count=%1$s/%2$s §4Blood Crystals §8(Quantity)
 waila.soulus:summoner.upgrades_range=%1$s/%2$s §6Murky Orbs §8(Range)
+waila.soulus:summoner.upgrades_efficiency=%1$s/%2$s §9Niobium Gears §8(Efficiency)
 tooltip.soulus:soulbook.contained_essence=%1$s/%2$s Essence
 tooltip.soulus:orb_murky.contained_essence=%1$s/%2$s Essence
 tooltip.soulus:soul_catalyst.contained_essence=%1$s/%2$s Essence
@@ -141,6 +142,7 @@ waila.soulus:skewer.upgrades_tether=%1$s/%2$s §7Ash §8(Tether)
 waila.soulus:composer.activation=Activation: %1$sx 
 waila.soulus:composer.upgrades_range=%1$s/%2$s §6Murky Orbs §8(Range)
 waila.soulus:composer.upgrades_delay=%1$s/%2$s §3Oscillating Gears §8(Speed)
+waila.soulus:composer.upgrades_efficiency=%1$s/%2$s §9Niobium Gears §8(Efficiency)
 waila.soulus:composer.craft_percentage=%1$s%% composed
 waila.soulus:composer.no_recipe=§8No Valid Recipe
 waila.soulus:composer_cell.no_items=§8Contains No Items
@@ -149,7 +151,7 @@ waila.soulus:composer_cell.slot=Slot %1$s
 
 waila.soulus:soul_totem.fuel_percentage=%1$s%% catalyst remaining
 waila.soulus:soul_totem.upgrades_soul_catalyst=%1$s/%2$s §6Soul Catalyst §8(Fuel)
-waila.soulus:soul_totem.upgrades_efficiency=%1$s/%2$s §3Niobium Gears §8(Efficiency)
+waila.soulus:soul_totem.upgrades_efficiency=%1$s/%2$s §9Niobium Gears §8(Efficiency)
 
 jei.recipe.soulus:composer.name=Composition
 

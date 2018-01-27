@@ -226,6 +226,6 @@ public class SoulTotem extends UpgradeableBlock<SoulTotemTileEntity> {
 	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, SoulTotemTileEntity te, boolean isSneaking) {
 
 		currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":soul_totem.fuel_percentage", (int) Math
-			.floor(te.getFuelPercent() * 100)));
+			.ceil(te.getFuelPercent() * 100)));
 	}
 }

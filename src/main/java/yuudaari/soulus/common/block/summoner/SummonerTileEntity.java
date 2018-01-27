@@ -26,6 +26,7 @@ import yuudaari.soulus.common.config.block.ConfigSummoner;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
+import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.ModPotionEffect;
 import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.Soulus;
@@ -46,7 +47,17 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	private String essenceType;
 	private float timeTillSpawn = 0;
 	private float lastTimeTillSpawn;
-	public int soulbookUses = CONFIG.soulbookUses;
+	private Float soulbookUses = null;
+
+	public float getSoulbookUses () {
+		if (soulbookUses == null && CONFIG.soulbookUses != null && CONFIG.soulbookUses > 0)
+			soulbookUses = (float) (int) CONFIG.soulbookUses;
+		return soulbookUses;
+	}
+
+	public void setSoulbookUses (Float val) {
+		soulbookUses = val;
+	}
 
 	private int spawningRadius;
 	private int activatingRange;
@@ -98,7 +109,6 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 	public void setEssenceType (String essenceType) {
 		this.essenceType = essenceType;
-		this.soulbookUses = CONFIG_ESSENCES.getSoulbookQuantity(essenceType);
 		resetEssenceType();
 	}
 
@@ -155,7 +165,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		}
 
 		// when the soulbook is empty, don't run
-		if (CONFIG.soulbookUses > 0 && soulbookUses <= 0) {
+		if (CONFIG.soulbookUses != null && CONFIG.soulbookUses > 0 && getSoulbookUses() <= 0) {
 			return 0;
 		}
 
@@ -238,7 +248,9 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		hasInit = true;
 
 		essenceType = compound.getString("entity_type");
-		soulbookUses = compound.getInteger("soulbook_uses");
+		soulbookUses = compound.getFloat("soulbook_uses");
+		if (soulbookUses == -101 || CONFIG.soulbookUses == null || CONFIG.soulbookUses <= 0)
+			soulbookUses = null;
 		resetEssenceType();
 		timeTillSpawn = compound.getFloat("delay");
 		lastTimeTillSpawn = compound.getFloat("delay_last");
@@ -255,7 +267,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		}
 
 		compound.setString("entity_type", essenceType);
-		compound.setInteger("soulbook_uses", soulbookUses);
+		compound.setFloat("soulbook_uses", soulbookUses == null ? -101 : soulbookUses);
 		compound.setFloat("delay", timeTillSpawn);
 		compound.setFloat("delay_last", lastTimeTillSpawn);
 	}
@@ -360,7 +372,10 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 			}
 		}
 
-		soulbookUses -= spawned;
+		if (CONFIG.soulbookUses != null && CONFIG.soulbookUses > 0) {
+			soulbookUses -= (float) (spawned * CONFIG.efficiencyUpgradeRange
+				.get(upgrades.get(Upgrade.EFFICIENCY) / (double) Upgrade.EFFICIENCY.getMaxQuantity()));
+		}
 
 		return spawned;
 	}

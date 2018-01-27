@@ -61,7 +61,8 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		COUNT (0, "count", ModItems.CRYSTAL_BLOOD.getItemStack()),
 		DELAY (1, "delay",
 			ModItems.GEAR_OSCILLATING.getItemStack()),
-		RANGE (2, "range", ModItems.ORB_MURKY.getItemStack());
+		RANGE (2, "range", ModItems.ORB_MURKY.getItemStack()),
+		EFFICIENCY (3, "efficiency", ModItems.GEAR_NIOBIUM.getItemStack());
 
 		private final int index;
 		private final String name;
@@ -378,7 +379,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 		// try to insert a soulbook
 		if (item == ModItems.SOULBOOK) {
-			if ((CONFIG.soulbookUses <= 0 && !Soulbook.isFilled(stack)) || Soulbook
+			if (((CONFIG.soulbookUses == null || CONFIG.soulbookUses <= 0) && !Soulbook.isFilled(stack)) || Soulbook
 				.getContainedEssence(stack) < CONFIG.soulbookEssenceRequiredToInsert * CONFIG_ESSENCES
 					.getSoulbookQuantity(EssenceType.getEssenceType(stack)))
 				return false;
@@ -399,8 +400,13 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 			String newEssenceType = EssenceType.getEssenceType(stack);
 			te.setEssenceType(newEssenceType);
-			te.soulbookUses = (int) (Soulbook.getContainedEssence(stack) / (double) CONFIG_ESSENCES
-				.getSoulbookQuantity(newEssenceType) * CONFIG.soulbookUses);
+
+			if (CONFIG.soulbookUses != null && CONFIG.soulbookUses > 0) {
+				te.setSoulbookUses((float) (Soulbook.getContainedEssence(stack) / (double) CONFIG_ESSENCES
+					.getSoulbookQuantity(newEssenceType) * CONFIG.soulbookUses));
+			} else
+				te.setSoulbookUses(null);
+
 			te.reset();
 
 			stack.shrink(1);
@@ -419,9 +425,10 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	public ItemStack getSoulbook (SummonerTileEntity te) {
 		String essenceType = te.getEssenceType();
 
-		return CONFIG.soulbookUses > 0 ? Soulbook
-			.getStack(essenceType, (int) Math.max(0, te.soulbookUses / (double) CONFIG.soulbookUses * CONFIG_ESSENCES
-				.getSoulbookQuantity(essenceType))) : Soulbook.getFilled(essenceType);
+		return CONFIG.soulbookUses != null && CONFIG.soulbookUses > 0 ? Soulbook
+			.getStack(essenceType, (int) Math
+				.max(0, te.getSoulbookUses() / (double) CONFIG.soulbookUses * CONFIG_ESSENCES
+					.getSoulbookQuantity(essenceType))) : Soulbook.getFilled(essenceType);
 	}
 
 	/////////////////////////////////////////
@@ -435,12 +442,12 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 		if (te == null) return;
 
-		currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":summoner.summon_percentage", (int) Math
-			.floor(te.getSpawnPercent() * 100)));
+		currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":summoner.summon_percentage", //
+			(int) Math.floor(te.getSpawnPercent() * 100)));
 
-		if (CONFIG.soulbookUses > 0) {
-			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":summoner.summons_remaining", Math
-				.max(0, te.soulbookUses), CONFIG.soulbookUses));
+		if (CONFIG.soulbookUses != null && CONFIG.soulbookUses > 0) {
+			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":summoner.summons_remaining", //
+				(int) Math.ceil(te.getSoulbookUses() / CONFIG.soulbookUses * 100)));
 		}
 
 	}

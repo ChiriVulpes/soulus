@@ -9,6 +9,7 @@ import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.common.util.serializer.DefaultClassSerializer;
 import yuudaari.soulus.common.util.serializer.DefaultFieldSerializer;
 import yuudaari.soulus.common.util.serializer.MapSerializer;
+import yuudaari.soulus.common.util.serializer.NullableField;
 import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
 import yuudaari.soulus.common.util.serializer.SerializationHandlers.IFieldDeserializationHandler;
@@ -27,19 +28,28 @@ public class ConfigSummoner extends ConfigUpgradeableBlock<Summoner> {
 		return Summoner.Upgrade.values();
 	}
 
+	///////// Client
+	@Serialized public int particleCountSpawn = 50;
+	@Serialized public double particleCountActivated = 3;
+
+	///////// Common
+	// count
 	@Serialized public int nonUpgradedSpawningRadius = 4;
 	@Serialized public Range nonUpgradedCount = new Range(1, 2);
-	@Serialized public Range nonUpgradedDelay = new Range(10000, 20000);
-	@Serialized public int nonUpgradedRange = 4;
 	@Serialized public Range upgradeCountEffectiveness = new Range(0.2, 0.5);
 	@Serialized public double upgradeCountRadiusEffectiveness = 0.15;
+	// range
+	@Serialized public int nonUpgradedRange = 4;
 	@Serialized public int upgradeRangeEffectiveness = 4;
-	@Serialized public double particleCountActivated = 3;
-	@Serialized public int particleCountSpawn = 50;
-	@Serialized public int soulbookUses = -1;
-	@Serialized public double soulbookEssenceRequiredToInsert = 0.5;
+	// delay
+	@Serialized public Range nonUpgradedDelay = new Range(10000, 20000);
 	@Serialized public Range upgradeDelayEffectiveness = new Range(0.8, 1);
+	// soulbook uses
+	@Serialized public double soulbookEssenceRequiredToInsert = 0.5;
+	@Serialized @NullableField public Integer soulbookUses = 256;
+	@Serialized public Range efficiencyUpgradeRange = new Range(1, 0.3);
 
+	// style potion effects
 	@Serialized(PotionEffectsMapSerializer.class) public Map<EndersteelType, ModPotionEffect[]> stylePotionEffects;
 	{
 		stylePotionEffects = new HashMap<>();
