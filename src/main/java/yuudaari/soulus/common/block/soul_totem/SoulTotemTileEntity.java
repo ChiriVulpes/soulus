@@ -4,7 +4,10 @@ import java.util.Random;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.client.util.ParticleType;
 import yuudaari.soulus.common.ModBlocks;
@@ -62,6 +65,7 @@ public class SoulTotemTileEntity extends UpgradeableBlockTileEntity {
 		validateStructure();
 
 		if (isActive()) {
+			createChunkLoader();
 			if (fuelTimeRemaining <= 0) {
 				upgrades.put(Upgrade.SOUL_CATALYST, upgrades.get(Upgrade.SOUL_CATALYST) - 1);
 				fuelTimeRemaining = CONFIG.soulCatalystFuelTime;
@@ -70,6 +74,8 @@ public class SoulTotemTileEntity extends UpgradeableBlockTileEntity {
 				fuelTimeRemaining -= CONFIG.efficiencyUpgradesRange
 					.get(upgrades.get(Upgrade.EFFICIENCY) / (double) Upgrade.EFFICIENCY.getMaxQuantity());
 			}
+		} else {
+			removeChunkLoader();
 		}
 
 		updateSignalStrength();
@@ -83,6 +89,45 @@ public class SoulTotemTileEntity extends UpgradeableBlockTileEntity {
 			this.signalStrength = signalStrength;
 			markDirty();
 		}
+	}
+
+	Ticket ticket = null;
+
+	private void createChunkLoader () {
+		if (ticket == null && isActive()) {
+			if (CONFIG.isChunkloader) {
+				ticket = ForgeChunkManager.requestTicket(Soulus.INSTANCE, world, ForgeChunkManager.Type.NORMAL);
+
+				if (ticket != null) {
+					ChunkPos cp = new ChunkPos(pos);
+					for (int x = -1; x < 2; x++) {
+						for (int z = -1; z < 3; z++) {
+							ForgeChunkManager.forceChunk(ticket, new ChunkPos(cp.x + x, cp.z + z));
+						}
+					}
+				}
+			} else {
+				removeChunkLoader();
+			}
+		}
+	}
+
+	private void removeChunkLoader () {
+		if (ticket != null) {
+			ForgeChunkManager.releaseTicket(ticket);
+			ticket = null;
+		}
+	}
+
+	@Override
+	public void onLoad () {
+		createChunkLoader();
+	}
+
+	@Override
+	public void invalidate () {
+		super.invalidate();
+		removeChunkLoader();
 	}
 
 	/////////////////////////////////////////

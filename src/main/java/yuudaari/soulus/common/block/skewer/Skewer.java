@@ -34,6 +34,7 @@ import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSkewer;
 import yuudaari.soulus.common.item.CrystalBlood;
+import yuudaari.soulus.common.item.SoulCatalyst;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.util.Material;
@@ -112,13 +113,20 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 
 			if (name == "crystal_blood")
 				return !CrystalBlood.isFilled(stack);
+			else if (name == "player")
+				return SoulCatalyst.isFilled(stack);
 
 			return true;
 		}
 
 		@Override
 		public ItemStack getItemStack (int quantity) {
-			return new ItemStack(this.stack.getItem(), quantity);
+			ItemStack stack = new ItemStack(this.stack.getItem(), quantity);
+
+			if (name == "player")
+				SoulCatalyst.setFilled(stack);
+
+			return stack;
 		}
 
 		@Override

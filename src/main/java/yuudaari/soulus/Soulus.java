@@ -15,7 +15,10 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Loader;
@@ -58,6 +61,8 @@ public class Soulus {
 	public static final String NAME = "Soulus";
 	public static final String MODID = "soulus";
 	public static Config config;
+
+	@Mod.Instance(MODID) public static Soulus INSTANCE;
 
 	/* UTILITY */
 
@@ -109,6 +114,8 @@ public class Soulus {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+
+		ForgeChunkManager.setForcedChunkLoadingCallback(INSTANCE, (List<Ticket> tickets, World world) -> {});
 
 		for (final PreInitEventHandler handler : preInitHandlers) {
 			handler.handle(event);
