@@ -133,8 +133,8 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	// Config
 	//
 
-	@Inject(ConfigSummoner.class) public static ConfigSummoner CONFIG;
-	@Inject(ConfigEssences.class) public static ConfigEssences CONFIG_ESSENCES;
+	@Inject public static ConfigSummoner CONFIG;
+	@Inject public static ConfigEssences CONFIG_ESSENCES;
 
 	/////////////////////////////////////////
 	// Properties

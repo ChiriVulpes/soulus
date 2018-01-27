@@ -62,7 +62,7 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 	// Config
 	//
 
-	@Inject(ConfigSkewer.class) public static ConfigSkewer CONFIG;
+	@Inject public static ConfigSkewer CONFIG;
 
 	/////////////////////////////////////////
 	// Events

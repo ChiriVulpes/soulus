@@ -33,7 +33,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ConfigInjected(Soulus.MODID)
 public class OrbMurky extends SummonerUpgrade {
 
-	@Inject(ConfigOrbMurky.class) public static ConfigOrbMurky CONFIG;
+	@Inject public static ConfigOrbMurky CONFIG;
 
 	public static class OrbMurkyFillRecipe extends ShapelessOreRecipe {
 

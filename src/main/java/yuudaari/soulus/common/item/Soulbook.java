@@ -35,7 +35,7 @@ import yuudaari.soulus.Soulus;
 @ConfigInjected(Soulus.MODID)
 public class Soulbook extends ModItem {
 
-	@Inject(ConfigEssences.class) public static ConfigEssences CONFIG;
+	@Inject public static ConfigEssences CONFIG;
 
 	public static ItemStack getFilled (String essenceType) {
 		return getStack(essenceType, CONFIG.getSoulbookQuantity(essenceType));

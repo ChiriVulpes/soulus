@@ -152,7 +152,7 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	// Config
 	//
 
-	@Inject(ConfigSkewer.class) public static ConfigSkewer CONFIG;
+	@Inject public static ConfigSkewer CONFIG;
 
 	/////////////////////////////////////////
 	// Properties

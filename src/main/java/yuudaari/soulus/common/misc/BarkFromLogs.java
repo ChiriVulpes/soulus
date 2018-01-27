@@ -15,7 +15,7 @@ import yuudaari.soulus.common.config.misc.ConfigBarkFromLogs;
 @ConfigInjected(Soulus.MODID)
 public class BarkFromLogs {
 
-	@Inject(ConfigBarkFromLogs.class) public static ConfigBarkFromLogs CONFIG;
+	@Inject public static ConfigBarkFromLogs CONFIG;
 
 	@SubscribeEvent
 	public static void onHarvest (HarvestDropsEvent event) {

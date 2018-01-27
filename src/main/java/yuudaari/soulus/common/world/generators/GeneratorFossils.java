@@ -9,7 +9,7 @@ import yuudaari.soulus.common.world.ModGenerator;
 @ConfigInjected(Soulus.MODID)
 public class GeneratorFossils extends ModGenerator {
 
-	@Inject(ConfigOreVeins.class) public static ConfigOreVeins CONFIG;
+	@Inject public static ConfigOreVeins CONFIG;
 
 	public GeneratorFossils () {
 		setVeins(CONFIG.veins);

@@ -38,8 +38,8 @@ import yuudaari.soulus.common.util.Range;
 @ConfigInjected(Soulus.MODID)
 public class BoneDrops {
 
-	@Inject(ConfigCreatures.class) public static ConfigCreatures CONFIG_CREATURES;
-	@Inject(ConfigEssences.class) public static ConfigEssences CONFIG_ESSENCES;
+	@Inject public static ConfigCreatures CONFIG_CREATURES;
+	@Inject public static ConfigEssences CONFIG_ESSENCES;
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onMobDrops (LivingDropsEvent event) {

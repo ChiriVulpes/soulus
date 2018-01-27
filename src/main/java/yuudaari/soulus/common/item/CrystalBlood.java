@@ -42,7 +42,7 @@ import com.google.common.collect.Multimap;
 @ConfigInjected(Soulus.MODID)
 public class CrystalBlood extends SummonerUpgrade {
 
-	@Inject(ConfigCrystalBlood.class) public static ConfigCrystalBlood CONFIG;
+	@Inject public static ConfigCrystalBlood CONFIG;
 
 	private static final int colourEmpty = 0x281313;
 	private static final int colourFilled = 0xBC2044;

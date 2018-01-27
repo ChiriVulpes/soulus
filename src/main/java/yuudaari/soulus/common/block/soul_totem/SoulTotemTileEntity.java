@@ -24,7 +24,7 @@ public class SoulTotemTileEntity extends UpgradeableBlockTileEntity {
 	// Config
 	//
 
-	@Inject(ConfigSoulTotem.class) public static ConfigSoulTotem CONFIG;
+	@Inject public static ConfigSoulTotem CONFIG;
 
 	/////////////////////////////////////////
 	// Helper

@@ -44,9 +44,9 @@ public class BoneChunk extends ModItem {
 	// Configs
 	//
 
-	@Inject(ConfigBoneChunks.class) public static ConfigBoneChunks CONFIG;
-	@Inject(ConfigFossils.class) public static ConfigFossils CONFIG_FOSSILS;
-	@Inject(ConfigEssences.class) public static ConfigEssences CONFIG_ESSENCES;
+	@Inject public static ConfigBoneChunks CONFIG;
+	@Inject public static ConfigFossils CONFIG_FOSSILS;
+	@Inject public static ConfigEssences CONFIG_ESSENCES;
 
 	/////////////////////////////////////////
 	// Basics

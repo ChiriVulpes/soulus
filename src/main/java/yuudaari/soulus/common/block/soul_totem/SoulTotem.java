@@ -109,7 +109,7 @@ public class SoulTotem extends UpgradeableBlock<SoulTotemTileEntity> {
 	// Config
 	//
 
-	@Inject(ConfigSoulTotem.class) public static ConfigSoulTotem CONFIG;
+	@Inject public static ConfigSoulTotem CONFIG;
 
 	public SoulTotem () {
 		super("soul_totem", new Material(MapColor.BLUE).setTransparent());

@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @ConfigInjected(Soulus.MODID)
 public class CrystalDark extends ModItem {
 
-	@Inject(ConfigCrystalDark.class) public static ConfigCrystalDark CONFIG;
+	@Inject public static ConfigCrystalDark CONFIG;
 
 	public CrystalDark () {
 		super("crystal_dark");

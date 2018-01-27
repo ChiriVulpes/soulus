@@ -26,7 +26,6 @@ import yuudaari.soulus.common.config.block.ConfigSummoner;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
-import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.ModPotionEffect;
 import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.Soulus;
@@ -34,8 +33,8 @@ import yuudaari.soulus.Soulus;
 @ConfigInjected(Soulus.MODID)
 public class SummonerTileEntity extends UpgradeableBlockTileEntity implements ITickable {
 
-	@Inject(ConfigSummoner.class) public static ConfigSummoner CONFIG;
-	@Inject(ConfigEssences.class) public static ConfigEssences CONFIG_ESSENCES;
+	@Inject public static ConfigSummoner CONFIG;
+	@Inject public static ConfigEssences CONFIG_ESSENCES;
 
 	@Override
 	public Summoner getBlock () {

@@ -18,7 +18,7 @@ import yuudaari.soulus.common.item.Essence;
 @ConfigInjected(Soulus.MODID)
 public class IngredientPotentialEssence extends Ingredient {
 
-	@Inject(ConfigEssences.class) public static ConfigEssences CONFIG;
+	@Inject public static ConfigEssences CONFIG;
 
 	private static IngredientPotentialEssence INSTANCE = null;
 

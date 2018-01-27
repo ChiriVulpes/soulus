@@ -32,7 +32,7 @@ import yuudaari.soulus.common.util.GeneratorName;
 @ConfigInjected(Soulus.MODID)
 public class SummonerReplacer {
 
-	@Inject(ConfigSummonerReplacement.class) public static ConfigSummonerReplacement CONFIG;
+	@Inject public static ConfigSummonerReplacement CONFIG;
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void populateChunkPost (PopulateChunkEvent.Post event) {

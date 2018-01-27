@@ -116,7 +116,7 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	// Config
 	//
 
-	@Inject(ConfigComposer.class) public static ConfigComposer CONFIG;
+	@Inject public static ConfigComposer CONFIG;
 
 	/////////////////////////////////////////
 	// Properties

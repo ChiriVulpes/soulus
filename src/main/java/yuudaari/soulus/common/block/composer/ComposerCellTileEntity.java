@@ -24,7 +24,7 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 	// Config
 	//
 
-	@Inject(ConfigComposerCell.class) public static ConfigComposerCell CONFIG;
+	@Inject public static ConfigComposerCell CONFIG;
 
 	public ChangeItemHandler changeItemHandler;
 	public BlockPos composerLocation;

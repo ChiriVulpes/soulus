@@ -21,6 +21,6 @@ public @interface ConfigInjected {
 		/**
 		 * The class that this injector will inject an instance of.
 		 */
-		Class<?> value ();
+		Class<?> value () default Inject.class;
 	}
 }

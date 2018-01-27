@@ -24,7 +24,7 @@ import yuudaari.soulus.Soulus;
 @ConfigInjected(Soulus.MODID)
 public class Essence extends ModItem {
 
-	@Inject(ConfigEssences.class) public static ConfigEssences CONFIG;
+	@Inject public static ConfigEssences CONFIG;
 
 	public static ItemStack getStack (String essenceType) {
 		return getStack(essenceType, 1);

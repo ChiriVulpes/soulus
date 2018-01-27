@@ -9,7 +9,7 @@ import yuudaari.soulus.common.util.ModItem;
 @ConfigInjected(Soulus.MODID)
 public class Glue extends ModItem {
 
-	@Inject(ConfigGlue.class) public static ConfigGlue CONFIG;
+	@Inject public static ConfigGlue CONFIG;
 
 	public Glue () {
 		super("glue");

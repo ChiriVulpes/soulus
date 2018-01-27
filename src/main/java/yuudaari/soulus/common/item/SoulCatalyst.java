@@ -36,7 +36,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ConfigInjected(Soulus.MODID)
 public class SoulCatalyst extends ModItem {
 
-	@Inject(ConfigSoulCatalyst.class) public static ConfigSoulCatalyst CONFIG;
+	@Inject public static ConfigSoulCatalyst CONFIG;
 
 	public static class SoulCatalystFillRecipe extends ShapelessOreRecipe {
 

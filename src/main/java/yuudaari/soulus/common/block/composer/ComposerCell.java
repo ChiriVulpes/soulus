@@ -45,7 +45,7 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	// Config
 	//
 
-	@Inject(ConfigComposerCell.class) public static ConfigComposerCell CONFIG;
+	@Inject public static ConfigComposerCell CONFIG;
 
 	/////////////////////////////////////////
 	// Properties

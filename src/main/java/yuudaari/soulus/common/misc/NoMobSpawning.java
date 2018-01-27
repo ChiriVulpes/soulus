@@ -23,7 +23,7 @@ import yuudaari.soulus.common.config.creature.ConfigCreatures;
 @ConfigInjected(Soulus.MODID)
 public class NoMobSpawning {
 
-	@Inject(ConfigCreatures.class) public static ConfigCreatures CONFIG;
+	@Inject public static ConfigCreatures CONFIG;
 
 	@SubscribeEvent
 	public static void onMobJoinWorld (EntityJoinWorldEvent event) {

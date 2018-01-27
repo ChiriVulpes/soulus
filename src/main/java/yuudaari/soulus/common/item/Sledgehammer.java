@@ -13,7 +13,7 @@ import java.util.Random;
 @ConfigInjected(Soulus.MODID)
 public class Sledgehammer extends ModItem {
 
-	@Inject(ConfigSledgehammer.class) public static ConfigSledgehammer CONFIG;
+	@Inject public static ConfigSledgehammer CONFIG;
 
 	public Sledgehammer () {
 		super("sledgehammer");

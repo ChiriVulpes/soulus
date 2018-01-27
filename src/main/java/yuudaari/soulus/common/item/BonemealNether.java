@@ -24,16 +24,14 @@ import yuudaari.soulus.common.config.item.ConfigBonemealNether;
 @ConfigInjected(Soulus.MODID)
 public class BonemealNether extends Bonemeal {
 
-	@Inject(ConfigBonemealNether.class)
-	public static ConfigBonemealNether CONFIG;
+	@Inject public static ConfigBonemealNether CONFIG;
 
-	public BonemealNether() {
+	public BonemealNether () {
 		super("bone_meal_nether");
 	}
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing,
-			float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse (EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 
 		IBlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
@@ -55,7 +53,7 @@ public class BonemealNether extends Bonemeal {
 	}
 
 	@SideOnly(Side.CLIENT)
-	private static void particles(World world, BlockPos pos) {
+	private static void particles (World world, BlockPos pos) {
 		Random rand = world.rand;
 
 		for (int i = 0; i < CONFIG.particleCount; ++i) {
