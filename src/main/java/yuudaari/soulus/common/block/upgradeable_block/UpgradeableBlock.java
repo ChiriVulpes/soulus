@@ -42,8 +42,13 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 	//
 	public static interface IUpgrade {
 
+		public int getIndex ();
+
+		public String getName ();
+
 		public ItemStack getItemStack (int quantity);
 
+		@Nullable
 		public default ItemStack getItemStackForTileEntity (UpgradeableBlockTileEntity te, int quantity) {
 			return getItemStack(quantity);
 		}
@@ -54,6 +59,7 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 
 		public default void addItemStackToList (UpgradeableBlockTileEntity te, List<ItemStack> list, int quantity) {
 			ItemStack item = te == null ? getItemStack(1) : getItemStackForTileEntity(te, 1);
+			if (item == null) return;
 			int maxStackSize = item.getMaxStackSize();
 			while (quantity > 0) {
 				int stackSize = Math.min(maxStackSize, quantity);
@@ -62,19 +68,23 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 			}
 		}
 
-		public default boolean canOverrideMaxQuantity () {
-			return true;
-		}
-
 		public boolean isItemStack (ItemStack stack);
 
-		public int getIndex ();
-
-		public String getName ();
+		public default boolean isItemStackForTileEntity (ItemStack stack, UpgradeableBlockTileEntity te) {
+			return isItemStack(stack);
+		}
 
 		public int getMaxQuantity ();
 
 		public void setMaxQuantity (int quantity);
+
+		public default boolean canOverrideMaxQuantity () {
+			return true;
+		}
+
+		public default boolean isSecret () {
+			return false;
+		}
 	}
 
 	public abstract IUpgrade[] getUpgrades ();
@@ -338,12 +348,18 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 
 	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
+	protected boolean shouldWailaTooltipShowAll (IBlockState blockState, TileEntityClass te) {
+		return false;
+	}
+
+	@Optional.Method(modid = "waila")
+	@SideOnly(Side.CLIENT)
 	private final void onWailaTooltipBody (List<String> currentTooltip, IBlockState blockState, TileEntityClass te, EntityPlayer player) {
 		List<String> upgrades = onWailaTooltipShowUpgrades(te);
 		List<String> more = onWailaTooltipMore(blockState, te, player);
 		int moreSize = more == null ? 0 : more.size();
 
-		if (player.isSneaking() || upgrades.size() + moreSize < 2) {
+		if (player.isSneaking() || upgrades.size() + moreSize < 2 || shouldWailaTooltipShowAll(blockState, te)) {
 			currentTooltip.addAll(upgrades);
 			if (more != null) currentTooltip.addAll(more);
 		} else if (upgrades.size() + moreSize > 0) {
@@ -357,13 +373,11 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 
 	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
-	private final List<String> onWailaTooltipShowUpgrades (TileEntity te) {
+	private final List<String> onWailaTooltipShowUpgrades (TileEntityClass te) {
 		List<String> tooltip = new ArrayList<>();
 
 		if (te != null && te instanceof UpgradeableBlockTileEntity) {
-			UpgradeableBlockTileEntity ute = (UpgradeableBlockTileEntity) te;
-
-			onWailaTooltipUpgrades(tooltip, ute);
+			onWailaTooltipUpgrades(tooltip, te);
 		}
 
 		return tooltip;
@@ -371,19 +385,30 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 
 	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
-	protected void onWailaTooltipUpgrades (List<String> currentTooltip, UpgradeableBlockTileEntity te) {
+	protected void onWailaTooltipUpgrades (List<String> currentTooltip, TileEntityClass te) {
 		List<IUpgrade> upgrades = new ArrayList<>(Arrays.asList(getUpgrades()));
 		for (IUpgrade upgrade : Lists.reverse(te.insertionOrder)) {
 			upgrades.remove(upgrade);
-			currentTooltip
-				.add(I18n.format("waila." + getRegistryName() + ".upgrades_" + upgrade.getName()
-					.toLowerCase(), te.upgrades.get(upgrade), upgrade.getMaxQuantity()));
+			String tooltip = getWailaTooltipUpgrade(upgrade, te);
+			if (tooltip != null) currentTooltip.add(tooltip);
 		}
 		for (IUpgrade upgrade : upgrades) {
-			currentTooltip
-				.add(I18n.format("waila." + getRegistryName() + ".upgrades_" + upgrade.getName()
-					.toLowerCase(), te.upgrades.get(upgrade), upgrade.getMaxQuantity()));
+			String tooltip = getWailaTooltipUpgrade(upgrade, te);
+			if (tooltip != null) currentTooltip.add(tooltip);
 		}
+	}
+
+	@Optional.Method(modid = "waila")
+	@SideOnly(Side.CLIENT)
+	@Nullable
+	protected String getWailaTooltipUpgrade (IUpgrade upgrade, TileEntityClass te) {
+		String upgradeName = upgrade.getName().toLowerCase();
+		int upgradeCount = te.upgrades.get(upgrade);
+
+		if (upgrade.isSecret() && upgradeCount == 0) return null;
+
+		return I18n.format("waila." + getRegistryName() + ".upgrades_" + upgradeName, //
+			upgradeCount, upgrade.getMaxQuantity());
 	}
 
 	@Optional.Method(modid = "waila")

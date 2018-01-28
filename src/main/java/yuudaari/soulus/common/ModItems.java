@@ -68,12 +68,13 @@ public class ModItems {
 	public static ModItem SOULBOOK = new Soulbook();
 	public static OrbMurky ORB_MURKY = new OrbMurky();
 	public static SoulCatalyst SOUL_CATALYST = new SoulCatalyst();
+	// @formatter:on
 
 	public static Item[] items = new Item[] {
 		ASH,
 		BARK,
 		BARKET,
-		BONE_CHUNK_DRY, 
+		BONE_CHUNK_DRY,
 		BONE_CHUNK_ENDER,
 		BONE_CHUNK_FROZEN,
 		BONE_CHUNK_FUNGAL,
@@ -82,9 +83,9 @@ public class ModItems {
 		BONE_CHUNK_SCALE,
 		BONE_DRY,
 		BONE_ENDER,
-		BONE_FROZEN, 
+		BONE_FROZEN,
 		BONE_FUNGAL,
-		BONE_NETHER, 
+		BONE_NETHER,
 		BONE_NORMAL,
 		BONE_SCALE,
 		BONEMEAL_ENDER,
@@ -93,20 +94,20 @@ public class ModItems {
 		CRYSTAL_BLOOD,
 		CRYSTAL_DARK,
 		DUST_ENDER_IRON_ASHEN,
-		DUST_ENDER_IRON, 
-		DUST_NIOBIUM, 
+		DUST_ENDER_IRON,
+		DUST_NIOBIUM,
 		DUST_IRON,
 		DUST_STONE,
 		DUST_WOOD,
 		EMERALD_BURNT,
-		EMERALD_COATED, 
-		ESSENCE, 
-		GEAR_BONE_DRY, 
+		EMERALD_COATED,
+		ESSENCE,
+		GEAR_BONE_DRY,
 		GEAR_BONE_ENDER,
-		GEAR_BONE_FROZEN, 
+		GEAR_BONE_FROZEN,
 		GEAR_BONE_FUNGAL,
-		GEAR_BONE_NETHER, 
-		GEAR_BONE, 
+		GEAR_BONE_NETHER,
+		GEAR_BONE,
 		GEAR_OSCILLATING,
 		GEAR_NIOBIUM,
 		GLUE,
@@ -120,7 +121,6 @@ public class ModItems {
 		SLEDGEHAMMER,
 		SOUL_CATALYST,
 		SOULBOOK
-		// @formatter:on
 	};
 
 	public static void registerItems (IForgeRegistry<Item> registry) {

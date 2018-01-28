@@ -120,6 +120,7 @@ waila.soulus:summoner.upgrades_delay=%1$s/%2$s §3Oscillating Gears §8(Speed)
 waila.soulus:summoner.upgrades_count=%1$s/%2$s §4Blood Crystals §8(Quantity)
 waila.soulus:summoner.upgrades_range=%1$s/%2$s §6Murky Orbs §8(Range)
 waila.soulus:summoner.upgrades_efficiency=%1$s/%2$s §9Niobium Gears §8(Efficiency)
+waila.soulus:summoner.upgrades_crystal_dark=§1Midnight Jewel §8(§kUnknown§r§8)
 tooltip.soulus:soulbook.contained_essence=%1$s/%2$s Essence
 tooltip.soulus:orb_murky.contained_essence=%1$s/%2$s Essence
 tooltip.soulus:soul_catalyst.contained_essence=%1$s/%2$s Essence

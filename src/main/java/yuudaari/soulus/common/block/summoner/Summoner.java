@@ -62,7 +62,8 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		DELAY (1, "delay",
 			ModItems.GEAR_OSCILLATING.getItemStack()),
 		RANGE (2, "range", ModItems.ORB_MURKY.getItemStack()),
-		EFFICIENCY (3, "efficiency", ModItems.GEAR_NIOBIUM.getItemStack());
+		EFFICIENCY (3, "efficiency", ModItems.GEAR_NIOBIUM.getItemStack()),
+		CRYSTAL_DARK (4, "crystal_dark", ModItems.CRYSTAL_DARK.getItemStack());
 
 		private final int index;
 		private final String name;
@@ -112,6 +113,27 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		}
 
 		@Override
+		public boolean isItemStackForTileEntity (ItemStack stack, UpgradeableBlockTileEntity te) {
+			if (te.upgrades.get(Upgrade.CRYSTAL_DARK) > 0)
+				return false;
+			else if (name == "crystal_dark") {
+				// a midnight jewel must be inserted into a summoner with no other upgrades
+				for (Upgrade upgrade : Upgrade.values()) {
+					if (te.upgrades.get(upgrade) > 0) return false;
+				}
+			}
+			return IUpgrade.super.isItemStackForTileEntity(stack, te);
+		}
+
+		@Override
+		public ItemStack getItemStackForTileEntity (UpgradeableBlockTileEntity te, int quantity) {
+			SummonerTileEntity ste = (SummonerTileEntity) te;
+			if (name == "crystal_dark" && ste.hasMalice()) return null;
+
+			return IUpgrade.super.getItemStackForTileEntity(te, quantity);
+		}
+
+		@Override
 		public ItemStack getItemStack (int quantity) {
 			ItemStack stack = new ItemStack(this.stack.getItem(), quantity);
 			if (name == "count") {
@@ -121,6 +143,11 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 			}
 
 			return stack;
+		}
+
+		@Override
+		public boolean isSecret () {
+			return name == "crystal_dark";
 		}
 	}
 
@@ -442,6 +469,9 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 		if (te == null) return;
 
+		// the stats of summoners with midnight jewels are secret
+		if (te.upgrades.get(Upgrade.CRYSTAL_DARK) > 0) return;
+
 		int summonPercentage = (int) Math.floor(te.getSpawnPercent() * 100);
 		currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":summoner.summon_percentage", summonPercentage));
 
@@ -452,6 +482,25 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 	}
 
+	@Optional.Method(modid = "waila")
+	@SideOnly(Side.CLIENT)
+	@Override
+	protected boolean shouldWailaTooltipShowAll (IBlockState blockState, SummonerTileEntity te) {
+		return te.upgrades.get(Upgrade.CRYSTAL_DARK) > 0;
+	}
+
+	@Optional.Method(modid = "waila")
+	@SideOnly(Side.CLIENT)
+	@Override
+	protected String getWailaTooltipUpgrade (IUpgrade upgrade, SummonerTileEntity te) {
+		if (upgrade != Upgrade.CRYSTAL_DARK && te.upgrades.get(Upgrade.CRYSTAL_DARK) > 0)
+			return null;
+
+		return super.getWailaTooltipUpgrade(upgrade, te);
+	}
+
+	@Optional.Method(modid = "waila")
+	@SideOnly(Side.CLIENT)
 	@Override
 	protected List<String> onWailaTooltipMore (IBlockState blockState, SummonerTileEntity te, EntityPlayer player) {
 		String variant = blockState.getValue(VARIANT).getName();

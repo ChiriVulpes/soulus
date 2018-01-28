@@ -373,7 +373,6 @@ public class Config {
 			for (final Field field : injectionClass.getDeclaredFields()) {
 				final Inject injectAnnotation = field.getAnnotation(Inject.class);
 				if (injectAnnotation != null) {
-					Logger.info(injectAnnotation.value().getSimpleName() + ", " + field.getType().getSimpleName());
 					Class<?> classToInject = injectAnnotation.value() == Inject.class ? field
 						.getType() : injectAnnotation.value();
 					result.put(field, classToInject);

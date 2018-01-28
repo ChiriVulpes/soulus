@@ -6,6 +6,7 @@ import javax.annotation.Nonnull;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EntitySelectors;
@@ -26,6 +27,7 @@ import yuudaari.soulus.common.config.block.ConfigSummoner;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
+import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock.IUpgrade;
 import yuudaari.soulus.common.util.ModPotionEffect;
 import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.Soulus;
@@ -47,6 +49,11 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	private float timeTillSpawn = 0;
 	private float lastTimeTillSpawn;
 	private Float soulbookUses = null;
+	private boolean malice = true;
+
+	public boolean hasMalice () {
+		return malice;
+	}
 
 	public float getSoulbookUses () {
 		if (soulbookUses == null && CONFIG.soulbookUses != null && CONFIG.soulbookUses > 0)
@@ -77,18 +84,34 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	}
 
 	@Override
+	public void onInsertUpgrade (ItemStack stack, IUpgrade upgrade, int newQuantity) {
+		if (upgrade == Upgrade.CRYSTAL_DARK) malice = false;
+	}
+
+	@Override
 	public void onUpdateUpgrades (boolean readFromNBT) {
 
-		int countUpgrades = upgrades.get(Upgrade.COUNT);
-		spawnCount = new Range(CONFIG.nonUpgradedCount.min + countUpgrades * CONFIG.upgradeCountEffectiveness.min, CONFIG.nonUpgradedCount.max + countUpgrades * CONFIG.upgradeCountEffectiveness.max);
-		spawningRadius = (int) Math
-			.floor(CONFIG.nonUpgradedSpawningRadius + countUpgrades * CONFIG.upgradeCountRadiusEffectiveness);
+		if (upgrades.get(Upgrade.CRYSTAL_DARK) > 0) {
+			// dark crystal
+			spawnCount = CONFIG.midnightJewelCount;
+			spawningRadius = CONFIG.midnightJewelSpawningRadius;
+			spawnDelay = CONFIG.midnightJewelDelay;
+			activatingRange = CONFIG.midnightJewelRange;
 
-		int delayUpgrades = upgrades.get(Upgrade.DELAY);
-		spawnDelay = new Range(CONFIG.nonUpgradedDelay.min / (1 + delayUpgrades * CONFIG.upgradeDelayEffectiveness.min), CONFIG.nonUpgradedDelay.max / (1 + delayUpgrades * CONFIG.upgradeDelayEffectiveness.max));
+		} else {
+			// normal upgrades
+			int countUpgrades = upgrades.get(Upgrade.COUNT);
+			spawnCount = new Range(CONFIG.nonUpgradedCount.min + countUpgrades * CONFIG.upgradeCountEffectiveness.min, CONFIG.nonUpgradedCount.max + countUpgrades * CONFIG.upgradeCountEffectiveness.max);
+			spawningRadius = (int) Math
+				.floor(CONFIG.nonUpgradedSpawningRadius + countUpgrades * CONFIG.upgradeCountRadiusEffectiveness);
 
-		int rangeUpgrades = upgrades.get(Upgrade.RANGE);
-		activatingRange = CONFIG.nonUpgradedRange + rangeUpgrades * CONFIG.upgradeRangeEffectiveness;
+			int delayUpgrades = upgrades.get(Upgrade.DELAY);
+			spawnDelay = new Range(CONFIG.nonUpgradedDelay.min / (1 + delayUpgrades * CONFIG.upgradeDelayEffectiveness.min), CONFIG.nonUpgradedDelay.max / (1 + delayUpgrades * CONFIG.upgradeDelayEffectiveness.max));
+
+			int rangeUpgrades = upgrades.get(Upgrade.RANGE);
+			activatingRange = CONFIG.nonUpgradedRange + rangeUpgrades * CONFIG.upgradeRangeEffectiveness;
+		}
+
 
 		if (world != null && !world.isRemote) {
 			if (!readFromNBT)
@@ -112,15 +135,12 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	}
 
 	private void resetEssenceType () {
-		ConfigEssence config = CONFIG_ESSENCES.get(essenceType);
-		if (config == null)
-			return;
-
-		spawnMobConfig = config;
+		spawnMobConfig = CONFIG_ESSENCES.get(essenceType);
 
 		spawnMobChanceTotal = 0;
-		if (config.spawns != null) {
-			for (double dropChance : config.spawns.values()) {
+
+		if (spawnMobConfig != null && spawnMobConfig.spawns != null) {
+			for (double dropChance : spawnMobConfig.spawns.values()) {
 				spawnMobChanceTotal += dropChance;
 			}
 		}
@@ -138,7 +158,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	}
 
 	private String getSpawnMob () {
-		if (spawnMobChanceTotal > 0) {
+		if (spawnMobChanceTotal > 0 && spawnMobConfig != null) {
 			int choice = new Random().nextInt(spawnMobChanceTotal);
 			for (Map.Entry<String, Double> spawnConfig : spawnMobConfig.spawns.entrySet()) {
 				choice -= spawnConfig.getValue();
@@ -158,8 +178,8 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	}
 
 	private double activationAmount () {
-		// when powered by redstone, don't run
-		if (world.isBlockIndirectlyGettingPowered(pos) != 0) {
+		// when powered by redstone and player created, don't run
+		if ((!malice || upgrades.get(Upgrade.CRYSTAL_DARK) < 1) && world.isBlockIndirectlyGettingPowered(pos) != 0) {
 			return 0;
 		}
 
@@ -253,6 +273,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		resetEssenceType();
 		timeTillSpawn = compound.getFloat("delay");
 		lastTimeTillSpawn = compound.getFloat("delay_last");
+		malice = compound.getBoolean("malice");
 
 		onUpdateUpgrades(false);
 	}
@@ -269,6 +290,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		compound.setFloat("soulbook_uses", soulbookUses == null ? -101 : soulbookUses);
 		compound.setFloat("delay", timeTillSpawn);
 		compound.setFloat("delay_last", lastTimeTillSpawn);
+		compound.setBoolean("malice", malice);
 	}
 
 	private boolean isPlayerInRangeForEffects () {
@@ -371,7 +393,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 			}
 		}
 
-		if (CONFIG.soulbookUses != null && CONFIG.soulbookUses > 0) {
+		if (CONFIG.soulbookUses != null && CONFIG.soulbookUses > 0 && upgrades.get(Upgrade.CRYSTAL_DARK) < 1) {
 			soulbookUses -= (float) (spawned * CONFIG.efficiencyUpgradeRange
 				.get(upgrades.get(Upgrade.EFFICIENCY) / (double) Upgrade.EFFICIENCY.getMaxQuantity()));
 		}

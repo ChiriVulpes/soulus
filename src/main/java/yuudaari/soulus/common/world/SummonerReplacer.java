@@ -20,13 +20,16 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModBlocks;
-import yuudaari.soulus.common.block.EndersteelType;
 import yuudaari.soulus.common.block.summoner.Summoner;
+import yuudaari.soulus.common.block.summoner.SummonerTileEntity;
+import yuudaari.soulus.common.block.summoner.Summoner.Upgrade;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.misc.ConfigSummonerReplacement;
 import yuudaari.soulus.common.config.misc.ConfigSummonerReplacement.ConfigStructure;
+import yuudaari.soulus.common.config.misc.ConfigSummonerReplacement.ConfigReplacement;
 import yuudaari.soulus.common.util.GeneratorName;
+import yuudaari.soulus.common.util.Logger;
 
 @Mod.EventBusSubscriber
 @ConfigInjected(Soulus.MODID)
@@ -63,14 +66,15 @@ public class SummonerReplacer {
 				String entityType = getTheIdFromAStupidMobSpawnerTileEntity(te);
 				// Logger.info("entity type " + entityType);
 
-				EndersteelType endersteelType = structureConfig.endersteelTypesByCreature.get(entityType);
-				if (endersteelType == null) {
-					endersteelType = structureConfig.endersteelTypesByCreature
+				ConfigReplacement replacement = structureConfig.replacementsByCreature.get(entityType);
+				if (replacement == null) {
+					replacement = structureConfig.replacementsByCreature
 						.get(new ResourceLocation(entityType).getResourceDomain() + ":*");
-					if (endersteelType == null) {
-						endersteelType = structureConfig.endersteelTypesByCreature.get("*");
-						if (endersteelType == null) {
-							endersteelType = EndersteelType.NORMAL;
+					if (replacement == null) {
+						replacement = structureConfig.replacementsByCreature.get("*");
+						if (replacement == null) {
+							// this spawner isn't configured to be replaced
+							return;
 						}
 					}
 				}
@@ -78,7 +82,20 @@ public class SummonerReplacer {
 				// Logger.info("endersteel type " + endersteelType);
 
 				world.setBlockState(pos, ModBlocks.SUMMONER.getDefaultState()
-					.withProperty(Summoner.VARIANT, endersteelType), 7);
+					.withProperty(Summoner.VARIANT, replacement.type)
+					.withProperty(Summoner.HAS_SOULBOOK, replacement.midnightJewel), 7);
+
+				if (!replacement.midnightJewel) return;
+
+				TileEntity nte = world.getTileEntity(pos);
+				if (nte == null || !(nte instanceof SummonerTileEntity)) {
+					Logger.info("Unable to insert midnight jewel into replaced summoner");
+					return;
+				}
+
+				SummonerTileEntity ste = (SummonerTileEntity) nte;
+				ste.setEssenceType(entityType);
+				ste.upgrades.put(Upgrade.CRYSTAL_DARK, 1);
 			}
 		}
 	}

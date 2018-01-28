@@ -48,7 +48,7 @@ public abstract class UpgradeableBlockTileEntity extends TileEntity implements I
 	public IUpgrade getUpgradeForItem (ItemStack stack) {
 		for (Map.Entry<IUpgrade, Integer> upgradeEntry : upgrades.entrySet()) {
 			IUpgrade upgrade = upgradeEntry.getKey();
-			if (upgrade.isItemStack(stack))
+			if (upgrade.isItemStackForTileEntity(stack, this))
 				return upgrade;
 		}
 
