@@ -18,7 +18,7 @@ public class ConfigSoulTotem extends ConfigUpgradeableBlock<SoulTotem> {
 	}
 
 	@Serialized public float particleCountIn = 1;
-	@Serialized public int soulCatalystFuelTime = 5000;
+	@Serialized public int soulCatalystFuelTime = 10000;
 	@Serialized public Range efficiencyUpgradesRange = new Range(1, .3);
 	@Serialized public boolean isChunkloader = true;
 
