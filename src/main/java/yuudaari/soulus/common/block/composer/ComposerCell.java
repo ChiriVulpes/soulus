@@ -248,6 +248,8 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 		}
 	}
 
+	@Optional.Method(modid = "waila")
+	@SideOnly(Side.CLIENT)
 	@Override
 	protected List<String> onWailaTooltipMore (IBlockState blockState, ComposerCellTileEntity te, EntityPlayer player) {
 		ItemStack storedItem = te.getStoredItem();

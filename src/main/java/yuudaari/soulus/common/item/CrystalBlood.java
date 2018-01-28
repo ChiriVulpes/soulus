@@ -229,8 +229,8 @@ public class CrystalBlood extends SummonerUpgrade {
 		}
 	}
 
-	@Override
 	@SideOnly(Side.CLIENT)
+	@Override
 	public void addInformation (ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		int containedBlood = CrystalBlood.getContainedBlood(stack);
 		if (containedBlood < CONFIG.requiredBlood) {

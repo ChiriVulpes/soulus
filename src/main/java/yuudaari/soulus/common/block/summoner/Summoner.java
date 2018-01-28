@@ -296,8 +296,8 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 			return I18n.format(this.getUnlocalizedName() + ".focused.name", alignment).trim();
 		}
 
-		@Override
 		@SideOnly(Side.CLIENT)
+		@Override
 		public void addInformation (ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 			tooltip.add(I18n.format("tooltip." + Soulus.MODID + ":summoner.style." + EndersteelType
 				.byMetadata(stack.getItemDamage() / 2)
