@@ -55,6 +55,7 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		POWER (3, "power", new ItemStack(Blocks.REDSTONE_TORCH)),
 		TETHER (4, "tether", ModItems.ASH.getItemStack()),
 		PLAYER (5, "player", ModItems.SOUL_CATALYST.getItemStack());
+		//LOOTING (6, "looting", new ItemStack(Items.DYE, 1, 4));
 
 		private final int index;
 		private final String name;
@@ -92,6 +93,8 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 					return 16;
 				if (name.equals("player"))
 					return 1;
+				if (name.equals("looting"))
+					return 64;
 			}
 
 			return maxQuantity;
