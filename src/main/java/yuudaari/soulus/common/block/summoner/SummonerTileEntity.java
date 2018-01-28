@@ -52,7 +52,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	private boolean malice = true;
 
 	public boolean hasMalice () {
-		return malice;
+		return malice && upgrades.get(Upgrade.CRYSTAL_DARK) > 0;
 	}
 
 	public float getSoulbookUses () {
