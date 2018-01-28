@@ -115,7 +115,7 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 			int insertQuantity = fillable.fill(currentStack, stack, requestedQuantity);
 			if (insertQuantity > 0) {
 				stack.shrink(insertQuantity);
-				markDirty();
+				blockUpdate();
 			}
 		}
 

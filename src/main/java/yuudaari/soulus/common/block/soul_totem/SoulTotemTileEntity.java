@@ -8,6 +8,8 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.client.util.ParticleType;
 import yuudaari.soulus.common.ModBlocks;
@@ -80,7 +82,7 @@ public class SoulTotemTileEntity extends UpgradeableBlockTileEntity {
 
 		updateSignalStrength();
 
-		updateRenderer();
+		if (world.isRemote) updateRenderer();
 	}
 
 	private void updateSignalStrength () {
@@ -170,6 +172,7 @@ public class SoulTotemTileEntity extends UpgradeableBlockTileEntity {
 	private float velocity = 0;
 	private float timeTillParticle = 0;
 
+	@SideOnly(Side.CLIENT)
 	private void updateRenderer () {
 		boolean isActive = isActive();
 
