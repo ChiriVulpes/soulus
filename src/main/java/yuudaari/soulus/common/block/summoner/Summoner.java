@@ -189,6 +189,12 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	}
 
 	@Override
+	public boolean canActivate (TileEntity te) {
+		if (te == null || !(te instanceof SummonerTileEntity)) return true;
+		return !((SummonerTileEntity) te).hasMalice();
+	}
+
+	@Override
 	public boolean hasComparatorInputOverride (IBlockState state) {
 		return true;
 	}
@@ -452,10 +458,19 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	public ItemStack getSoulbook (SummonerTileEntity te) {
 		String essenceType = te.getEssenceType();
 
-		return CONFIG.soulbookUses != null && CONFIG.soulbookUses > 0 ? Soulbook
-			.getStack(essenceType, (int) Math
+		if (te.hasMalice()) {
+			int essenceQuantity = CONFIG.midnightJewelSoulbookEssenceQuantity.getInt(te.getWorld().rand);
+			return Soulbook.getStack(essenceType, essenceQuantity);
+		}
+
+		if (CONFIG.soulbookUses != null && CONFIG.soulbookUses > 0) {
+			int essenceQuantity = (int) Math
 				.max(0, te.getSoulbookUses() / (double) CONFIG.soulbookUses * CONFIG_ESSENCES
-					.getSoulbookQuantity(essenceType))) : Soulbook.getFilled(essenceType);
+					.getSoulbookQuantity(essenceType));
+			return Soulbook.getStack(essenceType, essenceQuantity);
+		}
+
+		return Soulbook.getFilled(essenceType);
 	}
 
 	/////////////////////////////////////////

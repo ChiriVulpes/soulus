@@ -156,6 +156,8 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 		if (!world.isRemote) {
 			ItemStack heldStack = player.getHeldItem(hand);
 
+			if (!canActivate(world.getTileEntity(pos))) return false;
+
 			if (heldStack.isEmpty()) {
 				if (player.isSneaking()) {
 					return onActivateEmptyHandSneaking(world, pos, player);
@@ -297,7 +299,11 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 	}
 
 	public boolean canActivateWithItem (ItemStack stack, World world, BlockPos pos) {
-		return stack.isEmpty() || isUpgradeItem(stack, world, pos) != null;
+		return canActivate(world.getTileEntity(pos)) && (stack.isEmpty() || isUpgradeItem(stack, world, pos) != null);
+	}
+
+	public boolean canActivate (TileEntity te) {
+		return true;
 	}
 
 	/////////////////////////////////////////

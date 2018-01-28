@@ -53,6 +53,7 @@ public class ConfigSummoner extends ConfigUpgradeableBlock<Summoner> {
 	@Serialized public Range midnightJewelCount = new Range(2, 4);
 	@Serialized public Range midnightJewelDelay = new Range(500, 1000);
 	@Serialized public int midnightJewelSpawningRadius = 4;
+	@Serialized public Range midnightJewelSoulbookEssenceQuantity = new Range(1, 5);
 
 	// style potion effects
 	@Serialized(PotionEffectsMapSerializer.class) public Map<EndersteelType, ModPotionEffect[]> stylePotionEffects;
