@@ -30,20 +30,38 @@ public class RecipeComposerShapeless extends Recipe implements IRecipeComposer {
 	}
 
 	public RecipeComposerShapeless (Block result, Object... recipe) {
-		this(new ItemStack(result), recipe);
+		this(new ItemStack(result), 1, recipe);
 	}
 
 	public RecipeComposerShapeless (Item result, Object... recipe) {
-		this(new ItemStack(result), recipe);
+		this(new ItemStack(result), 1, recipe);
 	}
 
 	public RecipeComposerShapeless (NonNullList<Ingredient> input, @Nonnull ItemStack result) {
-		output = result.copy();
-		this.input = input;
+		this(input, 1, result);
 	}
 
 	public RecipeComposerShapeless (@Nonnull ItemStack result, Object... recipe) {
+		this(result, 1, recipe);
+	}
+
+	public RecipeComposerShapeless (Block result, float time, Object... recipe) {
+		this(new ItemStack(result), time, recipe);
+	}
+
+	public RecipeComposerShapeless (Item result, float time, Object... recipe) {
+		this(new ItemStack(result), time, recipe);
+	}
+
+	public RecipeComposerShapeless (NonNullList<Ingredient> input, float time, @Nonnull ItemStack result) {
 		output = result.copy();
+		this.input = input;
+		this.time = time;
+	}
+
+	public RecipeComposerShapeless (@Nonnull ItemStack result, float time, Object... recipe) {
+		output = result.copy();
+		this.time = time;
 		for (Object in : recipe) {
 			Ingredient ing = CraftingHelper.getIngredient(in);
 			if (ing != null) {

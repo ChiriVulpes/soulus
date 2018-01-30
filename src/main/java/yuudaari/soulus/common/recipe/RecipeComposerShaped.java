@@ -55,11 +55,28 @@ public class RecipeComposerShaped extends Recipe implements IRecipeComposer {
 	}
 
 	public RecipeComposerShaped (@Nonnull ItemStack result, ShapedPrimer primer) {
+		this(result, 1, primer);
+	}
+
+	public RecipeComposerShaped (Block result, float time, Object... recipe) {
+		this(new ItemStack(result), time, recipe);
+	}
+
+	public RecipeComposerShaped (Item result, float time, Object... recipe) {
+		this(new ItemStack(result), time, recipe);
+	}
+
+	public RecipeComposerShaped (@Nonnull ItemStack result, float time, Object... recipe) {
+		this(result, time, CraftingHelper.parseShaped(recipe));
+	}
+
+	public RecipeComposerShaped (@Nonnull ItemStack result, float time, ShapedPrimer primer) {
 		output = result.copy();
 		this.width = primer.width;
 		this.height = primer.height;
 		this.input = primer.input;
 		this.mirrored = primer.mirrored;
+		this.time = time;
 	}
 
 	/**
