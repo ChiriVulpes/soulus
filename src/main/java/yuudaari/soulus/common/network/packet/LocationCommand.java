@@ -1,5 +1,6 @@
 package yuudaari.soulus.common.network.packet;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import io.netty.buffer.ByteBuf;
@@ -62,7 +63,7 @@ public class LocationCommand implements IMessage {
 		entityId = buf.readInt();
 		structures = new String[buf.readInt()];
 		for (int i = 0; i < structures.length; i++) {
-			structures[i] = buf.readBytes(buf.readInt()).toString();
+			structures[i] = buf.readBytes(buf.readInt()).toString(Charset.defaultCharset());
 		}
 	}
 
