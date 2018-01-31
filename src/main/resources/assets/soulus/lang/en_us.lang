@@ -85,6 +85,8 @@ tile.soulus:fossil_sand.name=Sand with Dry Fossils
 tile.soulus:fossil_sand_red_dry.name=Red Sand with Dry Fossils
 tile.soulus:fossil_sand_red_scale.name=Red Sand with Scale Fossils
 
+tile.soulus:ash_block.name=Ash
+
 tile.soulus:block_endersteel.name=Block of Endersteel
 tile.soulus:block_endersteel_dark.name=Block of Dark Endersteel
 tile.soulus:block_niobium.name=Block of Niobium
