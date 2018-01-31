@@ -60,7 +60,7 @@ public class DefaultFieldSerializer extends FieldSerializer<Object> {
 		} else {
 			// there's a deserializer registered for this class, so try to use it
 			try {
-				result = deserializeClass(deserializer, requestedType, element);
+				result = deserializeClass(deserializer, requestedType, element, null);
 			} catch (Exception e) {
 				Logger.warn("Unable to deserialize class: " + (e.getClass() == Exception.class ? e.getMessage() : e));
 			}
@@ -83,8 +83,14 @@ public class DefaultFieldSerializer extends FieldSerializer<Object> {
 	 * Instantiate a class, and then deserialize a JSON value into it.
 	 */
 	@Nullable
-	public static final Object deserializeClass (final IClassDeserializationHandler<Object> deserializer, final Class<?> requestedType, final JsonElement element) {
-		final Object instance = deserializer.instantiate(requestedType);
+	public static final Object deserializeClass (final IClassDeserializationHandler<Object> deserializer, final Class<?> requestedType, final JsonElement element, final String profile) {
+		Object instance = null;
+
+		if (profile != null)
+			instance = deserializer.getProfile(requestedType, profile);
+
+		if (instance == null)
+			instance = deserializer.instantiate(requestedType);
 
 		return deserializer.deserialize(instance, element);
 	}

@@ -197,23 +197,6 @@ public class DefaultClassSerializer extends ClassSerializer<Object> {
 	}
 
 	/**
-	 * Instantiate a class. Returns null if it's unable to be instantiated.
-	 */
-	@Override
-	@Nullable
-	public Object instantiate (final Class<?> cls) {
-		Object instance = null;
-		try {
-			instance = cls.newInstance();
-		} catch (final InstantiationException | IllegalAccessException e) {
-			Logger.warn("Could not instantiate: ");
-			Logger.error(e);
-		}
-
-		return instance;
-	}
-
-	/**
 	 * Gets the deserialization handler for a field, returns null if the field is not serializable, or the deserializer errors
 	 */
 	@SuppressWarnings("unchecked")

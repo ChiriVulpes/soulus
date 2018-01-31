@@ -18,12 +18,13 @@ public @interface ConfigFile {
 	String path () default "";
 
 	/**
-	 * The folder that the file will be placed in
-	 */
-	String folder () default "";
-
-	/**
-	 * The ID of the Config instance this file should be serialized with
+	 * The ID of the Config instance this file should be serialized with.
 	 */
 	String id ();
+
+	/**
+	 * The default profile of this config file.
+	 * Default profiles should not be used when the config file is shared.
+	 */
+	String profile () default "";
 }

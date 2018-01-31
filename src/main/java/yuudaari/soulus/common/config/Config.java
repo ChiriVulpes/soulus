@@ -16,6 +16,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonWriter;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
@@ -120,41 +121,110 @@ public class Config {
 	/**
 	 * Attempts to deserialize a config file into all of the classes that serialize into it
 	 */
-	private void trySerializeConfigFile (final String fileName, final Map<Class<?>, Object> toSerialize) {
-		Logger.scopes.push(fileName);
+	private void trySerializeConfigFile (String filename, final Map<Class<?>, Object> toSerialize) {
+		final String profile = getProfile(getConfigFileJson(filename), filename, toSerialize);
+		if (profile != null)
+			filename = getProfileFilename(filename, profile);
 
-		final File configFile = new File(directory + fileName);
-		if (configFile.exists() || createConfigFile(configFile)) {
-			final JsonObject json = new JsonObject();
-			for (final Map.Entry<Class<?>, Object> serializationEntry : toSerialize.entrySet()) {
-				trySerializeClass(serializationEntry.getKey(), serializationEntry.getValue(), json);
-			}
-			writeJsonConfigFile(configFile, json, new File(configFile.getAbsolutePath().replace(".json", ".err.json")));
+		Logger.scopes.push(filename);
+
+		final JsonObject json = new JsonObject();
+		for (final Map.Entry<Class<?>, Object> serializationEntry : toSerialize.entrySet()) {
+			trySerializeClass(serializationEntry.getKey(), serializationEntry.getValue(), json);
+		}
+
+		final File configFile = new File(directory + filename);
+		writeJsonConfigFile(configFile, json, getErrorFilename(configFile.getAbsolutePath()));
+
+		Logger.scopes.pop();
+	}
+
+	/**
+	 * Gets a default profile of the given config classes.
+	 */
+	private String getConfigFileProfile (final Map<Class<?>, Object> toSerialize) {
+		Class<?> cls = toSerialize.keySet().stream().findAny().get();
+		ConfigFile configFileAnnotation = cls.getAnnotation(ConfigFile.class);
+		if (configFileAnnotation.profile().equals("")) return null;
+		return configFileAnnotation.profile();
+	}
+
+	/**
+	 * Attempts to deserialize a config file into all of the classes that serialize into it
+	 */
+	private void tryDeserializeConfigFile (String filename, final Map<Class<?>, Object> toDeserialize) {
+		JsonObject json = getConfigFileJson(filename);
+
+		final String profile = getProfile(json, filename, toDeserialize);
+
+		if (profile != null) {
+			filename = getProfileFilename(filename, profile);
+			json = getConfigFileJson(filename);
+		}
+
+		Logger.scopes.push(filename);
+
+		if (json == null)
+			Logger.warn("Not a valid Json Object");
+
+		for (final Map.Entry<Class<?>, Object> deserializationEntry : toDeserialize.entrySet()) {
+			Object deserialized = tryDeserializeClass(deserializationEntry.getKey(), json, profile);
+			deserializationEntry.setValue(deserialized);
 		}
 
 		Logger.scopes.pop();
 	}
 
 	/**
-	 * Attempts to deserialize a config file into all of the classes that serialize into it
+	 * Gets the profile for a config file. 
+	 * If there is no default config file, sets the default config file's profile to the default config profile.
 	 */
-	private void tryDeserializeConfigFile (final String fileName, final Map<Class<?>, Object> toDeserialize) {
-		Logger.scopes.push(fileName);
+	private String getProfile (final JsonObject json, final String filename, final Map<Class<?>, Object> toSerialize) {
+		if (json == null) {
+			final String profile = getConfigFileProfile(toSerialize);
+			JsonObject jsonProfile = new JsonObject();
+			jsonProfile.add("profile", new JsonPrimitive(profile));
+			writeJsonConfigFile(new File(directory + filename), jsonProfile, null);
+			return profile;
 
+		} else {
+			final JsonElement jsonProfile = json == null ? null : json.get("profile");
+			if (jsonProfile != null && jsonProfile.isJsonPrimitive() && jsonProfile.getAsJsonPrimitive().isString())
+				return jsonProfile.getAsString();
+		}
+
+		return null;
+	}
+
+	/**
+	 * Turns the filename of a config file into a profile of the filename
+	 */
+	private String getProfileFilename (final String filename, final String profile) {
+		return new StringBuilder(filename)
+			.insert(filename.lastIndexOf('.'), '#' + profile)
+			.toString();
+	}
+
+	/**
+	 * Turns the filename of a config file into a error version
+	 */
+	private String getErrorFilename (final String filename) {
+		return new StringBuilder(filename)
+			.insert(filename.lastIndexOf('.'), ".err")
+			.toString();
+	}
+
+	/**
+	 * Gets the JsonObject for a config file
+	 */
+	private JsonObject getConfigFileJson (final String fileName) {
 		final File configFile = new File(directory + fileName);
 		if (!configFile.exists())
 			createConfigFile(configFile);
 
 		final JsonObject json = parseJsonConfigFile(configFile);
-		if (json == null)
-			Logger.warn("Not a valid Json Object");
 
-		for (final Map.Entry<Class<?>, Object> deserializationEntry : toDeserialize.entrySet()) {
-			Object deserialized = tryDeserializeClass(deserializationEntry.getKey(), json);
-			deserializationEntry.setValue(deserialized);
-		}
-
-		Logger.scopes.pop();
+		return json;
 	}
 
 	/**
@@ -188,7 +258,7 @@ public class Config {
 	/**
 	 * Deserialize all of the @Serialized fields in a class
 	 */
-	private Object tryDeserializeClass (final Class<?> cls, JsonObject containingObject) {
+	private Object tryDeserializeClass (final Class<?> cls, JsonObject containingObject, final String profile) {
 		Logger.scopes.push(cls.getSimpleName());
 
 		Object result = null;
@@ -198,7 +268,7 @@ public class Config {
 		final IClassDeserializationHandler<Object> deserializer = DefaultFieldSerializer.getClassDeserializer(cls);
 		if (deserializer != null) {
 			try {
-				result = DefaultFieldSerializer.deserializeClass(deserializer, cls, containingObject);
+				result = DefaultFieldSerializer.deserializeClass(deserializer, cls, containingObject, profile);
 			} catch (final Exception e) {
 				Logger
 					.warn("Could not deserialize class: " + (e.getClass() == Exception.class ? e.getMessage() : e));
@@ -282,7 +352,7 @@ public class Config {
 	 * Replaces the contents of a config file with a string representation of a Json Object.
 	 * @param saveOld If not null, and the file contents are changing, the old version is saved to this file.
 	 */
-	private static void writeJsonConfigFile (final File configFile, final JsonObject json, @Nullable final File saveOld) {
+	private static void writeJsonConfigFile (final File configFile, final JsonObject json, @Nullable final String saveOld) {
 		try {
 
 			final JsonElement oldConfig = parseJsonConfigFile(configFile, false);
@@ -302,7 +372,7 @@ public class Config {
 				return;
 
 			if (saveOld != null && oldFileText.length() > 0)
-				Files.write(saveOld.toPath(), oldFileText.getBytes());
+				Files.write(new File(saveOld).toPath(), oldFileText.getBytes());
 
 			Files.write(configFile.toPath(), newFileText.getBytes());
 
