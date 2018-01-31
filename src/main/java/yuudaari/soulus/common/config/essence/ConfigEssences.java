@@ -9,7 +9,7 @@ import yuudaari.soulus.common.util.serializer.ListSerializer;
 import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
 
-@ConfigFile(file = "essences", id = Soulus.MODID)
+@ConfigFile(file = "essences/essences", id = Soulus.MODID)
 @Serializable
 public class ConfigEssences {
 

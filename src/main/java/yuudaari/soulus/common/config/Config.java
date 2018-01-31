@@ -142,9 +142,10 @@ public class Config {
 	/**
 	 * Gets a default profile of the given config classes.
 	 */
+	@Nullable
 	private String getConfigFileProfile (final Map<Class<?>, Object> toSerialize) {
-		Class<?> cls = toSerialize.keySet().stream().findAny().get();
-		ConfigFile configFileAnnotation = cls.getAnnotation(ConfigFile.class);
+		final Class<?> cls = toSerialize.keySet().stream().findAny().get();
+		final ConfigFile configFileAnnotation = cls.getAnnotation(ConfigFile.class);
 		if (configFileAnnotation.profile().equals("")) return null;
 		return configFileAnnotation.profile();
 	}
@@ -168,7 +169,7 @@ public class Config {
 			Logger.warn("Not a valid Json Object");
 
 		for (final Map.Entry<Class<?>, Object> deserializationEntry : toDeserialize.entrySet()) {
-			Object deserialized = tryDeserializeClass(deserializationEntry.getKey(), json, profile);
+			final Object deserialized = tryDeserializeClass(deserializationEntry.getKey(), json, profile);
 			deserializationEntry.setValue(deserialized);
 		}
 
@@ -182,9 +183,12 @@ public class Config {
 	private String getProfile (final JsonObject json, final String filename, final Map<Class<?>, Object> toSerialize) {
 		if (json == null) {
 			final String profile = getConfigFileProfile(toSerialize);
-			JsonObject jsonProfile = new JsonObject();
+			if (profile == null) return null;
+
+			final JsonObject jsonProfile = new JsonObject();
 			jsonProfile.add("profile", new JsonPrimitive(profile));
-			writeJsonConfigFile(new File(directory + filename), jsonProfile, null);
+			final File file = new File(directory + filename);
+			writeJsonConfigFile(file, jsonProfile, getErrorFilename(file.getAbsolutePath()));
 			return profile;
 
 		} else {

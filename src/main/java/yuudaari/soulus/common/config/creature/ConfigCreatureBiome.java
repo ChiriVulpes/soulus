@@ -13,6 +13,20 @@ public class ConfigCreatureBiome {
 	public String biomeId;
 	@Serialized(value = CreatureMapSerializer.class, topLevel = true) public Map<String, ConfigCreature> creatureConfigs = new HashMap<>();
 
+	public ConfigCreatureBiome () {}
+
+	public ConfigCreatureBiome (final String creature, final ConfigCreature config) {
+		creatureConfigs.put(creature, config);
+	}
+
+	public ConfigCreatureBiome (final Map<String, ConfigCreature> configs) {
+		creatureConfigs = configs;
+
+		for (final Map.Entry<String, ConfigCreature> entry : configs.entrySet()) {
+			entry.getValue().creatureId = entry.getKey();
+		}
+	}
+
 	public static class CreatureMapSerializer extends DefaultMapSerializer<ConfigCreature> {
 
 		@Override
@@ -30,16 +44,6 @@ public class ConfigCreatureBiome {
 			}
 
 			return result;
-		}
-	}
-
-	public ConfigCreatureBiome () {}
-
-	public ConfigCreatureBiome (final Map<String, ConfigCreature> creatureConfigs) {
-		this.creatureConfigs = creatureConfigs;
-
-		for (final Map.Entry<String, ConfigCreature> entry : creatureConfigs.entrySet()) {
-			entry.getValue().creatureId = entry.getKey();
 		}
 	}
 }

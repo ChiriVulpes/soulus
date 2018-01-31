@@ -37,6 +37,9 @@ public class ConfigCreature {
 		return this;
 	}
 
+	/**
+	 * Sets an explicit blacklist of drops. All other drops are whitelisted.
+	 */
 	public ConfigCreature setBlacklistedDrops (final String spawnType, final String... blacklistedDrops) {
 		ConfigCreatureDrops dc = drops.get(spawnType);
 		if (dc == null)
