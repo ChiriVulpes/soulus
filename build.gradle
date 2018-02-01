@@ -68,30 +68,29 @@ repositories {
         url "http://tehnut.info/maven"
     }
     
-    repositories {
-        // TheOneProbe
-        maven {
-            name "tterrag"
-            url "http://maven.tterrag.com"
-        }
+    // TheOneProbe
+    maven {
+        name "tterrag"
+        url "http://maven.tterrag.com"
+    }
         
-        repositories {
-            // RedstoneFlux
-            maven {
-                name = "CoFH Maven"
-                url = "http://maven.covers1624.net"
-            }
+    repositories {
+        // RedstoneFlux
+        maven {
+            name = "CoFH Maven"
+            url = "http://maven.covers1624.net"
         }
     }
 }
 
 dependencies {
     provided "exnihilocreatio:exnihilocreatio:1.12-0.1.5.9"
-    provided "mcp.mobius.waila:Hwyla:1.8.20-B38_1.12:api"
+    deobfCompile "mcp.mobius.waila:Hwyla:1.8.23-B38_1.12:api"
     provided "mezz.jei:jei_1.12.2:4.8.5.138:api"
     provided "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.0.387"
     provided "CraftTweaker2:CraftTweaker2-API:4.1.0.387"
     provided "CraftTweaker2:ZenScript:4.1.0.387"
+    deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.19-11:api"
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
