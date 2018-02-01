@@ -121,22 +121,24 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 		double activationAmount = 0;
 
-		List<String> entityTypes = new ArrayList<>();
+		final List<String> entityTypes = new ArrayList<>();
 
-		for (EntityLivingBase entity : world
-			.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos).grow(activatingRange))) {
+		final EnumFacing facing = world.getBlockState(pos).getValue(Composer.FACING).getOpposite();
+		final AxisAlignedBB activationBox = new AxisAlignedBB(pos.offset(facing, 2)).grow(activatingRange);
 
-			List<String> whitelist = CONFIG.whitelistedCreatures;
-			List<String> blacklist = CONFIG.blacklistedCreatures;
-			boolean whitelistAll = whitelist == null ? false : whitelist.contains("*");
-			boolean blacklistAll = blacklist == null ? false : blacklist.contains("*");
+		for (final EntityLivingBase entity : world.getEntitiesWithinAABB(EntityLivingBase.class, activationBox)) {
+
+			final List<String> whitelist = CONFIG.whitelistedCreatures;
+			final List<String> blacklist = CONFIG.blacklistedCreatures;
+			final boolean whitelistAll = whitelist == null ? false : whitelist.contains("*");
+			final boolean blacklistAll = blacklist == null ? false : blacklist.contains("*");
 
 			if (!(entity instanceof EntityPlayer)) {
-				ResourceLocation entityType = EntityList.getKey(entity);
+				final ResourceLocation entityType = EntityList.getKey(entity);
 				if (entityTypes.contains(entityType.toString()))
 					continue;
 
-				int whitelistLevel = (whitelistAll ? 1 : 0) + //
+				final int whitelistLevel = (whitelistAll ? 1 : 0) + //
 					(whitelist != null && whitelist.contains(entityType.getResourceDomain() + ":*") ? 2 : 0) + //
 					(whitelist != null && whitelist.contains(entityType.toString()) ? 4 : 0) - //
 					(blacklistAll ? 1 : 0) - //
@@ -151,7 +153,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 				activationAmount += 1;
 
 				if (!world.isRemote && isConnected && hasValidRecipe()) {
-					double poofChance = CONFIG.poofChance.get( //
+					final double poofChance = CONFIG.poofChance.get( //
 						upgrades.get(Upgrade.EFFICIENCY) / (double) Upgrade.EFFICIENCY.getMaxQuantity());
 					if (poofChance > world.rand.nextDouble()) {
 						entity.setDead();

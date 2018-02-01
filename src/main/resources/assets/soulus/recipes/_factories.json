@@ -9,6 +9,7 @@
 	"ingredients": {
 		"potential_essence": "yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence$Factory",
 		"orb_murky": "yuudaari.soulus.common.recipe.ingredient.IngredientOrbMurky$Factory",
+		"soul_catalyst": "yuudaari.soulus.common.recipe.ingredient.IngredientSoulCatalyst$Factory",
 		"crystal_blood": "yuudaari.soulus.common.recipe.ingredient.IngredientCrystalBlood$Factory",
 		"any_ingot": "yuudaari.soulus.common.recipe.ingredient.IngredientAnyIngot$Factory"
 	}
