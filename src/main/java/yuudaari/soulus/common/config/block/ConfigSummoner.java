@@ -61,42 +61,42 @@ public class ConfigSummoner extends ConfigUpgradeableBlock<Summoner> {
 		stylePotionEffects = new HashMap<>();
 
 		stylePotionEffects.put(EndersteelType.NORMAL, new ModPotionEffect[] {
-			new ModPotionEffect("water_breathing", 999999, 0.1f),
-			new ModPotionEffect("strength", 999999, 0.1f),
-			new ModPotionEffect("slowness", 999999, 0.1f),
-			new ModPotionEffect("invisibility", 999999, 0.1f),
-			new ModPotionEffect("weakness", 999999, 0.1f),
-			new ModPotionEffect("regeneration", 999999, 0.1f),
-			new ModPotionEffect("speed", 999999, 0.1f),
-			new ModPotionEffect("resistance", 999999, 0.1f)
+			new ModPotionEffect("water_breathing", 6000, 0.1f),
+			new ModPotionEffect("strength", 6000, 0.1f),
+			new ModPotionEffect("slowness", 6000, 0.1f),
+			new ModPotionEffect("invisibility", 6000, 0.1f),
+			new ModPotionEffect("weakness", 6000, 0.1f),
+			new ModPotionEffect("regeneration", 6000, 0.1f),
+			new ModPotionEffect("speed", 6000, 0.1f),
+			new ModPotionEffect("resistance", 6000, 0.1f)
 		});
 
 		// spooky
 		stylePotionEffects.put(EndersteelType.STONE, new ModPotionEffect[] {
-			new ModPotionEffect("glowing", 999999, 0.1f),
-			new ModPotionEffect("invisibility", 999999, 0.5f),
-			new ModPotionEffect("wither", 999999, 0.1f)
+			new ModPotionEffect("glowing", 6000, 0.1f),
+			new ModPotionEffect("invisibility", 6000, 0.5f),
+			new ModPotionEffect("wither", 6000, 0.1f)
 		});
 
 		// earthy
 		stylePotionEffects.put(EndersteelType.WOOD, new ModPotionEffect[] {
-			new ModPotionEffect("slowness", 999999, 0.2f),
-			new ModPotionEffect("resistance", 999999, 0.5f),
-			new ModPotionEffect("poison", 999999, 0.1f)
+			new ModPotionEffect("slowness", 6000, 0.2f),
+			new ModPotionEffect("resistance", 6000, 0.5f),
+			new ModPotionEffect("poison", 6000, 0.1f)
 		});
 
 		// blazing
 		stylePotionEffects.put(EndersteelType.BLAZE, new ModPotionEffect[] {
-			new ModPotionEffect("fire_resistance", 999999, 0.5f),
-			new ModPotionEffect("regeneration", 999999, 0.2f),
-			new ModPotionEffect("weakness", 999999, 0.1f)
+			new ModPotionEffect("fire_resistance", 6000, 0.5f),
+			new ModPotionEffect("regeneration", 6000, 0.2f),
+			new ModPotionEffect("weakness", 6000, 0.1f)
 		});
 
 		// ender
 		stylePotionEffects.put(EndersteelType.END_STONE, new ModPotionEffect[] {
-			new ModPotionEffect("speed", 999999, 0.1f),
-			new ModPotionEffect("absorption", 999999, 0.5f),
-			new ModPotionEffect("strength", 999999, 0.2f)
+			new ModPotionEffect("speed", 6000, 0.1f),
+			new ModPotionEffect("absorption", 6000, 0.5f),
+			new ModPotionEffect("strength", 6000, 0.2f)
 		});
 	}
 
