@@ -429,6 +429,8 @@ You can craft a Niobium Gear from Niobium, which is usable in the [Summoner](#su
 
 ![Niobium Gear](./preview/niobium_gear.gif)
 
+You can also make a block of Niobium with 9 ingots, which has comparator output that is the exact inverse of the input power. EG: Input is 15, output is 0. Input is 4, output is 11. It's like a slightly more powerful redstone torch.
+
 
 
 ## Soul Catalyst [🡅](#table-of-contents)
@@ -448,6 +450,10 @@ Soul Catalysts can be filled via crafting recipes or by putting them into a [Com
 The Soul Totem is the main block of a multiblock structure. It is crafted with Niobium, a Soul Catalyst, and obsidian, and takes Soul Catalysts as fuel. When powered by a Soul Catalyst (inserted like an upgrade), the Soul Totem functions as a player surrogate for the Summoner, and a chunk loader, of the current chunk and the surrounding ring of chunks, for a total of 9 chunks.
 
 Currently, the Soul Totem only has one upgrade, the Niobium Gear, which reduces the rate at which the Soul Catalyst fuel is consumed (to, by default, around a third of the normal rate).
+
+The Soul Totem structure is the Soul Totem on top, with 4 blocks of Dark Endersteel in the corners underneath, and 4 endersteel bars between those. 
+
+![Soul Totem Structure](./preview/soul_totem_structure.png)
 
 
 
