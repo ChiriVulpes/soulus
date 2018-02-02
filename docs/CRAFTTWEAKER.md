@@ -32,7 +32,7 @@ Composer::addShaped(String name, IItemStack stack, float time, IIngredient[][])
 Not providing the "time" argument in the call will set it to the default of `1`.
 
 Here's an example shaped recipe:
-```cs
+```js
 Composer.addShaped("soul_catalyst_from_diamonds", <soulus:soul_catalyst>, 2048, [
 	[<minecraft:diamond>, <minecraft:diamond>, <minecraft:diamond>],
 	[<minecraft:diamond>, <minecraft:diamond_block>, <minecraft:diamond>],
@@ -51,7 +51,7 @@ Composer::addShapeless(String name, IItemStack stack, float time, IIngredient[])
 Not providing the "time" argument in the call will set it to the default of `1`.
 
 Here's an example shapeless recipe:
-```cs
+```js
 Composer.addShapeless("soul_catalyst_from_ground", <soulus:soul_catalyst>, 3725, [
 	<minecraft:dirt>, <minecraft:dirt>, <minecraft:stone>
 ]);
