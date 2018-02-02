@@ -209,6 +209,7 @@ jei.description.soulus:gear_niobium=A gear made of metal forged from the souls o
 jei.description.soulus:soul_totem=A machine powered by compressed souls which can be used as a player surrogate to the summoner.
 
 jei.recipe.soulus:composer.recipe_time=%1$st
+jei.recipe.soulus:composer.recipe_time_tooltip=Recipe Duration
 
 command.soulus:soulus.usage=Usage: /soulus location|reload
 command.soulus:soulus.invalid_syntax=Command syntax invalid. %1$s

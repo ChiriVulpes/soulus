@@ -3,10 +3,12 @@ package yuudaari.soulus.common.compat.jei;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -14,6 +16,8 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import yuudaari.soulus.common.recipe.RecipeComposerShaped;
 import yuudaari.soulus.common.recipe.RecipeComposerShapeless;
+import yuudaari.soulus.common.util.RegionI;
+import yuudaari.soulus.common.util.Vec2i;
 
 public class RecipeWrapperComposer implements IRecipeWrapper {
 
@@ -71,11 +75,34 @@ public class RecipeWrapperComposer implements IRecipeWrapper {
 
 	@Override
 	public void drawInfo (Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
+		String time = getTimeString();
+		RegionI region = getTimeRegion(time);
+		minecraft.fontRenderer.drawString(time, region.pos.x, region.pos.y, Color.DARK_GRAY.getRGB(), false);
+	}
+
+	@Override
+	public List<String> getTooltipStrings (int mouseX, int mouseY) {
+		if (getTimeRegion().isPosWithin(new Vec2i(mouseX, mouseY)))
+			return Collections.singletonList(I18n.format("jei.recipe.soulus:composer.recipe_time_tooltip"));
+
+		return IRecipeWrapper.super.getTooltipStrings(mouseX, mouseY);
+	}
+
+	private String getTimeString () {
 		String timeString = "" + recipeTime;
 		if (timeString.endsWith(".0"))
 			timeString = timeString.substring(0, timeString.length() - 2);
 		String renderString = I18n.format("jei.recipe.soulus:composer.recipe_time", timeString);
-		int stringWidth = minecraft.fontRenderer.getStringWidth(renderString);
-		minecraft.fontRenderer.drawString(renderString, 72 - stringWidth / 2, 9, Color.DARK_GRAY.getRGB(), false);
+		return renderString;
+	}
+
+	private RegionI getTimeRegion () {
+		return getTimeRegion(getTimeString());
+	}
+
+	private RegionI getTimeRegion (String timeString) {
+		FontRenderer renderer = Minecraft.getMinecraft().fontRenderer;
+		int stringWidth = renderer.getStringWidth(timeString);
+		return new RegionI(new Vec2i(72 - stringWidth / 2, 9), new Vec2i(stringWidth, renderer.FONT_HEIGHT));
 	}
 }
