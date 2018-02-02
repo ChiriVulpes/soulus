@@ -2,9 +2,9 @@
 
 ## Table of Contents
 - [Config Profiles](#config-profiles-)
-- [Creatures](#configcreatures-)
-- [Essences](#configessences-)
-- [Summoner Replacement](#configsummoner_replacer-)
+- [Creatures](#creaturescreaturesjson-)
+- [Essences](#essencesessencesjson-)
+- [Summoner Replacement](#summoner_replacementreplacementjson-)
 
 
 
