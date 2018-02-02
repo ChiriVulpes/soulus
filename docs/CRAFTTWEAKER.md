@@ -68,6 +68,6 @@ Composer::remove(IItemStack output)
 You can remove Composer recipes by their name and by their output.
 
 Example:
-```cs
+```js
 Composer.remove(<soulus:soul_catalyst>);
 ```
