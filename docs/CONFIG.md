@@ -1,52 +1,59 @@
-[<- Return to Main Page](../README.md)
+[🡄 Return to Main Readme](../README.md)
 
 ## Table of Contents
+- [Config Profiles](#config-profiles-)
 - [Creatures](#configcreatures-)
 - [Essences](#configessences-)
 - [Summoner Replacement](#configsummoner_replacer-)
 
-## `CONFIG::creatures` [↑](#table-of-contents)
+
+
+## Config Profiles [🡅](#table-of-contents)
+
+All config files can optionally use a feature called "config profiles". A profile is a separate config file that you can use instead of the main file, in order to keep multiple versions of the file and switch between them in an easier way. A few config files also come with multiple default profiles, in order to provide quick and easy defaults for all kinds of players.
+
+To use a profile, replace the content of the file with the following:
 
 ```json
 {
-	"creatures": {
+	"profile": "<profile name>"
+}
+```
+
+`<profile name>` should be the name of the profile you want to use. It will be mapped to a json file of the same name, with `#<profile name>` at the end. For example:
+
+```json
+// misc.json
+{
+	"profile": "cool_stuff"
+}
+```
+
+This would map to the file `misc#cool_stuff.json`.
+
+
+
+## `creatures/creatures.json` [🡅](#table-of-contents)
+
+Default profiles:
+- `no_creatures_no_drops`: All mobs which enter the world from a place other than the Summoner are prevented. No mobs other than summoned mobs have drops. (Non-summoned mobs currently only exist if you have them enabled, and then switch to them disabled afterwards)
+- `no_creatures_yes_drops`: Same as previous, except drops are enabled for non-summoned mobs, if they exist.
+- `yes_creatures_no_drops`: All mob spawns are enabled, but only summoned mobs have drops.
+- `yes_creatures_yes_drops`: All mob spawns are enabled, and all mobs have drops.
+
+```json
+{
+	"*": {
 		"*": {
 			"*": {
-				"minecraft:skeleton": {
-					"spawn_chance": 0.0,
-					"drops": {
-						"all": {
-							"whitelisted_drops": [
-								"*"
-							],
-							"blacklisted_drops": [
-								"minecraft:bone"
-							]
-						}
-					}
-				},
-				"minecraft:wither_skeleton": {
-					"spawn_chance": 0.0,
-					"drops": {
-						"all": {
-							"whitelisted_drops": [
-								"*"
-							],
-							"blacklisted_drops": [
-								"minecraft:bone"
-							]
-						}
-					}
-				},
-				"*": {
-					"spawn_chance": 0.0,
-					"drops": {
-						"summoned": {
-							"whitelisted_drops": [
-								"*"
-							],
-							"blacklisted_drops": []
-						}
+				"spawn_chance": 0.0,
+				"drops": {
+					"summoned": {
+						"has_xp": true,
+						"whitelisted_drops": [
+							"*"
+						],
+						"blacklisted_drops": []
 					}
 				}
 			}
@@ -54,7 +61,7 @@
 	}
 }
 ```
-This is the default configuration, which disables all spawns, from every dimension, in every biome, of every creature. The first asterisk is a wildcard matching all dimensions, while the second asterisk is a wildcard matching all biomes, while the third asterisk is a wildcard matching all creatures.
+This is a simple configuration, which disables all spawns, from every dimension, in every biome, of every creature. The first asterisk is a wildcard matching all dimensions, while the second asterisk is a wildcard matching all biomes, while the third asterisk is a wildcard matching all creatures.
 
 `spawn_chance` affects only natural spawns. `drops`, however, will affect all mobs. In this config, we see Minecraft's bones being removed from all Skeletons and Wither Skeletons. (Soulus bones are added by default, elsewhere in the config)
 
@@ -67,60 +74,58 @@ For listing drops in `whitelisted_drops` or `blacklisted_drops`, you may use `"*
 Here's a more complex example:
 ```json
 {
-	"creatures": {
+	"*": {
 		"*": {
 			"*": {
-				"*": {
-					"spawn_chance": 0.0,
-					"drops": {}
-				},
-				"twilightforest:*": {
-					"spawn_chance": 1.0,
-					"drops": {}
-				},
-				"minecraft:wither": {
-					"spawn_chance": 1.0,
-					"drops": {
-						"all": {
-							"whitelisted_drops": [
-								"*"
-							],
-							"blacklisted_drops": []
-						}
-					}
-				}
+				"spawn_chance": 0.0,
+				"drops": {}
 			},
-			"minecraft:ocean": {
-				"*": {
-					"spawn_chance": 0.5,
-					"drops": {
-						"all": {
-							"whitelisted_drops": [
-								"*"
-							],
-							"blacklisted_drops": []
-						},
-						"spawned": {
-							"whitelisted_drops": [],
-							"blacklisted_drops": [
-								"minecraft:dye"
-							]
-						}
+			"twilightforest:*": {
+				"spawn_chance": 1.0,
+				"drops": {}
+			},
+			"minecraft:wither": {
+				"spawn_chance": 1.0,
+				"drops": {
+					"all": {
+						"whitelisted_drops": [
+							"*"
+						],
+						"blacklisted_drops": []
 					}
 				}
 			}
 		},
-		"the_end": {
-			"minecraft:*": {
-				"minecraft:ender_dragon": {
-					"spawn_chance": 1.0,
-					"drops": {
-						"all": {
-							"whitelisted_drops": [
-								"*"
-							],
-							"blacklisted_drops": []
-						}
+		"minecraft:ocean": {
+			"*": {
+				"spawn_chance": 0.5,
+				"drops": {
+					"all": {
+						"whitelisted_drops": [
+							"*"
+						],
+						"blacklisted_drops": []
+					},
+					"spawned": {
+						"whitelisted_drops": [],
+						"blacklisted_drops": [
+							"minecraft:dye"
+						]
+					}
+				}
+			}
+		}
+	},
+	"the_end": {
+		"minecraft:*": {
+			"minecraft:ender_dragon": {
+				"spawn_chance": 1.0,
+				"drops": {
+					"all": {
+						"whitelisted_drops": [
+							"*"
+						],
+						"blacklisted_drops": []
 					}
 				}
 			}
@@ -133,12 +138,16 @@ Then, any creatures that spawn in an ocean biome are half as likely to spawn.
 Then there's also an explicit configuration so that if the spawn is in the end, and in any vanilla biome, and the entity is an ender dragon, then it can spawn.
 In this example, nothing has drops except the ender dragon, the wither, and everything in an ocean biome. However, it also makes it so that nothing naturally spawned, which is in an ocean biome, will drop any "dye" item.
 
-To know the dimension and biome names of modded biomes, you can use the /souluslocation command.
+To know the dimension and biome names of modded biomes, you can use the `/soulus location` command.
 
-  
-As a side-note, when there are no mobs spawning, or very few, the spawning algorithm works a bit harder than usual to make more spawns, so a `spawn_chance` of 0.5 won't end up being half as many mobs. 
+#### Notes:
 
-## `CONFIG::essences` [↑](#table-of-contents)
+- The default profiles for `creatures/creatures.json` contain long sections which disable vanilla bone drops from skeletons, wither skeletons, and strays. It's not recommended to remove this, as if you do, there will be double bone drops from these mobs. 
+- When there are no mobs spawning, or very few, the spawning algorithm works a bit harder than usual to make more spawns, so a `spawn_chance` of `0.5` won't end up being half as many mobs. 
+
+
+
+## `essences/essences.json` [🡅](#table-of-contents)
 
 ```json
 {
@@ -185,33 +194,55 @@ As a side-note, when there are no mobs spawning, or very few, the spawning algor
 `spawns`: An object containing each mob that can *actually* spawn from this essence type, and the chance of spawning each over the others. If the object is empty, it can only spawn the mob that `essence` represents. Otherwise, it chooses from `spawns` (it does not include the mob in `essence` unless you specify it!)  
 `loot`: An object representing the bone drops for the spawned entities. `min` and `max` are used for the number of bones to drop, and `chance` is the chance that bones should be dropped at all.
 
-## `CONFIG::summoner_replacer` [↑](#table-of-contents)
 
-By default, all naturally-spawning mob spawners are replaced with empty variants of a summoner.
 
-The default config:
+## `summoner_replacement/replacement.json` [↑](#table-of-contents)
+
+Default profiles:
+- **`enabled` (default)**: Spawners will be replaced with Summoners with Soulbooks matching the mobs in the spawner.
+- **`enabled_empty`**: Spawners will be replaced with empty Summoners.
+- **`disabled`**: Spawners will not be replaced.
+
+The default config (`#enabled`):
 ```json
-"summoner_replacer": {
+{
 	"fortress": {
-		"*": "blaze"
+		"*": {
+			"type": "blaze",
+			"midnight_jewel": true
+		}
 	},
 	"*": {
-		"*": "normal"
+		"*": {
+			"type": "normal",
+			"midnight_jewel": true
+		}
 	},
 	"mineshaft": {
-		"*": "stone"
+		"*": {
+			"type": "stone",
+			"midnight_jewel": true
+		}
 	},
 	"stronghold": {
-		"*": "end_stone"
+		"*": {
+			"type": "end_stone",
+			"midnight_jewel": true
+		}
 	},
 	"mansion": {
-		"*": "wood"
+		"*": {
+			"type": "wood",
+			"midnight_jewel": true
+		}
 	}
 }
 ```
 
 The first key is used for the structure the spawner is in, and the second key is used for the creature id in the spawner. You can use `*` to target all creatures, `mod:*` to target all creatures from a mod, and the exact creature id to target just one creature.
 
-As for structures, you can use the `/souluslocation` command to get see the structures you're currently in. You can target all structures with `*`.
+As for structures, you can use the `/soulus location` command to get see the structures you're currently in. You can target all structures with `*`.
 
-The string you provide to the replacer can be any variant of the summoner. This example shows all 5 in use.
+The `type` you provide to the replacer can be any variant of the summoner. This example shows all 5 in use.
+
+If the `midnight_jewel` property is set to true, the replaced spawners will be Summoners with a Soulbook and a Midnight Jewel inside. The Soulbook will match the mob which was being spawned from the spawner. The Midnight Jewel will not drop from a natural Summoner.

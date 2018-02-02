@@ -10,7 +10,7 @@ import yuudaari.soulus.common.util.serializer.DefaultMapSerializer;
 import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
 
-@ConfigFile(file = "creatures/creatures", id = Soulus.MODID, profile = "yes_creatures_no_drops")
+@ConfigFile(file = "creatures/creatures", id = Soulus.MODID, profile = "no_creatures_no_drops")
 @Serializable
 public class ConfigCreatures {
 

@@ -6,7 +6,6 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.IIngredientFactory;
 import net.minecraftforge.common.crafting.JsonContext;
 import yuudaari.soulus.common.ModItems;
-import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.item.SoulCatalyst;
 
 public class IngredientSoulCatalyst extends Ingredient {

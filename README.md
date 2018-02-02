@@ -12,6 +12,8 @@ There are no modpack distribution restrictions for Soulus. You may use it in any
 
 See below for an in-depth list of features in the mod.
 
+
+
 ## Table of Contents
 - [Download](#download-)
 - [Previews](#previews-)
@@ -26,22 +28,30 @@ See below for an in-depth list of features in the mod.
 		- [Oscillating Gear](#oscillating-gear-)
 		- [Murky Orb](#murky-orb-)
 		- [Blood Crystal](#blood-crystal-)
+		- [Niobium Gear](#niobium-gear-)
 - [Skewer](#skewer-)
+	- [Skewer Upgrades](#skewer-upgrades-)
 - [Bone Drops](#bone-drops-)
 - [Ash](#ash-)
 - [Dark Endersteel](#dark-endersteel-)
+- [Endersteel Block](#endersteel-block-)
+- [Dark Endersteel Block](#dark-endersteel-block-)
 - [Composer](#composer-)
+	- [Composer Upgrades](#composer-upgrades-)
 - [Unloader](#unloader-)
+- [Endersteel Alchemy](#endersteel-alchemy-)
+- [Midnight Jewel](#midnight-jewel-)
+- [Niobium](#niobium-)
+- [Soul Catalyst](#soul-catalyst-)
+- [Soul Totem](#soul-totem-)
 - [Misc](#misc-)
 	- [Glue](#glue-)
 	- [Bark](#bark-)
 	- [Barket](#barket-)
-	- [Endersteel Alchemy](#endersteel-alchemy-)
-	- [Endersteel Block](#endersteel-block-)
-	- [Dark Endersteel Block](#dark-endersteel-block-)
 - [Mod Support](#mod-support-)
 - [Language Support](#language-support-)
 - [Contributing](#contributing-)
+
 
 
 ## Download [🡅](#table-of-contents)
@@ -49,6 +59,8 @@ See below for an in-depth list of features in the mod.
 [Github](https://github.com/Yuudaari/soulus/releases/latest)
 
 [CurseForge](https://minecraft.curseforge.com/projects/soulus)
+
+
 
 ## Previews [🡅](#table-of-contents)
 
@@ -58,17 +70,23 @@ See below for an in-depth list of features in the mod.
 
 ![Example Autocrafter](./preview/example_composer.png)
 
+
+
 ## No Mob Spawning and No Mob Drops [🡅](#table-of-contents)
 
 All mob spawning is disabled by default, but you can configure this functionality per dimension, biome, and creature, and even enable/disable drops for each. See [Creatures Config](./docs/CONFIG.md#configcreatures-)
 
 Summoner-summoned mobs are exempt from this config. They will always be summoned, and they will always have drops.
 
+
+
 ## Sledgehammer [🡅](#table-of-contents)
 
 ![Sledgehammer](./preview/sledgehammer.png)
 
 The Sledgehammer is used to smash materials. It is only used as a crafting ingredient, and currently only comes in iron. Using it as a weapon and more materials for it are planned.
+
+
 
 ## Fossils [🡅](#table-of-contents)
 
@@ -83,6 +101,8 @@ Fossils generate around the world, different types based on the biome and block.
 When you destroy a fossil, it will drop 4 bone chunks for that kind of fossil.
 
 Fossil veins are configurable (and you can even use the config to generate veins of other kinds of blocks, it's pretty vague). See `config.fossil_veins`
+
+
 
 ## Bone Chunks and Essences [🡅](#table-of-contents)
 
@@ -102,6 +122,8 @@ The main use of bone chunks, however, is to collect the essence of creatures! By
 | Nether | Zombie Pigman (20), Blaze (3), Wither Skeleton (1), Ghast (1), None (10) |
 | Ender | Shulker (1), Endermite (15), Creeper (10), Enderman (2), None (20) |
 
+
+
 ## Soulbook [🡅](#table-of-contents)
 
 ![Soulbook](./preview/soulbook.png)
@@ -111,10 +133,13 @@ You craft a Soulbook using a book and some ender bonemeal/ender dust. Soulbooks 
 ![Filling a Soulbook 1](./preview/filling_soulbook_1.png)
 ![Filling a Soulbook 2](./preview/filling_soulbook_2.png)
 
-You can fill a soulbook by crafting it with any number of your chosen type of essence. By default all mob types only require 16 essence to reconstruct their soul. That's two crafts if you craft the soulbook with 8 essence each time.
+You can fill a soulbook by crafting it with any number of your chosen type of essence. By default all mob types only require 16 essence to reconstruct their soul. That's two crafts if you craft the soulbook with 8 essence each time. 
+
+Late-game, Soulbooks can be filled easier by putting them into a [Composer Cell](#composer-cell-).
+
+
 
 ## Endersteel [🡅](#table-of-contents)
-
 
 1. Crush an iron ingot into iron dust.  
 ![Iron Dust](./preview/iron_dust.png)
@@ -136,6 +161,8 @@ Here's what they look like in the world:
 
 ![Endersteel Bars Preview](./preview/endersteel_bars_preview.png)
 
+
+
 ## Summoner [🡅](#table-of-contents)
 
 Using 8 Endersteel bars and an ender bonemeal in the center, you can craft an Empty Summoner.
@@ -154,9 +181,14 @@ If a summoner is receiving a redstone signal it will not be active.
 
 Summoners support comparators, they will output a signal strength of 1 if they are at 0% summoned and 15 if they are at 100% summoned. If they're not active, they will output a signal strength of 0.
 
+By default, over time the Summoner will use up the Soulbook inside of it. The amount of essence in its Soulbook translates directly to the uses of the Summoner. Once the Soulbook is empty, the Summoner will stop functioning. Removing the Soulbook after this point, therefore, will return an empty Soulbook, of the current alignment. (Once a Soulbook has an alignment, it cannot be removed)
+
+
+
 ## Summoner Upgrades [🡅](#table-of-contents)
 
-There are three upgrades for a summoner. An Oscillating Gear increases the speed, a Blood Crystal increases the quantity, and a Murky Orb increases the activation range.
+There are three main upgrades for a summoner. An Oscillating Gear increases the speed, a Blood Crystal increases the quantity, and a Murky Orb increases the activation range.
+
 
 ### Oscillating Gear [🡅](#table-of-contents)
 
@@ -174,6 +206,7 @@ Surrounding an ender bone gear in iron creates 2 oscillating gears.
 
 By default, a summoner can hold 16 oscillating gears, ranging from around 10 minutes per summon to around 30 seconds per summon.
 
+
 ### Murky Orb [🡅](#table-of-contents)
 
 Surrounding ender bonemeal with slimeballs (or glue) produces a Strange Sticky Ball. 
@@ -185,12 +218,14 @@ Crafting a Strange Sticky Ball with essence of any type puts the essence into it
 ![Murky Orb](./preview/filling_murky_orb_1.png)
 ![Murky Orb](./preview/filling_murky_orb_2.png)
 
+Late-game, Murky Orbs can be filled easier by putting them into a [Composer Cell](#composer-cell-).
+
 When a Murky Orb has been filled, its stack limit is 16.
 
 By default, a summoner can hold 16 murky orbs, ranging from around a range of 5 blocks to be active to around 70 blocks to be active.
 
-### Blood Crystal [🡅](#table-of-contents)
 
+### Blood Crystal [🡅](#table-of-contents)
 
 1. Smelting an emerald or soul sand produces a Burnt Emerald.   
 ![Burnt Emerald](./preview/burnt_emerald_1.png)
@@ -211,6 +246,15 @@ When a Blood Crystal has been filled, its stack limit is 16.
 
 By default, a summoner can hold 16 Blood Crystals, ranging from 1 entity summoned to around 6 entities summoned, max.
 
+
+### Niobium Gear [🡅](#table-of-contents)
+
+The Niobium Gear is a late-game upgrade for the Summoner which will reduce the Soulbook usage rate of a Summoner. By default, enough Niobium Gears will not prevent all Soulbook usage, only heavily reduce it.
+
+See [Niobium](#niobium-).
+
+
+
 ## Skewer [🡅](#table-of-contents)
 
 ![Skewer](./preview/skewer.png)
@@ -219,21 +263,31 @@ The Skewer is the Soulus way of killing creatures. It has two upgrades, and the 
 
 Skewers can be placed in any orientation, and spikes will extend outwards when the block receives a redstone signal. If you are at the same height as the spikes when they're facing upwards, you will collide with them and not be able to walk into them, but if you are any higher than that (eg: on a slab, a trapdoor, snow layers, or even a carpet), you will fall into them and begin to take damage. There is currently no collision protection for other orientations of the skewer.
 
-The first upgrade for the Skewer is an unfinished Blood Crystal. As the skewer damages entities, it can collect blood into the blood crystal it stores, based on the damage it deals. By default, for each damage it deals to an entity, there is a 50% chance of receiving 1 blood.
 
-The second upgrade for the Skewer is Nether Quartz. By default, the Skewer only deals 1 damage to each entity when they're not resistant to the damage. The Skewer can hold 256 Nether Quartz. At this point it will deal around 11 damage to entities when they're not resistant to the damage.
 
-Other upgrades for the Skewer are planned.
+## Skewer Upgrades [🡅](#table-of-contents)
+
+#### Unfinished Blood Crystal
+As the skewer damages entities, it can collect blood into the blood crystal it stores, based on the damage it deals. By default, for each damage it deals to an entity, there is a 50% chance of receiving 1 blood.
+
+#### Nether Quartz (Damage)
+By default, the Skewer only deals 1 damage to each entity when they're not resistant to the damage. The Skewer can hold 64 Nether Quartz. At this point it will deal around 6 damage to entities when they're not resistant to the damage.
+
+
 
 ## Bone Drops [🡅](#table-of-contents)
 
 By default, most mobs drop bones matching the bone type their essence comes from. This is configurable in the [Essences Config](./docs/CONFIG.md#configessences-)
+
+
 
 ## Ash [🡅](#table-of-contents)
 
 After collecting Blackened Bonemeal, you may use it on plants! This is a horrible, terrible fertilizer which in fact does not grow the plant, but reduces it to a pile of ash. It's also not very nice to do. Plant murderer.
 
 You can use ash as a replacement for essence in a Murky Orb, or to create Dark Endersteel.
+
+
 
 ## Dark Endersteel [🡅](#table-of-contents)
 
@@ -249,6 +303,32 @@ You can use ash as a replacement for essence in a Murky Orb, or to create Dark E
 4. Smelt the ash-ender-iron dust blend to get a dark endersteel ingot!  
 ![Dark Endersteel](./preview/dark_endersteel.png)
 
+
+
+## Endersteel Block [🡅](#table-of-contents)
+
+Crafting 9 endersteel bars into a block produces a Block of Endersteel. When placed into the world, you can use it as a clock, by reading its value via a comparator. The value is 0 when the block is receiving no power. When receiving power, it oscillates in a sin-wave from 0-15, at a speed dependent on the power received.
+
+
+
+## Dark Endersteel Block [🡅](#table-of-contents)
+
+Crafting 9 dark endersteel bars into a block produces a Block of Dark Endersteel. When placed into the world, you can use it as a random number generator, by reading its value via a comparator. The value is 0 when the block is receiving no power. Whenever it receives a new power level, it chooses a random output level 1-15.
+
+
+
+## Composer Cell [🡅](#table-of-contents)
+
+![Composer Cell](./preview/composer_cell.png) 
+
+To put items into a composer cell, you may either right click with a stack to put one item into the cell, sneak + right click to put the entire stack into the cell, or simply drop a stack on top of it. The [Unloader](#unloader-) is useful for automating insertion into Composer Cells.
+
+Each composer cell can hold up to 64 of the same item. *This ignores normal stack limitations.* 
+
+You can insert essence into a Composer Cell when it is filled with a Soulbook, Murky Orb, or Soul Catalyst, in order to fill them. This method is much faster and simpler than crafting.
+
+
+
 ## Composer [🡅](#table-of-contents)
 
 The Composer is a block which requires a multiblock structure to be built. It is an autocrafting table, more or less, which is very expensive and slow, but can be upgraded to be very fast. To build a Composer, here's what you will need:
@@ -256,8 +336,7 @@ The Composer is a block which requires a multiblock structure to be built. It is
 20 [Endersteel Bars](#endersteel-)  
 8 Obsidian  
 4 [Endersteel Blocks](#endersteel-block-)  
-9 Composer Cells:  
-![Composer Cell](./preview/composer_cell.png)  
+9 [Composer Cells](#composer-cell-)   
 1 Composer:  
 ![Composer](./preview/composer.png)
 
@@ -268,15 +347,31 @@ The composer can be on any side, as long as it's in the middle of that side. Mul
 
 The orientation of the composer is like a crafting table GUI. When looking at the structure from the composer, the right side is the top row of the crafting grid.
 
-To put items into a composer cell, you may either right click with a stack to put one item into the cell, sneak + right click to put the entire stack into the cell, or simply drop a stack on top of it. The [Unloader](#unloader-) is useful for automating insertion into Composer Cells.
+Any container items will be dropped underneath their cells after a composition completes. (You may put another block with an inventory underneath to deposit them into this inventory instead)
 
-Each composer cell can hold up to 64 of the same item. *This ignores normal stack limitations.* Any container items will be dropped underneath their cells after a composition completes. (You may put another block with an inventory underneath to deposit them into this inventory instead)
-
-The Composer doesn't work quite like the Summoner, in which it would require nearby players to function. Instead, it uses creatures! Each unique creature type nearby makes it go slightly faster. However, each creature type nearby has a 2% chance of "poofing", or being used up by the Composer, every second. (The creature will vanish entirely in a puff of smoke) EG: To keep a Composer running around the clock, you must feed it creatures with Summoner(s).
-
-The Composer can craft any normal or shapeless recipe, and you can add recipes via json (`soulus:composer_shapeless` or `soulus:composer_shaped`). These recipes will work *only* in the Composer, and not in any other table or autocrafter.
+The Composer doesn't work quite like the Summoner, in which it would require nearby players to function. Instead, it uses creatures! Each unique creature type nearby makes it go slightly faster. However, each creature type nearby has a `2%` chance of "poofing", or being used up by the Composer, every second. (The creature will vanish entirely in a puff of smoke) EG: To keep a Composer running around the clock, you must feed it creatures with Summoner(s).
 
 Composers support comparators, they will output a signal strength of 1 if they are at 0% composed and 15 if they are at 100% composed. If they're not active, they will output a signal strength of 0.
+
+The Composer can craft any normal crafting recipe. The recipes will take the default amount of time, named `1t`. Recipes exclusive to the Composer can take much longer, such as `512t`, which would mean 512x as long as a normal recipe.
+
+You can [add recipes which will only work in the Composer via CraftTweaker](./docs/CRAFTTWEAKER.md).
+
+
+
+## Composer Upgrades [🡅](#table-of-contents)
+
+
+#### Murky Orb (Range)
+The range of the Composer is a 4 block radius from the center Composer Cell. Each Murky Orb extends that radius by 1 block.
+
+#### Oscillating Gear (Speed)
+Self explanatory.
+
+#### Niobium Gear (Efficiency)
+Decreases the rate at which mobs "poof", from `2%` per second to, when maximally upgraded, `.6%` per second.
+
+
 
 ## Unloader [🡅](#table-of-contents)
 
@@ -284,7 +379,80 @@ Composers support comparators, they will output a signal strength of 1 if they a
 
 The Unloader is a block that will automatically drop any items put into it. It has no redstone support; to change how fast it drops items, you may feed it with a dropper or dispenser, and power those via redstone.
 
+
+
+## Endersteel Alchemy [🡅](#table-of-contents)
+
+Once you have a composer, you may create Endersteel from *any ingot*. The recipe is 8 ingots surrounding a single ender dust, and will return 8 Endersteel ingots. It takes 16x as long as a normal crafting recipe in the Composer. 
+
+![Endersteel Alchemy](./preview/endersteel_alchemy.gif)
+
+After creating Endersteel, you may use it to create any of the other base metals. The metals currently supported are:
+- Aluminum
+- Copper
+- Gold
+- Iron
+- Lead
+- Nickel
+- Silver
+- Tin
+- Zinc
+
+Here's an example:  
+![Endersteel Alchemy -> Iron](./preview/endersteel_alchemy_iron.png)
+
+All Endersteel Alchemy recipes are shaped this way, the dust of the metal surrounded by Endersteel Ingots. You will notice this method is not lossless. Consider creating the Endersteel from a renewable resource, such as Bricks, which can be converted into Endersteel the same as all other ingots.
+
+If you believe another metal should be supported, make an issue for it. Note that I will only be adding recipes for metals which are "easy" to collect.
+
+
+
+## Midnight Jewel [🡅](#table-of-contents)
+
+![Midnight Jewel](./preview/midnight_jewel.png)
+
+The Midnight Jewel is created from a Blood Crystal surrounded by ash in a Composer. The recipe takes 256x as long as a normal recipe.
+
+Each held Midnight Jewel has a small chance every tick of dealing damage and inflicting negative status effects upon the holder. It will not end well to hold a stack or more of the Jewels.
+
+
+
+## Niobium [🡅](#table-of-contents)
+
+![Niobium](./preview/niobium.png)
+
+A Midnight Jewel surrounded by Endersteel in the Composer will create 8 Niobium Ingots. Once you have Niobium, you may use its dust to create Niobium easier.
+
+![Niobium Alchemy](./preview/niobium_alchemy.png)
+
+You can craft a Niobium Gear from Niobium, which is usable in the [Summoner](#summoner-), [Composer](#composer-), and [Soul Totem](#soul-totem-) as Efficiency upgrades in each. (Reduces the rate at which they use their respective fuels)
+
+![Niobium Gear](./preview/niobium_gear.gif)
+
+
+
+## Soul Catalyst [🡅](#table-of-contents)
+
+![Soul Catalyst](./preview/soul_catalyst.png)
+
+A Midnight Jewel surrounded by 4 niobium dust in a Composer creates a Soul Catalyst. A Soul Catalyst must be filled with essence of any kind. Once it is filled, it can be used as the fuel for a Soul Totem.
+
+Soul Catalysts can be filled via crafting recipes or by putting them into a [Composer Cell](#composer-cell-).
+
+
+
+## Soul Totem [🡅](#table-of-contents)
+
+![Soul Totem](./preview/soul_totem.png)
+
+The Soul Totem is the main block of a multiblock structure. It is crafted with Niobium, a Soul Catalyst, and obsidian, and takes Soul Catalysts as fuel. When powered by a Soul Catalyst (inserted like an upgrade), the Soul Totem functions as a player surrogate for the Summoner, and a chunk loader, of the current chunk and the surrounding ring of chunks, for a total of 9 chunks.
+
+Currently, the Soul Totem only has one upgrade, the Niobium Gear, which reduces the rate at which the Soul Catalyst fuel is consumed (to, by default, around a third of the normal rate).
+
+
+
 ## Misc [🡅](#table-of-contents)
+
 
 ### Glue [🡅](#table-of-contents)
 
@@ -292,9 +460,11 @@ The Unloader is a block that will automatically drop any items put into it. It h
 
 Glue is crafted from sugar, bonemeal, and a bucket of water. It can be used anywhere a slimeball can. You can consume glue.
 
+
 ### Bark [🡅](#table-of-contents)
 
 Every 100 or so logs produces 8 bark instead of a log. You can use 2 bark and 3 paper to make a book.
+
 
 ### Barket [🡅](#table-of-contents)
 
@@ -302,34 +472,32 @@ Every 100 or so logs produces 8 bark instead of a log. You can use 2 bark and 3 
 
 Make a bucket shape with Bark to get a "Barket". It can only pick up water and will likely break in a matter of seconds. If you let it break, you'll spill your water!
 
-### Endersteel Alchemy [🡅](#table-of-contents)
 
-Once you have a composer, you may create Endersteel from *any ingot*. The recipe is 8 ingots surrounding a single ender dust, and will return 8 Endersteel ingots. It takes 16x as long as a normal crafting recipe in the Composer.
-
-### Endersteel Block [🡅](#table-of-contents)
-
-Crafting 9 endersteel bars into a block produces a Block of Endersteel. When placed into the world, you can use it as a clock, by reading its value via a comparator. The value is 0 when the block is receiving no power. When receiving power, it oscillates in a sin-wave from 0-15, at a speed dependent on the power received.
-
-### Dark Endersteel Block [🡅](#table-of-contents)
-
-Crafting 9 dark endersteel bars into a block produces a Block of Dark Endersteel. When placed into the world, you can use it as a random number generator, by reading its value via a comparator. The value is 0 when the block is receiving no power. Whenever it receives a new power level, it chooses a random output level 1-15.
 
 ## Mod Support [🡅](#table-of-contents)
+
 
 ### Ex Nihilo Creatio
 
 Drops are added automatically to Ex Nihilo Creatio Sieves. The default values are not configurable as they can be configured via Ex Nihilo Creatio configs.
 
+
 ### Other Explicitly Supported Mods
 
 Waila (Hwyla)
+JEI
+CraftTweaker
+
+
 
 ## Language Support [🡅](#table-of-contents)
 Soulus supports English, by default. The following languages are also supported, but were translated by the community:
 
-- Spanish, by Jairo0108
+- Spanish, by Jairo0108 (last update: 2.2.0)
 
 Thank you for contributing!
+
+
 
 ## Contributing [🡅](#table-of-contents)
 

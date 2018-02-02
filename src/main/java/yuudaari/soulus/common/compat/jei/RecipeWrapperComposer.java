@@ -60,7 +60,7 @@ public class RecipeWrapperComposer implements IRecipeWrapper {
 
 	public RecipeWrapperComposer (RecipeComposerShapeless recipe) {
 		this(recipe, false);
-		registryName = recipe.getRegistryName();
+		recipeTime = recipe.getTime();
 	}
 
 	@Override
