@@ -25,9 +25,9 @@ import yuudaari.soulus.common.block.summoner.SummonerTileEntity;
 import yuudaari.soulus.common.block.summoner.Summoner.Upgrade;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
-import yuudaari.soulus.common.config.summoner_replacement.ConfigSummonerReplacement;
-import yuudaari.soulus.common.config.summoner_replacement.ConfigStructure;
-import yuudaari.soulus.common.config.summoner_replacement.ConfigReplacement;
+import yuudaari.soulus.common.config.world.summoner_replacement.ConfigSummonerReplacement;
+import yuudaari.soulus.common.config.world.summoner_replacement.ConfigStructure;
+import yuudaari.soulus.common.config.world.summoner_replacement.ConfigReplacement;
 import yuudaari.soulus.common.util.GeneratorName;
 import yuudaari.soulus.common.util.Logger;
 

@@ -1,4 +1,4 @@
-package yuudaari.soulus.common.config.summoner_replacement;
+package yuudaari.soulus.common.config.world.summoner_replacement;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +10,7 @@ import yuudaari.soulus.common.util.serializer.DefaultMapSerializer;
 import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
 
-@ConfigFile(file = "summoner_replacement/replacement", id = Soulus.MODID, profile = "enabled")
+@ConfigFile(file = "world/summoner_replacement/replacement", id = Soulus.MODID, profile = "enabled")
 @Serializable
 public class ConfigSummonerReplacement {
 

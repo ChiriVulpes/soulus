@@ -1,4 +1,4 @@
-package yuudaari.soulus.common.config.summoner_replacement;
+package yuudaari.soulus.common.config.world.summoner_replacement;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,17 +1,19 @@
-package yuudaari.soulus.common.config.misc;
+package yuudaari.soulus.common.config.world;
 
 import net.minecraftforge.common.BiomeDictionary.Type;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.config.ConfigFile;
+import yuudaari.soulus.common.config.ConfigProfile;
 import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
 import yuudaari.soulus.common.world.OreVein;
 
-@ConfigFile(file = "misc/veins", id = Soulus.MODID)
+@ConfigFile(file = "world/veins/veins", id = Soulus.MODID, profile = "enabled")
 @Serializable
 public class ConfigOreVeins {
 
-	@Serialized public OreVein[] veins = new OreVein[] {
+	@ConfigProfile public static ConfigOreVeins disabled = new ConfigOreVeins();
+	@ConfigProfile public static ConfigOreVeins enabled = new ConfigOreVeins(new OreVein[] {
 		new OreVein().setBlock("soulus:fossil_dirt")
 			.setToReplace("minecraft:dirt")
 			.setSize(3, 7)
@@ -88,6 +90,16 @@ public class ConfigOreVeins {
 			.setSize(2, 5)
 			.setChances(300)
 			.setBiomes(Type.END)
-	};
+	});
+
+	@Serialized public OreVein[] veins;
+
+	public ConfigOreVeins () {
+		veins = new OreVein[0];
+	}
+
+	public ConfigOreVeins (OreVein[] veins) {
+		this.veins = veins;
+	}
 
 }
