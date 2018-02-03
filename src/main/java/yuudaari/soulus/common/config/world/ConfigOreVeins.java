@@ -87,7 +87,7 @@ public class ConfigOreVeins {
 		new OreVein()
 			.setBlock("soulus:fossil_end_stone")
 			.setToReplace("minecraft:end_stone")
-			.setSize(2, 5)
+			.setSize(4, 9)
 			.setChances(300)
 			.setBiomes(Type.END)
 	});

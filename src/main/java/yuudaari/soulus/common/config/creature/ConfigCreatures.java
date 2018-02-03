@@ -25,7 +25,11 @@ public class ConfigCreatures {
 			.setBlacklistedDrops("spawned", "*"))
 		.addCreatureConfig("minecraft:stray", new ConfigCreature(0.0)
 			.setBlacklistedDrops("all", "minecraft:bone")
-			.setBlacklistedDrops("spawned", "*"));
+			.setBlacklistedDrops("spawned", "*"))
+		.addCreatureConfig("minecraft:wither", new ConfigCreature(1.0)
+			.setWhitelistedDrops("all", "*"))
+		.addCreatureConfig("minecraft:ender_dragon", new ConfigCreature(1.0)
+			.setWhitelistedDrops("all", "*"));
 
 	@ConfigProfile public static ConfigCreatures noCreaturesYesDrops = new ConfigCreatures()
 		.addCreatureConfig("*", new ConfigCreature(0.0)
@@ -35,7 +39,11 @@ public class ConfigCreatures {
 		.addCreatureConfig("minecraft:wither_skeleton", new ConfigCreature(0.0)
 			.setBlacklistedDrops("all", "minecraft:bone"))
 		.addCreatureConfig("minecraft:stray", new ConfigCreature(0.0)
-			.setBlacklistedDrops("all", "minecraft:bone"));
+			.setBlacklistedDrops("all", "minecraft:bone"))
+		.addCreatureConfig("minecraft:wither", new ConfigCreature(1.0)
+			.setWhitelistedDrops("all", "*"))
+		.addCreatureConfig("minecraft:ender_dragon", new ConfigCreature(1.0)
+			.setWhitelistedDrops("all", "*"));
 
 	@ConfigProfile public static ConfigCreatures yesCreaturesNoDrops = new ConfigCreatures()
 		.addCreatureConfig("*", new ConfigCreature(1.0)
@@ -45,7 +53,11 @@ public class ConfigCreatures {
 		.addCreatureConfig("minecraft:wither_skeleton", new ConfigCreature(1.0)
 			.setBlacklistedDrops("summoned", "minecraft:bone"))
 		.addCreatureConfig("minecraft:stray", new ConfigCreature(1.0)
-			.setBlacklistedDrops("summoned", "minecraft:bone"));
+			.setBlacklistedDrops("summoned", "minecraft:bone"))
+		.addCreatureConfig("minecraft:wither", new ConfigCreature(1.0)
+			.setWhitelistedDrops("all", "*"))
+		.addCreatureConfig("minecraft:ender_dragon", new ConfigCreature(1.0)
+			.setWhitelistedDrops("all", "*"));
 
 	@ConfigProfile public static ConfigCreatures yesCreaturesYesDrops = new ConfigCreatures()
 		.addCreatureConfig("*", new ConfigCreature(1.0)

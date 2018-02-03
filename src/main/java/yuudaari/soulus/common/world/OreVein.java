@@ -22,23 +22,21 @@ import yuudaari.soulus.common.util.serializer.Serialized;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+@SuppressWarnings("unchecked")
 @Serializable
 public class OreVein {
 
-	public static final Map<String, Type> BIOME_TYPES = new HashMap<>();
+	public static final Map<String, Type> BIOME_TYPES;
 	static {
 		try {
 			Field f = Type.class.getDeclaredField("byName");
 			f.setAccessible(true);
 
-			@SuppressWarnings("unchecked")
-			Map<String, Type> biomeTypes = (Map<String, Type>) f.get(null);
-			OreVein.BIOME_TYPES.putAll(biomeTypes);
+			BIOME_TYPES = (Map<String, Type>) f.get(null);
 
 		} catch (final IllegalAccessException | NoSuchFieldException e) {
 			Logger.error(e);
@@ -122,57 +120,62 @@ public class OreVein {
 	}
 
 	public void generate (World world, Random random, int chunkX, int chunkZ) {
-		if (dimension == null || world.provider.getDimensionType() == dimension) {
-			int veinSize = size.min.intValue() + random.nextInt(size.max.intValue() - size.min.intValue());
-			int heightRange = height.max.intValue() - height.min.intValue();
 
-			IBlockState veinBlock = BlockFromString.get(block);
-			IBlockState toReplace = BlockFromString.get(replace);
+		if (chances <= 0) return;
+		if (size.max <= size.min) return;
+		if (height.max <= height.min) return;
+		if (dimension != null && world.provider.getDimensionType() != dimension) return;
 
-			if (veinBlock == null || toReplace == null) {
-				Logger.error("Unable to generate vein of " + veinBlock + " in " + toReplace);
-				return;
+
+		int veinSize = size.min.intValue() + random.nextInt(size.max.intValue() - size.min.intValue());
+		int heightRange = height.max.intValue() - height.min.intValue();
+
+		IBlockState veinBlock = BlockFromString.get(block);
+		IBlockState toReplace = BlockFromString.get(replace);
+
+		if (veinBlock == null || toReplace == null) {
+			Logger.error("Unable to generate vein of " + veinBlock + " in " + toReplace);
+			return;
+		}
+
+		WorldGenMinable gen = new WorldGenMinable(veinBlock, veinSize, blockstate -> blockstate.equals(toReplace));
+		for (int i = 0; i < chances; i++) {
+			int x = chunkX * 16 + random.nextInt(16);
+			int y = random.nextInt(heightRange) + height.min.intValue();
+			int z = chunkZ * 16 + random.nextInt(16);
+
+			BlockPos pos = new BlockPos(x, y, z);
+
+			if (biomeTypesWhitelist.size() > 0) {
+				Biome biome = world.getBiome(pos);
+
+				if (!biomeTypesWhitelist.stream().anyMatch(type -> BiomeDictionary.hasType(biome, type))) {
+					/*
+					Logger.info(
+							"Can't put '" + block + "' in biome '" + biome.getBiomeName() + "' (not whitelisted)");
+					String out = "";
+					for (Type type : biomeTypesWhitelist)
+						out += type.getName() + ", ";
+					Logger.info(out);
+					*/
+					// don't even bother, we failed once, it's likely we'll fail again
+					// might as well speed up gen speeds slightly
+					break;
+				}
 			}
 
-			WorldGenMinable gen = new WorldGenMinable(veinBlock, veinSize, blockstate -> blockstate.equals(toReplace));
-			for (int i = 0; i < chances; i++) {
-				int x = chunkX * 16 + random.nextInt(16);
-				int y = random.nextInt(heightRange) + height.min.intValue();
-				int z = chunkZ * 16 + random.nextInt(16);
+			if (biomeTypesBlacklist.size() > 0) {
+				Biome biome = world.getBiome(pos);
 
-				BlockPos pos = new BlockPos(x, y, z);
-
-				if (biomeTypesWhitelist.size() > 0) {
-					Biome biome = world.getBiome(pos);
-
-					if (!biomeTypesWhitelist.stream().anyMatch(type -> BiomeDictionary.hasType(biome, type))) {
-						/*
-						Logger.info(
-								"Can't put '" + block + "' in biome '" + biome.getBiomeName() + "' (not whitelisted)");
-						String out = "";
-						for (Type type : biomeTypesWhitelist)
-							out += type.getName() + ", ";
-						Logger.info(out);
-						*/
-						// don't even bother, we failed once, it's likely we'll fail again
-						// might as well speed up gen speeds slightly
-						break;
-					}
+				if (biomeTypesBlacklist.stream().anyMatch(type -> BiomeDictionary.hasType(biome, type))) {
+					// Logger.info("Can't put '" + block + "' in biome '" + biome.getBiomeName() + "' (blacklisted)");
+					// don't even bother, we failed once, it's likely we'll fail again
+					// might as well speed up gen speeds slightly
+					break;
 				}
-
-				if (biomeTypesBlacklist.size() > 0) {
-					Biome biome = world.getBiome(pos);
-
-					if (biomeTypesBlacklist.stream().anyMatch(type -> BiomeDictionary.hasType(biome, type))) {
-						// Logger.info("Can't put '" + block + "' in biome '" + biome.getBiomeName() + "' (blacklisted)");
-						// don't even bother, we failed once, it's likely we'll fail again
-						// might as well speed up gen speeds slightly
-						break;
-					}
-				}
-
-				gen.generate(world, random, pos);
 			}
+
+			gen.generate(world, random, pos);
 		}
 	}
 }
