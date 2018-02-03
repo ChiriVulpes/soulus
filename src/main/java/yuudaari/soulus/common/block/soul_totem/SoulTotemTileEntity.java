@@ -43,7 +43,9 @@ public class SoulTotemTileEntity extends UpgradeableBlockTileEntity {
 	}
 
 	public boolean isActive () {
-		return isConnected && (upgrades.get(Upgrade.SOUL_CATALYST) > 0 || fuelTimeRemaining > 0);
+		return isConnected && //
+			(upgrades.get(Upgrade.SOUL_CATALYST) > 0 || fuelTimeRemaining > 0) && //
+			(!CONFIG.canDisableWithRedstone || world.isBlockIndirectlyGettingPowered(pos) == 0);
 	}
 
 	public int getSignalStrength () {

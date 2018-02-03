@@ -21,5 +21,6 @@ public class ConfigSoulTotem extends ConfigUpgradeableBlock<SoulTotem> {
 	@Serialized public int soulCatalystFuelTime = 10000;
 	@Serialized public Range efficiencyUpgradesRange = new Range(1, .3);
 	@Serialized public boolean isChunkloader = true;
+	@Serialized public boolean canDisableWithRedstone = false;
 
 }
