@@ -11,10 +11,13 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag.TooltipFlags;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -100,8 +103,46 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 		return ModBlocks.COMPOSER_CELL;
 	}
 
+	@Override
 	public BlockFaceShape getBlockFaceShape (IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
 		return BlockFaceShape.UNDEFINED;
+	}
+
+	@Override
+	public boolean isFullCube (IBlockState state) {
+		return false;
+	}
+
+	@Override
+	public void addCollisionBoxToList (IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean isActualState) {
+		if (state.getValue(CELL_STATE) == CellState.DISCONNECTED) {
+			addCollisionBoxToList(pos, entityBox, collidingBoxes, new AxisAlignedBB(.0625, 0, .0625, .9375, .25, .9375));
+			addCollisionBoxToList(pos, entityBox, collidingBoxes, new AxisAlignedBB(.1875, .25, .1875, .9375, .5625, .8125));
+			addCollisionBoxToList(pos, entityBox, collidingBoxes, new AxisAlignedBB(0, .5625, 0, 1, 1, 1));
+
+		} else {
+			// if it's part of a structure, the shape doesn't matter, it should just be cubes
+			addCollisionBoxToList(pos, entityBox, collidingBoxes, state.getCollisionBoundingBox(worldIn, pos));
+		}
+	}
+
+	@Override
+	public boolean hasComparatorInputOverride (IBlockState state) {
+		return true;
+	}
+
+	@Override
+	public int getComparatorInputOverride (IBlockState blockState, World world, BlockPos pos) {
+		ComposerCellTileEntity te = (ComposerCellTileEntity) world.getTileEntity(pos);
+		ItemStack stack = te.getStoredItem();
+		if (stack == null || te.storedQuantity <= 0) return 0;
+
+		Item item = stack.getItem();
+		if (item instanceof IFillableWithEssence && te.storedQuantity == 1) {
+			return 1 + (int) Math.floor(14F * ((IFillableWithEssence) item).getFillPercentage(stack));
+		}
+
+		return 1 + (int) Math.floor(14 * (te.storedQuantity / (float) CONFIG.maxQuantity));
 	}
 
 	/////////////////////////////////////////
@@ -124,21 +165,6 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	public int getMetaFromState (IBlockState state) {
 		return state.getValue(CELL_STATE).getMeta();
 	}
-
-	/*
-	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY,
-			float hitZ, int meta, EntityLivingBase placer) {
-	
-		IBlockState state = getDefaultState().withProperty(FACING,
-				EnumFacing.getDirectionFromEntityLiving(pos, placer));
-	
-		EnumFacing direction = validateStructure(world, pos);
-		if (direction != null && state.getValue(Composer.FACING) != direction)
-			state = state.withProperty(Composer.FACING, direction).withProperty(CONNECTED, true);
-	
-		return state;
-	}
-	*/
 
 	/////////////////////////////////////////
 	// Tile Entity

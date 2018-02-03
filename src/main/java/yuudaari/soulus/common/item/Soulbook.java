@@ -24,7 +24,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.block.composer.ComposerCell.IHasImportantInfos;
-import yuudaari.soulus.common.block.composer.ComposerCellTileEntity.IFillableWithEssence;
+import yuudaari.soulus.common.block.composer.IFillableWithEssence;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
@@ -198,8 +198,12 @@ public class Soulbook extends ModItem implements IHasImportantInfos, IFillableWi
 		int currentEssence = getContainedEssence(currentStack);
 		String essenceType = EssenceType.getEssenceType(currentStack);
 		String fillWithEssenceType = EssenceType.getEssenceType(fillWith);
-		if (essenceType != null && !essenceType.equals(fillWithEssenceType)) return 0;
-		if (essenceType == null) EssenceType.setEssenceType(currentStack, fillWithEssenceType);
+
+		if (fillWithEssenceType == null || //
+			(essenceType != null && !essenceType.equals(fillWithEssenceType)))
+			return 0;
+
+		if (essenceType == null) EssenceType.setEssenceType(currentStack, essenceType = fillWithEssenceType);
 
 		int requiredEssence = CONFIG.getSoulbookQuantity(essenceType);
 		int insertQuantity = Math.max(0, Math.min(quantity, requiredEssence - currentEssence));
@@ -207,6 +211,15 @@ public class Soulbook extends ModItem implements IHasImportantInfos, IFillableWi
 		if (insertQuantity > 0) setContainedEssence(currentStack, currentEssence + insertQuantity);
 
 		return insertQuantity;
+	}
+
+	@Override
+	public float getFillPercentage (ItemStack stack) {
+		String essenceType = EssenceType.getEssenceType(stack);
+		if (essenceType == null) return 0;
+		int requiredEssence = CONFIG.getSoulbookQuantity(essenceType);
+		if (requiredEssence < 0) return 0;
+		return getContainedEssence(stack) / (float) requiredEssence;
 	}
 
 	public static int getContainedEssence (ItemStack stack) {

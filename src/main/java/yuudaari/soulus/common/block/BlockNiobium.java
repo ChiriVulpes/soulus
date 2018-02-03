@@ -61,7 +61,7 @@ public class BlockNiobium extends ModBlock {
 			world.setBlockState(pos, getDefaultState().withProperty(HAS_COMPARATOR, true), 7);
 		}
 
-		BlockEndersteelTileEntity te = (BlockEndersteelTileEntity) world.getTileEntity(pos);
+		BlockNiobiumTileEntity te = (BlockNiobiumTileEntity) world.getTileEntity(pos);
 		return te == null ? 0 : te.power;
 	}
 
@@ -72,15 +72,15 @@ public class BlockNiobium extends ModBlock {
 
 	@Override
 	public Class<? extends TileEntity> getTileEntityClass () {
-		return BlockEndersteelTileEntity.class;
+		return BlockNiobiumTileEntity.class;
 	}
 
 	@Override
 	public TileEntity createTileEntity (World worldIn, IBlockState blockState) {
-		return new BlockEndersteelTileEntity();
+		return new BlockNiobiumTileEntity();
 	}
 
-	public static class BlockEndersteelTileEntity extends TileEntity implements ITickable {
+	public static class BlockNiobiumTileEntity extends TileEntity implements ITickable {
 
 		public int power = 0;
 
@@ -89,13 +89,7 @@ public class BlockNiobium extends ModBlock {
 			if (hasComparator()) {
 
 				int powerIn = world.isBlockIndirectlyGettingPowered(pos);
-				int newPower = power;
-				if (powerIn == 0) {
-					newPower = 0;
-
-				} else {
-					newPower = 15 - powerIn;
-				}
+				int newPower = 15 - powerIn;
 
 				if (this.power != newPower) {
 					this.power = newPower;

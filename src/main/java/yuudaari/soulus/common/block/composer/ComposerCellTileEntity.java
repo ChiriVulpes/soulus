@@ -108,8 +108,9 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 
 			return true;
 
-		} else if (composerLocation == null && stack.getItem() == ModItems.ESSENCE && //
-			currentStack.getItem() instanceof IFillableWithEssence && storedQuantity == 1) {
+		} else if (composerLocation == null && //
+			currentStack.getItem() instanceof IFillableWithEssence && storedQuantity == 1 && //
+			(stack.getItem() == ModItems.ESSENCE || stack.getItem() == ModItems.ASH)) {
 
 			IFillableWithEssence fillable = (IFillableWithEssence) currentStack.getItem();
 			int insertQuantity = fillable.fill(currentStack, stack, requestedQuantity);
@@ -120,11 +121,6 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 		}
 
 		return false;
-	}
-
-	public static interface IFillableWithEssence {
-
-		public int fill (ItemStack currentStack, ItemStack fillWith, int quantity);
 	}
 
 	/////////////////////////////////////////

@@ -66,7 +66,7 @@ public class BlockEndersteelDark extends ModBlock {
 			world.setBlockState(pos, getDefaultState().withProperty(HAS_COMPARATOR, true), 7);
 		}
 
-		BlockEndersteelTileEntity te = (BlockEndersteelTileEntity) world.getTileEntity(pos);
+		BlockEndersteelDarkTileEntity te = (BlockEndersteelDarkTileEntity) world.getTileEntity(pos);
 		return te == null ? 0 : te.signalOut;
 	}
 
@@ -107,15 +107,15 @@ public class BlockEndersteelDark extends ModBlock {
 
 	@Override
 	public Class<? extends TileEntity> getTileEntityClass () {
-		return BlockEndersteelTileEntity.class;
+		return BlockEndersteelDarkTileEntity.class;
 	}
 
 	@Override
 	public TileEntity createTileEntity (World worldIn, IBlockState blockState) {
-		return new BlockEndersteelTileEntity();
+		return new BlockEndersteelDarkTileEntity();
 	}
 
-	public static class BlockEndersteelTileEntity extends TileEntity implements ITickable {
+	public static class BlockEndersteelDarkTileEntity extends TileEntity implements ITickable {
 
 		public int signalOut = 0;
 		public int signalIn = 0;

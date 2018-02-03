@@ -3,7 +3,7 @@ package yuudaari.soulus.common.item;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.block.composer.ComposerCell.IHasImportantInfos;
-import yuudaari.soulus.common.block.composer.ComposerCellTileEntity.IFillableWithEssence;
+import yuudaari.soulus.common.block.composer.IFillableWithEssence;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.item.ConfigSoulCatalyst;
@@ -149,6 +149,11 @@ public class SoulCatalyst extends ModItem implements IHasImportantInfos, IFillab
 		if (insertQuantity > 0) setContainedEssence(currentStack, currentEssence + insertQuantity);
 
 		return insertQuantity;
+	}
+
+	@Override
+	public float getFillPercentage (ItemStack stack) {
+		return getContainedEssence(stack) / (float) CONFIG.requiredEssence;
 	}
 
 	@Override
