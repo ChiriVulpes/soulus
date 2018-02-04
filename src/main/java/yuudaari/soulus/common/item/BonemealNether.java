@@ -2,10 +2,14 @@ package yuudaari.soulus.common.item;
 
 import java.util.Random;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockDoublePlant;
+import net.minecraft.block.BlockFlower;
 import net.minecraft.block.IGrowable;
+import net.minecraft.block.BlockDoublePlant.EnumBlockHalf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -36,7 +40,14 @@ public class BonemealNether extends Bonemeal {
 		IBlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
 
-		if (block instanceof IGrowable && !state.isFullBlock() && !(block instanceof BlockDoublePlant)) {
+		if ((block instanceof IGrowable || block instanceof BlockBush) && !state.isFullBlock()) {
+			if (block instanceof BlockDoublePlant) {
+				if (state.getValue(BlockDoublePlant.HALF) == EnumBlockHalf.UPPER)
+					world.setBlockState(pos.down(), Blocks.AIR.getDefaultState());
+				else
+					world.setBlockState(pos.up(), Blocks.AIR.getDefaultState());
+			}
+
 			world.setBlockState(pos, ModBlocks.ASH.getDefaultState(), 3);
 
 			ItemStack stack = player.getHeldItem(hand);
