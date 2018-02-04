@@ -20,6 +20,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonWriter;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
+import yuudaari.soulus.common.util.CompareJson;
 import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.serializer.DefaultFieldSerializer;
 import yuudaari.soulus.common.util.serializer.SerializationHandlers.IClassDeserializationHandler;
@@ -360,7 +361,7 @@ public class Config {
 		try {
 
 			final JsonElement oldConfig = parseJsonConfigFile(configFile, false);
-			if (json.equals(oldConfig))
+			if (CompareJson.equal(json, oldConfig))
 				return;
 
 			final StringWriter stringWriter = new StringWriter();
