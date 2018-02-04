@@ -287,9 +287,14 @@ The default config (`#enabled`):
 }
 ```
 
-The "veins" config is used in Soulus by default for the fossil generation. Instead of working via biomes, it works based on biome types. In the example above, there is only one configured vein, of `soulus:fossil_dirt`, which will spawn in `minecraft:dirt`.  
-`chances` is how many times the generator should attempt to spawn a vein in the chunk.  
-`size` is how big the vein should be.  
-`height` is the min and max heights the vein can spawn at.  
+The "veins" config is used in Soulus by default for the fossil generation. Instead of working via biomes, it works based on biome types. In the example above, there is only one configured vein, of `soulus:fossil_dirt`, which will spawn in `minecraft:dirt`.
+
+`chances` is how many times the generator should attempt to spawn a vein in the chunk.
+
+`size` is how big the vein should be.
+
+`height` is the min and max heights the vein can spawn at.
+
 `dimension` is the dimension id that the vein should spawn in. You can use `/soulus location` to get this information. Providing `null` means the vein can spawn in any dimension.
-`biome_types_whitelist` and `biome_types_blacklist` both use "biome types", which allows the generation to automatically support biomes added by other mods.
+
+`biome_types_whitelist` and `biome_types_blacklist` both use "biome types", which allows the generation to automatically support biomes added by other mods. Again, you can use `/soulus location` to get the biome types if the biome you're currently in.
