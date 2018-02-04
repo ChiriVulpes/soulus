@@ -74,9 +74,7 @@ See below for an in-depth list of features in the mod.
 
 ## No Mob Spawning and No Mob Drops [🡅](#table-of-contents)
 
-All mob spawning is disabled by default, but you can configure this functionality per dimension, biome, and creature, and even enable/disable drops for each. See [Creatures Config](./docs/CONFIG.md#configcreatures-)
-
-Summoner-summoned mobs are exempt from this config. They will always be summoned, and they will always have drops.
+All mob spawning is disabled by default, but you can configure this functionality per dimension, biome, and creature, and even enable/disable drops for each. See [`creatures/creatures.json`](./docs/CONFIG.md#creaturescreaturesjson-)
 
 
 
@@ -84,7 +82,7 @@ Summoner-summoned mobs are exempt from this config. They will always be summoned
 
 ![Sledgehammer](./preview/sledgehammer.png)
 
-The Sledgehammer is used to smash materials. It is only used as a crafting ingredient, and currently only comes in iron. Using it as a weapon and more materials for it are planned.
+The Sledgehammer is used to smash materials. It is only used as a crafting ingredient, and currently only comes in iron.
 
 
 
@@ -96,11 +94,9 @@ Fossils generate around the world, different types based on the biome and block.
 ![Sand Fossils](./preview/fossils_sand.png)
 ![Netherrack Fossils](./preview/fossils_netherrack.png)
 
-(more fossils coming soon)
+When you destroy a fossil, it will drop between 2 and 6 bone chunks for that kind of fossil.
 
-When you destroy a fossil, it will drop 4 bone chunks for that kind of fossil.
-
-Fossil veins are configurable (and you can even use the config to generate veins of other kinds of blocks, it's pretty vague). See `config.fossil_veins`
+Fossil veins are configurable (and you can even use the config to generate veins of other kinds of blocks, it's pretty vague). See [`world/veins/veins.json`](./docs/CONFIG.md).
 
 
 
@@ -110,7 +106,7 @@ Fossil veins are configurable (and you can even use the config to generate veins
 
 A bone chunk can be crafted with a Sledgehammer to produce bonemeal. Normal bone chunks, dry, frozen, and mossy all produce normal bonemeal, while ender bone chunks produce "ender bonemeal" and blackened bone chunks produce "blackened bonemeal".
 
-The main use of bone chunks, however, is to collect the essence of creatures! By right clicking with a bone chunk, you break it open and collect the essence inside. The possible Essences produced by each bone type is configurable in the [Essences Config](./docs/CONFIG.md#configessences-).
+The main use of bone chunks, however, is to collect the essence of creatures! By right clicking with a bone chunk, you break it open and collect the essence inside. The possible Essences produced by each bone type is configurable in [`essences/essences.json`](./docs/CONFIG.md#essencesessencesjson-).
 
 
 
@@ -159,7 +155,7 @@ Using 8 Endersteel bars and an ender bonemeal in the center, you can craft an Em
 
 ![Empty Summoner](./preview/summoner.png)
 
-You can also find empty summoners in the world, in the places where mob spawners would normally generate. (This replacement can be configured/disabled with [`CONFIG::summoner_replacer`](./docs/CONFIG.md#configsummoner_replacer-), but fair warning: the vanilla mob spawner is unable to spawn entities unless you also change the [Creatures Config](./docs/CONFIG.md#configcreatures-))
+You can also find empty summoners in the world, in the places where mob spawners would normally generate. (This replacement can be configured/disabled with [`world/summoner_replacement/replacement.json`](./docs/CONFIG.md#worldsummoner_replacementreplacementjson-), but fair warning: the vanilla mob spawner is unable to spawn entities unless you also change [`creatures/creatures.json`](./docs/CONFIG.md#creaturescreaturesjson-))
 
 If you right click on an empty summoner with a filled soulbook, a summoner is created. By default, summoning a mob takes around 10 minutes, only summons one, and you have to be within 3 blocks to increase the summon percentage. (Eg: you can spend 5 minutes at the summoner, then come back later and complete the summon)
 
@@ -267,7 +263,7 @@ By default, the Skewer only deals 1 damage to each entity when they're not resis
 
 ## Bone Drops [🡅](#table-of-contents)
 
-By default, most mobs drop bones matching the bone type their essence comes from. This is configurable in the [Essences Config](./docs/CONFIG.md#configessences-)
+By default, most mobs drop bones matching the bone type their essence comes from. This is configurable in [`essences/essences.json`](./docs/CONFIG.md#essencesessencesjson-). This config will work with mods, but at the moment Soulus doesn't support any out of the box.
 
 
 
