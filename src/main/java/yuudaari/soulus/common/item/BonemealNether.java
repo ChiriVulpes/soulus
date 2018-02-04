@@ -4,7 +4,6 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockDoublePlant;
-import net.minecraft.block.BlockFlower;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.BlockDoublePlant.EnumBlockHalf;
 import net.minecraft.block.state.IBlockState;
