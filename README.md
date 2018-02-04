@@ -110,17 +110,7 @@ Fossil veins are configurable (and you can even use the config to generate veins
 
 A bone chunk can be crafted with a Sledgehammer to produce bonemeal. Normal bone chunks, dry, frozen, and mossy all produce normal bonemeal, while ender bone chunks produce "ender bonemeal" and blackened bone chunks produce "blackened bonemeal".
 
-The main use of bone chunks, however, is to collect the essence of creatures! By right clicking with a bone chunk, you break it open and collect the essence inside. The possible Essences produced by each bone type is configurable in the [Essences Config](./docs/CONFIG.md#configessences-), but the defaults are as follows:
-
-| Bone Type | Essences |
-| --- | --- |
-| Normal | Bat (1), Chicken (8), Cow (8), Skeleton (3), Spider (5), Pig (10), Rabbit (4), Sheep (6), Villager (1), None(5) |
-| Dry | Horse (1), Llama (10), Husk (5), Cave Spider (1), None (30) |
-| Fungal | Mooshroom (1), Zombie (20), Witch (5), Illager (5), Ocelot (10), Parrot (10), None(20) |
-| Frozen | Snowman (1), Stray (1), Wolf (5), Polar Bear (10), None (10) |
-| Scale | Silverfish (1), Squid (20), Guardian (1), None (10) |
-| Nether | Zombie Pigman (20), Blaze (3), Wither Skeleton (1), Ghast (1), None (10) |
-| Ender | Shulker (1), Endermite (15), Creeper (10), Enderman (2), None (20) |
+The main use of bone chunks, however, is to collect the essence of creatures! By right clicking with a bone chunk, you break it open and collect the essence inside. The possible Essences produced by each bone type is configurable in the [Essences Config](./docs/CONFIG.md#configessences-).
 
 
 
