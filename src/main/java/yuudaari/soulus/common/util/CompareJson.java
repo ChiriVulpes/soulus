@@ -11,6 +11,8 @@ public class CompareJson {
 	public static boolean equal (JsonElement element1, JsonElement element2) {
 		boolean result = true;
 
+		if (element1 == null || element2 == null) return (element1 == null) == (element2 == null);
+
 		if (element1.getClass() != element2.getClass()) result = false;
 
 		if (element1.isJsonNull()) return true;
