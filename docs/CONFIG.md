@@ -4,7 +4,8 @@
 - [Config Profiles](#config-profiles-)
 - [Creatures](#creaturescreaturesjson-)
 - [Essences](#essencesessencesjson-)
-- [Summoner Replacement](#summoner_replacementreplacementjson-)
+- [Summoner Replacement](#worldsummoner_replacementreplacementjson-)
+- [Ore Veins (Fossils)](#worldveinsveinsjson-)
 
 
 
@@ -36,10 +37,11 @@ This would map to the file `misc#cool_stuff.json`.
 ## `creatures/creatures.json` [🡅](#table-of-contents)
 
 Default profiles:
-- `no_creatures_no_drops`: All mobs which enter the world from a place other than the Summoner are prevented. No mobs other than summoned mobs have drops. (Non-summoned mobs currently only exist if you have them enabled, and then switch to them disabled afterwards)
-- `no_creatures_yes_drops`: Same as previous, except drops are enabled for non-summoned mobs, if they exist.
-- `yes_creatures_no_drops`: All mob spawns are enabled, but only summoned mobs have drops.
-- `yes_creatures_yes_drops`: All mob spawns are enabled, and all mobs have drops.
+- **`no_creatures_no_drops` (default)**: No non-summoned vanilla creatures, and no drops from them, if the creatures existed previously. (Non-summoned creatures currently only exist if you have them enabled, and then disable them afterwards)
+- **`no_creatures_no_drops_all_mods`**: No non-summoned creatures (no matter what mod), and no drops from them, if they existed previously.
+- **`yes_creatures_no_drops`**: Creatures are all enabled, but non-summoned vanilla creatures won't have drops.
+- **`yes_creatures_no_drops_all_mods`**: Creatures are all enabled, but non-summoned creatures (from any mod) won't have drops.
+- **`yes_creatures_yes_drops`**: Everything is like normal. All creatures will spawn, and everything will have drops.
 
 ```json
 {
@@ -196,7 +198,7 @@ To know the dimension and biome names of modded biomes, you can use the `/soulus
 
 
 
-## `summoner_replacement/replacement.json` [↑](#table-of-contents)
+## `world/summoner_replacement/replacement.json` [🡅](#table-of-contents)
 
 Default profiles:
 - **`enabled` (default)**: Spawners will be replaced with Summoners with Soulbooks matching the mobs in the spawner.
@@ -246,3 +248,48 @@ As for structures, you can use the `/soulus location` command to get see the str
 The `type` you provide to the replacer can be any variant of the summoner. This example shows all 5 in use.
 
 If the `midnight_jewel` property is set to true, the replaced spawners will be Summoners with a Soulbook and a Midnight Jewel inside. The Soulbook will match the mob which was being spawned from the spawner. The Midnight Jewel will not drop from a natural Summoner.
+
+
+
+## `world/veins/veins.json` [🡅](#table-of-contents)
+
+Default profiles:
+- **`enabled` (default)**: Veins will be generated as normal.
+- **`disabled`**: There will be no veins generated. This is useful only if you will be reimplementing the veins in another dedicated mod. 
+
+The default config (`#enabled`):
+
+```json
+{
+	"veins": [
+		{
+			"block": "soulus:fossil_dirt",
+			"replace": "minecraft:dirt",
+			"chances": 300,
+			"size": {
+				"min": 3.0,
+				"max": 7.0
+			},
+			"height": {
+				"min": 0.0,
+				"max": 255.0
+			},
+			"dimension": null,
+			"biome_types_whitelist": [],
+			"biome_types_blacklist": [
+				"NETHER",
+				"OCEAN",
+				"END",
+				"VOID"
+			]
+		}
+	]
+}
+```
+
+The "veins" config is used in Soulus by default for the fossil generation. Instead of working via biomes, it works based on biome types. In the example above, there is only one configured vein, of `soulus:fossil_dirt`, which will spawn in `minecraft:dirt`.  
+`chances` is how many times the generator should attempt to spawn a vein in the chunk.  
+`size` is how big the vein should be.  
+`height` is the min and max heights the vein can spawn at.  
+`dimension` is the dimension id that the vein should spawn in. You can use `/soulus location` to get this information. Providing `null` means the vein can spawn in any dimension.
+`biome_types_whitelist` and `biome_types_blacklist` both use "biome types", which allows the generation to automatically support biomes added by other mods.
