@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityList;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
@@ -18,6 +19,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
@@ -27,6 +31,7 @@ import yuudaari.soulus.common.block.composer.ComposerCell.IHasImportantInfos;
 import yuudaari.soulus.common.block.composer.IFillableWithEssence;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
+import yuudaari.soulus.common.config.essence.ConfigColor;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
@@ -67,7 +72,7 @@ public class Soulbook extends ModItem implements IHasImportantInfos, IFillableWi
 
 			List<Ingredient> ingredients = new ArrayList<>();
 
-			ingredients.addAll(Collections.nCopies(size * size - 1, IngredientPotentialEssence.getInstance()));
+			ingredients.addAll(Collections.nCopies(size * size - 1, IngredientPotentialEssence.getInstanceNoAsh()));
 			ingredients.add(Ingredient.fromItem(ModItems.SOULBOOK));
 
 			return NonNullList.from(Ingredient.EMPTY, ingredients.toArray(new Ingredient[0]));
@@ -133,8 +138,37 @@ public class Soulbook extends ModItem implements IHasImportantInfos, IFillableWi
 
 	public Soulbook () {
 		super("soulbook", 1);
-		this.glint = true;
 		setHasDescription();
+
+		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+			registerColorHandler( (ItemStack stack, int tintIndex) -> {
+				if (tintIndex == 2) return -1;
+
+				int defaultColour = tintIndex == 0 ? 0x333F58 : 0x5E5997;
+
+				String essenceType = EssenceType.getEssenceType(stack);
+				if (essenceType == null)
+					return defaultColour;
+
+				EntityEntry entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(essenceType));
+				if (entry == null)
+					return defaultColour;
+
+				ConfigEssence essenceConfig = CONFIG.get(essenceType);
+				if (essenceConfig == null)
+					return defaultColour;
+
+				ConfigColor colors = essenceConfig.colors;
+				if (colors == null) {
+					EntityList.EntityEggInfo eggInfo = entry.getEgg();
+					if (eggInfo == null)
+						return defaultColour;
+					colors = new ConfigColor(eggInfo);
+				}
+
+				return tintIndex == 0 ? colors.primary : colors.secondary;
+			});
+		}
 	}
 
 	@Override
@@ -143,15 +177,6 @@ public class Soulbook extends ModItem implements IHasImportantInfos, IFillableWi
 			new SoulbookRecipe(getRegistryName(), 2), //
 			new SoulbookRecipe(getRegistryName(), 3) //
 		);
-	}
-
-	@Override
-	public boolean hasEffect (ItemStack stack) {
-		String essenceType = EssenceType.getEssenceType(stack);
-		if (essenceType == null)
-			return false;
-		int containedEssence = getContainedEssence(stack);
-		return containedEssence >= CONFIG.getSoulbookQuantity(essenceType);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -238,6 +263,18 @@ public class Soulbook extends ModItem implements IHasImportantInfos, IFillableWi
 		}
 		tag.setInteger("essence_quantity", count);
 		return stack;
+	}
+
+	@Override
+	public void getSubItems (CreativeTabs tab, NonNullList<ItemStack> items) {
+		if (!this.isInCreativeTab(tab)) return;
+
+		items.add(getItemStack());
+		for (ConfigEssence essence : CONFIG.essences) {
+			if (essence.essence.equals("NONE")) continue;
+
+			items.add(getStack(essence.essence, essence.soulbookQuantity));
+		}
 	}
 
 	@SideOnly(Side.CLIENT)

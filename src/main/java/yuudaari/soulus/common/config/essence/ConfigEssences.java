@@ -48,7 +48,7 @@ public class ConfigEssences {
 		essences.add(new ConfigEssence("NONE", new ConfigCreatureBone(BoneType.FUNGAL, 20)));
 
 		// frozen
-		essences.add(new ConfigEssence("minecraft:snowman", new ConfigCreatureBone(BoneType.FROZEN, 1)));
+		essences.add(new ConfigEssence("minecraft:snowman", new ConfigCreatureBone(BoneType.FROZEN, 1)).setColor(0xFFFFFF, 0xE3901D));
 		essences.add(new ConfigEssence("minecraft:stray", new ConfigCreatureBone(BoneType.FROZEN, 1)).addLoot(1, 2, 0.5));
 		essences.add(new ConfigEssence("minecraft:wolf", new ConfigCreatureBone(BoneType.FROZEN, 5)).addLoot(1, 1, 0.2));
 		essences.add(new ConfigEssence("minecraft:polar_bear", new ConfigCreatureBone(BoneType.FROZEN, 10)).addLoot(1, 3, 0.6));

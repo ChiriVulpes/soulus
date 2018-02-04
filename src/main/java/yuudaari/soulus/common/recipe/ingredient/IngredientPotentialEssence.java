@@ -21,10 +21,16 @@ public class IngredientPotentialEssence extends Ingredient {
 	@Inject public static ConfigEssences CONFIG;
 
 	private static IngredientPotentialEssence INSTANCE = null;
+	private static IngredientPotentialEssence INSTANCE_NO_ASH = null;
 
 	public static IngredientPotentialEssence getInstance () {
 		if (INSTANCE == null) INSTANCE = new IngredientPotentialEssence();
 		return INSTANCE;
+	}
+
+	public static IngredientPotentialEssence getInstanceNoAsh () {
+		if (INSTANCE_NO_ASH == null) INSTANCE_NO_ASH = new IngredientPotentialEssence(true);
+		return INSTANCE_NO_ASH;
 	}
 
 	public static ItemStack[] getMatchingStacks1 (boolean justEssence) {

@@ -30,7 +30,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLStateEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,8 +55,12 @@ public class BoneChunk extends ModItem {
 	public static Map<BoneType, BoneChunk> boneChunkTypes = new HashMap<>();
 
 	private Map<String, Double> drops = new HashMap<>();
-	private int chanceTotal = 0;
+	private double chanceTotal = 0;
 	private BoneType boneType;
+
+	public double getChanceTotal () {
+		return chanceTotal;
+	}
 
 	public BoneChunk (String name, BoneType boneType) {
 		super(name);
@@ -92,20 +96,18 @@ public class BoneChunk extends ModItem {
 		}
 	}
 
-	@Nullable
-	private ItemStack getDrop () {
-		int choice = new Random().nextInt(chanceTotal);
+	private List<ItemStack> getDrops () {
+		List<ItemStack> result = new ArrayList<>();
+		Random rand = new Random();
 		for (Map.Entry<String, Double> dropInfo : drops.entrySet()) {
-			choice -= dropInfo.getValue();
-			if (choice < 0) {
-				String drop = dropInfo.getKey();
-				if (drop != null) {
-					return Essence.getStack(drop);
-				}
-				return null;
+			if (dropInfo.getKey() == null) continue;
+
+			if (rand.nextFloat() < dropInfo.getValue() / chanceTotal) {
+				result.add(Essence.getStack(dropInfo.getKey()));
 			}
 		}
-		throw new RuntimeException("Bonechunk drop failed!");
+
+		return result;
 	}
 
 	/////////////////////////////////////////
@@ -116,8 +118,8 @@ public class BoneChunk extends ModItem {
 	public ActionResult<ItemStack> onItemRightClick (World world, EntityPlayer player, EnumHand hand) {
 		ItemStack heldItem = player.getHeldItem(hand);
 		if (!world.isRemote) {
-			ItemStack drop = getDrop();
-			if (drop != null) {
+			List<ItemStack> drops = getDrops();
+			for (ItemStack drop : drops) {
 				EntityItem dropEntity = new EntityItem(world, player.posX, player.posY, player.posZ, drop);
 				dropEntity.setNoPickupDelay();
 				world.spawnEntity(dropEntity);

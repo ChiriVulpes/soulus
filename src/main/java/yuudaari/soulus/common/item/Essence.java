@@ -1,8 +1,10 @@
 package yuudaari.soulus.common.item;
 
 import net.minecraft.client.resources.I18n;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.EntityEntry;
@@ -87,6 +89,17 @@ public class Essence extends ModItem {
 		}
 
 		return I18n.format(this.getUnlocalizedName() + ".focused.name", alignment).trim();
+	}
+
+	@Override
+	public void getSubItems (CreativeTabs tab, NonNullList<ItemStack> items) {
+		if (!this.isInCreativeTab(tab)) return;
+
+		for (ConfigEssence essence : CONFIG.essences) {
+			if (essence.essence.equals("NONE")) continue;
+
+			items.add(getStack(essence.essence));
+		}
 	}
 
 	@Override

@@ -13,9 +13,11 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import yuudaari.soulus.common.recipe.IRecipeComposer;
 import yuudaari.soulus.common.recipe.RecipeComposerShaped;
-import yuudaari.soulus.common.recipe.RecipeComposerShapeless;
 import yuudaari.soulus.common.util.RegionI;
 import yuudaari.soulus.common.util.Vec2i;
 
@@ -24,7 +26,7 @@ public class RecipeWrapperComposer implements IRecipeWrapper {
 	private List<List<ItemStack>> inputs;
 	private ItemStack output;
 
-	private boolean isShaped;
+	private boolean isShaped = false;
 	private float recipeTime = 1;
 
 	public int getWidth () {
@@ -45,7 +47,7 @@ public class RecipeWrapperComposer implements IRecipeWrapper {
 		return registryName;
 	}
 
-	public RecipeWrapperComposer (IRecipe recipe, boolean isShaped) {
+	public RecipeWrapperComposer (IRecipe recipe) {
 		inputs = new ArrayList<>();
 		for (Ingredient input : recipe.getIngredients()) {
 			inputs.add(Arrays.asList(input.getMatchingStacks()));
@@ -54,17 +56,13 @@ public class RecipeWrapperComposer implements IRecipeWrapper {
 		output = recipe.getRecipeOutput();
 		registryName = recipe.getRegistryName();
 
-		this.isShaped = isShaped;
-	}
+		if (recipe instanceof IRecipeComposer) {
+			recipeTime = ((IRecipeComposer) recipe).getTime();
+		}
 
-	public RecipeWrapperComposer (RecipeComposerShaped recipe) {
-		this(recipe, true);
-		recipeTime = recipe.getTime();
-	}
-
-	public RecipeWrapperComposer (RecipeComposerShapeless recipe) {
-		this(recipe, false);
-		recipeTime = recipe.getTime();
+		if (recipe instanceof RecipeComposerShaped || recipe instanceof ShapedOreRecipe || recipe instanceof ShapedRecipes) {
+			isShaped = true;
+		}
 	}
 
 	@Override

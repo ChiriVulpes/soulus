@@ -44,6 +44,11 @@ public class ConfigEssence {
 		return this;
 	}
 
+	public ConfigEssence setColor (int color1, int color2) {
+		this.colors = new ConfigColor(color1, color2);
+		return this;
+	}
+
 	public static class DoubleMapSerializer extends DefaultMapSerializer<Double> {
 
 		@Override

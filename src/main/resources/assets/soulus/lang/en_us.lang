@@ -157,7 +157,15 @@ waila.soulus:soul_totem.fuel_percentage=%1$s%% catalyst remaining
 waila.soulus:soul_totem.upgrades_soul_catalyst=%1$s/%2$s §6Soul Catalyst §8(Fuel)
 waila.soulus:soul_totem.upgrades_efficiency=%1$s/%2$s §9Niobium Gears §8(Efficiency)
 
+
 jei.recipe.soulus:composer.name=Composition
+
+jei.recipe.soulus:composer.recipe_time=%1$st
+jei.recipe.soulus:composer.recipe_time_tooltip=Recipe Duration
+
+jei.recipe.soulus:essence.name=Marrowing
+
+jei.recipe.soulus:essence.tooltip_chance=§2§n%1$s%% Drop Chance 
 
 jei.description.soulus:ash=Death in its purest form. Ash is devoid of life, and therefore, essence, but may potentially be usable as a grisly alternative when the alignment is inconsequential.
 jei.description.soulus:bark=The outer shell of a tree. A crude material, but it may prove itself useful.
@@ -208,8 +216,6 @@ jei.description.soulus:block_niobium=A block of metal forged from souls too nume
 jei.description.soulus:gear_niobium=A gear made of metal forged from the souls of many.
 jei.description.soulus:soul_totem=A machine powered by compressed souls which can be used as a player surrogate to the summoner.
 
-jei.recipe.soulus:composer.recipe_time=%1$st
-jei.recipe.soulus:composer.recipe_time_tooltip=Recipe Duration
 
 command.soulus:soulus.usage=Usage: /soulus location|reload
 command.soulus:soulus.invalid_syntax=Command syntax invalid. %1$s
