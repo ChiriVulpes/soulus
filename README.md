@@ -155,7 +155,7 @@ Using 8 Endersteel bars and an ender bonemeal in the center, you can craft an Em
 
 ![Empty Summoner](./preview/summoner.png)
 
-You can also find empty summoners in the world, in the places where mob spawners would normally generate. (This replacement can be configured/disabled with [`world/summoner_replacement/replacement.json`](./docs/CONFIG.md#worldsummoner_replacementreplacementjson-), but fair warning: the vanilla mob spawner is unable to spawn entities unless you also change [`creatures/creatures.json`](./docs/CONFIG.md#creaturescreaturesjson-))
+You can also find Summoners in the world, in the places where mob spawners would normally generate. By default, they will have a "Midnight Jewel" inside of them, which allows them to spawn similarly to vanilla spawners. You can change all of this functionality, even per biome, structure, and creature, with [`world/summoner_replacement/replacement.json`](./docs/CONFIG.md#worldsummoner_replacementreplacementjson-).
 
 If you right click on an empty summoner with a filled soulbook, a summoner is created. By default, summoning a mob takes around 10 minutes, only summons one, and you have to be within 3 blocks to increase the summon percentage. (Eg: you can spend 5 minutes at the summoner, then come back later and complete the summon)
 
