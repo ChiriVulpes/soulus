@@ -169,6 +169,8 @@ public class Soulbook extends ModItem implements IHasImportantInfos, IFillableWi
 				}
 
 				int color = tintIndex == 0 ? colors.primary : colors.secondary;
+				if (Summoner.CONFIG.soulbookEssenceRequiredToInsert <= 0) return color;
+
 				double percent = getContainedEssence(stack) / Summoner.CONFIG.soulbookEssenceRequiredToInsert / (double) essenceConfig.soulbookQuantity;
 				return Colour.mix(defaultColour, color, percent).get();
 			});
