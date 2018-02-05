@@ -28,6 +28,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.block.composer.ComposerCell.IHasImportantInfos;
+import yuudaari.soulus.common.block.summoner.Summoner;
 import yuudaari.soulus.common.block.composer.IFillableWithEssence;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
@@ -35,6 +36,7 @@ import yuudaari.soulus.common.config.essence.ConfigColor;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
+import yuudaari.soulus.common.util.Colour;
 import yuudaari.soulus.common.util.EssenceType;
 import yuudaari.soulus.common.util.ModItem;
 import yuudaari.soulus.Soulus;
@@ -166,7 +168,9 @@ public class Soulbook extends ModItem implements IHasImportantInfos, IFillableWi
 					colors = new ConfigColor(eggInfo);
 				}
 
-				return tintIndex == 0 ? colors.primary : colors.secondary;
+				int color = tintIndex == 0 ? colors.primary : colors.secondary;
+				double percent = getContainedEssence(stack) / Summoner.CONFIG.soulbookEssenceRequiredToInsert / (double) essenceConfig.soulbookQuantity;
+				return Colour.mix(defaultColour, color, percent).get();
 			});
 		}
 	}

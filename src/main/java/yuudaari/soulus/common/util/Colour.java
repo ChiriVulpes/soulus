@@ -58,12 +58,14 @@ public class Colour {
 		return new Colour(red / colours.length, green / colours.length, blue / colours.length);
 	}
 
-	public static Colour mix (Colour firstColour, Colour secondColour, float percentage) {
-		float red, blue, green;
+	public static Colour mix (Colour firstColour, Colour secondColour, double percentage) {
+		double red, blue, green;
 
-		red = firstColour.getRed() * (1F - percentage);
-		green = firstColour.getGreen() * (1F - percentage);
-		blue = firstColour.getBlue() * (1F - percentage);
+		percentage = Math.max(0, Math.min(1, percentage));
+
+		red = firstColour.getRed() * (1 - percentage);
+		green = firstColour.getGreen() * (1 - percentage);
+		blue = firstColour.getBlue() * (1 - percentage);
 
 		red += secondColour.getRed() * percentage;
 		green += secondColour.getGreen() * percentage;
@@ -78,7 +80,7 @@ public class Colour {
 		return Colour.mix((Colour[]) colourList.toArray());
 	}
 
-	public Colour mixWith (Colour secondColour, float percentage) {
+	public Colour mixWith (Colour secondColour, double percentage) {
 		return Colour.mix(this, secondColour, percentage);
 	}
 
@@ -89,7 +91,7 @@ public class Colour {
 		return mix((Colour[]) colours.toArray());
 	}
 
-	public static Colour mix (int firstHexColour, int secondHexColour, float percentage) {
+	public static Colour mix (int firstHexColour, int secondHexColour, double percentage) {
 		return mix(new Colour(firstHexColour), new Colour(secondHexColour), percentage);
 	}
 
