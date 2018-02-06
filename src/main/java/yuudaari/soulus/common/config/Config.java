@@ -1,8 +1,11 @@
 package yuudaari.soulus.common.config;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
@@ -19,10 +22,13 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonWriter;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
+import net.minecraftforge.fml.relauncher.Side;
 import yuudaari.soulus.common.util.CompareJson;
 import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.serializer.DefaultFieldSerializer;
+import yuudaari.soulus.common.util.serializer.Serialized;
 import yuudaari.soulus.common.util.serializer.SerializationHandlers.IClassDeserializationHandler;
 import yuudaari.soulus.common.util.serializer.SerializationHandlers.IClassSerializationHandler;
 import yuudaari.soulus.common.config.ConfigFile;
@@ -30,20 +36,22 @@ import yuudaari.soulus.common.config.ConfigInjected.Inject;
 
 public class Config {
 
-	public static Map<String, Config> INSTANCES = new HashMap<>();
+	public static final Map<String, Config> INSTANCES = new HashMap<>();
 
-	private final Map<String, List<Class<?>>> configFileClasses;
-	private Map<Field, Class<?>> configInjections = null;
-	private final Map<Class<?>, Object> configs = new HashMap<>();
-	private final String directory;
-	private final ASMDataTable asmDataTable;
-	private final String id;
+	private final Map<String, List<Class<?>>> CONFIG_CLASSES;
+	private final Map<Field, Class<?>> INJECTIONS;
+	private final Map<Class<?>, Object> CONFIGS = new HashMap<>();
+	private final String DIRECTORY;
+	private final ASMDataTable ASM_DATA_TABLE;
+	private final String ID;
+	public final Map<String, String> SERVER_CONFIGS = new HashMap<>();
 
 	public Config (final ASMDataTable asmDataTable, final String directory, final String id) {
-		this.asmDataTable = asmDataTable;
-		this.directory = directory;
-		this.id = id;
-		configFileClasses = getConfigFileClasses(asmDataTable, id);
+		this.ASM_DATA_TABLE = asmDataTable;
+		this.DIRECTORY = directory;
+		this.ID = id;
+		this.CONFIG_CLASSES = getConfigFileClasses(asmDataTable, id);
+		this.INJECTIONS = getConfigInjections(ASM_DATA_TABLE, ID);
 
 		INSTANCES.put(id, this);
 	}
@@ -54,7 +62,7 @@ public class Config {
 	@SuppressWarnings("unchecked")
 	@Nullable
 	public static <T> T get (final String id, final Class<T> cls) {
-		return (T) INSTANCES.get(id).configs.get(cls);
+		return (T) INSTANCES.get(id).CONFIGS.get(cls);
 	}
 
 	/**
@@ -63,7 +71,7 @@ public class Config {
 	@SuppressWarnings("unchecked")
 	@Nullable
 	public <T> T get (final Class<T> cls) {
-		final Object result = configs.get(cls);
+		final Object result = CONFIGS.get(cls);
 		if (result == null || !cls.isInstance(result))
 			return null;
 
@@ -74,7 +82,7 @@ public class Config {
 	 * Serializes the serializable classes from each config file
 	 */
 	public void serialize () {
-		for (final Map.Entry<String, List<Class<?>>> entry : configFileClasses.entrySet()) {
+		for (final Map.Entry<String, List<Class<?>>> entry : CONFIG_CLASSES.entrySet()) {
 			Logger.scopes.push("Config Serialization");
 			trySerializeConfigFile(entry.getKey(), filterConfigMap(entry.getValue()));
 			Logger.scopes.pop();
@@ -85,16 +93,16 @@ public class Config {
 	 * Deserializes the serializable classes from each config file
 	 */
 	public void deserialize () {
-		this.configs.clear();
+		this.CONFIGS.clear();
 
-		for (final Map.Entry<String, List<Class<?>>> entry : configFileClasses.entrySet()) {
+		for (final Map.Entry<String, List<Class<?>>> entry : CONFIG_CLASSES.entrySet()) {
 			final Map<Class<?>, Object> configs = createConfigClassMap(entry.getValue());
 
 			Logger.scopes.push("Config Deserialization");
 			tryDeserializeConfigFile(entry.getKey(), configs);
 			Logger.scopes.pop();
 
-			this.configs.putAll(configs);
+			this.CONFIGS.putAll(configs);
 		}
 
 		inject();
@@ -104,11 +112,7 @@ public class Config {
 	 * Injects all the configs into fields marked with @ConfigInject.
 	 */
 	private void inject () {
-		if (configInjections == null) {
-			configInjections = getConfigInjections(asmDataTable, id);
-		}
-
-		for (final Map.Entry<Field, Class<?>> configInjection : configInjections.entrySet()) {
+		for (final Map.Entry<Field, Class<?>> configInjection : INJECTIONS.entrySet()) {
 			final Field field = configInjection.getKey();
 			try {
 				field.set(null, get(configInjection.getValue()));
@@ -122,20 +126,25 @@ public class Config {
 	/**
 	 * Attempts to deserialize a config file into all of the classes that serialize into it
 	 */
-	private void trySerializeConfigFile (String filename, final Map<Class<?>, Object> toSerialize) {
+	private void trySerializeConfigFile (final String filename, final Map<Class<?>, Object> toSerialize) {
 		final String profile = getProfile(getConfigFileJson(filename), filename, toSerialize);
+		String profileFilename = filename;
 		if (profile != null)
-			filename = getProfileFilename(filename, profile);
+			profileFilename = getProfileFilename(filename, profile);
 
-		Logger.scopes.push(filename);
+		Logger.scopes.push(profileFilename);
 
 		final JsonObject json = new JsonObject();
 		for (final Map.Entry<Class<?>, Object> serializationEntry : toSerialize.entrySet()) {
 			trySerializeClass(serializationEntry.getKey(), serializationEntry.getValue(), json);
 		}
 
-		final File configFile = new File(directory + filename);
+		final File configFile = new File(DIRECTORY + profileFilename);
 		writeJsonConfigFile(configFile, json, getErrorFilename(configFile.getAbsolutePath()));
+
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+			SERVER_CONFIGS.put(filename, getJsonString(json, null));
+		}
 
 		Logger.scopes.pop();
 	}
@@ -156,6 +165,7 @@ public class Config {
 	 */
 	private void tryDeserializeConfigFile (String filename, final Map<Class<?>, Object> toDeserialize) {
 		JsonObject json = getConfigFileJson(filename);
+		final JsonObject serverJson = getServerJson(filename);
 
 		final String profile = getProfile(json, filename, toDeserialize);
 
@@ -164,14 +174,50 @@ public class Config {
 			json = getConfigFileJson(filename);
 		}
 
+
 		Logger.scopes.push(filename);
 
 		if (json == null)
 			Logger.warn("Not a valid Json Object");
 
 		for (final Map.Entry<Class<?>, Object> deserializationEntry : toDeserialize.entrySet()) {
-			final Object deserialized = tryDeserializeClass(deserializationEntry.getKey(), json, profile);
+			final Class<?> configClass = deserializationEntry.getKey();
+			final Object deserialized = tryDeserializeClass(configClass, json, profile);
+
+			if (serverJson != null && FMLCommonHandler.instance().getEffectiveSide() != Side.SERVER) {
+				final Object deserializedServer = tryDeserializeClass(configClass, serverJson, null);
+				injectServerFields(configClass, deserialized, deserializedServer);
+			}
+
 			deserializationEntry.setValue(deserialized);
+		}
+
+		Logger.scopes.pop();
+	}
+
+	private void injectServerFields (final Class<?> configClass, final Object localConfig, final Object serverConfig) {
+		Logger.scopes.push("Sync");
+
+		for (final Field field : configClass.getFields()) {
+			Serialized serializedAnnotation = field.getAnnotation(Serialized.class);
+			// if the field isn't serialized it doesn't need to be synced, obviously
+			if (serializedAnnotation == null) continue;
+
+			// client fields aren't synchronised
+			if (field.getAnnotation(ClientField.class) != null) continue;
+
+			Logger.scopes.push(field.getName());
+
+			try {
+				Object val = field.get(serverConfig);
+				field.set(localConfig, val);
+
+			} catch (IllegalAccessException e) {
+				Logger.warn("Unable to synchronise");
+				Logger.error(e);
+			}
+
+			Logger.scopes.pop();
 		}
 
 		Logger.scopes.pop();
@@ -188,7 +234,7 @@ public class Config {
 
 			final JsonObject jsonProfile = new JsonObject();
 			jsonProfile.add("profile", new JsonPrimitive(profile));
-			final File file = new File(directory + filename);
+			final File file = new File(DIRECTORY + filename);
 			writeJsonConfigFile(file, jsonProfile, getErrorFilename(file.getAbsolutePath()));
 			return profile;
 
@@ -222,14 +268,25 @@ public class Config {
 	/**
 	 * Gets the JsonObject for a config file
 	 */
-	private JsonObject getConfigFileJson (final String fileName) {
-		final File configFile = new File(directory + fileName);
+	private JsonObject getConfigFileJson (final String filename) {
+		final File configFile = new File(DIRECTORY + filename);
 		if (!configFile.exists())
 			createConfigFile(configFile);
 
-		final JsonObject json = parseJsonConfigFile(configFile);
+		try {
+			return parseJsonConfigFile(new FileReader(configFile));
 
-		return json;
+		} catch (final FileNotFoundException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns the config given by the server, or null if none
+	 */
+	private JsonObject getServerJson (final String filename) {
+		String serverConfigFileText = SERVER_CONFIGS.get(filename);
+		return serverConfigFileText == null ? null : parseJsonConfigFile(new StringReader(serverConfigFileText));
 	}
 
 	/**
@@ -263,7 +320,7 @@ public class Config {
 	/**
 	 * Deserialize all of the @Serialized fields in a class
 	 */
-	private Object tryDeserializeClass (final Class<?> cls, JsonObject containingObject, final String profile) {
+	private Object tryDeserializeClass (final Class<?> cls, JsonObject containingObject, @Nullable final String profile) {
 		Logger.scopes.push(cls.getSimpleName());
 
 		Object result = null;
@@ -332,21 +389,21 @@ public class Config {
 	 * Returns the JsonObject of a config file
 	 */
 	@Nullable
-	private static JsonObject parseJsonConfigFile (final File configFile) {
-		return parseJsonConfigFile(configFile, true);
+	private static JsonObject parseJsonConfigFile (final Reader reader) {
+		return parseJsonConfigFile(reader, true);
 	}
 
 	/**
 	 * Returns the JsonObject of a config file
 	 */
 	@Nullable
-	private static JsonObject parseJsonConfigFile (final File configFile, boolean warn) {
+	private static JsonObject parseJsonConfigFile (final Reader reader, boolean warn) {
 		try {
-			final JsonElement json = new JsonParser().parse(new FileReader(configFile));
+			final JsonElement json = new JsonParser().parse(reader);
 			if (json != null && json.isJsonObject())
 				return json.getAsJsonObject();
 
-		} catch (final IOException | JsonParseException e) {
+		} catch (final JsonParseException e) {
 			if (warn) Logger.warn("Could not parse the config file: " + e.getMessage());
 		}
 
@@ -360,17 +417,11 @@ public class Config {
 	private static void writeJsonConfigFile (final File configFile, final JsonObject json, @Nullable final String saveOld) {
 		try {
 
-			final JsonElement oldConfig = parseJsonConfigFile(configFile, false);
+			final JsonElement oldConfig = parseJsonConfigFile(new FileReader(configFile), false);
 			if (CompareJson.equal(json, oldConfig))
 				return;
 
-			final StringWriter stringWriter = new StringWriter();
-			final JsonWriter jsonWriter = new JsonWriter(stringWriter);
-			jsonWriter.setLenient(true);
-			jsonWriter.setIndent("\t");
-			Streams.write(json, jsonWriter);
-			final String newFileText = stringWriter.toString();
-
+			final String newFileText = getJsonString(json, "\t");
 			final String oldFileText = new String(Files.readAllBytes(configFile.toPath()));
 
 			if (newFileText.equals(oldFileText))
@@ -383,6 +434,20 @@ public class Config {
 
 		} catch (final IOException | JsonParseException e) {
 			Logger.warn("Could not write the config file: " + e.getMessage());
+		}
+	}
+
+	private static String getJsonString (final JsonObject json, final String indent) {
+		try {
+			final StringWriter stringWriter = new StringWriter();
+			final JsonWriter jsonWriter = new JsonWriter(stringWriter);
+			jsonWriter.setLenient(true);
+			jsonWriter.setIndent(indent == null ? "" : indent);
+			Streams.write(json, jsonWriter);
+			return stringWriter.toString();
+
+		} catch (final IOException e) {
+			return null;
 		}
 	}
 
@@ -523,7 +588,7 @@ public class Config {
 	 * Filters the config map to only include classes specified in the list
 	 */
 	private Map<Class<?>, Object> filterConfigMap (List<Class<?>> validKeys) {
-		return configs.entrySet()
+		return CONFIGS.entrySet()
 			.stream()
 			.filter(e -> validKeys.contains(e.getKey()))
 			.collect(HashMap::new, (m, v) -> m.put(v.getKey(), v.getValue()), HashMap::putAll);

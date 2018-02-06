@@ -1,6 +1,7 @@
 package yuudaari.soulus.common.config.item;
 
 import yuudaari.soulus.Soulus;
+import yuudaari.soulus.common.config.ClientField;
 import yuudaari.soulus.common.config.ConfigFile;
 import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
@@ -9,5 +10,5 @@ import yuudaari.soulus.common.util.serializer.Serialized;
 @Serializable
 public class ConfigBonemealNether {
 
-	@Serialized public int particleCount = 50;
+	@Serialized @ClientField public int particleCount = 50;
 }

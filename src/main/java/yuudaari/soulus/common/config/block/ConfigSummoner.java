@@ -3,6 +3,7 @@ package yuudaari.soulus.common.config.block;
 import yuudaari.soulus.common.block.EndersteelType;
 import yuudaari.soulus.common.block.summoner.Summoner;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock.IUpgrade;
+import yuudaari.soulus.common.config.ClientField;
 import yuudaari.soulus.common.config.ConfigFile;
 import yuudaari.soulus.common.util.ModPotionEffect;
 import yuudaari.soulus.common.util.Range;
@@ -28,11 +29,11 @@ public class ConfigSummoner extends ConfigUpgradeableBlock<Summoner> {
 		return Summoner.Upgrade.values();
 	}
 
-	///////// Client
-	@Serialized public int particleCountSpawn = 50;
-	@Serialized public double particleCountActivated = 3;
+	// CLIENT
+	@Serialized @ClientField public int particleCountSpawn = 50;
+	@Serialized @ClientField public double particleCountActivated = 3;
 
-	///////// Common
+	// SERVER
 	// count
 	@Serialized public int nonUpgradedSpawningRadius = 4;
 	@Serialized public Range nonUpgradedCount = new Range(1, 2);

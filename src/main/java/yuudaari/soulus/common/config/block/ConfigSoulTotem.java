@@ -3,6 +3,7 @@ package yuudaari.soulus.common.config.block;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.block.soul_totem.SoulTotem;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock.IUpgrade;
+import yuudaari.soulus.common.config.ClientField;
 import yuudaari.soulus.common.config.ConfigFile;
 import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.common.util.serializer.Serializable;
@@ -17,7 +18,10 @@ public class ConfigSoulTotem extends ConfigUpgradeableBlock<SoulTotem> {
 		return SoulTotem.Upgrade.values();
 	}
 
-	@Serialized public float particleCountIn = 1;
+	// CLIENT
+	@Serialized @ClientField public float particleCountIn = 1;
+
+	// SERVER
 	@Serialized public int soulCatalystFuelTime = 10000;
 	@Serialized public Range efficiencyUpgradesRange = new Range(1, .3);
 	@Serialized public boolean isChunkloader = true;

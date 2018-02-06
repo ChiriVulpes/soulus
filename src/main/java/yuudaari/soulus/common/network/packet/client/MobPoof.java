@@ -1,4 +1,4 @@
-package yuudaari.soulus.common.network.packet;
+package yuudaari.soulus.common.network.packet.client;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.math.BlockPos;

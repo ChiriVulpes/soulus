@@ -8,7 +8,7 @@ import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.item.ConfigCrystalBlood;
 import yuudaari.soulus.common.misc.ModDamageSource;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
-import yuudaari.soulus.common.network.packet.CrystalBloodHitEntity;
+import yuudaari.soulus.common.network.packet.client.CrystalBloodHitEntity;
 import yuudaari.soulus.common.util.Colour;
 import yuudaari.soulus.common.util.ModPotionEffect;
 import net.minecraft.client.resources.I18n;

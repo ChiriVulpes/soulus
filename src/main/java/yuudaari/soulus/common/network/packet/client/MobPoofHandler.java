@@ -1,4 +1,4 @@
-package yuudaari.soulus.common.network.packet;
+package yuudaari.soulus.common.network.packet.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;

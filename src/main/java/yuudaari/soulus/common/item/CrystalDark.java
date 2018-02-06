@@ -13,7 +13,7 @@ import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.item.ConfigCrystalDark;
 import yuudaari.soulus.common.misc.ModDamageSource;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
-import yuudaari.soulus.common.network.packet.CrystalDarkPrick;
+import yuudaari.soulus.common.network.packet.client.CrystalDarkPrick;
 import yuudaari.soulus.common.util.ModItem;
 import yuudaari.soulus.common.util.ModPotionEffect;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;

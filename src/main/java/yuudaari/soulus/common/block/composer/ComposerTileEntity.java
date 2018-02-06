@@ -41,7 +41,7 @@ import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigComposer;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
-import yuudaari.soulus.common.network.packet.MobPoof;
+import yuudaari.soulus.common.network.packet.client.MobPoof;
 import yuudaari.soulus.common.recipe.IRecipeComposer;
 import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.common.util.StructureMap.BlockValidator;

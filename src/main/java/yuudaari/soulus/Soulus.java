@@ -2,6 +2,7 @@ package yuudaari.soulus;
 
 import yuudaari.soulus.client.ModRenderers;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
+import yuudaari.soulus.common.network.packet.client.SendConfig;
 import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.server.command.SoulusCommand;
 import yuudaari.soulus.common.ModBlocks;
@@ -12,6 +13,7 @@ import yuudaari.soulus.common.config.Config;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
@@ -21,6 +23,7 @@ import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -29,11 +32,13 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 
-@Mod(modid = Soulus.MODID, name = Soulus.NAME, version = "@VERSION@", acceptedMinecraftVersions = "[1.12.1]")
+@Mod(modid = Soulus.MODID, name = Soulus.NAME, version = "@VERSION@", acceptedMinecraftVersions = "[1.12.2]")
 @Mod.EventBusSubscriber
 public class Soulus {
 
@@ -94,14 +99,28 @@ public class Soulus {
 	/**
 	 * Refreshes the soulus config
 	 */
-	public static void reloadConfig () throws Exception {
+	public static void reloadConfig (boolean syncToClients, boolean serialize) throws Exception {
 		config.deserialize();
 
-		try {
-			config.serialize();
-		} catch (Exception e) {
-			Logger.error(e);
+		if (serialize) {
+			try {
+				config.serialize();
+			} catch (Exception e) {
+				Logger.error(e);
+			}
 		}
+
+		if (syncToClients && FMLCommonHandler.instance().getSide() == Side.SERVER) {
+			syncConfigs();
+		}
+	}
+
+	/**
+	 * Synchronises server configs with all clients
+	 */
+	public static void syncConfigs () {
+		SendConfig packet = new SendConfig(Config.INSTANCES.get(Soulus.MODID).SERVER_CONFIGS);
+		SoulsPacketHandler.INSTANCE.sendToAll(packet);
 	}
 
 	@EventHandler
@@ -110,7 +129,7 @@ public class Soulus {
 		final String configPath = event.getModConfigurationDirectory().getAbsolutePath() + "/soulus/";
 		config = new Config(event.getAsmData(), configPath, Soulus.MODID);
 		try {
-			reloadConfig();
+			reloadConfig(false, true);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -176,5 +195,22 @@ public class Soulus {
 	@EventHandler
 	public void serverLoad (FMLServerStartingEvent event) {
 		event.registerServerCommand(new SoulusCommand());
+	}
+
+	@SubscribeEvent
+	public static void clientConnect (PlayerLoggedInEvent event) {
+		SendConfig packet = new SendConfig(Config.INSTANCES.get(Soulus.MODID).SERVER_CONFIGS);
+		SoulsPacketHandler.INSTANCE.sendTo(packet, (EntityPlayerMP) event.player);
+	}
+
+	@SubscribeEvent
+	public static void disconnect (ClientDisconnectionFromServerEvent event) {
+		config.SERVER_CONFIGS.clear();
+		try {
+			// no need to serialize this time
+			reloadConfig(false, false);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

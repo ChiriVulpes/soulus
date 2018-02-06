@@ -1,4 +1,4 @@
-package yuudaari.soulus.common.network.packet;
+package yuudaari.soulus.common.network.packet.client;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;

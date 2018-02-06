@@ -4,7 +4,8 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.network.packet.*;
+import yuudaari.soulus.common.network.packet.client.*;
+// import yuudaari.soulus.common.network.packet.server.*;
 
 public class SoulsPacketHandler {
 
@@ -16,5 +17,6 @@ public class SoulsPacketHandler {
 		INSTANCE.registerMessage(LocationCommandHandler.class, LocationCommand.class, 2, Side.CLIENT);
 		INSTANCE.registerMessage(CrystalDarkPrickHandler.class, CrystalDarkPrick.class, 3, Side.CLIENT);
 		INSTANCE.registerMessage(TetherEntityHandler.class, TetherEntity.class, 4, Side.CLIENT);
+		INSTANCE.registerMessage(SendConfig.Handler.class, SendConfig.class, 5, Side.CLIENT);
 	}
 }

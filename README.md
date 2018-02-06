@@ -307,11 +307,11 @@ Crafting 9 dark endersteel bars into a block produces a Block of Dark Endersteel
 
 ![Composer Cell](./preview/composer_cell.png) 
 
-To put items into a composer cell, you may either right click with a stack to put one item into the cell, sneak + right click to put the entire stack into the cell, or simply drop a stack on top of it. The [Unloader](#unloader-) is useful for automating insertion into Composer Cells.
+To put items into a Composer Cell, you may either right click with a stack to put one item into the cell, sneak + right click to put the entire stack into the cell, or simply drop a stack on top of it. The [Unloader](#unloader-) is useful for automating insertion into Composer Cells.
 
-Each composer cell can hold up to 64 of the same item. *This ignores normal stack limitations.* 
+Each Composer Cell can hold up to 64 of the same item. *This ignores normal stack limitations.* 
 
-You can insert essence into a Composer Cell when it is filled with a Soulbook, Murky Orb, or Soul Catalyst, in order to fill them. This method is much faster and simpler than crafting.
+When a Composer Cell contains exactly one Soulbook, Murky Orb, or Soul Catalyst, you can insert essence into it in order to fill them. This method is much faster and simpler to fill these items than crafting.
 
 
 

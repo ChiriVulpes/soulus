@@ -12,7 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
-import yuudaari.soulus.common.network.packet.LocationCommand;
+import yuudaari.soulus.common.network.packet.client.LocationCommand;
 
 public class SoulusCommand extends CommandBase {
 
@@ -63,7 +63,7 @@ public class SoulusCommand extends CommandBase {
 
 	private void executeReload (ICommandSender ics) throws SoulusCommandException {
 		try {
-			Soulus.reloadConfig();
+			Soulus.reloadConfig(true, true);
 			ics.sendMessage(new TextComponentTranslation("command.soulus:reload.success"));
 
 		} catch (final Exception e) {

@@ -83,7 +83,7 @@ public class DefaultFieldSerializer extends FieldSerializer<Object> {
 	 * Instantiate a class, and then deserialize a JSON value into it.
 	 */
 	@Nullable
-	public static final Object deserializeClass (final IClassDeserializationHandler<Object> deserializer, final Class<?> requestedType, final JsonElement element, final String profile) {
+	public static final Object deserializeClass (final IClassDeserializationHandler<Object> deserializer, final Class<?> requestedType, final JsonElement element, @Nullable final String profile) {
 		Object instance = null;
 
 		if (profile != null)
