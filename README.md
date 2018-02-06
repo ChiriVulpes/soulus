@@ -491,6 +491,12 @@ Thank you for contributing!
 
 
 
+## Other Credits [🡅](#table-of-contents)
+
+There are 4 styles for the Summoner, which are craftable and will appear in the world via [summoner replacement](#summoner-) depending on the structure they're in. I made the textures, but they're heavily based on the spawner variants listed in [SimplySarc's "50 Tiny Ways to Improve Minecraft"](https://youtu.be/NSsac8V3BpA). They even appear in the same structures as his recommendations. This feature is meant as a tribute to that great video. I hope to see similar variants in vanilla someday. =)
+
+
+
 ## Contributing [🡅](#table-of-contents)
 
 If you have an error, bug, or have found an oversight please [leave an issue about it](https://github.com/Yuudaari/soulus/issues). I'll try to get to them as fast as I can. 
