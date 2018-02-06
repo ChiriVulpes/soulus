@@ -73,6 +73,10 @@ public class ConfigEssences {
 		essences.add(new ConfigEssence("minecraft:creeper", new ConfigCreatureBone(BoneType.ENDER, 10)).addLoot(1, 2, 0.4));
 		essences.add(new ConfigEssence("minecraft:enderman", new ConfigCreatureBone(BoneType.ENDER, 2)).addLoot(1, 4, 0.8));
 		essences.add(new ConfigEssence("NONE", new ConfigCreatureBone(BoneType.ENDER, 20)));
+		
+		// no bone type
+		essences.add(new ConfigEssence("minecraft:slime", null));
+		essences.add(new ConfigEssence("minecraft:villager_golem", null).setColor(0xD1CBC8, 0x6A914B));
 
 		// @formatter:on
 	}

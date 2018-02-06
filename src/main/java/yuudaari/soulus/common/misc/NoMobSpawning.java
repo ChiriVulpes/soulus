@@ -3,6 +3,7 @@ package yuudaari.soulus.common.misc;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -37,6 +38,12 @@ public class NoMobSpawning {
 		NBTTagCompound entityData = entity.getEntityData();
 		if (entityData.hasKey("soulus:spawn_whitelisted", 1))
 			return;
+
+		// we explicitly whitelist slimes that have persistence as it's likely they were from a summoned slime
+		if (((EntityLiving) entity).isNoDespawnRequired() && entity instanceof EntitySlime) {
+			approveSpawn(entity);
+			return;
+		}
 
 		// then we get the dimension config for this potential spawn
 		DimensionType dimension = event.getWorld().provider.getDimensionType();

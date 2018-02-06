@@ -88,6 +88,9 @@ public class RecipeCategoryEssence implements IRecipeCategory<IRecipeWrapper> {
 		guiItemStacks.addTooltipCallback( (slotIndex, input, ingredient, tooltip) -> {
 			if (ingredient.getItem() == ModItems.ESSENCE) {
 				ConfigEssence essence = Essence.CONFIG.get(EssenceType.getEssenceType(ingredient));
+
+				if (essence.bones == null) return;
+
 				double dropWeight = essence.bones.dropWeight;
 
 				BoneChunk chunk = BoneChunk.boneChunkTypes.get(essence.bones.type);

@@ -8,6 +8,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -55,14 +56,16 @@ public class BoneDrops {
 
 		if (config != null) {
 			boolean wasSummoned = entity.getEntityData().getByte("soulus:spawn_whitelisted") == (byte) 2;
+			// we explicitly whitelist slimes that have persistence as it's likely they were from a summoned slime
+			if (!wasSummoned && ((EntityLiving) entity).isNoDespawnRequired() && entity instanceof EntitySlime)
+				wasSummoned = true;
+
 			String spawnType = wasSummoned ? "summoned" : "spawned";
 
 			ConfigCreatureDrops dropConfig = config.drops.get(spawnType);
 			ConfigCreatureDrops dropConfigAll = config.drops.get("all");
 
 			if (dropConfig == null && dropConfigAll == null) {
-				// Logger.info("all cleared null");
-				drops.clear();
 				return;
 
 			} else {
@@ -114,7 +117,7 @@ public class BoneDrops {
 
 			for (Map.Entry<String, ConfigCreatureLoot> lootConfig : essenceConfig.loot.entrySet()) {
 				ResourceLocation name = EntityList.getKey(entity);
-				if (name != null && lootConfig.getKey().equals(name.toString())) {
+				if (name != null && essenceConfig.bones != null && lootConfig.getKey().equals(name.toString())) {
 					ItemStack stack = getStack(entity.world.rand, essenceConfig.bones.type, lootConfig.getValue());
 					if (stack != null) {
 						drops.add(new EntityItem(entity.world, entity.posX, entity.posY, entity.posZ, stack));

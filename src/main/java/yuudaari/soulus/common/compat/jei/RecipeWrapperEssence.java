@@ -28,7 +28,7 @@ public class RecipeWrapperEssence implements IRecipeWrapper {
 		outputs = new ArrayList<>();
 
 		outputs = Essence.CONFIG.essences.stream()
-			.filter(e -> e.bones.type == boneType && !e.essence.equals("NONE"))
+			.filter(e -> e.bones != null && e.bones.type == boneType && !e.essence.equals("NONE"))
 			.sorted( (e1, e2) -> (int) Math.signum(e2.bones.dropWeight - e1.bones.dropWeight))
 			.map(e -> Essence.getStack(e.essence))
 			.collect(Collectors.toList());

@@ -75,7 +75,7 @@ public class BoneChunk extends ModItem {
 
 	private void registerEssenceDrops (FMLStateEvent e) {
 		for (ConfigEssence essenceConfig : CONFIG_ESSENCES.essences) {
-			if (essenceConfig.bones.type != boneType) {
+			if (essenceConfig.bones == null || essenceConfig.bones.type != boneType) {
 				continue;
 			}
 
