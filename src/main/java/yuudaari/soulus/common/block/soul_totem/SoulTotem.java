@@ -26,7 +26,6 @@ import yuudaari.soulus.common.item.SoulCatalyst;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.StructureMap;
 import yuudaari.soulus.common.util.StructureMap.BlockValidator;
-import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -221,7 +220,6 @@ public class SoulTotem extends UpgradeableBlock<SoulTotemTileEntity> {
 	// Waila
 	//
 
-	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	@Override
 	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, SoulTotemTileEntity te, EntityPlayer player) {

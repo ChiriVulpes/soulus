@@ -3,7 +3,6 @@ package yuudaari.soulus.common.block.summoner;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nullable;
-import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
@@ -29,7 +28,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.common.block.EndersteelType;
@@ -477,7 +475,6 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	// Waila
 	//
 
-	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	@Override
 	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, SummonerTileEntity te, EntityPlayer player) {
@@ -497,14 +494,12 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 	}
 
-	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	@Override
 	protected boolean shouldWailaTooltipShowAll (IBlockState blockState, SummonerTileEntity te) {
 		return te.upgrades.get(Upgrade.CRYSTAL_DARK) > 0;
 	}
 
-	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	@Override
 	protected String getWailaTooltipUpgrade (IUpgrade upgrade, SummonerTileEntity te) {
@@ -514,7 +509,6 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		return super.getWailaTooltipUpgrade(upgrade, te);
 	}
 
-	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	@Override
 	protected List<String> onWailaTooltipMore (IBlockState blockState, SummonerTileEntity te, EntityPlayer player) {
@@ -522,10 +516,9 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		return Collections.singletonList(I18n.format("tooltip." + Soulus.MODID + ":summoner.style." + variant));
 	}
 
-	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	@Override
-	public ItemStack getWailaStack (IWailaDataAccessor accessor) {
+	public ItemStack getWailaStack (IDataAccessor accessor) {
 		TileEntity te = accessor.getTileEntity();
 		if (te == null || !(te instanceof SummonerTileEntity))
 			return null;

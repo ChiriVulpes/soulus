@@ -21,7 +21,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.common.ModBlocks;
@@ -253,7 +252,6 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	// Waila
 	//
 
-	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	@Override
 	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, ComposerCellTileEntity te, EntityPlayer player) {
@@ -274,7 +272,6 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 		}
 	}
 
-	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	@Override
 	protected List<String> onWailaTooltipMore (IBlockState blockState, ComposerCellTileEntity te, EntityPlayer player) {

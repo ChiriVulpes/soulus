@@ -9,6 +9,7 @@ import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.ModGenerators;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.compat.ExNihiloCreatioRecipes;
+import yuudaari.soulus.common.compat.top.TheOneProbe;
 import yuudaari.soulus.common.config.Config;
 import java.util.ArrayList;
 import java.util.List;
@@ -125,6 +126,10 @@ public class Soulus {
 
 	@EventHandler
 	public void preinit (final FMLPreInitializationEvent event) {
+
+		if (Loader.isModLoaded("theoneprobe")) {
+			TheOneProbe.register();
+		}
 
 		final String configPath = event.getModConfigurationDirectory().getAbsolutePath() + "/soulus/";
 		config = new Config(event.getAsmData(), configPath, Soulus.MODID);

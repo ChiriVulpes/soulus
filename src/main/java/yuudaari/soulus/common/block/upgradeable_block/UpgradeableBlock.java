@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.Nullable;
-import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -27,7 +26,6 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.common.util.Material;
@@ -325,17 +323,15 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 	// Waila
 	//
 
-	@Optional.Method(modid = "waila")
 	@Override
-	public ItemStack getWailaStack (IWailaDataAccessor accessor) {
+	public ItemStack getWailaStack (IDataAccessor accessor) {
 		return getItemStack();
 	}
 
 	@SuppressWarnings("unchecked")
-	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	@Override
-	public final List<String> getWailaTooltip (List<String> currentTooltip, IWailaDataAccessor accessor) {
+	public final List<String> getWailaTooltip (List<String> currentTooltip, IDataAccessor accessor) {
 		TileEntity te = accessor.getTileEntity();
 
 		EntityPlayer player = accessor.getPlayer();
@@ -352,13 +348,11 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 		return currentTooltip;
 	}
 
-	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	protected boolean shouldWailaTooltipShowAll (IBlockState blockState, TileEntityClass te) {
 		return false;
 	}
 
-	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	private final void onWailaTooltipBody (List<String> currentTooltip, IBlockState blockState, TileEntityClass te, EntityPlayer player) {
 		List<String> upgrades = onWailaTooltipShowUpgrades(te);
@@ -377,7 +371,6 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 		}
 	}
 
-	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	private final List<String> onWailaTooltipShowUpgrades (TileEntityClass te) {
 		List<String> tooltip = new ArrayList<>();
@@ -389,7 +382,6 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 		return tooltip;
 	}
 
-	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	protected void onWailaTooltipUpgrades (List<String> currentTooltip, TileEntityClass te) {
 		List<IUpgrade> upgrades = new ArrayList<>(Arrays.asList(getUpgrades()));
@@ -404,7 +396,6 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 		}
 	}
 
-	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	@Nullable
 	protected String getWailaTooltipUpgrade (IUpgrade upgrade, TileEntityClass te) {
@@ -417,18 +408,15 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 			upgradeCount, upgrade.getMaxQuantity());
 	}
 
-	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	@Nullable
 	protected List<String> onWailaTooltipMore (IBlockState blockState, TileEntityClass te, EntityPlayer player) {
 		return null;
 	}
 
-	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, TileEntityClass te, EntityPlayer player) {}
 
-	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	protected void onWailaTooltipFooter (List<String> currentTooltip, IBlockState blockState, TileEntityClass te, EntityPlayer player) {}
 

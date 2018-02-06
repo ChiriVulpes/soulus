@@ -4,9 +4,12 @@ import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.compat.WailaProviders;
 import java.util.Collections;
 import java.util.List;
+import mcjty.theoneprobe.api.IProbeHitData;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -16,7 +19,6 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.common.Optional;
 
 public interface IBlock extends IModThing {
 
@@ -52,15 +54,73 @@ public interface IBlock extends IModThing {
 
 	abstract void getSubBlocks (CreativeTab itemIn, NonNullList<ItemStack> items);
 
-	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
-	default List<String> getWailaTooltip (List<String> currentTooltip, IWailaDataAccessor accessor) {
+	default List<String> getWailaTooltip (List<String> currentTooltip, IDataAccessor accessor) {
 		return currentTooltip;
 	}
 
-	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
-	default ItemStack getWailaStack (IWailaDataAccessor accessor) {
+	default ItemStack getWailaStack (IDataAccessor accessor) {
 		return null;
 	}
+
+	public static interface IDataAccessor {
+
+		TileEntity getTileEntity ();
+
+		EntityPlayer getPlayer ();
+
+		IBlockState getBlockState ();
+	}
+
+	public static class DataAccessorWaila implements IDataAccessor {
+
+		private final IWailaDataAccessor accessor;
+
+		public DataAccessorWaila (final IWailaDataAccessor accessor) {
+			this.accessor = accessor;
+		}
+
+		@Override
+		public TileEntity getTileEntity () {
+			return accessor.getTileEntity();
+		}
+
+		@Override
+		public EntityPlayer getPlayer () {
+			return accessor.getPlayer();
+		}
+
+		@Override
+		public IBlockState getBlockState () {
+			return accessor.getBlockState();
+		}
+	}
+
+	public static class DataAccessorTOP implements IDataAccessor {
+
+		private final EntityPlayer PLAYER;
+		private final IProbeHitData DATA;
+
+		public DataAccessorTOP (final EntityPlayer player, final IProbeHitData probeHitData) {
+			this.PLAYER = player;
+			this.DATA = probeHitData;
+		}
+
+		@Override
+		public TileEntity getTileEntity () {
+			return PLAYER.getEntityWorld().getTileEntity(DATA.getPos());
+		}
+
+		@Override
+		public EntityPlayer getPlayer () {
+			return PLAYER;
+		}
+
+		@Override
+		public IBlockState getBlockState () {
+			return PLAYER.getEntityWorld().getBlockState(DATA.getPos());
+		}
+	}
+
 }

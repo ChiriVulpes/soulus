@@ -1,6 +1,5 @@
 package yuudaari.soulus.common.block;
 
-import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.MaterialTransparent;
@@ -15,7 +14,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.Optional;
 import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.util.ModBlock;
@@ -82,9 +80,8 @@ public class AshBlock extends ModBlock {
 		return false;
 	}
 
-	@Optional.Method(modid = "waila")
 	@Override
-	public ItemStack getWailaStack (IWailaDataAccessor accessor) {
+	public ItemStack getWailaStack (IDataAccessor accessor) {
 		return ModItems.ASH.getItemStack();
 	}
 }

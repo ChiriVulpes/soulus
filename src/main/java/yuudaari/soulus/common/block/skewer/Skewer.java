@@ -26,7 +26,6 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
@@ -339,7 +338,6 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	// Waila
 	//
 
-	@Optional.Method(modid = "waila")
 	@SideOnly(Side.CLIENT)
 	@Override
 	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, SkewerTileEntity te, EntityPlayer player) {
