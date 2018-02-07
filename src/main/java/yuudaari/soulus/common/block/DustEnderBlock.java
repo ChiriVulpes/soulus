@@ -93,6 +93,11 @@ public class DustEnderBlock extends ModBlock {
 	}
 
 	@Override
+	public AxisAlignedBB getBoundingBox (IBlockState state, IBlockAccess source, BlockPos pos) {
+		return new AxisAlignedBB(0, 0, 0, 1, .125, 1);
+	}
+
+	@Override
 	public BlockFaceShape getBlockFaceShape (IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
 		return BlockFaceShape.UNDEFINED;
 	}
