@@ -139,8 +139,6 @@ public class ModItems {
 	};
 
 	public static void registerItems (IForgeRegistry<Item> registry) {
-		OreDictionary.registerOre("bonemeal", new ItemStack(Items.DYE, 1, 15));
-
 		for (Item item : items) {
 			registry.register(item);
 			if (item instanceof IModThing) {
@@ -149,6 +147,8 @@ public class ModItems {
 				}
 			}
 		}
+
+		OreDictionary.registerOre("bonemeal", new ItemStack(Items.DYE, 1, 15));
 	}
 
 	@SideOnly(Side.CLIENT)

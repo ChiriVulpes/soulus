@@ -3,7 +3,6 @@ package yuudaari.soulus.common;
 import yuudaari.soulus.common.util.IBlock;
 import yuudaari.soulus.common.util.IModThing;
 import yuudaari.soulus.common.util.IProvidesJeiDescription;
-import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -30,6 +29,7 @@ public class ModBlocks {
 	public static final BlockNiobium BLOCK_NIOBIUM = new BlockNiobium();
 	public static final Composer COMPOSER = new Composer();
 	public static final ComposerCell COMPOSER_CELL = new ComposerCell();
+	public static final DustEnderBlock DUST_ENDER = new DustEnderBlock();
 	public static final FossilDirt FOSSIL_DIRT = new FossilDirt();
 	public static final FossilDirtEnder FOSSIL_DIRT_ENDER = new FossilDirtEnder();
 	public static final FossilDirtFrozen FOSSIL_DIRT_FROZEN = new FossilDirtFrozen();
@@ -49,6 +49,8 @@ public class ModBlocks {
 	public static final SoulTotem SOUL_TOTEM = new SoulTotem();
 
 	public static IBlock[] blocks = new IBlock[] {
+		DUST_ENDER,
+
 		FOSSIL_DIRT,
 		FOSSIL_DIRT_FROZEN,
 		FOSSIL_DIRT_FUNGAL,
@@ -97,8 +99,7 @@ public class ModBlocks {
 	public static void registerItems (IForgeRegistry<Item> registry) {
 		for (IBlock block : blocks) {
 			if (block.hasItem()) {
-				List<ItemBlock> items = block.getItemBlocks();
-				for (ItemBlock item : items) {
+				for (ItemBlock item : block.getItemBlocks()) {
 					registry.register(item);
 					for (String dict : block.getOreDicts()) {
 						OreDictionary.registerOre(dict, item);

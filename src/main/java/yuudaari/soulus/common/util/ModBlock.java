@@ -15,6 +15,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.NonNullList;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ModBlock extends Block implements IBlock {
 
@@ -60,17 +61,21 @@ public class ModBlock extends Block implements IBlock {
 		recipes.add(recipe);
 	}
 
-	public void setHasItem (boolean hasItem) {
+	public void setHasItem (boolean hasItem, @Nullable ItemBlock block) {
 		if (hasItem) {
 			if (!this.hasItem) {
 				this.hasItem = true;
-				itemBlock = new ItemBlock(this);
+				itemBlock = block == null ? new ItemBlock(this) : block;
 				itemBlock.setRegistryName(getRegistryName());
 			}
 		} else {
 			this.hasItem = false;
 			itemBlock = null;
 		}
+	}
+
+	public void setHasItem (boolean hasItem) {
+		setHasItem(hasItem, null);
 	}
 
 	public void setHasItem () {

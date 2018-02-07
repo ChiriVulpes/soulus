@@ -148,6 +148,7 @@ public class Soulus {
 
 	@EventHandler
 	public void init (FMLInitializationEvent event) {
+
 		for (InitEventHandler handler : initHandlers) {
 			handler.handle(event);
 		}
