@@ -1,6 +1,6 @@
 {
 	"parent": "minecraft:block/cube_all",
 	"textures": {
-		"all": "soulus:blocks/fossil_end_stone"
+		"all": "soulus:blocks/fossil/fossil_end_stone"
 	}
 }

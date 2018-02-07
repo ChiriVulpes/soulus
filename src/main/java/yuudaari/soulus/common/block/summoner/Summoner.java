@@ -264,7 +264,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	public static class SummonerItemBlock extends ItemMultiTexture {
 
 		public SummonerItemBlock (Block b) {
-			super(b, b, i -> EndersteelType.byMetadata(i.getItemDamage()).getName());
+			super(b, b, i -> "summoner_" + EndersteelType.byMetadata(i.getItemDamage()).getName());
 			setRegistryName(Soulus.MODID + ":summoner");
 		}
 
@@ -391,14 +391,18 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		// the summoner style can always be changed
 		if (item.equals(ModItems.DUST_IRON) && state.getValue(VARIANT) != EndersteelType.NORMAL) {
 			world.setBlockState(pos, state.withProperty(VARIANT, EndersteelType.NORMAL));
-		} else if (item.equals(ModItems.DUST_WOOD) && state.getValue(VARIANT) != EndersteelType.WOOD) {
-			world.setBlockState(pos, state.withProperty(VARIANT, EndersteelType.WOOD));
-		} else if (item.equals(ModItems.DUST_STONE) && state.getValue(VARIANT) != EndersteelType.STONE) {
-			world.setBlockState(pos, state.withProperty(VARIANT, EndersteelType.STONE));
-		} else if (item.equals(ModItems.BONEMEAL_ENDER) && state.getValue(VARIANT) != EndersteelType.END_STONE) {
-			world.setBlockState(pos, state.withProperty(VARIANT, EndersteelType.END_STONE));
-		} else if (item.equals(Items.BLAZE_POWDER) && state.getValue(VARIANT) != EndersteelType.BLAZE) {
-			world.setBlockState(pos, state.withProperty(VARIANT, EndersteelType.BLAZE));
+		} else if (item.equals(ModItems.DUST_WOOD) && state.getValue(VARIANT) != EndersteelType.EARTHY) {
+			world.setBlockState(pos, state.withProperty(VARIANT, EndersteelType.EARTHY));
+		} else if (item.equals(ModItems.DUST_STONE) && state.getValue(VARIANT) != EndersteelType.SPOOKY) {
+			world.setBlockState(pos, state.withProperty(VARIANT, EndersteelType.SPOOKY));
+		} else if (item.equals(ModItems.BONEMEAL_ENDER) && state.getValue(VARIANT) != EndersteelType.ENDER) {
+			world.setBlockState(pos, state.withProperty(VARIANT, EndersteelType.ENDER));
+		} else if (item.equals(Items.BLAZE_POWDER) && state.getValue(VARIANT) != EndersteelType.BLAZING) {
+			world.setBlockState(pos, state.withProperty(VARIANT, EndersteelType.BLAZING));
+		} else if (item.equals(ModItems.DUST_NIOBIUM) && state.getValue(VARIANT) != EndersteelType.SORROW) {
+			world.setBlockState(pos, state.withProperty(VARIANT, EndersteelType.SORROW));
+		} else if (item.equals(ModItems.ASH) && state.getValue(VARIANT) != EndersteelType.MADNESS) {
+			world.setBlockState(pos, state.withProperty(VARIANT, EndersteelType.MADNESS));
 		} else {
 			didChangeStyle = false;
 		}

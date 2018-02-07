@@ -9,10 +9,12 @@ import yuudaari.soulus.common.util.serializer.FieldSerializer;
 
 public enum EndersteelType implements IStringSerializable {
 	NORMAL (0, "normal"),
-	WOOD (1, "wood"),
-	STONE (2, "stone"),
-	END_STONE (3, "end_stone"),
-	BLAZE (4, "blaze");
+	EARTHY (1, "earthy"),
+	SPOOKY (2, "spooky"),
+	ENDER (3, "ender"),
+	BLAZING (4, "blazing"),
+	SORROW (5, "sorrow"),
+	MADNESS (6, "madness");
 
 	private final int meta;
 	private final String name;

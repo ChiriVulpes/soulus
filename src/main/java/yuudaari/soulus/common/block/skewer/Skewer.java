@@ -25,6 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -293,21 +294,49 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 
 			if (entityBox.intersects(box)) {
 				if (facing == EnumFacing.UP) {
-					if (entityBox.intersects(bottomBox(facing, pos)) && entityBox.intersects(topBox(facing, pos))) {
+					if (entityBox.intersects(getVerticalCollisionBoxBottom(facing, pos)) && //
+						entityBox.intersects(getVerticalCollisionBoxTop(facing, pos))) {
+
+						collidingBoxes.add(box);
+					}
+				} else if (facing.getAxis() != Axis.Y) {
+					if (entityBox.intersects(getHorizontalCollisionBoxTop(facing, pos)) || //
+						entityBox.intersects(getHorizontalCollisionBoxSideLeft(facing, pos)) ||  //
+						entityBox.intersects(getHorizontalCollisionBoxSideRight(facing, pos))) {
+
 						collidingBoxes.add(box);
 					}
 				}
 			}
 
+
+
 		}
 	}
 
-	public AxisAlignedBB bottomBox (EnumFacing facing, BlockPos pos) {
+	public AxisAlignedBB getHorizontalCollisionBoxTop (EnumFacing facing, BlockPos pos) {
+		return contract(contract( //
+			new AxisAlignedBB(pos.offset(facing).up(2)), //
+			EnumFacing.UP, 0.5), //
+			EnumFacing.DOWN, 0.25);
+	}
+
+	public AxisAlignedBB getHorizontalCollisionBoxSideLeft (EnumFacing facing, BlockPos pos) {
+		EnumFacing side = facing.rotateYCCW();
+		return contract(new AxisAlignedBB(pos.offset(facing).offset(side)), side.getOpposite(), 0.4);
+	}
+
+	public AxisAlignedBB getHorizontalCollisionBoxSideRight (EnumFacing facing, BlockPos pos) {
+		EnumFacing side = facing.rotateY();
+		return contract(new AxisAlignedBB(pos.offset(facing).offset(side)), side.getOpposite(), 0.4);
+	}
+
+	public AxisAlignedBB getVerticalCollisionBoxBottom (EnumFacing facing, BlockPos pos) {
 		return contract(getSpikeHitbox(facing, pos), facing, 0.69);
 	}
 
-	public AxisAlignedBB topBox (EnumFacing facing, BlockPos pos) {
-		return offset(bottomBox(facing, pos), facing, 0.69);
+	public AxisAlignedBB getVerticalCollisionBoxTop (EnumFacing facing, BlockPos pos) {
+		return offset(getVerticalCollisionBoxBottom(facing, pos), facing, 0.69);
 	}
 
 	public AxisAlignedBB offset (AxisAlignedBB box, EnumFacing facing, double n) {

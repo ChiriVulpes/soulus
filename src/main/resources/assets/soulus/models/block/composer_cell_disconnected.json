@@ -1,10 +1,10 @@
 {
     "parent": "block/block",
     "textures": {
-		"side": "soulus:blocks/composer_cell_side",
-		"top": "soulus:blocks/composer_cell_top",
-		"bottom": "soulus:blocks/composer_cell_bottom",
-		"particle": "soulus:blocks/composer_cell_top"
+		"side": "soulus:blocks/composer/composer_cell_side",
+		"top": "soulus:blocks/composer/composer_cell_top",
+		"bottom": "soulus:blocks/composer/composer_cell_bottom",
+		"particle": "soulus:blocks/composer/composer_cell_top"
     },
     "elements": [
         {   "from": [ 1, 0, 1 ],

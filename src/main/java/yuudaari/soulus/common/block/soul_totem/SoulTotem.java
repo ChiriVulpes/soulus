@@ -145,10 +145,10 @@ public class SoulTotem extends UpgradeableBlock<SoulTotemTileEntity> {
 		addCollisionBoxToList(pos, entityBox, collidingBoxes, state.getCollisionBoundingBox(worldIn, pos));
 
 		if (state.getValue(CONNECTED)) {
-			addCollisionBoxToList(pos, entityBox, collidingBoxes, new AxisAlignedBB(-.4375, -.1875, -.4375, 1.4375, .25, 0));
-			addCollisionBoxToList(pos, entityBox, collidingBoxes, new AxisAlignedBB(-.4375, -.1875, 1, 1.4375, .25, 1.4375));
-			addCollisionBoxToList(pos, entityBox, collidingBoxes, new AxisAlignedBB(-.4375, -.1875, 0, 0, .25, 1));
-			addCollisionBoxToList(pos, entityBox, collidingBoxes, new AxisAlignedBB(1, -.1875, 0, 1.4375, .25, 1));
+			addCollisionBoxToList(pos, entityBox, collidingBoxes, new AxisAlignedBB(-.4375, -.875, -.4375, 1.4375, .25, 0));
+			addCollisionBoxToList(pos, entityBox, collidingBoxes, new AxisAlignedBB(-.4375, -.875, 1, 1.4375, .25, 1.4375));
+			addCollisionBoxToList(pos, entityBox, collidingBoxes, new AxisAlignedBB(-.4375, -.875, 0, 0, .25, 1));
+			addCollisionBoxToList(pos, entityBox, collidingBoxes, new AxisAlignedBB(1, -.875, 0, 1.4375, .25, 1));
 		}
 	}
 
@@ -181,20 +181,20 @@ public class SoulTotem extends UpgradeableBlock<SoulTotemTileEntity> {
 
 	public StructureMap structure = new StructureMap();
 	{
-		BlockValidator bars = BlockValidator.byBlock(ModBlocks.BARS_ENDERSTEEL);
-		BlockValidator endersteel = BlockValidator.byBlock(ModBlocks.BLOCK_ENDERSTEEL_DARK);
+		// BlockValidator bars = BlockValidator.byBlock(ModBlocks.BARS_ENDERSTEEL);
+		BlockValidator niobium = BlockValidator.byBlock(ModBlocks.BLOCK_NIOBIUM);
 
 		// layer -1
-		structure.addBlock(-1, -1, -1, endersteel);
-		structure.addBlock(0, -1, -1, bars);
-		structure.addBlock(1, -1, -1, endersteel);
+		structure.addBlock(-1, -1, -1, niobium);
+		// structure.addBlock(0, -1, -1, bars);
+		structure.addBlock(1, -1, -1, niobium);
 
-		structure.addBlock(-1, -1, 0, bars);
-		structure.addBlock(1, -1, 0, bars);
+		// structure.addBlock(-1, -1, 0, bars);
+		// structure.addBlock(1, -1, 0, bars);
 
-		structure.addBlock(-1, -1, 1, endersteel);
-		structure.addBlock(0, -1, 1, bars);
-		structure.addBlock(1, -1, 1, endersteel);
+		structure.addBlock(-1, -1, 1, niobium);
+		// structure.addBlock(0, -1, 1, bars);
+		structure.addBlock(1, -1, 1, niobium);
 	}
 
 	/////////////////////////////////////////

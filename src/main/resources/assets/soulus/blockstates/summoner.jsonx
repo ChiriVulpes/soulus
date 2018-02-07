@@ -1,0 +1,11 @@
+{
+	"multipart": [
+		{ "when": { "variant": "normal" }, "apply": { "model": "soulus:summoner/normal" }},
+		{ "when": { "variant": "spooky" }, "apply": { "model": "soulus:summoner/spooky" }},
+		{ "when": { "variant": "earthy" }, "apply": { "model": "soulus:summoner/earthy" }},
+		{ "when": { "variant": "ender" }, "apply": { "model": "soulus:summoner/ender" }},
+		{ "when": { "variant": "blazing" }, "apply": { "model": "soulus:summoner/blazing" }},
+		{ "when": { "variant": "sorrow" }, "apply": { "model": "soulus:summoner/sorrow" }},
+		{ "when": { "variant": "madness" }, "apply": { "model": "soulus:summoner/madness" }}
+	]
+}

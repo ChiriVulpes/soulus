@@ -1,13 +1,13 @@
 {
     "parent": "block/block",
     "textures": {
-		"back": "soulus:blocks/composer_back",
-		"side": "soulus:blocks/composer_side",
-		"front": "soulus:blocks/composer_front",
-		"top": "soulus:blocks/composer_top",
-		"bottom": "soulus:blocks/composer_bottom",
+		"back": "soulus:blocks/composer/composer_back",
+		"side": "soulus:blocks/composer/composer_side",
+		"front": "soulus:blocks/composer/composer_front",
+		"top": "soulus:blocks/composer/composer_top",
+		"bottom": "soulus:blocks/composer/composer_bottom",
 		"mid": "soulus:blocks/block_endersteel",
-		"particle": "soulus:blocks/composer_side"
+		"particle": "soulus:blocks/composer/composer_side"
     },
     "elements": [
         {   "from": [ 0, 0, 0 ],

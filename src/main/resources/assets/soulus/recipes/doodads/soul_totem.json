@@ -1,20 +1,25 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"pattern": [
-		"bbb",
-		"bSb",
-		"ooo"
+		"bob",
+		"bob",
+		"ppp"
 	],
 	"key": {
+		"o": {
+			"item": "soulus:gear_oscillating"
+		},
 		"b": {
 			"item": "soulus:ingot_niobium"
 		},
-		"o": {
-			"item": "minecraft:obsidian"
-		},
-		"S": {
-			"type": "soulus:soul_catalyst"
-		}
+		"p": [
+			{
+				"item": "minecraft:purpur_block"
+			},
+			{
+				"item": "minecraft:purpur_pillar"
+			}
+		]
 	},
 	"result": {
 		"item": "soulus:soul_totem"

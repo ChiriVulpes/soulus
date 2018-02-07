@@ -1,6 +1,6 @@
 {
 	"parent": "minecraft:block/cube_all",
 	"textures": {
-		"all": "soulus:blocks/fossil_netherrack_ender"
+		"all": "soulus:blocks/fossil/fossil_netherrack_ender"
 	}
 }

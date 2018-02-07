@@ -73,31 +73,45 @@ public class ConfigSummoner extends ConfigUpgradeableBlock<Summoner> {
 		});
 
 		// spooky
-		stylePotionEffects.put(EndersteelType.STONE, new ModPotionEffect[] {
+		stylePotionEffects.put(EndersteelType.SPOOKY, new ModPotionEffect[] {
 			new ModPotionEffect("glowing", 6000, 0.1f),
 			new ModPotionEffect("invisibility", 6000, 0.5f),
 			new ModPotionEffect("wither", 6000, 0.1f)
 		});
 
 		// earthy
-		stylePotionEffects.put(EndersteelType.WOOD, new ModPotionEffect[] {
+		stylePotionEffects.put(EndersteelType.EARTHY, new ModPotionEffect[] {
 			new ModPotionEffect("slowness", 6000, 0.2f),
 			new ModPotionEffect("resistance", 6000, 0.5f),
 			new ModPotionEffect("poison", 6000, 0.1f)
 		});
 
 		// blazing
-		stylePotionEffects.put(EndersteelType.BLAZE, new ModPotionEffect[] {
+		stylePotionEffects.put(EndersteelType.BLAZING, new ModPotionEffect[] {
 			new ModPotionEffect("fire_resistance", 6000, 0.5f),
 			new ModPotionEffect("regeneration", 6000, 0.2f),
 			new ModPotionEffect("weakness", 6000, 0.1f)
 		});
 
 		// ender
-		stylePotionEffects.put(EndersteelType.END_STONE, new ModPotionEffect[] {
+		stylePotionEffects.put(EndersteelType.ENDER, new ModPotionEffect[] {
 			new ModPotionEffect("speed", 6000, 0.1f),
 			new ModPotionEffect("absorption", 6000, 0.5f),
 			new ModPotionEffect("strength", 6000, 0.2f)
+		});
+
+		// sorrow
+		stylePotionEffects.put(EndersteelType.SORROW, new ModPotionEffect[] {
+			new ModPotionEffect("slowness", 6000, 0.2f),
+			new ModPotionEffect("weakness", 6000, 0.5f),
+			new ModPotionEffect("resistance", 6000, 0.1f)
+		});
+
+		// madness
+		stylePotionEffects.put(EndersteelType.MADNESS, new ModPotionEffect[] {
+			new ModPotionEffect("weakness", 6000, 0.1f),
+			new ModPotionEffect("wither", 6000, 0.5f),
+			new ModPotionEffect("poison", 6000, 0.2f)
 		});
 	}
 

@@ -1,0 +1,7 @@
+{
+	"parent": "minecraft:block/cube_column",
+	"textures": {
+		"end": "soulus:blocks/summoner/sorrow_top",
+		"side": "soulus:blocks/summoner/sorrow_side"
+	}
+}

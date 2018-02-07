@@ -1,20 +1,28 @@
 {
 	"parent": "minecraft:block/block",
     "textures": {
-		"top": "soulus:blocks/soul_totem_top",
-		"side": "soulus:blocks/soul_totem_side",
-		"particle": "soulus:blocks/soul_totem_side"
+		"top": "soulus:blocks/soul_totem/soul_totem_top",
+		"side": "soulus:blocks/soul_totem/soul_totem_side",
+        "bottom": "soulus:blocks/soul_totem/soul_totem_bottom",
+        "cage_top": "soulus:blocks/soul_totem/soul_totem_cage_top",
+		"particle": "soulus:blocks/soul_totem/soul_totem_side"
     },
     "elements": [
         {   "from": [ 0, 0, 0 ],
             "to": [ 16, 16, 16 ],
             "faces": {
-                "down":  { "texture": "#top", "cullface": "down" },
-                "up":    { "texture": "#top", "cullface": "up" },
+                "down":  { "texture": "#bottom", "cullface": "down" },
+                "up":    { "texture": "#cage_top", "cullface": "up" },
                 "north": { "texture": "#side", "cullface": "north" },
                 "south": { "texture": "#side", "cullface": "south" },
                 "west":  { "texture": "#side", "cullface": "west" },
                 "east":  { "texture": "#side", "cullface": "east" }
+            }
+        },
+        {   "from": [ 0, 9, 0 ],
+            "to": [ 16, 9, 16 ],
+            "faces": {
+                "up":    { "texture": "#top", "cullface": "up" }
             }
         }
     ]

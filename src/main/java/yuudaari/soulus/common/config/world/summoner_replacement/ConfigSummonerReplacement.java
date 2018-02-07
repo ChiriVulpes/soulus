@@ -17,16 +17,16 @@ public class ConfigSummonerReplacement {
 	@ConfigProfile public static ConfigSummonerReplacement disabled = new ConfigSummonerReplacement();
 	@ConfigProfile public static ConfigSummonerReplacement enabled = new ConfigSummonerReplacement()
 		.addStructure("*", EndersteelType.NORMAL)
-		.addStructure("mineshaft", EndersteelType.STONE)
-		.addStructure("stronghold", EndersteelType.END_STONE)
-		.addStructure("mansion", EndersteelType.WOOD)
-		.addStructure("fortress", EndersteelType.BLAZE);
+		.addStructure("mineshaft", EndersteelType.SPOOKY)
+		.addStructure("stronghold", EndersteelType.ENDER)
+		.addStructure("mansion", EndersteelType.EARTHY)
+		.addStructure("fortress", EndersteelType.BLAZING);
 	@ConfigProfile public static ConfigSummonerReplacement enabledEmpty = new ConfigSummonerReplacement()
 		.addStructure("*", new ConfigReplacement(EndersteelType.NORMAL, false))
-		.addStructure("mineshaft", new ConfigReplacement(EndersteelType.STONE, false))
-		.addStructure("stronghold", new ConfigReplacement(EndersteelType.END_STONE, false))
-		.addStructure("mansion", new ConfigReplacement(EndersteelType.WOOD, false))
-		.addStructure("fortress", new ConfigReplacement(EndersteelType.BLAZE, false));
+		.addStructure("mineshaft", new ConfigReplacement(EndersteelType.SPOOKY, false))
+		.addStructure("stronghold", new ConfigReplacement(EndersteelType.ENDER, false))
+		.addStructure("mansion", new ConfigReplacement(EndersteelType.EARTHY, false))
+		.addStructure("fortress", new ConfigReplacement(EndersteelType.BLAZING, false));
 
 	@Serialized(value = Serializer.class, topLevel = true) public Map<String, ConfigStructure> structures = new HashMap<>();
 

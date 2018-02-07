@@ -7,27 +7,43 @@
 		"variant": {
 			"normal": {
 				"textures": {
-					"all": "soulus:blocks/summoner_normal"
+					"all": "soulus:blocks/summoner/normal"
 				}
 			},
-			"wood": {
+			"earthy": {
 				"textures": {
-					"all": "soulus:blocks/summoner_wood"
+					"all": "soulus:blocks/summoner/earthy"
 				}
 			},
-			"stone": {
+			"spooky": {
 				"textures": {
-					"all": "soulus:blocks/summoner_stone"
+					"all": "soulus:blocks/summoner/spooky"
 				}
 			},
-			"end_stone": {
+			"ender": {
+				"model": "minecraft:cube_column",
 				"textures": {
-					"all": "soulus:blocks/summoner_end_stone"
+					"side": "soulus:blocks/summoner/ender_side",
+					"end": "soulus:blocks/summoner/ender_top"
 				}
 			},
-			"blaze": {
+			"blazing": {
 				"textures": {
-					"all": "soulus:blocks/summoner_blaze"
+					"all": "soulus:blocks/summoner/blazing"
+				}
+			},
+			"sorrow": {
+				"model": "minecraft:cube_column",
+				"textures": {
+					"side": "soulus:blocks/summoner/sorrow_side",
+					"end": "soulus:blocks/summoner/sorrow_top"
+				}
+			},
+			"madness": {
+				"model": "minecraft:cube_column",
+				"textures": {
+					"side": "soulus:blocks/summoner/madness_side",
+					"end": "soulus:blocks/summoner/madness_top"
 				}
 			}
 		},
