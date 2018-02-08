@@ -49,12 +49,12 @@ public class ZenComposer {
 			for (final IIngredient input : inputArr) {
 				final char symbol = input == null ? ' ' : Character.forDigit(i++, 10);
 				row += symbol;
+				if (symbol == ' ' || input == null) continue;
+
 				ingredients.push(symbol);
-				if (input != null) {
-					final Ingredient ingredient = getIngredient(input);
-					if (ingredient == null) return;
-					ingredients.push(ingredient);
-				}
+				final Ingredient ingredient = getIngredient(input);
+				if (ingredient == null) return;
+				ingredients.push(ingredient);
 			}
 			ingredients.insertElementAt(row, (i - 1) / 3);
 		}
