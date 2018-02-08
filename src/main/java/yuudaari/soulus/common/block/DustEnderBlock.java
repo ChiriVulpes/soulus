@@ -1,5 +1,7 @@
 package yuudaari.soulus.common.block;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -9,6 +11,7 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -27,6 +30,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import scala.Tuple2;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.ModItems;
@@ -55,7 +61,7 @@ public class DustEnderBlock extends ModBlock {
 		.<EnumDyeColor>create("color", EnumDyeColor.class);
 
 	public DustEnderBlock () {
-		super("dust_ender_block", new Material(MapColor.GRASS).setTransparent());
+		super("dust_ender_block", new Material(MapColor.GRASS).setTransparent().setDestroyOnPushed());
 		setDefaultState(getDefaultState().withProperty(COLOR, EnumDyeColor.LIGHT_BLUE));
 		addOreDict("dustEnder", "bonemeal");
 		setSoundType(SoundType.STONE);
@@ -78,6 +84,7 @@ public class DustEnderBlock extends ModBlock {
 		if (state.getValue(COLOR) == newColor) return false;
 
 		world.setBlockState(pos, state.withProperty(COLOR, newColor), 3);
+		stack.shrink(1);
 
 		return true;
 	}
@@ -88,6 +95,8 @@ public class DustEnderBlock extends ModBlock {
 		if (world.rand.nextFloat() > CONFIG.teleportChance) return;
 
 		if (!entity.getEntityBoundingBox().intersects(getBoundingBox(state, world, pos).offset(pos))) return;
+
+		List<Tuple2<EnderlinkTileEntity, Double>> links = new ArrayList<>();
 
 		EnumDyeColor color = world.getBlockState(pos).getValue(COLOR);
 		for (int x = -2; x < 3; x++) {
@@ -100,12 +109,18 @@ public class DustEnderBlock extends ModBlock {
 					EnderlinkTileEntity ete = (EnderlinkTileEntity) te;
 					if (ete.color != color) continue;
 
-					if (!ete.isWithinRange(entity)) continue;
+					double distance = entity.getDistanceSqToCenter(ete.getPos());
+					if (!ete.isWithinRange(entity, distance)) continue;
 
-					ete.teleportEntity(entity);
+					links.add(new Tuple2<>(ete, distance));
 				}
 			}
 		}
+
+		links.stream()
+			.sorted( (a, b) -> Double.compare(a._2, b._2))
+			.findFirst()
+			.ifPresent(ete -> ete._1.teleportEntity(entity));
 	}
 
 	@Override
@@ -186,4 +201,17 @@ public class DustEnderBlock extends ModBlock {
 		return state.getValue(COLOR).getMetadata();
 	}
 
+	/////////////////////////////////////////
+	// Waila
+	//
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public final List<String> getWailaTooltip (List<String> currentTooltip, IDataAccessor accessor) {
+		String color = accessor.getBlockState().getValue(COLOR).getDyeColorName();
+
+		currentTooltip.add(I18n.format("waila.soulus:misc.color." + color));
+
+		return currentTooltip;
+	}
 }

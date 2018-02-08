@@ -11,7 +11,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import yuudaari.soulus.common.ModBlocks;
@@ -76,12 +78,26 @@ public class EnderlinkTileEntity extends UpgradeableBlockTileEntity implements I
 			z += facing.getFrontOffsetZ() * entity.width / 2;
 		}
 
+		if (!isItem) {
+			Vec3d entityPos = entity.getPositionVector();
+			AxisAlignedBB entityBox = entity.getEntityBoundingBox()
+				.offset(x - entityPos.x, y - entityPos.y, z - entityPos.z)
+				.shrink(0.2);
+
+			// cancel teleport if the new position causes the entity to collide with anything
+			if (world.collidesWithAnyBlock(entityBox)) return;
+		}
+
 		entity.setPositionAndUpdate(x, y, z);
 		explosionParticles(entity, particleCount);
 	}
 
 	public boolean isWithinRange (Entity entity) {
-		return entity.getDistanceSqToCenter(pos) < range;
+		return isWithinRange(entity, entity.getDistanceSqToCenter(pos));
+	}
+
+	public boolean isWithinRange (Entity entity, double distance) {
+		return distance < range;
 	}
 
 	/////////////////////////////////////////

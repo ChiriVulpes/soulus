@@ -23,7 +23,7 @@ public class AshBlock extends ModBlock {
 	protected static final AxisAlignedBB ASH_AABB = new AxisAlignedBB(0.20000001192092896D, 0.0D, 0.20000001192092896D, 0.799999988079071D, 0.31250001192092896D, 0.799999988079071D);
 
 	public AshBlock () {
-		super("ash_block", new MaterialTransparent(MapColor.BLACK).setReplaceable());
+		super("ash_block", new MaterialTransparent(MapColor.BLACK).setNoPushMobility());
 		setSoundType(SoundType.PLANT);
 		registerWailaProvider(AshBlock.class);
 	}

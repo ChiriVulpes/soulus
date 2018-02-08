@@ -97,12 +97,15 @@ tile.soulus:bars_endersteel.name=Endersteel Bars
 tile.soulus:skewer.name=Skewer
 tile.soulus:unloader.name=Unloader
 
-tile.soulus:composer.name=Composer
-tile.soulus:composer_cell.name=Composer Cell
-
 tile.soulus:summoner.unfocused.name=Empty Summoner
 tile.soulus:summoner.name=Summoner
 tile.soulus:summoner.focused.name=Summoner of %1$s
+
+tile.soulus:composer.name=Composer
+tile.soulus:composer_cell.name=Composer Cell
+
+tile.soulus:enderlink.name=Enderlink
+
 
 tile.soulus:soul_totem.name=Soul Totem
 
@@ -115,6 +118,16 @@ death.attack.soulus:skewer_player=%1$s became a shishkebab
 
 waila.soulus:upgradeable_block.show_upgrades=§8§oSneak to show upgrades
 waila.soulus:upgradeable_block.show_more=§8§oSneak to show more
+
+waila.soulus:skewer.extended=§8Extended
+waila.soulus:skewer.not_extended=§8Not Extended
+waila.soulus:skewer.crystal_blood_stored_blood=§4Blood Crystal: §8%1$s/%2$s Blood
+waila.soulus:skewer.upgrades_crystal_blood=%1$s/%2$s §4Blood Crystal
+waila.soulus:skewer.upgrades_damage=%1$s/%2$s §fNether Quartz §8(Damage)
+waila.soulus:skewer.upgrades_poison=%1$s/%2$s §2Spider Eyes §8(Poison)
+waila.soulus:skewer.upgrades_power=%1$s/%2$s §cRedstone Torch §8(Power)
+waila.soulus:skewer.upgrades_player=%1$s/%2$s §6Soul Catalyst §8(Player)
+waila.soulus:skewer.upgrades_tether=%1$s/%2$s §7Ash §8(Tether)
 
 waila.soulus:summoner.summon_percentage=%1$s%% summoned
 waila.soulus:summoner.summons_remaining=%1$s%% souls remaining
@@ -135,16 +148,6 @@ tooltip.soulus:summoner.style.blazing=§8Style: §cBlazing
 tooltip.soulus:summoner.style.sorrow=§8Style: §3Sorrow
 tooltip.soulus:summoner.style.madness=§8Style: §8Madness
 
-waila.soulus:skewer.extended=§8Extended
-waila.soulus:skewer.not_extended=§8Not Extended
-waila.soulus:skewer.crystal_blood_stored_blood=§4Blood Crystal: §8%1$s/%2$s Blood
-waila.soulus:skewer.upgrades_crystal_blood=%1$s/%2$s §4Blood Crystal
-waila.soulus:skewer.upgrades_damage=%1$s/%2$s §fNether Quartz §8(Damage)
-waila.soulus:skewer.upgrades_poison=%1$s/%2$s §2Spider Eyes §8(Poison)
-waila.soulus:skewer.upgrades_power=%1$s/%2$s §cRedstone Torch §8(Power)
-waila.soulus:skewer.upgrades_player=%1$s/%2$s §6Soul Catalyst §8(Player)
-waila.soulus:skewer.upgrades_tether=%1$s/%2$s §7Ash §8(Tether)
-
 waila.soulus:composer.activation=Activation: %1$sx 
 waila.soulus:composer.upgrades_range=%1$s/%2$s §6Murky Orbs §8(Range)
 waila.soulus:composer.upgrades_delay=%1$s/%2$s §3Oscillating Gears §8(Speed)
@@ -154,6 +157,24 @@ waila.soulus:composer.no_recipe=§8No Valid Recipe
 waila.soulus:composer_cell.no_items=§8Contains No Items
 waila.soulus:composer_cell.contained_item=%1$s/%2$s §6%3$s
 waila.soulus:composer_cell.slot=Slot %1$s
+
+waila.soulus:enderlink.upgrades_range=%1$s/%2$s §6Murky Orbs §8(Range)
+waila.soulus:misc.color.black=§8Color: §0Black
+waila.soulus:misc.color.red=§8Color: §4Red
+waila.soulus:misc.color.green=§8Color: §2Green
+waila.soulus:misc.color.brown=§8Color: §4Brown
+waila.soulus:misc.color.blue=§8Color: §1Blue
+waila.soulus:misc.color.purple=§8Color: §5Purple
+waila.soulus:misc.color.cyan=§8Color: §3Cyan
+waila.soulus:misc.color.silver=§8Color: §7Light Gray
+waila.soulus:misc.color.gray=§8Color: §8Gray
+waila.soulus:misc.color.pink=§8Color: §dPink
+waila.soulus:misc.color.lime=§8Color: §aLime
+waila.soulus:misc.color.yellow=§8Color: §eYellow
+waila.soulus:misc.color.light_blue=§8Color: §bLight Blue
+waila.soulus:misc.color.magenta=§8Color: §dMagenta
+waila.soulus:misc.color.orange=§8Color: §6Orange 
+waila.soulus:misc.color.white=§8Color: §fWhite
 
 waila.soulus:soul_totem.fuel_percentage=%1$s%% catalyst remaining
 waila.soulus:soul_totem.upgrades_soul_catalyst=%1$s/%2$s §6Soul Catalyst §8(Fuel)

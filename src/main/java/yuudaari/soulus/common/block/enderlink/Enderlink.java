@@ -7,6 +7,7 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -19,6 +20,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import yuudaari.soulus.common.block.DustEnderBlock;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.config.ConfigInjected;
@@ -123,6 +125,7 @@ public class Enderlink extends UpgradeableBlock<EnderlinkTileEntity> {
 		disableStats();
 		setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.UP));
 		setHasDescription();
+		registerWailaProvider(DustEnderBlock.class);
 	}
 
 	@Override
@@ -197,6 +200,8 @@ public class Enderlink extends UpgradeableBlock<EnderlinkTileEntity> {
 	@Override
 	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, EnderlinkTileEntity te, EntityPlayer player) {
 		if (te == null) return;
+
+		currentTooltip.add(I18n.format("waila.soulus:misc.color." + te.color.getDyeColorName()));
 	}
 
 }
