@@ -314,7 +314,13 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 	}
 
 	@Override
-	public abstract UpgradeableBlockTileEntity createTileEntity (World world, IBlockState state);
+	public UpgradeableBlockTileEntity createTileEntity (World world, IBlockState state) {
+		try {
+			return getTileEntityClass().newInstance();
+		} catch (final InstantiationException | IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	@Override
 	public abstract Class<? extends UpgradeableBlockTileEntity> getTileEntityClass ();

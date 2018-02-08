@@ -211,11 +211,6 @@ public class SoulTotem extends UpgradeableBlock<SoulTotemTileEntity> {
 		return SoulTotemTileEntity.class;
 	}
 
-	@Override
-	public UpgradeableBlockTileEntity createTileEntity (World worldIn, IBlockState blockState) {
-		return new SoulTotemTileEntity();
-	}
-
 	/////////////////////////////////////////
 	// Waila
 	//

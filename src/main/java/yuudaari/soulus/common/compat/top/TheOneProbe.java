@@ -10,7 +10,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.util.IBlock;
-import yuudaari.soulus.common.util.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -36,7 +35,6 @@ public class TheOneProbe {
 		@Override
 		public Void apply (ITheOneProbe theOneProbe) {
 			probe = theOneProbe;
-			Logger.info("Enabled support for The One Probe");
 
 			probe.registerBlockDisplayOverride(new IBlockDisplayOverride() {
 

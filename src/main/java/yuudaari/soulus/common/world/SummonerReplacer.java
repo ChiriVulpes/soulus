@@ -89,7 +89,7 @@ public class SummonerReplacer {
 
 				TileEntity nte = world.getTileEntity(pos);
 				if (nte == null || !(nte instanceof SummonerTileEntity)) {
-					Logger.info("Unable to insert midnight jewel into replaced summoner");
+					Logger.warn("Unable to insert midnight jewel into replaced summoner");
 					return;
 				}
 

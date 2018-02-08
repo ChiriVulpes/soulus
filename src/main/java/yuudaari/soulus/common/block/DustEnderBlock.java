@@ -9,11 +9,13 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -25,10 +27,17 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
+import yuudaari.soulus.Soulus;
+import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.block.enderlink.EnderlinkTileEntity;
+import yuudaari.soulus.common.config.ConfigInjected;
+import yuudaari.soulus.common.config.ConfigInjected.Inject;
+import yuudaari.soulus.common.config.block.ConfigEnderlink;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.ModBlock;
 
+@ConfigInjected(Soulus.MODID)
 public class DustEnderBlock extends ModBlock {
 
 	@SubscribeEvent
@@ -40,6 +49,8 @@ public class DustEnderBlock extends ModBlock {
 		}
 	}
 
+	@Inject public static ConfigEnderlink CONFIG;
+
 	public static final PropertyEnum<EnumDyeColor> COLOR = PropertyEnum
 		.<EnumDyeColor>create("color", EnumDyeColor.class);
 
@@ -50,6 +61,10 @@ public class DustEnderBlock extends ModBlock {
 		setSoundType(SoundType.STONE);
 	}
 
+	@Override
+	public CreativeTab getCreativeTabToDisplayOn () {
+		return null;
+	}
 
 	@Override
 	public boolean onBlockActivated (World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
@@ -65,6 +80,32 @@ public class DustEnderBlock extends ModBlock {
 		world.setBlockState(pos, state.withProperty(COLOR, newColor), 3);
 
 		return true;
+	}
+
+	@Override
+	public void onEntityCollidedWithBlock (World world, BlockPos pos, IBlockState state, Entity entity) {
+		if (world.isRemote) return;
+		if (world.rand.nextFloat() > CONFIG.teleportChance) return;
+
+		if (!entity.getEntityBoundingBox().intersects(getBoundingBox(state, world, pos).offset(pos))) return;
+
+		EnumDyeColor color = world.getBlockState(pos).getValue(COLOR);
+		for (int x = -2; x < 3; x++) {
+			for (int z = -2; z < 3; z++) {
+				int cx = (pos.getX() >> 4) + x, cz = (pos.getZ() >> 4) + z;
+				for (TileEntity te : world.getChunkFromChunkCoords(cx, cz).getTileEntityMap().values()) {
+
+					if (!(te instanceof EnderlinkTileEntity)) continue;
+
+					EnderlinkTileEntity ete = (EnderlinkTileEntity) te;
+					if (ete.color != color) continue;
+
+					if (!ete.isWithinRange(entity)) continue;
+
+					ete.teleportEntity(entity);
+				}
+			}
+		}
 	}
 
 	@Override

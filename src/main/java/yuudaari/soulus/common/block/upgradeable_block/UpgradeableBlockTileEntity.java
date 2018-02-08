@@ -101,39 +101,51 @@ public abstract class UpgradeableBlockTileEntity extends TileEntity implements I
 		blockUpdate();
 	}
 
+	public static IInventory getFacingInventory (World world, BlockPos pos, EnumFacing facing) {
+		BlockPos facingPos = pos.offset(facing);
+		return TileEntityHopper.getInventoryAtPosition(world, (double) facingPos
+			.getX(), (double) facingPos.getY(), (double) facingPos.getZ());
+	}
+
+	public static ItemStack insertItem (ItemStack stack, World world, BlockPos pos, EnumFacing facing) {
+		IInventory facingInventory = getFacingInventory(world, pos, facing);
+		if (facingInventory == null) return stack;
+
+		ItemStack result = TileEntityHopper
+			.putStackInInventoryAllSlots(null, facingInventory, stack.copy(), facing.getOpposite());
+		stack.setCount(result.getCount());
+		return result;
+	}
+
 	public static void dispenseItem (ItemStack stack, World world, BlockPos pos, EnumFacing facing) {
 		if (!stack.isEmpty()) {
-			BlockPos facingPos = pos.offset(facing);
-			IInventory facingInventory = TileEntityHopper.getInventoryAtPosition(world, (double) facingPos
-				.getX(), (double) facingPos.getY(), (double) facingPos.getZ());
+			IInventory facingInventory = getFacingInventory(world, pos, facing);
 
 			if (facingInventory != null) {
-				stack = TileEntityHopper
-					.putStackInInventoryAllSlots(null, facingInventory, stack.copy(), facing.getOpposite());
+				insertItem(stack, world, pos, facing);
+				return;
 			}
 
-			if (facingInventory == null) {
-				double d0 = pos.getX() + 0.5 + facing.getFrontOffsetX() / 1.5;
-				double d1 = pos.getY() + 0.5 + facing.getFrontOffsetY() / 1.5;
-				double d2 = pos.getZ() + 0.5 + facing.getFrontOffsetZ() / 1.5;
+			double d0 = pos.getX() + 0.5 + facing.getFrontOffsetX() / 1.5;
+			double d1 = pos.getY() + 0.5 + facing.getFrontOffsetY() / 1.5;
+			double d2 = pos.getZ() + 0.5 + facing.getFrontOffsetZ() / 1.5;
 
-				if (facing.getAxis() == EnumFacing.Axis.Y) {
-					d1 = d1 - 0.125D;
-				} else {
-					d1 = d1 - 0.15625D;
-				}
-
-				EntityItem itemEntity = new EntityItem(world, d0, d1, d2, stack);
-				double d3 = world.rand.nextDouble() * 0.1D + 0.2D;
-				itemEntity.motionX = facing.getFrontOffsetX() * d3;
-				itemEntity.motionY = facing.getFrontOffsetY() * d3;
-				itemEntity.motionZ = facing.getFrontOffsetZ() * d3;
-				double speed = 1.5;
-				itemEntity.motionX += world.rand.nextGaussian() * 0.0075D * speed;
-				itemEntity.motionY += world.rand.nextGaussian() * 0.0075D * speed;
-				itemEntity.motionZ += world.rand.nextGaussian() * 0.0075D * speed;
-				world.spawnEntity(itemEntity);
+			if (facing.getAxis() == EnumFacing.Axis.Y) {
+				d1 = d1 - 0.125D;
+			} else {
+				d1 = d1 - 0.15625D;
 			}
+
+			EntityItem itemEntity = new EntityItem(world, d0, d1, d2, stack);
+			double d3 = world.rand.nextDouble() * 0.1D + 0.2D;
+			itemEntity.motionX = facing.getFrontOffsetX() * d3;
+			itemEntity.motionY = facing.getFrontOffsetY() * d3;
+			itemEntity.motionZ = facing.getFrontOffsetZ() * d3;
+			double speed = 1.5;
+			itemEntity.motionX += world.rand.nextGaussian() * 0.0075D * speed;
+			itemEntity.motionY += world.rand.nextGaussian() * 0.0075D * speed;
+			itemEntity.motionZ += world.rand.nextGaussian() * 0.0075D * speed;
+			world.spawnEntity(itemEntity);
 		}
 	}
 

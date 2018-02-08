@@ -179,11 +179,6 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 		return ComposerCellTileEntity.class;
 	}
 
-	@Override
-	public UpgradeableBlockTileEntity createTileEntity (World worldIn, IBlockState blockState) {
-		return new ComposerCellTileEntity();
-	}
-
 	/////////////////////////////////////////
 	// Events
 	//

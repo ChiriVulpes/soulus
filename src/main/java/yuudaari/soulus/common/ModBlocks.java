@@ -15,6 +15,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.common.block.*;
 import yuudaari.soulus.common.block.composer.*;
+import yuudaari.soulus.common.block.enderlink.Enderlink;
 import yuudaari.soulus.common.block.summoner.Summoner;
 import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
 import yuudaari.soulus.common.block.skewer.Skewer;
@@ -30,6 +31,7 @@ public class ModBlocks {
 	public static final Composer COMPOSER = new Composer();
 	public static final ComposerCell COMPOSER_CELL = new ComposerCell();
 	public static final DustEnderBlock DUST_ENDER = new DustEnderBlock();
+	public static final Enderlink ENDERLINK = new Enderlink();
 	public static final FossilDirt FOSSIL_DIRT = new FossilDirt();
 	public static final FossilDirtEnder FOSSIL_DIRT_ENDER = new FossilDirtEnder();
 	public static final FossilDirtFrozen FOSSIL_DIRT_FROZEN = new FossilDirtFrozen();
@@ -86,6 +88,8 @@ public class ModBlocks {
 
 		COMPOSER,
 		COMPOSER_CELL,
+
+		ENDERLINK,
 
 		SOUL_TOTEM
 	};

@@ -274,11 +274,6 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		return SkewerTileEntity.class;
 	}
 
-	@Override
-	public UpgradeableBlockTileEntity createTileEntity (World worldIn, IBlockState blockState) {
-		return new SkewerTileEntity();
-	}
-
 	/////////////////////////////////////////
 	// Collision
 	//

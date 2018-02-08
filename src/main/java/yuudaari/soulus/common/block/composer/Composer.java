@@ -140,6 +140,14 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 		return ModBlocks.COMPOSER;
 	}
 
+
+	// Don't rotate if connected
+	@Override
+	public boolean rotateBlock (World world, BlockPos pos, EnumFacing axis) {
+		if (world.getBlockState(pos).getValue(CONNECTED)) return false;
+		return super.rotateBlock(world, pos, axis);
+	}
+
 	@Override
 	public BlockFaceShape getBlockFaceShape (IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
 		face = rotateFace(state.getValue(FACING), face);
@@ -337,11 +345,6 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	@Override
 	public Class<? extends UpgradeableBlockTileEntity> getTileEntityClass () {
 		return ComposerTileEntity.class;
-	}
-
-	@Override
-	public UpgradeableBlockTileEntity createTileEntity (World worldIn, IBlockState blockState) {
-		return new ComposerTileEntity();
 	}
 
 	/////////////////////////////////////////

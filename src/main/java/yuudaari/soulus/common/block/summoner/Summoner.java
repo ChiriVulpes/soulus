@@ -332,11 +332,6 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		return SummonerTileEntity.class;
 	}
 
-	@Override
-	public UpgradeableBlockTileEntity createTileEntity (World worldIn, IBlockState blockState) {
-		return new SummonerTileEntity();
-	}
-
 	/////////////////////////////////////////
 	// Events
 	//
