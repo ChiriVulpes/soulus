@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
@@ -61,7 +60,7 @@ public class DustEnderBlock extends ModBlock {
 		.<EnumDyeColor>create("color", EnumDyeColor.class);
 
 	public DustEnderBlock () {
-		super("dust_ender_block", new Material(MapColor.GRASS).setTransparent().setDestroyOnPushed());
+		super("dust_ender_block", Material.CIRCUITS);
 		setDefaultState(getDefaultState().withProperty(COLOR, EnumDyeColor.LIGHT_BLUE));
 		addOreDict("dustEnder", "bonemeal");
 		setSoundType(SoundType.STONE);
