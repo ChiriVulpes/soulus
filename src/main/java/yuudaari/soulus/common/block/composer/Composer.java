@@ -356,7 +356,7 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 
 		if (te.hasValidRecipe()) {
 			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":composer.activation", (int) Math
-				.floor(te.activationAmount())));
+				.floor(te.getActivationAmount())));
 			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":composer.craft_percentage", (int) Math
 				.floor(te.getCompositionPercent() * 100)));
 		} else {

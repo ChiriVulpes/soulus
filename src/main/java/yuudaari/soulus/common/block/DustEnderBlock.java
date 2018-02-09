@@ -108,6 +108,8 @@ public class DustEnderBlock extends ModBlock {
 					EnderlinkTileEntity ete = (EnderlinkTileEntity) te;
 					if (ete.color != color) continue;
 
+					if (world.isBlockIndirectlyGettingPowered(ete.getPos()) > 0) continue;
+
 					double distance = entity.getDistanceSqToCenter(ete.getPos());
 					if (!ete.isWithinRange(entity, distance)) continue;
 
@@ -118,8 +120,8 @@ public class DustEnderBlock extends ModBlock {
 
 		links.stream()
 			.sorted( (a, b) -> Double.compare(a._2, b._2))
-			.findFirst()
-			.ifPresent(ete -> ete._1.teleportEntity(entity));
+			.filter(ete -> ete._1.teleportEntity(entity))
+			.findFirst();
 	}
 
 	@Override

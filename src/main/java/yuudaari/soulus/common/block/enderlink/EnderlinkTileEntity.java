@@ -49,9 +49,7 @@ public class EnderlinkTileEntity extends UpgradeableBlockTileEntity implements I
 		return true;
 	}
 
-	public void teleportEntity (Entity entity) {
-		if (world.isBlockIndirectlyGettingPowered(pos) > 0) return;
-
+	public boolean teleportEntity (Entity entity) {
 		EnumFacing facing = world.getBlockState(pos).getValue(Enderlink.FACING);
 		BlockPos teleportPos = pos.offset(facing);
 
@@ -64,7 +62,7 @@ public class EnderlinkTileEntity extends UpgradeableBlockTileEntity implements I
 			IInventory facingInventory = getFacingInventory(world, pos, facing);
 			if (facingInventory != null) {
 				insertItem(item, world, pos, facing);
-				return;
+				return true;
 			}
 		}
 
@@ -87,11 +85,13 @@ public class EnderlinkTileEntity extends UpgradeableBlockTileEntity implements I
 				.shrink(0.2);
 
 			// cancel teleport if the new position causes the entity to collide with anything
-			if (world.collidesWithAnyBlock(entityBox)) return;
+			if (world.collidesWithAnyBlock(entityBox)) return false;
 		}
 
 		entity.setPositionAndUpdate(x, y, z);
 		explosionParticles(entity, particleCount);
+
+		return true;
 	}
 
 	public boolean isWithinRange (Entity entity) {

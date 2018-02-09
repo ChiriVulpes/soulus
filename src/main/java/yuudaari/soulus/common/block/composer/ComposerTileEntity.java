@@ -37,6 +37,7 @@ import yuudaari.soulus.Soulus;
 import yuudaari.soulus.client.util.ParticleType;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.block.composer.Composer.Upgrade;
+import yuudaari.soulus.common.block.composer.ComposerCell.CellState;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigComposer;
@@ -56,6 +57,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	private int activatingRange;
 	private Range spawnDelay;
 	private int signalStrength;
+	private double activationAmount = 0;
 
 	@Override
 	public Composer getBlock () {
@@ -78,6 +80,10 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 	public int getSignalStrength () {
 		return signalStrength;
+	}
+
+	public double getActivationAmount () {
+		return activationAmount;
 	}
 
 	/////////////////////////////////////////
@@ -109,17 +115,15 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 			blockUpdate();
 	}
 
-	public double activationAmount () {
+	public void updateActivationAmount () {
+		activationAmount = 0;
+
+		if (!isConnected) return;
+
 		// when powered by redstone, don't run
-		if (world.isBlockIndirectlyGettingPowered(pos) != 0) {
-			return 0;
-		}
+		if (world.isBlockIndirectlyGettingPowered(pos) != 0) return;
 
-		if (!hasValidRecipe()) {
-			return 0;
-		}
-
-		double activationAmount = 0;
+		if (!hasValidRecipe()) return;
 
 		final List<String> entityTypes = new ArrayList<>();
 
@@ -163,57 +167,33 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 				}
 			}
 		}
-
-		return activationAmount;
 	}
 
-	public static void mobPoofParticles (World world, BlockPos pos) {
-		if (world.isRemote) {
-			particles(pos);
-		} else {
-			SoulsPacketHandler.INSTANCE.sendToAllAround(new MobPoof(pos), new TargetPoint(world.provider
-				.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 128));
-		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	private static void particles (BlockPos pos) {
-		World world = Minecraft.getMinecraft().world;
-		Random rand = world.rand;
-
-		for (int i = 0; i < CONFIG.particleCountMobPoof; ++i) {
-			double d3 = (pos.getX() - 0.5F + rand.nextFloat());
-			double d4 = (pos.getY() + rand.nextFloat());
-			double d5 = (pos.getZ() - 0.5F + rand.nextFloat());
-			double d3o = (d3 - pos.getX()) / 4;
-			double d4o = (d4 - pos.getY()) / 5;
-			double d5o = (d5 - pos.getZ()) / 4;
-			world.spawnParticle(ParticleType.MOB_POOF.getId(), false, d3 + 0.5F, d4, d5 + 0.5F, d3o, d4o, d5o, 1);
-		}
-	}
+	private int timeTillNextMajorUpdate = 0;
 
 	@Override
 	public void update () {
-		double activationAmount = activationAmount();
+
+		if (timeTillNextMajorUpdate-- < 0) {
+			timeTillNextMajorUpdate = 20;
+			validateStructure();
+			updateActivationAmount();
+		}
 
 		if (world.isRemote) {
 			updateRenderer(activationAmount);
 
 		} else {
-			validateStructure();
-
-			if (needsRecipeRefresh) {
-				refreshRecipe();
-			}
-
+			if (needsRecipeRefresh) refreshRecipe();
 			updateSignalStrength(activationAmount);
 		}
 
 		timeTillCraft -= activationAmount;
 
 		if (timeTillCraft <= 0) {
-			if (!world.isRemote)
+			if (!world.isRemote) {
 				completeCraft();
+			}
 
 			resetTimer();
 		}
@@ -235,7 +215,11 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		EnumFacing currentDirection = state.getValue(Composer.FACING);
 
 		EnumFacing direction = getBlock().validateStructure(world, pos, currentDirection);
-		isConnected = direction != null;
+
+		if (isConnected != (direction != null)) {
+			isConnected = direction != null;
+			needsRecipeRefresh = true;
+		}
 
 		boolean changedState = false;
 
@@ -249,49 +233,74 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 			state = state.withProperty(Composer.CONNECTED, isConnected);
 			changedState = true;
 
-			BlockPos center = direction == null ? null : pos.offset(direction, -3);
-			BlockPos x = direction == null ? null : BlockPos.ORIGIN.offset(direction, 1);
-			BlockPos z = direction == null ? null : BlockPos.ORIGIN.offset(direction.rotateY(), 1);
-			BlockPos topLeft = direction == null ? null : offset(offset(pos, x, -4), z, -1);
-
 			if (isConnected) {
-				cellMap.clear();
-				for (int iz = 0; iz < 3; iz++) {
-					for (int ix = 0; ix < 3; ix++) {
-						BlockPos cellPos = offset(offset(topLeft, x, ix), z, iz);
-						cellMap.put(cellPos, (byte) (ix + iz * 3));
-					}
-				}
+				connectCells(direction, state);
+			} else {
+				disconnectCells(currentDirection);
 			}
-
-			if (currentDirection != EnumFacing.UP && currentDirection != EnumFacing.DOWN)
-				getBlock().structure.loopBlocks(world, pos, state
-					.getValue(Composer.FACING), (BlockPos pos2, BlockValidator validator) -> {
-						IBlockState currentState = world.getBlockState(pos2);
-
-						if (currentState.getBlock() == ModBlocks.COMPOSER_CELL) {
-							ComposerCellTileEntity ccte = (ComposerCellTileEntity) world.getTileEntity(pos2);
-							BlockPos ccPos = ccte.getPos();
-							world.setBlockState(ccPos, currentState
-								.withProperty(ComposerCell.CELL_STATE, !isConnected ? ComposerCell.CellState.DISCONNECTED : ccPos
-									.equals(center) ? ComposerCell.CellState.CONNECTED_CENTER : ComposerCell.CellState.CONNECTED_EDGE), 3);
-
-							ccte.composerLocation = isConnected ? pos : null;
-							ccte.changeComposerCooldown = 20;
-							Byte slot = cellMap.get(ccPos);
-							ccte.slot = slot == null ? -1 : slot;
-							ccte.blockUpdate();
-							ccte.onChangeItem(isConnected ? this::updateCCTEItem : null);
-						}
-
-						return null;
-					});
 
 			needsRecipeRefresh = true;
 		}
 
 		if (changedState)
 			world.setBlockState(pos, state, 3);
+	}
+
+	private void disconnectCells (EnumFacing direction) {
+		getBlock().structure.loopBlocks(world, pos, direction, (BlockPos cellPos, BlockValidator validator) -> {
+			IBlockState cellState = world.getBlockState(cellPos);
+
+			if (cellState.getBlock() == ModBlocks.COMPOSER_CELL) {
+				ComposerCellTileEntity ccte = (ComposerCellTileEntity) world.getTileEntity(cellPos);
+				cellState = cellState.withProperty(ComposerCell.CELL_STATE, CellState.DISCONNECTED);
+				world.setBlockState(cellPos, cellState, 3);
+
+				ccte.composerLocation = null;
+				ccte.changeComposerCooldown = 20;
+				ccte.slot = -1;
+				ccte.blockUpdate();
+				ccte.onChangeItem(null);
+			}
+
+			return null;
+		});
+
+		cellMap.clear();
+	}
+
+	private void connectCells (EnumFacing direction, IBlockState state) {
+		BlockPos center = direction == null ? null : pos.offset(direction, -3);
+		BlockPos x = direction == null ? null : BlockPos.ORIGIN.offset(direction, 1);
+		BlockPos z = direction == null ? null : BlockPos.ORIGIN.offset(direction.rotateY(), 1);
+		BlockPos topLeft = direction == null ? null : offset(offset(pos, x, -4), z, -1);
+
+		cellMap.clear();
+		for (int iz = 0; iz < 3; iz++) {
+			for (int ix = 0; ix < 3; ix++) {
+				BlockPos cellPos = offset(offset(topLeft, x, ix), z, iz);
+				cellMap.put(cellPos, (byte) (ix + iz * 3));
+			}
+		}
+
+		if (direction == EnumFacing.UP || direction == EnumFacing.DOWN) return;
+
+		getBlock().structure.loopBlocks(world, pos, direction, (BlockPos cellPos, BlockValidator validator) -> {
+			IBlockState cellBlockState = world.getBlockState(cellPos);
+
+			if (cellBlockState.getBlock() == ModBlocks.COMPOSER_CELL) {
+				ComposerCellTileEntity ccte = (ComposerCellTileEntity) world.getTileEntity(cellPos);
+				CellState cellState = cellPos.equals(center) ? CellState.CONNECTED_CENTER : CellState.CONNECTED_EDGE;
+				world.setBlockState(cellPos, cellBlockState.withProperty(ComposerCell.CELL_STATE, cellState), 3);
+
+				ccte.composerLocation = pos;
+				ccte.changeComposerCooldown = 20;
+				ccte.slot = cellMap.get(cellPos);
+				ccte.blockUpdate();
+				ccte.onChangeItem(this::updateCCTEItem);
+			}
+
+			return null;
+		});
 	}
 
 	private BlockPos offset (BlockPos a, BlockPos b, double amt) {
@@ -324,6 +333,11 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	public void completeCraft () {
 		if (!hasValidRecipe())
 			return;
+
+		if (!loopComposerCells(ccte -> null)) {
+			validateStructure();
+			if (!isConnected) return;
+		}
 
 		ItemStack result = getStoredItem();
 		dispenseItem(result.copy(), world, pos, world.getBlockState(pos).getValue(Composer.FACING));
@@ -489,6 +503,31 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	@Override
 	public boolean shouldComplexRotate () {
 		return true;
+	}
+
+	public static void mobPoofParticles (World world, BlockPos pos) {
+		if (world.isRemote) {
+			particles(pos);
+		} else {
+			SoulsPacketHandler.INSTANCE.sendToAllAround(new MobPoof(pos), new TargetPoint(world.provider
+				.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 128));
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	private static void particles (BlockPos pos) {
+		World world = Minecraft.getMinecraft().world;
+		Random rand = world.rand;
+
+		for (int i = 0; i < CONFIG.particleCountMobPoof; ++i) {
+			double d3 = (pos.getX() - 0.5F + rand.nextFloat());
+			double d4 = (pos.getY() + rand.nextFloat());
+			double d5 = (pos.getZ() - 0.5F + rand.nextFloat());
+			double d3o = (d3 - pos.getX()) / 4;
+			double d4o = (d4 - pos.getY()) / 5;
+			double d5o = (d5 - pos.getZ()) / 4;
+			world.spawnParticle(ParticleType.MOB_POOF.getId(), false, d3 + 0.5F, d4, d5 + 0.5F, d3o, d4o, d5o, 1);
+		}
 	}
 
 	/////////////////////////////////////////

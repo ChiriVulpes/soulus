@@ -177,18 +177,18 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		return (lastTimeTillSpawn - timeTillSpawn) / (float) lastTimeTillSpawn;
 	}
 
-	private double activationAmount () {
+	private double activationAmount = 0;
+
+	private void updateActivationAmount () {
+		activationAmount = 0;
+
 		// when powered by redstone and player created, don't run
-		if ((!malice || upgrades.get(Upgrade.CRYSTAL_DARK) < 1) && world.isBlockIndirectlyGettingPowered(pos) != 0) {
-			return 0;
-		}
+		if ((!malice || upgrades.get(Upgrade.CRYSTAL_DARK) < 1) && world.isBlockIndirectlyGettingPowered(pos) != 0)
+			return;
 
 		// when the soulbook is empty, don't run
-		if (CONFIG.soulbookUses != null && CONFIG.soulbookUses > 0 && getSoulbookUses() <= 0) {
-			return 0;
-		}
-
-		double activationAmount = 0;
+		if (CONFIG.soulbookUses != null && CONFIG.soulbookUses > 0 && getSoulbookUses() <= 0)
+			return;
 
 		for (EntityPlayer player : world.playerEntities) {
 
@@ -209,9 +209,9 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 				activationAmount += Math.max(0, (1 - (nearAmt * nearAmt)) * 2);
 			}
 		}
-
-		return activationAmount;
 	}
+
+	private int timeTillNextMajorUpdate = 0;
 
 	@Override
 	public void update () {
@@ -225,7 +225,11 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 			onUpdateUpgrades(false);
 		}
 
-		double activationAmount = activationAmount();
+		if (timeTillNextMajorUpdate-- < 0) {
+			timeTillNextMajorUpdate = 20;
+			updateActivationAmount();
+		}
+
 		if (world.isRemote) {
 			updateRenderer(activationAmount);
 

@@ -63,10 +63,14 @@ public class SoulTotemTileEntity extends UpgradeableBlockTileEntity {
 	private boolean isConnected = false;
 	private float fuelTimeRemaining = 0;
 	private int signalStrength = 0;
+	private int timeTillNextStructureValidation = 0;
 
 	@Override
 	public void update () {
-		validateStructure();
+		if (!world.isRemote && timeTillNextStructureValidation-- < 0) {
+			timeTillNextStructureValidation = 20;
+			validateStructure();
+		}
 
 		if (isActive()) {
 			createChunkLoader();

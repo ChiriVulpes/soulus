@@ -111,8 +111,12 @@ public abstract class UpgradeableBlockTileEntity extends TileEntity implements I
 		IInventory facingInventory = getFacingInventory(world, pos, facing);
 		if (facingInventory == null) return stack;
 
+		return insertItem(stack, facing, facingInventory);
+	}
+
+	private static ItemStack insertItem (ItemStack stack, EnumFacing facing, IInventory inventory) {
 		ItemStack result = TileEntityHopper
-			.putStackInInventoryAllSlots(null, facingInventory, stack.copy(), facing.getOpposite());
+			.putStackInInventoryAllSlots(null, inventory, stack.copy(), facing.getOpposite());
 		stack.setCount(result.getCount());
 		return result;
 	}
@@ -122,7 +126,7 @@ public abstract class UpgradeableBlockTileEntity extends TileEntity implements I
 			IInventory facingInventory = getFacingInventory(world, pos, facing);
 
 			if (facingInventory != null) {
-				insertItem(stack, world, pos, facing);
+				insertItem(stack, facing, facingInventory);
 				return;
 			}
 
