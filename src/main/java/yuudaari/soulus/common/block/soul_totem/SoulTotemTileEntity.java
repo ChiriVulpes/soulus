@@ -67,7 +67,7 @@ public class SoulTotemTileEntity extends UpgradeableBlockTileEntity {
 
 	@Override
 	public void update () {
-		if (!world.isRemote && timeTillNextStructureValidation-- < 0) {
+		if (timeTillNextStructureValidation-- < 0) {
 			timeTillNextStructureValidation = 20;
 			validateStructure();
 		}
