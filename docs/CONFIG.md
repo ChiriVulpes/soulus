@@ -1,11 +1,20 @@
 [🡄 Return to Main Readme](../README.md)
 
 ## Table of Contents
+- [Config Syncing](#config-syncing-)
 - [Config Profiles](#config-profiles-)
 - [Creatures](#creaturescreaturesjson-)
 - [Essences](#essencesessencesjson-)
 - [Summoner Replacement](#worldsummoner_replacementreplacementjson-)
 - [Ore Veins (Fossils)](#worldveinsveinsjson-)
+
+
+
+## Config Syncing [🡅](#table-of-contents)
+
+Most config settings are server-side, but a few are exclusive to the client. In order to allow these client-side settings to exist and not require the server and client configs to be identical, the server-side configs are synced with each client upon connecting to the server. This synchronisation happens automatically. Using `/soulus reload` to reload the server-side configs will also resynchronise each client.
+
+Currently, only particle counts are client-side only (and some still use the server-side setting regardless). Fixing this is on the todo.
 
 
 
@@ -210,7 +219,7 @@ The default config (`#enabled`):
 {
 	"fortress": {
 		"*": {
-			"type": "blaze",
+			"type": "blazing",
 			"midnight_jewel": true
 		}
 	},
@@ -222,19 +231,19 @@ The default config (`#enabled`):
 	},
 	"mineshaft": {
 		"*": {
-			"type": "stone",
+			"type": "spooky",
 			"midnight_jewel": true
 		}
 	},
 	"stronghold": {
 		"*": {
-			"type": "end_stone",
+			"type": "ender",
 			"midnight_jewel": true
 		}
 	},
 	"mansion": {
 		"*": {
-			"type": "wood",
+			"type": "earthy",
 			"midnight_jewel": true
 		}
 	}
@@ -245,7 +254,7 @@ The first key is used for the structure the spawner is in, and the second key is
 
 As for structures, you can use the `/soulus location` command to get see the structures you're currently in. You can target all structures with `*`.
 
-The `type` you provide to the replacer can be any variant of the summoner. This example shows all 5 in use.
+The `type` you provide to the replacer can be any variant of the summoner. This example shows 5 in use, but there are also the styles `"sorrow"`, and `"madness"`.
 
 If the `midnight_jewel` property is set to true, the replaced spawners will be Summoners with a Soulbook and a Midnight Jewel inside. The Soulbook will match the mob which was being spawned from the spawner. The Midnight Jewel will not drop from a natural Summoner.
 

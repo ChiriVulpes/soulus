@@ -50,6 +50,8 @@ public class EnderlinkTileEntity extends UpgradeableBlockTileEntity implements I
 	}
 
 	public void teleportEntity (Entity entity) {
+		if (world.isBlockIndirectlyGettingPowered(pos) > 0) return;
+
 		EnumFacing facing = world.getBlockState(pos).getValue(Enderlink.FACING);
 		BlockPos teleportPos = pos.offset(facing);
 

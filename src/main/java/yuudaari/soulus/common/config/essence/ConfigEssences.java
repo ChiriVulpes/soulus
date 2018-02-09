@@ -77,7 +77,8 @@ public class ConfigEssences {
 		// no bone type
 		essences.add(new ConfigEssence("minecraft:slime", null));
 		essences.add(new ConfigEssence("minecraft:villager_golem", null).setColor(0xD1CBC8, 0x6A914B));
-
+		essences.add(new ConfigEssence("minecraft:magma_cube", null));
+		
 		// @formatter:on
 	}
 

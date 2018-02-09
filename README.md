@@ -24,11 +24,13 @@ See below for an in-depth list of features in the mod.
 - [Soulbook](#soulbook-)
 - [Endersteel](#endersteel-)
 - [Summoner](#summoner-)
+	- [Summoner Effects](#summoner-effects-)
 	- [Summoner Upgrades](#summoner-upgrades-)
 		- [Oscillating Gear](#oscillating-gear-)
 		- [Murky Orb](#murky-orb-)
 		- [Blood Crystal](#blood-crystal-)
 		- [Niobium Gear](#niobium-gear-)
+		- [Midnight Jewel](#midnight-jewel-)
 - [Skewer](#skewer-)
 	- [Skewer Upgrades](#skewer-upgrades-)
 - [Bone Drops](#bone-drops-)
@@ -40,7 +42,9 @@ See below for an in-depth list of features in the mod.
 	- [Composer Upgrades](#composer-upgrades-)
 - [Unloader](#unloader-)
 - [Endersteel Alchemy](#endersteel-alchemy-)
+- [Spawning Slimes, Magma Cubes, and Iron Golems](#spawning-slimes-magma-cubes-and-iron-golems-)
 - [Midnight Jewel](#midnight-jewel-)
+- [Enderlink](#enderlink-)
 - [Niobium](#niobium-)
 - [Soul Catalyst](#soul-catalyst-)
 - [Soul Totem](#soul-totem-)
@@ -69,6 +73,8 @@ See below for an in-depth list of features in the mod.
 ![Example Farm](./preview/example_farm.png)
 
 ![Example Autocrafter](./preview/example_composer.png)
+
+![Example Soul Totem](./preview/example_soul_totem.png)
 
 
 
@@ -155,8 +161,6 @@ Using 8 Endersteel bars and an ender bonemeal in the center, you can craft an Em
 
 ![Empty Summoner](./preview/summoner.png)
 
-You can also find Summoners in the world, in the places where mob spawners would normally generate. By default, they will have a "Midnight Jewel" inside of them, which allows them to spawn similarly to vanilla spawners. You can change all of this functionality, even per biome, structure, and creature, with [`world/summoner_replacement/replacement.json`](./docs/CONFIG.md#worldsummoner_replacementreplacementjson-).
-
 If you right click on an empty summoner with a filled soulbook, a summoner is created. By default, summoning a mob takes around 10 minutes, only summons one, and you have to be within 3 blocks to increase the summon percentage. (Eg: you can spend 5 minutes at the summoner, then come back later and complete the summon)
 
 Summoning entities does not obey natural spawn rules. You may summon entities anywhere you like, as long as they fit.
@@ -168,6 +172,28 @@ If a summoner is receiving a redstone signal it will not be active.
 Summoners support comparators, they will output a signal strength of 1 if they are at 0% summoned and 15 if they are at 100% summoned. If they're not active, they will output a signal strength of 0.
 
 By default, over time the Summoner will use up the Soulbook inside of it. The amount of essence in its Soulbook translates directly to the uses of the Summoner. Once the Soulbook is empty, the Summoner will stop functioning. Removing the Soulbook after this point, therefore, will return an empty Soulbook, of the current alignment. (Once a Soulbook has an alignment, it cannot be removed)
+
+You can also find Summoners in the world, in the places where mob spawners would normally generate. By default, they will have a "Midnight Jewel" inside of them, which allows them to spawn similarly to vanilla spawners. You can change all of this functionality, even per biome, structure, and creature, with [`world/summoner_replacement/replacement.json`](./docs/CONFIG.md#worldsummoner_replacementreplacementjson-).
+
+
+
+## Summoner Effeccts [🡅](#table-of-contents)
+
+You may notice that the Summoner spawns creatures with various status effects. The effects that the creatures may spawn with change depending on the "style" of Summoner. There are currently 7 styles, and they have different appearances and the following default effects:
+
+| Style | Effect (chance) |
+| --- | --- |
+| Normal | Water Breathing (0.1), Strength (0.1), Slowness (0.1), Invisibility (0.1), Weakness (0.1), Regeneration (0.1), Speed (0.1), Resistance (0.1) |
+| Spooky | Glowing (0.1), Invisibility (0.5), Wither (0.1) |
+| Earthy | Slowness (0.2), Resistance (0.5), Poison (0.1) |
+| Blazing | Fire Resistance (0.5), Regeneration (0.2), Weakness (0.1) |
+| Ender | Speed (0.1), Absorption (0.5), Strength (0.2) |
+| Sorrow | Slowness (0.2), Weakness (0.5), Resistance (0.1) |
+| Madness | Weakness (0.1), Wither (0.5), Poison (0.2) |
+
+Most effects have an upside and a downside. It may be worth considering which effect to use.
+
+By default, the effects only last five minutes. This is because when Creepers explode they leave a lingering potion of the same effect, for the same duration. If this functionality is ever disabled, the effect duration will be changed to "forever". See issue #38.
 
 
 
@@ -238,6 +264,13 @@ By default, a summoner can hold 16 Blood Crystals, ranging from 1 entity summone
 The Niobium Gear is a late-game upgrade for the Summoner which will reduce the Soulbook usage rate of a Summoner. By default, enough Niobium Gears will not prevent all Soulbook usage, only heavily reduce it.
 
 See [Niobium](#niobium-).
+
+
+### Midnight Jewel [🡅](#table-of-contents)
+
+The Midnight Jewel is a late-game upgrade for the Summoner which causes the Soulbook to last forever, and the Summon speed to be very fast, but the activation range and spawn quantity to be "middle-of-the-road". This is in order to emulate natural mob spawners. When the Midnight Jewel is inside the Summoner, no other upgrades may be inserted.
+
+The Midnight Jewel upgrade is most useful for quick summoners that don't need to be maximally upgraded.
 
 
 
@@ -393,6 +426,19 @@ If you believe another metal should be supported, make an issue for it. Note tha
 
 
 
+## Spawning Slimes, Magma Cubes, and Iron Golems [🡅](#table-of-contents)
+
+Slimes, Magma Cubes, and Iron Golems have essences, but as they do not have bones, they cannot be collected the normal way. However, you can synthesize their essence from their materials, in a Composer.
+
+![Slime Essence](./preview/essence_slime.png)  
+
+![Magma Cube Essence](./preview/essence_magma_cube.png)  
+
+![Iron Golem Essence](./preview/essence_iron_golem.png)
+
+
+
+
 ## Midnight Jewel [🡅](#table-of-contents)
 
 ![Midnight Jewel](./preview/midnight_jewel.png)
@@ -400,6 +446,34 @@ If you believe another metal should be supported, make an issue for it. Note tha
 The Midnight Jewel is created from a Blood Crystal surrounded by ash in a Composer. The recipe takes 256x as long as a normal recipe.
 
 Each held Midnight Jewel has a small chance every tick of dealing damage and inflicting negative status effects upon the holder. It will not end well to hold a stack or more of the Jewels.
+
+
+
+## Enderlink [🡅](#table-of-contents)
+
+![Enderlink](./preview/enderlink.png)
+
+The Enderlink is a block used for teleportation of creatures and items. It functions as the "anchor" of teleportation--eg: it is one-way, to the Enderlink.
+
+#### Setting up an Enderlink:
+
+Place Ender Dust on the ground where you want the items or creatures to be teleported from.
+
+![Ender Dust on the Ground](./preview/ender_dust_ground.png)
+
+By default, the Ender Dust is "aligned" to Light Blue. However, by right clicking with a dye, you can change the "alignment" of the dust.
+
+Next, place the Enderlink. It can be placed facing any direction, and will be placed facing towards you.
+
+![Enderlink in the World](./preview/enderlink_ground.png)
+
+By default, the Enderlink is *also* aligned to Light Blue. This means that the Ender Dust is linked to the Enderlink. You can test if it works by standing on the nearby Ender Dust. You will be teleported to the front of the Enderlink.
+
+By default, the Enderlink has a range of 16 blocks. Each Murky Orb extends its range by 1 block, up to  a total distance of 32 blocks. 
+
+The Enderlink can be disabled with a redstone signal.
+
+Note: As always, all numbers are configurable. However, the range of the Enderlink is limited by chunks. Teleportation is done based on entities which are colliding with Ender Dust, which requires looping through the tile entities in the chunks within range (25 chunks), in order to find a valid Enderlink. This chunk range is not configurable and will not be. Therefore, the maximum range shouldn't be expanded beyond 32. 
 
 
 
@@ -433,7 +507,7 @@ Soul Catalysts can be filled via crafting recipes or by putting them into a [Com
 
 ![Soul Totem](./preview/soul_totem.png)
 
-The Soul Totem is the main block of a multiblock structure. It is crafted with Niobium, a Soul Catalyst, and obsidian, and takes Soul Catalysts as fuel. When powered by a Soul Catalyst (inserted like an upgrade), the Soul Totem functions as a player surrogate for the Summoner, and a chunk loader, of the current chunk and the surrounding ring of chunks, for a total of 9 chunks.
+The Soul Totem is the main block of a multiblock structure. It is crafted with Niobium, Oscillating Gears, and Purpur blocks, and takes Soul Catalysts as fuel. When fueled by the Soul Catalysts (inserted like an upgrade), the Soul Totem functions as a player surrogate for the Summoner, and a chunk loader, of the current chunk and the surrounding ring of chunks, for a total of 9 chunks.
 
 Currently, the Soul Totem only has one upgrade, the Niobium Gear, which reduces the rate at which the Soul Catalyst fuel is consumed (to, by default, around a third of the normal rate).
 
