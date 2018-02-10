@@ -1,6 +1,7 @@
 package yuudaari.soulus;
 
 import yuudaari.soulus.client.ModRenderers;
+import yuudaari.soulus.common.compat.crafttweaker.ZenComposer;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.client.SendConfig;
 import yuudaari.soulus.common.util.Logger;
@@ -39,7 +40,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 
-@Mod(modid = Soulus.MODID, name = Soulus.NAME, version = "@VERSION@", acceptedMinecraftVersions = "[1.12.2]")
+@Mod(modid = Soulus.MODID, name = Soulus.NAME, version = "@VERSION@", acceptedMinecraftVersions = "[1.12.2]", dependencies = "after:crafttweaker")
 @Mod.EventBusSubscriber
 public class Soulus {
 
@@ -167,6 +168,10 @@ public class Soulus {
 		SoulsPacketHandler.register();
 		if (Loader.isModLoaded("exnihilocreatio")) {
 			ExNihiloCreatioRecipes.init();
+		}
+
+		if (Loader.isModLoaded("crafttweaker")) {
+			ZenComposer.apply();
 		}
 	}
 

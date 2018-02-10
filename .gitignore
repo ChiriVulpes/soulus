@@ -1,7 +1,10 @@
 .gradle/
+.idea/
 bin/
 build/
+out/
 run/
 .classpath
 .project
 reset.bat
+*.iml
