@@ -15,6 +15,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistryModifiable;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 import java.util.Map.Entry;
@@ -33,6 +35,20 @@ public class ZenComposer {
 
 	public static final String NAME = "mods.soulus.Composer";
 
+	private static final List<IAction> REMOVALS = new ArrayList<>();
+	private static final List<IAction> ADDITIONS = new ArrayList<>();
+
+	public static void apply() {
+
+		for (IAction removal : REMOVALS) {
+			CraftTweakerAPI.apply(removal);
+		}
+
+		for (IAction addition : ADDITIONS) {
+			CraftTweakerAPI.apply(addition);
+		}
+	}
+
 	@ZenMethod
 	public static void addShaped (final String name, final IItemStack output, final IIngredient[][] inputs) {
 		addShaped(name, output, 1, inputs);
@@ -41,30 +57,7 @@ public class ZenComposer {
 	@ZenMethod
 	public static void addShaped (final String name, final IItemStack output, final float time, final IIngredient[][] inputs) {
 
-		final Stack<Object> ingredients = new Stack<>();
-
-		int i = 0;
-		for (final IIngredient[] inputArr : inputs) {
-			String row = "";
-			for (final IIngredient input : inputArr) {
-				final char symbol = input == null ? ' ' : Character.forDigit(i++, 10);
-				row += symbol;
-				if (symbol == ' ' || input == null) continue;
-
-				ingredients.push(symbol);
-				final Ingredient ingredient = getIngredient(input);
-				if (ingredient == null) return;
-				ingredients.push(ingredient);
-			}
-			ingredients.insertElementAt(row, (i - 1) / 3);
-		}
-
-		final IRecipe recipe = new RecipeComposerShaped(InputHelper.toStack(output), time, ingredients
-			.toArray(new Object[0]));
-
-		recipe.setRegistryName(new ResourceLocation(name));
-
-		CraftTweakerAPI.apply(new Add(recipe));
+		ADDITIONS.add(new AddShaped(name, output, time, inputs));
 	}
 
 	@ZenMethod
@@ -75,16 +68,7 @@ public class ZenComposer {
 	@ZenMethod
 	public static void addShapeless (final String name, final IItemStack output, final float time, final IIngredient[] inputs) {
 
-		final Object[] ingredients = new Ingredient[inputs.length];
-		for (int i = 0; i < inputs.length; i++) {
-			ingredients[i] = getIngredient(inputs[i]);
-		}
-
-		final IRecipe recipe = new RecipeComposerShapeless(InputHelper.toStack(output), time, ingredients);
-
-		recipe.setRegistryName(new ResourceLocation(name));
-
-		CraftTweakerAPI.apply(new Add(recipe));
+		ADDITIONS.add(new AddShapeless(name, output, time, inputs));
 	}
 
 	private static Ingredient getIngredient (final IIngredient ingredient) {
@@ -115,34 +99,108 @@ public class ZenComposer {
 		return Ingredient.fromStacks(itemStacks);
 	}
 
-	public static class Add implements IAction {
+	public static class AddShaped implements IAction {
 
-		private final IRecipe recipe;
+		final String name;
+		final IItemStack output;
+		final float time;
+		final IIngredient[][] inputs;
 
-		public Add (final IRecipe recipe) {
-			this.recipe = recipe;
+		public AddShaped(String name, IItemStack output, float time, IIngredient[][] inputs) {
+
+			this.name = name;
+			this.output = output;
+			this.time = time;
+			this.inputs = inputs;
 		}
 
 		@Override
 		public String describe () {
-			return "Adding Composer recipe for " + recipe.getRecipeOutput().getDisplayName();
+			return "Adding Composer recipe for " + output.getDisplayName();
 		}
 
 		@Override
 		public void apply () {
+
+			// Delay the resolution of ingredients (specifically ore dict ingredients)
+			// until the last possible moment to ensure mods and scripts have a chance
+			// to get their entries in before retrieving entries from the dictionary
+
+			final Stack<Object> ingredients = new Stack<>();
+
+			int i = 0;
+			for (final IIngredient[] inputArr : inputs) {
+				String row = "";
+				for (final IIngredient input : inputArr) {
+					final char symbol = input == null ? ' ' : Character.forDigit(i++, 10);
+					row += symbol;
+					if (symbol == ' ' || input == null) continue;
+
+					ingredients.push(symbol);
+					final Ingredient ingredient = getIngredient(input);
+					if (ingredient == null) return;
+					ingredients.push(ingredient);
+				}
+				ingredients.insertElementAt(row, (i - 1) / 3);
+			}
+
+			final IRecipe recipe = new RecipeComposerShaped(InputHelper.toStack(output), time, ingredients
+					.toArray(new Object[0]));
+
+			recipe.setRegistryName(new ResourceLocation(name));
+
 			ForgeRegistries.RECIPES.register(recipe);
 		}
 	}
 
+	public static class AddShapeless implements IAction {
+
+		final String name;
+		final IItemStack output;
+		final float time;
+		final IIngredient[] inputs;
+
+		public AddShapeless(String name, IItemStack output, float time, IIngredient[] inputs) {
+
+			this.name = name;
+			this.output = output;
+			this.time = time;
+			this.inputs = inputs;
+		}
+
+		@Override
+		public String describe () {
+			return "Adding Composer recipe for " + output.getDisplayName();
+		}
+
+		@Override
+		public void apply() {
+
+			// Delay the resolution of ingredients (specifically ore dict ingredients)
+			// until the last possible moment to ensure mods and scripts have a chance
+			// to get their entries in before retrieving entries from the dictionary
+
+			final Object[] ingredients = new Ingredient[inputs.length];
+			for (int i = 0; i < inputs.length; i++) {
+				ingredients[i] = getIngredient(inputs[i]);
+			}
+
+			final IRecipe recipe = new RecipeComposerShapeless(InputHelper.toStack(output), time, ingredients);
+
+			recipe.setRegistryName(new ResourceLocation(name));
+
+			ForgeRegistries.RECIPES.register(recipe);
+		}
+	}
 
 	@ZenMethod
 	public static void remove (final String name) {
-		CraftTweakerAPI.apply(new Remove(name));
+		REMOVALS.add(new Remove(name));
 	}
 
 	@ZenMethod
 	public static void remove (final IItemStack output) {
-		CraftTweakerAPI.apply(new Remove(InputHelper.toStack(output)));
+		REMOVALS.add(new Remove(InputHelper.toStack(output)));
 	}
 
 	public static class Remove implements IAction {
