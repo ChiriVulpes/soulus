@@ -19,7 +19,7 @@ import mods.soulus.Composer;
 Notes, before we begin:
 1. All Composer recipes will require a name.
 2. All Composer recipes have a time. By default, their time is `1`, or the normal length of a recipe. All vanilla crafting recipes can be crafted in a Composer in this time. Providing `0.5` as this number will make the recipe craft twice as fast. Most Composer-specific recipes should take *longer*, however; Composer specific recipes, as per the lore of the mod, are using the "souls" of mobs as an ingredient to crafting. Therefore, taking longer infers that the recipe takes more souls.
-3. Composer recipes are stored in the normal crafting recipe registry. This means that the vanilla CraftTweaker recipe removal will work on them. However, do not use this in conjunction with adding your own Composer recipes of that type, as vanilla recipe removal happens after Composer recipe registration, so your new recipes will be removed.
+3. Composer recipes are stored in the normal crafting recipe registry. This means that the vanilla CraftTweaker recipe removal will work on them. It's still recommended to use the Composer recipe removal on existing Composer recipes, however.
 
 
 ### Shaped Recipes [🡅](#table-of-contents)
