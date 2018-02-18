@@ -82,6 +82,8 @@ See below for an in-depth list of features in the mod.
 
 All mob spawning is disabled by default, but you can configure this functionality per dimension, biome, and creature, and even enable/disable drops for each. See [`creatures/creatures.json`](./docs/CONFIG.md#creaturescreaturesjson-)
 
+Animal breeding is also disabled by default. See [`misc/breeding.json`](./docs/CONFIG.md#miscbreedingjson-)
+
 
 
 ## Sledgehammer [🡅](#table-of-contents)
@@ -566,6 +568,8 @@ Thank you for contributing!
 
 
 ## Other Credits [🡅](#table-of-contents)
+
+The original implementation of the CraftTweaker support was janky and barely worked, and it was rewritten by [CodeTaylor](https://github.com/codetaylor) to make it work correctly for v3.4.0. Thanks for the contribution!
 
 There are 4 styles for the Summoner, which are craftable and will appear in the world via [summoner replacement](#summoner-) depending on the structure they're in. I made the textures, but they're heavily based on the spawner variants listed in [SimplySarc's "50 Tiny Ways to Improve Minecraft"](https://youtu.be/NSsac8V3BpA). They even appear in the same structures as his recommendations. This feature is meant as a tribute to that great video. I hope to see similar variants in vanilla someday. =)
 

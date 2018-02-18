@@ -7,6 +7,7 @@
 - [Essences](#essencesessencesjson-)
 - [Summoner Replacement](#worldsummoner_replacementreplacementjson-)
 - [Ore Veins (Fossils)](#worldveinsveinsjson-)
+- [Breeding](#miscbreedingjson-)
 
 
 
@@ -307,3 +308,34 @@ The "veins" config is used in Soulus by default for the fossil generation. Inste
 `dimension` is the dimension id that the vein should spawn in. You can use `/soulus location` to get this information. Providing `null` means the vein can spawn in any dimension.
 
 `biome_types_whitelist` and `biome_types_blacklist` both use "biome types", which allows the generation to automatically support biomes added by other mods. Again, you can use `/soulus location` to get the biome types if the biome you're currently in.
+
+
+## `misc/breeding.json` [🡅](#table-of-contents)
+
+Default profiles:
+- **`none` (default)**: All animal breeding is disabled.
+- **`all`**: All animal breeding is enabled. 
+
+The default config (`#none`):
+
+```json
+{
+	"*": 0.0
+}
+```
+
+Each key in the JSON will target a creature or multiple creatures. You can use `*` to target all creatures, `<mod>:*` to target all creatures from one mod (eg: `minecraft:*`), and the entire name to target one specific creature `minecraft:pig`.
+
+The value for each key is the chance that the breeding will be successful. `0.0` = 0% chance, `1.0` = 100% chance.
+
+Example:
+
+```json
+{
+	"*": 0.0,
+	"minecraft:pig": 1.0,
+	"twilightforest:*": 0.5
+}
+```
+
+Everything by default can't breed. Pigs can always breed. The twilight forest mobs will be able to breed 50% of the time.
