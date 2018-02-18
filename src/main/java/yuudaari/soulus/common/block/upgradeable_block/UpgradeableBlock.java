@@ -226,7 +226,8 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 		if (upgrade == null)
 			return false;
 
-		ute.insertUpgrade(stack, upgrade, player.isSneaking() ? stack.getCount() : 1);
+		int insertQuantity = player.isSneaking() ? stack.getCount() : 1;
+		ute.insertUpgrade(player.isCreative() ? stack.copy() : stack, upgrade, insertQuantity);
 
 		return true;
 	}

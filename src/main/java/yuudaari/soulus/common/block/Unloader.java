@@ -1,5 +1,6 @@
 package yuudaari.soulus.common.block;
 
+import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
@@ -80,12 +81,29 @@ public class Unloader extends ModBlock {
 			}
 		}
 
+		public boolean canUnload () {
+			IBlockState below = world.getBlockState(pos.down());
+			if (below.isFullBlock()) return false;
+			if (below.getBlock() instanceof BlockTrapDoor) {
+				return below.getValue(BlockTrapDoor.OPEN);
+			}
+
+			return true;
+		}
+
 		public static class ItemHandler extends ItemStackHandler {
 
 			private UnloaderTileEntity te;
 
 			public ItemHandler (UnloaderTileEntity te) {
 				this.te = te;
+			}
+
+			@Override
+			public ItemStack insertItem (int slot, ItemStack stack, boolean simulate) {
+				if (!this.te.canUnload()) return stack;
+
+				return super.insertItem(slot, stack, simulate);
 			}
 
 			@Override
