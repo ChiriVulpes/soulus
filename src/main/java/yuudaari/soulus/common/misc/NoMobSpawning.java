@@ -101,7 +101,7 @@ public class NoMobSpawning {
 		}
 	}
 
-	private static void approveSpawn (Entity entity) {
+	public static void approveSpawn (Entity entity) {
 		entity.getEntityData().setByte("soulus:spawn_whitelisted", (byte) 1);
 	}
 }
