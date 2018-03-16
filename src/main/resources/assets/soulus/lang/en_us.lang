@@ -238,6 +238,7 @@ jei.description.soulus:ingot_niobium=An ingot of metal, forged from souls too nu
 jei.description.soulus:block_niobium=A block of metal forged from souls too numerous to count.
 jei.description.soulus:gear_niobium=A gear made of metal forged from the souls of many.
 jei.description.soulus:soul_totem=A machine powered by compressed souls which can be used as a player surrogate to the summoner.
+jei.description.soulus:enderlink=A machine with a gravitational pull. Things which touch nearby ender dust of the same color will be teleported to the Enderlink.
 
 
 command.soulus:soulus.usage=Usage: /soulus location|reload

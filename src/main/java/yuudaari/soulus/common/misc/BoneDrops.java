@@ -55,6 +55,9 @@ public class BoneDrops {
 		ConfigCreature config = getCreatureConfig(entity);
 
 		if (config != null) {
+			// Logger.info("added bone drops");
+			BoneDrops.addBoneDrops(entity, config, drops);
+
 			boolean wasSummoned = entity.getEntityData().getByte("soulus:spawn_whitelisted") == (byte) 2;
 			// we explicitly whitelist slimes that have persistence as it's likely they were from a summoned slime
 			if (!wasSummoned && ((EntityLiving) entity).isNoDespawnRequired() && entity instanceof EntitySlime)
@@ -110,14 +113,14 @@ public class BoneDrops {
 				}
 			}
 		}
+	}
 
-		// Logger.info("added bone drops");
+	private static void addBoneDrops (EntityLivingBase entity, ConfigCreature config, List<EntityItem> drops) {
 		for (ConfigEssence essenceConfig : CONFIG_ESSENCES.essences) {
 			if (essenceConfig.loot == null) continue;
 
 			for (Map.Entry<String, ConfigCreatureLoot> lootConfig : essenceConfig.loot.entrySet()) {
-				ResourceLocation name = EntityList.getKey(entity);
-				if (name != null && essenceConfig.bones != null && lootConfig.getKey().equals(name.toString())) {
+				if (essenceConfig.bones != null && lootConfig.getKey().equals(config.creatureId)) {
 					ItemStack stack = getStack(entity.world.rand, essenceConfig.bones.type, lootConfig.getValue());
 					if (stack != null) {
 						drops.add(new EntityItem(entity.world, entity.posX, entity.posY, entity.posZ, stack));
