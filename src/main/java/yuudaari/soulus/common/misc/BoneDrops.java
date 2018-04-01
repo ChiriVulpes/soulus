@@ -52,11 +52,12 @@ public class BoneDrops {
 
 		List<EntityItem> drops = event.getDrops();
 
-		ConfigCreature config = getCreatureConfig(entity);
+		String entityName = EntityList.getKey(entity).toString();
+		ConfigCreature config = getCreatureConfig(entity, entityName);
 
 		if (config != null) {
 			// Logger.info("added bone drops");
-			BoneDrops.addBoneDrops(entity, config, drops);
+			BoneDrops.addBoneDrops(entity, entityName, drops);
 
 			boolean wasSummoned = entity.getEntityData().getByte("soulus:spawn_whitelisted") == (byte) 2;
 			// we explicitly whitelist slimes that have persistence as it's likely they were from a summoned slime
@@ -115,12 +116,12 @@ public class BoneDrops {
 		}
 	}
 
-	private static void addBoneDrops (EntityLivingBase entity, ConfigCreature config, List<EntityItem> drops) {
+	private static void addBoneDrops (EntityLivingBase entity, String entityName, List<EntityItem> drops) {
 		for (ConfigEssence essenceConfig : CONFIG_ESSENCES.essences) {
 			if (essenceConfig.loot == null) continue;
 
 			for (Map.Entry<String, ConfigCreatureLoot> lootConfig : essenceConfig.loot.entrySet()) {
-				if (essenceConfig.bones != null && lootConfig.getKey().equals(config.creatureId)) {
+				if (essenceConfig.bones != null && lootConfig.getKey().equals(entityName)) {
 					ItemStack stack = getStack(entity.world.rand, essenceConfig.bones.type, lootConfig.getValue());
 					if (stack != null) {
 						drops.add(new EntityItem(entity.world, entity.posX, entity.posY, entity.posZ, stack));
@@ -132,6 +133,10 @@ public class BoneDrops {
 	}
 
 	private static ConfigCreature getCreatureConfig (EntityLivingBase entity) {
+		return getCreatureConfig(entity, EntityList.getKey(entity).toString());
+	}
+
+	private static ConfigCreature getCreatureConfig (EntityLivingBase entity, String entityName) {
 		// then we get the dimension config for this potential spawn
 		DimensionType dimension = entity.world.provider.getDimensionType();
 		//Logger.info(dimension.getName());
@@ -159,7 +164,6 @@ public class BoneDrops {
 		}
 
 		// then we get the creature config for this potential spawn
-		String entityName = EntityList.getKey(entity).toString();
 		//Logger.info(entityName);
 		ConfigCreature creatureConfig = biomeConfig.creatureConfigs.get(entityName);
 		if (creatureConfig == null) {
