@@ -1,0 +1,20 @@
+{
+	"type": "soulus:composer_shaped",
+	"time": 32,
+	"pattern": [
+		" n ",
+		"nCn",
+		" n "
+	],
+	"key": {
+		"n": {
+			"item": "soulus:dust_niobium"
+		},
+		"C": {
+			"item": "soulus:crystal_dark"
+		}
+	},
+	"result": {
+		"item": "soulus:soul_catalyst"
+	}
+}

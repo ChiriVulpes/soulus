@@ -1,0 +1,16 @@
+{
+    "variants": {
+        "connected=false,facing=up": { "model": "soulus:composer", "x": 270 },
+        "connected=false,facing=down": { "model": "soulus:composer", "x": 90 },
+        "connected=false,facing=north": { "model": "soulus:composer" },
+        "connected=false,facing=south": { "model": "soulus:composer", "y": 180 },
+        "connected=false,facing=west": { "model": "soulus:composer", "y": 270 },
+        "connected=false,facing=east": { "model": "soulus:composer", "y": 90 },
+        "connected=true,facing=up": { "model": "soulus:composer_connected", "x": 270 },
+        "connected=true,facing=down": { "model": "soulus:composer_connected", "x": 90 },
+        "connected=true,facing=north": { "model": "soulus:composer_connected" },
+        "connected=true,facing=south": { "model": "soulus:composer_connected", "y": 180 },
+        "connected=true,facing=west": { "model": "soulus:composer_connected", "y": 270 },
+        "connected=true,facing=east": { "model": "soulus:composer_connected", "y": 90 }
+    }
+}

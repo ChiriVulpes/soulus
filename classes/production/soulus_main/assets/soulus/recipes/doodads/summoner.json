@@ -1,0 +1,21 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"BBB",
+		"BeB",
+		"BBB"
+	],
+	"key": {
+		"B": {
+			"item": "soulus:bars_endersteel"
+		},
+		"e": {
+			"type": "forge:ore_dict",
+			"ore": "dustEnder"
+		}
+	},
+	"result": {
+		"item": "soulus:summoner",
+		"data": 0
+	}
+}

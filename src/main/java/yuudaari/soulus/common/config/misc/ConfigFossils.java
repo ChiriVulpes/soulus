@@ -28,6 +28,10 @@ public class ConfigFossils {
 		fossils.put("soulus:fossil_sand", new ConfigFossil(BoneType.DRY, 2, 6));
 		fossils.put("soulus:fossil_sand_red_scale", new ConfigFossil(BoneType.SCALE, 2, 6));
 		fossils.put("soulus:fossil_sand_red_dry", new ConfigFossil(BoneType.DRY, 2, 6));
+		fossils.put("soulus:fossil_ice", new ConfigFossil(BoneType.NORMAL, 2, 6));
+		fossils.put("soulus:fossil_ice_ender", new ConfigFossil(BoneType.ENDER, 2, 6));
+		fossils.put("soulus:fossil_ice_frozen", new ConfigFossil(BoneType.FROZEN, 2, 6));
+		fossils.put("soulus:fossil_ice_scale", new ConfigFossil(BoneType.SCALE, 2, 6));
 	}
 
 	public ConfigFossil get (String id) {

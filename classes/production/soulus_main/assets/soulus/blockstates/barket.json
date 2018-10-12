@@ -1,0 +1,17 @@
+{
+	"forge_marker": 1,
+	"variants": {
+		"inventory": {
+			"model": "forge:forgebucket",
+			"textures": {
+				"base": "soulus:items/barket",
+				"fluid": "forge:items/bucket_fluid",
+				"cover": "soulus:items/barket_filled"
+			},
+			"transform": "forge:default-item",
+			"custom": {
+				"flipGas": true
+			}
+		}
+	}
+}

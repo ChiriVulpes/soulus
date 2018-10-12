@@ -1,0 +1,6 @@
+{
+	"parent": "soulus:block/bars/cap",
+	"textures": {
+		"all": "soulus:blocks/bars_endersteel_normal"
+	}
+}

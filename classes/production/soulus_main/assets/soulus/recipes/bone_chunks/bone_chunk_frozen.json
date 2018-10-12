@@ -1,0 +1,12 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"item": "soulus:bone_frozen"
+		}
+	],
+	"result": {
+		"item": "soulus:bone_chunk_frozen",
+		"count": 3
+	}
+}

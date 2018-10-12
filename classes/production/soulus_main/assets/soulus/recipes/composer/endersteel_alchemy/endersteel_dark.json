@@ -1,0 +1,21 @@
+{
+	"type": "soulus:composer_shaped",
+	"time": 16,
+	"pattern": [
+		"eee",
+		"ede",
+		"eee"
+	],
+	"key": {
+		"d": {
+			"item": "soulus:ash"
+		},
+		"e": {
+			"item": "soulus:ingot_endersteel"
+		}
+	},
+	"result": {
+		"item": "soulus:ingot_endersteel_dark",
+		"count": 8
+	}
+}

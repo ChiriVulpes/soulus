@@ -1,0 +1,32 @@
+{
+	"multipart": [
+		{   "apply": { "model": "soulus:bars_endersteel/normal/post_ends" }},
+		{   "when": { "north": false, "east": false, "south": false, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/normal/post" }
+		},
+		{   "when": { "north": true, "east": false, "south": false, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/normal/cap" }
+		},
+		{   "when": { "north": false, "east": true, "south": false, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/normal/cap", "y": 90 }
+		},
+		{   "when": { "north": false, "east": false, "south": true, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/normal/cap_alt" }
+		},
+		{   "when": { "north": false, "east": false, "south": false, "west": true },
+			"apply": { "model": "soulus:bars_endersteel/normal/cap_alt", "y": 90 }
+		},
+		{   "when": { "north": true },
+			"apply": { "model": "soulus:bars_endersteel/normal/side" }
+		},
+		{   "when": { "east": true },
+			"apply": { "model": "soulus:bars_endersteel/normal/side", "y": 90 }
+		},
+		{   "when": { "south": true },
+			"apply": { "model": "soulus:bars_endersteel/normal/side_alt" }
+		},
+		{   "when": { "west": true },
+			"apply": { "model": "soulus:bars_endersteel/normal/side_alt", "y": 90 }
+		}
+	]
+}

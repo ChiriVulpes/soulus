@@ -45,6 +45,10 @@ public class ModBlocks {
 	public static final FossilSandScale FOSSIL_SAND_SCALE = new FossilSandScale();
 	public static final FossilSandRed FOSSIL_SAND_RED = new FossilSandRed();
 	public static final FossilSandRedScale FOSSIL_SAND_RED_SCALE = new FossilSandRedScale();
+	public static final FossilIce FOSSIL_ICE = new FossilIce();
+	public static final FossilIceEnder FOSSIL_ICE_ENDER = new FossilIceEnder();
+	public static final FossilIceFrozen FOSSIL_ICE_FROZEN = new FossilIceFrozen();
+	public static final FossilIceScale FOSSIL_ICE_SCALE = new FossilIceScale();
 	public static final Skewer SKEWER = new Skewer();
 	public static final Summoner SUMMONER = new Summoner();
 	public static final Unloader UNLOADER = new Unloader();
@@ -64,13 +68,17 @@ public class ModBlocks {
 		FOSSIL_SAND_RED,
 		FOSSIL_SAND_RED_SCALE,
 
+		FOSSIL_ICE,
+		FOSSIL_ICE_ENDER,
+		FOSSIL_ICE_FROZEN,
+		FOSSIL_ICE_SCALE,
+
 		FOSSIL_GRAVEL,
 
 		FOSSIL_NETHERRACK,
 		FOSSIL_NETHERRACK_ENDER,
 
 		FOSSIL_END_STONE,
-
 
 		ASH,
 

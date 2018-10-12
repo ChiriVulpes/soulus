@@ -1,0 +1,9 @@
+{
+	"type": "soulus:furnace",
+	"input": {
+		"item": "soulus:emerald_coated"
+	},
+	"result": {
+		"item": "soulus:crystal_blood"
+	}
+}

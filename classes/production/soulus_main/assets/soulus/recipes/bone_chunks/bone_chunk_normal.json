@@ -1,0 +1,17 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		[
+			{
+				"item": "soulus:bone_normal"
+			},
+			{
+				"item": "minecraft:bone"
+			}
+		]
+	],
+	"result": {
+		"item": "soulus:bone_chunk_normal",
+		"count": 3
+	}
+}

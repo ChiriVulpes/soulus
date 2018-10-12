@@ -1,0 +1,172 @@
+itemGroup.soulus=Soulus
+
+
+item.soulus:bone_normal.name=Hueso Normal
+item.soulus:bone_nether.name=Hueso Ennegrecido
+item.soulus:bone_ender.name=Hueso de Ender
+item.soulus:bone_dry.name=Hueso Seco
+item.soulus:bone_frozen.name=Hueso Congelado
+item.soulus:bone_fungal.name=Hueso Musgoso
+item.soulus:bone_scale.name=Escama
+item.soulus:bone_chunk_normal.name=Trozo de Hueso Normal
+item.soulus:bone_chunk_nether.name=Trozo de Hueso Ennegrecido
+item.soulus:bone_chunk_ender.name=Trozo de Hueso Ender
+item.soulus:bone_chunk_dry.name=Trozo de Hueso Seco
+item.soulus:bone_chunk_frozen.name=Trozo de Hueso Congelado
+item.soulus:bone_chunk_fungal.name=Trozo de Hueso Musgoso
+item.soulus:bone_chunk_scale.name=Trozo de Escama
+item.soulus:bone_meal_nether.name=Harina de hueso ennegrecida
+
+item.soulus:dust_ender.name=Polvo de Ender
+item.soulus:dust_iron.name=Polvo de Hierro
+item.soulus:dust_wood.name=Wood Dust
+item.soulus:dust_stone.name=Stone Dust
+item.soulus:dust_ender_iron.name=Mezcla de Polvos Ender-Hierro
+item.soulus:dust_ender_iron_ashen.name=Mezcla de Polvos Ender-Hierro-Cenizas
+
+item.soulus:ingot_endersteel.name=Lingote de Ender
+item.soulus:nugget_endersteel.name=Pepita de Ender
+item.soulus:ingot_endersteel_dark.name=Lingote de Ender Oscuro
+item.soulus:nugget_endersteel_dark.name=Pepita de Ender Oscuro
+
+item.soulus:glue.name=Pegamento
+item.soulus:bark.name=Corteza
+item.soulus:ash.name=Ceniza
+
+item.soulus:emerald_burnt.name=Esmeralda Quemada
+item.soulus:emerald_coated.name=Esmeralda Sangrienta
+item.soulus:crystal_blood_broken.name=Cristal Sangriento Destrozado
+item.soulus:crystal_blood.name=Cristal Sangriento
+item.soulus:crystal_blood.filled.name=Cristal Sangriento
+
+item.soulus:gear_bone.name=Engranaje de Hueso Normal
+item.soulus:gear_bone_ender.name=Engranaje de Hueso de Ender
+item.soulus:gear_bone_nether.name=Engranaje de Hueso Ennegrecido
+item.soulus:gear_bone_frozen.name=Engranaje de Hueso Congelado
+item.soulus:gear_bone_fungal.name=Engranaje de Hueso Musgoso
+item.soulus:gear_bone_dry.name=Engranaje de Hueso Seco
+item.soulus:gear_oscillating.name=Engranaje Oscilante
+
+item.soulus:orb_murky.name=Bola Adhesiva Extraña
+item.soulus:orb_murky.filled.name=Orbe Turbio
+
+item.soulus:soul_catalyst.name=Catalizador De Almas
+
+item.soulus:sledgehammer.name=Mazo Pulverizador
+item.soulus:barket.name=Cubo de Madera
+item.soulus:barket_filled.name=Cubo de Madera con Agua
+
+item.soulus:soulbook.name=Libro de Alma
+item.soulus:soulbook.unfocused.name=Libro de Alma
+item.soulus:soulbook.focused.name=Libro de Alma "%1$s"
+
+
+item.soulus:essence.unfocused.name=Esencia Desenfocada
+item.soulus:essence.focused.name=Esencia de %1$s
+
+
+tile.soulus:fossil_dirt_ender.name=Tierra con Fosiles Brillantes
+tile.soulus:fossil_dirt_frozen.name=Tierra con Fosiles Congelados
+tile.soulus:fossil_dirt_fungal.name=Tierra con Fosiles y Moho
+tile.soulus:fossil_dirt.name=Tierra con Fosiles
+tile.soulus:fossil_end_stone.name=Piedra del Fin con Fosiles Brillantes
+tile.soulus:fossil_gravel_scale.name=Grava con Fosiles de Escamas
+tile.soulus:fossil_netherrack_ender.name=Piedra del Nether con Fosiles Brillantes
+tile.soulus:fossil_netherrack.name=Piedra del Nether con Fosiles
+tile.soulus:fossil_sand_ender.name=Arena con Fosiles Brillantes
+tile.soulus:fossil_sand_scale.name=Arena con Fosiles de Escamas
+tile.soulus:fossil_sand.name=Arena con Fosiles Secos
+tile.soulus:fossil_sand_red_dry.name=Arena Roja Con Fosiles Secos
+tile.soulus:fossil_sand_red_scale.name=Arena Roja con Fosiles de Escamas
+
+tile.soulus:block_endersteel.name=Bloque de Ender
+tile.soulus:block_endersteel_dark.name=Bloque de Ender Oscuro
+tile.soulus:bars_endersteel.name=Barras de Ender
+
+tile.soulus:skewer.name=Pinchos
+
+tile.soulus:composer.name=Compositor
+tile.soulus:composer_cell.name=Celda de Compositor
+
+tile.soulus:summoner.unfocused.name=Invocador Vacio
+tile.soulus:summoner.name=Invocador
+tile.soulus:summoner.focused.name=Invocador de %1$s
+
+
+death.attack.soulus:crystal_blood=%1$s se sacrifico en un cristal de sangre.
+death.attack.soulus:skewer=%1$s conviértete en un anticucho.
+
+waila.soulus:upgradeable_block.show_upgrades=§8§oMostrar las actualizaciones
+
+waila.soulus:summoner.summon_percentage=%1$s%% Invocado
+waila.soulus:summoner.summons_remaining=%1$s/%2$s Invocaciones restantes
+waila.soulus:summoner.upgrades_delay=%1$s/%2$s §3Engranajes Oscilantes
+waila.soulus:summoner.upgrades_count=%1$s/%2$s §4Cristal de Sangriento
+waila.soulus:summoner.upgrades_range=%1$s/%2$s §6Orbe Turbio
+tooltip.soulus:soulbook.contained_essence=%1$s/%2$s Esencia
+tooltip.soulus:orb_murky.contained_essence=%1$s/%2$s Esencia
+tooltip.soulus:crystal_blood.contained_blood=%1$s/%2$s Sangre
+tooltip.soulus:summoner.style.normal=§8Style: §3Normal
+tooltip.soulus:summoner.style.wood=§8Style: §6Terroso
+tooltip.soulus:summoner.style.stone=§8Style: §9Escalofriante
+tooltip.soulus:summoner.style.end_stone=§8Style: §2Ender
+tooltip.soulus:summoner.style.blaze=§8Style: §cFlameante
+
+waila.soulus:skewer.extended=§8Extendido
+waila.soulus:skewer.not_extended=§8Sin Extender
+waila.soulus:skewer.crystal_blood_stored_blood=§4Blood Crystal: §8%1$s/%2$s Sangre
+waila.soulus:skewer.upgrades_crystal_blood=%1$s/%2$s §4Cristales Sangrientos
+waila.soulus:skewer.upgrades_damage=%1$s/%2$s §6Aumento de Daño
+waila.soulus:skewer.upgrades_poison=%1$s/%2$s §2Aumento de Veneno
+waila.soulus:skewer.upgrades_power=%1$s/%2$s §cAumento de Poder
+
+waila.soulus:composer.upgrades_range=%1$s/%2$s §6Orbe Turbio
+waila.soulus:composer.upgrades_delay=%1$s/%2$s §3Engranaje Oscilante
+waila.soulus:composer.craft_percentage=%1$s%% Elaborado
+waila.soulus:composer.no_recipe=§8Receta no valida
+waila.soulus:composer_cell.no_items=§8No contiene items
+waila.soulus:composer_cell.contained_item=%1$s/%2$s §6%3$s
+waila.soulus:composer_cell.slot=Slot %1$s
+
+jei.recipe.soulus:composer.name=Compositor
+
+jei.description.soulus:ash=Muerte en su forma más pura. La ceniza está desprovista de vida y, por lo tanto, de esencia, pero puede ser potencialmente utilizable como una espeluznante alternativa cuando la alineación es intrascendente.
+jei.description.soulus:bark=La capa exterior de un árbol. Un material crudo, pero puede ser útil.
+jei.description.soulus:barket=Un cubo improvisado hecho de corteza. Tiene un par de agujeros y se está cayendo a pedazos. No es una herramienta para los civilizados.
+jei.description.soulus:bone_chunk=Un trozo de hueso de una criatura pasada. Todavía puede haber la magia de la vida dentro de esta pieza de la historia.
+jei.description.soulus:bone_chunk_ender=Un trozo de hueso de una criatura alienígena pasada. Todavía hay magia de vida dentro de esta pieza de la historia, pero, sin tener en cuenta, parece estar vibrando. Uno solo puede imaginar todos los usos para esto.
+jei.description.soulus:bone_chunk_nether=Un pedazo de hueso de una criatura del inframundo. Todavía puede haber magia de vida dentro de esta pieza de la historia. Por extraño que parezca, el pedazo parece emanar malicia.
+jei.description.soulus:bone=Parte del esqueleto de una criatura. 
+jei.description.soulus:bone_ender=Parte del esqueleto de una criatura alienígena.
+jei.description.soulus:bone_nether=Parte del esqueleto de una criatura del inframundo.
+jei.description.soulus:bone_meal_nether=Los restos de una criatura del inframundo, aplastada en un polvo fino. Si uno creyó o no en el verdadero mal antes es irrelevante; por ahora, es seguro que existe, en una pequeña pila en la palma de la mano.
+jei.description.soulus:crystal_blood=Un cristal forjado desde el fuego, cubierto en la sangre de muchos. El Cristal de Sangre puede contener cientos de vidas. Mirar al centro es como mirar a las profundidades del infierno. Mejor no pensar en eso. Los Cristales de sangre pueden aumentar la cantidad de criaturas invocadas por un Invocador.
+jei.description.soulus:crystal_blood_broken=Un cristal de sangre que se ha roto en muchos pedazos. La sangre dentro se ha evaporado. Puede que no sea una buena idea intentar pinchar la sangre de los dedos manchados.
+jei.description.soulus:dust_ender=Polvo brillante. Si uno creyó o no en la magia antes es irrelevante; por ahora, es seguro que existe, en una pequeña pila en la palma de la mano.
+jei.description.soulus:dust_ender_iron=Una mezcla del polvo brillante y el polvo de hierro. ¿Podría un metal ser forjado de esto?
+jei.description.soulus:dust_ender_iron_ashen=Una mezcla del polvo brillante, el polvo de hierro y la ceniza. Si se puede forjar metal de la mezcla de polvos brillantes y de hierro, uno tal vez también podría ser forjado por esto.
+jei.description.soulus:dust_iron=Polvo fino de hierro.
+jei.description.soulus:dust_stone=Piedra triturada en un polvo fino.
+jei.description.soulus:dust_wood=Madera triturada en polvo fino.
+jei.description.soulus:emerald_burnt=Un cristal forjado desde el fuego.
+jei.description.soulus:emerald_coated=Un cristal forjado del fuego, cubierto de sangre.
+jei.description.soulus:essence=Un polvo mágico que es la esencia de una criatura. La esencia se obtiene de los restos de los muertos y, al llenar un libro de Alma, se puede usar para devolver a estas criaturas de la extinción.
+jei.description.soulus:gear_bone=Un engranaje improvisado hecho de restos de criaturas. Puede ser útil cuando se combina con un material más fuerte
+jei.description.soulus:gear_bone_ender=Un engranaje improvisado hecho de los restos de criaturas alienígenas. Puede ser útil cuando se combina con un material más fuerte.
+jei.description.soulus:gear_oscillating=Un engranaje hecho de restos de criaturas y metal brillante. Los usos potenciales harían que cualquier ingeniero mágico babeara. Los engranajes oscilantes pueden aumentar la velocidad de un invocador o un compositor.
+jei.description.soulus:glue=Una sustancia pegajosa. Se han contado historias sobre las personas que consumieron el material, y lo han disfrutado. Bufones.
+jei.description.soulus:ingot_endersteel=Un metal hecho de los restos de criaturas alienígenas y hierro. Puede o no ser pulsante.
+jei.description.soulus:ingot_endersteel_dark=Un metal hecho de restos de criaturas alienígenas, hierro y ceniza. No es pulsátil, pero tocarlo durante demasiado tiempo puede volverse loco.
+jei.description.soulus:nugget_endersteel=Un pedazo de metal hecho con restos de criaturas alienígenas y hierro. Donde el astillado del lingote, brilla.
+jei.description.soulus:nugget_endersteel_dark=Un pedazo del metal hecho de restos de criaturas alienígenas, hierro y ceniza. El tamaño más pequeño reduce ligeramente la tensión de tocar el metal.
+jei.description.soulus:orb_murky=Un orbe pegajoso, marmoleado y mágico. Uno podría ver su propia alma en sus profundidades. Los Orbes Turbios que están llenos de esencia puede proporcionar un impulso al rango de activación de un invocador o compositor.
+jei.description.soulus:sledgehammer=Una herramienta para triturar materiales.
+jei.description.soulus:soul_catalyst=Las vidas de muchos se condensaron en una brillante, brillante bola de poder.
+jei.description.soulus:soulbook=Un Libro de Alma es el medio para invocar a una criatura y que no vuelva a extinguirse. Los libros de Almas deben estar llenos de Esencia de un tipo y pueden colocarse en un Invocador.
+jei.description.soulus:bars_endersteel=Barras de metal hechas con restos de criaturas alienígenas y hierro.
+jei.description.soulus:block_endersteel=Un bloque del metal hecho de restos de criaturas alienígenas y hierro. Está pulsando suavemente, y parece reaccionar a la piedra roja.
+jei.description.soulus:block_endersteel_dark=Un bloque del metal hecho de los restos de criaturas alienígenas, hierro y ceniza. Es inerte, pero de alguna manera es aterrador en su silencio. Parece reaccionar violentamente a redstone.
+jei.description.soulus:composer=Una máquina diseñada con la sabiduría de experimentos y descubrimientos previos. El Compositor puede crear cualquier cosa hecha en una Mesa de Artesanía, pero sin interacción humana. Utiliza las criaturas que lo rodean para funcionar, e incluso puede consumir la criatura, de vez en cuando. Este efecto secundario puede conducir a una innovación futura.
+jei.description.soulus:composer_cell=Puede contener múltiples cosas, ya sea que una persona pueda o no. Cuando es parte de un Compositor, se convierte en un tragamonedas de artesanía.
+jei.description.soulus:skewer=Un bloque que, cuando funciona con redstone, extenderá los picos hacia afuera. Se puede usar para asesinar a las criaturas que uno ha invocado. Cuando se agrega cuarzo, del mundo inferior, es probable que sea más efectivo. También se puede insertar un cristal de sangre para llenarlo.
+jei.description.soulus:summoner=Una máquina creada a partir de restos de criaturas alienígenas y metal, que invoca a una criatura de un Libro de Alma. Con esto, la vida puede regresar pronto al mundo.

@@ -1,0 +1,21 @@
+{
+	"type": "soulus:composer_shaped",
+	"time": 512,
+	"pattern": [
+		"eee",
+		"eCe",
+		"eee"
+	],
+	"key": {
+		"C": {
+			"item": "soulus:crystal_dark"
+		},
+		"e": {
+			"item": "soulus:ingot_endersteel"
+		}
+	},
+	"result": {
+		"item": "soulus:ingot_niobium",
+		"count": 12
+	}
+}

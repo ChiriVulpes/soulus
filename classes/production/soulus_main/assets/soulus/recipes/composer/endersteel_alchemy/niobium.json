@@ -1,0 +1,21 @@
+{
+	"type": "soulus:composer_shaped",
+	"time": 256,
+	"pattern": [
+		"eee",
+		"ede",
+		"eee"
+	],
+	"key": {
+		"d": {
+			"item": "soulus:dust_niobium"
+		},
+		"e": {
+			"item": "soulus:ingot_endersteel"
+		}
+	},
+	"result": {
+		"item": "soulus:ingot_niobium",
+		"count": 8
+	}
+}

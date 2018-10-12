@@ -1,0 +1,9 @@
+{
+	"type": "soulus:furnace",
+	"input": {
+		"item": "soulus:dust_niobium"
+	},
+	"result": {
+		"item": "soulus:ingot_niobium"
+	}
+}

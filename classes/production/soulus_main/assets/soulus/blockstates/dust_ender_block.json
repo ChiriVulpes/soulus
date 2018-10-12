@@ -1,0 +1,26 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "soulus:dust_ender_block"
+	},
+	"variants": {
+		"color": {
+			"white": { "textures": { "overlay": "soulus:blocks/dust_ender/white" }},
+			"orange": { "textures": { "overlay": "soulus:blocks/dust_ender/orange" }},
+			"magenta": { "textures": { "overlay": "soulus:blocks/dust_ender/magenta" }},
+			"light_blue": { "textures": { "overlay": "soulus:blocks/dust_ender/light_blue" }},
+			"yellow": { "textures": { "overlay": "soulus:blocks/dust_ender/yellow" }},
+			"lime": { "textures": { "overlay": "soulus:blocks/dust_ender/lime" }},
+			"pink": { "textures": { "overlay": "soulus:blocks/dust_ender/pink" }},
+			"gray": { "textures": { "overlay": "soulus:blocks/dust_ender/gray" }},
+			"silver": { "textures": { "overlay": "soulus:blocks/dust_ender/silver" }},
+			"cyan": { "textures": { "overlay": "soulus:blocks/dust_ender/cyan" }},
+			"purple": { "textures": { "overlay": "soulus:blocks/dust_ender/purple" }},
+			"blue": { "textures": { "overlay": "soulus:blocks/dust_ender/blue" }},
+			"brown": { "textures": { "overlay": "soulus:blocks/dust_ender/brown" }},
+			"green": { "textures": { "overlay": "soulus:blocks/dust_ender/green" }},
+			"red": { "textures": { "overlay": "soulus:blocks/dust_ender/red" }},
+			"black": { "textures": { "overlay": "soulus:blocks/dust_ender/black" }}
+		}
+	}
+}

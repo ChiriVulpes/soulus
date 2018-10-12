@@ -1,0 +1,12 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"item": "soulus:block_endersteel"
+		}
+	],
+	"result": {
+		"item": "soulus:ingot_endersteel",
+		"count": 9
+	}
+}

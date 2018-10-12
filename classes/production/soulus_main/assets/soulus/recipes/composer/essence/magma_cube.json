@@ -1,0 +1,23 @@
+{
+	"type": "soulus:composer_shaped",
+	"time": 16,
+	"pattern": [
+		"sss",
+		"sas",
+		"sss"
+	],
+	"key": {
+		"s": {
+			"item": "minecraft:magma_cream"
+		},
+		"a": {
+			"item": "soulus:ash"
+		}
+	},
+	"result": {
+		"item": "soulus:essence",
+		"nbt": {
+			"essence_type": "minecraft:magma_cube"
+		}
+	}
+}

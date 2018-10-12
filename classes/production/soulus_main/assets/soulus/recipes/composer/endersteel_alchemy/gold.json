@@ -1,0 +1,22 @@
+{
+	"type": "soulus:composer_shaped",
+	"time": 16,
+	"pattern": [
+		"eee",
+		"ede",
+		"eee"
+	],
+	"key": {
+		"d": {
+			"type": "forge:ore_dict",
+			"ore": "dustGold"
+		},
+		"e": {
+			"item": "soulus:ingot_endersteel"
+		}
+	},
+	"result": {
+		"item": "minecraft:gold_ingot",
+		"count": 8
+	}
+}

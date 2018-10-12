@@ -1,0 +1,12 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"item": "soulus:bone_nether"
+		}
+	],
+	"result": {
+		"item": "soulus:bone_chunk_nether",
+		"count": 3
+	}
+}

@@ -1,0 +1,16 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"EEE",
+		"EEE"
+	],
+	"key": {
+		"E": {
+			"item": "soulus:ingot_endersteel"
+		}
+	},
+	"result": {
+		"item": "soulus:bars_endersteel",
+		"count": 16
+	}
+}
