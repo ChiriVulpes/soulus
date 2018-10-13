@@ -21,6 +21,8 @@ public class ConfigFossils {
 		fossils.put("soulus:fossil_dirt", new ConfigFossil(BoneType.NORMAL, 2, 6));
 		fossils.put("soulus:fossil_end_stone", new ConfigFossil(BoneType.ENDER, 2, 6));
 		fossils.put("soulus:fossil_gravel_scale", new ConfigFossil(BoneType.SCALE, 2, 6));
+		fossils.put("soulus:fossil_gravel_dry", new ConfigFossil(BoneType.DRY, 2, 6));
+		fossils.put("soulus:fossil_gravel_fungal", new ConfigFossil(BoneType.FUNGAL, 2, 6));
 		fossils.put("soulus:fossil_netherrack_ender", new ConfigFossil(BoneType.ENDER, 2, 6));
 		fossils.put("soulus:fossil_netherrack", new ConfigFossil(BoneType.NETHER, 2, 6));
 		fossils.put("soulus:fossil_sand_ender", new ConfigFossil(BoneType.ENDER, 2, 6));

@@ -41,6 +41,17 @@ public class ConfigOreVeins {
 			.setSize(3, 7)
 			.setChances(30)
 			.setBiomes(Type.OCEAN),
+		new OreVein().setBlock("soulus:fossil_gravel_fungal")
+			.setToReplace("minecraft:dirt")
+			.setSize(3, 7)
+			.setChances(300)
+			.setBiomes(Type.WET, Type.DENSE),
+		new OreVein().setBlock("soulus:fossil_gravel_dry")
+			.setToReplace("minecraft:sand@0")
+			.setSize(3, 7)
+			.setChances(50)
+			.setBiomes(Type.HOT, Type.DRY)
+			.setBiomesBlacklist(Type.NETHER),
 		new OreVein().setBlock("soulus:fossil_sand")
 			.setToReplace("minecraft:sand@0")
 			.setSize(3, 7)
