@@ -1,7 +1,7 @@
 {
 	"parent": "minecraft:block/cube_all",
 	"textures": {
-		"overlay": "soulus:blocks/fossil/fossil_scale",
+		"overlay": "soulus:blocks/fossil/fossil_scale_2",
 		"base": "minecraft:blocks/red_sand"
 	},
 	"elements": [
