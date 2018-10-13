@@ -2,6 +2,7 @@
 .idea/
 bin/
 build/
+classes/
 out/
 run/
 .classpath
