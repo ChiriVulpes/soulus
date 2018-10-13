@@ -1,8 +1,0 @@
-{
-	"parent": "minecraft:item/generated",
-	"textures": {
-		"layer0": "soulus:items/soulbook_bg",
-		"layer1": "soulus:items/soulbook_fg",
-		"layer2": "soulus:items/soulbook_main"
-	}
-}

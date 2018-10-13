@@ -1,6 +1,0 @@
-{
-	"parent": "minecraft:item/generated",
-	"textures": {
-		"layer0": "soulus:items/crystal_blood_broken"
-	}
-}

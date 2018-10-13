@@ -1,6 +1,0 @@
-{
-    "variants": {
-        "connected=false": { "model": "soulus:soul_totem" },
-        "connected=true": { "model": "soulus:soul_totem_connected" }
-    }
-}

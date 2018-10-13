@@ -1,7 +1,0 @@
-{
-    "parent": "block/block",
-    "textures": {
-		"particle": "soulus:blocks/composer/composer_cell_top"
-    },
-    "elements": []
-}

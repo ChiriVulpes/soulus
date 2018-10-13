@@ -1,7 +1,0 @@
-{
-    "variants": {
-        "cell_state=disconnected": { "model": "soulus:composer_cell_disconnected" },
-        "cell_state=connected_center": { "model": "soulus:composer_cell_connected_center" },
-        "cell_state=connected_edge": { "model": "soulus:composer_cell_connected_edge" }
-    }
-}

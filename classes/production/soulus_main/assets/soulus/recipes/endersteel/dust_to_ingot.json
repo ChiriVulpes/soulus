@@ -1,9 +1,0 @@
-{
-	"type": "soulus:furnace",
-	"input": {
-		"item": "soulus:dust_ender_iron"
-	},
-	"result": {
-		"item": "soulus:ingot_endersteel"
-	}
-}
