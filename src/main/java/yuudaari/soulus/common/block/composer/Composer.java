@@ -1,39 +1,40 @@
 package yuudaari.soulus.common.block.composer;
 
-import java.util.Arrays;
-import java.util.List;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import yuudaari.soulus.Soulus;
+import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigComposer;
 import yuudaari.soulus.common.item.OrbMurky;
-import yuudaari.soulus.common.ModBlocks;
-import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.util.LangHelper;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.StructureMap;
 import yuudaari.soulus.common.util.StructureMap.BlockValidator;
-import yuudaari.soulus.Soulus;
+
+import java.util.Arrays;
+import java.util.List;
 
 @ConfigInjected(Soulus.MODID)
 public class Composer extends UpgradeableBlock<ComposerTileEntity> {
@@ -355,12 +356,12 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, ComposerTileEntity te, EntityPlayer player) {
 
 		if (te.hasValidRecipe()) {
-			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":composer.activation", (int) Math
+			currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":composer.activation", (int) Math
 				.floor(te.getActivationAmount())));
-			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":composer.craft_percentage", (int) Math
+			currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":composer.craft_percentage", (int) Math
 				.floor(te.getCompositionPercent() * 100)));
 		} else {
-			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":composer.no_recipe"));
+			currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":composer.no_recipe"));
 		}
 
 	}

@@ -1,18 +1,14 @@
 package yuudaari.soulus.common.block.summoner;
 
-import java.util.Collections;
-import java.util.List;
-import javax.annotation.Nullable;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,13 +19,17 @@ import net.minecraft.item.ItemMultiTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import yuudaari.soulus.Soulus;
+import yuudaari.soulus.common.CreativeTab;
+import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.block.EndersteelType;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
@@ -38,15 +38,16 @@ import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSummoner;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
-import yuudaari.soulus.common.CreativeTab;
-import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.item.CrystalBlood;
 import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.item.Soulbook;
-import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.util.EssenceType;
+import yuudaari.soulus.common.util.LangHelper;
 import yuudaari.soulus.common.util.Material;
-import yuudaari.soulus.Soulus;
+
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
 
 @ConfigInjected(Soulus.MODID)
 public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
@@ -273,31 +274,28 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 			return damage;
 		}
 
-		@SideOnly(Side.CLIENT)
 		@Override
 		public String getItemStackDisplayName (ItemStack stack) {
 			String essenceType = EssenceType.getEssenceType(stack);
 			ConfigEssence config = CONFIG_ESSENCES.get(essenceType);
 			if (essenceType == null || config == null)
-				return I18n.format(this.getUnlocalizedName() + ".unfocused.name").trim();
+				return LangHelper.localize(this.getUnlocalizedName() + ".unfocused.name").trim();
 
 			String alignment = config.name;
 			if (alignment == null) {
 				String translationKey = "entity." + essenceType + ".name";
-				alignment = I18n.format(translationKey);
+				alignment = LangHelper.localize(translationKey);
 				if (translationKey.equals(alignment)) {
-					alignment = I18n
-						.format("entity." + EntityList.getTranslationName(new ResourceLocation(essenceType)) + ".name");
+					alignment = LangHelper.localize("entity." + EntityList.getTranslationName(new ResourceLocation(essenceType)) + ".name");
 				}
 			}
 
-			return I18n.format(this.getUnlocalizedName() + ".focused.name", alignment).trim();
+			return LangHelper.localize(this.getUnlocalizedName() + ".focused.name", alignment).trim();
 		}
 
-		@SideOnly(Side.CLIENT)
 		@Override
 		public void addInformation (ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-			tooltip.add(I18n.format("tooltip." + Soulus.MODID + ":summoner.style." + EndersteelType
+			tooltip.add(LangHelper.localize("tooltip." + Soulus.MODID + ":summoner.style." + EndersteelType
 				.byMetadata(stack.getItemDamage() / 2)
 				.getName()));
 		}
@@ -474,7 +472,6 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	// Waila
 	//
 
-	@SideOnly(Side.CLIENT)
 	@Override
 	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, SummonerTileEntity te, EntityPlayer player) {
 
@@ -484,22 +481,20 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		if (te.upgrades.get(Upgrade.CRYSTAL_DARK) > 0) return;
 
 		int summonPercentage = (int) Math.floor(te.getSpawnPercent() * 100);
-		currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":summoner.summon_percentage", summonPercentage));
+		currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":summoner.summon_percentage", summonPercentage));
 
 		if (CONFIG.soulbookUses != null && CONFIG.soulbookUses > 0) {
 			int summonsRemaining = (int) Math.ceil(te.getSoulbookUses() / CONFIG.soulbookUses * 100);
-			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":summoner.summons_remaining", summonsRemaining));
+			currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":summoner.summons_remaining", summonsRemaining));
 		}
 
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
 	protected boolean shouldWailaTooltipShowAll (IBlockState blockState, SummonerTileEntity te) {
 		return te.upgrades.get(Upgrade.CRYSTAL_DARK) > 0;
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
 	protected String getWailaTooltipUpgrade (IUpgrade upgrade, SummonerTileEntity te) {
 		if (upgrade != Upgrade.CRYSTAL_DARK && te.upgrades.get(Upgrade.CRYSTAL_DARK) > 0)
@@ -508,14 +503,12 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		return super.getWailaTooltipUpgrade(upgrade, te);
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
 	protected List<String> onWailaTooltipMore (IBlockState blockState, SummonerTileEntity te, EntityPlayer player) {
 		String variant = blockState.getValue(VARIANT).getName();
-		return Collections.singletonList(I18n.format("tooltip." + Soulus.MODID + ":summoner.style." + variant));
+		return Collections.singletonList(LangHelper.localize("tooltip." + Soulus.MODID + ":summoner.style." + variant));
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
 	public ItemStack getWailaStack (IDataAccessor accessor) {
 		TileEntity te = accessor.getTileEntity();

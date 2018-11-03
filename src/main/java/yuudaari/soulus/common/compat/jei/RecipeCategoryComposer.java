@@ -1,6 +1,5 @@
 package yuudaari.soulus.common.compat.jei;
 
-import java.util.List;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.ICraftingGridHelper;
 import mezz.jei.api.gui.IDrawable;
@@ -17,11 +16,13 @@ import mezz.jei.startup.ForgeModIdHelper;
 import mezz.jei.util.Translator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import yuudaari.soulus.Soulus;
+import yuudaari.soulus.common.util.LangHelper;
+
+import java.util.List;
 
 public class RecipeCategoryComposer implements IRecipeCategory<IRecipeWrapper> {
 
@@ -49,7 +50,7 @@ public class RecipeCategoryComposer implements IRecipeCategory<IRecipeWrapper> {
 
 	@Override
 	public String getTitle () {
-		return I18n.format("jei.recipe." + getUid() + ".name");
+		return LangHelper.localize("jei.recipe." + getUid() + ".name");
 	}
 
 	@Override

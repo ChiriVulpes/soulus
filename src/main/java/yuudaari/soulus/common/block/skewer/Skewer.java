@@ -1,6 +1,5 @@
 package yuudaari.soulus.common.block.skewer;
 
-import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -9,7 +8,6 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,17 +16,14 @@ import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.*;
+import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import yuudaari.soulus.Soulus;
+import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.config.ConfigInjected;
@@ -36,10 +31,10 @@ import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSkewer;
 import yuudaari.soulus.common.item.CrystalBlood;
 import yuudaari.soulus.common.item.SoulCatalyst;
-import yuudaari.soulus.common.ModBlocks;
-import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.util.LangHelper;
 import yuudaari.soulus.common.util.Material;
-import yuudaari.soulus.Soulus;
+
+import java.util.List;
 
 @ConfigInjected(Soulus.MODID)
 public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
@@ -362,16 +357,14 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	// Waila
 	//
 
-	@SideOnly(Side.CLIENT)
 	@Override
 	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, SkewerTileEntity te, EntityPlayer player) {
 
-		currentTooltip.add(I18n.format("waila." + Soulus.MODID + (blockState
+		currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + (blockState
 			.getValue(Skewer.EXTENDED) ? ":skewer.extended" : ":skewer.not_extended")));
 
 		if (te.upgrades.get(Upgrade.CRYSTAL_BLOOD) == 1) {
-			currentTooltip.add(I18n
-				.format("waila." + Soulus.MODID + ":skewer.crystal_blood_stored_blood", te.crystalBloodContainedBlood, CrystalBlood.CONFIG.requiredBlood));
+			currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":skewer.crystal_blood_stored_blood", te.crystalBloodContainedBlood, CrystalBlood.CONFIG.requiredBlood));
 		}
 	}
 

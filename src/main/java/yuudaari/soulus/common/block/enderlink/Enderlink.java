@@ -1,38 +1,37 @@
 package yuudaari.soulus.common.block.enderlink;
 
-import java.util.List;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import yuudaari.soulus.Soulus;
+import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.block.DustEnderBlock;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigEnderlink;
-import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.item.OrbMurky;
-import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.util.LangHelper;
 import yuudaari.soulus.common.util.Material;
-import yuudaari.soulus.Soulus;
+
+import java.util.List;
 
 @ConfigInjected(Soulus.MODID)
 public class Enderlink extends UpgradeableBlock<EnderlinkTileEntity> {
@@ -203,12 +202,11 @@ public class Enderlink extends UpgradeableBlock<EnderlinkTileEntity> {
 	// Waila
 	//
 
-	@SideOnly(Side.CLIENT)
 	@Override
 	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, EnderlinkTileEntity te, EntityPlayer player) {
 		if (te == null) return;
 
-		currentTooltip.add(I18n.format("waila.soulus:misc.color." + te.color.getDyeColorName()));
+		currentTooltip.add(LangHelper.localize("waila.soulus:misc.color." + te.color.getDyeColorName()));
 	}
 
 }

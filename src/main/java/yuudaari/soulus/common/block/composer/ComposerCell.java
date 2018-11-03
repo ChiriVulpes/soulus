@@ -1,15 +1,12 @@
 package yuudaari.soulus.common.block.composer;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag.TooltipFlags;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,14 +20,18 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigComposerCell;
+import yuudaari.soulus.common.util.LangHelper;
 import yuudaari.soulus.common.util.Material;
-import yuudaari.soulus.Soulus;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @ConfigInjected(Soulus.MODID)
 public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
@@ -247,18 +248,15 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	// Waila
 	//
 
-	@SideOnly(Side.CLIENT)
 	@Override
 	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, ComposerCellTileEntity te, EntityPlayer player) {
 
-		// currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":composer_cell.slot", te.slot));
+		// currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":composer_cell.slot", te.slot));
 
 		if (te.storedQuantity == 0) {
-			currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":composer_cell.no_items"));
+			currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":composer_cell.no_items"));
 		} else {
-			currentTooltip.add(I18n
-				.format("waila." + Soulus.MODID + ":composer_cell.contained_item", te.storedQuantity, CONFIG.maxQuantity, te.storedItem
-					.getDisplayName()));
+			currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":composer_cell.contained_item", te.storedQuantity, CONFIG.maxQuantity, te.storedItem.getDisplayName()));
 
 			ItemStack storedItem = te.getStoredItem();
 			if (!player.isSneaking() && storedItem != null && storedItem.getItem() instanceof IHasImportantInfos) {

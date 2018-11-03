@@ -1,7 +1,5 @@
 package yuudaari.soulus.common.compat.jei;
 
-import java.text.DecimalFormat;
-import java.util.List;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.ICraftingGridHelper;
 import mezz.jei.api.gui.IDrawable;
@@ -11,7 +9,6 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import mezz.jei.api.recipe.wrapper.ICustomCraftingRecipeWrapper;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import yuudaari.soulus.Soulus;
@@ -20,6 +17,10 @@ import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.item.BoneChunk;
 import yuudaari.soulus.common.item.Essence;
 import yuudaari.soulus.common.util.EssenceType;
+import yuudaari.soulus.common.util.LangHelper;
+
+import java.text.DecimalFormat;
+import java.util.List;
 
 public class RecipeCategoryEssence implements IRecipeCategory<IRecipeWrapper> {
 
@@ -47,7 +48,7 @@ public class RecipeCategoryEssence implements IRecipeCategory<IRecipeWrapper> {
 
 	@Override
 	public String getTitle () {
-		return I18n.format("jei.recipe." + getUid() + ".name");
+		return LangHelper.localize("jei.recipe." + getUid() + ".name");
 	}
 
 	@Override
@@ -95,7 +96,7 @@ public class RecipeCategoryEssence implements IRecipeCategory<IRecipeWrapper> {
 
 				BoneChunk chunk = BoneChunk.boneChunkTypes.get(essence.bones.type);
 				double dropChance = dropWeight / chunk.getChanceTotal() * 100;
-				tooltip.add(0, I18n.format("jei.recipe." + Soulus.MODID + ":essence.tooltip_chance", //
+				tooltip.add(0, LangHelper.localize("jei.recipe." + Soulus.MODID + ":essence.tooltip_chance", //
 					new DecimalFormat("#.##").format(dropChance)));
 			}
 		});

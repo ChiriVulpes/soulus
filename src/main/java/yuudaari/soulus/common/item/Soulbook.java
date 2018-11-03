@@ -1,20 +1,14 @@
 package yuudaari.soulus.common.item;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityList;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -26,10 +20,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
+import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.block.composer.ComposerCell.IHasImportantInfos;
-import yuudaari.soulus.common.block.summoner.Summoner;
 import yuudaari.soulus.common.block.composer.IFillableWithEssence;
+import yuudaari.soulus.common.block.summoner.Summoner;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.essence.ConfigColor;
@@ -38,8 +33,14 @@ import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
 import yuudaari.soulus.common.util.Colour;
 import yuudaari.soulus.common.util.EssenceType;
+import yuudaari.soulus.common.util.LangHelper;
 import yuudaari.soulus.common.util.ModItem;
-import yuudaari.soulus.Soulus;
+
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @ConfigInjected(Soulus.MODID)
 public class Soulbook extends ModItem implements IHasImportantInfos, IFillableWithEssence {
@@ -191,19 +192,18 @@ public class Soulbook extends ModItem implements IHasImportantInfos, IFillableWi
 		String essenceType = EssenceType.getEssenceType(stack);
 		ConfigEssence config = CONFIG.get(essenceType);
 		if (essenceType == null || config == null)
-			return I18n.format(this.getUnlocalizedName() + ".unfocused.name").trim();
+			return LangHelper.localize(this.getUnlocalizedName() + ".unfocused.name").trim();
 
 		String alignment = config.name;
 		if (alignment == null) {
 			String translationKey = "entity." + essenceType + ".name";
-			alignment = I18n.format(translationKey);
+			alignment = LangHelper.localize(translationKey);
 			if (translationKey.equals(alignment)) {
-				alignment = I18n
-					.format("entity." + EntityList.getTranslationName(new ResourceLocation(essenceType)) + ".name");
+				alignment = LangHelper.localize("entity." + EntityList.getTranslationName(new ResourceLocation(essenceType)) + ".name");
 			}
 		}
 
-		return I18n.format(this.getUnlocalizedName() + ".focused.name", alignment).trim();
+		return LangHelper.localize(this.getUnlocalizedName() + ".focused.name", alignment).trim();
 	}
 
 	@Override
@@ -297,8 +297,7 @@ public class Soulbook extends ModItem implements IHasImportantInfos, IFillableWi
 		if (mobTarget != null) {
 			int requiredEssence = CONFIG.getSoulbookQuantity(mobTarget);
 			if (containedEssence < requiredEssence) {
-				tooltip.add(I18n
-					.format("tooltip." + Soulus.MODID + ":soulbook.contained_essence", containedEssence, requiredEssence));
+				tooltip.add(LangHelper.localize("tooltip." + Soulus.MODID + ":soulbook.contained_essence", containedEssence, requiredEssence));
 			}
 		}
 	}

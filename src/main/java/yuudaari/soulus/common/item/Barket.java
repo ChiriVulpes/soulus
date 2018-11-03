@@ -1,9 +1,7 @@
 package yuudaari.soulus.common.item;
 
-import javax.annotation.Nullable;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -19,11 +17,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fluids.FluidActionResult;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.UniversalBucket;
+import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStackSimple;
@@ -34,6 +28,9 @@ import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
 import yuudaari.soulus.common.util.IModThing;
+import yuudaari.soulus.common.util.LangHelper;
+
+import javax.annotation.Nullable;
 
 public class Barket extends UniversalBucket implements IModThing {
 
@@ -150,7 +147,7 @@ public class Barket extends UniversalBucket implements IModThing {
 	@Override
 	public String getItemStackDisplayName (ItemStack stack) {
 		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
-			return I18n.format(getUnlocalizedNameInefficiently(stack) + ".name");
+			return LangHelper.localize(getUnlocalizedNameInefficiently(stack) + ".name");
 		}
 		return getRegistryName().toString();
 	}
