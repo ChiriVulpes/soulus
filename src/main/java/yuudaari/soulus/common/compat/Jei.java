@@ -1,6 +1,5 @@
 package yuudaari.soulus.common.compat;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import mezz.jei.api.IGuiHelper;
@@ -21,17 +20,24 @@ import yuudaari.soulus.common.compat.jei.RecipeCategoryEssence;
 import yuudaari.soulus.common.compat.jei.RecipeWrapperComposer;
 import yuudaari.soulus.common.compat.jei.RecipeWrapperEssence;
 import yuudaari.soulus.common.compat.jei.SubtypeInterpreterEssence;
+import yuudaari.soulus.common.config.ConfigInjected;
+import yuudaari.soulus.common.config.ConfigInjected.Inject;
+import yuudaari.soulus.common.config.bones.ConfigBoneType;
+import yuudaari.soulus.common.config.bones.ConfigBoneTypes;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.item.Essence;
+import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.recipe.RecipeComposerShaped;
 import yuudaari.soulus.common.recipe.RecipeComposerShapeless;
-import yuudaari.soulus.common.util.BoneType;
 
 @JEIPlugin
+@ConfigInjected(Soulus.MODID)
 public class Jei implements IModPlugin {
+
+	@Inject public static ConfigBoneTypes CONFIG;
 
 	@Override
 	public void registerItemSubtypes (ISubtypeRegistry subtypeRegistry) {
@@ -65,10 +71,9 @@ public class Jei implements IModPlugin {
 		}
 		registry.addRecipeCatalyst(Essence.getStack(essence.essence), RecipeCategoryEssence.UID);
 
-		registry.handleRecipes(BoneType.class, RecipeWrapperEssence::new, RecipeCategoryEssence.UID);
+		registry.handleRecipes(ConfigBoneType.class, RecipeWrapperEssence::new, RecipeCategoryEssence.UID);
 
-		List<BoneType> boneTypes = Arrays.asList(BoneType.values());
-		registry.addRecipes(boneTypes, RecipeCategoryEssence.UID);
+		registry.addRecipes(CONFIG.boneTypes, RecipeCategoryEssence.UID);
 	}
 
 	/**

@@ -13,16 +13,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.config.ConfigInjected;
+import yuudaari.soulus.common.config.ConfigInjected.Inject;
+import yuudaari.soulus.common.config.bones.ConfigBoneTypes;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
-import yuudaari.soulus.common.item.BoneChunk;
 import yuudaari.soulus.common.item.Essence;
+import yuudaari.soulus.common.misc.BoneChunks;
 import yuudaari.soulus.common.util.EssenceType;
 import yuudaari.soulus.common.util.LangHelper;
-
 import java.text.DecimalFormat;
 import java.util.List;
 
+@ConfigInjected(Soulus.MODID)
 public class RecipeCategoryEssence implements IRecipeCategory<IRecipeWrapper> {
+
+	@Inject public static ConfigBoneTypes CONFIG;
 
 	public static final String UID = "soulus:essence";
 
@@ -94,8 +99,7 @@ public class RecipeCategoryEssence implements IRecipeCategory<IRecipeWrapper> {
 
 				double dropWeight = essence.bones.dropWeight;
 
-				BoneChunk chunk = BoneChunk.boneChunkTypes.get(essence.bones.type);
-				double dropChance = dropWeight / chunk.getChanceTotal() * 100;
+				double dropChance = dropWeight / BoneChunks.getChanceTotal(essence.bones.type) * 100;
 				tooltip.add(0, LangHelper.localize("jei.recipe." + Soulus.MODID + ":essence.tooltip_chance", //
 					new DecimalFormat("#.##").format(dropChance)));
 			}

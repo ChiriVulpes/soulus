@@ -12,6 +12,7 @@ import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.compat.ExNihiloCreatioRecipes;
 import yuudaari.soulus.common.compat.top.TheOneProbe;
 import yuudaari.soulus.common.config.Config;
+import yuudaari.soulus.common.misc.BoneChunks;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.block.Block;
@@ -173,6 +174,8 @@ public class Soulus {
 		if (Loader.isModLoaded("crafttweaker")) {
 			ZenComposer.apply();
 		}
+
+		BoneChunks.registerEssenceDrops(event);
 	}
 
 	@SubscribeEvent

@@ -9,7 +9,6 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntitySlime;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ResourceLocation;
@@ -21,9 +20,10 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
+import yuudaari.soulus.common.config.bones.ConfigBoneType;
+import yuudaari.soulus.common.config.bones.ConfigBoneTypes;
 import yuudaari.soulus.common.config.creature.ConfigCreature;
 import yuudaari.soulus.common.config.creature.ConfigCreatureBiome;
 import yuudaari.soulus.common.config.creature.ConfigCreatureDimension;
@@ -32,7 +32,6 @@ import yuudaari.soulus.common.config.creature.ConfigCreatures;
 import yuudaari.soulus.common.config.essence.ConfigCreatureLoot;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
-import yuudaari.soulus.common.util.BoneType;
 import yuudaari.soulus.common.util.Range;
 
 @Mod.EventBusSubscriber
@@ -41,6 +40,7 @@ public class BoneDrops {
 
 	@Inject public static ConfigCreatures CONFIG_CREATURES;
 	@Inject public static ConfigEssences CONFIG_ESSENCES;
+	@Inject public static ConfigBoneTypes CONFIG_BONE_TYPES;
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onMobDrops (LivingDropsEvent event) {
@@ -139,7 +139,7 @@ public class BoneDrops {
 	private static ConfigCreature getCreatureConfig (EntityLivingBase entity, String entityName) {
 		// then we get the dimension config for this potential spawn
 		DimensionType dimension = entity.world.provider.getDimensionType();
-		//Logger.info(dimension.getName());
+		// Logger.info(dimension.getName());
 		ConfigCreatureDimension dimensionConfig = CONFIG_CREATURES.dimensionConfigs.get(dimension.getName());
 		if (dimensionConfig == null) {
 			dimensionConfig = CONFIG_CREATURES.dimensionConfigs.get("*");
@@ -151,7 +151,7 @@ public class BoneDrops {
 		// then we get the biome config for this potential spawn
 		BlockPos pos = entity.getPosition();
 		Biome biome = entity.world.getBiome(pos);
-		//Logger.info(biome.getRegistryName().toString());
+		// Logger.info(biome.getRegistryName().toString());
 		ConfigCreatureBiome biomeConfig = dimensionConfig.biomeConfigs.get(biome.getRegistryName().toString());
 		if (biomeConfig == null) {
 			biomeConfig = dimensionConfig.biomeConfigs.get(biome.getRegistryName().getResourceDomain() + ":*");
@@ -164,7 +164,7 @@ public class BoneDrops {
 		}
 
 		// then we get the creature config for this potential spawn
-		//Logger.info(entityName);
+		// Logger.info(entityName);
 		ConfigCreature creatureConfig = biomeConfig.creatureConfigs.get(entityName);
 		if (creatureConfig == null) {
 			creatureConfig = biomeConfig.creatureConfigs
@@ -180,33 +180,16 @@ public class BoneDrops {
 		return creatureConfig;
 	}
 
-	private static ItemStack getStack (Random rand, BoneType boneType, ConfigCreatureLoot lootConfig) {
+	private static ItemStack getStack (Random rand, String boneType, ConfigCreatureLoot lootConfig) {
 		if (lootConfig.chance < rand.nextDouble()) {
 			return null;
 		}
 
-		Item item;
-		if (boneType == BoneType.NORMAL) {
-			item = ModItems.BONE_NORMAL;
-		} else if (boneType == BoneType.DRY) {
-			item = ModItems.BONE_DRY;
-		} else if (boneType == BoneType.FUNGAL) {
-			item = ModItems.BONE_FUNGAL;
-		} else if (boneType == BoneType.FROZEN) {
-			item = ModItems.BONE_FROZEN;
-		} else if (boneType == BoneType.NETHER) {
-			item = ModItems.BONE_NETHER;
-		} else if (boneType == BoneType.ENDER) {
-			item = ModItems.BONE_ENDER;
-		} else if (boneType == BoneType.SCALE) {
-			item = ModItems.BONE_SCALE;
-		} else {
-			return null;
-		}
+		ConfigBoneType boneConfig = CONFIG_BONE_TYPES.get(boneType);
 
-		ItemStack result = new ItemStack(item);
-		result.setCount(new Range(lootConfig.min, lootConfig.max).getInt(rand));
-		return result;
+		if (boneConfig == null) return null;
+
+		return boneConfig.getBoneStack(new Range(lootConfig.min, lootConfig.max).getInt(rand));
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
