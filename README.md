@@ -294,6 +294,17 @@ As the skewer damages entities, it can collect blood into the blood crystal it s
 #### Nether Quartz (Damage)
 By default, the Skewer only deals 1 damage to each entity when they're not resistant to the damage. The Skewer can hold 64 Nether Quartz. At this point it will deal around 6 damage to entities when they're not resistant to the damage.
 
+#### Spider Eye (Poison)
+By default, the Skewer can hold up to 16 spider eyes. The more spider eyes, the higher the chance of the poison status effect being applied each time an entity takes damage from the skewer, from a 20% chance at 1 spider eye to a 100% chance at 16 spider eyes.
+
+#### Redstone Torch (Invert Default State)
+When inserted, the skewer will be extended by default, and a redstone signal will instead retract the spikes.
+
+#### Ash (Tether)
+By default, the Skewer can hold up to 16 ash. The more ash, the higher the chance of teleporting entities being tethered each time the entity takes damage from the skewer. The chance of tethering is 20% at 1 ash and 100% at 16 ash.
+
+#### Soul Catalyst (Player)
+If a soul catalyst is inserted, entities killed by the Skewer will drop the same drops as if a player killed the entity. This includes experience.
 
 
 ## Bone Drops [🡅](#table-of-contents)
@@ -513,7 +524,7 @@ The Soul Totem is the main block of a multiblock structure. It is crafted with N
 
 Currently, the Soul Totem only has one upgrade, the Niobium Gear, which reduces the rate at which the Soul Catalyst fuel is consumed (to, by default, around a third of the normal rate).
 
-The Soul Totem structure is the Soul Totem on top, with 4 blocks of Dark Endersteel in the corners underneath, and 4 endersteel bars between those. 
+The Soul Totem structure is the Soul Totem on top, with 4 blocks of Niobium in the corners underneath. 
 
 ![Soul Totem Structure](./preview/soul_totem_structure.png)
 
