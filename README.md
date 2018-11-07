@@ -571,6 +571,8 @@ Thank you for contributing!
 
 The original implementation of the CraftTweaker support was janky and barely worked, and it was rewritten by [CodeTaylor](https://github.com/codetaylor) to make it work correctly for v3.4.0. Thanks for the contribution!
 
+The [TOP support originally did not function on servers](https://github.com/Yuudaari/soulus/issues/53) due to an inconsistency between my understanding of how TOP worked and how it actually worked. This was [fixed](https://github.com/Yuudaari/soulus/pull/54) by [pupnewfster](https://github.com/pupnewfster) for v4.0.0.
+
 There are 4 styles for the Summoner, which are craftable and will appear in the world via [summoner replacement](#summoner-) depending on the structure they're in. I made the textures, but they're heavily based on the spawner variants listed in [SimplySarc's "50 Tiny Ways to Improve Minecraft"](https://youtu.be/NSsac8V3BpA). They even appear in the same structures as his recommendations. This feature is meant as a tribute to that great video. I hope to see similar variants in vanilla someday. =)
 
 
