@@ -1,8 +1,5 @@
 package yuudaari.soulus.common.block;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.IProperty;
@@ -10,7 +7,6 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -27,10 +23,8 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import scala.Tuple2;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.CreativeTab;
@@ -39,8 +33,13 @@ import yuudaari.soulus.common.block.enderlink.EnderlinkTileEntity;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigEnderlink;
+import yuudaari.soulus.common.util.LangHelper;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.ModBlock;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 @ConfigInjected(Soulus.MODID)
 public class DustEnderBlock extends ModBlock {
@@ -206,12 +205,11 @@ public class DustEnderBlock extends ModBlock {
 	// Waila
 	//
 
-	@SideOnly(Side.CLIENT)
 	@Override
 	public final List<String> getWailaTooltip (List<String> currentTooltip, IDataAccessor accessor) {
 		String color = accessor.getBlockState().getValue(COLOR).getDyeColorName();
 
-		currentTooltip.add(I18n.format("waila.soulus:misc.color." + color));
+		currentTooltip.add(LangHelper.localize("waila.soulus:misc.color." + color));
 
 		return currentTooltip;
 	}

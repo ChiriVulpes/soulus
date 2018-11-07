@@ -1,6 +1,5 @@
 package yuudaari.soulus.common.block.soul_totem;
 
-import java.util.Random;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
@@ -8,8 +7,6 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.client.util.ParticleType;
 import yuudaari.soulus.common.ModBlocks;
@@ -18,6 +15,8 @@ import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSoulTotem;
+
+import java.util.Random;
 
 @ConfigInjected(Soulus.MODID)
 public class SoulTotemTileEntity extends UpgradeableBlockTileEntity {
@@ -178,7 +177,6 @@ public class SoulTotemTileEntity extends UpgradeableBlockTileEntity {
 	private float velocity = 0;
 	private float timeTillParticle = 0;
 
-	@SideOnly(Side.CLIENT)
 	private void updateRenderer () {
 		boolean isActive = isActive();
 

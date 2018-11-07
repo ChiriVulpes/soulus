@@ -1,16 +1,5 @@
 package yuudaari.soulus.common.item;
 
-import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.ModItems;
-import yuudaari.soulus.common.block.composer.ComposerCell.IHasImportantInfos;
-import yuudaari.soulus.common.block.composer.IFillableWithEssence;
-import yuudaari.soulus.common.config.ConfigInjected;
-import yuudaari.soulus.common.config.ConfigInjected.Inject;
-import yuudaari.soulus.common.config.item.ConfigSoulCatalyst;
-import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
-import yuudaari.soulus.common.util.Colour;
-import yuudaari.soulus.common.util.ModItem;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
@@ -28,12 +17,24 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import yuudaari.soulus.Soulus;
+import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.block.composer.ComposerCell.IHasImportantInfos;
+import yuudaari.soulus.common.block.composer.IFillableWithEssence;
+import yuudaari.soulus.common.config.ConfigInjected;
+import yuudaari.soulus.common.config.ConfigInjected.Inject;
+import yuudaari.soulus.common.config.item.ConfigSoulCatalyst;
+import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
+import yuudaari.soulus.common.util.Colour;
+import yuudaari.soulus.common.util.LangHelper;
+import yuudaari.soulus.common.util.ModItem;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @ConfigInjected(Soulus.MODID)
 public class SoulCatalyst extends ModItem implements IHasImportantInfos, IFillableWithEssence {
@@ -226,8 +227,7 @@ public class SoulCatalyst extends ModItem implements IHasImportantInfos, IFillab
 	public void addImportantInformation (List<String> tooltip, ItemStack stack) {
 		int containedEssence = OrbMurky.getContainedEssence(stack);
 		if (containedEssence < CONFIG.requiredEssence) {
-			tooltip.add(I18n
-				.format("tooltip." + Soulus.MODID + ":soul_catalyst.contained_essence", containedEssence, CONFIG.requiredEssence));
+			tooltip.add(LangHelper.localize("tooltip." + Soulus.MODID + ":soul_catalyst.contained_essence", containedEssence, CONFIG.requiredEssence));
 		}
 	}
 

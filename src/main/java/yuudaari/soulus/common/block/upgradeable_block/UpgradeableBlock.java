@@ -1,13 +1,8 @@
 package yuudaari.soulus.common.block.upgradeable_block;
 
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,21 +11,25 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import yuudaari.soulus.Soulus;
+import yuudaari.soulus.common.util.LangHelper;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.ModBlock;
-import yuudaari.soulus.Soulus;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Soulus.MODID)
 public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockTileEntity> extends ModBlock {
@@ -336,7 +335,6 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 	}
 
 	@SuppressWarnings("unchecked")
-	@SideOnly(Side.CLIENT)
 	@Override
 	public final List<String> getWailaTooltip (List<String> currentTooltip, IDataAccessor accessor) {
 		TileEntity te = accessor.getTileEntity();
@@ -355,12 +353,10 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 		return currentTooltip;
 	}
 
-	@SideOnly(Side.CLIENT)
 	protected boolean shouldWailaTooltipShowAll (IBlockState blockState, TileEntityClass te) {
 		return false;
 	}
 
-	@SideOnly(Side.CLIENT)
 	private final void onWailaTooltipBody (List<String> currentTooltip, IBlockState blockState, TileEntityClass te, EntityPlayer player) {
 		List<String> upgrades = onWailaTooltipShowUpgrades(te);
 		List<String> more = onWailaTooltipMore(blockState, te, player);
@@ -371,14 +367,13 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 			if (more != null) currentTooltip.addAll(more);
 		} else if (upgrades.size() + moreSize > 0) {
 			if (moreSize > 0) {
-				currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":upgradeable_block.show_more"));
+				currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":upgradeable_block.show_more"));
 			} else {
-				currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":upgradeable_block.show_upgrades"));
+				currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":upgradeable_block.show_upgrades"));
 			}
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
 	private final List<String> onWailaTooltipShowUpgrades (TileEntityClass te) {
 		List<String> tooltip = new ArrayList<>();
 
@@ -389,7 +384,6 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 		return tooltip;
 	}
 
-	@SideOnly(Side.CLIENT)
 	protected void onWailaTooltipUpgrades (List<String> currentTooltip, TileEntityClass te) {
 		List<IUpgrade> upgrades = new ArrayList<>(Arrays.asList(getUpgrades()));
 		for (IUpgrade upgrade : Lists.reverse(te.insertionOrder)) {
@@ -403,7 +397,6 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Nullable
 	protected String getWailaTooltipUpgrade (IUpgrade upgrade, TileEntityClass te) {
 		String upgradeName = upgrade.getName().toLowerCase();
@@ -411,20 +404,17 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 
 		if (upgrade.isSecret() && upgradeCount == 0) return null;
 
-		return I18n.format("waila." + getRegistryName() + ".upgrades_" + upgradeName, //
+		return LangHelper.localize("waila." + getRegistryName() + ".upgrades_" + upgradeName, //
 			upgradeCount, upgrade.getMaxQuantity());
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Nullable
 	protected List<String> onWailaTooltipMore (IBlockState blockState, TileEntityClass te, EntityPlayer player) {
 		return null;
 	}
 
-	@SideOnly(Side.CLIENT)
 	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, TileEntityClass te, EntityPlayer player) {}
 
-	@SideOnly(Side.CLIENT)
 	protected void onWailaTooltipFooter (List<String> currentTooltip, IBlockState blockState, TileEntityClass te, EntityPlayer player) {}
 
 }

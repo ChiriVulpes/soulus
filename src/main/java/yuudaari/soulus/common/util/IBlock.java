@@ -1,9 +1,5 @@
 package yuudaari.soulus.common.util;
 
-import yuudaari.soulus.common.CreativeTab;
-import yuudaari.soulus.common.compat.WailaProviders;
-import java.util.Collections;
-import java.util.List;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
@@ -19,6 +15,11 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import yuudaari.soulus.common.CreativeTab;
+import yuudaari.soulus.common.compat.WailaProviders;
+
+import java.util.Collections;
+import java.util.List;
 
 public interface IBlock extends IModThing {
 
@@ -54,12 +55,10 @@ public interface IBlock extends IModThing {
 
 	abstract void getSubBlocks (CreativeTab itemIn, NonNullList<ItemStack> items);
 
-	@SideOnly(Side.CLIENT)
 	default List<String> getWailaTooltip (List<String> currentTooltip, IDataAccessor accessor) {
 		return currentTooltip;
 	}
 
-	@SideOnly(Side.CLIENT)
 	default ItemStack getWailaStack (IDataAccessor accessor) {
 		return null;
 	}

@@ -1,13 +1,11 @@
 package yuudaari.soulus.common.block.soul_totem;
 
-import java.util.List;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -23,11 +21,12 @@ import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSoulTotem;
 import yuudaari.soulus.common.item.SoulCatalyst;
+import yuudaari.soulus.common.util.LangHelper;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.StructureMap;
 import yuudaari.soulus.common.util.StructureMap.BlockValidator;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 @ConfigInjected(Soulus.MODID)
 public class SoulTotem extends UpgradeableBlock<SoulTotemTileEntity> {
@@ -215,11 +214,10 @@ public class SoulTotem extends UpgradeableBlock<SoulTotemTileEntity> {
 	// Waila
 	//
 
-	@SideOnly(Side.CLIENT)
 	@Override
 	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, SoulTotemTileEntity te, EntityPlayer player) {
 
-		currentTooltip.add(I18n.format("waila." + Soulus.MODID + ":soul_totem.fuel_percentage", (int) Math
+		currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":soul_totem.fuel_percentage", (int) Math
 			.ceil(te.getFuelPercent() * 100)));
 	}
 }

@@ -1,15 +1,9 @@
 package yuudaari.soulus.common.compat.jei;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
@@ -18,8 +12,15 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import yuudaari.soulus.common.recipe.IRecipeComposer;
 import yuudaari.soulus.common.recipe.RecipeComposerShaped;
+import yuudaari.soulus.common.util.LangHelper;
 import yuudaari.soulus.common.util.RegionI;
 import yuudaari.soulus.common.util.Vec2i;
+
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class RecipeWrapperComposer implements IRecipeWrapper {
 
@@ -81,7 +82,7 @@ public class RecipeWrapperComposer implements IRecipeWrapper {
 	@Override
 	public List<String> getTooltipStrings (int mouseX, int mouseY) {
 		if (getTimeRegion().isPosWithin(new Vec2i(mouseX, mouseY)))
-			return Collections.singletonList(I18n.format("jei.recipe.soulus:composer.recipe_time_tooltip"));
+			return Collections.singletonList(LangHelper.localize("jei.recipe.soulus:composer.recipe_time_tooltip"));
 
 		return IRecipeWrapper.super.getTooltipStrings(mouseX, mouseY);
 	}
@@ -90,7 +91,7 @@ public class RecipeWrapperComposer implements IRecipeWrapper {
 		String timeString = "" + recipeTime;
 		if (timeString.endsWith(".0"))
 			timeString = timeString.substring(0, timeString.length() - 2);
-		String renderString = I18n.format("jei.recipe.soulus:composer.recipe_time", timeString);
+		String renderString = LangHelper.localize("jei.recipe.soulus:composer.recipe_time", timeString);
 		return renderString;
 	}
 
