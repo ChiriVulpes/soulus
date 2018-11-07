@@ -1,4 +1,4 @@
-package yuudaari.soulus.common.block;
+package yuudaari.soulus.common.block.fossil;
 
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.ModBlock;

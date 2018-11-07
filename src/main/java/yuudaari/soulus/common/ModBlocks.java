@@ -14,6 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.common.block.*;
+import yuudaari.soulus.common.block.fossil.*;
 import yuudaari.soulus.common.block.composer.*;
 import yuudaari.soulus.common.block.enderlink.Enderlink;
 import yuudaari.soulus.common.block.summoner.Summoner;
@@ -33,18 +34,19 @@ public class ModBlocks {
 	public static final DustEnderBlock DUST_ENDER = new DustEnderBlock();
 	public static final Enderlink ENDERLINK = new Enderlink();
 	public static final FossilDirt FOSSIL_DIRT = new FossilDirt();
-	public static final FossilDirtEnder FOSSIL_DIRT_ENDER = new FossilDirtEnder();
-	public static final FossilDirtFrozen FOSSIL_DIRT_FROZEN = new FossilDirtFrozen();
-	public static final FossilDirtFungal FOSSIL_DIRT_FUNGAL = new FossilDirtFungal();
+	public static final FossilDirt FOSSIL_DIRT_ENDER = new FossilDirt("fossil_dirt_ender");
+	public static final FossilDirt FOSSIL_DIRT_FROZEN = new FossilDirt("fossil_dirt_frozen");
+	public static final FossilDirt FOSSIL_DIRT_FUNGAL = new FossilDirt("fossil_dirt_fungal");
 	public static final FossilEndStone FOSSIL_END_STONE = new FossilEndStone();
 	public static final FossilGravel FOSSIL_GRAVEL = new FossilGravel();
 	public static final FossilNetherrack FOSSIL_NETHERRACK = new FossilNetherrack();
-	public static final FossilNetherrackEnder FOSSIL_NETHERRACK_ENDER = new FossilNetherrackEnder();
+	public static final FossilNetherrack FOSSIL_NETHERRACK_ENDER = new FossilNetherrack("fossil_netherrack_ender");
 	public static final FossilSand FOSSIL_SAND = new FossilSand();
-	public static final FossilSandEnder FOSSIL_SAND_ENDER = new FossilSandEnder();
-	public static final FossilSandScale FOSSIL_SAND_SCALE = new FossilSandScale();
+	public static final FossilSand FOSSIL_SAND_ENDER = new FossilSand("fossil_sand_ender");
+	public static final FossilSand FOSSIL_SAND_SCALE = new FossilSand("fossil_sand_scale");
 	public static final FossilSandRed FOSSIL_SAND_RED = new FossilSandRed();
-	public static final FossilSandRedScale FOSSIL_SAND_RED_SCALE = new FossilSandRedScale();
+	public static final FossilSandRed FOSSIL_SAND_RED_ENDER = new FossilSandRed("fossil_sand_red_ender");
+	public static final FossilSandRed FOSSIL_SAND_RED_SCALE = new FossilSandRed("fossil_sand_red_scale");
 	public static final Skewer SKEWER = new Skewer();
 	public static final Summoner SUMMONER = new Summoner();
 	public static final Unloader UNLOADER = new Unloader();
@@ -63,6 +65,7 @@ public class ModBlocks {
 		FOSSIL_SAND_ENDER,
 		FOSSIL_SAND_RED,
 		FOSSIL_SAND_RED_SCALE,
+		FOSSIL_SAND_RED_ENDER,
 
 		FOSSIL_GRAVEL,
 

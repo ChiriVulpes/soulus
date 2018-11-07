@@ -84,6 +84,7 @@ tile.soulus:fossil_sand_scale.name=Sand with Scale Fossils
 tile.soulus:fossil_sand.name=Sand with Dry Fossils
 tile.soulus:fossil_sand_red_dry.name=Red Sand with Dry Fossils
 tile.soulus:fossil_sand_red_scale.name=Red Sand with Scale Fossils
+tile.soulus:fossil_sand_red_ender.name=Red Sand with Glowing Fossils
 
 tile.soulus:ash_block.name=Ash
 

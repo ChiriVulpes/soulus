@@ -1,18 +1,18 @@
-package yuudaari.soulus.common.block;
+package yuudaari.soulus.common.block.fossil;
 
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.ModBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 
-public class FossilSand extends ModBlock {
+public class FossilSandRed extends ModBlock {
 
-	public FossilSand () {
-		this("fossil_sand");
+	public FossilSandRed () {
+		this("fossil_sand_red_dry");
 	}
 
-	public FossilSand (String name) {
-		super(name, new Material(MapColor.SAND).setToolNotRequired());
+	public FossilSandRed (String name) {
+		super(name, new Material(MapColor.RED).setToolNotRequired());
 		setHasItem();
 		setHardness(0.5F);
 		setHarvestLevel("shovel", 0);

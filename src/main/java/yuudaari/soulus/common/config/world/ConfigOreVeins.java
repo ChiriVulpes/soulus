@@ -72,6 +72,11 @@ public class ConfigOreVeins {
 			.setChances(30)
 			.setBiomes(Type.HOT, Type.DRY)
 			.setBiomesBlacklist(Type.NETHER),
+		new OreVein().setBlock("soulus:fossil_sand_red_ender")
+			.setToReplace("minecraft:sand@1")
+			.setSize(2, 5)
+			.setBiomes(Type.HOT, Type.DRY)
+			.setBiomesBlacklist(Type.NETHER),
 		new OreVein()
 			.setBlock("soulus:fossil_netherrack")
 			.setToReplace("minecraft:netherrack")
