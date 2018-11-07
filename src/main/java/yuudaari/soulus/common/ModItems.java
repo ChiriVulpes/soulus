@@ -35,7 +35,7 @@ public class ModItems {
 	public static ModItem BONE_FUNGAL = new Bone("bone_fungal");
 	public static ModItem BONE_NETHER = new ModItem("bone_nether").setHasDescription();
 	public static ModItem BONE_NORMAL = new Bone("bone_normal");
-	public static ModItem BONE_SCALE = new Bone("bone_scale");
+	public static ModItem BONE_SCALE = new Bone("bone_scale").removeOreDict("bone");
 	public static ModItem BONEMEAL_ENDER = new BonemealEnder();
 	public static ModItem BONEMEAL_NETHER = new BonemealNether();
 	public static ModItem CRYSTAL_BLOOD_BROKEN = new ModItem("crystal_blood_broken").setHasDescription();
