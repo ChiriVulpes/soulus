@@ -4,9 +4,13 @@
 
 [Roadmap](https://trello.com/b/DfeJpjGX/soulus)
 
-Soulus is a mod I created because I was sick of building giant mob-spawning boxes in skyblock modpacks.
+Soulus is a mod about creating life and then exploiting it. It provides functionality for almost every aspect of mob farms, and late-game functionality for Beyond the Mob Farm™. Modpackers rejoice: Almost all functionality in the mod is also configurable or disableable!
 
-It adds in custom spawners, called Summoners, which start out incredibly underpowered but can be upgraded to be extremely fast and efficient. The upgrades are incredibly expensive and will likely take a long time to craft in the early game, but everything can be automated with other mods. The mod is also highly configurable, so you can make everything cheap and easy if you want to.
+The main reason I made the mod is because I was sick of building giant mob-spawning boxes in skyblock modpacks. I mean, doing that more than one time is just boring as a bag of bricks. However, even though the mod was made to fix that problem, that doesn't mean it's only usable for skyblock modpacks. In fact, the default mod configuration is for vanilla worlds.
+
+A normal playthrough of Soulus will have you digging up fossils in order to collect the "essence" of creatures past, then use that essence to spawn real creatures. When you're first starting out, you'll have to stay very close to your Summoner to spawn the creatures, and spawning will take ages. However, over time, as you progress through the mod, and discover new technologies for increasing the speed and usability of your Summoners.
+
+Late-game Soulus is about using the creatures to automate crafting, and eventually compress their souls into the fuel for a kind of beacon which will allow your Summoners to function without your presence.
 
 There are no modpack distribution restrictions for Soulus. You may use it in any modpack, with any launcher. However, there ARE general distribution restrictions. You may not provide downloads of Soulus outside of a modpack. To put it in layman's terms, all downloads of Soulus must either be as part of a modpack, through the [Github](https://github.com/Yuudaari/soulus), or through the [Curseforge](https://minecraft.curseforge.com/projects/soulus).
 
@@ -563,9 +567,10 @@ Drops are added automatically to Ex Nihilo Creatio Sieves. The default values ar
 
 ### Other Explicitly Supported Mods
 
-Waila (Hwyla)
-JEI
-CraftTweaker
+- Waila (Hwyla) *Highly Recommended*
+- JEI *Recommended*
+- CraftTweaker
+- The One Probe
 
 
 
