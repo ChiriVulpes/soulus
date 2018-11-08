@@ -62,56 +62,56 @@ public class ConfigSummoner extends ConfigUpgradeableBlock<Summoner> {
 		stylePotionEffects = new HashMap<>();
 
 		stylePotionEffects.put(EndersteelType.NORMAL, new ModPotionEffect[] {
-			new ModPotionEffect("water_breathing", 6000, 0.1f),
-			new ModPotionEffect("strength", 6000, 0.1f),
-			new ModPotionEffect("slowness", 6000, 0.1f),
-			new ModPotionEffect("invisibility", 6000, 0.1f),
-			new ModPotionEffect("weakness", 6000, 0.1f),
-			new ModPotionEffect("regeneration", 6000, 0.1f),
-			new ModPotionEffect("speed", 6000, 0.1f),
-			new ModPotionEffect("resistance", 6000, 0.1f)
+			new ModPotionEffect("water_breathing", Integer.MAX_VALUE, 0.1f),
+			new ModPotionEffect("strength", Integer.MAX_VALUE, 0.1f),
+			new ModPotionEffect("slowness", Integer.MAX_VALUE, 0.1f),
+			new ModPotionEffect("invisibility", Integer.MAX_VALUE, 0.1f),
+			new ModPotionEffect("weakness", Integer.MAX_VALUE, 0.1f),
+			new ModPotionEffect("regeneration", Integer.MAX_VALUE, 0.1f),
+			new ModPotionEffect("speed", Integer.MAX_VALUE, 0.1f),
+			new ModPotionEffect("resistance", Integer.MAX_VALUE, 0.1f)
 		});
 
 		// spooky
 		stylePotionEffects.put(EndersteelType.SPOOKY, new ModPotionEffect[] {
-			new ModPotionEffect("glowing", 6000, 0.1f),
-			new ModPotionEffect("invisibility", 6000, 0.5f),
-			new ModPotionEffect("wither", 6000, 0.1f)
+			new ModPotionEffect("glowing", Integer.MAX_VALUE, 0.1f),
+			new ModPotionEffect("invisibility", Integer.MAX_VALUE, 0.5f),
+			new ModPotionEffect("wither", Integer.MAX_VALUE, 0.1f)
 		});
 
 		// earthy
 		stylePotionEffects.put(EndersteelType.EARTHY, new ModPotionEffect[] {
-			new ModPotionEffect("slowness", 6000, 0.2f),
-			new ModPotionEffect("resistance", 6000, 0.5f),
-			new ModPotionEffect("poison", 6000, 0.1f)
+			new ModPotionEffect("slowness", Integer.MAX_VALUE, 0.2f),
+			new ModPotionEffect("resistance", Integer.MAX_VALUE, 0.5f),
+			new ModPotionEffect("poison", Integer.MAX_VALUE, 0.1f)
 		});
 
 		// blazing
 		stylePotionEffects.put(EndersteelType.BLAZING, new ModPotionEffect[] {
-			new ModPotionEffect("fire_resistance", 6000, 0.5f),
-			new ModPotionEffect("regeneration", 6000, 0.2f),
-			new ModPotionEffect("weakness", 6000, 0.1f)
+			new ModPotionEffect("fire_resistance", Integer.MAX_VALUE, 0.5f),
+			new ModPotionEffect("regeneration", Integer.MAX_VALUE, 0.2f),
+			new ModPotionEffect("weakness", Integer.MAX_VALUE, 0.1f)
 		});
 
 		// ender
 		stylePotionEffects.put(EndersteelType.ENDER, new ModPotionEffect[] {
-			new ModPotionEffect("speed", 6000, 0.1f),
-			new ModPotionEffect("absorption", 6000, 0.5f),
-			new ModPotionEffect("strength", 6000, 0.2f)
+			new ModPotionEffect("speed", Integer.MAX_VALUE, 0.1f),
+			new ModPotionEffect("absorption", Integer.MAX_VALUE, 0.5f),
+			new ModPotionEffect("strength", Integer.MAX_VALUE, 0.2f)
 		});
 
 		// sorrow
 		stylePotionEffects.put(EndersteelType.SORROW, new ModPotionEffect[] {
-			new ModPotionEffect("slowness", 6000, 0.2f),
-			new ModPotionEffect("weakness", 6000, 0.5f),
-			new ModPotionEffect("resistance", 6000, 0.1f)
+			new ModPotionEffect("slowness", Integer.MAX_VALUE, 0.2f),
+			new ModPotionEffect("weakness", Integer.MAX_VALUE, 0.5f),
+			new ModPotionEffect("resistance", Integer.MAX_VALUE, 0.1f)
 		});
 
 		// madness
 		stylePotionEffects.put(EndersteelType.MADNESS, new ModPotionEffect[] {
-			new ModPotionEffect("weakness", 6000, 0.1f),
-			new ModPotionEffect("wither", 6000, 0.5f),
-			new ModPotionEffect("poison", 6000, 0.2f)
+			new ModPotionEffect("weakness", Integer.MAX_VALUE, 0.1f),
+			new ModPotionEffect("wither", Integer.MAX_VALUE, 0.5f),
+			new ModPotionEffect("poison", Integer.MAX_VALUE, 0.2f)
 		});
 	}
 
