@@ -9,7 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import yuudaari.soulus.common.config.bones.ConfigBoneType;
 import yuudaari.soulus.common.item.Essence;
-import yuudaari.soulus.common.util.Logger;
 
 public class RecipeWrapperEssence implements IRecipeWrapper {
 

@@ -61,7 +61,8 @@ public class Colour {
 	public static Colour mix (Colour firstColour, Colour secondColour, double percentage) {
 		double red, blue, green;
 
-		percentage = Math.max(0, Math.min(1, percentage));
+		if (percentage <= 0) return new Colour(firstColour.colour);
+		if (percentage >= 1) return new Colour(secondColour.colour);
 
 		red = firstColour.getRed() * (1 - percentage);
 		green = firstColour.getGreen() * (1 - percentage);
