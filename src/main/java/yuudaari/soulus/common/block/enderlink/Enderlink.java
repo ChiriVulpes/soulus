@@ -30,7 +30,6 @@ import yuudaari.soulus.common.config.block.ConfigEnderlink;
 import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.util.LangHelper;
 import yuudaari.soulus.common.util.Material;
-
 import java.util.List;
 
 @ConfigInjected(Soulus.MODID)
@@ -188,7 +187,7 @@ public class Enderlink extends UpgradeableBlock<EnderlinkTileEntity> {
 		Item item = stack.getItem();
 		EnderlinkTileEntity te = (EnderlinkTileEntity) world.getTileEntity(pos);
 
-		// the summoner style can always be changed
+		// changing the colour/alignment of the enderlink
 		if (item.equals(Items.DYE) && te.setColor(EnumDyeColor.byDyeDamage(stack.getItemDamage()))) {
 			stack.shrink(1);
 			return true;

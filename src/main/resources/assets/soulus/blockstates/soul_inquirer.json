@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "has_soulbook=false": { "model": "soulus:soul_inquirer" },
+        "has_soulbook=true": { "model": "soulus:soul_inquirer" }
+    }
+}

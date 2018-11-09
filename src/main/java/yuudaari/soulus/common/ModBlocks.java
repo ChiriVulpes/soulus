@@ -20,6 +20,7 @@ import yuudaari.soulus.common.block.enderlink.Enderlink;
 import yuudaari.soulus.common.block.summoner.Summoner;
 import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
 import yuudaari.soulus.common.block.skewer.Skewer;
+import yuudaari.soulus.common.block.soul_inquirer.SoulInquirer;
 import yuudaari.soulus.common.block.soul_totem.SoulTotem;
 
 public class ModBlocks {
@@ -51,6 +52,7 @@ public class ModBlocks {
 	public static final Summoner SUMMONER = new Summoner();
 	public static final Unloader UNLOADER = new Unloader();
 	public static final SoulTotem SOUL_TOTEM = new SoulTotem();
+	public static final SoulInquirer SOUL_INQUIRER = new SoulInquirer();
 
 	public static IBlock[] blocks = new IBlock[] {
 		DUST_ENDER,
@@ -93,6 +95,8 @@ public class ModBlocks {
 		COMPOSER_CELL,
 
 		ENDERLINK,
+
+		SOUL_INQUIRER,
 
 		SOUL_TOTEM
 	};

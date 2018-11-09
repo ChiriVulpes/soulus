@@ -107,6 +107,9 @@ tile.soulus:composer_cell.name=Composer Cell
 
 tile.soulus:enderlink.name=Enderlink
 
+tile.soulus:soul_inquirer.unfocused.name=Empty Soul Inquirer
+tile.soulus:soul_inquirer.name=Soul Inquirer
+tile.soulus:soul_inquirer.focused.name=Soul Inquirer of %1$s
 
 tile.soulus:soul_totem.name=Soul Totem
 
@@ -137,10 +140,18 @@ waila.soulus:summoner.upgrades_count=%1$s/%2$s §4Blood Crystals §8(Quantity)
 waila.soulus:summoner.upgrades_range=%1$s/%2$s §6Murky Orbs §8(Range)
 waila.soulus:summoner.upgrades_efficiency=%1$s/%2$s §9Niobium Gears §8(Efficiency)
 waila.soulus:summoner.upgrades_crystal_dark=§1Midnight Jewel §8(§kUnknown§r§8)
+
+waila.soulus:soul_inquirer.detecting_nothing=§8No Souls Detected
+waila.soulus:soul_inquirer.detecting_something=§8Souls Detected
+waila.soulus:soul_inquirer.detecting=%1$s/%2$s §8Souls Detected
+waila.soulus:soul_inquirer.upgrades_count=%1$s/%2$s §4Blood Crystals §8(Detection Quantity)
+waila.soulus:soul_inquirer.upgrades_range=%1$s/%2$s §6Murky Orbs §8(Detection Range)
+
 tooltip.soulus:soulbook.contained_essence=%1$s/%2$s Essence
 tooltip.soulus:orb_murky.contained_essence=%1$s/%2$s Essence
 tooltip.soulus:soul_catalyst.contained_essence=%1$s/%2$s Essence
 tooltip.soulus:crystal_blood.contained_blood=%1$s/%2$s Blood
+
 tooltip.soulus:summoner.style.normal=§8Style: §7Normal
 tooltip.soulus:summoner.style.earthy=§8Style: §6Earthy
 tooltip.soulus:summoner.style.spooky=§8Style: §9Spooky
@@ -240,6 +251,7 @@ jei.description.soulus:block_niobium=A block of metal forged from souls too nume
 jei.description.soulus:gear_niobium=A gear made of metal forged from the souls of many.
 jei.description.soulus:soul_totem=A machine powered by compressed souls which can be used as a player surrogate to the summoner.
 jei.description.soulus:enderlink=A machine with a gravitational pull. Things which touch nearby ender dust of the same color will be teleported to the Enderlink.
+jei.description.soulus:soul_inquirer=A machine which uses the alignment of a Soulbook in order to test the presence of nearby souls of that type.
 
 
 command.soulus:soulus.usage=Usage: /soulus location|reload

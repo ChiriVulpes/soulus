@@ -1,0 +1,26 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"oGo",
+		"srs"
+	],
+	"key": {
+		"s": {
+			"type": "forge:ore_dict",
+			"ore": "cobblestone"
+		},
+		"r": {
+			"type": "forge:ore_dict",
+			"ore": "dustRedstone"
+		},
+		"G": {
+			"item": "soulus:gear_oscillating"
+		},
+		"o": {
+			"item": "minecraft:obsidian"
+		}
+	},
+	"result": {
+		"item": "soulus:soul_inquirer"
+	}
+}
