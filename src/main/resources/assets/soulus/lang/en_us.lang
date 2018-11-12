@@ -261,3 +261,27 @@ command.soulus:reload.success=§aReloaded configs.
 command.soulus:soulus.location=§rDimension: %1$s§7, §rBiome: %2$s§c:%3$s§7, §rBiome Types: %4$s§7, §rStructures: %5$s
 command.soulus:soulus.location.structures_none=§7None
 command.soulus:soulus.location.separator=§7, §r
+
+advancement.soulus:root.title=Soulus
+advancement.soulus:root.description=Traces of Animalia
+advancement.soulus:all_bone_chunks.title=Archaeologist
+advancement.soulus:all_bone_chunks.description=Collect bone chunks from every type of fossil
+advancement.soulus:dust_ender.title=Magic Powder
+advancement.soulus:dust_ender.description=Grind up chunks of an alien fossil
+advancement.soulus:bark.title=Barking up the Wrong Tree
+advancement.soulus:bark.description=Strip a log of its bark
+advancement.soulus:break_barket.title=Ya Borked da Barket!
+advancement.soulus:break_barket.description=Borked a barket
+advancement.soulus:eat_glue.title=Mmmm, Pasty
+advancement.soulus:eat_glue.description=I can believe it's not peanut butter!
+advancement.soulus:soulbook.title=Soulbook
+advancement.soulus:soulbook.description=A container for souls
+advancement.soulus:soulbook_fill.title=One Whole Soul
+advancement.soulus:soulbook_fill.description=Fill a soulbook with a type of essence
+advancement.soulus:endersteel.title=Alien Metal
+advancement.soulus:endersteel.description=Use an ender-iron dust blend to create a magical alloy
+advancement.soulus:summoner.title=The Cornerstone of Restoration
+advancement.soulus:summoner.description=Craft a Summoner
+
+patchouli.book.soulus:soulus.landing=The world has become devoid of Animalia --- this is a guide on how to bring them back.
+patchouli.book.soulus:soulus.subtitle=Restoration of Animalia

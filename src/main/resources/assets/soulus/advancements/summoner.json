@@ -1,0 +1,26 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:summoner"
+		},
+		"title": {
+			"translate": "advancement.soulus:summoner.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:summoner.description"
+		}
+	},
+	"parent": "soulus:endersteel",
+	"criteria": {
+		"craft": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "soulus:summoner"
+					}
+				]
+			}
+		}
+	}
+}

@@ -1,0 +1,14 @@
+{
+	"name": "Soulus",
+	"landing_text": "patchouli.book.soulus:soulus.landing",
+	"book_texture": "patchouli:textures/gui/book_blue.png",
+	"model": "soulus:guidebook_soulus",
+	"nameplate_color": "FFFFFF",
+	"link_color": "CE2D49",
+	"link_hover_color": "F04C51",
+	"proress_bar_color": "7D9CD8",
+	"proress_bar_background": "141A24",
+	"subtitle": "patchouli.book.soulus:soulus.subtitle",
+	"creative_tab": "soulus",
+	"advancement_namespaces": ["soulus"]
+}

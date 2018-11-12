@@ -1,0 +1,87 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:fossil_dirt_ender"
+		},
+		"title": {
+			"translate": "advancement.soulus:all_bone_chunks.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:all_bone_chunks.description"
+		},
+		"frame": "goal"
+	},
+	"parent": "soulus:root",
+	"criteria": {
+		"collect_bone_chunk_normal": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "soulus:bone_chunk_normal"
+					}
+				]
+			}
+		},
+		"collect_bone_chunk_dry": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "soulus:bone_chunk_dry"
+					}
+				]
+			}
+		},
+		"collect_bone_chunk_fungal": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "soulus:bone_chunk_fungal"
+					}
+				]
+			}
+		},
+		"collect_bone_chunk_frozen": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "soulus:bone_chunk_frozen"
+					}
+				]
+			}
+		},
+		"collect_bone_chunk_scale": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "soulus:bone_chunk_scale"
+					}
+				]
+			}
+		},
+		"collect_bone_chunk_ender": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "soulus:bone_chunk_ender"
+					}
+				]
+			}
+		},
+		"collect_bone_chunk_nether": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "soulus:bone_chunk_nether"
+					}
+				]
+			}
+		}
+	}
+}

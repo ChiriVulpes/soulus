@@ -1,0 +1,26 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:ingot_endersteel"
+		},
+		"title": {
+			"translate": "advancement.soulus:endersteel.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:endersteel.description"
+		}
+	},
+	"parent": "soulus:dust_ender",
+	"criteria": {
+		"craft": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "soulus:ingot_endersteel"
+					}
+				]
+			}
+		}
+	}
+}

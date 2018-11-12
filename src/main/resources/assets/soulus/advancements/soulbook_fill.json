@@ -1,0 +1,28 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:soulbook",
+			"nbt": "{\"essence_quantity\":16,\"essence_type\":\"minecraft:chicken\"}"
+		},
+		"title": {
+			"translate": "advancement.soulus:soulbook_fill.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:soulbook_fill.description"
+		}
+	},
+	"parent": "soulus:soulbook",
+	"criteria": {
+		"craft": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "soulus:soulbook",
+						"nbt": "{\"essence_quantity\":16}"
+					}
+				]
+			}
+		}
+	}
+}

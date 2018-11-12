@@ -1,0 +1,27 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:barket"
+		},
+		"title": {
+			"translate": "advancement.soulus:break_barket.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:break_barket.description"
+		},
+		"frame": "challenge",
+		"hidden": true
+	},
+	"parent": "soulus:bark",
+	"criteria": {
+		"craft": {
+			"trigger": "minecraft:item_durability_changed",
+			"conditions": {
+				"item": {
+					"item": "soulus:barket"
+				},
+				"durability": 0
+			}
+		}
+	}
+}

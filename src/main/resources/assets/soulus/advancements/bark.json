@@ -1,0 +1,26 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:bark"
+		},
+		"title": {
+			"translate": "advancement.soulus:bark.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:bark.description"
+		}
+	},
+	"parent": "soulus:root",
+	"criteria": {
+		"craft": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "soulus:bark"
+					}
+				]
+			}
+		}
+	}
+}

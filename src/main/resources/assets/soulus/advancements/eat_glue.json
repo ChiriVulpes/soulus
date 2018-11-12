@@ -1,0 +1,26 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:glue"
+		},
+		"title": {
+			"translate": "advancement.soulus:eat_glue.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:eat_glue.description"
+		},
+		"frame": "challenge",
+		"hidden": true
+	},
+	"parent": "soulus:root",
+	"criteria": {
+		"craft": {
+			"trigger": "minecraft:consume_item",
+			"conditions": {
+				"item": {
+					"item": "soulus:glue"
+				}
+			}
+		}
+	}
+}

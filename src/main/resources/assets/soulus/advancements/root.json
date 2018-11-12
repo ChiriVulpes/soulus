@@ -1,0 +1,50 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:fossil_dirt"
+		},
+		"title": {
+			"translate": "advancement.soulus:root.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:root.description"
+		},
+		"background": "soulus:textures/blocks/composer/composer_bottom.png"
+	},
+	"criteria": {
+		"collect_bone_chunk_misc": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"type": "forge:ore_dict",
+						"ore": "boneChunk"
+					}
+				]
+			}
+		},
+		"collect_bone_chunk_ender": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "soulus:bone_chunk_ender"
+					}
+				]
+			}
+		},
+		"collect_bone_chunk_nether": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "soulus:bone_chunk_nether"
+					}
+				]
+			}
+		}
+	},
+	"requirements": [
+		["collect_bone_chunk_misc", "collect_bone_chunk_ender", "collect_bone_chunk_nether"]
+	]
+}

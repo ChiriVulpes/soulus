@@ -1,0 +1,26 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:dust_ender"
+		},
+		"title": {
+			"translate": "advancement.soulus:dust_ender.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:dust_ender.description"
+		}
+	},
+	"parent": "soulus:root",
+	"criteria": {
+		"craft": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "soulus:dust_ender"
+					}
+				]
+			}
+		}
+	}
+}

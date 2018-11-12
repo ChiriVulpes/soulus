@@ -1,0 +1,27 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:soulbook",
+			"nbt": "{\"essence_quantity\":1,\"essence_type\":\"unfocused\"}"
+		},
+		"title": {
+			"translate": "advancement.soulus:soulbook.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:soulbook.description"
+		}
+	},
+	"parent": "soulus:dust_ender",
+	"criteria": {
+		"craft": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "soulus:soulbook"
+					}
+				]
+			}
+		}
+	}
+}
