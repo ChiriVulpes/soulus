@@ -281,6 +281,25 @@ public class SoulInquirer extends UpgradeableBlock<SoulInquirerTileEntity> {
 	}
 
 	@Override
+	public void addOtherDropStacksToList (List<ItemStack> list, World world, BlockPos pos, IBlockState state) {
+		TileEntity te = world.getTileEntity(pos);
+
+		if (te != null && te instanceof SoulInquirerTileEntity) {
+			SoulInquirerTileEntity ste = (SoulInquirerTileEntity) te;
+			list.add(Soulbook.getFilled(ste.getEssenceType()));
+		}
+	}
+
+	@Override
+	public boolean onActivateEmptyHandSneaking (World world, BlockPos pos, EntityPlayer player) {
+		super.onActivateEmptyHandSneaking(world, pos, player);
+
+		world.setBlockState(pos, getDefaultState().withProperty(HAS_SOULBOOK, false));
+
+		return true;
+	}
+
+	@Override
 	public boolean onActivateInsert (World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
 		Item item = stack.getItem();
 		IBlockState state = world.getBlockState(pos);
