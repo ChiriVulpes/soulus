@@ -1,11 +1,14 @@
 package yuudaari.soulus.common.block.summoner;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import javax.annotation.Nonnull;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -14,23 +17,24 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraftforge.event.ForgeEventFactory;
+import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.advancement.Advancements;
 import yuudaari.soulus.common.block.soul_totem.SoulTotemTileEntity;
 import yuudaari.soulus.common.block.summoner.Summoner.Upgrade;
+import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock.IUpgrade;
+import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSummoner;
-import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
-import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
-import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock.IUpgrade;
+import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.util.ModPotionEffect;
 import yuudaari.soulus.common.util.Range;
-import yuudaari.soulus.Soulus;
 
 @ConfigInjected(Soulus.MODID)
 public class SummonerTileEntity extends UpgradeableBlockTileEntity implements ITickable {
@@ -178,6 +182,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	}
 
 	private double activationAmount = 0;
+	private Set<EntityPlayer> players = new HashSet<>();
 
 	private void updateActivationAmount () {
 		activationAmount = 0;
@@ -190,24 +195,31 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		if (CONFIG.soulbookUses != null && CONFIG.soulbookUses > 0 && getSoulbookUses() <= 0)
 			return;
 
+		players.clear();
+
 		for (EntityPlayer player : world.playerEntities) {
+			if (!EntitySelectors.NOT_SPECTATING.apply(player)) continue;
 
-			if (EntitySelectors.NOT_SPECTATING.apply(player)) {
-				double d0 = player.getDistanceSqToCenter(pos);
+			players.add(player);
 
-				double nearAmt = (d0 / (activatingRange * activatingRange));
-				activationAmount += Math.max(0, (1 - (nearAmt * nearAmt)) * 2);
-			}
+			double d0 = player.getDistanceSqToCenter(pos);
+
+			double nearAmt = (d0 / (activatingRange * activatingRange));
+			activationAmount += Math.max(0, (1 - (nearAmt * nearAmt)) * 2);
 		}
 
 		for (TileEntity te : world.loadedTileEntityList) {
-			if (te instanceof SoulTotemTileEntity && ((SoulTotemTileEntity) te).isActive()) {
-				BlockPos tePos = te.getPos();
-				double d0 = pos.distanceSqToCenter(tePos.getX() + 0.5, tePos.getY() + 0.5, tePos.getZ() + 0.5);
+			if (!(te instanceof SoulTotemTileEntity) || !((SoulTotemTileEntity) te).isActive()) continue;
 
-				double nearAmt = (d0 / (activatingRange * activatingRange));
-				activationAmount += Math.max(0, (1 - (nearAmt * nearAmt)) * 2);
-			}
+			SoulTotemTileEntity ste = (SoulTotemTileEntity) te;
+			EntityPlayer player = ste.getOwner();
+			if (player != null) players.add(player);
+
+			BlockPos tePos = te.getPos();
+			double d0 = pos.distanceSqToCenter(tePos.getX() + 0.5, tePos.getY() + 0.5, tePos.getZ() + 0.5);
+
+			double nearAmt = (d0 / (activatingRange * activatingRange));
+			activationAmount += Math.max(0, (1 - (nearAmt * nearAmt)) * 2);
 		}
 	}
 
@@ -391,6 +403,12 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 					explosionParticles(entity);
 
 				spawned++;
+
+				for (EntityPlayer player : players) {
+					if (player instanceof EntityPlayerMP) {
+						Advancements.SUMMON_CREATURE.trigger((EntityPlayerMP) player, essenceType);
+					}
+				}
 
 				// we successfully spawned, so exit the try-to-spawn loop
 				break;

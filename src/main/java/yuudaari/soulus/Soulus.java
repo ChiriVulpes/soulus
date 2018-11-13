@@ -1,18 +1,5 @@
 package yuudaari.soulus;
 
-import yuudaari.soulus.client.ModRenderers;
-import yuudaari.soulus.common.compat.crafttweaker.ZenComposer;
-import yuudaari.soulus.common.network.SoulsPacketHandler;
-import yuudaari.soulus.common.network.packet.client.SendConfig;
-import yuudaari.soulus.common.util.Logger;
-import yuudaari.soulus.server.command.SoulusCommand;
-import yuudaari.soulus.common.ModBlocks;
-import yuudaari.soulus.common.ModGenerators;
-import yuudaari.soulus.common.ModItems;
-import yuudaari.soulus.common.compat.ExNihiloCreatioRecipes;
-import yuudaari.soulus.common.compat.top.TheOneProbe;
-import yuudaari.soulus.common.config.Config;
-import yuudaari.soulus.common.misc.BoneChunks;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.block.Block;
@@ -40,6 +27,20 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnection
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
+import yuudaari.soulus.client.ModRenderers;
+import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.ModGenerators;
+import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.advancement.Advancements;
+import yuudaari.soulus.common.compat.ExNihiloCreatioRecipes;
+import yuudaari.soulus.common.compat.crafttweaker.ZenComposer;
+import yuudaari.soulus.common.compat.top.TheOneProbe;
+import yuudaari.soulus.common.config.Config;
+import yuudaari.soulus.common.misc.BoneChunks;
+import yuudaari.soulus.common.network.SoulsPacketHandler;
+import yuudaari.soulus.common.network.packet.client.SendConfig;
+import yuudaari.soulus.common.util.Logger;
+import yuudaari.soulus.server.command.SoulusCommand;
 
 @Mod(modid = Soulus.MODID, name = Soulus.NAME, version = "@VERSION@", acceptedMinecraftVersions = "[1.12.2]", dependencies = "after:crafttweaker")
 @Mod.EventBusSubscriber
@@ -143,10 +144,13 @@ public class Soulus {
 
 		ForgeChunkManager.setForcedChunkLoadingCallback(INSTANCE, (List<Ticket> tickets, World world) -> {});
 
+		Advancements.registerTriggers();
+
 		for (final PreInitEventHandler handler : preInitHandlers) {
 			handler.handle(event);
 		}
 	}
+
 
 	@EventHandler
 	public void init (FMLInitializationEvent event) {

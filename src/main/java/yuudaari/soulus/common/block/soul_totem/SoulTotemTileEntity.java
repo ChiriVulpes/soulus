@@ -1,6 +1,7 @@
 package yuudaari.soulus.common.block.soul_totem;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -15,8 +16,9 @@ import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSoulTotem;
-
 import java.util.Random;
+import java.util.UUID;
+import javax.annotation.Nullable;
 
 @ConfigInjected(Soulus.MODID)
 public class SoulTotemTileEntity extends UpgradeableBlockTileEntity {
@@ -55,6 +57,14 @@ public class SoulTotemTileEntity extends UpgradeableBlockTileEntity {
 		return fuelTimeRemaining / CONFIG.soulCatalystFuelTime;
 	}
 
+	public void setOwner (EntityPlayer owner) {
+		this.owner = owner.getUniqueID();
+	}
+
+	public @Nullable EntityPlayer getOwner () {
+		return owner == null ? null : world.getPlayerEntityByUUID(owner);
+	}
+
 	/////////////////////////////////////////
 	// Soul Totem
 	//
@@ -63,6 +73,7 @@ public class SoulTotemTileEntity extends UpgradeableBlockTileEntity {
 	private float fuelTimeRemaining = 0;
 	private int signalStrength = 0;
 	private int timeTillNextStructureValidation = 0;
+	private @Nullable UUID owner;
 
 	@Override
 	public void update () {

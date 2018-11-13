@@ -2,7 +2,7 @@
 	"display": {
 		"icon": {
 			"item": "soulus:soulbook",
-			"nbt": "{\"essence_quantity\":16,\"essence_type\":\"minecraft:chicken\"}"
+			"nbt": "{\"essence_quantity\":16,\"essence_type\":\"minecraft:cave_spider\"}"
 		},
 		"title": {
 			"translate": "advancement.soulus:soulbook_fill.title"

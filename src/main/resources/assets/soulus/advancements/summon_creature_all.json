@@ -1,0 +1,240 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:essence",
+			"nbt": "{\"essence_type\":\"minecraft:creeper\"}"
+		},
+		"title": {
+			"translate": "advancement.soulus:summon_creature_all.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:summon_creature_all.description"
+		},
+		"frame": "challenge"
+	},
+	"parent": "soulus:summon_creature",
+	"criteria": {
+		"summon_minecraft:bat": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:bat"
+			}
+		},
+		"summon_minecraft:chicken": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:chicken"
+			}
+		},
+		"summon_minecraft:cow": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:cow"
+			}
+		},
+		"summon_minecraft:pig": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:pig"
+			}
+		},
+		"summon_minecraft:rabbit": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:rabbit"
+			}
+		},
+		"summon_minecraft:sheep": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:sheep"
+			}
+		},
+		"summon_minecraft:skeleton": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:skeleton"
+			}
+		},
+		"summon_minecraft:spider": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:spider"
+			}
+		},
+		"summon_minecraft:villager": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:villager"
+			}
+		},
+		"summon_minecraft:cave_spider": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:cave_spider"
+			}
+		},
+		"summon_minecraft:horse": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:horse"
+			}
+		},
+		"summon_minecraft:husk": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:husk"
+			}
+		},
+		"summon_minecraft:llama": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:llama"
+			}
+		},
+		"summon_minecraft:mooshroom": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:mooshroom"
+			}
+		},
+		"summon_minecraft:ocelot": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:ocelot"
+			}
+		},
+		"summon_minecraft:parrot": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:parrot"
+			}
+		},
+		"summon_minecraft:vindication_illager": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:vindication_illager"
+			}
+		},
+		"summon_minecraft:witch": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:witch"
+			}
+		},
+		"summon_minecraft:zombie": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:zombie"
+			}
+		},
+		"summon_minecraft:snowman": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:snowman"
+			}
+		},
+		"summon_minecraft:stray": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:stray"
+			}
+		},
+		"summon_minecraft:wolf": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:wolf"
+			}
+		},
+		"summon_minecraft:polar_bear": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:polar_bear"
+			}
+		},
+		"summon_minecraft:silverfish": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:silverfish"
+			}
+		},
+		"summon_minecraft:squid": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:squid"
+			}
+		},
+		"summon_minecraft:guardian": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:guardian"
+			}
+		},
+		"summon_minecraft:zombie_pigman": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:zombie_pigman"
+			}
+		},
+		"summon_minecraft:blaze": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:blaze"
+			}
+		},
+		"summon_minecraft:wither_skeleton": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:wither_skeleton"
+			}
+		},
+		"summon_minecraft:ghast": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:ghast"
+			}
+		},
+		"summon_minecraft:shulker": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:shulker"
+			}
+		},
+		"summon_minecraft:endermite": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:endermite"
+			}
+		},
+		"summon_minecraft:creeper": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:creeper"
+			}
+		},
+		"summon_minecraft:enderman": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:enderman"
+			}
+		},
+		"summon_minecraft:slime": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:slime"
+			}
+		},
+		"summon_minecraft:villager_golem": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:villager_golem"
+			}
+		},
+		"summon_minecraft:magma_cube": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "minecraft:magma_cube"
+			}
+		}
+	}
+}

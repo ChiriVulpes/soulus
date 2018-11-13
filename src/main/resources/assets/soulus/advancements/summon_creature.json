@@ -1,0 +1,23 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:essence",
+			"nbt": "{\"essence_type\":\"minecraft:chicken\"}"
+		},
+		"title": {
+			"translate": "advancement.soulus:summon_creature.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:summon_creature.description"
+		}
+	},
+	"parent": "soulus:summoner",
+	"criteria": {
+		"summon_creature": {
+			"trigger": "soulus:summon_creature",
+			"conditions": {
+				"essence_type": "*"
+			}
+		}
+	}
+}

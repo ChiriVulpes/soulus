@@ -7,6 +7,7 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -25,7 +26,6 @@ import yuudaari.soulus.common.util.LangHelper;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.StructureMap;
 import yuudaari.soulus.common.util.StructureMap.BlockValidator;
-
 import java.util.List;
 
 @ConfigInjected(Soulus.MODID)
@@ -208,6 +208,16 @@ public class SoulTotem extends UpgradeableBlock<SoulTotemTileEntity> {
 	@Override
 	public Class<? extends UpgradeableBlockTileEntity> getTileEntityClass () {
 		return SoulTotemTileEntity.class;
+	}
+
+	@Override
+	public void onBlockPlacedBy (World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		SoulTotemTileEntity te = (SoulTotemTileEntity) world.getTileEntity(pos);
+		if (te == null) return;
+
+		if (placer instanceof EntityPlayer) {
+			te.setOwner((EntityPlayer) placer);
+		}
 	}
 
 	/////////////////////////////////////////

@@ -282,6 +282,10 @@ advancement.soulus:endersteel.title=Alien Metal
 advancement.soulus:endersteel.description=Use an ender-iron dust blend to create a magical alloy
 advancement.soulus:summoner.title=The Cornerstone of Restoration
 advancement.soulus:summoner.description=Craft a Summoner
+advancement.soulus:summon_creature.title=Let There Be Life
+advancement.soulus:summon_creature.description=That's how it goes, right?
+advancement.soulus:summon_creature_all.title=Restoration of Animalia
+advancement.soulus:summon_creature_all.description=Summoned a creature of every type
 
 patchouli.book.soulus:soulus.landing=The world has become devoid of Animalia --- this is a guide on how to bring them back.
 patchouli.book.soulus:soulus.subtitle=Restoration of Animalia
