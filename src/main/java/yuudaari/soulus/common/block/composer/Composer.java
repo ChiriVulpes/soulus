@@ -170,6 +170,20 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 		return face;
 	}
 
+	////////////////////////////////////
+	// Events
+	//
+
+	@Override
+	public void onBlockPlacedBy (World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		ComposerTileEntity te = (ComposerTileEntity) world.getTileEntity(pos);
+		if (te == null) return;
+
+		if (placer instanceof EntityPlayer) {
+			te.setOwner((EntityPlayer) placer);
+		}
+	}
+
 	@Override
 	public void onBlockDestroy (World world, BlockPos pos, int fortune, EntityPlayer player) {
 		super.onBlockDestroy(world, pos, fortune, player);

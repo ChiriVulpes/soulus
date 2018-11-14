@@ -22,6 +22,9 @@ public class Advancements {
 	public static BreakSummonerMaliceTrigger BREAK_SUMMONER_MALICE;
 	public static SkewerKillTrigger SKEWER_KILL;
 	public static UpgradeTrigger UPGRADE;
+	public static CrystalBloodPrickTrigger CRYSTAL_BLOOD_PRICK;
+	public static ComposeTrigger COMPOSE;
+	public static TeleportTrigger TELEPORT;
 
 	public static void registerTriggers () {
 		CriteriaTriggers.register(BREAK_BLOCK = new BreakBlockTrigger());
@@ -29,6 +32,9 @@ public class Advancements {
 		CriteriaTriggers.register(BREAK_SUMMONER_MALICE = new BreakSummonerMaliceTrigger());
 		CriteriaTriggers.register(SKEWER_KILL = new SkewerKillTrigger());
 		CriteriaTriggers.register(UPGRADE = new UpgradeTrigger());
+		CriteriaTriggers.register(CRYSTAL_BLOOD_PRICK = new CrystalBloodPrickTrigger());
+		CriteriaTriggers.register(COMPOSE = new ComposeTrigger());
+		CriteriaTriggers.register(TELEPORT = new TeleportTrigger());
 	}
 
 	@SubscribeEvent

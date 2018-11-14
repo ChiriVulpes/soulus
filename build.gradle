@@ -122,3 +122,7 @@ jar {
         attributes 'FMLAT': 'soulus_at.cfg'
     }
 }
+
+runClient {
+    jvmArgs "-Xmx8192m", "-Xms1024m"
+}

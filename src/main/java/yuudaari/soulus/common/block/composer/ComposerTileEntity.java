@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import javax.annotation.Nullable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityList;
@@ -36,6 +37,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.client.util.ParticleType;
 import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.advancement.Advancements;
 import yuudaari.soulus.common.block.composer.Composer.Upgrade;
 import yuudaari.soulus.common.block.composer.ComposerCell.CellState;
 import yuudaari.soulus.common.config.ConfigInjected;
@@ -59,6 +61,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	private int signalStrength;
 	private double activationAmount = 0;
 	private float poofChance = 0;
+	private @Nullable UUID owner;
 
 	@Override
 	public Composer getBlock () {
@@ -89,6 +92,14 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 	public double getPoofChance () {
 		return poofChance;
+	}
+
+	public void setOwner (EntityPlayer owner) {
+		this.owner = owner.getUniqueID();
+	}
+
+	public @Nullable EntityPlayer getOwner () {
+		return owner == null ? null : world.getPlayerEntityByUUID(owner);
 	}
 
 	/////////////////////////////////////////
@@ -348,6 +359,9 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 		ItemStack result = getStoredItem();
 		dispenseItem(result.copy(), world, pos, world.getBlockState(pos).getValue(Composer.FACING));
+
+		Advancements.COMPOSE.trigger(getOwner(), this.container.lastRecipe.getRegistryName().toString());
+
 		loopComposerCells(ccte -> {
 			if (ccte.storedItem == null)
 				return null;

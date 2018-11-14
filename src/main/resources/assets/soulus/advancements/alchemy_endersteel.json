@@ -1,0 +1,105 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:ingot_endersteel"
+		},
+		"title": {
+			"translate": "advancement.soulus:alchemy_endersteel.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:alchemy_endersteel.description"
+		},
+		"frame": "goal"
+	},
+	"parent": "soulus:compose",
+	"criteria": {
+		"compose_aluminum": {
+			"trigger": "soulus:compose",
+			"conditions": {
+				"recipe": "soulus:composer/endersteel_alchemy/compat/aluminum"
+			}
+		},
+		"compose_copper": {
+			"trigger": "soulus:compose",
+			"conditions": {
+				"recipe": "soulus:composer/endersteel_alchemy/compat/copper"
+			}
+		},
+		"compose_lead": {
+			"trigger": "soulus:compose",
+			"conditions": {
+				"recipe": "soulus:composer/endersteel_alchemy/compat/lead"
+			}
+		},
+		"compose_nickel": {
+			"trigger": "soulus:compose",
+			"conditions": {
+				"recipe": "soulus:composer/endersteel_alchemy/compat/nickel"
+			}
+		},
+		"compose_silver": {
+			"trigger": "soulus:compose",
+			"conditions": {
+				"recipe": "soulus:composer/endersteel_alchemy/compat/silver"
+			}
+		},
+		"compose_tin": {
+			"trigger": "soulus:compose",
+			"conditions": {
+				"recipe": "soulus:composer/endersteel_alchemy/compat/tin"
+			}
+		},
+		"compose_zinc": {
+			"trigger": "soulus:compose",
+			"conditions": {
+				"recipe": "soulus:composer/endersteel_alchemy/compat/zinc"
+			}
+		},
+		"compose_endersteel_dark": {
+			"trigger": "soulus:compose",
+			"conditions": {
+				"recipe": "soulus:composer/endersteel_alchemy/endersteel_dark"
+			}
+		},
+		"compose_endersteel": {
+			"trigger": "soulus:compose",
+			"conditions": {
+				"recipe": "soulus:composer/endersteel_alchemy/endersteel"
+			}
+		},
+		"compose_gold": {
+			"trigger": "soulus:compose",
+			"conditions": {
+				"recipe": "soulus:composer/endersteel_alchemy/gold"
+			}
+		},
+		"compose_iron": {
+			"trigger": "soulus:compose",
+			"conditions": {
+				"recipe": "soulus:composer/endersteel_alchemy/iron"
+			}
+		},
+		"compose_niobium": {
+			"trigger": "soulus:compose",
+			"conditions": {
+				"recipe": "soulus:composer/endersteel_alchemy/niobium"
+			}
+		}
+	},
+	"requirements": [
+		[
+			"compose_aluminum", 
+			"compose_copper", 
+			"compose_lead", 
+			"compose_nickel", 
+			"compose_silver", 
+			"compose_tin",
+			"compose_zinc",
+			"compose_endersteel_dark",
+			"compose_endersteel",
+			"compose_gold",
+			"compose_iron",
+			"compose_niobium"
+		]
+	]
+}

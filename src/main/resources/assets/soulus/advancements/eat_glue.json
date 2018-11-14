@@ -12,7 +12,7 @@
 		"frame": "challenge",
 		"hidden": true
 	},
-	"parent": "soulus:root",
+	"parent": "soulus:break_barket",
 	"criteria": {
 		"craft": {
 			"trigger": "minecraft:consume_item",

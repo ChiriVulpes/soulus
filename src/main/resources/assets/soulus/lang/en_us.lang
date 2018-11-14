@@ -316,6 +316,32 @@ advancement.soulus:skewer_upgrade_max.title=Death Machine
 advancement.soulus:skewer_upgrade_max.description=Max out each kind of upgrade on any skewer
 advancement.soulus:summoner_upgrade_max.title=Life Machine
 advancement.soulus:summoner_upgrade_max.description=Max out each kind of upgrade on any summoner
+advancement.soulus:gear_oscillating.title=Grim Reaper
+advancement.soulus:gear_oscillating.description=Use the bones of summoned creatures to craft a magic cog
+advancement.soulus:crystal_blood.title=Blood Mage
+advancement.soulus:crystal_blood.description=Collect the blood of summoned creatures to craft a magic crystal
+advancement.soulus:orb_murky.title=Fortune Teller
+advancement.soulus:orb_murky.description=Collect the essence from countless dead to craft a magic orb
+advancement.soulus:crystal_blood_prick.title=Special Blood
+advancement.soulus:crystal_blood_prick.description=Skim a bit off the top to help fill a blood crystal
+advancement.soulus:ash.title=Decimation of Plantae
+advancement.soulus:ash.description=Use a malignant powder to collect ash
+advancement.soulus:endersteel_dark.title=A Dastardly Metal
+advancement.soulus:endersteel_dark.description=Combine alien remains, iron, and ash to craft a maddening ingot
+advancement.soulus:composer.title=Hands Free Crafting
+advancement.soulus:composer.description=And now you can imbue souls as well!
+advancement.soulus:compose.title=Exploit the Summoned
+advancement.soulus:compose.description=I mean, they're alive, but it's not like they have lives...
+advancement.soulus:alchemy_endersteel.title=Fauxmetal Alchemist
+advancement.soulus:alchemy_endersteel.description=At what cost?
+advancement.soulus:crystal_dark.title=Witching Hour
+advancement.soulus:crystal_dark.description=Compose the blood and souls of innumerable Animalia into a Midnight Jewel
+advancement.soulus:enderlink.title=Magnetic Darkness
+advancement.soulus:enderlink.description=Construct a machine capable of teleportation
+advancement.soulus:teleport.title=Free Teleportation
+advancement.soulus:teleport.description=It just takes a bit of an investment
+advancement.soulus:teleport_multiple.title=What is this, a circus?
+advancement.soulus:teleport_multiple.description=It's all fun and games until innumerable souls are involved
 
 
 # PATCHOULI GUIDEBOOK

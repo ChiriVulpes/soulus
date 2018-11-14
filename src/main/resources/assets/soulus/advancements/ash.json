@@ -1,0 +1,26 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:ash"
+		},
+		"title": {
+			"translate": "advancement.soulus:ash.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:ash.description"
+		}
+	},
+	"parent": "soulus:dust_ender",
+	"criteria": {
+		"craft": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "soulus:ash"
+					}
+				]
+			}
+		}
+	}
+}

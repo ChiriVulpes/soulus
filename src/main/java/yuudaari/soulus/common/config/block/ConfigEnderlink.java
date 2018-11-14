@@ -17,5 +17,5 @@ public class ConfigEnderlink {
 	// SERVER
 	@Serialized public int nonUpgradedRange = 16;
 	@Serialized public int upgradeRangeEffectiveness = 1;
-	@Serialized public double teleportChance = 0.01;
+	@Serialized public double teleportChance = 0.1;
 }

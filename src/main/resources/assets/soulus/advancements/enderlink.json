@@ -1,0 +1,26 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:enderlink"
+		},
+		"title": {
+			"translate": "advancement.soulus:enderlink.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:enderlink.description"
+		}
+	},
+	"parent": "soulus:crystal_dark",
+	"criteria": {
+		"craft": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "soulus:enderlink"
+					}
+				]
+			}
+		}
+	}
+}

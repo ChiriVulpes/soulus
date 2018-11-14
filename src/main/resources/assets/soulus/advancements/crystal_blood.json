@@ -1,0 +1,28 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:crystal_blood",
+			"nbt": "{\"contained_blood\":1000}"
+		},
+		"title": {
+			"translate": "advancement.soulus:crystal_blood.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:crystal_blood.description"
+		}
+	},
+	"parent": "soulus:summoner",
+	"criteria": {
+		"craft": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "soulus:crystal_blood",
+						"nbt": "{\"contained_blood\":1000}"
+					}
+				]
+			}
+		}
+	}
+}

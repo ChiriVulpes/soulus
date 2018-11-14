@@ -1,0 +1,26 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:ingot_endersteel_dark"
+		},
+		"title": {
+			"translate": "advancement.soulus:endersteel_dark.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:endersteel_dark.description"
+		}
+	},
+	"parent": "soulus:ash",
+	"criteria": {
+		"craft": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "soulus:ingot_endersteel_dark"
+					}
+				]
+			}
+		}
+	}
+}

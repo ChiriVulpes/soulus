@@ -1,0 +1,19 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:enderlink"
+		},
+		"title": {
+			"translate": "advancement.soulus:teleport.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:teleport.description"
+		}
+	},
+	"parent": "soulus:enderlink",
+	"criteria": {
+		"craft": {
+			"trigger": "soulus:teleport"
+		}
+	}
+}

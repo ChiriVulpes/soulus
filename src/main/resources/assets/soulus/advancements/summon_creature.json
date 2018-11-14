@@ -11,7 +11,7 @@
 			"translate": "advancement.soulus:summon_creature.description"
 		}
 	},
-	"parent": "soulus:summoner",
+	"parent": "soulus:soulbook_fill",
 	"criteria": {
 		"summon_creature": {
 			"trigger": "soulus:summon_creature",

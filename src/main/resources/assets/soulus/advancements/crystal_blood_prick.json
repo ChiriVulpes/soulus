@@ -1,0 +1,22 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:crystal_blood",
+			"nbt": "{\"contained_blood\":1000}"
+		},
+		"title": {
+			"translate": "advancement.soulus:crystal_blood_prick.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:crystal_blood_prick.description"
+		},
+		"frame": "challenge",
+		"hidden": true
+	},
+	"parent": "soulus:crystal_blood",
+	"criteria": {
+		"craft": {
+			"trigger": "soulus:crystal_blood_prick"
+		}
+	}
+}

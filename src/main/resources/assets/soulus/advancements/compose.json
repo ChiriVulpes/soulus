@@ -1,0 +1,22 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:composer"
+		},
+		"title": {
+			"translate": "advancement.soulus:compose.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:compose.description"
+		}
+	},
+	"parent": "soulus:composer",
+	"criteria": {
+		"compose": {
+			"trigger": "soulus:compose",
+			"conditions": {
+				"recipe": "*"
+			}
+		}
+	}
+}

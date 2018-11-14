@@ -1,0 +1,24 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:enderlink"
+		},
+		"title": {
+			"translate": "advancement.soulus:teleport_multiple.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:teleport_multiple.description"
+		},
+		"frame": "challenge",
+		"hidden": true
+	},
+	"parent": "soulus:teleport",
+	"criteria": {
+		"craft": {
+			"trigger": "soulus:teleport",
+			"conditions": {
+				"teleports": 10
+			}
+		}
+	}
+}

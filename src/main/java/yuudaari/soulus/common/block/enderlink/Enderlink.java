@@ -30,10 +30,43 @@ import yuudaari.soulus.common.config.block.ConfigEnderlink;
 import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.util.LangHelper;
 import yuudaari.soulus.common.util.Material;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @ConfigInjected(Soulus.MODID)
 public class Enderlink extends UpgradeableBlock<EnderlinkTileEntity> {
+
+	private static final Map<Long, Set<BlockPos>> ENDERLINKS = new HashMap<>();
+
+	private static long getChunkPosition (BlockPos pos) {
+		return getChunkPosition(pos.getX() >> 4, pos.getZ() >> 4);
+	}
+
+	private static long getChunkPosition (int cx, int cz) {
+		return cx * (long) Integer.MAX_VALUE + cz;
+	}
+
+	public static Set<BlockPos> getEnderlinksInChunk (BlockPos pos) {
+		return getEnderlinksInChunk(pos.getX() >> 4, pos.getZ() >> 4);
+	}
+
+	public static Set<BlockPos> getEnderlinksInChunk (int cx, int cz) {
+		final long cp = getChunkPosition(cx, cz);
+		final Set<BlockPos> enderlinks = ENDERLINKS.get(cp);
+		return enderlinks == null ? new HashSet<>() : enderlinks;
+	}
+
+	public static void notifyEnderlink (EnderlinkTileEntity te) {
+		long cp = getChunkPosition(te.getPos());
+
+		Set<BlockPos> enderlinks = ENDERLINKS.get(cp);
+		if (enderlinks == null) ENDERLINKS.put(cp, enderlinks = new HashSet<>());
+
+		enderlinks.add(te.getPos());
+	}
 
 	/////////////////////////////////////////
 	// Upgrades
@@ -181,6 +214,27 @@ public class Enderlink extends UpgradeableBlock<EnderlinkTileEntity> {
 	/////////////////////////////////////////
 	// Events
 	//
+
+	@Override
+	public void onBlockPlacedBy (World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		notifyEnderlink((EnderlinkTileEntity) world.getTileEntity(pos));
+	}
+
+	@Override
+	public void onBlockDestroy (World world, BlockPos pos, int fortune, EntityPlayer player) {
+		long cp = getChunkPosition(pos);
+
+		Set<BlockPos> enderlinks = ENDERLINKS.get(cp);
+		if (enderlinks != null) {
+			enderlinks.remove(pos);
+
+			if (enderlinks.size() == 0) {
+				ENDERLINKS.remove(cp);
+			}
+		}
+
+		super.onBlockDestroy(world, pos, fortune, player);
+	}
 
 	@Override
 	public boolean onActivateInsert (World world, BlockPos pos, EntityPlayer player, ItemStack stack) {

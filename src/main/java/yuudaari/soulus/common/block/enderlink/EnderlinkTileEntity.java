@@ -1,9 +1,13 @@
 package yuudaari.soulus.common.block.enderlink;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -16,7 +20,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import scala.Tuple2;
 import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.advancement.Advancements;
 import yuudaari.soulus.common.block.enderlink.Enderlink.Upgrade;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
@@ -26,6 +32,8 @@ import yuudaari.soulus.Soulus;
 
 @ConfigInjected(Soulus.MODID)
 public class EnderlinkTileEntity extends UpgradeableBlockTileEntity implements ITickable {
+
+	private static final Map<UUID, Tuple2<Long, Integer>> TELEPORT_TIMES = new HashMap<>();
 
 	/////////////////////////////////////////
 	// Main
@@ -91,6 +99,21 @@ public class EnderlinkTileEntity extends UpgradeableBlockTileEntity implements I
 		entity.setPositionAndUpdate(x, y, z);
 		explosionParticles(entity, particleCount);
 
+		if (entity instanceof EntityPlayer) {
+
+			final UUID id = entity.getUniqueID();
+			final Tuple2<Long, Integer> teleportationData = TELEPORT_TIMES.get(id);
+			final long worldTime = world.getWorldTime();
+			int teleports = 1;
+			if (teleportationData != null && worldTime - teleportationData._1() <= 40) {
+				teleports += teleportationData._2().intValue();
+			}
+
+			TELEPORT_TIMES.put(id, new Tuple2<>(worldTime, teleports));
+
+			Advancements.TELEPORT.trigger((EntityPlayer) entity, teleports);
+		}
+
 		return true;
 	}
 
@@ -137,6 +160,8 @@ public class EnderlinkTileEntity extends UpgradeableBlockTileEntity implements I
 		color = EnumDyeColor.byMetadata(compound.getInteger("color"));
 
 		onUpdateUpgrades(false);
+
+		Enderlink.notifyEnderlink(this);
 	}
 
 	@Override

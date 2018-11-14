@@ -13,7 +13,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -29,6 +28,7 @@ import scala.Tuple2;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.block.enderlink.Enderlink;
 import yuudaari.soulus.common.block.enderlink.EnderlinkTileEntity;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
@@ -36,7 +36,6 @@ import yuudaari.soulus.common.config.block.ConfigEnderlink;
 import yuudaari.soulus.common.util.LangHelper;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.ModBlock;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -100,11 +99,9 @@ public class DustEnderBlock extends ModBlock {
 		for (int x = -2; x < 3; x++) {
 			for (int z = -2; z < 3; z++) {
 				int cx = (pos.getX() >> 4) + x, cz = (pos.getZ() >> 4) + z;
-				for (TileEntity te : world.getChunkFromChunkCoords(cx, cz).getTileEntityMap().values()) {
+				for (BlockPos enderlinkPos : Enderlink.getEnderlinksInChunk(cx, cz)) {
+					EnderlinkTileEntity ete = (EnderlinkTileEntity) world.getTileEntity(enderlinkPos);
 
-					if (!(te instanceof EnderlinkTileEntity)) continue;
-
-					EnderlinkTileEntity ete = (EnderlinkTileEntity) te;
 					if (ete.color != color) continue;
 
 					if (world.isBlockIndirectlyGettingPowered(ete.getPos()) > 0) continue;

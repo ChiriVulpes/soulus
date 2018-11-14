@@ -53,7 +53,7 @@ public abstract class BasicTrigger<T extends MatchableCriterionInstance<D>, D> i
 	public abstract T deserializeInstance (JsonObject json, JsonDeserializationContext context);
 
 	public void trigger (EntityPlayer player, D data) {
-		if (!(player instanceof EntityPlayerMP)) return;
+		if (player == null || !(player instanceof EntityPlayerMP)) return;
 
 		EntityPlayerMP playerMP = (EntityPlayerMP) player;
 

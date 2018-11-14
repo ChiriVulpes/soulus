@@ -195,12 +195,12 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		if (CONFIG.soulbookUses != null && CONFIG.soulbookUses > 0 && getSoulbookUses() <= 0)
 			return;
 
-		players.clear();
+		if (!hasMalice()) players.clear();
 
 		for (EntityPlayer player : world.playerEntities) {
 			if (!EntitySelectors.NOT_SPECTATING.apply(player)) continue;
 
-			players.add(player);
+			if (!hasMalice()) players.add(player);
 
 			double d0 = player.getDistanceSqToCenter(pos);
 
@@ -211,9 +211,11 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		for (TileEntity te : world.loadedTileEntityList) {
 			if (!(te instanceof SoulTotemTileEntity) || !((SoulTotemTileEntity) te).isActive()) continue;
 
-			SoulTotemTileEntity ste = (SoulTotemTileEntity) te;
-			EntityPlayer player = ste.getOwner();
-			if (player != null) players.add(player);
+			if (!hasMalice()) {
+				SoulTotemTileEntity ste = (SoulTotemTileEntity) te;
+				EntityPlayer player = ste.getOwner();
+				if (player != null) players.add(player);
+			}
 
 			BlockPos tePos = te.getPos();
 			double d0 = pos.distanceSqToCenter(tePos.getX() + 0.5, tePos.getY() + 0.5, tePos.getZ() + 0.5);

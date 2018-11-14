@@ -24,6 +24,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.client.util.ParticleType;
 import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.advancement.Advancements;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.item.ConfigCrystalBlood;
@@ -33,7 +34,6 @@ import yuudaari.soulus.common.network.packet.client.CrystalBloodHitEntity;
 import yuudaari.soulus.common.util.Colour;
 import yuudaari.soulus.common.util.LangHelper;
 import yuudaari.soulus.common.util.ModPotionEffect;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -127,6 +127,8 @@ public class CrystalBlood extends SummonerUpgrade {
 				if (!worldIn.isRemote) {
 					setContainedBlood(heldItem, containedBlood + CONFIG.prickWorth);
 					player.attackEntityFrom(ModDamageSource.CRYSTAL_BLOOD, CONFIG.prickAmount);
+
+					Advancements.CRYSTAL_BLOOD_PRICK.trigger(player, null);
 
 					for (ModPotionEffect effect : CONFIG.prickEffects)
 						effect.apply(player);
@@ -235,7 +237,8 @@ public class CrystalBlood extends SummonerUpgrade {
 	public void addInformation (ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		int containedBlood = CrystalBlood.getContainedBlood(stack);
 		if (containedBlood < CONFIG.requiredBlood) {
-			tooltip.add(LangHelper.localize("tooltip." + Soulus.MODID + ":crystal_blood.contained_blood", containedBlood, CONFIG.requiredBlood));
+			tooltip.add(LangHelper
+				.localize("tooltip." + Soulus.MODID + ":crystal_blood.contained_blood", containedBlood, CONFIG.requiredBlood));
 		}
 	}
 }

@@ -1,0 +1,28 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:orb_murky",
+			"nbt": "{\"essence_quantity\":128}"
+		},
+		"title": {
+			"translate": "advancement.soulus:orb_murky.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:orb_murky.description"
+		}
+	},
+	"parent": "soulus:summoner",
+	"criteria": {
+		"craft": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "soulus:orb_murky",
+						"nbt": "{\"essence_quantity\":128}"
+					}
+				]
+			}
+		}
+	}
+}

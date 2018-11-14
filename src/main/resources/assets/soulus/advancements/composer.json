@@ -1,0 +1,26 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:composer"
+		},
+		"title": {
+			"translate": "advancement.soulus:composer.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:composer.description"
+		}
+	},
+	"parent": "soulus:endersteel_dark",
+	"criteria": {
+		"craft": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "soulus:composer"
+					}
+				]
+			}
+		}
+	}
+}

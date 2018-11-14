@@ -1,0 +1,26 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:gear_oscillating"
+		},
+		"title": {
+			"translate": "advancement.soulus:gear_oscillating.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:gear_oscillating.description"
+		}
+	},
+	"parent": "soulus:summoner",
+	"criteria": {
+		"craft": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "soulus:gear_oscillating"
+					}
+				]
+			}
+		}
+	}
+}

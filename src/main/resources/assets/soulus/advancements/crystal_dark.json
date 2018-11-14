@@ -1,0 +1,22 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:crystal_dark"
+		},
+		"title": {
+			"translate": "advancement.soulus:crystal_dark.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:crystal_dark.description"
+		}
+	},
+	"parent": "soulus:compose",
+	"criteria": {
+		"craft": {
+			"trigger": "soulus:compose",
+			"conditions": {
+				"recipe": "soulus:composer/crystal_dark"
+			}
+		}
+	}
+}

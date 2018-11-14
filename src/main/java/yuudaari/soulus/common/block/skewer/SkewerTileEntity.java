@@ -32,7 +32,6 @@ import yuudaari.soulus.common.item.CrystalBlood;
 import yuudaari.soulus.common.misc.ModDamageSource;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.client.TetherEntity;
-import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.ModPotionEffect;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
