@@ -171,8 +171,8 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	}
 
 	@Override
-	public void onBlockDestroy (World world, BlockPos pos, int fortune, boolean creative) {
-		super.onBlockDestroy(world, pos, fortune, creative);
+	public void onBlockDestroy (World world, BlockPos pos, int fortune, EntityPlayer player) {
+		super.onBlockDestroy(world, pos, fortune, player);
 
 		IBlockState state = world.getBlockState(pos);
 

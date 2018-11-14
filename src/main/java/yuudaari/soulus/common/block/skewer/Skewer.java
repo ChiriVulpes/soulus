@@ -33,7 +33,6 @@ import yuudaari.soulus.common.item.CrystalBlood;
 import yuudaari.soulus.common.item.SoulCatalyst;
 import yuudaari.soulus.common.util.LangHelper;
 import yuudaari.soulus.common.util.Material;
-
 import java.util.List;
 
 @ConfigInjected(Soulus.MODID)
@@ -50,7 +49,7 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		POWER (3, "power", new ItemStack(Blocks.REDSTONE_TORCH)),
 		TETHER (4, "tether", ModItems.ASH.getItemStack()),
 		PLAYER (5, "player", ModItems.SOUL_CATALYST.getItemStack());
-		//LOOTING (6, "looting", new ItemStack(Items.DYE, 1, 4));
+		// LOOTING (6, "looting", new ItemStack(Items.DYE, 1, 4));
 
 		private final int index;
 		private final String name;
@@ -183,6 +182,16 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	/////////////////////////////////////////
 	// Events
 	//
+
+	@Override
+	public void onBlockPlacedBy (World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		SkewerTileEntity te = (SkewerTileEntity) world.getTileEntity(pos);
+		if (te == null) return;
+
+		if (placer instanceof EntityPlayer) {
+			te.setOwner((EntityPlayer) placer);
+		}
+	}
 
 	@Override
 	public void neighborChanged (IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
@@ -364,7 +373,8 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 			.getValue(Skewer.EXTENDED) ? ":skewer.extended" : ":skewer.not_extended")));
 
 		if (te.upgrades.get(Upgrade.CRYSTAL_BLOOD) == 1) {
-			currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":skewer.crystal_blood_stored_blood", te.crystalBloodContainedBlood, CrystalBlood.CONFIG.requiredBlood));
+			currentTooltip.add(LangHelper
+				.localize("waila." + Soulus.MODID + ":skewer.crystal_blood_stored_blood", te.crystalBloodContainedBlood, CrystalBlood.CONFIG.requiredBlood));
 		}
 	}
 

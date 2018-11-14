@@ -30,6 +30,7 @@ import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.advancement.Advancements;
 import yuudaari.soulus.common.block.EndersteelType;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
@@ -44,7 +45,6 @@ import yuudaari.soulus.common.item.Soulbook;
 import yuudaari.soulus.common.util.EssenceType;
 import yuudaari.soulus.common.util.LangHelper;
 import yuudaari.soulus.common.util.Material;
-
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
@@ -286,7 +286,8 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 				String translationKey = "entity." + essenceType + ".name";
 				alignment = LangHelper.localize(translationKey);
 				if (translationKey.equals(alignment)) {
-					alignment = LangHelper.localize("entity." + EntityList.getTranslationName(new ResourceLocation(essenceType)) + ".name");
+					alignment = LangHelper.localize("entity." + EntityList
+						.getTranslationName(new ResourceLocation(essenceType)) + ".name");
 				}
 			}
 
@@ -363,6 +364,20 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		world.setBlockState(pos, getDefaultState().withProperty(VARIANT, state.getValue(VARIANT)));
 
 		return true;
+	}
+
+	@Override
+	public void onBlockDestroy (World world, BlockPos pos, int fortune, EntityPlayer player) {
+		TileEntity te = world.getTileEntity(pos);
+
+		if (te != null && te instanceof SummonerTileEntity) {
+			SummonerTileEntity ste = (SummonerTileEntity) te;
+			if (ste.hasMalice()) {
+				Advancements.BREAK_SUMMONER_MALICE.trigger(player, null);
+			}
+		}
+
+		super.onBlockDestroy(world, pos, fortune, player);
 	}
 
 	@Override
@@ -481,11 +496,13 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		if (te.upgrades.get(Upgrade.CRYSTAL_DARK) > 0) return;
 
 		int summonPercentage = (int) Math.floor(te.getSpawnPercent() * 100);
-		currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":summoner.summon_percentage", summonPercentage));
+		currentTooltip
+			.add(LangHelper.localize("waila." + Soulus.MODID + ":summoner.summon_percentage", summonPercentage));
 
 		if (CONFIG.soulbookUses != null && CONFIG.soulbookUses > 0) {
 			int summonsRemaining = (int) Math.ceil(te.getSoulbookUses() / CONFIG.soulbookUses * 100);
-			currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":summoner.summons_remaining", summonsRemaining));
+			currentTooltip
+				.add(LangHelper.localize("waila." + Soulus.MODID + ":summoner.summons_remaining", summonsRemaining));
 		}
 
 	}

@@ -1,0 +1,22 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:skewer"
+		},
+		"title": {
+			"translate": "advancement.soulus:skewer_kill.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:skewer_kill.description"
+		}
+	},
+	"parent": "soulus:skewer",
+	"criteria": {
+		"skewer_kill": {
+			"trigger": "soulus:skewer_kill",
+			"conditions": {
+				"creature": "*"
+			}
+		}
+	}
+}

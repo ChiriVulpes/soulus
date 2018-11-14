@@ -20,12 +20,13 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
+import scala.Tuple3;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import yuudaari.soulus.Soulus;
+import yuudaari.soulus.common.advancement.Advancements;
 import yuudaari.soulus.common.util.LangHelper;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.ModBlock;
-
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -129,21 +130,21 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 			EntityPlayer player = event.getPlayer();
 			((UpgradeableBlock<? extends UpgradeableBlockTileEntity>) block)
 				.onBlockDestroy(world, pos, EnchantmentHelper
-					.getEnchantmentLevel(Enchantments.FORTUNE, player.getHeldItemMainhand()), player.isCreative());
+					.getEnchantmentLevel(Enchantments.FORTUNE, player.getHeldItemMainhand()), player);
 		}
 	}
 
 	@Override
 	public final void onBlockExploded (World world, BlockPos pos, Explosion explosion) {
-		onBlockDestroy(world, pos, 0, false);
+		onBlockDestroy(world, pos, 0, null);
 	}
 
-	public final void onBlockDestroy (World world, BlockPos pos, boolean creative) {
-		onBlockDestroy(world, pos, 0, creative);
+	public final void onBlockDestroy (World world, BlockPos pos, @Nullable EntityPlayer player) {
+		onBlockDestroy(world, pos, 0, player);
 	}
 
-	public void onBlockDestroy (World world, BlockPos pos, int fortune, boolean creative) {
-		List<ItemStack> drops = getDropsForBreak(world, pos, world.getBlockState(pos), fortune, creative);
+	public void onBlockDestroy (World world, BlockPos pos, int fortune, @Nullable EntityPlayer player) {
+		List<ItemStack> drops = getDropsForBreak(world, pos, world.getBlockState(pos), fortune, player.isCreative());
 
 		dropItems(world, drops, pos);
 	}
@@ -227,6 +228,9 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 
 		int insertQuantity = player.isSneaking() ? stack.getCount() : 1;
 		ute.insertUpgrade(player.isCreative() ? stack.copy() : stack, upgrade, insertQuantity);
+
+		boolean isFilled = ute.upgrades.get(upgrade) == upgrade.getMaxQuantity();
+		Advancements.UPGRADE.trigger(player, new Tuple3<>(this, upgrade, isFilled));
 
 		return true;
 	}

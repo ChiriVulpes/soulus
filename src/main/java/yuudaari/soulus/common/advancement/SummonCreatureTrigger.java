@@ -38,8 +38,8 @@ public class SummonCreatureTrigger extends BasicTrigger<SummonCreatureTrigger.In
 		}
 
 		public boolean matches (EntityPlayerMP player, String essenceType) {
-			return this.essenceType == null ? false : //
-				this.essenceType.equals("*") ? true : this.essenceType.equalsIgnoreCase(essenceType);
+			return this.essenceType == null || this.essenceType.equals("*") ? true : this.essenceType
+				.equalsIgnoreCase(essenceType);
 		}
 	}
 }

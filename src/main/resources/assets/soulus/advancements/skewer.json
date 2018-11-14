@@ -1,0 +1,26 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:skewer"
+		},
+		"title": {
+			"translate": "advancement.soulus:skewer.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:skewer.description"
+		}
+	},
+	"parent": "soulus:root",
+	"criteria": {
+		"craft": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "soulus:skewer"
+					}
+				]
+			}
+		}
+	}
+}

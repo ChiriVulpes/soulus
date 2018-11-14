@@ -8,7 +8,6 @@ import javax.annotation.Nonnull;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -405,9 +404,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 				spawned++;
 
 				for (EntityPlayer player : players) {
-					if (player instanceof EntityPlayerMP) {
-						Advancements.SUMMON_CREATURE.trigger((EntityPlayerMP) player, essenceType);
-					}
+					Advancements.SUMMON_CREATURE.trigger(player, essenceType);
 				}
 
 				// we successfully spawned, so exit the try-to-spawn loop

@@ -10,6 +10,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
 public abstract class BasicTrigger<T extends MatchableCriterionInstance<D>, D> implements ICriterionTrigger<T> {
@@ -51,8 +52,12 @@ public abstract class BasicTrigger<T extends MatchableCriterionInstance<D>, D> i
 	@Override
 	public abstract T deserializeInstance (JsonObject json, JsonDeserializationContext context);
 
-	public void trigger (EntityPlayerMP player, D data) {
-		PlayerAdvancements advancements = player.getAdvancements();
+	public void trigger (EntityPlayer player, D data) {
+		if (!(player instanceof EntityPlayerMP)) return;
+
+		EntityPlayerMP playerMP = (EntityPlayerMP) player;
+
+		PlayerAdvancements advancements = playerMP.getAdvancements();
 		Set<ICriterionTrigger.Listener<T>> listeners = this.listeners.get(advancements);
 
 		if (listeners == null) return;
@@ -61,7 +66,7 @@ public abstract class BasicTrigger<T extends MatchableCriterionInstance<D>, D> i
 
 		for (ICriterionTrigger.Listener<T> listener : listeners) {
 			T breakBlockTrigger = (T) listener.getCriterionInstance();
-			if (!breakBlockTrigger.matches(player, data)) continue;
+			if (!breakBlockTrigger.matches(playerMP, data)) continue;
 
 			if (matchingListeners == null) {
 				matchingListeners = new ArrayList<>();

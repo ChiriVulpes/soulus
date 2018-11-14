@@ -19,17 +19,17 @@ public class Advancements {
 
 	public static BreakBlockTrigger BREAK_BLOCK;
 	public static SummonCreatureTrigger SUMMON_CREATURE;
-	// public static Advancement SUMMON_ALL_CREATURES;
+	public static BreakSummonerMaliceTrigger BREAK_SUMMONER_MALICE;
+	public static SkewerKillTrigger SKEWER_KILL;
+	public static UpgradeTrigger UPGRADE;
 
 	public static void registerTriggers () {
 		CriteriaTriggers.register(BREAK_BLOCK = new BreakBlockTrigger());
 		CriteriaTriggers.register(SUMMON_CREATURE = new SummonCreatureTrigger());
+		CriteriaTriggers.register(BREAK_SUMMONER_MALICE = new BreakSummonerMaliceTrigger());
+		CriteriaTriggers.register(SKEWER_KILL = new SkewerKillTrigger());
+		CriteriaTriggers.register(UPGRADE = new UpgradeTrigger());
 	}
-
-	// @SubscribeEvent
-	// public void registerAdvancements (WorldEvent.Load event) {
-	// AdvancementRegistrar.register(SUMMON_ALL_CREATURES = summonAllCreaturesAdvancement());
-	// }
 
 	@SubscribeEvent
 	public void onBlockBreak (BlockEvent.BreakEvent event) {
@@ -38,6 +38,13 @@ public class Advancements {
 			BREAK_BLOCK.trigger((EntityPlayerMP) player, event.getState());
 		}
 	}
+
+	// public static Advancement SUMMON_ALL_CREATURES;
+
+	// @SubscribeEvent
+	// public void registerAdvancements (WorldEvent.Load event) {
+	// AdvancementRegistrar.register(SUMMON_ALL_CREATURES = summonAllCreaturesAdvancement());
+	// }
 
 	// private static Advancement summonAllCreaturesAdvancement () {
 	// ItemStack icon = Essence.getStack("minecraft:creeper");

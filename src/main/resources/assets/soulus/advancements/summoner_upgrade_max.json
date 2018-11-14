@@ -1,0 +1,50 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:summoner"
+		},
+		"title": {
+			"translate": "advancement.soulus:summoner_upgrade_max.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:summoner_upgrade_max.description"
+		},
+		"frame": "challenge",
+		"hidden": true
+	},
+	"parent": "soulus:summoner",
+	"criteria": {
+		"count": {
+			"trigger": "soulus:upgrade",
+			"conditions": {
+				"block": "soulus:summoner",
+				"upgrade": "count",
+				"filled": true
+			}
+		},
+		"delay": {
+			"trigger": "soulus:upgrade",
+			"conditions": {
+				"block": "soulus:summoner",
+				"upgrade": "delay",
+				"filled": true
+			}
+		},
+		"range": {
+			"trigger": "soulus:upgrade",
+			"conditions": {
+				"block": "soulus:summoner",
+				"upgrade": "range",
+				"filled": true
+			}
+		},
+		"efficiency": {
+			"trigger": "soulus:upgrade",
+			"conditions": {
+				"block": "soulus:summoner",
+				"upgrade": "efficiency",
+				"filled": true
+			}
+		}
+	}
+}

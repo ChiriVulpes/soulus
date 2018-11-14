@@ -1,0 +1,50 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:skewer"
+		},
+		"title": {
+			"translate": "advancement.soulus:skewer_upgrade_max.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:skewer_upgrade_max.description"
+		},
+		"frame": "challenge",
+		"hidden": true
+	},
+	"parent": "soulus:skewer_kill",
+	"criteria": {
+		"damage": {
+			"trigger": "soulus:upgrade",
+			"conditions": {
+				"block": "soulus:skewer",
+				"upgrade": "damage",
+				"filled": true
+			}
+		},
+		"poison": {
+			"trigger": "soulus:upgrade",
+			"conditions": {
+				"block": "soulus:skewer",
+				"upgrade": "poison",
+				"filled": true
+			}
+		},
+		"tether": {
+			"trigger": "soulus:upgrade",
+			"conditions": {
+				"block": "soulus:skewer",
+				"upgrade": "tether",
+				"filled": true
+			}
+		},
+		"player": {
+			"trigger": "soulus:upgrade",
+			"conditions": {
+				"block": "soulus:skewer",
+				"upgrade": "player",
+				"filled": true
+			}
+		}
+	}
+}

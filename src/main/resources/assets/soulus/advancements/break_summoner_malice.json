@@ -1,0 +1,20 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:summoner",
+			"data": 12
+		},
+		"title": {
+			"translate": "advancement.soulus:break_summoner_malice.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:break_summoner_malice.description"
+		}
+	},
+	"parent": "soulus:root",
+	"criteria": {
+		"break_summoner_malice": {
+			"trigger": "soulus:break_summoner_malice"
+		}
+	}
+}

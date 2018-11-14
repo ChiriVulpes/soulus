@@ -1,6 +1,8 @@
 itemGroup.soulus=Soulus
 
 
+# ITEMS
+
 item.soulus:bone_normal.name=Normal Bone
 item.soulus:bone_nether.name=Blackened Bone
 item.soulus:bone_ender.name=Ender Bone
@@ -71,6 +73,8 @@ item.soulus:essence.unfocused.name=Unfocused Essence
 item.soulus:essence.focused.name=%1$s Essence
 
 
+# BLOCKS
+
 tile.soulus:fossil_dirt_ender.name=Dirt with Glowing Fossils
 tile.soulus:fossil_dirt_frozen.name=Dirt with Frozen Fossils
 tile.soulus:fossil_dirt_fungal.name=Dirt with Fossils and Moss
@@ -94,7 +98,6 @@ tile.soulus:block_niobium.name=Block of Niobium
 
 tile.soulus:bars_endersteel.name=Endersteel Bars
 
-
 tile.soulus:skewer.name=Skewer
 tile.soulus:unloader.name=Unloader
 
@@ -114,11 +117,31 @@ tile.soulus:soul_inquirer.focused.name=Soul Inquirer of %1$s
 tile.soulus:soul_totem.name=Soul Totem
 
 
+# MESSAGES
+
 death.attack.soulus:crystal_blood=%1$s sacrificed themselves to a Blood Crystal
 death.attack.soulus:crystal_dark=%1$s was consumed by a Midnight Crystal
 death.attack.soulus:skewer=%1$s became a shishkebab
 death.attack.soulus:skewer_player=%1$s became a shishkebab
 
+
+# ITEM TOOLTIPS
+
+tooltip.soulus:soulbook.contained_essence=%1$s/%2$s Essence
+tooltip.soulus:orb_murky.contained_essence=%1$s/%2$s Essence
+tooltip.soulus:soul_catalyst.contained_essence=%1$s/%2$s Essence
+tooltip.soulus:crystal_blood.contained_blood=%1$s/%2$s Blood
+
+tooltip.soulus:summoner.style.normal=§8Style: §7Normal
+tooltip.soulus:summoner.style.earthy=§8Style: §6Earthy
+tooltip.soulus:summoner.style.spooky=§8Style: §9Spooky
+tooltip.soulus:summoner.style.ender=§8Style: §2Ender
+tooltip.soulus:summoner.style.blazing=§8Style: §cBlazing
+tooltip.soulus:summoner.style.sorrow=§8Style: §3Sorrow
+tooltip.soulus:summoner.style.madness=§8Style: §8Madness
+
+
+# WORLD TOOLTIPS
 
 waila.soulus:upgradeable_block.show_upgrades=§8§oSneak to show upgrades
 waila.soulus:upgradeable_block.show_more=§8§oSneak to show more
@@ -146,19 +169,6 @@ waila.soulus:soul_inquirer.detecting_something=§8Souls Detected
 waila.soulus:soul_inquirer.detecting=%1$s/%2$s §8Souls Detected
 waila.soulus:soul_inquirer.upgrades_count=%1$s/%2$s §4Blood Crystals §8(Detection Quantity)
 waila.soulus:soul_inquirer.upgrades_range=%1$s/%2$s §6Murky Orbs §8(Detection Range)
-
-tooltip.soulus:soulbook.contained_essence=%1$s/%2$s Essence
-tooltip.soulus:orb_murky.contained_essence=%1$s/%2$s Essence
-tooltip.soulus:soul_catalyst.contained_essence=%1$s/%2$s Essence
-tooltip.soulus:crystal_blood.contained_blood=%1$s/%2$s Blood
-
-tooltip.soulus:summoner.style.normal=§8Style: §7Normal
-tooltip.soulus:summoner.style.earthy=§8Style: §6Earthy
-tooltip.soulus:summoner.style.spooky=§8Style: §9Spooky
-tooltip.soulus:summoner.style.ender=§8Style: §2Ender
-tooltip.soulus:summoner.style.blazing=§8Style: §cBlazing
-tooltip.soulus:summoner.style.sorrow=§8Style: §3Sorrow
-tooltip.soulus:summoner.style.madness=§8Style: §8Madness
 
 waila.soulus:composer.activation=Activation: %1$sx 
 waila.soulus:composer.upgrades_range=%1$s/%2$s §6Murky Orbs §8(Range)
@@ -193,6 +203,8 @@ waila.soulus:soul_totem.upgrades_soul_catalyst=%1$s/%2$s §6Soul Catalyst §8(Fu
 waila.soulus:soul_totem.upgrades_efficiency=%1$s/%2$s §9Niobium Gears §8(Efficiency)
 
 
+# JEI COMPAT
+
 jei.recipe.soulus:composer.name=Composition
 
 jei.recipe.soulus:composer.recipe_time=%1$st
@@ -201,6 +213,9 @@ jei.recipe.soulus:composer.recipe_time_tooltip=Recipe Duration
 jei.recipe.soulus:essence.name=Marrowing
 
 jei.recipe.soulus:essence.tooltip_chance=§2§n%1$s%% Drop Chance 
+
+
+# DESCRIPTIONS
 
 jei.description.soulus:ash=Death in its purest form. Ash is devoid of life, and therefore, essence, but may potentially be usable as a grisly alternative when the alignment is inconsequential.
 jei.description.soulus:bark=The outer shell of a tree. A crude material, but it may prove itself useful.
@@ -254,6 +269,8 @@ jei.description.soulus:enderlink=A machine with a gravitational pull. Things whi
 jei.description.soulus:soul_inquirer=A machine which uses the alignment of a Soulbook in order to test the presence of nearby souls of that type.
 
 
+# COMMANDS AND COMMAND RESULTS
+
 command.soulus:soulus.usage=Usage: /soulus location|reload
 command.soulus:soulus.invalid_syntax=Command syntax invalid. %1$s
 command.soulus:reload.failed=§cCould not reload configs. See log for more information. Error: %1$s
@@ -261,6 +278,9 @@ command.soulus:reload.success=§aReloaded configs.
 command.soulus:soulus.location=§rDimension: %1$s§7, §rBiome: %2$s§c:%3$s§7, §rBiome Types: %4$s§7, §rStructures: %5$s
 command.soulus:soulus.location.structures_none=§7None
 command.soulus:soulus.location.separator=§7, §r
+
+
+# ADVANCEMENTS
 
 advancement.soulus:root.title=Soulus
 advancement.soulus:root.description=Traces of Animalia
@@ -286,6 +306,19 @@ advancement.soulus:summon_creature.title=Let There Be Life
 advancement.soulus:summon_creature.description=That's how it goes, right?
 advancement.soulus:summon_creature_all.title=Restoration of Animalia
 advancement.soulus:summon_creature_all.description=Summoned a creature of every type
+advancement.soulus:break_summoner_malice.title=§kUnknown
+advancement.soulus:break_summoner_malice.description=Destroyed an §kunknown§r summoner from the past
+advancement.soulus:skewer.title=Who's Hungry?
+advancement.soulus:skewer.description=Craft a skewer
+advancement.soulus:skewer_kill.title=Shishkebab
+advancement.soulus:skewer_kill.description=Skewer a summoned creature
+advancement.soulus:skewer_upgrade_max.title=Death Machine
+advancement.soulus:skewer_upgrade_max.description=Max out each kind of upgrade on any skewer
+advancement.soulus:summoner_upgrade_max.title=Life Machine
+advancement.soulus:summoner_upgrade_max.description=Max out each kind of upgrade on any summoner
+
+
+# PATCHOULI GUIDEBOOK
 
 patchouli.book.soulus:soulus.landing=The world has become devoid of Animalia --- this is a guide on how to bring them back.
 patchouli.book.soulus:soulus.subtitle=Restoration of Animalia
