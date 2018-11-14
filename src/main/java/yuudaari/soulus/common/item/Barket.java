@@ -29,7 +29,6 @@ import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
 import yuudaari.soulus.common.util.IModThing;
 import yuudaari.soulus.common.util.LangHelper;
-
 import javax.annotation.Nullable;
 
 public class Barket extends UniversalBucket implements IModThing {
@@ -72,6 +71,14 @@ public class Barket extends UniversalBucket implements IModThing {
 	@Override
 	public boolean shouldCauseReequipAnimation (ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
 		return slotChanged || !fluidsEqual(oldStack, newStack);
+	}
+
+	@Override
+	public ItemStack getContainerItem (ItemStack itemStack) {
+		int durability = itemStack.getItemDamage();
+		ItemStack result = super.getContainerItem(itemStack);
+		result.setItemDamage(durability);
+		return result;
 	}
 
 	public boolean fluidsEqual (ItemStack s1, ItemStack s2) {
@@ -172,7 +179,8 @@ public class Barket extends UniversalBucket implements IModThing {
 
 	@Override
 	public ICapabilityProvider initCapabilities (ItemStack stack, NBTTagCompound nbt) {
-		// FluidBucketWrapper only works with Forge's UniversalBucket instance, use a different IFluidHandlerItem implementation instead
+		// FluidBucketWrapper only works with Forge's UniversalBucket instance, use a different IFluidHandlerItem
+		// implementation instead
 		return new FluidHandler(stack, getCapacity());
 	}
 

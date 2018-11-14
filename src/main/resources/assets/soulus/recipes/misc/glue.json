@@ -9,7 +9,8 @@
 			"item": "minecraft:sugar"
 		},
 		{
-			"item": "minecraft:water_bucket"
+			"type": "soulus:fluid",
+			"fluid": "water"
 		}
 	],
 	"result": {
