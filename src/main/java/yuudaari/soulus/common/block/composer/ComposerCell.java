@@ -18,8 +18,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
@@ -29,7 +27,6 @@ import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigComposerCell;
 import yuudaari.soulus.common.util.LangHelper;
 import yuudaari.soulus.common.util.Material;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -255,17 +252,20 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 
 		if (te.storedQuantity == 0) {
 			currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":composer_cell.no_items"));
-		} else {
-			currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":composer_cell.contained_item", te.storedQuantity, CONFIG.maxQuantity, te.storedItem.getDisplayName()));
+			return;
+		}
 
-			ItemStack storedItem = te.getStoredItem();
-			if (!player.isSneaking() && storedItem != null && storedItem.getItem() instanceof IHasImportantInfos) {
-				((IHasImportantInfos) storedItem.getItem()).addImportantInformation(currentTooltip, storedItem);
-			}
+		currentTooltip.add(LangHelper
+			.localize("waila." + Soulus.MODID + ":composer_cell.contained_item", te.storedQuantity, CONFIG.maxQuantity, te.storedItem
+				.getDisplayName()));
+
+		ItemStack storedItem = te.getStoredItem();
+		if (!player.isSneaking() && storedItem != null && storedItem.getItem() instanceof IHasComposerCellInfo) {
+			((IHasComposerCellInfo) storedItem.getItem())
+				.addComposerCellInfo(currentTooltip, storedItem, te.storedQuantity);
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
 	protected List<String> onWailaTooltipMore (IBlockState blockState, ComposerCellTileEntity te, EntityPlayer player) {
 		ItemStack storedItem = te.getStoredItem();
@@ -275,8 +275,8 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 		return null;
 	}
 
-	public static interface IHasImportantInfos {
+	public static interface IHasComposerCellInfo {
 
-		abstract void addImportantInformation (List<String> currentTooltip, ItemStack stack);
+		abstract void addComposerCellInfo (List<String> currentTooltip, ItemStack stack, int stackSize);
 	}
 }

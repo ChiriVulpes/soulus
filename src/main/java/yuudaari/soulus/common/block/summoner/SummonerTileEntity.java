@@ -20,7 +20,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
-import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.advancement.Advancements;
@@ -391,9 +392,8 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 					effect.apply(entity);
 				}
 
-
-				if (!ForgeEventFactory
-					.doSpecialSpawn(entity, world, (float) entity.posX, (float) entity.posY, (float) entity.posZ)) {
+				LivingSpawnEvent.SpecialSpawn specialSpawn = new LivingSpawnEvent.SpecialSpawn(entity, world, (float) entity.posX, (float) entity.posY, (float) entity.posZ, null);
+				if (!MinecraftForge.EVENT_BUS.post(specialSpawn)) {
 					entity.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(entity)), null);
 				}
 

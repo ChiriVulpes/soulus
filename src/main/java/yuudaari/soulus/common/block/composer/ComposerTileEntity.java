@@ -58,6 +58,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	private Range spawnDelay;
 	private int signalStrength;
 	private double activationAmount = 0;
+	private float poofChance = 0;
 
 	@Override
 	public Composer getBlock () {
@@ -86,6 +87,10 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		return activationAmount;
 	}
 
+	public double getPoofChance () {
+		return poofChance;
+	}
+
 	/////////////////////////////////////////
 	// Config
 	//
@@ -95,10 +100,6 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	/////////////////////////////////////////
 	// Update
 	//
-
-	public void reset () {
-		this.resetTimer();
-	}
 
 	private void resetTimer () {
 		resetTimer(true);
@@ -124,6 +125,12 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		if (world.isBlockIndirectlyGettingPowered(pos) != 0) return;
 
 		if (!hasValidRecipe()) return;
+
+		final double poofChance = CONFIG.poofChance.get( //
+			upgrades.get(Upgrade.EFFICIENCY) / (double) Upgrade.EFFICIENCY.getMaxQuantity());
+
+		// the chance of poofing increases over time
+		this.poofChance += poofChance;
 
 		final List<String> entityTypes = new ArrayList<>();
 
@@ -156,14 +163,14 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 				activationAmount += 1;
 
-				if (!world.isRemote && isConnected && hasValidRecipe()) {
-					final double poofChance = CONFIG.poofChance.get( //
-						upgrades.get(Upgrade.EFFICIENCY) / (double) Upgrade.EFFICIENCY.getMaxQuantity());
-					if (poofChance > world.rand.nextDouble()) {
-						entity.setDead();
-						mobPoofParticles(world, pos);
-						mobPoofParticles(world, entity.getPosition());
-					}
+				if (!world.isRemote && isConnected && hasValidRecipe() && this.poofChance > world.rand.nextDouble()) {
+					// reset poof chance
+					this.poofChance = 0;
+					// blockUpdate(); (only needed if chance is rendered)
+
+					entity.setDead();
+					mobPoofParticles(world, pos);
+					mobPoofParticles(world, entity.getPosition());
 				}
 			}
 		}
@@ -395,8 +402,10 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	@Override
 	public void onWriteToNBT (NBTTagCompound compound) {
 
+		compound.setBoolean("connected", isConnected);
 		compound.setFloat("delay", timeTillCraft);
 		compound.setFloat("delay_last", lastTimeTillCraft);
+		compound.setFloat("poof_chance", poofChance);
 
 		NBTTagCompound cellTag = new NBTTagCompound();
 		for (Map.Entry<BlockPos, Byte> cell : cellMap.entrySet()) {
@@ -416,8 +425,10 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	@Override
 	public void onReadFromNBT (NBTTagCompound compound) {
 
+		isConnected = compound.getBoolean("connected");
 		timeTillCraft = compound.getFloat("delay");
 		lastTimeTillCraft = compound.getFloat("delay_last");
+		poofChance = compound.getFloat("poof_chance");
 
 		NBTTagCompound cellTag = compound.getCompoundTag("cell_map");
 		for (Integer slot = 0; slot < 9; slot++) {
@@ -427,6 +438,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		}
 
 		needsRecipeRefresh = true;
+		isInitialRecipeRefresh = true;
 
 		if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
 			renderItem = new ItemStack(compound.getCompoundTag("crafting_item"));
@@ -541,7 +553,8 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		public float time = 1;
 		private final World world;
 		private final EntityPlayer player;
-		private RecipeChangedHandler onRecipeChanged;
+		private RecipeChangedHandler recipeChangedHandler;
+		private IRecipe lastRecipe;
 
 		public static class CraftingMatrix extends InventoryCrafting {
 
@@ -573,27 +586,28 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 			if (!world.isRemote) {
 				ItemStack stack = ItemStack.EMPTY;
 				IRecipe recipe = CraftingManager.findMatchingRecipe(craftingMatrix, world);
-				time = 1;
 
-				if (recipe != null) {
+				if (recipe != null && recipe != lastRecipe) {
+					lastRecipe = recipe;
 					craftResult.setRecipeUsed(recipe);
+
+					time = 1;
+
 					if (recipe instanceof IRecipeComposer)
 						time = ((IRecipeComposer) recipe).getTime();
+
 					stack = recipe.getCraftingResult(craftingMatrix);
-					onRecipeChanged();
+
+					if (recipeChangedHandler != null)
+						recipeChangedHandler.handle();
 				}
 
 				craftResult.setInventorySlotContents(0, stack);
 			}
 		}
 
-		public void onRecipeChanged () {
-			if (onRecipeChanged != null)
-				onRecipeChanged.handle();
-		}
-
 		public void onRecipeChanged (RecipeChangedHandler handler) {
-			onRecipeChanged = handler;
+			recipeChangedHandler = handler;
 		}
 
 		public static interface RecipeChangedHandler {
@@ -606,6 +620,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	private FakePlayer fakePlayer;
 	private ComposerContainer container;
 	private boolean needsRecipeRefresh = true;
+	private boolean isInitialRecipeRefresh = false;
 
 	public void refreshRecipe () {
 		needsRecipeRefresh = false;
@@ -620,6 +635,8 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 			container.craftResult.clear();
 		}
 
+		isInitialRecipeRefresh = false;
+
 		blockUpdate();
 	}
 
@@ -628,7 +645,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		fakePlayer = new FakePlayer((WorldServer) world, new GameProfile(uuid, "composer_tile_entity"));
 		container = new ComposerContainer(world, fakePlayer);
 		container.onRecipeChanged( () -> {
-			resetTimer();
+			if (!isInitialRecipeRefresh) resetTimer();
 		});
 	}
 

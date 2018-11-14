@@ -18,14 +18,13 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModItems;
-import yuudaari.soulus.common.block.composer.ComposerCell.IHasImportantInfos;
+import yuudaari.soulus.common.block.composer.ComposerCell.IHasComposerCellInfo;
 import yuudaari.soulus.common.block.composer.IFillableWithEssence;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.item.ConfigOrbMurky;
 import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
 import yuudaari.soulus.common.util.LangHelper;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -34,7 +33,7 @@ import java.util.Collections;
 import java.util.List;
 
 @ConfigInjected(Soulus.MODID)
-public class OrbMurky extends SummonerUpgrade implements IHasImportantInfos, IFillableWithEssence {
+public class OrbMurky extends SummonerUpgrade implements IHasComposerCellInfo, IFillableWithEssence {
 
 	@Inject public static ConfigOrbMurky CONFIG;
 
@@ -210,12 +209,16 @@ public class OrbMurky extends SummonerUpgrade implements IHasImportantInfos, IFi
 		addImportantInformation(tooltip, stack);
 	}
 
-	@SideOnly(Side.CLIENT)
-	@Override
 	public void addImportantInformation (List<String> tooltip, ItemStack stack) {
 		int containedEssence = OrbMurky.getContainedEssence(stack);
 		if (containedEssence < CONFIG.requiredEssence) {
-			tooltip.add(LangHelper.localize("tooltip." + Soulus.MODID + ":orb_murky.contained_essence", containedEssence, CONFIG.requiredEssence));
+			tooltip.add(LangHelper
+				.localize("tooltip." + Soulus.MODID + ":orb_murky.contained_essence", containedEssence, CONFIG.requiredEssence));
 		}
+	}
+
+	@Override
+	public void addComposerCellInfo (List<String> tooltip, ItemStack stack, int stackSize) {
+		if (stackSize == 1) addImportantInformation(tooltip, stack);
 	}
 }

@@ -22,9 +22,10 @@ public class ConfigSoulTotem extends ConfigUpgradeableBlock<SoulTotem> {
 	@Serialized @ClientField public float particleCountIn = 1;
 
 	// SERVER
-	@Serialized public int soulCatalystFuelTime = 10000;
+	@Serialized public int soulCatalystFuelTime = 11000;
 	@Serialized public Range efficiencyUpgradesRange = new Range(1, .3);
 	@Serialized public boolean isChunkloader = true;
-	@Serialized public boolean canDisableWithRedstone = false;
+	@Serialized public boolean canDisableWithRedstone = true;
+	@Serialized public int kickstartFuelUse = 1000;
 
 }

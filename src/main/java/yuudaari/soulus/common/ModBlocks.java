@@ -120,7 +120,7 @@ public class ModBlocks {
 
 			Class<? extends TileEntity> te = block.getTileEntityClass();
 			if (te != null) {
-				GameRegistry.registerTileEntity(te, block.getRegistryName().toString());
+				GameRegistry.registerTileEntity(te, block.getRegistryName());
 			}
 		}
 	}

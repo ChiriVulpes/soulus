@@ -79,6 +79,7 @@ public class Jei implements IModPlugin {
 	/**
 	 * Registers the Composer recipe support.
 	 */
+	@SuppressWarnings("deprecation")
 	private void registerComposer (IModRegistry registry) {
 		registry.addRecipeCatalyst(ModBlocks.COMPOSER.getItemStack(), RecipeCategoryComposer.UID);
 

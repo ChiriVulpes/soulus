@@ -32,7 +32,6 @@ import yuudaari.soulus.common.util.LangHelper;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.StructureMap;
 import yuudaari.soulus.common.util.StructureMap.BlockValidator;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -360,6 +359,8 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 				.floor(te.getActivationAmount())));
 			currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":composer.craft_percentage", (int) Math
 				.floor(te.getCompositionPercent() * 100)));
+
+			// currentTooltip.add("Poof chance: " + te.getPoofChance()); // Only render for debugging
 		} else {
 			currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":composer.no_recipe"));
 		}

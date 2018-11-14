@@ -43,14 +43,8 @@ public class SoulTotemTileEntity extends UpgradeableBlockTileEntity {
 		return oldState.getBlock() != newState.getBlock();
 	}
 
-	public boolean isActive () {
-		return isConnected && //
-			(upgrades.get(Upgrade.SOUL_CATALYST) > 0 || fuelTimeRemaining > 0) && //
-			(!CONFIG.canDisableWithRedstone || world.isBlockIndirectlyGettingPowered(pos) == 0);
-	}
-
 	public int getSignalStrength () {
-		return isActive() ? (int) Math.floor(14 * getFuelPercent()) + 1 : 0;
+		return isActive ? (int) Math.floor(14 * getFuelPercent()) + 1 : 0;
 	}
 
 	public float getFuelPercent () {
@@ -65,6 +59,10 @@ public class SoulTotemTileEntity extends UpgradeableBlockTileEntity {
 		return owner == null ? null : world.getPlayerEntityByUUID(owner);
 	}
 
+	public boolean isActive () {
+		return isActive;
+	}
+
 	/////////////////////////////////////////
 	// Soul Totem
 	//
@@ -74,31 +72,52 @@ public class SoulTotemTileEntity extends UpgradeableBlockTileEntity {
 	private int signalStrength = 0;
 	private int timeTillNextStructureValidation = 0;
 	private @Nullable UUID owner;
+	private boolean isActive = false;
+	private byte kickstartCost = 0;
 
 	@Override
 	public void update () {
-		if (timeTillNextStructureValidation-- < 0) {
+		if (timeTillNextStructureValidation-- <= 0) {
 			timeTillNextStructureValidation = 20;
 			validateStructure();
 		}
 
-		if (isActive()) {
+		updateIsActive();
+
+		if (isActive) {
 			createChunkLoader();
 			if (fuelTimeRemaining <= 0) {
 				upgrades.put(Upgrade.SOUL_CATALYST, upgrades.get(Upgrade.SOUL_CATALYST) - 1);
-				fuelTimeRemaining = CONFIG.soulCatalystFuelTime;
+				fuelTimeRemaining += CONFIG.soulCatalystFuelTime;
 				blockUpdate();
 			} else {
 				fuelTimeRemaining -= CONFIG.efficiencyUpgradesRange
 					.get(upgrades.get(Upgrade.EFFICIENCY) / (double) Upgrade.EFFICIENCY.getMaxQuantity());
 			}
 		} else {
+			if (kickstartCost < 100) kickstartCost += 1;
 			removeChunkLoader();
 		}
 
 		updateSignalStrength();
 
 		if (world.isRemote) updateRenderer();
+	}
+
+	public void updateIsActive () {
+		boolean isActive = isConnected && //
+			(upgrades.get(Upgrade.SOUL_CATALYST) > 0 || fuelTimeRemaining > 0) && //
+			(!CONFIG.canDisableWithRedstone || world.isBlockIndirectlyGettingPowered(pos) == 0);
+
+		if (this.isActive == isActive) return;
+		this.isActive = isActive;
+
+		if (isActive && !world.isRemote) {
+			fuelTimeRemaining -= CONFIG.kickstartFuelUse * Math.min((float) 100, kickstartCost) / 100;
+			kickstartCost = 0;
+		}
+
+		blockUpdate();
 	}
 
 	private void updateSignalStrength () {
@@ -112,7 +131,7 @@ public class SoulTotemTileEntity extends UpgradeableBlockTileEntity {
 	Ticket ticket = null;
 
 	private void createChunkLoader () {
-		if (ticket == null && isActive()) {
+		if (ticket == null && isActive) {
 			if (CONFIG.isChunkloader) {
 				ticket = ForgeChunkManager.requestTicket(Soulus.INSTANCE, world, ForgeChunkManager.Type.NORMAL);
 
@@ -170,11 +189,15 @@ public class SoulTotemTileEntity extends UpgradeableBlockTileEntity {
 	@Override
 	public void onWriteToNBT (NBTTagCompound compound) {
 		compound.setFloat("fuel_time_remaining", fuelTimeRemaining);
+		compound.setBoolean("active", isActive);
+		compound.setByte("kickstart_cost", kickstartCost);
 	}
 
 	@Override
 	public void onReadFromNBT (NBTTagCompound compound) {
 		fuelTimeRemaining = compound.getFloat("fuel_time_remaining");
+		isActive = compound.getBoolean("active");
+		kickstartCost = compound.getByte("kickstart_cost");
 	}
 
 	/////////////////////////////////////////
@@ -189,8 +212,6 @@ public class SoulTotemTileEntity extends UpgradeableBlockTileEntity {
 	private float timeTillParticle = 0;
 
 	private void updateRenderer () {
-		boolean isActive = isActive();
-
 		lastScale = scale;
 		lastRotation = rotation;
 		if (isActive) {

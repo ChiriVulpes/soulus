@@ -22,7 +22,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModItems;
-import yuudaari.soulus.common.block.composer.ComposerCell.IHasImportantInfos;
+import yuudaari.soulus.common.block.composer.ComposerCell.IHasComposerCellInfo;
 import yuudaari.soulus.common.block.composer.IFillableWithEssence;
 import yuudaari.soulus.common.block.summoner.Summoner;
 import yuudaari.soulus.common.config.ConfigInjected;
@@ -35,7 +35,6 @@ import yuudaari.soulus.common.util.Colour;
 import yuudaari.soulus.common.util.EssenceType;
 import yuudaari.soulus.common.util.LangHelper;
 import yuudaari.soulus.common.util.ModItem;
-
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
@@ -43,7 +42,7 @@ import java.util.Collections;
 import java.util.List;
 
 @ConfigInjected(Soulus.MODID)
-public class Soulbook extends ModItem implements IHasImportantInfos, IFillableWithEssence {
+public class Soulbook extends ModItem implements IHasComposerCellInfo, IFillableWithEssence {
 
 	@Inject public static ConfigEssences CONFIG;
 
@@ -199,7 +198,8 @@ public class Soulbook extends ModItem implements IHasImportantInfos, IFillableWi
 			String translationKey = "entity." + essenceType + ".name";
 			alignment = LangHelper.localize(translationKey);
 			if (translationKey.equals(alignment)) {
-				alignment = LangHelper.localize("entity." + EntityList.getTranslationName(new ResourceLocation(essenceType)) + ".name");
+				alignment = LangHelper
+					.localize("entity." + EntityList.getTranslationName(new ResourceLocation(essenceType)) + ".name");
 			}
 		}
 
@@ -289,16 +289,20 @@ public class Soulbook extends ModItem implements IHasImportantInfos, IFillableWi
 		addImportantInformation(tooltip, stack);
 	}
 
-	@SideOnly(Side.CLIENT)
-	@Override
 	public void addImportantInformation (List<String> tooltip, ItemStack stack) {
 		int containedEssence = Soulbook.getContainedEssence(stack);
 		String mobTarget = EssenceType.getEssenceType(stack);
 		if (mobTarget != null) {
 			int requiredEssence = CONFIG.getSoulbookQuantity(mobTarget);
 			if (containedEssence < requiredEssence) {
-				tooltip.add(LangHelper.localize("tooltip." + Soulus.MODID + ":soulbook.contained_essence", containedEssence, requiredEssence));
+				tooltip.add(LangHelper
+					.localize("tooltip." + Soulus.MODID + ":soulbook.contained_essence", containedEssence, requiredEssence));
 			}
 		}
+	}
+
+	@Override
+	public void addComposerCellInfo (List<String> tooltip, ItemStack stack, int stackSize) {
+		if (stackSize == 1) addImportantInformation(tooltip, stack);
 	}
 }
