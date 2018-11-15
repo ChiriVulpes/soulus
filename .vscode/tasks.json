@@ -17,13 +17,19 @@
 			"group": "build",
 			"command": "\"./gradlew\" runServer",
 			"problemMatcher": []
-		},
+		}, 
 		{
 			"label": "Build",
 			"type": "shell",
 			"group": "build",
 			"command": "\"./gradlew\" build",
 			"problemMatcher": []
+		},
+		{
+			"label": "Debug",
+			"type": "shell",
+			"group": "build",
+			"command": "node ./debug.js"
 		}
 	]
 }
