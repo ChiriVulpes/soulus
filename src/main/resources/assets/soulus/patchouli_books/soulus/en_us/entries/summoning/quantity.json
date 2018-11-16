@@ -1,8 +1,9 @@
 {
     "name": "Summoner: Quantity",
     "icon": "soulus:crystal_blood{contained_blood:1000}",
+	"advancement": "soulus:summoner",
     "category": "summoning",
-	"sortnum": 6,
+	"sortnum": 10204,
 	"pages": [
 		{
 			"type": "text",
@@ -31,7 +32,8 @@
 			"title": "Other Upgrades",
 			"entries": [
 				"summoning/speed",
-				"summoning/range"
+				"summoning/range",
+				"summoning/efficiency"
 			],
 			"text": "$(l:processing/skewer)The next chapter will detail a contraption you can use to kill creatures more easily$(), in order to collect their bones or blood in the continual pursuit of restoring Animalia."
 		}

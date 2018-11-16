@@ -1,8 +1,9 @@
 {
     "name": "The Soulbook",
     "icon": "soulus:soulbook",
+	"advancement": "soulus:dust_ender",
     "category": "summoning",
-	"sortnum": 3,
+	"sortnum": 10201,
 	"pages": [
 		{
 			"type": "spotlight",

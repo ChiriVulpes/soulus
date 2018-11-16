@@ -1,8 +1,9 @@
 {
     "name": "The Skewer",
     "icon": "soulus:skewer",
+	"advancement": "soulus:dust_ender",
     "category": "processing",
-	"sortnum": 8,
+	"sortnum": 10301,
 	"pages": [
 		{
 			"type": "text",
@@ -23,7 +24,8 @@
 			"entries": [
 				"processing/tether",
 				"processing/human"
-			]
+			],
+			"text": "$(l:exploiting/ash)The next section of this guide will be on putting summoned creatures to use.$()"
 		}
 	]
 }

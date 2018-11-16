@@ -2,7 +2,7 @@
     "name": "Extracting Essence",
     "icon": "soulus:bone_chunk_normal",
     "category": "fossils_and_essence",
-	"sortnum": 1,
+	"sortnum": 10102,
     "pages": [
 		{
 			"type": "text",

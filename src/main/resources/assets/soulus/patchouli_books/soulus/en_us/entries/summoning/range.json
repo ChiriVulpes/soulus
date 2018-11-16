@@ -1,8 +1,9 @@
 {
     "name": "Summoner: Range",
     "icon": "soulus:orb_murky{essence_quantity:128}",
+	"advancement": "soulus:summoner",
     "category": "summoning",
-	"sortnum": 7,
+	"sortnum": 10205,
 	"pages": [
 		{
 			"type": "text",
@@ -31,7 +32,8 @@
 			"title": "Other Upgrades",
 			"entries": [
 				"summoning/quantity",
-				"summoning/speed"
+				"summoning/speed",
+				"summoning/efficiency"
 			],
 			"text": "Note: I also noticed that you can fill $(item)Murky Orbs$() with $(item)Ash$(), but you may not have any of that yet.$(p)$(l:processing/skewer)The next chapter will detail a contraption you can use to kill creatures more easily$(), in order to collect their bones or blood in the continual pursuit of restoring Animalia."
 		}

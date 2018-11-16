@@ -1,8 +1,9 @@
 {
     "name": "The Summoner",
-    "icon": "soulus:summoner",
+	"icon": "soulus:summoner",
+	"advancement": "soulus:dust_ender",
     "category": "summoning",
-	"sortnum": 4,
+	"sortnum": 10202,
 	"pages": [
 		{
 			"type": "text",
@@ -38,7 +39,8 @@
 			"entries": [
 				"summoning/speed",
 				"summoning/quantity",
-				"summoning/range"
+				"summoning/range",
+				"summoning/efficiency"
 			],
 			"text": "There are multiple ways I've found in which you can improve your summoner. These chapters document each."
 		}

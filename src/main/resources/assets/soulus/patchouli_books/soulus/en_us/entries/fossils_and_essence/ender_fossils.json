@@ -2,7 +2,7 @@
     "name": "Ender Fossils",
     "icon": "soulus:bone_chunk_ender",
     "category": "fossils_and_essence",
-	"sortnum": 2,
+	"sortnum": 10103,
     "pages": [
 		{
             "type": "text",

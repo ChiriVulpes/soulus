@@ -1,8 +1,9 @@
 {
     "name": "Summoner: Speed",
     "icon": "soulus:gear_oscillating",
+	"advancement": "soulus:summoner",
     "category": "summoning",
-	"sortnum": 5,
+	"sortnum": 10203,
 	"pages": [
 		{
 			"type": "text",
@@ -27,7 +28,8 @@
 			"title": "Other Upgrades",
 			"entries": [
 				"summoning/quantity",
-				"summoning/range"
+				"summoning/range",
+				"summoning/efficiency"
 			],
 			"text": "$(l:processing/skewer)The next chapter will detail a contraption you can use to kill creatures more easily$(), in order to collect their bones or blood in the continual pursuit of restoring Animalia."
 		}

@@ -3,7 +3,7 @@
 	"advancement": "soulus:ash",
     "icon": "soulus:ash",
     "category": "processing",
-	"sortnum": 9,
+	"sortnum": 10302,
 	"pages": [
 		{
 			"type": "text",

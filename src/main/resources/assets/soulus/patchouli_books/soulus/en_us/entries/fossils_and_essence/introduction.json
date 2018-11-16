@@ -2,7 +2,7 @@
     "name": "Introduction",
     "icon": "minecraft:writable_book",
 	"category": "fossils_and_essence",
-	"sortnum": 0,
+	"sortnum": 10101,
     "pages": [
         {
             "type": "text",
