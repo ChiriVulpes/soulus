@@ -194,11 +194,14 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 	@Override
 	public void onReadFromNBT (NBTTagCompound compound) {
 		crystalBloodContainedBlood = compound.getInteger("crystal_blood_stored_blood");
+		final String ownerString = compound.getString("owner");
+		owner = ownerString == "" ? null : UUID.fromString(ownerString);
 	}
 
 	@Override
 	public void onWriteToNBT (NBTTagCompound compound) {
 		compound.setInteger("crystal_blood_stored_blood", crystalBloodContainedBlood);
+		if (owner != null) compound.setString("owner", owner.toString());
 	}
 
 }

@@ -1,0 +1,28 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:soul_catalyst",
+			"nbt": "{\"essence_quantity\":256}"
+		},
+		"title": {
+			"translate": "advancement.soulus:soul_catalyst_fill.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:soul_catalyst_fill.description"
+		}
+	},
+	"parent": "soulus:soul_catalyst",
+	"criteria": {
+		"collect": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "soulus:soul_catalyst",
+						"nbt": "{\"essence_quantity\":256}"
+					}
+				]
+			}
+		}
+	}
+}

@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -21,6 +22,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import scala.Tuple2;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.advancement.Advancements;
@@ -33,6 +35,7 @@ import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSummoner;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
+import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.ModPotionEffect;
 import yuudaari.soulus.common.util.Range;
 
@@ -73,6 +76,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	private int activatingRange;
 	private Range spawnDelay;
 	private Range spawnCount;
+	private boolean usedPlayer = false;
 
 	private int signalStrength;
 
@@ -200,12 +204,15 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		for (EntityPlayer player : world.playerEntities) {
 			if (!EntitySelectors.NOT_SPECTATING.apply(player)) continue;
 
-			if (!hasMalice()) players.add(player);
-
 			double d0 = player.getDistanceSqToCenter(pos);
 
 			double nearAmt = (d0 / (activatingRange * activatingRange));
 			activationAmount += Math.max(0, (1 - (nearAmt * nearAmt)) * 2);
+
+			if (activationAmount > 0) {
+				if (!hasMalice()) players.add(player);
+				usedPlayer = true;
+			}
 		}
 
 		for (TileEntity te : world.loadedTileEntityList) {
@@ -292,6 +299,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		timeTillSpawn = compound.getFloat("delay");
 		lastTimeTillSpawn = compound.getFloat("delay_last");
 		malice = compound.getBoolean("malice");
+		usedPlayer = compound.getBoolean("used_player");
 
 		onUpdateUpgrades(false);
 	}
@@ -309,6 +317,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		compound.setFloat("delay", timeTillSpawn);
 		compound.setFloat("delay_last", lastTimeTillSpawn);
 		compound.setBoolean("malice", malice);
+		compound.setBoolean("used_player", usedPlayer);
 	}
 
 	private boolean isPlayerInRangeForEffects () {
@@ -405,8 +414,10 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 				spawned++;
 
+				Logger.info("spawned " + essenceType + " by " + players.stream().map(player -> player.getName()).collect(Collectors.joining(", ")));
+
 				for (EntityPlayer player : players) {
-					Advancements.SUMMON_CREATURE.trigger(player, essenceType);
+					Advancements.SUMMON_CREATURE.trigger(player, new Tuple2<>(essenceType, usedPlayer));
 				}
 
 				// we successfully spawned, so exit the try-to-spawn loop
@@ -418,6 +429,9 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 			soulbookUses -= (float) (spawned * CONFIG.efficiencyUpgradeRange
 				.get(upgrades.get(Upgrade.EFFICIENCY) / (double) Upgrade.EFFICIENCY.getMaxQuantity()));
 		}
+
+		// reset whether a player was used for this spawn
+		usedPlayer = false;
 
 		return spawned;
 	}

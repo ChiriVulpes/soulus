@@ -1,0 +1,55 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:summoner",
+			"data": 10
+		},
+		"title": {
+			"translate": "advancement.soulus:style_summoner_all.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:style_summoner_all.description"
+		},
+		"frame": "challenge",
+		"hidden": true
+	},
+	"parent": "soulus:style_summoner",
+	"criteria": {
+		"style_earthy": {
+			"trigger": "soulus:style_summoner",
+			"conditions": {
+				"style": "earthy"
+			}
+		},
+		"style_spooky": {
+			"trigger": "soulus:style_summoner",
+			"conditions": {
+				"style": "spooky"
+			}
+		},
+		"style_ender": {
+			"trigger": "soulus:style_summoner",
+			"conditions": {
+				"style": "ender"
+			}
+		},
+		"style_blazing": {
+			"trigger": "soulus:style_summoner",
+			"conditions": {
+				"style": "blazing"
+			}
+		},
+		"style_sorrow": {
+			"trigger": "soulus:style_summoner",
+			"conditions": {
+				"style": "sorrow"
+			}
+		},
+		"style_madness": {
+			"trigger": "soulus:style_summoner",
+			"conditions": {
+				"style": "madness"
+			}
+		}
+	}
+}

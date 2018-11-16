@@ -11,6 +11,7 @@ import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.client.util.ParticleType;
 import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.advancement.Advancements;
 import yuudaari.soulus.common.block.soul_totem.SoulTotem.Upgrade;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.config.ConfigInjected;
@@ -177,6 +178,10 @@ public class SoulTotemTileEntity extends UpgradeableBlockTileEntity {
 
 		if (state.getValue(SoulTotem.CONNECTED) != structureValid) {
 			world.setBlockState(pos, state.withProperty(SoulTotem.CONNECTED, structureValid), 3);
+
+			if (structureValid) {
+				Advancements.CONSTRUCT.trigger(this.getOwner(), this.getBlock());
+			}
 		}
 
 		isConnected = structureValid;
@@ -187,17 +192,20 @@ public class SoulTotemTileEntity extends UpgradeableBlockTileEntity {
 	//
 
 	@Override
-	public void onWriteToNBT (NBTTagCompound compound) {
-		compound.setFloat("fuel_time_remaining", fuelTimeRemaining);
-		compound.setBoolean("active", isActive);
-		compound.setByte("kickstart_cost", kickstartCost);
-	}
-
-	@Override
 	public void onReadFromNBT (NBTTagCompound compound) {
 		fuelTimeRemaining = compound.getFloat("fuel_time_remaining");
 		isActive = compound.getBoolean("active");
 		kickstartCost = compound.getByte("kickstart_cost");
+		final String ownerString = compound.getString("owner");
+		owner = ownerString == "" ? null : UUID.fromString(ownerString);
+	}
+
+	@Override
+	public void onWriteToNBT (NBTTagCompound compound) {
+		compound.setFloat("fuel_time_remaining", fuelTimeRemaining);
+		compound.setBoolean("active", isActive);
+		compound.setByte("kickstart_cost", kickstartCost);
+		if (owner != null) compound.setString("owner", owner.toString());
 	}
 
 	/////////////////////////////////////////

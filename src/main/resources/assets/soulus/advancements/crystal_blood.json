@@ -11,7 +11,7 @@
 			"translate": "advancement.soulus:crystal_blood.description"
 		}
 	},
-	"parent": "soulus:summoner",
+	"parent": "soulus:orb_murky",
 	"criteria": {
 		"craft": {
 			"trigger": "minecraft:inventory_changed",

@@ -1,0 +1,24 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:dust_niobium"
+		},
+		"title": {
+			"translate": "advancement.soulus:niobium_cheap.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:niobium_cheap.description"
+		},
+		"frame": "challenge",
+		"hidden": true
+	},
+	"parent": "soulus:niobium",
+	"criteria": {
+		"compose": {
+			"trigger": "soulus:compose",
+			"conditions": {
+				"recipe": "soulus:composer/endersteel_alchemy/niobium"
+			}
+		}
+	}
+}

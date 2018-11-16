@@ -335,13 +335,29 @@ advancement.soulus:compose.description=I mean, they're alive, but it's not like 
 advancement.soulus:alchemy_endersteel.title=Fauxmetal Alchemist
 advancement.soulus:alchemy_endersteel.description=At what cost?
 advancement.soulus:crystal_dark.title=Witching Hour
-advancement.soulus:crystal_dark.description=Compose the blood and souls of innumerable Animalia into a Midnight Jewel
+advancement.soulus:crystal_dark.description=Compose the blood and souls of many Animalia into a Midnight Jewel
 advancement.soulus:enderlink.title=Magnetic Darkness
 advancement.soulus:enderlink.description=Construct a machine capable of teleportation
 advancement.soulus:teleport.title=Free Teleportation
 advancement.soulus:teleport.description=It just takes a bit of an investment
 advancement.soulus:teleport_multiple.title=What is this, a circus?
-advancement.soulus:teleport_multiple.description=It's all fun and games until innumerable souls are involved
+advancement.soulus:teleport_multiple.description=It's all fun and games until many souls are involved
+advancement.soulus:style_summoner.title=Evolution
+advancement.soulus:style_summoner.description=Change the fundamentals of how the summoner creates life
+advancement.soulus:style_summoner_all.title=I Am Your God
+advancement.soulus:style_summoner_all.description=Peruse every possible way of creating life
+advancement.soulus:niobium.title=Ingot of Sorrow
+advancement.soulus:niobium.description=Why did you make this? What is your end goal?
+advancement.soulus:niobium_cheap.title=Less Souls Were Harmed in the Making of this Ingot
+advancement.soulus:niobium_cheap.description=Well, I suppose it's an improvement.
+advancement.soulus:soul_catalyst.title=Now This is Just Ridiculous
+advancement.soulus:soul_catalyst.description=Now what are you going to do, stick more souls into it?
+advancement.soulus:soul_catalyst_fill.title=Off The Deep End
+advancement.soulus:soul_catalyst_fill.description=Compress innumerable souls into one tiny, golden, shimmering ball of power
+advancement.soulus:soul_totem.title=A Structure With a Presence
+advancement.soulus:soul_totem.description=Construct a Soul Totem
+advancement.soulus:soul_totem_summon.title=Closed Feedback Loop
+advancement.soulus:soul_totem_summon.description=Summon creatures without the presence of your human soul
 
 
 # PATCHOULI GUIDEBOOK

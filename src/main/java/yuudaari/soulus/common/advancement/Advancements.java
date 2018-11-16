@@ -25,6 +25,8 @@ public class Advancements {
 	public static CrystalBloodPrickTrigger CRYSTAL_BLOOD_PRICK;
 	public static ComposeTrigger COMPOSE;
 	public static TeleportTrigger TELEPORT;
+	public static StyleSummonerTrigger STYLE_SUMMONER;
+	public static ConstructTrigger CONSTRUCT;
 
 	public static void registerTriggers () {
 		CriteriaTriggers.register(BREAK_BLOCK = new BreakBlockTrigger());
@@ -35,6 +37,8 @@ public class Advancements {
 		CriteriaTriggers.register(CRYSTAL_BLOOD_PRICK = new CrystalBloodPrickTrigger());
 		CriteriaTriggers.register(COMPOSE = new ComposeTrigger());
 		CriteriaTriggers.register(TELEPORT = new TeleportTrigger());
+		CriteriaTriggers.register(STYLE_SUMMONER = new StyleSummonerTrigger());
+		CriteriaTriggers.register(CONSTRUCT = new ConstructTrigger());
 	}
 
 	@SubscribeEvent

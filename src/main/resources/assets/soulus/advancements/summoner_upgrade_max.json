@@ -12,7 +12,7 @@
 		"frame": "challenge",
 		"hidden": true
 	},
-	"parent": "soulus:summoner",
+	"parent": "soulus:crystal_blood",
 	"criteria": {
 		"count": {
 			"trigger": "soulus:upgrade",

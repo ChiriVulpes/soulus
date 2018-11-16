@@ -18,6 +18,7 @@ import yuudaari.soulus.common.util.serializer.SerializationHandlers.IFieldSerial
 import java.util.HashMap;
 import java.util.Map;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 import yuudaari.soulus.Soulus;
 
 @ConfigFile(file = "block/summoner", id = Soulus.MODID)
@@ -55,6 +56,30 @@ public class ConfigSummoner extends ConfigUpgradeableBlock<Summoner> {
 	@Serialized public Range midnightJewelDelay = new Range(500, 1000);
 	@Serialized public int midnightJewelSpawningRadius = 4;
 	@Serialized public Range midnightJewelSoulbookEssenceQuantity = new Range(1, 5);
+	// style items
+	@Serialized(StylerMapSerializer.class) public Map<String, EndersteelType> styleItems = new HashMap<>();
+	{
+		styleItems.put("soulus:dust_iron", EndersteelType.NORMAL);
+		styleItems.put("soulus:dust_wood", EndersteelType.EARTHY);
+		styleItems.put("soulus:dust_stone", EndersteelType.SPOOKY);
+		styleItems.put("soulus:dust_ender", EndersteelType.ENDER);
+		styleItems.put("minecraft:blaze_powder", EndersteelType.BLAZING);
+		styleItems.put("soulus:dust_niobium", EndersteelType.SORROW);
+		styleItems.put("soulus:ash", EndersteelType.MADNESS);
+	}
+
+	public static class StylerMapSerializer extends MapSerializer.OfStringKeys<EndersteelType> {
+
+		@Override
+		public JsonElement serializeValue (final EndersteelType value) throws Exception {
+			return new JsonPrimitive(value.getName());
+		}
+
+		@Override
+		public EndersteelType deserializeValue (final JsonElement value) throws Exception {
+			return EndersteelType.byName(value.getAsString());
+		}
+	}
 
 	// style potion effects
 	@Serialized(PotionEffectsMapSerializer.class) public Map<EndersteelType, ModPotionEffect[]> stylePotionEffects;

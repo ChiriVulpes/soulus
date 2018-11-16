@@ -6,9 +6,10 @@ import com.google.gson.JsonObject;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
+import scala.Tuple2;
 import yuudaari.soulus.Soulus;
 
-public class SummonCreatureTrigger extends BasicTrigger<SummonCreatureTrigger.Instance, String> {
+public class SummonCreatureTrigger extends BasicTrigger<SummonCreatureTrigger.Instance, Tuple2<String, Boolean>> {
 
 	private static final ResourceLocation ID = new ResourceLocation(Soulus.MODID, "summon_creature");
 
@@ -20,26 +21,33 @@ public class SummonCreatureTrigger extends BasicTrigger<SummonCreatureTrigger.In
 	@Override
 	public SummonCreatureTrigger.Instance deserializeInstance (JsonObject json, JsonDeserializationContext context) {
 		String essenceType = null;
+		Boolean player = null;
 
 		if (json.has("essence_type")) {
 			essenceType = JsonUtils.getString(json, "essence_type");
 		}
 
-		return new SummonCreatureTrigger.Instance(essenceType);
-	}
-
-	public static class Instance extends MatchableCriterionInstance<String> {
-
-		private final @Nullable String essenceType;
-
-		public Instance (@Nullable String essenceType) {
-			super(SummonCreatureTrigger.ID);
-			this.essenceType = essenceType;
+		if (json.has("player")) {
+			player = JsonUtils.getBoolean(json, "player");
 		}
 
-		public boolean matches (EntityPlayerMP player, String essenceType) {
-			return this.essenceType == null || this.essenceType.equals("*") ? true : this.essenceType
-				.equalsIgnoreCase(essenceType);
+		return new SummonCreatureTrigger.Instance(essenceType, player);
+	}
+
+	public static class Instance extends MatchableCriterionInstance<Tuple2<String, Boolean>> {
+
+		private final String essenceType;
+		private final @Nullable Boolean player;
+
+		public Instance (@Nullable String essenceType, @Nullable Boolean player) {
+			super(SummonCreatureTrigger.ID);
+			this.essenceType = essenceType == null ? "*" : essenceType;
+			this.player = player;
+		}
+
+		public boolean matches (EntityPlayerMP player, Tuple2<String, Boolean> summonInfo) {
+			return (this.essenceType.equals("*") || this.essenceType.equalsIgnoreCase(summonInfo._1())) && //
+				(this.player == null || summonInfo._2() == this.player);
 		}
 	}
 }

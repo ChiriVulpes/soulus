@@ -1,5 +1,8 @@
 package yuudaari.soulus.common.block.summoner;
 
+import java.util.Collections;
+import java.util.List;
+import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -12,7 +15,6 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemMultiTexture;
@@ -45,9 +47,6 @@ import yuudaari.soulus.common.item.Soulbook;
 import yuudaari.soulus.common.util.EssenceType;
 import yuudaari.soulus.common.util.LangHelper;
 import yuudaari.soulus.common.util.Material;
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
 
 @ConfigInjected(Soulus.MODID)
 public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
@@ -392,31 +391,15 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 	@Override
 	public boolean onActivateInsert (World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
-		Item item = stack.getItem();
-		IBlockState state = world.getBlockState(pos);
+		final Item item = stack.getItem();
+		final IBlockState state = world.getBlockState(pos);
 
-		boolean didChangeStyle = true;
 		// the summoner style can always be changed
-		if (item.equals(ModItems.DUST_IRON) && state.getValue(VARIANT) != EndersteelType.NORMAL) {
-			world.setBlockState(pos, state.withProperty(VARIANT, EndersteelType.NORMAL));
-		} else if (item.equals(ModItems.DUST_WOOD) && state.getValue(VARIANT) != EndersteelType.EARTHY) {
-			world.setBlockState(pos, state.withProperty(VARIANT, EndersteelType.EARTHY));
-		} else if (item.equals(ModItems.DUST_STONE) && state.getValue(VARIANT) != EndersteelType.SPOOKY) {
-			world.setBlockState(pos, state.withProperty(VARIANT, EndersteelType.SPOOKY));
-		} else if (item.equals(ModItems.BONEMEAL_ENDER) && state.getValue(VARIANT) != EndersteelType.ENDER) {
-			world.setBlockState(pos, state.withProperty(VARIANT, EndersteelType.ENDER));
-		} else if (item.equals(Items.BLAZE_POWDER) && state.getValue(VARIANT) != EndersteelType.BLAZING) {
-			world.setBlockState(pos, state.withProperty(VARIANT, EndersteelType.BLAZING));
-		} else if (item.equals(ModItems.DUST_NIOBIUM) && state.getValue(VARIANT) != EndersteelType.SORROW) {
-			world.setBlockState(pos, state.withProperty(VARIANT, EndersteelType.SORROW));
-		} else if (item.equals(ModItems.ASH) && state.getValue(VARIANT) != EndersteelType.MADNESS) {
-			world.setBlockState(pos, state.withProperty(VARIANT, EndersteelType.MADNESS));
-		} else {
-			didChangeStyle = false;
-		}
-
-		if (didChangeStyle) {
+		final EndersteelType itemStyle = CONFIG.styleItems.get(item.getRegistryName().toString().toLowerCase());
+		if (itemStyle != null && state.getValue(VARIANT) != itemStyle) {
+			world.setBlockState(pos, state.withProperty(VARIANT, itemStyle));
 			stack.shrink(1);
+			Advancements.STYLE_SUMMONER.trigger(player, itemStyle.getName());
 			return true;
 		}
 

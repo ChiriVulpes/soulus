@@ -11,7 +11,7 @@
 			"translate": "advancement.soulus:orb_murky.description"
 		}
 	},
-	"parent": "soulus:summoner",
+	"parent": "soulus:gear_oscillating",
 	"criteria": {
 		"craft": {
 			"trigger": "minecraft:inventory_changed",

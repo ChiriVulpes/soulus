@@ -78,12 +78,6 @@
 			"conditions": {
 				"recipe": "soulus:composer/endersteel_alchemy/iron"
 			}
-		},
-		"compose_niobium": {
-			"trigger": "soulus:compose",
-			"conditions": {
-				"recipe": "soulus:composer/endersteel_alchemy/niobium"
-			}
 		}
 	},
 	"requirements": [
@@ -98,8 +92,7 @@
 			"compose_endersteel_dark",
 			"compose_endersteel",
 			"compose_gold",
-			"compose_iron",
-			"compose_niobium"
+			"compose_iron"
 		]
 	]
 }

@@ -1,0 +1,20 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:summoner",
+			"data": 4
+		},
+		"title": {
+			"translate": "advancement.soulus:style_summoner.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:style_summoner.description"
+		}
+	},
+	"parent": "soulus:summoner",
+	"criteria": {
+		"style": {
+			"trigger": "soulus:style_summoner"
+		}
+	}
+}

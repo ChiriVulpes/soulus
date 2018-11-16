@@ -1,6 +1,6 @@
 const exec = require("child_process").exec;
 
-exec("start gradlew runClient --debug-jvm");
+exec("@echo off & start gradlew runClient --debug-jvm & timeout 20 & exit");
 
 setTimeout(() => {
 	process.exit();

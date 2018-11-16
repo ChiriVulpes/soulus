@@ -13,13 +13,9 @@
 	"parent": "soulus:endersteel_dark",
 	"criteria": {
 		"craft": {
-			"trigger": "minecraft:inventory_changed",
+			"trigger": "soulus:construct",
 			"conditions": {
-				"items": [
-					{
-						"item": "soulus:composer"
-					}
-				]
+				"structure": "soulus:composer"
 			}
 		}
 	}

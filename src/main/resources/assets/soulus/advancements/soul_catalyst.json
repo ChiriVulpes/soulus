@@ -1,0 +1,22 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:soul_catalyst"
+		},
+		"title": {
+			"translate": "advancement.soulus:soul_catalyst.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:soul_catalyst.description"
+		}
+	},
+	"parent": "soulus:niobium",
+	"criteria": {
+		"compose": {
+			"trigger": "soulus:compose",
+			"conditions": {
+				"recipe": "soulus:composer/soul_catalyst"
+			}
+		}
+	}
+}

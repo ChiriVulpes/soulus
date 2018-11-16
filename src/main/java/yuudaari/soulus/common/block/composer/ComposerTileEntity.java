@@ -253,6 +253,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 			if (isConnected) {
 				connectCells(direction, state);
+				Advancements.CONSTRUCT.trigger(this.getOwner(), this.getBlock());
 			} else {
 				disconnectCells(currentDirection);
 			}
@@ -421,6 +422,8 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		compound.setFloat("delay_last", lastTimeTillCraft);
 		compound.setFloat("poof_chance", poofChance);
 
+		if (owner != null) compound.setString("owner", owner.toString());
+
 		NBTTagCompound cellTag = new NBTTagCompound();
 		for (Map.Entry<BlockPos, Byte> cell : cellMap.entrySet()) {
 			NBTTagCompound posTag = new NBTTagCompound();
@@ -443,6 +446,9 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		timeTillCraft = compound.getFloat("delay");
 		lastTimeTillCraft = compound.getFloat("delay_last");
 		poofChance = compound.getFloat("poof_chance");
+
+		final String ownerString = compound.getString("owner");
+		owner = ownerString == "" ? null : UUID.fromString(ownerString);
 
 		NBTTagCompound cellTag = compound.getCompoundTag("cell_map");
 		for (Integer slot = 0; slot < 9; slot++) {

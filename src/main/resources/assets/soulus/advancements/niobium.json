@@ -1,0 +1,22 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:ingot_niobium"
+		},
+		"title": {
+			"translate": "advancement.soulus:niobium.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:niobium.description"
+		}
+	},
+	"parent": "soulus:crystal_dark",
+	"criteria": {
+		"compose": {
+			"trigger": "soulus:compose",
+			"conditions": {
+				"recipe": "soulus:composer/niobium"
+			}
+		}
+	}
+}
