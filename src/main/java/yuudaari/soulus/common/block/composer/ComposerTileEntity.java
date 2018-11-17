@@ -607,8 +607,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 				ItemStack stack = ItemStack.EMPTY;
 				IRecipe recipe = CraftingManager.findMatchingRecipe(craftingMatrix, world);
 
-				if (recipe != null && recipe != lastRecipe) {
-					lastRecipe = recipe;
+				if (recipe != null) {
 					craftResult.setRecipeUsed(recipe);
 
 					time = 1;
@@ -618,9 +617,11 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 					stack = recipe.getCraftingResult(craftingMatrix);
 
-					if (recipeChangedHandler != null)
+					if (recipe != lastRecipe && recipeChangedHandler != null)
 						recipeChangedHandler.handle();
 				}
+
+				lastRecipe = recipe;
 
 				craftResult.setInventorySlotContents(0, stack);
 			}
