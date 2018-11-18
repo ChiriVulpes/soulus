@@ -54,7 +54,7 @@ public class BoneChunks {
 	private static Map<String, Tuple2<Double, Map<String, Double>>> drops = new HashMap<>();
 
 	public static double getChanceTotal (String boneType) {
-		Tuple2<Double, Map<String, Double>> dropTuple = drops.get(boneType);
+		Tuple2<Double, Map<String, Double>> dropTuple = drops.get(boneType.toLowerCase());
 		return dropTuple == null ? 0 : dropTuple._1;
 	}
 
@@ -84,7 +84,7 @@ public class BoneChunks {
 				chanceTotal += dropChance;
 			}
 
-			BoneChunks.drops.put(boneType.name, new Tuple2<>(chanceTotal, drops));
+			BoneChunks.drops.put(boneType.name.toLowerCase(), new Tuple2<>(chanceTotal, drops));
 		}
 	}
 
