@@ -7,7 +7,7 @@
 	"pages": [
 		{
 			"type": "text",
-			"text": "The $(item)Summoner$() uses souls of creatures past in order to create random descendants. The alignment and fuel source (souls) of a summoner is provided by a $(l:summoning/soulbook)Soulbook$().$(p)In order to craft a summoner, you will need to collect a few other items."
+			"text": "The $(item)Summoner$() converts essence of creatures past into soulus in order to create random descendants. The alignment and fuel source (essence) of a summoner is provided by a $(l:summoning/soulbook)Soulbook$().$(p)In order to craft a summoner, you will need to collect a few other items."
 		},
 		{
 			"type": "crafting",
@@ -17,7 +17,7 @@
 		{
 			"type": "smelting",
 			"recipe": "soulus:dust_ender_iron",
-			"text": "You have now created an ingot of what I've dubbed 'Endersteel'. This metal is similar to iron in density and hardness, but it's also a better conductor for souls.$(p)$(o)Note: This is probably over your head; that's fine. You haven't researched soul manipulation for as long as I have."
+			"text": "You have now created an ingot of what I've dubbed 'Endersteel'. This metal is similar to iron in density and hardness, but it's also a better conductor for soulus.$(p)$(o)Note: This is probably over your head; that's fine. You haven't researched soulus manipulation for as long as I have."
 		},
 		{
 			"type": "crafting",

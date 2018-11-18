@@ -11,6 +11,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IRecipeFactory;
+import net.minecraftforge.common.crafting.IShapedRecipe;
 import net.minecraftforge.common.crafting.CraftingHelper.ShapedPrimer;
 import yuudaari.soulus.common.block.composer.ComposerTileEntity;
 import net.minecraftforge.common.crafting.JsonContext;
@@ -25,9 +26,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
-public class RecipeComposerShaped extends Recipe implements IRecipeComposer {
+public class RecipeComposerShaped extends Recipe implements IRecipeComposer, IShapedRecipe {
 
-	//Added in for future ease of change, but hard coded for now.
+	// Added in for future ease of change, but hard coded for now.
 	public static final int MAX_CRAFT_GRID_WIDTH = 3;
 	public static final int MAX_CRAFT_GRID_HEIGHT = 3;
 
@@ -37,10 +38,6 @@ public class RecipeComposerShaped extends Recipe implements IRecipeComposer {
 	protected int height = 0;
 	protected boolean mirrored = true;
 	protected float time = 1;
-
-	public float getTime () {
-		return time;
-	}
 
 	public RecipeComposerShaped (Block result, Object... recipe) {
 		this(new ItemStack(result), recipe);
@@ -77,6 +74,20 @@ public class RecipeComposerShaped extends Recipe implements IRecipeComposer {
 		this.input = primer.input;
 		this.mirrored = primer.mirrored;
 		this.time = time;
+	}
+
+	public float getTime () {
+		return time;
+	}
+
+	@Override
+	public int getRecipeWidth () {
+		return width;
+	}
+
+	@Override
+	public int getRecipeHeight () {
+		return height;
 	}
 
 	/**

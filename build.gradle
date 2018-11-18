@@ -96,6 +96,8 @@ dependencies {
     deobfProvided "exnihilocreatio:exnihilocreatio:1.12-0.1.5.9"
     
     deobfProvided "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.19-11:api"
+    
+    compileOnly "vazkii.patchouli:Patchouli:1.0-8.31"
 }
 
 processResources {

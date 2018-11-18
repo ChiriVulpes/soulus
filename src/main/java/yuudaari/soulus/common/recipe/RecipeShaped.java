@@ -12,6 +12,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IRecipeFactory;
+import net.minecraftforge.common.crafting.IShapedRecipe;
 import net.minecraftforge.common.crafting.CraftingHelper.ShapedPrimer;
 import net.minecraftforge.common.crafting.JsonContext;
 import java.util.Map;
@@ -25,14 +26,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
-public class RecipeShaped extends Recipe {
+public class RecipeShaped extends Recipe implements IShapedRecipe {
 
-	//Added in for future ease of change, but hard coded for now.
+	// Added in for future ease of change, but hard coded for now.
 	public static final int MAX_CRAFT_GRID_WIDTH = 3;
 	public static final int MAX_CRAFT_GRID_HEIGHT = 3;
 
-	@Nonnull
-	protected ItemStack output = ItemStack.EMPTY;
+	protected @Nonnull ItemStack output = ItemStack.EMPTY;
 	protected NonNullList<Ingredient> input = null;
 	protected int width = 0;
 	protected int height = 0;
@@ -58,6 +58,16 @@ public class RecipeShaped extends Recipe {
 		this.height = primer.height;
 		this.input = primer.input;
 		this.mirrored = primer.mirrored;
+	}
+
+	@Override
+	public int getRecipeWidth () {
+		return width;
+	}
+
+	@Override
+	public int getRecipeHeight () {
+		return height;
 	}
 
 	/**

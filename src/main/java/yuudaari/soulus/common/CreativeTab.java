@@ -2,9 +2,8 @@ package yuudaari.soulus.common;
 
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.item.Soulbook;
-import yuudaari.soulus.common.util.IBlock;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import javax.annotation.Nonnull;
@@ -27,15 +26,14 @@ public final class CreativeTab extends CreativeTabs {
 
 	@Override
 	public void displayAllRelevantItems (NonNullList<ItemStack> list) {
-		for (IBlock block : ModBlocks.blocks) {
-			if (block.getCreativeTabToDisplayOn() == this) {
-				block.getSubBlocks(this, list);
-			}
-		}
-		for (Item item : ModItems.items) {
-			if (item.getCreativeTab() == this) {
-				item.getSubItems(this, list);
-			}
-		}
+		super.displayAllRelevantItems(list);
+
+		list.sort( (item1, item2) -> {
+			return getSortValue(item1) - getSortValue(item2);
+		});
+	}
+
+	private int getSortValue (ItemStack stack) {
+		return stack.getItem() instanceof ItemBlock ? 0 : 1;
 	}
 }

@@ -11,7 +11,7 @@
 		},
 		{
 			"type": "text",
-			"text": "Simply putting one of these $(item)Oscillating Gears$() into a summoner will improve its $(thing)Rate of Soul Transfer$(). It will, by itself (likely due to the $(thing)Souletic Field$()) move into a suitable place inside the Summoner, attaching itself to the inner workings and improving the flow."
+			"text": "Simply putting one of these $(item)Oscillating Gears$() into a summoner will improve its $(thing)Soulus Flow$() (rate of soul transfer). It will, by itself (likely due to the $(thing)Souletic Field$()) move into a suitable place inside the Summoner, attaching itself to the inner workings and improving the flow."
 		},
 		{
 			"type": "crafting",

@@ -42,7 +42,7 @@ public class Advancements {
 	}
 
 	@SubscribeEvent
-	public void onBlockBreak (BlockEvent.BreakEvent event) {
+	public static void onBlockBreak (BlockEvent.BreakEvent event) {
 		EntityPlayer player = event.getPlayer();
 		if (player instanceof EntityPlayerMP) {
 			BREAK_BLOCK.trigger((EntityPlayerMP) player, event.getState());

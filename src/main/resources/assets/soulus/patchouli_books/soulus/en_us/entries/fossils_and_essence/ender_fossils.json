@@ -17,7 +17,7 @@
         {
             "type": "crafting",
             "recipe": "soulus:dust/dust_ender",
-            "text": "I call this powder $(item)Ender Dust$(). Using this it's possible to create all manner of contraptions which will interact with the souls of creatures past."
+            "text": "I call this powder $(item)Ender Dust$(). Using this it's possible to create all manner of contraptions which will interact with the soulus of creatures past."
         },
         {
             "type": "image_footer",

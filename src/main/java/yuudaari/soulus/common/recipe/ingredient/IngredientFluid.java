@@ -36,7 +36,7 @@ public class IngredientFluid extends Ingredient {
 
 		for (UniversalBucket bucket : UNIVERSAL_BUCKETS) {
 			if (bucket.equals(ForgeModContainer.getInstance().universalBucket)) {
-				stacks.add(FluidUtil.getFilledBucket(new FluidStack(fluid, 1000)));
+				stacks.add(FluidUtil.getFilledBucket(new FluidStack(fluid, Fluid.BUCKET_VOLUME)));
 				continue;
 			}
 
@@ -61,7 +61,7 @@ public class IngredientFluid extends Ingredient {
 	@Override
 	public boolean apply (ItemStack stack) {
 		FluidStack contained = FluidUtil.getFluidContained(stack);
-		return contained != null && contained.isFluidEqual(new FluidStack(fluid, 1000));
+		return contained != null && contained.isFluidEqual(new FluidStack(fluid, Fluid.BUCKET_VOLUME));
 	}
 
 	@Override

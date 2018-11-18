@@ -25,10 +25,6 @@ public class RecipeComposerShapeless extends Recipe implements IRecipeComposer {
 	protected NonNullList<Ingredient> input = NonNullList.create();
 	protected float time = 1;
 
-	public float getTime () {
-		return time;
-	}
-
 	public RecipeComposerShapeless (Block result, Object... recipe) {
 		this(new ItemStack(result), 1, recipe);
 	}
@@ -75,6 +71,10 @@ public class RecipeComposerShapeless extends Recipe implements IRecipeComposer {
 				throw new RuntimeException(ret);
 			}
 		}
+	}
+
+	public float getTime () {
+		return time;
 	}
 
 	@Override
