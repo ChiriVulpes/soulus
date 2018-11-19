@@ -1,0 +1,16 @@
+{
+	"commands": [
+		{
+			"command": "workbench.action.tasks.runTask",
+			"text": "$(beaker)  Test",
+			"tooltip": "Tests the mod",
+			"arguments": ["Test"]
+		},
+		{
+			"command": "workbench.action.tasks.runTask",
+			"text": "$(rocket)  Build",
+			"tooltip": "Builds the mod",
+			"arguments": ["Build"]
+		}
+	]
+}
