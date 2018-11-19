@@ -8,6 +8,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -15,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -96,8 +98,14 @@ public class EnderlinkTileEntity extends UpgradeableBlockTileEntity implements I
 			if (world.collidesWithAnyBlock(entityBox)) return false;
 		}
 
+		world.playSound(null, entity.getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.NEUTRAL, 0.5F, world.rand
+			.nextFloat() * 0.25F + 0.6F);
+
 		entity.setPositionAndUpdate(x, y, z);
 		explosionParticles(entity, particleCount);
+
+		world.playSound(null, teleportPos, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.NEUTRAL, 0.5F, world.rand
+			.nextFloat() * 0.25F + 0.6F);
 
 		if (entity instanceof EntityPlayer) {
 
