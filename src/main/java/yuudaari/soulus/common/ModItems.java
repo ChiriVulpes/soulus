@@ -43,6 +43,7 @@ public class ModItems {
 	public static ModItem DUST_ENDER_IRON = new ModItem("dust_ender_iron").setHasGlint().setHasDescription();
 	public static ModItem DUST_ENDER_IRON_ASHEN = new ModItem("dust_ender_iron_ashen").setHasDescription();
 	public static ModItem DUST_IRON = new ModItem("dust_iron").addOreDict("dustIron").setHasDescription();
+	public static ModItem DUST_GOLD = new ModItem("dust_gold").addOreDict("dustGold").setHasDescription();
 	public static ModItem DUST_STONE = new ModItem("dust_stone").addOreDict("dustStone").setHasDescription();
 	public static ModItem DUST_WOOD = new ModItem("dust_wood").addOreDict("dustWood").setHasDescription();
 	public static ModItem EMERALD_BURNT = new ModItem("emerald_burnt").setHasDescription();
@@ -107,6 +108,7 @@ public class ModItems {
 		DUST_ENDER_IRON_ASHEN,
 		DUST_ENDER_IRON,
 		DUST_IRON,
+		DUST_GOLD,
 		DUST_STONE,
 		DUST_WOOD,
 

@@ -21,6 +21,7 @@ item.soulus:bone_meal_nether.name=Blackened Bone Meal
 
 item.soulus:dust_ender.name=Ender Dust
 item.soulus:dust_iron.name=Iron Dust
+item.soulus:dust_gold.name=Gold Dust
 item.soulus:dust_wood.name=Wood Dust
 item.soulus:dust_stone.name=Stone Dust
 item.soulus:dust_ender_iron.name=Ender-Iron Dust Blend
@@ -232,7 +233,8 @@ jei.description.soulus:crystal_blood_broken=A Blood Crystal which has been shatt
 jei.description.soulus:dust_ender=Glowing dust. Whether or not one believed in magic before is irrelevant; for now it is certain to exist, in a small pile in the palm of the hand.
 jei.description.soulus:dust_ender_iron=A mixture of the glowing dust and iron dust. Could metal be forged from this?
 jei.description.soulus:dust_ender_iron_ashen=A mixture of the glowing dust, iron dust, and ash. If metal could be forged from the mixture of glowing and iron dusts, maybe it could likewise be forged from this.
-jei.description.soulus:dust_iron=Iron metal crushed into a fine powder.
+jei.description.soulus:dust_iron=Iron ground into a fine powder.
+jei.description.soulus:dust_gold=Gold ground into a fine powder.
 jei.description.soulus:dust_stone=Stone crushed into a fine powder.
 jei.description.soulus:dust_wood=Wood crushed into a fine powder.
 jei.description.soulus:emerald_burnt=A crystal forged from fire.
