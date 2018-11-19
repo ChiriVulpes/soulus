@@ -13,6 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
@@ -26,6 +27,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -182,6 +184,9 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 					entity.setDead();
 					mobPoofParticles(world, pos);
 					mobPoofParticles(world, entity.getPosition());
+
+					world.playSound(null, entity.getPosition(), SoundEvents.ENTITY_ELDER_GUARDIAN_DEATH, SoundCategory.NEUTRAL, 0.5F, world.rand
+						.nextFloat() * 0.25F + 0.6F);
 				}
 			}
 		}
@@ -362,6 +367,9 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		dispenseItem(result.copy(), world, pos, world.getBlockState(pos).getValue(Composer.FACING));
 
 		Advancements.COMPOSE.trigger(getOwner(), this.container.lastRecipe.getRegistryName().toString());
+
+		world.playSound(null, pos, SoundEvents.ENTITY_ARMORSTAND_FALL, SoundCategory.NEUTRAL, 0.5F, world.rand
+			.nextFloat() * 0.25F + 0.6F);
 
 		loopComposerCells(ccte -> {
 			if (ccte.storedItem == null)
