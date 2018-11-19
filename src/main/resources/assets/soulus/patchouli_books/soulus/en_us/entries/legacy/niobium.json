@@ -21,7 +21,7 @@
 		},
 		{
 			"type": "text",
-			"text": "It inverts the pull of the midnight jewel, and instead seems to dislike my presence. I don't blame it.$(p)$(item)Niobium$() is a useful metal, however, as a result. We can use its emanation in order to remotely transfer large amounts of soulus. The only ingredient missing is a soulus container stronger than anything we've created before.$(p)$(l:legacy/soul_catalyst)We need a $(o)soul catalyst$()."
+			"text": "It inverts the pull of the midnight jewel, and instead seems to dislike my presence. I don't blame it.$(p)$(item)Niobium$() is a useful metal, however, as a result. We can use its emanation in order to remotely transfer large amounts of soulus. The only ingredient missing is a soulus container stronger than anything we've created before.$(p)$(l:legacy/soul_catalyst)We need a $(o)soul catalyst.$()"
 		}
 	]
 }
