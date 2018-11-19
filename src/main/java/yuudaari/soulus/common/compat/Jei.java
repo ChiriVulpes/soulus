@@ -26,6 +26,7 @@ import yuudaari.soulus.common.config.bones.ConfigBoneType;
 import yuudaari.soulus.common.config.bones.ConfigBoneTypes;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
+import yuudaari.soulus.common.config.misc.ConfigModSupport;
 import yuudaari.soulus.common.item.Essence;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModBlocks;
@@ -37,7 +38,8 @@ import yuudaari.soulus.common.recipe.RecipeComposerShapeless;
 @ConfigInjected(Soulus.MODID)
 public class Jei implements IModPlugin {
 
-	@Inject public static ConfigBoneTypes CONFIG;
+	@Inject public static ConfigBoneTypes CONFIG_BONE_TYPES;
+	@Inject public static ConfigModSupport CONFIG_MOD_SUPPORT;
 
 	@Override
 	public void registerItemSubtypes (ISubtypeRegistry subtypeRegistry) {
@@ -73,7 +75,7 @@ public class Jei implements IModPlugin {
 
 		registry.handleRecipes(ConfigBoneType.class, RecipeWrapperEssence::new, RecipeCategoryEssence.UID);
 
-		registry.addRecipes(CONFIG.boneTypes, RecipeCategoryEssence.UID);
+		registry.addRecipes(CONFIG_BONE_TYPES.boneTypes, RecipeCategoryEssence.UID);
 	}
 
 	/**
@@ -85,10 +87,13 @@ public class Jei implements IModPlugin {
 
 		registry.handleRecipes(RecipeComposerShaped.class, RecipeWrapperComposer::new, RecipeCategoryComposer.UID);
 		registry.handleRecipes(RecipeComposerShapeless.class, RecipeWrapperComposer::new, RecipeCategoryComposer.UID);
-		registry.handleRecipes(ShapedOreRecipe.class, RecipeWrapperComposer::new, RecipeCategoryComposer.UID);
-		registry.handleRecipes(ShapedRecipes.class, RecipeWrapperComposer::new, RecipeCategoryComposer.UID);
-		registry.handleRecipes(ShapelessOreRecipe.class, RecipeWrapperComposer::new, RecipeCategoryComposer.UID);
-		registry.handleRecipes(ShapelessRecipes.class, RecipeWrapperComposer::new, RecipeCategoryComposer.UID);
+
+		if (CONFIG_MOD_SUPPORT.jei.showNormalRecipesInComposerTab) {
+			registry.handleRecipes(ShapedOreRecipe.class, RecipeWrapperComposer::new, RecipeCategoryComposer.UID);
+			registry.handleRecipes(ShapedRecipes.class, RecipeWrapperComposer::new, RecipeCategoryComposer.UID);
+			registry.handleRecipes(ShapelessOreRecipe.class, RecipeWrapperComposer::new, RecipeCategoryComposer.UID);
+			registry.handleRecipes(ShapelessRecipes.class, RecipeWrapperComposer::new, RecipeCategoryComposer.UID);
+		}
 
 		registry.addRecipes(ForgeRegistries.RECIPES.getValues(), RecipeCategoryComposer.UID);
 	}
