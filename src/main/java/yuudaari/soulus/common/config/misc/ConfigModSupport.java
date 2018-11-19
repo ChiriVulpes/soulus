@@ -15,6 +15,8 @@ public class ConfigModSupport {
 	public class ConfigJEI {
 
 		@Serialized public boolean showNormalRecipesInComposerTab = false;
+
+		public ConfigJEI () {}
 	}
 
 }

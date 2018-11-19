@@ -83,5 +83,8 @@
 				]
 			}
 		}
+	},
+	"rewards": {
+		"experience": 50
 	}
 }

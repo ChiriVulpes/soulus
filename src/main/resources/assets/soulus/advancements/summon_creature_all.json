@@ -236,5 +236,8 @@
 				"essence_type": "minecraft:magma_cube"
 			}
 		}
+	},
+	"rewards": {
+		"experience": 500
 	}
 }

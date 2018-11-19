@@ -21,5 +21,8 @@
 				"player": false
 			}
 		}
+	},
+	"rewards": {
+		"experience": 250
 	}
 }

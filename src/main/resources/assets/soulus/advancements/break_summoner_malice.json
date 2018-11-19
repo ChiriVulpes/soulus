@@ -16,5 +16,8 @@
 		"break_summoner_malice": {
 			"trigger": "soulus:break_summoner_malice"
 		}
+	},
+	"rewards": {
+		"experience": 50
 	}
 }

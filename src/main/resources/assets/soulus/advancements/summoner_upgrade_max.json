@@ -46,5 +46,8 @@
 				"filled": true
 			}
 		}
+	},
+	"rewards": {
+		"experience": 200
 	}
 }

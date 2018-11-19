@@ -18,5 +18,8 @@
 		"craft": {
 			"trigger": "soulus:crystal_blood_prick"
 		}
+	},
+	"rewards": {
+		"experience": 30
 	}
 }

@@ -51,5 +51,8 @@
 				"style": "madness"
 			}
 		}
+	},
+	"rewards": {
+		"experience": 50
 	}
 }

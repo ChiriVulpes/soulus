@@ -20,5 +20,8 @@
 				"teleports": 10
 			}
 		}
+	},
+	"rewards": {
+		"experience": 100
 	}
 }
