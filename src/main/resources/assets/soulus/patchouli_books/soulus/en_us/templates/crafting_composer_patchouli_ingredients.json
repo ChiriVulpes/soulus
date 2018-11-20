@@ -25,56 +25,56 @@
             "group": "shapeless"
         },
         {
-            "type": "ingredient",
-            "ingredient": "#input1",
+            "type": "item",
+            "item": "#input1",
             "x": 12,
             "y": 7
         },
         {
-            "type": "ingredient",
-            "ingredient": "#input2",
+            "type": "item",
+            "item": "#input2",
             "x": 31,
             "y": 7
         },
         {
-            "type": "ingredient",
-            "ingredient": "#input3",
+            "type": "item",
+            "item": "#input3",
             "x": 50,
             "y": 7
         },
         {
-            "type": "ingredient",
-            "ingredient": "#input4",
+            "type": "item",
+            "item": "#input4",
             "x": 12,
             "y": 26
         },
         {
-            "type": "ingredient",
-            "ingredient": "#input5",
+            "type": "item",
+            "item": "#input5",
             "x": 31,
             "y": 26
         },
         {
-            "type": "ingredient",
-            "ingredient": "#input6",
+            "type": "item",
+            "item": "#input6",
             "x": 50,
             "y": 26
         },
         {
-            "type": "ingredient",
-            "ingredient": "#input7",
+            "type": "item",
+            "item": "#input7",
             "x": 12,
             "y": 45
         },
         {
-            "type": "ingredient",
-            "ingredient": "#input8",
+            "type": "item",
+            "item": "#input8",
             "x": 31,
             "y": 45
         },
         {
-            "type": "ingredient",
-            "ingredient": "#input9",
+            "type": "item",
+            "item": "#input9",
             "x": 50,
             "y": 45
         },
@@ -125,64 +125,64 @@
             "group": "recipe2_shapeless"
         },
         {
-            "type": "ingredient",
-            "ingredient": "#recipe2_input1",
+            "type": "item",
+            "item": "#recipe2_input1",
             "x": 12,
             "y": 85,
             "group": "multi_recipe"
         },
         {
-            "type": "ingredient",
-            "ingredient": "#recipe2_input2",
+            "type": "item",
+            "item": "#recipe2_input2",
             "x": 31,
             "y": 85,
             "group": "multi_recipe"
         },
         {
-            "type": "ingredient",
-            "ingredient": "#recipe2_input3",
+            "type": "item",
+            "item": "#recipe2_input3",
             "x": 50,
             "y": 85,
             "group": "multi_recipe"
         },
         {
-            "type": "ingredient",
-            "ingredient": "#recipe2_input4",
+            "type": "item",
+            "item": "#recipe2_input4",
             "x": 12,
             "y": 104,
             "group": "multi_recipe"
         },
         {
-            "type": "ingredient",
-            "ingredient": "#recipe2_input5",
+            "type": "item",
+            "item": "#recipe2_input5",
             "x": 31,
             "y": 104,
             "group": "multi_recipe"
         },
         {
-            "type": "ingredient",
-            "ingredient": "#recipe2_input6",
+            "type": "item",
+            "item": "#recipe2_input6",
             "x": 50,
             "y": 104,
             "group": "multi_recipe"
         },
         {
-            "type": "ingredient",
-            "ingredient": "#recipe2_input7",
+            "type": "item",
+            "item": "#recipe2_input7",
             "x": 12,
             "y": 123,
             "group": "multi_recipe"
         },
         {
-            "type": "ingredient",
-            "ingredient": "#recipe2_input8",
+            "type": "item",
+            "item": "#recipe2_input8",
             "x": 31,
             "y": 123,
             "group": "multi_recipe"
         },
         {
-            "type": "ingredient",
-            "ingredient": "#recipe2_input9",
+            "type": "item",
+            "item": "#recipe2_input9",
             "x": 50,
             "y": 123,
             "group": "multi_recipe"
@@ -222,64 +222,64 @@
             "group": "recipe2_shapeless_no_title2"
         },
         {
-            "type": "ingredient",
-            "ingredient": "#recipe2_input1",
+            "type": "item",
+            "item": "#recipe2_input1",
             "x": 12,
             "y": 75,
             "group": "multi_recipe_no_title2"
         },
         {
-            "type": "ingredient",
-            "ingredient": "#recipe2_input2",
+            "type": "item",
+            "item": "#recipe2_input2",
             "x": 31,
             "y": 75,
             "group": "multi_recipe_no_title2"
         },
         {
-            "type": "ingredient",
-            "ingredient": "#recipe2_input3",
+            "type": "item",
+            "item": "#recipe2_input3",
             "x": 50,
             "y": 75,
             "group": "multi_recipe_no_title2"
         },
         {
-            "type": "ingredient",
-            "ingredient": "#recipe2_input4",
+            "type": "item",
+            "item": "#recipe2_input4",
             "x": 12,
             "y": 94,
             "group": "multi_recipe_no_title2"
         },
         {
-            "type": "ingredient",
-            "ingredient": "#recipe2_input5",
+            "type": "item",
+            "item": "#recipe2_input5",
             "x": 31,
             "y": 94,
             "group": "multi_recipe_no_title2"
         },
         {
-            "type": "ingredient",
-            "ingredient": "#recipe2_input6",
+            "type": "item",
+            "item": "#recipe2_input6",
             "x": 50,
             "y": 94,
             "group": "multi_recipe_no_title2"
         },
         {
-            "type": "ingredient",
-            "ingredient": "#recipe2_input7",
+            "type": "item",
+            "item": "#recipe2_input7",
             "x": 12,
             "y": 113,
             "group": "multi_recipe_no_title2"
         },
         {
-            "type": "ingredient",
-            "ingredient": "#recipe2_input8",
+            "type": "item",
+            "item": "#recipe2_input8",
             "x": 31,
             "y": 113,
             "group": "multi_recipe_no_title2"
         },
         {
-            "type": "ingredient",
-            "ingredient": "#recipe2_input9",
+            "type": "item",
+            "item": "#recipe2_input9",
             "x": 50,
             "y": 113,
             "group": "multi_recipe_no_title2"
