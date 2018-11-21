@@ -97,7 +97,7 @@ dependencies {
     
     deobfProvided "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.19-11:api"
     
-    compileOnly "vazkii.patchouli:Patchouli:1.0-8.31"
+    compileOnly "vazkii.patchouli:Patchouli:1.0-10.45"
 }
 
 processResources {
