@@ -366,3 +366,5 @@ advancement.soulus:soul_totem_summon.description=Summon creatures without the pr
 
 patchouli.book.soulus:soulus.landing=The world has become devoid of Animalia --- this is a guide on how to bring them back.
 patchouli.book.soulus:soulus.subtitle=Restoration of Animalia
+
+patchouli.recipe.soulus:composer.recipe_time=$(tooltip:Recipe Duration)%1$st

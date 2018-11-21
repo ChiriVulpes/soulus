@@ -78,7 +78,8 @@ public class ComposerCraftingPage implements IComponentProcessor {
 				String timeString = "" + (recipe instanceof IRecipeComposer ? ((IRecipeComposer) recipe).getTime() : 1);
 				if (timeString.endsWith(".0"))
 					timeString = timeString.substring(0, timeString.length() - 2);
-				return LangHelper.localize("jei.recipe.soulus:composer.recipe_time", timeString);
+				timeString = LangHelper.localize("patchouli.recipe.soulus:composer.recipe_time", timeString);
+				return timeString;
 			}
 			case "name":
 				return recipe != recipe2 || title2 == null ? title : title2;
@@ -93,7 +94,7 @@ public class ComposerCraftingPage implements IComponentProcessor {
 		NonNullList<Ingredient> ingredients = recipe.getIngredients();
 
 		if (ingredients.size() > ingredientId)
-			return IngredientComponent.serialize(ingredients.get(ingredientId));
+			return PatchouliAPI.instance.serializeIngredient(ingredients.get(ingredientId));
 		else
 			return null;
 	}
