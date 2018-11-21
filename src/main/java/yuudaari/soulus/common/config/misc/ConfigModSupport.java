@@ -12,7 +12,7 @@ public class ConfigModSupport {
 	@Serialized public ConfigJEI jei = new ConfigJEI();
 
 	@Serializable
-	public class ConfigJEI {
+	public static class ConfigJEI {
 
 		@Serialized public boolean showNormalRecipesInComposerTab = false;
 

@@ -368,3 +368,14 @@ patchouli.book.soulus:soulus.landing=The world has become devoid of Animalia ---
 patchouli.book.soulus:soulus.subtitle=Restoration of Animalia
 
 patchouli.recipe.soulus:composer.recipe_time=$(tooltip:Recipe Duration)%1$st
+
+
+# DEBUG, DOESN'T NEED TO BE TRANSLATED
+
+key.export=Export
+key.categories.soulus=Soulus
+
+gui.rendering=Rendering %1$s items from %2$s
+gui.rendered=Rendered %1$s items
+gui.renderCancelled=Operation cancelled
+gui.progress=(%1$s/%2$s, %3$s to go)

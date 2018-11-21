@@ -39,6 +39,7 @@ import yuudaari.soulus.common.config.Config;
 import yuudaari.soulus.common.misc.BoneChunks;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.client.SendConfig;
+import yuudaari.soulus.common.util.DebugHelper;
 import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.server.command.SoulusCommand;
 
@@ -129,7 +130,6 @@ public class Soulus {
 
 	@EventHandler
 	public void preinit (final FMLPreInitializationEvent event) {
-
 		if (Loader.isModLoaded("theoneprobe")) {
 			TheOneProbe.register();
 		}
@@ -145,6 +145,7 @@ public class Soulus {
 		ForgeChunkManager.setForcedChunkLoadingCallback(INSTANCE, (List<Ticket> tickets, World world) -> {});
 
 		Advancements.registerTriggers();
+		DebugHelper.initialize();
 
 		for (final PreInitEventHandler handler : preInitHandlers) {
 			handler.handle(event);

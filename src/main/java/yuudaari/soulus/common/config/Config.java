@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -20,12 +19,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
-import com.google.gson.internal.Streams;
-import com.google.gson.stream.JsonWriter;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.relauncher.Side;
 import yuudaari.soulus.common.util.CompareJson;
+import yuudaari.soulus.common.util.JSON;
 import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.serializer.DefaultFieldSerializer;
 import yuudaari.soulus.common.util.serializer.Serialized;
@@ -143,7 +141,7 @@ public class Config {
 		writeJsonConfigFile(configFile, json, getErrorFilename(configFile.getAbsolutePath()));
 
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-			SERVER_CONFIGS.put(filename, getJsonString(json, null));
+			SERVER_CONFIGS.put(filename, JSON.getString(json, null));
 		}
 
 		Logger.scopes.pop();
@@ -421,7 +419,7 @@ public class Config {
 			if (CompareJson.equal(json, oldConfig))
 				return;
 
-			final String newFileText = getJsonString(json, "\t");
+			final String newFileText = JSON.getString(json, "\t");
 			final String oldFileText = new String(Files.readAllBytes(configFile.toPath()));
 
 			if (newFileText.equals(oldFileText))
@@ -434,20 +432,6 @@ public class Config {
 
 		} catch (final IOException | JsonParseException e) {
 			Logger.warn("Could not write the config file: " + e.getMessage());
-		}
-	}
-
-	private static String getJsonString (final JsonObject json, final String indent) {
-		try {
-			final StringWriter stringWriter = new StringWriter();
-			final JsonWriter jsonWriter = new JsonWriter(stringWriter);
-			jsonWriter.setLenient(true);
-			jsonWriter.setIndent(indent == null ? "" : indent);
-			Streams.write(json, jsonWriter);
-			return stringWriter.toString();
-
-		} catch (final IOException e) {
-			return null;
 		}
 	}
 
