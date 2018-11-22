@@ -3,10 +3,10 @@ package yuudaari.soulus.common.recipe;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JsonUtils;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -21,6 +21,18 @@ import java.util.Map;
 public class RecipeFurnace implements IRecipe {
 
 	private ResourceLocation name;
+	private final Ingredient input;
+	private final ItemStack output;
+
+	public RecipeFurnace (final Ingredient input, final ItemStack output) {
+		this.input = input;
+		this.output = output;
+	}
+
+	@Override
+	public NonNullList<Ingredient> getIngredients () {
+		return NonNullList.from(input, input);
+	}
 
 	public boolean canFit (int width, int height) {
 		return true;
@@ -36,7 +48,7 @@ public class RecipeFurnace implements IRecipe {
 	}
 
 	public ItemStack getRecipeOutput () {
-		return new ItemStack(Items.AIR);
+		return this.output;
 	}
 
 	public boolean matches (InventoryCrafting inv, World world) {
@@ -44,7 +56,7 @@ public class RecipeFurnace implements IRecipe {
 	}
 
 	public ItemStack getCraftingResult (InventoryCrafting inv) {
-		return new ItemStack(Items.AIR);
+		return this.output;
 	}
 
 	public Class<IRecipe> getRegistryType () {
@@ -78,7 +90,7 @@ public class RecipeFurnace implements IRecipe {
 				FurnaceRecipes.instance().getSmeltingList().put(input, output);
 			}
 
-			return new RecipeFurnace();
+			return new RecipeFurnace(ing, output);
 		}
 	}
 }

@@ -20,7 +20,7 @@ import net.minecraft.item.ItemStack;
 // As such, we are free to do whatever we like before Minecraft renders, as long as we put everything back the way it was.
 public class Renderer {
 
-	private static final int SIZE = 512;
+	private static final int SIZE = 64;
 
 	private static float oldZLevel;
 

@@ -1,9 +1,11 @@
-package yuudaari.soulus.client.exporter;
+package yuudaari.soulus.client.exporter.exports;
 
 import java.util.List;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import yuudaari.soulus.common.util.LangHelper;
+import yuudaari.soulus.common.util.ModItem;
 import yuudaari.soulus.common.util.serializer.ListSerializer;
 import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
@@ -12,13 +14,21 @@ import yuudaari.soulus.common.util.serializer.Serialized;
 public class ItemExport {
 
 	@Serialized public final String registryName;
+	@Serialized public final boolean isBlock;
 	@Serialized public final String description;
-	@Serialized(StacksSerializer.class) public final List<StackExport> stacks;
+	@Serialized(StackListSerializer.class) public final List<StackExport> stacks;
 
 	public ItemExport (final Item item, final List<StackExport> stacks) {
 		this.registryName = item.getRegistryName().toString();
-		this.description = LangHelper.localize("jei.description." + registryName);
+		this.isBlock = item instanceof ItemBlock;
 		this.stacks = stacks;
+
+		String registryName = null;
+		if (item instanceof ModItem) {
+			registryName = ((ModItem) item).getDescriptionRegistryName();
+		}
+
+		this.description = LangHelper.localize("jei.description." + (registryName == null ? this.registryName : registryName));
 	}
 
 	@Serializable
@@ -35,7 +45,7 @@ public class ItemExport {
 		}
 	}
 
-	public static class StacksSerializer extends ListSerializer<StackExport> {
+	public static class StackListSerializer extends ListSerializer<StackExport> {
 
 		@Override
 		public Class<StackExport> getValueClass () {

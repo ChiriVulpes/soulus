@@ -8,11 +8,7 @@ package yuudaari.soulus.client.exporter;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,7 +16,7 @@ import java.util.stream.Collectors;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import org.apache.commons.io.FileUtils;
 import org.lwjgl.input.Keyboard;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngameMenu;
@@ -31,7 +27,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import scala.Tuple2;
-import yuudaari.soulus.client.exporter.ItemExport.StackExport;
+import yuudaari.soulus.client.exporter.exports.*;
 import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.ModItems;
@@ -39,12 +35,11 @@ import yuudaari.soulus.common.util.IBlock;
 import yuudaari.soulus.common.util.JSON;
 import yuudaari.soulus.common.util.LangHelper;
 import yuudaari.soulus.common.util.Logger;
-import yuudaari.soulus.common.util.serializer.DefaultFieldSerializer;
-import yuudaari.soulus.common.util.serializer.SerializationHandlers.IClassSerializationHandler;
+import yuudaari.soulus.common.util.serializer.Serializer;
 
 public class Exporter {
 
-	private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
+	// private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
 	private static final Map<String, File> modFolders = Maps.newHashMap();
 
 	private static File getModFolder (final String modid, final File exportFolder) {
@@ -61,18 +56,29 @@ public class Exporter {
 		Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
 
 		modFolders.clear();
-		final File exportFolder = new File("exports/" + dateFormat.format(new Date()) + "/");
+
+		// final File exportFolder = new File("exports/" + dateFormat.format(new Date()) + "/");
+		final File exportFolder = new File("export/");
+
+		try {
+			FileUtils.deleteDirectory(exportFolder);
+		} catch (IOException e) {
+			Logger.error("Unable to clear export folder");
+			Logger.error(e);
+		}
 
 		// construct a list of which items need to be rendered
-		final List<ItemStack> itemsToExport = getExportItems();
-		final Map<Item, List<Tuple2<ItemStack, String>>> renderedItems = Maps.newHashMap();
+		final Tuple2<List<ItemStack>, List<IRecipe>> toExport = getExports();
+		final List<ItemStack> itemsToExport = toExport._1;
+		final List<IRecipe> recipesToExport = toExport._2;
+		final Map<Item, Tuple2<List<Tuple2<ItemStack, String>>, Integer>> renderedItems = Maps.newHashMap();
 
 		long lastUpdate = 0;
 		int exportCount = 0;
 
 		Renderer.setUpRenderState();
 
-		for (final ItemStack stack : itemsToExport) {
+		for (final ItemStack stack : toExport._1) {
 			if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
 				break;
 
@@ -83,9 +89,9 @@ public class Exporter {
 			final String imagePath = Renderer.render(stack, sanitize(registryName.getResourcePath()), modFolder);
 
 			if (imagePath != null) {
-				List<Tuple2<ItemStack, String>> renders = renderedItems.get(stack.getItem());
-				if (renders == null) renderedItems.put(stack.getItem(), renders = Lists.newArrayList());
-				renders.add(new Tuple2<>(stack, imagePath));
+				Tuple2<List<Tuple2<ItemStack, String>>, Integer> renders = renderedItems.get(stack.getItem());
+				if (renders == null) renderedItems.put(stack.getItem(), renders = new Tuple2<>(Lists.newArrayList(), exportCount));
+				renders._1.add(new Tuple2<>(stack, imagePath));
 			}
 
 			exportCount++;
@@ -104,35 +110,8 @@ public class Exporter {
 			}
 		}
 
-		// create a JSON representation of the items exported, and data applicable to them
-		final JsonArray itemExportsJson = new JsonArray();
-		for (final Map.Entry<Item, List<Tuple2<ItemStack, String>>> renderedItem : renderedItems.entrySet()) {
-			final Item item = renderedItem.getKey();
-
-			final List<StackExport> stackExports = Lists.newArrayList();
-			for (final Tuple2<ItemStack, String> renderedStack : renderedItem.getValue()) {
-				final String imagePath = item.getRegistryName().getResourceDomain() + "/" + renderedStack._2;
-				stackExports.add(new StackExport(imagePath, renderedStack._1));
-			}
-
-			final ItemExport export = new ItemExport(item, stackExports);
-			final JsonObject json = new JsonObject();
-
-			final IClassSerializationHandler<Object> deserializer = DefaultFieldSerializer.getClassSerializer(ItemExport.class);
-			DefaultFieldSerializer.serializeClass(deserializer, export, json);
-
-			itemExportsJson.add(json);
-		}
-
-		// write a JSON file for the exported/rendered item data
-		final File itemsFile = new File(exportFolder, "items.json");
-		final String itemsJsonString = JSON.getString(itemExportsJson, "\t");
-		try {
-			Files.write(itemsFile.toPath(), itemsJsonString.getBytes());
-		} catch (IOException e) {
-			Logger.error(e);
-			Logger.error("Unable to export items.json file");
-		}
+		writeItemsJson(renderedItems, exportFolder);
+		writeRecipesJson(recipesToExport, exportFolder);
 
 		final List<String> result = Lists.newArrayList();
 
@@ -163,10 +142,54 @@ public class Exporter {
 	}
 
 	/**
+	 * Writes a JSON file representing each stack which was rendered.
+	 */
+	private static void writeItemsJson (final Map<Item, Tuple2<List<Tuple2<ItemStack, String>>, Integer>> renderedItems, final File exportFolder) {
+
+		final JsonArray itemExportsJson = new JsonArray();
+
+		// create a JSON representation of the items exported, and data applicable to them
+		renderedItems.entrySet()
+			.stream()
+			.sorted( (a, b) -> a.getValue()._2 - b.getValue()._2)
+			.forEach(renderedItem -> {
+				final Item item = renderedItem.getKey();
+
+				final List<ItemExport.StackExport> stackExports = Lists.newArrayList();
+				for (final Tuple2<ItemStack, String> renderedStack : renderedItem.getValue()._1) {
+					final String imagePath = item.getRegistryName().getResourceDomain() + "/" + renderedStack._2;
+					stackExports.add(new ItemExport.StackExport(imagePath, renderedStack._1));
+				}
+
+				final ItemExport export = new ItemExport(item, stackExports);
+				itemExportsJson.add(Serializer.serialize(export));
+			});
+
+		// write a JSON file for the exported/rendered item data
+		JSON.writeFile(itemExportsJson, new File(exportFolder, "items.json"));
+	}
+
+	/**
+	 * Writes a JSON file representing each recipe which contains an item from Soulus.
+	 */
+	private static void writeRecipesJson (final List<IRecipe> recipes, final File exportFolder) {
+
+		// create a JSON representation of the items exported, and data applicable to them
+		final JsonArray recipeExportsJson = new JsonArray();
+
+		recipes.stream()
+			.map(recipe -> Serializer.serialize(new RecipeExport(recipe)))
+			.forEach(recipeExportsJson::add);
+
+		// write a JSON file for the exported/rendered item data
+		JSON.writeFile(recipeExportsJson, new File(exportFolder, "recipes.json"));
+	}
+
+	/**
 	 * @return A list of {@link ItemStack}s which are either from Soulus or share a recipe with a Soulus item.
 	 */
 	@SuppressWarnings("deprecation")
-	private static List<ItemStack> getExportItems () {
+	private static Tuple2<List<ItemStack>, List<IRecipe>> getExports () {
 		final StackMap items = new StackMap();
 
 		// add mod blocks to item map
@@ -186,6 +209,7 @@ public class Exporter {
 		// go through recipes to see if any recipes contain items we're planning on exporting
 		// if they do, we need to export those items as well
 		final List<ItemStack> matchingRecipeItems = Lists.newArrayList();
+		final List<IRecipe> matchingRecipes = Lists.newArrayList();
 		for (final IRecipe recipe : ForgeRegistries.RECIPES.getValues()) {
 
 			final ItemStack output = recipe.getRecipeOutput();
@@ -197,6 +221,7 @@ public class Exporter {
 			// check if any of the planned exports are the same items as in this recipe
 			for (final Item item : items.items()) {
 				if (output.getItem().equals(item) || ingredients.stream().anyMatch(stack -> stack.getItem().equals(item))) {
+					matchingRecipes.add(recipe);
 					matchingRecipeItems.add(output);
 					matchingRecipeItems.addAll(ingredients);
 					break;
@@ -208,23 +233,24 @@ public class Exporter {
 		// every recipe that touched a recipe that touched a recipe that touched a recipe that touched a soulus recipe
 		items.add(matchingRecipeItems);
 
-		return items.stacks();
+		return new Tuple2<>(items.stacks(), matchingRecipes);
 	}
 
 	private static class StackMap {
 
-		private final Map<Item, List<ItemStack>> internalMap = Maps.newHashMap();
+		private final Map<Item, List<Tuple2<ItemStack, Integer>>> internalMap = Maps.newHashMap();
+		private int index = 0;
 
 		public void add (final List<ItemStack> stacks) {
 			for (final ItemStack stack : stacks) {
-				List<ItemStack> itemList = internalMap.get(stack.getItem());
+				List<Tuple2<ItemStack, Integer>> itemList = internalMap.get(stack.getItem());
 				if (itemList == null) internalMap.put(stack.getItem(), itemList = Lists.newArrayList());
 
-				if (itemList.stream().anyMatch(existingStack -> areStacksEqual(stack, existingStack)))
+				if (itemList.stream().anyMatch(existingStack -> areStacksEqual(stack, existingStack._1)))
 					continue;
 
 				// the stack isn't in this set yet
-				itemList.add(stack);
+				itemList.add(new Tuple2<>(stack, index++));
 				Logger.info(stack.getItem().getRegistryName() + " (" + stack.getDisplayName() + ")");
 			}
 		}
@@ -234,7 +260,12 @@ public class Exporter {
 		}
 
 		public List<ItemStack> stacks () {
-			return internalMap.values().stream().flatMap(stackList -> stackList.stream()).collect(Collectors.toList());
+			return internalMap.values()
+				.stream()
+				.flatMap(stackList -> stackList.stream())
+				.sorted( (a, b) -> a._2 - b._2)
+				.map(stack -> stack._1)
+				.collect(Collectors.toList());
 		}
 
 		private boolean areStacksEqual (final ItemStack a, final ItemStack b) {

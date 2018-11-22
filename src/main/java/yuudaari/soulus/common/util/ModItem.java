@@ -17,6 +17,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -189,8 +190,22 @@ public class ModItem extends Item implements IModThing {
 	}
 
 	@Override
-	public void onRegisterDescription (JeiDescriptionRegistry registry) {
-		if (hasDescription)
+	public void onRegisterDescription (final JeiDescriptionRegistry registry) {
+		if (!hasDescription) return;
+
+		final Ingredient ing = getDescriptionIngredient();
+		final String name = getDescriptionRegistryName();
+		if (name != null)
+			registry.add(ing == null ? Ingredient.fromItem(this) : ing, name);
+		else
 			registry.add(this);
+	}
+
+	public Ingredient getDescriptionIngredient () {
+		return null;
+	}
+
+	public String getDescriptionRegistryName () {
+		return null;
 	}
 }
