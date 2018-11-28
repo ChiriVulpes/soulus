@@ -37,10 +37,12 @@ public class ItemExport {
 		@Serialized public final String image;
 		@Serialized public final String displayName;
 		@Serialized public final String nbt;
+		@Serialized public final int data;
 
 		public StackExport (final String image, final ItemStack stack) {
 			this.image = image;
 			this.displayName = stack.getDisplayName();
+			this.data = stack.getMetadata();
 			this.nbt = stack.hasTagCompound() ? stack.getTagCompound().toString() : "";
 		}
 	}
