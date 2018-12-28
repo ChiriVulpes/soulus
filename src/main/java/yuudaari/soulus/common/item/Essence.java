@@ -103,6 +103,6 @@ public class Essence extends ModItem {
 
 	@Override
 	public void onRegisterDescription (JeiDescriptionRegistry registry) {
-		registry.add(new IngredientPotentialEssence(true), getRegistryName());
+		registry.add(new IngredientPotentialEssence(false, false), getRegistryName());
 	}
 }

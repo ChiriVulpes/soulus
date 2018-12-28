@@ -5,6 +5,7 @@ import java.util.List;
 import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.crafting.IIngredientFactory;
 import net.minecraftforge.common.crafting.JsonContext;
 import yuudaari.soulus.Soulus;
@@ -29,7 +30,7 @@ public class IngredientPotentialEssence extends Ingredient {
 	}
 
 	public static IngredientPotentialEssence getInstanceNoAsh () {
-		if (INSTANCE_NO_ASH == null) INSTANCE_NO_ASH = new IngredientPotentialEssence(true);
+		if (INSTANCE_NO_ASH == null) INSTANCE_NO_ASH = new IngredientPotentialEssence(false, true);
 		return INSTANCE_NO_ASH;
 	}
 
@@ -50,18 +51,24 @@ public class IngredientPotentialEssence extends Ingredient {
 		return stacks.toArray(new ItemStack[0]);
 	}
 
+	private final boolean allowEmpty;
+	private final boolean allowAsh;
+
 	public IngredientPotentialEssence () {
-		this(false);
+		this(true, true);
 	}
 
-	public IngredientPotentialEssence (boolean justEssence) {
-		super(getMatchingStacks1(justEssence));
+	public IngredientPotentialEssence (boolean allowAsh, boolean allowEmpty) {
+		super(getMatchingStacks1(!allowAsh));
+		this.allowAsh = allowAsh;
+		this.allowEmpty = allowEmpty;
 	}
 
 	@Override
 	public boolean apply (ItemStack input) {
-		return input == null || input.isEmpty() || input.getItem() == ModItems.ESSENCE || input
-			.getItem() == ModItems.ASH;
+		return (allowEmpty && (input == null || input.isEmpty())) || //
+			input.getItem() == ModItems.ESSENCE || // 
+			(allowAsh && input.getItem() == ModItems.ASH);
 	}
 
 	@Override
@@ -73,7 +80,9 @@ public class IngredientPotentialEssence extends Ingredient {
 
 		@Override
 		public Ingredient parse (JsonContext context, JsonObject json) {
-			return new IngredientPotentialEssence();
+			final boolean allowAsh = json.has("allow_ash") ? JsonUtils.getBoolean(json, "allow_ash") : true;
+			final boolean allowEmpty = json.has("allow_empty") ? JsonUtils.getBoolean(json, "allow_ash") : true;
+			return new IngredientPotentialEssence(allowAsh, allowEmpty);
 		}
 	}
 }

@@ -1,0 +1,19 @@
+{
+	"type": "forge:ore_shapeless",
+	"ingredients": [
+		{
+			"item": "minecraft:book"
+		},
+		{
+			"type": "soulus:potential_essence",
+			"allow_ash": false,
+			"allow_empty": false
+		}
+	],
+	"result": {
+		"item": "patchouli:guide_book",
+		"nbt": {
+			"patchouli:book": "soulus:soulus"
+		}
+	}
+}

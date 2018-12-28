@@ -21,8 +21,7 @@ import com.google.gson.JsonParseException;
 
 public class RecipeShapeless extends Recipe {
 
-	@Nonnull
-	protected ItemStack output = ItemStack.EMPTY;
+	@Nonnull protected ItemStack output = ItemStack.EMPTY;
 	protected NonNullList<Ingredient> input = NonNullList.create();
 
 	public RecipeShapeless (ResourceLocation group, Block result, Object... recipe) {

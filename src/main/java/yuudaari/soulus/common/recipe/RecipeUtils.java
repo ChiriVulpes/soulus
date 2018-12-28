@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistryModifiable;
+import yuudaari.soulus.Soulus;
 
 @Mod.EventBusSubscriber
 public class RecipeUtils {
@@ -29,7 +30,8 @@ public class RecipeUtils {
 				if (!resultProperty.isJsonObject()) continue;
 				try {
 					return getOutput(entry, context);
-				} catch (JsonSyntaxException e) {}
+				} catch (JsonSyntaxException e) {
+				}
 			}
 		}
 
@@ -54,16 +56,21 @@ public class RecipeUtils {
 	 * Remove invalid composer recipes after they're registered
 	 */
 	@SubscribeEvent
-	public static void registerRecipes (RegistryEvent.Register<IRecipe> event) {
-		IForgeRegistryModifiable<IRecipe> registry = (IForgeRegistryModifiable<IRecipe>) event.getRegistry();
+	public static void registerRecipes (final RegistryEvent.Register<IRecipe> event) {
+		final IForgeRegistryModifiable<IRecipe> registry = (IForgeRegistryModifiable<IRecipe>) event.getRegistry();
 
-		List<ResourceLocation> toRemove = new ArrayList<>();
-		for (IRecipe recipe : registry) {
-			if (recipe instanceof IRecipeComposer && recipe.getRecipeOutput().isEmpty())
+		final List<ResourceLocation> toRemove = new ArrayList<>();
+		for (final IRecipe recipe : registry) {
+			final boolean isSoulusRecipe = recipe instanceof IRecipeComposer || //
+				recipe instanceof RecipeShaped || //
+				recipe instanceof RecipeShapeless || //
+				recipe.getRegistryName().getResourceDomain().equalsIgnoreCase(Soulus.MODID);
+
+			if (isSoulusRecipe && recipe.getRecipeOutput().isEmpty())
 				toRemove.add(recipe.getRegistryName());
 		}
 
-		for (ResourceLocation name : toRemove) {
+		for (final ResourceLocation name : toRemove) {
 			registry.remove(name);
 		}
 	}
