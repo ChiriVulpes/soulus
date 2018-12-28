@@ -20,11 +20,13 @@ public class RecipeExport {
 	@Serialized public final String type;
 	@Serialized public final StackExport output;
 	@Serialized(IngredientListSerializer.class) public final List<IngredientExport> ingredients;
+	@Serialized public final float compositionTime;
 
 	public RecipeExport (final IRecipe recipe) {
 		this.name = recipe.getRegistryName().toString();
 		this.type = getRecipeType(recipe);
 		this.output = new StackExport(recipe.getRecipeOutput());
+		this.compositionTime = recipe instanceof IRecipeComposer ? ((IRecipeComposer) recipe).getTime() : 1;
 		this.ingredients = recipe.getIngredients()
 			.stream()
 			.map(ingredient -> new IngredientExport(ingredient))
@@ -40,7 +42,7 @@ public class RecipeExport {
 			return recipe instanceof IShapedRecipe ? "composer_shaped" : "composer_shapeless";
 		}
 
-		return recipe instanceof IShapedRecipe ? "shaped" : "shapeless";
+		return recipe instanceof IShapedRecipe ? "craft_shaped" : "craft_shapeless";
 	}
 
 	@Serializable
