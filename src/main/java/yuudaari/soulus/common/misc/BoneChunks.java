@@ -103,6 +103,8 @@ public class BoneChunks {
 				World world = event.getWorld();
 				EntityPlayer player = event.getEntityPlayer();
 
+				particles(world, player, heldItem.getItem());
+
 				if (!world.isRemote) {
 					List<ItemStack> drops = getDrops(boneType.name);
 					for (ItemStack drop : drops) {
@@ -111,9 +113,8 @@ public class BoneChunks {
 						world.spawnEntity(dropEntity);
 					}
 				}
-				heldItem.setCount(heldItem.getCount() - 1);
 
-				particles(world, player, heldItem.getItem());
+				heldItem.setCount(heldItem.getCount() - 1);
 			}
 		}
 	}
