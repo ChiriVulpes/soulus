@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -37,7 +36,6 @@ import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSummoner;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
-import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.ModPotionEffect;
 import yuudaari.soulus.common.util.Range;
 
@@ -416,7 +414,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 				spawned++;
 
-				Logger.info("spawned " + essenceType + " by " + players.stream().map(player -> player.getName()).collect(Collectors.joining(", ")));
+				// Logger.info("spawned " + essenceType + " by " + players.stream().map(player -> player.getName()).collect(Collectors.joining(", ")));
 
 				for (EntityPlayer player : players) {
 					Advancements.SUMMON_CREATURE.trigger(player, new Tuple2<>(essenceType, usedPlayer));

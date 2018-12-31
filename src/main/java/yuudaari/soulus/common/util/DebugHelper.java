@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.client.exporter.Exporter;
 
 @Mod.EventBusSubscriber
@@ -35,9 +36,10 @@ public class DebugHelper {
 
 	// We *must* call render code in pre-render. If we don't, it won't work right. Because we need to render some things as part
 	// of the export, we therefore call all export code in pre-render.
+	@SideOnly(Side.CLIENT)
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void onFrameStart (final RenderTickEvent e) {
-		if (e.phase != Phase.START)
+		if (e.phase != Phase.START || bind == null || !isInDebugContext())
 			return;
 
 		final int code = bind.getKeyCode();

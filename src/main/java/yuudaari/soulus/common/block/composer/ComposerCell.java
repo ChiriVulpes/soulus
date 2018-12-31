@@ -18,6 +18,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
@@ -266,6 +268,9 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 		}
 	}
 
+	// this has to stay clientside, TooltipFlags doesn't exist on the server
+	// solution, don't use TOP, cuz it retarded. who came up with the idea of having server-side tooltips.
+	@SideOnly(Side.CLIENT)
 	@Override
 	protected List<String> onWailaTooltipMore (IBlockState blockState, ComposerCellTileEntity te, EntityPlayer player) {
 		ItemStack storedItem = te.getStoredItem();

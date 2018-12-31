@@ -26,6 +26,8 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import scala.Tuple2;
 import yuudaari.soulus.client.exporter.exports.*;
 import yuudaari.soulus.common.CreativeTab;
@@ -52,6 +54,7 @@ public class Exporter {
 		return str.replaceAll("[^A-Za-z0-9-_ ]", "_");
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static List<String> export () {
 		Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
 
@@ -136,7 +139,8 @@ public class Exporter {
 		// wait a lil while
 		try {
 			Thread.sleep(1500);
-		} catch (InterruptedException e) {}
+		} catch (InterruptedException e) {
+		}
 
 		return result;
 	}

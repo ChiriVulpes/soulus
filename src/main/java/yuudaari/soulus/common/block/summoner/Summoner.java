@@ -293,6 +293,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 			return LangHelper.localize(this.getUnlocalizedName() + ".focused.name", alignment).trim();
 		}
 
+		@SideOnly(Side.CLIENT)
 		@Override
 		public void addInformation (ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 			tooltip.add(LangHelper.localize("tooltip." + Soulus.MODID + ":summoner.style." + EndersteelType

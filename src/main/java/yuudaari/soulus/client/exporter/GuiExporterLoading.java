@@ -8,9 +8,12 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class GuiExporterLoading {
 
+	@SideOnly(Side.CLIENT)
 	public static void renderLoadingScreen (final String title, final String subtitle, final ItemStack stack, final float progress) {
 		final Minecraft mc = Minecraft.getMinecraft();
 		final ScaledResolution res = new ScaledResolution(mc);
@@ -40,6 +43,7 @@ public class GuiExporterLoading {
 		mc.getFramebuffer().bindFramebuffer(false);
 	}
 
+	@SideOnly(Side.CLIENT)
 	private static void tryRenderTooltip (final ItemStack stack, final String subtitle) {
 		final Minecraft mc = Minecraft.getMinecraft();
 		final ScaledResolution res = new ScaledResolution(mc);
@@ -63,6 +67,7 @@ public class GuiExporterLoading {
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	private static void renderTooltip (final ItemStack stack, final String subtitle) {
 		final Minecraft mc = Minecraft.getMinecraft();
 		final ScaledResolution res = new ScaledResolution(mc);
