@@ -4,7 +4,7 @@
 	"description": "You must sift through the ashes of the dead to restore life to the world.",
 	"version": "${mod_version}",
 	"mcversion": "${mcversion}",
-	"url": "https://github.com/Yuudaari/soulus",
+	"url": "https://soulus.info",
 	"updateUrl": "",
 	"authorList": ["Yuudaari"],
 	"credits": "",
