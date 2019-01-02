@@ -145,7 +145,7 @@ public class BoneChunks {
 		List<ItemStack> result = new ArrayList<>();
 		Random rand = new Random();
 
-		Tuple2<Double, Map<String, Double>> dropMap = BoneChunks.drops.get(boneType);
+		Tuple2<Double, Map<String, Double>> dropMap = BoneChunks.drops.get(boneType.toLowerCase());
 		double chanceTotal = dropMap._1;
 		Map<String, Double> drops = dropMap._2;
 
