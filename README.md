@@ -5,3 +5,5 @@
 [Roadmap](https://trello.com/b/DfeJpjGX/soulus)
 
 # [Visit the website for docs, guides, downloads, and more!](https://soulus.info)
+
+# [Join the Discord to chat!](https://discord.gg/FMnTUCV)
