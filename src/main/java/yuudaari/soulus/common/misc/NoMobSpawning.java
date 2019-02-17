@@ -19,7 +19,6 @@ import yuudaari.soulus.common.config.creature.ConfigCreature;
 import yuudaari.soulus.common.config.creature.ConfigCreatureBiome;
 import yuudaari.soulus.common.config.creature.ConfigCreatureDimension;
 import yuudaari.soulus.common.config.creature.ConfigCreatures;
-import yuudaari.soulus.common.util.Logger;
 
 @Mod.EventBusSubscriber
 @ConfigInjected(Soulus.MODID)
@@ -88,10 +87,6 @@ public class NoMobSpawning {
 					return;
 				}
 			}
-		}
-
-		if (entityName.equalsIgnoreCase("minecraft:pig")) {
-			Logger.info("spawn chance of " + entityName + ", " + creatureConfig.spawnChance);
 		}
 
 		// if we have 100% spawn chance, don't attempt to cancel

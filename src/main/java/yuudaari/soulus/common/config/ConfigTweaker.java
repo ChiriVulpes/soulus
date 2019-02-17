@@ -29,7 +29,7 @@ public class ConfigTweaker {
 
 			if (!conditionsMatch(conditions, null)) continue;
 
-			applyTweak(workingDirectory, base, tweak.getAsJsonObject());
+			apply(workingDirectory, base, tweak.getAsJsonObject());
 		}
 
 		return base;
@@ -93,7 +93,21 @@ public class ConfigTweaker {
 		return false;
 	}
 
-	private static void applyTweak (final String workingDirectory, final JsonObject base, final JsonObject tweak) {
+	private static void apply (final String workingDirectory, final JsonObject base, final JsonObject tweak) {
+		final JsonElement changes = tweak.get("changes");
+		if (changes != null && changes.isJsonArray()) {
+			for (final JsonElement change : changes.getAsJsonArray()) {
+				if (!change.isJsonObject()) {
+					Logger.warn("Changes must be Json Objects.");
+					continue;
+				}
+
+				apply(workingDirectory, base, change.getAsJsonObject());
+			}
+
+			return;
+		}
+
 		JsonElement insertStrategyJson = tweak.get("insert_strategy");
 		if (insertStrategyJson == null || !insertStrategyJson.isJsonPrimitive() || !insertStrategyJson.getAsJsonPrimitive().isString()) {
 			Logger.warn("Tweaks must have an 'insert_strategy' property of 'replace' or 'merge'.");
