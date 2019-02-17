@@ -88,10 +88,6 @@ public class GameStages {
 	}
 
 	private void changed () {
-		try {
-			Soulus.reloadConfig(true, false);
-		} catch (final Exception e) {
-			throw new RuntimeException(e);
-		}
+		Soulus.reloadConfigs(true, false);
 	}
 }

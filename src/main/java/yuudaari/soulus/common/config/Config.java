@@ -35,6 +35,8 @@ public class Config {
 
 	public static final Map<String, Config> INSTANCES = new HashMap<>();
 
+	public static boolean CONFIGS_HAVE_GAME_STAGES_TWEAKS = false;
+
 	private final Map<String, List<Class<?>>> CONFIG_CLASSES;
 	private final Map<Field, Class<?>> INJECTIONS;
 	private final Map<Class<?>, Object> CONFIGS = new HashMap<>();
@@ -91,6 +93,8 @@ public class Config {
 	 */
 	public void deserialize (final boolean includeOverrides) {
 		this.CONFIGS.clear();
+
+		CONFIGS_HAVE_GAME_STAGES_TWEAKS = false;
 
 		for (final Map.Entry<String, List<Class<?>>> entry : CONFIG_CLASSES.entrySet()) {
 			final Map<Class<?>, Object> configs = createConfigClassMap(entry.getValue());
@@ -169,14 +173,22 @@ public class Config {
 		if (profile != null) {
 			filename = getProfileFilename(filename, profile);
 
-			final String workingDirectory = new File(filename).getParent();
 			final JsonObject baseProfile = getConfigFileJson(filename, true);
+
 			final JsonElement tweaks = json.get("tweaks");
-			if (includeOverrides && tweaks != null && tweaks.isJsonArray()) {
-				json = ConfigTweaker.applyTweaks(workingDirectory == null ? "" : workingDirectory, baseProfile, tweaks.getAsJsonArray());
-			} else {
+			final boolean hasTweaks = tweaks != null && tweaks.isJsonArray();
+
+			if (includeOverrides && hasTweaks) {
+				String workingDirectory = new File(filename).getParent();
+				workingDirectory = workingDirectory == null ? "" : workingDirectory;
+				json = ConfigTweaker.applyTweaks(workingDirectory, baseProfile, tweaks.getAsJsonArray());
+
+			} else
 				json = baseProfile;
-			}
+
+
+			if (hasTweaks)
+				CONFIGS_HAVE_GAME_STAGES_TWEAKS = true;
 		}
 
 

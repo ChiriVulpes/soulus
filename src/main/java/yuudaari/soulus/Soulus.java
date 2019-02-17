@@ -106,24 +106,29 @@ public class Soulus {
 	/**
 	 * Refreshes the soulus config
 	 */
-	public static void reloadConfig (boolean syncToClients, boolean serialize) throws Exception {
-		config.deserialize(false);
-		Logger.info("Reloaded client-side configs.");
+	public static void reloadConfigs (boolean syncToClients, boolean serialize) {
+		try {
+			config.deserialize(false);
+			Logger.info("Reloaded client-side configs.");
 
-		if (serialize) {
-			try {
-				config.serialize();
-				Logger.info("Written updated configs to disk.");
-			} catch (Exception e) {
-				Logger.error(e);
+			if (serialize) {
+				try {
+					config.serialize();
+					Logger.info("Written updated configs to disk.");
+				} catch (final Exception e) {
+					Logger.error(e);
+				}
 			}
-		}
 
-		config.deserialize(true);
-		Logger.info("Reloaded configs.");
+			config.deserialize(true);
+			Logger.info("Reloaded configs.");
 
-		if (syncToClients && FMLCommonHandler.instance().getSide() == Side.SERVER) {
-			syncConfigs();
+			if (syncToClients && FMLCommonHandler.instance().getSide() == Side.SERVER) {
+				syncConfigs();
+			}
+
+		} catch (final Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -144,11 +149,8 @@ public class Soulus {
 
 		final String configPath = event.getModConfigurationDirectory().getAbsolutePath() + "/soulus/";
 		config = new Config(event.getAsmData(), configPath, Soulus.MODID);
-		try {
-			reloadConfig(false, true);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+
+		reloadConfigs(false, true);
 
 		ForgeChunkManager.setForcedChunkLoadingCallback(INSTANCE, (List<Ticket> tickets, World world) -> {
 		});
@@ -229,20 +231,23 @@ public class Soulus {
 		event.registerServerCommand(new SoulusCommand());
 	}
 
+	@SideOnly(Side.SERVER)
 	@SubscribeEvent
 	public static void clientConnect (PlayerLoggedInEvent event) {
-		SendConfig packet = new SendConfig(Config.INSTANCES.get(Soulus.MODID).SERVER_CONFIGS);
-		SoulsPacketHandler.INSTANCE.sendTo(packet, (EntityPlayerMP) event.player);
+		if (Loader.isModLoaded("gamestages") && Config.CONFIGS_HAVE_GAME_STAGES_TWEAKS) {
+			// game stages tweaks depend on all players, so we have to reload all the configs from scratch
+			reloadConfigs(true, false);
+
+		} else {
+			SendConfig packet = new SendConfig(Config.INSTANCES.get(Soulus.MODID).SERVER_CONFIGS);
+			SoulsPacketHandler.INSTANCE.sendTo(packet, (EntityPlayerMP) event.player);
+		}
 	}
 
 	@SubscribeEvent
 	public static void disconnect (ClientDisconnectionFromServerEvent event) {
 		config.SERVER_CONFIGS.clear();
-		try {
-			// no need to serialize this time
-			reloadConfig(false, false);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		// no need to serialize this time
+		reloadConfigs(false, false);
 	}
 }
