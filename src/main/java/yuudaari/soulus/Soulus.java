@@ -24,6 +24,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -234,14 +235,26 @@ public class Soulus {
 	@SideOnly(Side.SERVER)
 	@SubscribeEvent
 	public static void clientConnect (PlayerLoggedInEvent event) {
-		if (Loader.isModLoaded("gamestages") && Config.CONFIGS_HAVE_GAME_STAGES_TWEAKS) {
-			// game stages tweaks depend on all players, so we have to reload all the configs from scratch
-			reloadConfigs(true, false);
-
-		} else {
+		if (!reloadAllIfGameStagesTweaks()) { // if all configs weren't reloaded, we send the configs only to the new player
 			SendConfig packet = new SendConfig(Config.INSTANCES.get(Soulus.MODID).SERVER_CONFIGS);
 			SoulsPacketHandler.INSTANCE.sendTo(packet, (EntityPlayerMP) event.player);
 		}
+	}
+
+	@SideOnly(Side.SERVER)
+	@SubscribeEvent
+	public static void clientDisconnect (PlayerLoggedOutEvent event) {
+		reloadAllIfGameStagesTweaks();
+	}
+
+	private static boolean reloadAllIfGameStagesTweaks () {
+		if (Loader.isModLoaded("gamestages") && Config.CONFIGS_HAVE_GAME_STAGES_TWEAKS) {
+			// game stages tweaks depend on all players, so we have to reload all the configs from scratch
+			reloadConfigs(true, false);
+			return true;
+		}
+
+		return false;
 	}
 
 	@SubscribeEvent

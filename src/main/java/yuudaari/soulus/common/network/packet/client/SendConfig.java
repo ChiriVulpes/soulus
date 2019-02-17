@@ -10,7 +10,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.config.Config;
-import yuudaari.soulus.common.util.Logger;
 
 public class SendConfig implements IMessage {
 
@@ -55,12 +54,7 @@ public class SendConfig implements IMessage {
 			config.SERVER_CONFIGS.clear();
 			config.SERVER_CONFIGS.putAll(message.configs);
 
-			try {
-				Soulus.reloadConfig(true, false);
-			} catch (Exception e) {
-				Logger.warn("Unable to sync configs");
-				Logger.error(e);
-			}
+			Soulus.reloadConfigs(true, false);
 
 			return null;
 		}

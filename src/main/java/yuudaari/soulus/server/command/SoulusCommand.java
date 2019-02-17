@@ -64,7 +64,7 @@ public class SoulusCommand extends CommandBase {
 
 	private void executeReload (ICommandSender ics) throws SoulusCommandException {
 		try {
-			Soulus.reloadConfig(true, true);
+			Soulus.reloadConfigs(true, true);
 			ics.sendMessage(new TextComponentTranslation("command.soulus:reload.success"));
 
 		} catch (final Exception e) {
