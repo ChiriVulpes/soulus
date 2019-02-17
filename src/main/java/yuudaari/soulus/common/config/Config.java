@@ -89,14 +89,14 @@ public class Config {
 	/**
 	 * Deserializes the serializable classes from each config file
 	 */
-	public void deserialize () {
+	public void deserialize (final boolean includeOverrides) {
 		this.CONFIGS.clear();
 
 		for (final Map.Entry<String, List<Class<?>>> entry : CONFIG_CLASSES.entrySet()) {
 			final Map<Class<?>, Object> configs = createConfigClassMap(entry.getValue());
 
 			Logger.scopes.push("Config Deserialization");
-			tryDeserializeConfigFile(entry.getKey(), configs);
+			tryDeserializeConfigFile(entry.getKey(), configs, includeOverrides);
 			Logger.scopes.pop();
 
 			this.CONFIGS.putAll(configs);
@@ -160,7 +160,7 @@ public class Config {
 	/**
 	 * Attempts to deserialize a config file into all of the classes that serialize into it
 	 */
-	private void tryDeserializeConfigFile (String filename, final Map<Class<?>, Object> toDeserialize) {
+	private void tryDeserializeConfigFile (String filename, final Map<Class<?>, Object> toDeserialize, final boolean includeOverrides) {
 		JsonObject json = getConfigFileJson(filename, true);
 		final JsonObject serverJson = getServerJson(filename);
 
@@ -172,7 +172,7 @@ public class Config {
 			final String workingDirectory = new File(filename).getParent();
 			final JsonObject baseProfile = getConfigFileJson(filename, true);
 			final JsonElement tweaks = json.get("tweaks");
-			if (tweaks != null && tweaks.isJsonArray()) {
+			if (includeOverrides && tweaks != null && tweaks.isJsonArray()) {
 				json = ConfigTweaker.applyTweaks(workingDirectory == null ? "" : workingDirectory, baseProfile, tweaks.getAsJsonArray());
 			} else {
 				json = baseProfile;
@@ -191,7 +191,9 @@ public class Config {
 
 			if (serverJson != null && FMLCommonHandler.instance().getEffectiveSide() != Side.SERVER) {
 				final Object deserializedServer = tryDeserializeClass(configClass, serverJson, null);
-				injectServerFields(configClass, deserialized, deserializedServer);
+				if (includeOverrides) {
+					injectServerFields(configClass, deserialized, deserializedServer);
+				}
 			}
 
 			deserializationEntry.setValue(deserialized);

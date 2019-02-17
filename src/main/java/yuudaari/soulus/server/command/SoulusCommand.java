@@ -2,6 +2,7 @@ package yuudaari.soulus.server.command;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.jline.utils.Log;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -67,6 +68,7 @@ public class SoulusCommand extends CommandBase {
 			ics.sendMessage(new TextComponentTranslation("command.soulus:reload.success"));
 
 		} catch (final Exception e) {
+			Log.error(e);
 			throw new SoulusCommandException("reload", "failed", e.getMessage());
 		}
 	}

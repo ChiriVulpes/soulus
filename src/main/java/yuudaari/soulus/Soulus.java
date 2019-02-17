@@ -107,8 +107,8 @@ public class Soulus {
 	 * Refreshes the soulus config
 	 */
 	public static void reloadConfig (boolean syncToClients, boolean serialize) throws Exception {
-		config.deserialize();
-		Logger.info("Reloaded configs.");
+		config.deserialize(false);
+		Logger.info("Reloaded client-side configs.");
 
 		if (serialize) {
 			try {
@@ -118,6 +118,9 @@ public class Soulus {
 				Logger.error(e);
 			}
 		}
+
+		config.deserialize(true);
+		Logger.info("Reloaded configs.");
 
 		if (syncToClients && FMLCommonHandler.instance().getSide() == Side.SERVER) {
 			syncConfigs();

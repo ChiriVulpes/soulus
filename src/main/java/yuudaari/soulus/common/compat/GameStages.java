@@ -6,14 +6,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.gamestages.event.GameStageEvent;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
+import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.util.Logger;
-import net.minecraftforge.fml.common.Optional;
 
 public class GameStages {
 
@@ -36,10 +36,10 @@ public class GameStages {
 		final String playerOption = playerJson.getAsString();
 		final JsonArray stages = stagesJson.getAsJsonArray();
 
-		final World world = Minecraft.getMinecraft().world;
-		if (world == null) return false;
+		final MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+		if (server == null) return false;
 
-		for (final EntityPlayer player : world.playerEntities) {
+		for (final EntityPlayer player : server.getPlayerList().getPlayers()) {
 			final boolean stagesMatch = stagesMatch(player, stages);
 
 			if (playerOption.equalsIgnoreCase("all") && !stagesMatch)

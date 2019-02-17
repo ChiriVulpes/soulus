@@ -1,6 +1,5 @@
 package yuudaari.soulus.common.config;
 
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import com.google.common.collect.Streams;
 import com.google.gson.JsonArray;
@@ -88,7 +87,7 @@ public class ConfigTweaker {
 
 		final JsonElement not = conditionParent.get("not");
 		if (not != null && (not.isJsonArray() || not.isJsonObject()))
-			return !conditionsMatch(or, null);
+			return !conditionsMatch(not, null);
 
 		Logger.warn("Tweak conditions must have a 'type' property.");
 		return false;
