@@ -2,6 +2,12 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"label": "Setup",
+			"type": "shell",
+			"command": "\"./gradlew\" setupDecompWorkspace",
+			"problemMatcher": []
+		},
+		{
 			"label": "Test",
 			"type": "shell",
 			"group": {

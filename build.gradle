@@ -77,9 +77,14 @@ repositories {
     repositories {
         // RedstoneFlux
         maven {
-            name = "CoFH Maven"
-            url = "http://maven.covers1624.net"
+            name "CoFH Maven"
+            url "http://maven.covers1624.net"
         }
+    }
+    
+    // Game Stages
+    maven { 
+        url "https://maven.mcmoddev.com"
     }
 }
 
@@ -98,6 +103,8 @@ dependencies {
     deobfProvided "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.19-11:api"
     
     compileOnly "vazkii.patchouli:Patchouli:1.0-10.45"
+    
+    deobfProvided "net.darkhax.gamestages:GameStages-1.12.2:2.0.112"
 }
 
 processResources {

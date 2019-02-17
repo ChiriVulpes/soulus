@@ -17,6 +17,12 @@
 			"text": "$(rocket)  Build",
 			"tooltip": "Builds the mod",
 			"arguments": ["Build"]
+		},
+		{
+			"command": "workbench.action.tasks.runTask",
+			"text": "$(checklist)  Setup",
+			"tooltip": "Sets up the decomp workspace",
+			"arguments": ["Setup"]
 		}
 	]
 }

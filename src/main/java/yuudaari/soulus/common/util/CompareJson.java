@@ -13,23 +13,22 @@ public class CompareJson {
 
 		if (element1 == null || element2 == null) return (element1 == null) == (element2 == null);
 
-		if (element1.getClass() != element2.getClass()) result = false;
+		if (element1.getClass() != element2.getClass())
+			result = false;
 
-		if (element1.isJsonNull()) return true;
+		else if (element1.isJsonNull())
+			return true;
 
-		if (element1.isJsonPrimitive()) result = equal(element1.getAsJsonPrimitive(), element2.getAsJsonPrimitive());
+		else if (element1.isJsonPrimitive())
+			result = equal(element1.getAsJsonPrimitive(), element2.getAsJsonPrimitive());
 
-		if (element1.isJsonObject()) result = equal(element1.getAsJsonObject(), element2.getAsJsonObject());
+		else if (element1.isJsonObject())
+			result = equal(element1.getAsJsonObject(), element2.getAsJsonObject());
 
-		if (element1.isJsonArray()) result = equal(element1.getAsJsonArray(), element2.getAsJsonArray());
-
-		if (!result) {
-			// Logger.info(element1 + ", " + element2);
-		}
+		else if (element1.isJsonArray())
+			result = equal(element1.getAsJsonArray(), element2.getAsJsonArray());
 
 		return result;
-
-		// throw new UnsupportedOperationException();
 	}
 
 	private static boolean equal (JsonObject obj1, JsonObject obj2) {

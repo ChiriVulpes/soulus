@@ -10,6 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -33,6 +34,7 @@ import yuudaari.soulus.common.ModGenerators;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.advancement.Advancements;
 import yuudaari.soulus.common.compat.ExNihiloCreatioRecipes;
+import yuudaari.soulus.common.compat.GameStages;
 import yuudaari.soulus.common.compat.crafttweaker.ZenComposer;
 import yuudaari.soulus.common.compat.top.TheOneProbe;
 import yuudaari.soulus.common.config.Config;
@@ -106,10 +108,12 @@ public class Soulus {
 	 */
 	public static void reloadConfig (boolean syncToClients, boolean serialize) throws Exception {
 		config.deserialize();
+		Logger.info("Reloaded configs.");
 
 		if (serialize) {
 			try {
 				config.serialize();
+				Logger.info("Written updated configs to disk.");
 			} catch (Exception e) {
 				Logger.error(e);
 			}
@@ -126,6 +130,7 @@ public class Soulus {
 	public static void syncConfigs () {
 		SendConfig packet = new SendConfig(Config.INSTANCES.get(Soulus.MODID).SERVER_CONFIGS);
 		SoulsPacketHandler.INSTANCE.sendToAll(packet);
+		Logger.info("Synced configs to clients.");
 	}
 
 	@EventHandler
@@ -142,7 +147,8 @@ public class Soulus {
 			throw new RuntimeException(e);
 		}
 
-		ForgeChunkManager.setForcedChunkLoadingCallback(INSTANCE, (List<Ticket> tickets, World world) -> {});
+		ForgeChunkManager.setForcedChunkLoadingCallback(INSTANCE, (List<Ticket> tickets, World world) -> {
+		});
 
 		Advancements.registerTriggers();
 		DebugHelper.initialize();
@@ -178,6 +184,10 @@ public class Soulus {
 
 		if (Loader.isModLoaded("crafttweaker")) {
 			ZenComposer.apply();
+		}
+
+		if (Loader.isModLoaded("gamestages")) {
+			MinecraftForge.EVENT_BUS.register(new GameStages());
 		}
 
 		BoneChunks.registerEssenceDrops(event);

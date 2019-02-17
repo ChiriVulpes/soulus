@@ -31,6 +31,18 @@ public class ConfigCreatures {
 		.addCreatureConfig("minecraft:ender_dragon", new ConfigCreature(1.0)
 			.setWhitelistedDrops("all", "*"));
 
+	@ConfigProfile public static ConfigCreatures noCreaturesYesDrops = new ConfigCreatures()
+		.addCreatureConfig("minecraft:*", new ConfigCreature(0.0)
+			.setWhitelistedDrops("all", "*"))
+		.addCreatureConfig("minecraft:skeleton", new ConfigCreature(0.0)
+			.setBlacklistedDrops("all", "minecraft:bone"))
+		.addCreatureConfig("minecraft:wither_skeleton", new ConfigCreature(0.0)
+			.setBlacklistedDrops("all", "minecraft:bone"))
+		.addCreatureConfig("minecraft:stray", new ConfigCreature(0.0)
+			.setBlacklistedDrops("all", "minecraft:bone"))
+		.addCreatureConfig("minecraft:wither", new ConfigCreature(1.0))
+		.addCreatureConfig("minecraft:ender_dragon", new ConfigCreature(1.0));
+
 	@ConfigProfile public static ConfigCreatures noCreaturesNoDropsAllMods = new ConfigCreatures()
 		.addCreatureConfig("*", new ConfigCreature(0.0)
 			.setWhitelistedDrops("summoned", "*"))

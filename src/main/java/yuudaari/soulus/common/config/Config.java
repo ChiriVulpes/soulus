@@ -22,15 +22,14 @@ import com.google.gson.JsonPrimitive;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.relauncher.Side;
+import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.util.CompareJson;
 import yuudaari.soulus.common.util.JSON;
 import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.serializer.DefaultFieldSerializer;
-import yuudaari.soulus.common.util.serializer.Serialized;
 import yuudaari.soulus.common.util.serializer.SerializationHandlers.IClassDeserializationHandler;
 import yuudaari.soulus.common.util.serializer.SerializationHandlers.IClassSerializationHandler;
-import yuudaari.soulus.common.config.ConfigFile;
-import yuudaari.soulus.common.config.ConfigInjected.Inject;
+import yuudaari.soulus.common.util.serializer.Serialized;
 
 public class Config {
 
@@ -125,7 +124,7 @@ public class Config {
 	 * Attempts to deserialize a config file into all of the classes that serialize into it
 	 */
 	private void trySerializeConfigFile (final String filename, final Map<Class<?>, Object> toSerialize) {
-		final String profile = getProfile(getConfigFileJson(filename), filename, toSerialize);
+		final String profile = getProfile(getConfigFileJson(filename, true), filename, toSerialize);
 		String profileFilename = filename;
 		if (profile != null)
 			profileFilename = getProfileFilename(filename, profile);
@@ -162,14 +161,22 @@ public class Config {
 	 * Attempts to deserialize a config file into all of the classes that serialize into it
 	 */
 	private void tryDeserializeConfigFile (String filename, final Map<Class<?>, Object> toDeserialize) {
-		JsonObject json = getConfigFileJson(filename);
+		JsonObject json = getConfigFileJson(filename, true);
 		final JsonObject serverJson = getServerJson(filename);
 
 		final String profile = getProfile(json, filename, toDeserialize);
 
 		if (profile != null) {
 			filename = getProfileFilename(filename, profile);
-			json = getConfigFileJson(filename);
+
+			final String workingDirectory = new File(filename).getParent();
+			final JsonObject baseProfile = getConfigFileJson(filename, true);
+			final JsonElement tweaks = json.get("tweaks");
+			if (tweaks != null && tweaks.isJsonArray()) {
+				json = ConfigTweaker.applyTweaks(workingDirectory == null ? "" : workingDirectory, baseProfile, tweaks.getAsJsonArray());
+			} else {
+				json = baseProfile;
+			}
 		}
 
 
@@ -263,16 +270,23 @@ public class Config {
 			.toString();
 	}
 
+	private JsonObject getConfigFileJson (final String filename, final boolean create) {
+		return (JsonObject) getConfigFileJson(filename, create, true);
+	}
+
 	/**
 	 * Gets the JsonObject for a config file
 	 */
-	private JsonObject getConfigFileJson (final String filename) {
+	public JsonElement getConfigFileJson (final String filename, final boolean create, final boolean mustBeJsonObject) {
 		final File configFile = new File(DIRECTORY + filename);
-		if (!configFile.exists())
+		if (!configFile.exists()) {
+			if (!create) return null;
+
 			createConfigFile(configFile);
+		}
 
 		try {
-			return parseJsonConfigFile(new FileReader(configFile));
+			return parseJsonConfigFile(new FileReader(configFile), true, mustBeJsonObject);
 
 		} catch (final FileNotFoundException e) {
 			return null;
@@ -388,18 +402,18 @@ public class Config {
 	 */
 	@Nullable
 	private static JsonObject parseJsonConfigFile (final Reader reader) {
-		return parseJsonConfigFile(reader, true);
+		return (JsonObject) parseJsonConfigFile(reader, true, true);
 	}
 
 	/**
-	 * Returns the JsonObject of a config file
+	 * Returns the JsonElement of a config file
 	 */
 	@Nullable
-	private static JsonObject parseJsonConfigFile (final Reader reader, boolean warn) {
+	private static JsonElement parseJsonConfigFile (final Reader reader, final boolean warn, final boolean mustBeJsonObject) {
 		try {
 			final JsonElement json = new JsonParser().parse(reader);
-			if (json != null && json.isJsonObject())
-				return json.getAsJsonObject();
+			if (json != null && (!mustBeJsonObject || json.isJsonObject()))
+				return json;
 
 		} catch (final JsonParseException e) {
 			if (warn) Logger.warn("Could not parse the config file: " + e.getMessage());
@@ -415,7 +429,7 @@ public class Config {
 	private static void writeJsonConfigFile (final File configFile, final JsonObject json, @Nullable final String saveOld) {
 		try {
 
-			final JsonElement oldConfig = parseJsonConfigFile(new FileReader(configFile), false);
+			final JsonElement oldConfig = parseJsonConfigFile(new FileReader(configFile), false, false);
 			if (CompareJson.equal(json, oldConfig))
 				return;
 
