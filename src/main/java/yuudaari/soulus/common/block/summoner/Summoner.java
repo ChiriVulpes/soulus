@@ -1,5 +1,6 @@
 package yuudaari.soulus.common.block.summoner;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -42,6 +43,7 @@ import yuudaari.soulus.common.config.block.ConfigSummoner;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.item.CrystalBlood;
+import yuudaari.soulus.common.item.EssencePerfect;
 import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.item.Soulbook;
 import yuudaari.soulus.common.util.EssenceType;
@@ -444,6 +446,19 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		// we can't insert anything else if it's an empty summoner
 		if (!state.getValue(HAS_SOULBOOK))
 			return false;
+
+		if (item == ModItems.ESSENCE_PERFECT) {
+			final SummonerTileEntity te = (SummonerTileEntity) world.getTileEntity(pos);
+			final String essenceType = te.getEssenceType();
+			final String[] perfectEssenceTypes = EssencePerfect.getEssenceTypes(stack);
+
+			if (Arrays.stream(perfectEssenceTypes).anyMatch(essenceType::equalsIgnoreCase)) {
+
+				te.insertPerfectEssence();
+				stack.shrink(1);
+				return true;
+			}
+		}
 
 		// trying to insert the upgrades
 		return super.onActivateInsert(world, pos, player, stack);

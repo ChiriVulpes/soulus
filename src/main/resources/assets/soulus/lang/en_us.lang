@@ -72,6 +72,7 @@ item.soulus:soulbook.focused.name=Soulbook of %1$s
 
 item.soulus:essence.unfocused.name=Unfocused Essence
 item.soulus:essence.focused.name=%1$s Essence
+item.soulus:essence_perfect.name=Existential Essence
 
 
 # BLOCKS
@@ -240,6 +241,7 @@ jei.description.soulus:dust_wood=Wood crushed into a fine powder.
 jei.description.soulus:emerald_burnt=A crystal forged from fire.
 jei.description.soulus:emerald_coated=A crystal forged from fire, covered in blood.
 jei.description.soulus:essence=A magical powder which is the essence of a creature. Essence is collected from the remains of the dead, and, when filling a Soulbook, can be used to return these creatures from extinction.
+jei.description.soulus:essence_perfect=A magical powder made by combining multiple different kinds of essence. There seems to be a strength in the variety, causing soulus to more quickly congeal into a living form.
 jei.description.soulus:gear_bone=A makeshift gear made from the remains of creatures. May be useful when combined with a stronger material.
 jei.description.soulus:gear_bone_ender=A makeshift gear made from the remains of alien creatures. May be useful when combined with a stronger material.
 jei.description.soulus:gear_oscillating=A gear made from the remains of creatures and glowing metal. The potential uses would cause any magical engineer to salivate. Oscillating Gears can provide a boost to the speed of a Summoner or Composer.

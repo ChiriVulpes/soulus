@@ -35,6 +35,7 @@ public class ConfigSummoner extends ConfigUpgradeableBlock<Summoner> {
 	@Serialized @ClientField public double particleCountActivated = 3;
 
 	// SERVER
+	@Serialized public double perfectEssenceWorth = 1.0;
 	// count
 	@Serialized public int nonUpgradedSpawningRadius = 4;
 	@Serialized public Range nonUpgradedCount = new Range(1, 2);

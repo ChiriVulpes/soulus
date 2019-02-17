@@ -1,0 +1,13 @@
+{
+	"parent": "minecraft:item/generated",
+	"textures": {
+		"layer0": "soulus:items/essence/1",
+		"layer1": "soulus:items/essence/2",
+		"layer2": "soulus:items/essence/3",
+		"layer3": "soulus:items/essence/4",
+		"layer4": "soulus:items/essence/5",
+		"layer5": "soulus:items/essence/6",
+		"layer6": "soulus:items/essence/7",
+		"layer7": "soulus:items/essence/8"
+	}
+}

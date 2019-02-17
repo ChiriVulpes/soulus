@@ -234,6 +234,11 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 	private int timeTillNextMajorUpdate = 0;
 
+	public void insertPerfectEssence () {
+		timeTillSpawn -= CONFIG.perfectEssenceWorth * spawnDelay.getInt(world.rand);
+		blockUpdate();
+	}
+
 	@Override
 	public void update () {
 		if (essenceType == null) {

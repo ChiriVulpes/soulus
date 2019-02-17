@@ -38,6 +38,29 @@ public class Essence extends ModItem {
 		return stack;
 	}
 
+	public static int getColor (final String essenceType, final int index) {
+		if (essenceType == null)
+			return -1;
+
+		EntityEntry entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(essenceType));
+		if (entry == null)
+			return -1;
+
+		ConfigEssence essenceConfig = CONFIG.get(essenceType);
+		if (essenceConfig == null)
+			return -1;
+
+		ConfigColor colors = essenceConfig.colors;
+		if (colors == null) {
+			EntityList.EntityEggInfo eggInfo = entry.getEgg();
+			if (eggInfo == null)
+				return -1;
+			colors = new ConfigColor(eggInfo);
+		}
+
+		return index == 0 ? colors.primary : colors.secondary;
+	}
+
 	public Essence () {
 		super("essence");
 		setMaxStackSize(64);
@@ -46,26 +69,7 @@ public class Essence extends ModItem {
 		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
 			registerColorHandler( (ItemStack stack, int tintIndex) -> {
 				String essenceType = EssenceType.getEssenceType(stack);
-				if (essenceType == null)
-					return -1;
-
-				EntityEntry entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(essenceType));
-				if (entry == null)
-					return -1;
-
-				ConfigEssence essenceConfig = CONFIG.get(essenceType);
-				if (essenceConfig == null)
-					return -1;
-
-				ConfigColor colors = essenceConfig.colors;
-				if (colors == null) {
-					EntityList.EntityEggInfo eggInfo = entry.getEgg();
-					if (eggInfo == null)
-						return -1;
-					colors = new ConfigColor(eggInfo);
-				}
-
-				return tintIndex == 0 ? colors.primary : colors.secondary;
+				return getColor(essenceType, tintIndex);
 			});
 		}
 	}

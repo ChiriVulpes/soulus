@@ -49,6 +49,7 @@ public class ModItems {
 	public static ModItem EMERALD_BURNT = new ModItem("emerald_burnt").setHasDescription();
 	public static ModItem EMERALD_COATED = new ModItem("emerald_coated").setHasDescription();
 	public static ModItem ESSENCE = new Essence();
+	public static ModItem ESSENCE_PERFECT = new EssencePerfect();
 	public static ModItem GEAR_BONE = new GearBone("gear_bone");
 	public static ModItem GEAR_BONE_DRY = new GearBone("gear_bone_dry");
 	public static ModItem GEAR_BONE_ENDER = new GearBoneEnder();
@@ -135,6 +136,7 @@ public class ModItems {
 		SOUL_CATALYST,
 
 		ESSENCE,
+		ESSENCE_PERFECT,
 
 		SOULBOOK
 	};
