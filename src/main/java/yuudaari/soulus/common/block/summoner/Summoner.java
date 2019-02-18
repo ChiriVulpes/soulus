@@ -33,6 +33,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.Soulus;
@@ -349,8 +350,14 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		registry.registerAll(CONFIG.styleItems.entrySet()
 			.stream()
 			.map(item -> new ShapelessOreRecipe(null, getStackFromEndersteelType(item.getValue()), getIngredientFromStacksOfOtherEndersteelTypes(item.getValue()), ForgeRegistries.ITEMS.getValue(new ResourceLocation(item.getKey())))
-				.setRegistryName(getRegistryName() + "_" + item.getValue().getName().toLowerCase()))
+				.setRegistryName(getRegistryName() + "_dye_" + item.getValue().getName().toLowerCase()))
 			.toArray(ShapelessOreRecipe[]::new));
+
+		registry.registerAll(CONFIG.styleItems.entrySet()
+			.stream()
+			.map(item -> new ShapedOreRecipe(null, getStackFromEndersteelType(item.getValue()), "BBB", "BeB", "BBB", 'B', ModBlocks.BARS_ENDERSTEEL.getStackFromEndersteelType(item.getValue()), 'e', ModItems.BONEMEAL_ENDER)
+				.setRegistryName(getRegistryName() + "_" + item.getValue().getName().toLowerCase()))
+			.toArray(ShapedOreRecipe[]::new));
 	}
 
 	private ItemStack getStackFromEndersteelType (final EndersteelType type) {

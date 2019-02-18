@@ -1,32 +1,226 @@
 {
 	"multipart": [
-		{   "apply": { "model": "soulus:bars_endersteel/normal/post_ends" }},
-		{   "when": { "north": false, "east": false, "south": false, "west": false },
+		{   "when": { "variant": "normal" },
+			"apply": { "model": "soulus:bars_endersteel/normal/post_ends" }
+		},
+		{   "when": { "variant": "normal", "north": false, "east": false, "south": false, "west": false },
 			"apply": { "model": "soulus:bars_endersteel/normal/post" }
 		},
-		{   "when": { "north": true, "east": false, "south": false, "west": false },
+		{   "when": { "variant": "normal", "north": true, "east": false, "south": false, "west": false },
 			"apply": { "model": "soulus:bars_endersteel/normal/cap" }
 		},
-		{   "when": { "north": false, "east": true, "south": false, "west": false },
+		{   "when": { "variant": "normal", "north": false, "east": true, "south": false, "west": false },
 			"apply": { "model": "soulus:bars_endersteel/normal/cap", "y": 90 }
 		},
-		{   "when": { "north": false, "east": false, "south": true, "west": false },
+		{   "when": { "variant": "normal", "north": false, "east": false, "south": true, "west": false },
 			"apply": { "model": "soulus:bars_endersteel/normal/cap_alt" }
 		},
-		{   "when": { "north": false, "east": false, "south": false, "west": true },
+		{   "when": { "variant": "normal", "north": false, "east": false, "south": false, "west": true },
 			"apply": { "model": "soulus:bars_endersteel/normal/cap_alt", "y": 90 }
 		},
-		{   "when": { "north": true },
+		{   "when": { "variant": "normal", "north": true },
 			"apply": { "model": "soulus:bars_endersteel/normal/side" }
 		},
-		{   "when": { "east": true },
+		{   "when": { "variant": "normal", "east": true },
 			"apply": { "model": "soulus:bars_endersteel/normal/side", "y": 90 }
 		},
-		{   "when": { "south": true },
+		{   "when": { "variant": "normal", "south": true },
 			"apply": { "model": "soulus:bars_endersteel/normal/side_alt" }
 		},
-		{   "when": { "west": true },
+		{   "when": { "variant": "normal", "west": true },
 			"apply": { "model": "soulus:bars_endersteel/normal/side_alt", "y": 90 }
+		},
+		
+		
+		{   "when": { "variant": "earthy" },
+			"apply": { "model": "soulus:bars_endersteel/earthy/post_ends" }
+		},
+		{   "when": { "variant": "earthy", "north": false, "east": false, "south": false, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/earthy/post" }
+		},
+		{   "when": { "variant": "earthy", "north": true, "east": false, "south": false, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/earthy/cap" }
+		},
+		{   "when": { "variant": "earthy", "north": false, "east": true, "south": false, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/earthy/cap", "y": 90 }
+		},
+		{   "when": { "variant": "earthy", "north": false, "east": false, "south": true, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/earthy/cap_alt" }
+		},
+		{   "when": { "variant": "earthy", "north": false, "east": false, "south": false, "west": true },
+			"apply": { "model": "soulus:bars_endersteel/earthy/cap_alt", "y": 90 }
+		},
+		{   "when": { "variant": "earthy", "north": true },
+			"apply": { "model": "soulus:bars_endersteel/earthy/side" }
+		},
+		{   "when": { "variant": "earthy", "east": true },
+			"apply": { "model": "soulus:bars_endersteel/earthy/side", "y": 90 }
+		},
+		{   "when": { "variant": "earthy", "south": true },
+			"apply": { "model": "soulus:bars_endersteel/earthy/side_alt" }
+		},
+		{   "when": { "variant": "earthy", "west": true },
+			"apply": { "model": "soulus:bars_endersteel/earthy/side_alt", "y": 90 }
+		},
+		
+		
+		{   "when": { "variant": "spooky" },
+			"apply": { "model": "soulus:bars_endersteel/spooky/post_ends" }
+		},
+		{   "when": { "variant": "spooky", "north": false, "east": false, "south": false, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/spooky/post" }
+		},
+		{   "when": { "variant": "spooky", "north": true, "east": false, "south": false, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/spooky/cap" }
+		},
+		{   "when": { "variant": "spooky", "north": false, "east": true, "south": false, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/spooky/cap", "y": 90 }
+		},
+		{   "when": { "variant": "spooky", "north": false, "east": false, "south": true, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/spooky/cap_alt" }
+		},
+		{   "when": { "variant": "spooky", "north": false, "east": false, "south": false, "west": true },
+			"apply": { "model": "soulus:bars_endersteel/spooky/cap_alt", "y": 90 }
+		},
+		{   "when": { "variant": "spooky", "north": true },
+			"apply": { "model": "soulus:bars_endersteel/spooky/side" }
+		},
+		{   "when": { "variant": "spooky", "east": true },
+			"apply": { "model": "soulus:bars_endersteel/spooky/side", "y": 90 }
+		},
+		{   "when": { "variant": "spooky", "south": true },
+			"apply": { "model": "soulus:bars_endersteel/spooky/side_alt" }
+		},
+		{   "when": { "variant": "spooky", "west": true },
+			"apply": { "model": "soulus:bars_endersteel/spooky/side_alt", "y": 90 }
+		},
+		
+		
+		{   "when": { "variant": "ender" },
+			"apply": { "model": "soulus:bars_endersteel/ender/post_ends" }
+		},
+		{   "when": { "variant": "ender", "north": false, "east": false, "south": false, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/ender/post" }
+		},
+		{   "when": { "variant": "ender", "north": true, "east": false, "south": false, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/ender/cap" }
+		},
+		{   "when": { "variant": "ender", "north": false, "east": true, "south": false, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/ender/cap", "y": 90 }
+		},
+		{   "when": { "variant": "ender", "north": false, "east": false, "south": true, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/ender/cap_alt" }
+		},
+		{   "when": { "variant": "ender", "north": false, "east": false, "south": false, "west": true },
+			"apply": { "model": "soulus:bars_endersteel/ender/cap_alt", "y": 90 }
+		},
+		{   "when": { "variant": "ender", "north": true },
+			"apply": { "model": "soulus:bars_endersteel/ender/side" }
+		},
+		{   "when": { "variant": "ender", "east": true },
+			"apply": { "model": "soulus:bars_endersteel/ender/side", "y": 90 }
+		},
+		{   "when": { "variant": "ender", "south": true },
+			"apply": { "model": "soulus:bars_endersteel/ender/side_alt" }
+		},
+		{   "when": { "variant": "ender", "west": true },
+			"apply": { "model": "soulus:bars_endersteel/ender/side_alt", "y": 90 }
+		},
+		
+		
+		{   "when": { "variant": "blazing" },
+			"apply": { "model": "soulus:bars_endersteel/blazing/post_ends" }
+		},
+		{   "when": { "variant": "blazing", "north": false, "east": false, "south": false, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/blazing/post" }
+		},
+		{   "when": { "variant": "blazing", "north": true, "east": false, "south": false, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/blazing/cap" }
+		},
+		{   "when": { "variant": "blazing", "north": false, "east": true, "south": false, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/blazing/cap", "y": 90 }
+		},
+		{   "when": { "variant": "blazing", "north": false, "east": false, "south": true, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/blazing/cap_alt" }
+		},
+		{   "when": { "variant": "blazing", "north": false, "east": false, "south": false, "west": true },
+			"apply": { "model": "soulus:bars_endersteel/blazing/cap_alt", "y": 90 }
+		},
+		{   "when": { "variant": "blazing", "north": true },
+			"apply": { "model": "soulus:bars_endersteel/blazing/side" }
+		},
+		{   "when": { "variant": "blazing", "east": true },
+			"apply": { "model": "soulus:bars_endersteel/blazing/side", "y": 90 }
+		},
+		{   "when": { "variant": "blazing", "south": true },
+			"apply": { "model": "soulus:bars_endersteel/blazing/side_alt" }
+		},
+		{   "when": { "variant": "blazing", "west": true },
+			"apply": { "model": "soulus:bars_endersteel/blazing/side_alt", "y": 90 }
+		},
+		
+		
+		{   "when": { "variant": "sorrow" },
+			"apply": { "model": "soulus:bars_endersteel/sorrow/post_ends" }
+		},
+		{   "when": { "variant": "sorrow", "north": false, "east": false, "south": false, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/sorrow/post" }
+		},
+		{   "when": { "variant": "sorrow", "north": true, "east": false, "south": false, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/sorrow/cap" }
+		},
+		{   "when": { "variant": "sorrow", "north": false, "east": true, "south": false, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/sorrow/cap", "y": 90 }
+		},
+		{   "when": { "variant": "sorrow", "north": false, "east": false, "south": true, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/sorrow/cap_alt" }
+		},
+		{   "when": { "variant": "sorrow", "north": false, "east": false, "south": false, "west": true },
+			"apply": { "model": "soulus:bars_endersteel/sorrow/cap_alt", "y": 90 }
+		},
+		{   "when": { "variant": "sorrow", "north": true },
+			"apply": { "model": "soulus:bars_endersteel/sorrow/side" }
+		},
+		{   "when": { "variant": "sorrow", "east": true },
+			"apply": { "model": "soulus:bars_endersteel/sorrow/side", "y": 90 }
+		},
+		{   "when": { "variant": "sorrow", "south": true },
+			"apply": { "model": "soulus:bars_endersteel/sorrow/side_alt" }
+		},
+		{   "when": { "variant": "sorrow", "west": true },
+			"apply": { "model": "soulus:bars_endersteel/sorrow/side_alt", "y": 90 }
+		},
+		
+		
+		{   "when": { "variant": "madness" },
+			"apply": { "model": "soulus:bars_endersteel/madness/post_ends" }
+		},
+		{   "when": { "variant": "madness", "north": false, "east": false, "south": false, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/madness/post" }
+		},
+		{   "when": { "variant": "madness", "north": true, "east": false, "south": false, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/madness/cap" }
+		},
+		{   "when": { "variant": "madness", "north": false, "east": true, "south": false, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/madness/cap", "y": 90 }
+		},
+		{   "when": { "variant": "madness", "north": false, "east": false, "south": true, "west": false },
+			"apply": { "model": "soulus:bars_endersteel/madness/cap_alt" }
+		},
+		{   "when": { "variant": "madness", "north": false, "east": false, "south": false, "west": true },
+			"apply": { "model": "soulus:bars_endersteel/madness/cap_alt", "y": 90 }
+		},
+		{   "when": { "variant": "madness", "north": true },
+			"apply": { "model": "soulus:bars_endersteel/madness/side" }
+		},
+		{   "when": { "variant": "madness", "east": true },
+			"apply": { "model": "soulus:bars_endersteel/madness/side", "y": 90 }
+		},
+		{   "when": { "variant": "madness", "south": true },
+			"apply": { "model": "soulus:bars_endersteel/madness/side_alt" }
+		},
+		{   "when": { "variant": "madness", "west": true },
+			"apply": { "model": "soulus:bars_endersteel/madness/side_alt", "y": 90 }
 		}
 	]
 }

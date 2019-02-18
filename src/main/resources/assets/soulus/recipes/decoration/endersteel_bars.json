@@ -11,6 +11,7 @@
 	},
 	"result": {
 		"item": "soulus:bars_endersteel",
-		"count": 16
+		"count": 16,
+		"data": 0
 	}
 }

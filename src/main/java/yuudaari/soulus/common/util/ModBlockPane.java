@@ -47,9 +47,12 @@ public class ModBlockPane extends BlockPane implements IBlock {
 	public void setHasItem () {
 		if (!hasItem) {
 			hasItem = true;
-			itemBlock = new ItemBlock(this);
-			itemBlock.setRegistryName(getRegistryName());
+			itemBlock = createItemBlock();
 		}
+	}
+
+	protected ItemBlock createItemBlock () {
+		return (ItemBlock) new ItemBlock(this).setRegistryName(getRegistryName());
 	}
 
 	public boolean hasItem () {

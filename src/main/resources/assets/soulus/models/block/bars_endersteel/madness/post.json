@@ -1,6 +1,6 @@
 {
 	"parent": "soulus:block/bars/post",
 	"textures": {
-		"all": "soulus:blocks/bars_endersteel/normal"
+		"all": "soulus:blocks/bars_endersteel/madness"
 	}
 }
