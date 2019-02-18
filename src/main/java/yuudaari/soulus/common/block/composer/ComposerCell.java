@@ -184,8 +184,12 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	//
 
 	@Override
-	public boolean canActivateWithItem (ItemStack stack, World world, BlockPos pos) {
-		ComposerCellTileEntity te = (ComposerCellTileEntity) world.getTileEntity(pos);
+	public boolean canActivateWithStack (ItemStack stack, World world, BlockPos pos) {
+		return true;
+	}
+
+	@Override
+	public boolean canActivateTileEntity (final ComposerCellTileEntity te) {
 		return te.storedQuantity < CONFIG.maxQuantity;
 	}
 

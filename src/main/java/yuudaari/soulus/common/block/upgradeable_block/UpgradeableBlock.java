@@ -149,12 +149,13 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 		dropItems(world, drops, pos);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public final boolean onBlockActivated (World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) {
 			ItemStack heldStack = player.getHeldItem(hand);
 
-			if (!canActivate(world.getTileEntity(pos))) return false;
+			if (!canActivateTileEntity((TileEntityClass) world.getTileEntity(pos))) return false;
 
 			if (heldStack.isEmpty()) {
 				if (player.isSneaking()) {
@@ -236,7 +237,8 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 	}
 
 	@Override
-	public final void getDrops (NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {}
+	public final void getDrops (NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+	}
 
 	/////////////////////////////////////////
 	// Utility
@@ -285,7 +287,8 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 		}
 	}
 
-	public void addOtherDropStacksToList (List<ItemStack> list, World world, BlockPos pos, IBlockState state) {}
+	public void addOtherDropStacksToList (List<ItemStack> list, World world, BlockPos pos, IBlockState state) {
+	}
 
 	public void addBlockToList (List<ItemStack> list, World world, BlockPos pos) {
 		list.add(getItemStack());
@@ -300,11 +303,16 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 		return ((UpgradeableBlockTileEntity) te).getUpgradeForItem(stack);
 	}
 
-	public boolean canActivateWithItem (ItemStack stack, World world, BlockPos pos) {
-		return canActivate(world.getTileEntity(pos)) && (stack.isEmpty() || isUpgradeItem(stack, world, pos) != null);
+	@SuppressWarnings("unchecked")
+	public final boolean canActivateWithItem (ItemStack stack, World world, BlockPos pos) {
+		return canActivateTileEntity((TileEntityClass) world.getTileEntity(pos)) && canActivateWithStack(stack, world, pos);
 	}
 
-	public boolean canActivate (TileEntity te) {
+	public boolean canActivateWithStack (ItemStack stack, World world, BlockPos pos) {
+		return stack.isEmpty() || isUpgradeItem(stack, world, pos) != null;
+	}
+
+	public boolean canActivateTileEntity (TileEntityClass te) {
 		return true;
 	}
 
@@ -417,8 +425,10 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 		return null;
 	}
 
-	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, TileEntityClass te, EntityPlayer player) {}
+	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, TileEntityClass te, EntityPlayer player) {
+	}
 
-	protected void onWailaTooltipFooter (List<String> currentTooltip, IBlockState blockState, TileEntityClass te, EntityPlayer player) {}
+	protected void onWailaTooltipFooter (List<String> currentTooltip, IBlockState blockState, TileEntityClass te, EntityPlayer player) {
+	}
 
 }

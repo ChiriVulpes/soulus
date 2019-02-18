@@ -1,6 +1,5 @@
 package yuudaari.soulus.common.block.summoner;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -43,7 +42,6 @@ import yuudaari.soulus.common.config.block.ConfigSummoner;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.item.CrystalBlood;
-import yuudaari.soulus.common.item.EssencePerfect;
 import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.item.Soulbook;
 import yuudaari.soulus.common.util.EssenceType;
@@ -189,9 +187,13 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	}
 
 	@Override
-	public boolean canActivate (TileEntity te) {
-		if (te == null || !(te instanceof SummonerTileEntity)) return true;
-		return !((SummonerTileEntity) te).hasMalice();
+	public boolean canActivateWithStack (ItemStack stack, World world, BlockPos pos) {
+		return super.canActivateWithStack(stack, world, pos) || stack.getItem() == ModItems.ESSENCE_PERFECT;
+	}
+
+	@Override
+	public boolean canActivateTileEntity (SummonerTileEntity te) {
+		return te == null || !te.hasMalice();
 	}
 
 	@Override
@@ -449,15 +451,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 		if (item == ModItems.ESSENCE_PERFECT) {
 			final SummonerTileEntity te = (SummonerTileEntity) world.getTileEntity(pos);
-			final String essenceType = te.getEssenceType();
-			final String[] perfectEssenceTypes = EssencePerfect.getEssenceTypes(stack);
-
-			if (Arrays.stream(perfectEssenceTypes).anyMatch(essenceType::equalsIgnoreCase)) {
-
-				te.insertPerfectEssence();
-				stack.shrink(1);
-				return true;
-			}
+			return te.insertPerfectEssence(stack, player.isSneaking());
 		}
 
 		// trying to insert the upgrades

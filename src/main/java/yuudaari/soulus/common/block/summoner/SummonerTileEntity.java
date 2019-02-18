@@ -1,5 +1,6 @@
 package yuudaari.soulus.common.block.summoner;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
@@ -36,6 +37,7 @@ import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSummoner;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
+import yuudaari.soulus.common.item.EssencePerfect;
 import yuudaari.soulus.common.util.ModPotionEffect;
 import yuudaari.soulus.common.util.Range;
 
@@ -55,6 +57,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	private String essenceType;
 	private float timeTillSpawn = 0;
 	private float lastTimeTillSpawn;
+	private float boost = 0;
 	private Float soulbookUses = null;
 	private boolean malice = true;
 
@@ -230,13 +233,33 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 			double nearAmt = (d0 / (activatingRange * activatingRange));
 			activationAmount += Math.max(0, (1 - (nearAmt * nearAmt)) * 2);
 		}
+
+		if (boost > 0.01) {
+			activationAmount *= 1 + boost;
+			boost *= CONFIG.perfectEssenceBoostDecay;
+		}
 	}
 
 	private int timeTillNextMajorUpdate = 0;
 
-	public void insertPerfectEssence () {
-		timeTillSpawn -= CONFIG.perfectEssenceWorth * spawnDelay.getInt(world.rand);
+	public boolean insertPerfectEssence (final ItemStack stack, final boolean all) {
+		final String essenceType = getEssenceType();
+		final String[] perfectEssenceTypes = EssencePerfect.getEssenceTypes(stack);
+
+		if (!Arrays.stream(perfectEssenceTypes).anyMatch(essenceType::equalsIgnoreCase))
+			return false;
+
+		final int count = all ? stack.getCount() : 1;
+
+		for (int i = 0; i < count; i++) {
+			boost += CONFIG.perfectEssenceBoost * spawnDelay.get(world.rand);
+		}
+
 		blockUpdate();
+		timeTillNextMajorUpdate = 0;
+
+		stack.shrink(count);
+		return true;
 	}
 
 	@Override
@@ -251,7 +274,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 			onUpdateUpgrades(false);
 		}
 
-		if (timeTillNextMajorUpdate-- < 0) {
+		if (--timeTillNextMajorUpdate < 0) {
 			timeTillNextMajorUpdate = 20;
 			updateActivationAmount();
 		}
@@ -287,6 +310,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	private void resetTimer (boolean update) {
 		timeTillSpawn = spawnDelay.getInt(world.rand);
 		lastTimeTillSpawn = timeTillSpawn;
+		timeTillNextMajorUpdate = 0;
 
 		if (update)
 			blockUpdate();
@@ -305,8 +329,11 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		lastTimeTillSpawn = compound.getFloat("delay_last");
 		malice = compound.getBoolean("malice");
 		usedPlayer = compound.getBoolean("used_player");
+		boost = compound.getFloat("boost");
 
 		onUpdateUpgrades(false);
+
+		timeTillNextMajorUpdate = 0;
 	}
 
 	@Nonnull
@@ -323,6 +350,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		compound.setFloat("delay_last", lastTimeTillSpawn);
 		compound.setBoolean("malice", malice);
 		compound.setBoolean("used_player", usedPlayer);
+		compound.setFloat("boost", boost);
 	}
 
 	private boolean isPlayerInRangeForEffects () {
