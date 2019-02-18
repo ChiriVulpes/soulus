@@ -52,6 +52,7 @@ public class BarsEndersteel extends ModBlockPane {
 		setSoundType(SoundType.METAL);
 		setDefaultState(getDefaultState().withProperty(VARIANT, EndersteelType.NORMAL));
 		setHasDescription();
+		registerWailaProvider(BarsEndersteel.class);
 	}
 
 	@Override
@@ -140,4 +141,18 @@ public class BarsEndersteel extends ModBlockPane {
 			.map(e -> getStackFromEndersteelType(e))
 			.toArray(ItemStack[]::new));
 	}
+
+	/////////////////////////////////////////
+	// Waila
+	//
+
+	@Override
+	public final List<String> getWailaTooltip (final List<String> currentTooltip, final IDataAccessor accessor) {
+		final String variant = accessor.getBlockState().getValue(VARIANT).getName();
+
+		currentTooltip.add(LangHelper.localize("tooltip." + Soulus.MODID + ":summoner.style." + variant));
+
+		return currentTooltip;
+	}
+
 }
