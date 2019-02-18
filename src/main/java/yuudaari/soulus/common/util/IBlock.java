@@ -5,6 +5,7 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -17,7 +18,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.compat.WailaProviders;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -53,7 +53,13 @@ public interface IBlock extends IModThing {
 
 	abstract CreativeTab getCreativeTabToDisplayOn ();
 
-	abstract void getSubBlocks (CreativeTab itemIn, NonNullList<ItemStack> items);
+	abstract void getSubBlocks (CreativeTabs itemIn, NonNullList<ItemStack> items);
+
+	default NonNullList<ItemStack> getSubBlocks () {
+		final NonNullList<ItemStack> items = NonNullList.create();
+		getSubBlocks(CreativeTab.INSTANCE, items);
+		return items;
+	}
 
 	default List<String> getWailaTooltip (List<String> currentTooltip, IDataAccessor accessor) {
 		return currentTooltip;

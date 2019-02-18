@@ -9,11 +9,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.NonNullList;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -116,11 +114,6 @@ public class ModBlock extends Block implements IBlock {
 	@Override
 	public CreativeTab getCreativeTabToDisplayOn () {
 		return CreativeTab.INSTANCE;
-	}
-
-	@Override
-	public void getSubBlocks (CreativeTab itemIn, NonNullList<ItemStack> items) {
-		items.add(new ItemStack(this));
 	}
 
 	public boolean hasDescription = false;

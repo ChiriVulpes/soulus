@@ -8,9 +8,7 @@ import java.util.List;
 import net.minecraft.block.BlockPane;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.NonNullList;
 
 public class ModBlockPane extends BlockPane implements IBlock {
 
@@ -71,11 +69,6 @@ public class ModBlockPane extends BlockPane implements IBlock {
 	@Override
 	public CreativeTab getCreativeTabToDisplayOn () {
 		return CreativeTab.INSTANCE;
-	}
-
-	@Override
-	public void getSubBlocks (CreativeTab itemIn, NonNullList<ItemStack> items) {
-		items.add(new ItemStack(this));
 	}
 
 	public boolean hasDescription = false;

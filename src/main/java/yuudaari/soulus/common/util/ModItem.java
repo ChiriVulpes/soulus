@@ -22,6 +22,7 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -180,6 +181,12 @@ public class ModItem extends Item implements IModThing {
 
 		stack.shrink(foodConfigGetter.get().getQuantity());
 		return stack;
+	}
+
+	public NonNullList<ItemStack> getSubItems () {
+		final NonNullList<ItemStack> items = NonNullList.create();
+		getSubItems(CreativeTab.INSTANCE, items);
+		return items;
 	}
 
 	public boolean hasDescription = false;

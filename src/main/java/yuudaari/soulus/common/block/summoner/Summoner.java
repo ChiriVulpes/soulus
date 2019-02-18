@@ -1,5 +1,6 @@
 package yuudaari.soulus.common.block.summoner;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -13,12 +14,15 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemMultiTexture;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
@@ -26,8 +30,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
+import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.ModBlocks;
@@ -209,15 +216,13 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 	@Override
 	public void addBlockToList (List<ItemStack> list, World world, BlockPos pos) {
-		list.add(getItemStack(1, getMetaFromState(getDefaultState().withProperty(HAS_SOULBOOK, false)
-			.withProperty(VARIANT, world.getBlockState(pos).getValue(VARIANT)))));
+		list.add(getStackFromEndersteelType(world.getBlockState(pos).getValue(VARIANT)));
 	}
 
 	@Override
-	public void getSubBlocks (CreativeTab tab, NonNullList<ItemStack> list) {
+	public void getSubBlocks (CreativeTabs tab, NonNullList<ItemStack> list) {
 		for (EndersteelType variant : EndersteelType.values()) {
-			list.add(new ItemStack(this, 1, getMetaFromState(getDefaultState().withProperty(VARIANT, variant)
-				.withProperty(HAS_SOULBOOK, false))));
+			list.add(getStackFromEndersteelType(variant));
 		}
 	}
 
@@ -338,6 +343,26 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	/////////////////////////////////////////
 	// Events
 	//
+
+	@Override
+	public void onRegisterRecipes (IForgeRegistry<IRecipe> registry) {
+		registry.registerAll(CONFIG.styleItems.entrySet()
+			.stream()
+			.map(item -> new ShapelessOreRecipe(null, getStackFromEndersteelType(item.getValue()), getIngredientFromStacksOfOtherEndersteelTypes(item.getValue()), ForgeRegistries.ITEMS.getValue(new ResourceLocation(item.getKey())))
+				.setRegistryName(getRegistryName() + "_" + item.getValue().getName().toLowerCase()))
+			.toArray(ShapelessOreRecipe[]::new));
+	}
+
+	private ItemStack getStackFromEndersteelType (final EndersteelType type) {
+		return getItemStack(1, getMetaFromState(getDefaultState().withProperty(VARIANT, type)));
+	}
+
+	private Ingredient getIngredientFromStacksOfOtherEndersteelTypes (final EndersteelType type) {
+		return Ingredient.fromStacks(Arrays.stream(EndersteelType.values())
+			.filter(e -> e != type)
+			.map(e -> getStackFromEndersteelType(e))
+			.toArray(ItemStack[]::new));
+	}
 
 	@Override
 	public boolean onActivateEmptyHand (World world, BlockPos pos, EntityPlayer player) {
