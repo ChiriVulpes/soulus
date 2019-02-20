@@ -1,14 +1,17 @@
 package yuudaari.soulus.common.util.serializer;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.serializer.SerializationHandlers.IFieldDeserializationHandler;
 import yuudaari.soulus.common.util.serializer.SerializationHandlers.IFieldSerializationHandler;
 
-public abstract class ListSerializer<T> extends FieldSerializer<List<T>> {
+public abstract class CollectionSerializer<T> extends FieldSerializer<Collection<T>> {
 
 	/**
 	 * Override
@@ -21,7 +24,7 @@ public abstract class ListSerializer<T> extends FieldSerializer<List<T>> {
 	 * Serializes a list into a Json Array.
 	 */
 	@Override
-	public final JsonElement serialize (final Class<?> objectType, final List<T> object) {
+	public final JsonElement serialize (final Class<?> objectType, final Collection<T> object) {
 		JsonArray result = new JsonArray();
 
 		try {
@@ -43,14 +46,15 @@ public abstract class ListSerializer<T> extends FieldSerializer<List<T>> {
 	 * Deserializes a Json Array into a list.
 	 */
 	@Override
-	public final List<T> deserialize (Class<?> requestedType, JsonElement json) {
+	public final Collection<T> deserialize (Class<?> requestedType, JsonElement json) {
 		if (json == null || !json.isJsonArray()) {
 			Logger.warn("Not a Json Array");
 			return null;
 		}
 
 
-		List<T> result = new ArrayList<>();
+		final Collection<T> result = getCollectionOfClass(requestedType);
+		if (result == null) return result;
 
 		try {
 			for (final JsonElement item : json.getAsJsonArray()) {
@@ -58,13 +62,27 @@ public abstract class ListSerializer<T> extends FieldSerializer<List<T>> {
 			}
 
 		} catch (final Exception e) {
-			Logger.warn("Couldn't serialize list:");
+			Logger.warn("Couldn't deserialize list:");
 			Logger.error(e);
-
-			result = new ArrayList<>();
 		}
 
 		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	private Collection<T> getCollectionOfClass (final Class<?> requestedType) {
+		if (requestedType == List.class)
+			return new ArrayList<>();
+		if (requestedType == Set.class)
+			return new HashSet<>();
+
+		try {
+			return (Collection<T>) requestedType.newInstance();
+		} catch (final Exception e) {
+			Logger.warn("Can't deserialize Collection class '" + requestedType.getCanonicalName() + "':");
+			Logger.error(e);
+			return null;
+		}
 	}
 
 	public JsonElement serializeValue (final T value) throws Exception {
@@ -86,7 +104,7 @@ public abstract class ListSerializer<T> extends FieldSerializer<List<T>> {
 		return (T) DefaultClassSerializer.deserializeValue(deserializer, valueClass, false, value);
 	}
 
-	public static class OfStrings extends ListSerializer<String> {
+	public static class OfStrings extends CollectionSerializer<String> {
 
 		@Override
 		public Class<String> getValueClass () {

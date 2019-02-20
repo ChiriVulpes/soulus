@@ -15,7 +15,7 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonPrimitive;
 import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.common.util.serializer.FieldSerializer;
-import yuudaari.soulus.common.util.serializer.ListSerializer;
+import yuudaari.soulus.common.util.serializer.CollectionSerializer;
 import yuudaari.soulus.common.util.serializer.NullableField;
 import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
@@ -66,7 +66,7 @@ public class OreVein {
 		}
 	}
 
-	public static class BiomeTypeListSerializer extends ListSerializer<Type> {
+	public static class BiomeTypeListSerializer extends CollectionSerializer<Type> {
 
 		@Override
 		public JsonElement serializeValue (Type value) throws Exception {

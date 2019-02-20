@@ -1,13 +1,12 @@
 package yuudaari.soulus.common.block.composer;
 
-import com.mojang.authlib.GameProfile;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nullable;
+import com.mojang.authlib.GameProfile;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityList;
@@ -16,12 +15,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.InventoryCraftResult;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -34,6 +33,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
@@ -47,10 +48,9 @@ import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigComposer;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.client.MobPoof;
-import yuudaari.soulus.common.recipe.IRecipeComposer;
+import yuudaari.soulus.common.recipe.composer.IRecipeComposer;
 import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.common.util.StructureMap.BlockValidator;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 @ConfigInjected(Soulus.MODID)
 public class ComposerTileEntity extends HasRenderItemTileEntity {
@@ -64,6 +64,10 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	private double activationAmount = 0;
 	private float poofChance = 0;
 	private @Nullable UUID owner;
+	public final Map<String, Integer> mobsRequired = new HashMap<>();
+	public final Map<String, Integer> remainingMobs = new HashMap<>();
+	public Set<String> mobWhitelist = null;
+	public Set<String> mobBlacklist = null;
 
 	@Override
 	public Composer getBlock () {
@@ -124,6 +128,8 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 		timeTillCraft = spawnDelay.getInt(world.rand) * (this.container == null ? 1 : this.container.time);
 		lastTimeTillCraft = timeTillCraft;
+		remainingMobs.clear();
+		remainingMobs.putAll(this.mobsRequired);
 
 		if (update)
 			blockUpdate();
@@ -145,50 +151,70 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		// the chance of poofing increases over time
 		this.poofChance += poofChance;
 
-		final List<String> entityTypes = new ArrayList<>();
+		for (final EntityLivingBase entity : getConsumableEntities().values()) {
+			activationAmount += 1;
+
+			if (!world.isRemote && isConnected && hasValidRecipe() && this.poofChance > world.rand.nextDouble()) {
+				// reset poof chance
+				this.poofChance = 0;
+				// blockUpdate(); (only needed if chance is rendered)
+				poofEntity(entity);
+			}
+		}
+
+	}
+
+	private Map<String, EntityLivingBase> getConsumableEntities () {
+
+		final Map<String, EntityLivingBase> consumableEntities = new HashMap<>();
 
 		final EnumFacing facing = world.getBlockState(pos).getValue(Composer.FACING).getOpposite();
 		final AxisAlignedBB activationBox = new AxisAlignedBB(pos.offset(facing, 2)).grow(activatingRange);
 
 		for (final EntityLivingBase entity : world.getEntitiesWithinAABB(EntityLivingBase.class, activationBox)) {
 
-			final List<String> whitelist = CONFIG.whitelistedCreatures;
-			final List<String> blacklist = CONFIG.blacklistedCreatures;
-			final boolean whitelistAll = whitelist == null ? false : whitelist.contains("*");
-			final boolean blacklistAll = blacklist == null ? false : blacklist.contains("*");
+			final boolean whitelistAll = mobWhitelist == null ? false : mobWhitelist.contains("*");
+			final boolean blacklistAll = mobBlacklist == null ? false : mobBlacklist.contains("*");
 
 			if (!(entity instanceof EntityPlayer)) {
 				final ResourceLocation entityType = EntityList.getKey(entity);
-				if (entityTypes.contains(entityType.toString()))
+				if (consumableEntities.containsKey(entityType.toString()))
 					continue;
 
 				final int whitelistLevel = (whitelistAll ? 1 : 0) + //
-					(whitelist != null && whitelist.contains(entityType.getResourceDomain() + ":*") ? 2 : 0) + //
-					(whitelist != null && whitelist.contains(entityType.toString()) ? 4 : 0) - //
+					(mobWhitelist != null && mobWhitelist.contains(entityType.getResourceDomain() + ":*") ? 2 : 0) + //
+					(mobWhitelist != null && mobWhitelist.contains(entityType.toString()) ? 4 : 0) - //
 					(blacklistAll ? 1 : 0) - //
-					(blacklist != null && blacklist.contains(entityType.getResourceDomain() + ":*") ? 2 : 0) - //
-					(blacklist != null && blacklist.contains(entityType.toString()) ? 4 : 0);
+					(mobBlacklist != null && mobBlacklist.contains(entityType.getResourceDomain() + ":*") ? 2 : 0) - //
+					(mobBlacklist != null && mobBlacklist.contains(entityType.toString()) ? 4 : 0);
 
 				if (whitelistLevel < 0)
 					continue;
 
-				entityTypes.add(entityType.toString());
-
-				activationAmount += 1;
-
-				if (!world.isRemote && isConnected && hasValidRecipe() && this.poofChance > world.rand.nextDouble()) {
-					// reset poof chance
-					this.poofChance = 0;
-					// blockUpdate(); (only needed if chance is rendered)
-
-					entity.setDead();
-					mobPoofParticles(world, pos);
-					mobPoofParticles(world, entity.getPosition());
-
-					world.playSound(null, entity.getPosition(), SoundEvents.ENTITY_ELDER_GUARDIAN_DEATH, SoundCategory.NEUTRAL, 0.5F, world.rand
-						.nextFloat() * 0.25F + 0.6F);
-				}
+				consumableEntities.put(entityType.toString(), entity);
 			}
+		}
+
+		return consumableEntities;
+	}
+
+	private void poofEntity (final EntityLivingBase entity) {
+		entity.setDead();
+		mobPoofParticles(world, pos);
+		mobPoofParticles(world, entity.getPosition());
+
+		world.playSound(null, entity.getPosition(), SoundEvents.ENTITY_ELDER_GUARDIAN_DEATH, SoundCategory.NEUTRAL, 0.5F, world.rand
+			.nextFloat() * 0.25F + 0.6F);
+
+		final String entityType = EntityList.getKey(entity).toString();
+		if (remainingMobs.containsKey(entityType)) {
+			final int count = remainingMobs.get(entityType) - 1;
+			if (count <= 0)
+				remainingMobs.remove(entityType);
+			else
+				remainingMobs.put(entityType, count);
+
+			blockUpdate();
 		}
 	}
 
@@ -212,14 +238,38 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		}
 
 		timeTillCraft -= activationAmount;
+		// Logger.info("time till craft " + timeTillCraft);
 
 		if (timeTillCraft <= 0) {
-			if (!world.isRemote) {
-				completeCraft();
+			if (hasValidRecipe()) {
+				if (!processRequiredMobs()) {
+					timeTillCraft += 20;
+					return;
+				}
+
+				if (!world.isRemote) {
+					completeCraft();
+				}
 			}
 
 			resetTimer();
 		}
+	}
+
+	private boolean processRequiredMobs () {
+		if (remainingMobs.size() == 0)
+			return true;
+
+		final Map<String, EntityLivingBase> consumableEntities = getConsumableEntities();
+
+		for (final Map.Entry<String, Integer> requiredEntity : remainingMobs.entrySet()) {
+			final EntityLivingBase entity = consumableEntities.get(requiredEntity.getKey());
+			if (entity == null) continue;
+			poofEntity(entity);
+			break;
+		}
+
+		return remainingMobs.size() == 0;
 	}
 
 	private void updateSignalStrength (double activationAmount) {
@@ -355,9 +405,6 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	}
 
 	public void completeCraft () {
-		if (!hasValidRecipe())
-			return;
-
 		if (!loopComposerCells(ccte -> null)) {
 			validateStructure();
 			if (!isConnected) return;
@@ -442,6 +489,15 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		}
 		compound.setTag("cell_map", cellTag);
 
+		final NBTTagCompound mobsTag = new NBTTagCompound();
+		remainingMobs.entrySet()
+			.forEach(requiredMob -> mobsTag.setInteger(requiredMob.getKey(), requiredMob.getValue()));
+		compound.setTag("required_mobs", mobsTag);
+
+		final String recipe = container == null || container.lastRecipe == null ? null : container.lastRecipe.getRegistryName().toString();
+		if (recipe != null)
+			compound.setString("recipe", recipe);
+
 		if (FMLCommonHandler.instance().getEffectiveSide().isServer()) {
 			compound.setTag("crafting_item", getStoredItem().writeToNBT(new NBTTagCompound()));
 		}
@@ -463,6 +519,20 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 			NBTTagCompound posTag = cellTag.getCompoundTag(slot.toString());
 			cellMap.put(new BlockPos(posTag.getInteger("x"), posTag.getInteger("y"), posTag
 				.getInteger("z")), (byte) (int) slot);
+		}
+
+		remainingMobs.clear();
+		final NBTTagCompound mobsTag = compound.getCompoundTag("required_mobs");
+		mobsTag.getKeySet()
+			.forEach(key -> remainingMobs.put(key, mobsTag.getInteger(key)));
+
+		if (compound.hasKey("recipe", 8)) {
+			final IRecipe recipe = ForgeRegistries.RECIPES.getValue(new ResourceLocation(compound.getString("recipe")));
+			if (recipe != null && recipe instanceof IRecipeComposer) {
+				final IRecipeComposer composerRecipe = (IRecipeComposer) recipe;
+				mobWhitelist = composerRecipe.getMobWhitelist();
+				mobBlacklist = composerRecipe.getMobBlacklist();
+			}
 		}
 
 		needsRecipeRefresh = true;
@@ -609,11 +679,11 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		}
 
 		@Override
-		protected void slotChangedCraftingGrid (World world, EntityPlayer player, InventoryCrafting craftingMatrix, InventoryCraftResult craftResult) {
+		protected void slotChangedCraftingGrid (final World world, final EntityPlayer player, final InventoryCrafting craftingMatrix, final InventoryCraftResult craftResult) {
 
 			if (!world.isRemote) {
 				ItemStack stack = ItemStack.EMPTY;
-				IRecipe recipe = CraftingManager.findMatchingRecipe(craftingMatrix, world);
+				final IRecipe recipe = CraftingManager.findMatchingRecipe(craftingMatrix, world);
 
 				if (recipe != null) {
 					craftResult.setRecipeUsed(recipe);
@@ -626,7 +696,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 					stack = recipe.getCraftingResult(craftingMatrix);
 
 					if (recipe != lastRecipe && recipeChangedHandler != null)
-						recipeChangedHandler.handle();
+						recipeChangedHandler.handle(recipe);
 				}
 
 				lastRecipe = recipe;
@@ -635,13 +705,13 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 			}
 		}
 
-		public void onRecipeChanged (RecipeChangedHandler handler) {
+		public void onRecipeChanged (final RecipeChangedHandler handler) {
 			recipeChangedHandler = handler;
 		}
 
 		public static interface RecipeChangedHandler {
 
-			public void handle ();
+			public void handle (final IRecipe recipe);
 		}
 	}
 
@@ -673,7 +743,18 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		uuid = UUID.randomUUID();
 		fakePlayer = new FakePlayer((WorldServer) world, new GameProfile(uuid, "composer_tile_entity"));
 		container = new ComposerContainer(world, fakePlayer);
-		container.onRecipeChanged( () -> {
+		container.onRecipeChanged(recipe -> {
+			this.mobsRequired.clear();
+			this.mobWhitelist = CONFIG.whitelistedCreatures;
+			this.mobBlacklist = CONFIG.blacklistedCreatures;
+			if (recipe instanceof IRecipeComposer) {
+				final IRecipeComposer composerRecipe = (IRecipeComposer) recipe;
+				final Map<String, Integer> mobsRequired = composerRecipe.getMobsRequired();
+				if (mobsRequired != null) this.mobsRequired.putAll(mobsRequired);
+				this.mobWhitelist = composerRecipe.getMobWhitelist();
+				this.mobBlacklist = composerRecipe.getMobBlacklist();
+			}
+
 			if (!isInitialRecipeRefresh) resetTimer();
 		});
 	}

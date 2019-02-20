@@ -64,7 +64,6 @@ public class Essence extends ModItem {
 	public Essence () {
 		super("essence");
 		setMaxStackSize(64);
-		setCreativeTab(null);
 
 		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
 			registerColorHandler( (ItemStack stack, int tintIndex) -> {
@@ -84,11 +83,7 @@ public class Essence extends ModItem {
 
 		String alignment = config.name;
 		if (alignment == null) {
-			String translationKey = "entity." + essenceType + ".name";
-			alignment = LangHelper.localize(translationKey);
-			if (translationKey.equals(alignment)) {
-				alignment = LangHelper.localize("entity." + EntityList.getTranslationName(new ResourceLocation(essenceType)) + ".name");
-			}
+			alignment = LangHelper.localizeEntity(essenceType);
 		}
 
 		return LangHelper.localize(this.getUnlocalizedName() + ".focused.name", alignment).trim();

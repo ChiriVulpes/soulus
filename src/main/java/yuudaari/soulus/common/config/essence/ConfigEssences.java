@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.config.ConfigFile;
-import yuudaari.soulus.common.util.serializer.ListSerializer;
+import yuudaari.soulus.common.util.serializer.CollectionSerializer;
 import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
 
@@ -90,7 +90,7 @@ public class ConfigEssences {
 		return config != null ? config.soulbookQuantity : essenceType == "unfocused" ? 1 : -1;
 	}
 
-	public static class EssencesSerializer extends ListSerializer<ConfigEssence> {
+	public static class EssencesSerializer extends CollectionSerializer<ConfigEssence> {
 
 		@Override
 		public Class<ConfigEssence> getValueClass () {

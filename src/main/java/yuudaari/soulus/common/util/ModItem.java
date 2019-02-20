@@ -183,7 +183,7 @@ public class ModItem extends Item implements IModThing {
 		return stack;
 	}
 
-	public NonNullList<ItemStack> getSubItems () {
+	public final NonNullList<ItemStack> getSubItems () {
 		final NonNullList<ItemStack> items = NonNullList.create();
 		getSubItems(CreativeTab.INSTANCE, items);
 		return items;

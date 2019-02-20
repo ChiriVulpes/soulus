@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.config.ConfigFile;
-import yuudaari.soulus.common.util.serializer.ListSerializer;
+import yuudaari.soulus.common.util.serializer.CollectionSerializer;
 import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
 
@@ -29,7 +29,7 @@ public class ConfigBoneTypes {
 		return boneTypes.stream().filter(config -> config.name.equalsIgnoreCase(type)).findFirst().orElse(null);
 	}
 
-	public static class BoneTypesSerializer extends ListSerializer<ConfigBoneType> {
+	public static class BoneTypesSerializer extends CollectionSerializer<ConfigBoneType> {
 
 		@Override
 		public Class<ConfigBoneType> getValueClass () {

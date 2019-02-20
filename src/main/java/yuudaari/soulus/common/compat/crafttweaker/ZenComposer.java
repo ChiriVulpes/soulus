@@ -15,19 +15,21 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistryModifiable;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
+import com.google.common.collect.Sets;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 import yuudaari.soulus.common.compat.crafttweaker.mtlib.InputHelper;
 import yuudaari.soulus.common.compat.crafttweaker.mtlib.LogHelper;
-import yuudaari.soulus.common.recipe.IRecipeComposer;
-import yuudaari.soulus.common.recipe.RecipeComposerShaped;
-import yuudaari.soulus.common.recipe.RecipeComposerShapeless;
+import yuudaari.soulus.common.recipe.composer.IRecipeComposer;
+import yuudaari.soulus.common.recipe.composer.RecipeComposerShaped;
+import yuudaari.soulus.common.recipe.composer.RecipeComposerShapeless;
 
 @ZenClass(ZenComposer.NAME)
 @ZenRegister
@@ -38,7 +40,7 @@ public class ZenComposer {
 	private static final List<IAction> REMOVALS = new ArrayList<>();
 	private static final List<IAction> ADDITIONS = new ArrayList<>();
 
-	public static void apply() {
+	public static void apply () {
 
 		for (IAction removal : REMOVALS) {
 			CraftTweakerAPI.apply(removal);
@@ -50,25 +52,124 @@ public class ZenComposer {
 	}
 
 	@ZenMethod
-	public static void addShaped (final String name, final IItemStack output, final IIngredient[][] inputs) {
-		addShaped(name, output, 1, inputs);
+	public static Factory recipe (final String name, final IItemStack output) {
+		return new Factory(name, output);
 	}
 
-	@ZenMethod
-	public static void addShaped (final String name, final IItemStack output, final float time, final IIngredient[][] inputs) {
+	public static class Factory implements IZenComposerFactory, IAction {
 
-		ADDITIONS.add(new AddShaped(name, output, time, inputs));
-	}
+		public final String name;
+		public final IItemStack output;
+		public float time = 1;
+		public IIngredient[] inputsShapeless = null;
+		public IIngredient[][] inputsShaped = null;
+		public Set<String> mobWhitelist = null;
+		public Set<String> mobBlacklist = null;
+		public Map<String, Integer> mobsRequired = null;
 
-	@ZenMethod
-	public static void addShapeless (final String name, final IItemStack output, final IIngredient[] inputs) {
-		addShapeless(name, output, 1, inputs);
-	}
+		private Factory (final String name, final IItemStack output) {
+			this.name = name;
+			this.output = output;
+		}
 
-	@ZenMethod
-	public static void addShapeless (final String name, final IItemStack output, final float time, final IIngredient[] inputs) {
+		@Override
+		public Factory setTime (final float time) {
+			this.time = time;
+			return this;
+		}
 
-		ADDITIONS.add(new AddShapeless(name, output, time, inputs));
+		@Override
+		public Factory setShaped (final IIngredient[][] inputsShaped) {
+			this.inputsShapeless = null;
+			this.inputsShaped = inputsShaped;
+			return this;
+		}
+
+		@Override
+		public Factory setShapeless (final IIngredient[] inputsShapeless) {
+			this.inputsShaped = null;
+			this.inputsShapeless = inputsShapeless;
+			return this;
+		}
+
+		@Override
+		public Factory setMobWhitelist (final String[] mobWhitelist) {
+			this.mobWhitelist = Sets.newHashSet(mobWhitelist);
+			return this;
+		}
+
+		@Override
+		public Factory setMobBlacklist (final String[] mobBlacklist) {
+			this.mobBlacklist = Sets.newHashSet(mobBlacklist);
+			return this;
+		}
+
+		@Override
+		public Factory setMobsRequired (final Map<String, Integer> mobsRequired) {
+			this.mobsRequired = mobsRequired;
+			return this;
+		}
+
+		@Override
+		public String describe () {
+			return "Adding Composer recipe '" + name + "'. Output: " + output.getDisplayName();
+		}
+
+		@Override
+		public void create () {
+			ADDITIONS.add(this);
+		}
+
+		@Override
+		public void apply () {
+
+			// Delay the resolution of ingredients (specifically ore dict ingredients)
+			// until the last possible moment to ensure mods and scripts have a chance
+			// to get their entries in before retrieving entries from the dictionary
+			if (inputsShapeless == null && inputsShaped == null) {
+				LogHelper.logError("No ingredients set for recipe: '" + name + "'");
+				return;
+			}
+
+			final IRecipe recipe = (inputsShaped == null ? createShapeless() : createShaped())
+				.setRegistryName(new ResourceLocation(name));
+
+			ForgeRegistries.RECIPES.register(recipe);
+		}
+
+		private RecipeComposerShaped createShaped () {
+			final Stack<Object> ingredients = new Stack<>();
+
+			int i = 0;
+			for (final IIngredient[] inputArr : inputsShaped) {
+				String row = "";
+				for (final IIngredient input : inputArr) {
+					final char symbol = input == null ? ' ' : Character.forDigit(i++, 10);
+					row += symbol;
+					if (symbol == ' ' || input == null) continue;
+
+					ingredients.push(symbol);
+					final Ingredient ingredient = getIngredient(input);
+					if (ingredient == null) {
+						LogHelper.logError("Unknown ingredient for symbol '" + symbol + "' in recipe '" + name + "'");
+						return null;
+					}
+					ingredients.push(ingredient);
+				}
+				ingredients.insertElementAt(row, (i - 1) / 3);
+			}
+
+			return new RecipeComposerShaped(InputHelper.toStack(output), time, mobsRequired, mobWhitelist, mobBlacklist, ingredients.toArray(new Object[0]));
+		}
+
+		private RecipeComposerShapeless createShapeless () {
+			final Object[] ingredients = new Ingredient[inputsShapeless.length];
+			for (int i = 0; i < inputsShapeless.length; i++) {
+				ingredients[i] = getIngredient(inputsShapeless[i]);
+			}
+
+			return new RecipeComposerShapeless(InputHelper.toStack(output), time, mobsRequired, mobWhitelist, mobBlacklist, ingredients);
+		}
 	}
 
 	private static Ingredient getIngredient (final IIngredient ingredient) {
@@ -97,100 +198,6 @@ public class ZenComposer {
 		}
 
 		return Ingredient.fromStacks(itemStacks);
-	}
-
-	public static class AddShaped implements IAction {
-
-		final String name;
-		final IItemStack output;
-		final float time;
-		final IIngredient[][] inputs;
-
-		public AddShaped(String name, IItemStack output, float time, IIngredient[][] inputs) {
-
-			this.name = name;
-			this.output = output;
-			this.time = time;
-			this.inputs = inputs;
-		}
-
-		@Override
-		public String describe () {
-			return "Adding Composer recipe for " + output.getDisplayName();
-		}
-
-		@Override
-		public void apply () {
-
-			// Delay the resolution of ingredients (specifically ore dict ingredients)
-			// until the last possible moment to ensure mods and scripts have a chance
-			// to get their entries in before retrieving entries from the dictionary
-
-			final Stack<Object> ingredients = new Stack<>();
-
-			int i = 0;
-			for (final IIngredient[] inputArr : inputs) {
-				String row = "";
-				for (final IIngredient input : inputArr) {
-					final char symbol = input == null ? ' ' : Character.forDigit(i++, 10);
-					row += symbol;
-					if (symbol == ' ' || input == null) continue;
-
-					ingredients.push(symbol);
-					final Ingredient ingredient = getIngredient(input);
-					if (ingredient == null) return;
-					ingredients.push(ingredient);
-				}
-				ingredients.insertElementAt(row, (i - 1) / 3);
-			}
-
-			final IRecipe recipe = new RecipeComposerShaped(InputHelper.toStack(output), time, ingredients
-					.toArray(new Object[0]));
-
-			recipe.setRegistryName(new ResourceLocation(name));
-
-			ForgeRegistries.RECIPES.register(recipe);
-		}
-	}
-
-	public static class AddShapeless implements IAction {
-
-		final String name;
-		final IItemStack output;
-		final float time;
-		final IIngredient[] inputs;
-
-		public AddShapeless(String name, IItemStack output, float time, IIngredient[] inputs) {
-
-			this.name = name;
-			this.output = output;
-			this.time = time;
-			this.inputs = inputs;
-		}
-
-		@Override
-		public String describe () {
-			return "Adding Composer recipe for " + output.getDisplayName();
-		}
-
-		@Override
-		public void apply() {
-
-			// Delay the resolution of ingredients (specifically ore dict ingredients)
-			// until the last possible moment to ensure mods and scripts have a chance
-			// to get their entries in before retrieving entries from the dictionary
-
-			final Object[] ingredients = new Ingredient[inputs.length];
-			for (int i = 0; i < inputs.length; i++) {
-				ingredients[i] = getIngredient(inputs[i]);
-			}
-
-			final IRecipe recipe = new RecipeComposerShapeless(InputHelper.toStack(output), time, ingredients);
-
-			recipe.setRegistryName(new ResourceLocation(name));
-
-			ForgeRegistries.RECIPES.register(recipe);
-		}
 	}
 
 	@ZenMethod

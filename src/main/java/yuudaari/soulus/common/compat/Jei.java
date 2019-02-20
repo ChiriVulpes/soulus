@@ -31,8 +31,8 @@ import yuudaari.soulus.common.item.Essence;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.ModItems;
-import yuudaari.soulus.common.recipe.RecipeComposerShaped;
-import yuudaari.soulus.common.recipe.RecipeComposerShapeless;
+import yuudaari.soulus.common.recipe.composer.RecipeComposerShaped;
+import yuudaari.soulus.common.recipe.composer.RecipeComposerShapeless;
 
 @JEIPlugin
 @ConfigInjected(Soulus.MODID)

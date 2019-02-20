@@ -6,7 +6,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import yuudaari.soulus.common.util.LangHelper;
 import yuudaari.soulus.common.util.ModItem;
-import yuudaari.soulus.common.util.serializer.ListSerializer;
+import yuudaari.soulus.common.util.serializer.CollectionSerializer;
 import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
 
@@ -47,7 +47,7 @@ public class ItemExport {
 		}
 	}
 
-	public static class StackListSerializer extends ListSerializer<StackExport> {
+	public static class StackListSerializer extends CollectionSerializer<StackExport> {
 
 		@Override
 		public Class<StackExport> getValueClass () {

@@ -7,9 +7,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.IShapedRecipe;
-import yuudaari.soulus.common.recipe.IRecipeComposer;
 import yuudaari.soulus.common.recipe.RecipeFurnace;
-import yuudaari.soulus.common.util.serializer.ListSerializer;
+import yuudaari.soulus.common.recipe.composer.IRecipeComposer;
+import yuudaari.soulus.common.util.serializer.CollectionSerializer;
 import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
 
@@ -73,7 +73,7 @@ public class RecipeExport {
 		}
 	}
 
-	public static class StackListSerializer extends ListSerializer<StackExport> {
+	public static class StackListSerializer extends CollectionSerializer<StackExport> {
 
 		@Override
 		public Class<StackExport> getValueClass () {
@@ -81,7 +81,7 @@ public class RecipeExport {
 		}
 	}
 
-	public static class IngredientListSerializer extends ListSerializer<IngredientExport> {
+	public static class IngredientListSerializer extends CollectionSerializer<IngredientExport> {
 
 		@Override
 		public Class<IngredientExport> getValueClass () {

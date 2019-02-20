@@ -195,12 +195,7 @@ public class Soulbook extends ModItem implements IHasComposerCellInfo, IFillable
 
 		String alignment = config.name;
 		if (alignment == null) {
-			String translationKey = "entity." + essenceType + ".name";
-			alignment = LangHelper.localize(translationKey);
-			if (translationKey.equals(alignment)) {
-				alignment = LangHelper
-					.localize("entity." + EntityList.getTranslationName(new ResourceLocation(essenceType)) + ".name");
-			}
+			alignment = LangHelper.localizeEntity(essenceType);
 		}
 
 		return LangHelper.localize(this.getUnlocalizedName() + ".focused.name", alignment).trim();

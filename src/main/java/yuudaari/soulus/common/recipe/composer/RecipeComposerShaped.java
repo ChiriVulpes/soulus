@@ -1,23 +1,11 @@
-package yuudaari.soulus.common.recipe;
+package yuudaari.soulus.common.recipe.composer;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.JsonUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.common.crafting.IRecipeFactory;
-import net.minecraftforge.common.crafting.IShapedRecipe;
-import net.minecraftforge.common.crafting.CraftingHelper.ShapedPrimer;
-import yuudaari.soulus.common.block.composer.ComposerTileEntity;
-import net.minecraftforge.common.crafting.JsonContext;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -25,6 +13,23 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.JsonUtils;
+import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.crafting.CraftingHelper.ShapedPrimer;
+import net.minecraftforge.common.crafting.IRecipeFactory;
+import net.minecraftforge.common.crafting.IShapedRecipe;
+import net.minecraftforge.common.crafting.JsonContext;
+import yuudaari.soulus.common.block.composer.ComposerTileEntity;
+import yuudaari.soulus.common.recipe.Recipe;
+import yuudaari.soulus.common.recipe.RecipeUtils;
+import yuudaari.soulus.common.util.JSON;
+import yuudaari.soulus.common.util.Logger;
 
 public class RecipeComposerShaped extends Recipe implements IRecipeComposer, IShapedRecipe {
 
@@ -37,47 +42,44 @@ public class RecipeComposerShaped extends Recipe implements IRecipeComposer, ISh
 	protected int width = 0;
 	protected int height = 0;
 	protected boolean mirrored = true;
-	protected float time = 1;
+	protected final float time;
+	protected final Map<String, Integer> mobsRequired = new HashMap<>();
+	protected final Set<String> mobWhitelist = new HashSet<>();
+	protected final Set<String> mobBlacklist = new HashSet<>();
 
-	public RecipeComposerShaped (Block result, Object... recipe) {
-		this(new ItemStack(result), recipe);
+	public RecipeComposerShaped (final ItemStack result, final float time, final Map<String, Integer> mobsRequired, final Set<String> mobWhitelist, final Set<String> mobBlacklist, final Object... recipe) {
+		this(result, time, mobsRequired, mobWhitelist, mobBlacklist, CraftingHelper.parseShaped(recipe));
 	}
 
-	public RecipeComposerShaped (Item result, Object... recipe) {
-		this(new ItemStack(result), recipe);
-	}
-
-	public RecipeComposerShaped (@Nonnull ItemStack result, Object... recipe) {
-		this(result, CraftingHelper.parseShaped(recipe));
-	}
-
-	public RecipeComposerShaped (@Nonnull ItemStack result, ShapedPrimer primer) {
-		this(result, 1, primer);
-	}
-
-	public RecipeComposerShaped (Block result, float time, Object... recipe) {
-		this(new ItemStack(result), time, recipe);
-	}
-
-	public RecipeComposerShaped (Item result, float time, Object... recipe) {
-		this(new ItemStack(result), time, recipe);
-	}
-
-	public RecipeComposerShaped (@Nonnull ItemStack result, float time, Object... recipe) {
-		this(result, time, CraftingHelper.parseShaped(recipe));
-	}
-
-	public RecipeComposerShaped (@Nonnull ItemStack result, float time, ShapedPrimer primer) {
+	private RecipeComposerShaped (final ItemStack result, final float time, final Map<String, Integer> requiredMobs, final Set<String> whitelist, final Set<String> blacklist, final ShapedPrimer primer) {
 		output = result.copy();
 		this.width = primer.width;
 		this.height = primer.height;
 		this.input = primer.input;
 		this.mirrored = primer.mirrored;
 		this.time = time;
+		if (requiredMobs != null) this.mobsRequired.putAll(requiredMobs);
+		if (whitelist != null) this.mobWhitelist.addAll(whitelist);
+		if (blacklist != null) this.mobBlacklist.addAll(blacklist);
 	}
 
 	public float getTime () {
 		return time;
+	}
+
+	@Override
+	public Map<String, Integer> getMobsRequired () {
+		return mobsRequired;
+	}
+
+	@Override
+	public Set<String> getMobWhitelist () {
+		return mobWhitelist;
+	}
+
+	@Override
+	public Set<String> getMobBlacklist () {
+		return mobBlacklist;
 	}
 
 	@Override
@@ -191,9 +193,9 @@ public class RecipeComposerShaped extends Recipe implements IRecipeComposer, ISh
 	public static class Factory implements IRecipeFactory {
 
 		@Override
-		public IRecipe parse (JsonContext context, JsonObject json) {
-			Map<Character, Ingredient> ingMap = Maps.newHashMap();
-			for (Entry<String, JsonElement> entry : JsonUtils.getJsonObject(json, "key").entrySet()) {
+		public IRecipe parse (final JsonContext context, final JsonObject json) {
+			final Map<Character, Ingredient> ingMap = Maps.newHashMap();
+			for (final Entry<String, JsonElement> entry : JsonUtils.getJsonObject(json, "key").entrySet()) {
 				if (entry.getKey().length() != 1)
 					throw new JsonSyntaxException("Invalid key entry: '" + entry
 						.getKey() + "' is an invalid symbol (must be 1 character only).");
@@ -205,32 +207,32 @@ public class RecipeComposerShaped extends Recipe implements IRecipeComposer, ISh
 
 			ingMap.put(' ', Ingredient.EMPTY);
 
-			JsonArray patternJ = JsonUtils.getJsonArray(json, "pattern");
+			final JsonArray patternJ = JsonUtils.getJsonArray(json, "pattern");
 
 			if (patternJ.size() == 0)
 				throw new JsonSyntaxException("Invalid pattern: empty pattern not allowed");
 
-			String[] pattern = new String[patternJ.size()];
+			final String[] pattern = new String[patternJ.size()];
 			for (int x = 0; x < pattern.length; ++x) {
-				String line = JsonUtils.getString(patternJ.get(x), "pattern[" + x + "]");
+				final String line = JsonUtils.getString(patternJ.get(x), "pattern[" + x + "]");
 				if (x > 0 && pattern[0].length() != line.length())
-					throw new JsonSyntaxException("Invalid pattern: each row must  be the same width");
+					throw new JsonSyntaxException("Invalid pattern: each row must be the same width");
 				pattern[x] = line;
 			}
 
-			ShapedPrimer primer = new ShapedPrimer();
+			final ShapedPrimer primer = new ShapedPrimer();
 			primer.width = pattern[0].length();
 			primer.height = pattern.length;
 			primer.mirrored = JsonUtils.getBoolean(json, "mirrored", true);
 			primer.input = NonNullList.withSize(primer.width * primer.height, Ingredient.EMPTY);
 
-			Set<Character> keys = Sets.newHashSet(ingMap.keySet());
+			final Set<Character> keys = Sets.newHashSet(ingMap.keySet());
 			keys.remove(' ');
 
 			int x = 0;
-			for (String line : pattern) {
-				for (char chr : line.toCharArray()) {
-					Ingredient ing = ingMap.get(chr);
+			for (final String line : pattern) {
+				for (final char chr : line.toCharArray()) {
+					final Ingredient ing = ingMap.get(chr);
 					if (ing == null)
 						throw new JsonSyntaxException("Pattern references symbol '" + chr + "' but it's not defined in the key");
 					primer.input.set(x++, ing);
@@ -239,15 +241,22 @@ public class RecipeComposerShaped extends Recipe implements IRecipeComposer, ISh
 			}
 
 			if (!keys.isEmpty())
-				throw new JsonSyntaxException("Key defines symbols that aren't used in pattern: " + keys);
+				Logger.warn("Key defines symbols that aren't used in pattern: " + keys);
 
-			ItemStack output = RecipeUtils.getOutput(json.get("result"), context);
-			RecipeComposerShaped result = new RecipeComposerShaped(output, primer);
+			final ItemStack output = RecipeUtils.getOutput(json.get("result"), context);
 
-			result.time = JsonUtils.getFloat(json, "time", result.time);
+			final float time = JsonUtils.getFloat(json, "time", 1);
 
+			final JsonObject mobs = JsonUtils.getJsonObject(json, "mobs_required", null);
+			final Map<String, Integer> requiredMobs = mobs == null ? null : mobs.getAsJsonObject()
+				.entrySet()
+				.stream()
+				.collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getAsInt()));
 
-			return result;
+			final Set<String> whitelist = JSON.getStringSet(json, "mob_whitelist");
+			final Set<String> blacklist = JSON.getStringSet(json, "mob_blacklist");
+
+			return new RecipeComposerShaped(output, time, requiredMobs, whitelist, blacklist, primer);
 		}
 	}
 }

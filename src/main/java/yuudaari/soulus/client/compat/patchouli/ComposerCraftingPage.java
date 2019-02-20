@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariableProvider;
 import vazkii.patchouli.api.PatchouliAPI;
-import yuudaari.soulus.common.recipe.IRecipeComposer;
+import yuudaari.soulus.common.recipe.composer.IRecipeComposer;
 import yuudaari.soulus.common.util.LangHelper;
 
 public class ComposerCraftingPage implements IComponentProcessor {

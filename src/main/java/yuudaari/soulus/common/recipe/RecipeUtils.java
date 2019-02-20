@@ -17,6 +17,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistryModifiable;
 import yuudaari.soulus.Soulus;
+import yuudaari.soulus.common.recipe.composer.IRecipeComposer;
 
 @Mod.EventBusSubscriber
 public class RecipeUtils {

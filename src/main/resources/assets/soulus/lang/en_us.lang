@@ -158,8 +158,8 @@ waila.soulus:skewer.upgrades_power=%1$s/%2$s §cRedstone Torch §8(Power)
 waila.soulus:skewer.upgrades_player=%1$s/%2$s §6Soul Catalyst §8(Player)
 waila.soulus:skewer.upgrades_tether=%1$s/%2$s §7Ash §8(Tether)
 
-waila.soulus:summoner.summon_percentage=%1$s%% summoned
-waila.soulus:summoner.summons_remaining=%1$s%% souls remaining
+waila.soulus:summoner.summon_percentage=§a%1$s%% §8summoned
+waila.soulus:summoner.summons_remaining=%1$s%% §8souls remaining
 waila.soulus:summoner.upgrades_delay=%1$s/%2$s §3Oscillating Gears §8(Speed)
 waila.soulus:summoner.upgrades_count=%1$s/%2$s §4Blood Crystals §8(Quantity)
 waila.soulus:summoner.upgrades_range=%1$s/%2$s §6Murky Orbs §8(Range)
@@ -172,11 +172,13 @@ waila.soulus:soul_inquirer.detecting=%1$s/%2$s §8Souls Detected
 waila.soulus:soul_inquirer.upgrades_count=%1$s/%2$s §4Blood Crystals §8(Detection Quantity)
 waila.soulus:soul_inquirer.upgrades_range=%1$s/%2$s §6Murky Orbs §8(Detection Range)
 
-waila.soulus:composer.activation=Activation: %1$sx 
+waila.soulus:composer.activation=§8Activation: §r%1$sx 
 waila.soulus:composer.upgrades_range=%1$s/%2$s §6Murky Orbs §8(Range)
 waila.soulus:composer.upgrades_delay=%1$s/%2$s §3Oscillating Gears §8(Speed)
 waila.soulus:composer.upgrades_efficiency=%1$s/%2$s §9Niobium Gears §8(Efficiency)
-waila.soulus:composer.craft_percentage=%1$s%% composed
+waila.soulus:composer.craft_percentage=§a%1$s%% §8composed
+waila.soulus:composer.required_creatures=Required Consumption:
+waila.soulus:composer.required_creature=§8%1$s: §c%2$s
 waila.soulus:composer.no_recipe=§8No Valid Recipe
 waila.soulus:composer_cell.no_items=§8Contains No Items
 waila.soulus:composer_cell.contained_item=%1$s/%2$s §6%3$s
@@ -200,7 +202,7 @@ waila.soulus:misc.color.magenta=Color: §dMagenta
 waila.soulus:misc.color.orange=Color: §6Orange 
 waila.soulus:misc.color.white=Color: §fWhite
 
-waila.soulus:soul_totem.fuel_percentage=%1$s%% catalyst remaining
+waila.soulus:soul_totem.fuel_percentage=%1$s%% §8catalyst remaining
 waila.soulus:soul_totem.upgrades_soul_catalyst=%1$s/%2$s §6Soul Catalyst §8(Fuel)
 waila.soulus:soul_totem.upgrades_efficiency=%1$s/%2$s §9Niobium Gears §8(Efficiency)
 
@@ -211,6 +213,8 @@ jei.recipe.soulus:composer.name=Composition
 
 jei.recipe.soulus:composer.recipe_time=%1$st
 jei.recipe.soulus:composer.recipe_time_tooltip=Recipe Duration
+jei.recipe.soulus:composer.mobs_required=Consumes
+jei.recipe.soulus:composer.required_creature=§8%1$s: §r%2$s
 
 jei.recipe.soulus:essence.name=Marrowing
 

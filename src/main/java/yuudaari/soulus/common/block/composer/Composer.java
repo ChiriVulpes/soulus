@@ -28,7 +28,7 @@ import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigComposer;
 import yuudaari.soulus.common.item.OrbMurky;
-import yuudaari.soulus.common.util.LangHelper;
+import yuudaari.soulus.common.util.Translation;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.StructureMap;
 import yuudaari.soulus.common.util.StructureMap.BlockValidator;
@@ -366,17 +366,26 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	//
 
 	@Override
-	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, ComposerTileEntity te, EntityPlayer player) {
+	protected void onWailaTooltipHeader (final List<String> tooltip, final IBlockState blockState, final ComposerTileEntity te, final EntityPlayer player) {
 
 		if (te.hasValidRecipe()) {
-			currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":composer.activation", (int) Math
-				.floor(te.getActivationAmount())));
-			currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":composer.craft_percentage", (int) Math
-				.floor(te.getCompositionPercent() * 100)));
+			tooltip.add(new Translation("waila." + Soulus.MODID + ":composer.craft_percentage")
+				.get((int) Math.floor(te.getCompositionPercent() * 100)));
+			tooltip.add(new Translation("waila." + Soulus.MODID + ":composer.activation")
+				.get((int) Math.floor(te.getActivationAmount())));
+
+			if (te.hasValidRecipe() && te.remainingMobs.size() > 0) {
+				tooltip.add(Translation.localize("waila." + Soulus.MODID + ":composer.required_creatures"));
+				te.remainingMobs.entrySet()
+					.stream()
+					.map(requiredMob -> new Translation("waila." + Soulus.MODID + ":composer.required_creature")
+						.get(Translation.localizeEntity(requiredMob.getKey()), requiredMob.getValue()))
+					.forEach(tooltip::add);
+			}
 
 			// currentTooltip.add("Poof chance: " + te.getPoofChance()); // Only render for debugging
 		} else {
-			currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":composer.no_recipe"));
+			tooltip.add(Translation.localize("waila." + Soulus.MODID + ":composer.no_recipe"));
 		}
 
 	}
