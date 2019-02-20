@@ -1,8 +1,7 @@
 package yuudaari.soulus.common;
 
-import yuudaari.soulus.common.util.IBlock;
-import yuudaari.soulus.common.util.IModThing;
-import yuudaari.soulus.common.util.IProvidesJeiDescription;
+import java.util.List;
+import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -13,15 +12,30 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
-import yuudaari.soulus.common.block.*;
-import yuudaari.soulus.common.block.fossil.*;
-import yuudaari.soulus.common.block.composer.*;
+import yuudaari.soulus.common.block.AshBlock;
+import yuudaari.soulus.common.block.BarsEndersteel;
+import yuudaari.soulus.common.block.BlockEndersteel;
+import yuudaari.soulus.common.block.BlockEndersteelDark;
+import yuudaari.soulus.common.block.BlockNiobium;
+import yuudaari.soulus.common.block.DustEnderBlock;
+import yuudaari.soulus.common.block.Unloader;
+import yuudaari.soulus.common.block.composer.Composer;
+import yuudaari.soulus.common.block.composer.ComposerCell;
 import yuudaari.soulus.common.block.enderlink.Enderlink;
-import yuudaari.soulus.common.block.summoner.Summoner;
-import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
+import yuudaari.soulus.common.block.fossil.FossilDirt;
+import yuudaari.soulus.common.block.fossil.FossilEndStone;
+import yuudaari.soulus.common.block.fossil.FossilGravel;
+import yuudaari.soulus.common.block.fossil.FossilNetherrack;
+import yuudaari.soulus.common.block.fossil.FossilSand;
+import yuudaari.soulus.common.block.fossil.FossilSandRed;
 import yuudaari.soulus.common.block.skewer.Skewer;
 import yuudaari.soulus.common.block.soul_inquirer.SoulInquirer;
 import yuudaari.soulus.common.block.soul_totem.SoulTotem;
+import yuudaari.soulus.common.block.summoner.Summoner;
+import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
+import yuudaari.soulus.common.util.IBlock;
+import yuudaari.soulus.common.util.IModThing;
+import yuudaari.soulus.common.util.IProvidesJeiDescription;
 
 public class ModBlocks {
 
@@ -54,7 +68,7 @@ public class ModBlocks {
 	public static final SoulTotem SOUL_TOTEM = new SoulTotem();
 	public static final SoulInquirer SOUL_INQUIRER = new SoulInquirer();
 
-	public static IBlock[] blocks = new IBlock[] {
+	public static List<IBlock> blocks = Lists.newArrayList(new IBlock[] {
 		DUST_ENDER,
 
 		FOSSIL_DIRT,
@@ -99,7 +113,7 @@ public class ModBlocks {
 		SOUL_INQUIRER,
 
 		SOUL_TOTEM
-	};
+	});
 
 	public static void registerBlocks (IForgeRegistry<Block> registry) {
 		for (IBlock block : blocks) {

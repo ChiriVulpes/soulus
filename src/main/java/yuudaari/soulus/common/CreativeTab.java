@@ -1,12 +1,13 @@
 package yuudaari.soulus.common;
 
-import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.item.Soulbook;
+import javax.annotation.Nonnull;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import javax.annotation.Nonnull;
+import yuudaari.soulus.Soulus;
+import yuudaari.soulus.common.item.Soulbook;
 
 public final class CreativeTab extends CreativeTabs {
 
@@ -34,6 +35,11 @@ public final class CreativeTab extends CreativeTabs {
 	}
 
 	private int getSortValue (ItemStack stack) {
-		return stack.getItem() instanceof ItemBlock ? 0 : 1;
+		final Item item = stack.getItem();
+		if (item instanceof ItemBlock) {
+			return ModBlocks.blocks.indexOf((Object) ((ItemBlock) item).getBlock());
+		}
+
+		return ModBlocks.blocks.size() + ModItems.items.indexOf(item);
 	}
 }

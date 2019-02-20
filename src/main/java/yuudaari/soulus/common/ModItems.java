@@ -1,5 +1,7 @@
 package yuudaari.soulus.common;
 
+import java.util.List;
+import com.google.common.collect.Lists;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -71,55 +73,54 @@ public class ModItems {
 	public static SoulCatalyst SOUL_CATALYST = new SoulCatalyst();
 	// @formatter:on
 
-	public static Item[] items = new Item[] {
+	public static List<Item> items = Lists.newArrayList(new Item[] {
 
 		BARK,
 		GLUE,
-		ASH,
 
 		BARKET,
 		SLEDGEHAMMER,
 
-		BONE_DRY,
-		BONE_ENDER,
-		BONE_FROZEN,
-		BONE_FUNGAL,
-		BONE_NETHER,
 		BONE_NORMAL,
+		BONE_DRY,
+		BONE_FUNGAL,
+		BONE_FROZEN,
 		BONE_SCALE,
+		BONE_ENDER,
+		BONE_NETHER,
 
-		BONE_CHUNK_DRY,
-		BONE_CHUNK_ENDER,
-		BONE_CHUNK_FROZEN,
-		BONE_CHUNK_FUNGAL,
-		BONE_CHUNK_NETHER,
 		BONE_CHUNK_NORMAL,
+		BONE_CHUNK_DRY,
+		BONE_CHUNK_FUNGAL,
+		BONE_CHUNK_FROZEN,
 		BONE_CHUNK_SCALE,
+		BONE_CHUNK_ENDER,
+		BONE_CHUNK_NETHER,
 
 		GEAR_BONE,
 		GEAR_BONE_DRY,
-		GEAR_BONE_ENDER,
-		GEAR_BONE_FROZEN,
 		GEAR_BONE_FUNGAL,
+		GEAR_BONE_FROZEN,
+		GEAR_BONE_ENDER,
 		GEAR_BONE_NETHER,
 
 		BONEMEAL_ENDER,
 		BONEMEAL_NETHER,
 
-		DUST_ENDER_IRON_ASHEN,
-		DUST_ENDER_IRON,
+		DUST_WOOD,
+		DUST_STONE,
 		DUST_IRON,
 		DUST_GOLD,
-		DUST_STONE,
-		DUST_WOOD,
-
+		DUST_ENDER_IRON,
+		ASH,
+		DUST_ENDER_IRON_ASHEN,
 		DUST_NIOBIUM,
 
-		INGOT_ENDERSTEEL_DARK,
 		INGOT_ENDERSTEEL,
-		INGOT_NIOBIUM,
-		NUGGET_ENDERSTEEL_DARK,
 		NUGGET_ENDERSTEEL,
+		INGOT_ENDERSTEEL_DARK,
+		NUGGET_ENDERSTEEL_DARK,
+		INGOT_NIOBIUM,
 		NUGGET_NIOBIUM,
 
 		EMERALD_BURNT,
@@ -135,11 +136,11 @@ public class ModItems {
 		CRYSTAL_DARK,
 		SOUL_CATALYST,
 
-		ESSENCE,
 		ESSENCE_PERFECT,
+		ESSENCE,
 
 		SOULBOOK
-	};
+	});
 
 	public static void registerItems (IForgeRegistry<Item> registry) {
 		for (Item item : items) {
