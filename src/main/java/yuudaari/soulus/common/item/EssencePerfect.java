@@ -1,6 +1,7 @@
 package yuudaari.soulus.common.item;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -8,6 +9,8 @@ import java.util.Set;
 import javax.annotation.Nullable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Streams;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityList;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -41,6 +44,12 @@ public class EssencePerfect extends ModItem {
 		return Streams.stream(list)
 			.map(strTag -> ((NBTTagString) strTag).getString())
 			.toArray(String[]::new);
+	}
+
+	public static ItemStack setEssenceTypes (final ItemStack stack, final ResourceLocation... essenceTypes) {
+		return setEssenceTypes(stack, Arrays.stream(essenceTypes)
+			.map(rl -> rl.toString())
+			.toArray(String[]::new));
 	}
 
 	public static ItemStack setEssenceTypes (final ItemStack stack, final String... essenceTypes) {
@@ -159,7 +168,6 @@ public class EssencePerfect extends ModItem {
 	public EssencePerfect () {
 		super("essence_perfect");
 		setMaxStackSize(64);
-		setCreativeTab(null);
 		setHasDescription();
 
 		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
@@ -173,6 +181,15 @@ public class EssencePerfect extends ModItem {
 				return Essence.getColor(essenceType, tintIndex % 2);
 			});
 		}
+	}
+
+	@Override
+	public void getSubItems (final CreativeTabs tab, final NonNullList<ItemStack> items) {
+		if (!this.isInCreativeTab(tab)) return;
+
+		final ItemStack result = getItemStack();
+		setEssenceTypes(result, EntityList.ENTITY_EGGS.keySet().toArray(new ResourceLocation[0]));
+		items.add(result);
 	}
 
 	@Override
