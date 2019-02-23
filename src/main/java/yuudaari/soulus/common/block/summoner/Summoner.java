@@ -266,6 +266,11 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		return state.getValue(VARIANT).getMeta() * 2 + (state.getValue(HAS_SOULBOOK) ? 1 : 0);
 	}
 
+	@Override
+	public int damageDropped (IBlockState state) {
+		return getMetaFromState(state.withProperty(HAS_SOULBOOK, false));
+	}
+
 	/////////////////////////////////////////
 	// Item
 	//
@@ -275,6 +280,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		public SummonerItemBlock (Block b) {
 			super(b, b, i -> "summoner_" + EndersteelType.byMetadata(i.getItemDamage()).getName());
 			setRegistryName(Soulus.MODID + ":summoner");
+			setHasSubtypes(true);
 		}
 
 		@Override
