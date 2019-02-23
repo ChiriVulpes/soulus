@@ -34,6 +34,11 @@
 			"text": "As you may have expected, it takes a long time for your summoner to recreate life. It also takes another ingredient: your presence.$(p)The reasoning is simple, but unfortunate; it's impossible to create something living from only remains. To summon a creature, the summoner will leech away your soul. Don't worry, though, you won't feel a thing. Probably. And your soul will regenerate over time."
 		},
 		{
+			"type": "spotlight",
+			"item": "soulus:essence_perfect{essence_types:['minecraft:chicken','minecraft:creeper','minecraft:spider','minecraft:cow','minecraft:bat','minecraft:horse','minecraft:villager','minecraft:slime','minecraft:pig']}",
+			"text": "To speed up the summoning process, you can insert Existential Essence. It must contain some essence matching the creature being summoned."
+		},
+		{
 			"type": "relations",
 			"title": "Upgrading the Summoner",
 			"entries": [
