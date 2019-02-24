@@ -8,6 +8,7 @@ import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.gamestages.event.GameStageEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.management.PlayerList;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional;
@@ -38,6 +39,9 @@ public class GameStages {
 
 		final MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 		if (server == null) return false;
+
+		final PlayerList playerList = server.getPlayerList();
+		if (playerList == null) return false;
 
 		for (final EntityPlayer player : server.getPlayerList().getPlayers()) {
 			final boolean stagesMatch = stagesMatch(player, stages);
