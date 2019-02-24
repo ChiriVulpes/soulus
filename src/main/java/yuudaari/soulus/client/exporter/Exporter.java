@@ -274,6 +274,7 @@ public class Exporter {
 
 		private boolean areStacksEqual (final ItemStack a, final ItemStack b) {
 			return a.getItem().equals(b.getItem()) && //
+				a.getMetadata() == b.getMetadata() && //
 				(a.getTagCompound() == null) == (b.getTagCompound() == null) && //
 				(a.getTagCompound() == null || a.getTagCompound().equals(b.getTagCompound())) && //
 				a.areCapsCompatible(b);
