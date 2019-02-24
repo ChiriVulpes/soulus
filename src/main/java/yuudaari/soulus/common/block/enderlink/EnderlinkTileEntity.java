@@ -142,8 +142,18 @@ public class EnderlinkTileEntity extends UpgradeableBlockTileEntity implements I
 
 	}
 
+	private void onUpdateUpgrades () {
+		onUpdateUpgrades(false);
+	}
+
 	@Override
 	public void onUpdateUpgrades (boolean readFromNBT) {
+		if (isInvalid()) {
+			Soulus.removeConfigReloadHandler(this::onUpdateUpgrades);
+			return;
+		}
+
+		Soulus.onConfigReload(this::onUpdateUpgrades);
 
 		int rangeUpgrades = upgrades.get(Upgrade.RANGE);
 		range = (int) Math.pow(CONFIG.nonUpgradedRange + rangeUpgrades * CONFIG.upgradeRangeEffectiveness, 2);

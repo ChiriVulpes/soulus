@@ -449,8 +449,18 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	// Events
 	//
 
+	private void onUpdateUpgrades () {
+		onUpdateUpgrades(false);
+	}
+
 	@Override
 	public void onUpdateUpgrades (boolean readFromNBT) {
+		if (isInvalid()) {
+			Soulus.removeConfigReloadHandler(this::onUpdateUpgrades);
+			return;
+		}
+
+		Soulus.onConfigReload(this::onUpdateUpgrades);
 
 		int delayUpgrades = upgrades.get(Upgrade.DELAY);
 		spawnDelay = new Range(CONFIG.nonUpgradedDelay.min / (1 + delayUpgrades * CONFIG.upgradeDelayEffectiveness.min), CONFIG.nonUpgradedDelay.max / (1 + delayUpgrades * CONFIG.upgradeDelayEffectiveness.max));

@@ -99,8 +99,18 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		if (upgrade == Upgrade.CRYSTAL_DARK) malice = false;
 	}
 
+	private void onUpdateUpgrades () {
+		onUpdateUpgrades(false);
+	}
+
 	@Override
 	public void onUpdateUpgrades (boolean readFromNBT) {
+		if (isInvalid()) {
+			Soulus.removeConfigReloadHandler(this::onUpdateUpgrades);
+			return;
+		}
+
+		Soulus.onConfigReload(this::onUpdateUpgrades);
 
 		if (upgrades.get(Upgrade.CRYSTAL_DARK) > 0) {
 			// dark crystal

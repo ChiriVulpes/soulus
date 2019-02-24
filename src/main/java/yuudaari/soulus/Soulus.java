@@ -1,7 +1,8 @@
 package yuudaari.soulus;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -69,6 +70,11 @@ public class Soulus {
 		void handle (FMLPostInitializationEvent event);
 	}
 
+	public interface ConfigReloadEventHandler {
+
+		void handle ();
+	}
+
 	/* CONSTANTS */
 
 	public static final String NAME = "Soulus";
@@ -88,9 +94,10 @@ public class Soulus {
 
 	/* EVENT HANDLERS */
 
-	public static final List<PreInitEventHandler> preInitHandlers = new ArrayList<>();
-	public static final List<InitEventHandler> initHandlers = new ArrayList<>();
-	public static final List<PostInitEventHandler> postInitHandlers = new ArrayList<>();
+	public static final Set<PreInitEventHandler> preInitHandlers = new HashSet<>();
+	public static final Set<InitEventHandler> initHandlers = new HashSet<>();
+	public static final Set<PostInitEventHandler> postInitHandlers = new HashSet<>();
+	public static final Set<ConfigReloadEventHandler> configReloadHandlers = new HashSet<>();
 
 	public static void onPreInit (PreInitEventHandler handler) {
 		preInitHandlers.add(handler);
@@ -102,6 +109,14 @@ public class Soulus {
 
 	public static void onPostInit (PostInitEventHandler handler) {
 		postInitHandlers.add(handler);
+	}
+
+	public static void onConfigReload (ConfigReloadEventHandler handler) {
+		configReloadHandlers.add(handler);
+	}
+
+	public static void removeConfigReloadHandler (ConfigReloadEventHandler handler) {
+		configReloadHandlers.remove(handler);
 	}
 
 	/**
@@ -130,6 +145,10 @@ public class Soulus {
 
 		} catch (final Exception e) {
 			throw new RuntimeException(e);
+		}
+
+		for (final ConfigReloadEventHandler handler : configReloadHandlers.toArray(new ConfigReloadEventHandler[0])) {
+			handler.handle();
 		}
 	}
 
