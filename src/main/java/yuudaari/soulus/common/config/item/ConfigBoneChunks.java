@@ -11,4 +11,5 @@ import yuudaari.soulus.common.util.serializer.Serialized;
 public class ConfigBoneChunks {
 
 	@Serialized @ClientField public int particleCount = 3;
+	@Serialized public boolean sneakToMarrowFullStack = false;
 }

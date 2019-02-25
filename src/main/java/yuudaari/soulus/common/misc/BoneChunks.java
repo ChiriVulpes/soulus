@@ -1,17 +1,10 @@
 package yuudaari.soulus.common.misc;
 
-import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.config.ConfigInjected;
-import yuudaari.soulus.common.config.ConfigInjected.Inject;
-import yuudaari.soulus.common.config.bones.ConfigBoneType;
-import yuudaari.soulus.common.config.bones.ConfigBoneTypes;
-import yuudaari.soulus.common.config.item.ConfigBoneChunks;
-import yuudaari.soulus.common.config.essence.ConfigEssences;
-import yuudaari.soulus.common.config.misc.ConfigFossils;
-import yuudaari.soulus.common.config.essence.ConfigEssence;
-import yuudaari.soulus.common.config.misc.ConfigFossils.ConfigFossil;
-import yuudaari.soulus.common.item.Essence;
-import yuudaari.soulus.common.util.Range;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -28,11 +21,18 @@ import net.minecraftforge.fml.common.event.FMLStateEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import scala.Tuple2;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import yuudaari.soulus.Soulus;
+import yuudaari.soulus.common.config.ConfigInjected;
+import yuudaari.soulus.common.config.ConfigInjected.Inject;
+import yuudaari.soulus.common.config.bones.ConfigBoneType;
+import yuudaari.soulus.common.config.bones.ConfigBoneTypes;
+import yuudaari.soulus.common.config.essence.ConfigEssence;
+import yuudaari.soulus.common.config.essence.ConfigEssences;
+import yuudaari.soulus.common.config.item.ConfigBoneChunks;
+import yuudaari.soulus.common.config.misc.ConfigFossils;
+import yuudaari.soulus.common.config.misc.ConfigFossils.ConfigFossil;
+import yuudaari.soulus.common.item.Essence;
+import yuudaari.soulus.common.util.Range;
 
 @Mod.EventBusSubscriber
 @ConfigInjected(Soulus.MODID)
@@ -93,28 +93,30 @@ public class BoneChunks {
 	//
 
 	@SubscribeEvent
-	public static void onRightClick (RightClickItem event) {
-		ItemStack heldItem = event.getItemStack();
-		String itemName = heldItem.getItem().getRegistryName().toString();
+	public static void onRightClick (final RightClickItem event) {
+		final ItemStack heldItem = event.getItemStack();
+		final String itemName = heldItem.getItem().getRegistryName().toString();
 
-		for (ConfigBoneType boneType : CONFIG_BONE_TYPES.boneTypes) {
+		for (final ConfigBoneType boneType : CONFIG_BONE_TYPES.boneTypes) {
 			if (boneType.item_chunk.equalsIgnoreCase(itemName)) {
 
-				World world = event.getWorld();
-				EntityPlayer player = event.getEntityPlayer();
+				final World world = event.getWorld();
+				final EntityPlayer player = event.getEntityPlayer();
 
 				particles(world, player, heldItem.getItem());
 
+				final int count = player.isSneaking() && CONFIG.sneakToMarrowFullStack ? heldItem.getCount() : 1;
+
 				if (!world.isRemote) {
-					List<ItemStack> drops = getDrops(boneType.name);
-					for (ItemStack drop : drops) {
-						EntityItem dropEntity = new EntityItem(world, player.posX, player.posY, player.posZ, drop);
+					final Collection<ItemStack> drops = getDrops(world.rand, boneType.name, count);
+					for (final ItemStack drop : drops) {
+						final EntityItem dropEntity = new EntityItem(world, player.posX, player.posY, player.posZ, drop);
 						dropEntity.setNoPickupDelay();
 						world.spawnEntity(dropEntity);
 					}
 				}
 
-				heldItem.setCount(heldItem.getCount() - 1);
+				heldItem.shrink(count);
 			}
 		}
 	}
@@ -141,23 +143,30 @@ public class BoneChunks {
 	// Util
 	//
 
-	private static List<ItemStack> getDrops (String boneType) {
-		List<ItemStack> result = new ArrayList<>();
-		Random rand = new Random();
+	private static Collection<ItemStack> getDrops (final Random rand, final String boneType, final int count) {
+		final Map<String, ItemStack> result = new HashMap<>();
 
-		Tuple2<Double, Map<String, Double>> dropMap = BoneChunks.drops.get(boneType.toLowerCase());
-		double chanceTotal = dropMap._1;
-		Map<String, Double> drops = dropMap._2;
+		final Tuple2<Double, Map<String, Double>> dropMap = BoneChunks.drops.get(boneType.toLowerCase());
+		final double chanceTotal = dropMap._1;
+		final Map<String, Double> drops = dropMap._2;
 
-		for (Map.Entry<String, Double> dropInfo : drops.entrySet()) {
-			if (dropInfo.getKey() == null) continue;
+		for (int i = 0; i < count; i++) {
+			for (final Map.Entry<String, Double> dropInfo : drops.entrySet()) {
+				if (dropInfo.getKey() == null) continue;
 
-			if (rand.nextFloat() < dropInfo.getValue() / chanceTotal) {
-				result.add(Essence.getStack(dropInfo.getKey()));
+				if (rand.nextFloat() >= dropInfo.getValue() / chanceTotal) continue;
+
+				ItemStack stack = result.get(dropInfo.getKey());
+				if (stack == null) {
+					stack = Essence.getStack(dropInfo.getKey());
+					result.put(dropInfo.getKey(), stack);
+				} else
+					stack.grow(1);
+
 			}
 		}
 
-		return result;
+		return result.values();
 	}
 
 	private static void particles (World world, EntityPlayer player, Item item) {
