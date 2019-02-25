@@ -79,20 +79,24 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 
 	public boolean pullItems () {
 
-		for (EntityItem item : getCaptureItems()) {
+		for (final EntityItem item : getCaptureItems()) {
 			if (item.ticksExisted < 2) continue;
-			ItemStack stack = item.getItem();
+			final ItemStack stack = item.getItem();
 			if (tryInsert(stack, stack.getCount())) return true;
 		}
 
 		return false;
 	}
 
-	public boolean tryInsert (ItemStack stack, int requestedQuantity) {
+	public boolean tryInsert (final ItemStack stack, final int requestedQuantity) {
+		if (stack == null || stack.isEmpty()) return false;
+
 		ItemStack currentStack = storedItem;
+		if (currentStack != null && currentStack.isEmpty()) currentStack = storedItem = null;
+
 		if (currentStack == null || areItemStacksEqual(stack, currentStack)) {
-			int canStillBeInsertedQuantity = CONFIG.maxQuantity - (currentStack == null ? 0 : storedQuantity);
-			int insertQuantity = Math.min(requestedQuantity, canStillBeInsertedQuantity);
+			final int canStillBeInsertedQuantity = CONFIG.maxQuantity - (currentStack == null ? 0 : storedQuantity);
+			final int insertQuantity = Math.min(requestedQuantity, canStillBeInsertedQuantity);
 
 			if (currentStack == null) {
 				storedItem = stack.copy();
@@ -112,8 +116,8 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 			currentStack.getItem() instanceof IFillableWithEssence && storedQuantity == 1 && //
 			(stack.getItem() == ModItems.ESSENCE || stack.getItem() == ModItems.ASH)) {
 
-			IFillableWithEssence fillable = (IFillableWithEssence) currentStack.getItem();
-			int insertQuantity = fillable.fill(currentStack, stack, requestedQuantity);
+			final IFillableWithEssence fillable = (IFillableWithEssence) currentStack.getItem();
+			final int insertQuantity = fillable.fill(currentStack, stack, requestedQuantity);
 			if (insertQuantity > 0) {
 				stack.shrink(insertQuantity);
 				blockUpdate();
