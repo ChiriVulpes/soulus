@@ -27,7 +27,7 @@ import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigComposerCell;
-import yuudaari.soulus.common.util.LangHelper;
+import yuudaari.soulus.common.util.Translation;
 import yuudaari.soulus.common.util.Material;
 import java.util.ArrayList;
 import java.util.List;
@@ -254,16 +254,16 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	@Override
 	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, ComposerCellTileEntity te, EntityPlayer player) {
 
-		// currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":composer_cell.slot", te.slot));
+		// currentTooltip.add(Translation.localize("waila." + Soulus.MODID + ":composer_cell.slot", te.slot));
 
 		if (te.storedQuantity == 0) {
-			currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":composer_cell.no_items"));
+			currentTooltip.add(Translation.localize("waila." + Soulus.MODID + ":composer_cell.no_items"));
 			return;
 		}
 
-		currentTooltip.add(LangHelper
-			.localize("waila." + Soulus.MODID + ":composer_cell.contained_item", te.storedQuantity, CONFIG.maxQuantity, te.storedItem
-				.getDisplayName()));
+		currentTooltip.add(new Translation("waila." + Soulus.MODID + ":composer_cell.contained_item")
+			.addArgs(te.storedQuantity, CONFIG.maxQuantity, te.storedItem.getDisplayName())
+			.get());
 
 		ItemStack storedItem = te.getStoredItem();
 		if (!player.isSneaking() && storedItem != null && storedItem.getItem() instanceof IHasComposerCellInfo) {

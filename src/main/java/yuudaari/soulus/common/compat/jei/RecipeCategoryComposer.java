@@ -20,8 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.util.LangHelper;
-
+import yuudaari.soulus.common.util.Translation;
 import java.util.List;
 
 public class RecipeCategoryComposer implements IRecipeCategory<IRecipeWrapper> {
@@ -50,7 +49,7 @@ public class RecipeCategoryComposer implements IRecipeCategory<IRecipeWrapper> {
 
 	@Override
 	public String getTitle () {
-		return LangHelper.localize("jei.recipe." + getUid() + ".name");
+		return Translation.localize("jei.recipe." + getUid() + ".name");
 	}
 
 	@Override

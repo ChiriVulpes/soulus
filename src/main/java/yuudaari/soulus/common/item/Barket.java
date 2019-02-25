@@ -38,7 +38,7 @@ import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
 import yuudaari.soulus.common.util.IModThing;
-import yuudaari.soulus.common.util.LangHelper;
+import yuudaari.soulus.common.util.Translation;
 
 public class Barket extends UniversalBucket implements IModThing {
 
@@ -209,7 +209,7 @@ public class Barket extends UniversalBucket implements IModThing {
 	@Override
 	public String getItemStackDisplayName (final ItemStack stack) {
 		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
-			return LangHelper.localize(getUnlocalizedNameInefficiently(stack) + ".name");
+			return Translation.localize(getUnlocalizedNameInefficiently(stack) + ".name");
 		}
 		return getRegistryName().toString();
 	}

@@ -11,7 +11,7 @@ import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariableProvider;
 import vazkii.patchouli.api.PatchouliAPI;
 import yuudaari.soulus.common.recipe.composer.IRecipeComposer;
-import yuudaari.soulus.common.util.LangHelper;
+import yuudaari.soulus.common.util.Translation;
 
 public class ComposerCraftingPage implements IComponentProcessor {
 
@@ -78,7 +78,7 @@ public class ComposerCraftingPage implements IComponentProcessor {
 				String timeString = "" + (recipe instanceof IRecipeComposer ? ((IRecipeComposer) recipe).getTime() : 1);
 				if (timeString.endsWith(".0"))
 					timeString = timeString.substring(0, timeString.length() - 2);
-				timeString = LangHelper.localize("patchouli.recipe.soulus:composer.recipe_time", timeString);
+				timeString = Translation.localize("patchouli.recipe.soulus:composer.recipe_time", timeString);
 				return timeString;
 			}
 			case "name":

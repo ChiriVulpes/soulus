@@ -33,7 +33,7 @@ import yuudaari.soulus.common.block.enderlink.EnderlinkTileEntity;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigEnderlink;
-import yuudaari.soulus.common.util.LangHelper;
+import yuudaari.soulus.common.util.Translation;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.ModBlock;
 import java.util.ArrayList;
@@ -206,7 +206,7 @@ public class DustEnderBlock extends ModBlock {
 	public final List<String> getWailaTooltip (List<String> currentTooltip, IDataAccessor accessor) {
 		String color = accessor.getBlockState().getValue(COLOR).getDyeColorName();
 
-		currentTooltip.add(LangHelper.localize("waila.soulus:misc.color." + color));
+		currentTooltip.add(Translation.localize("waila.soulus:misc.color." + color));
 
 		return currentTooltip;
 	}

@@ -32,7 +32,7 @@ import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSummoner;
-import yuudaari.soulus.common.util.LangHelper;
+import yuudaari.soulus.common.util.Translation;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.ModBlockPane;
 
@@ -96,7 +96,7 @@ public class BarsEndersteel extends ModBlockPane {
 			@SideOnly(Side.CLIENT)
 			@Override
 			public void addInformation (ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-				tooltip.add(LangHelper.localize("tooltip." + Soulus.MODID + ":summoner.style." + EndersteelType
+				tooltip.add(Translation.localize("tooltip." + Soulus.MODID + ":summoner.style." + EndersteelType
 					.byMetadata(stack.getItemDamage())
 					.getName()));
 			}
@@ -150,7 +150,7 @@ public class BarsEndersteel extends ModBlockPane {
 	public final List<String> getWailaTooltip (final List<String> currentTooltip, final IDataAccessor accessor) {
 		final String variant = accessor.getBlockState().getValue(VARIANT).getName();
 
-		currentTooltip.add(LangHelper.localize("tooltip." + Soulus.MODID + ":summoner.style." + variant));
+		currentTooltip.add(Translation.localize("tooltip." + Soulus.MODID + ":summoner.style." + variant));
 
 		return currentTooltip;
 	}

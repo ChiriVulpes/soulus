@@ -52,7 +52,7 @@ import yuudaari.soulus.common.item.CrystalBlood;
 import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.item.Soulbook;
 import yuudaari.soulus.common.util.EssenceType;
-import yuudaari.soulus.common.util.LangHelper;
+import yuudaari.soulus.common.util.Translation;
 import yuudaari.soulus.common.util.Material;
 
 @ConfigInjected(Soulus.MODID)
@@ -293,20 +293,20 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 			String essenceType = EssenceType.getEssenceType(stack);
 			ConfigEssence config = CONFIG_ESSENCES.get(essenceType);
 			if (essenceType == null || config == null)
-				return LangHelper.localize(this.getUnlocalizedName() + ".unfocused.name").trim();
+				return Translation.localize(this.getUnlocalizedName() + ".unfocused.name").trim();
 
 			String alignment = config.name;
 			if (alignment == null) {
-				alignment = LangHelper.localizeEntity(essenceType);
+				alignment = Translation.localizeEntity(essenceType);
 			}
 
-			return LangHelper.localize(this.getUnlocalizedName() + ".focused.name", alignment).trim();
+			return Translation.localize(this.getUnlocalizedName() + ".focused.name", alignment).trim();
 		}
 
 		@SideOnly(Side.CLIENT)
 		@Override
 		public void addInformation (ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-			tooltip.add(LangHelper.localize("tooltip." + Soulus.MODID + ":summoner.style." + EndersteelType
+			tooltip.add(Translation.localize("tooltip." + Soulus.MODID + ":summoner.style." + EndersteelType
 				.byMetadata(stack.getItemDamage() / 2)
 				.getName()));
 		}
@@ -522,12 +522,12 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 		int summonPercentage = (int) Math.floor(te.getSpawnPercent() * 100);
 		currentTooltip
-			.add(LangHelper.localize("waila." + Soulus.MODID + ":summoner.summon_percentage", summonPercentage));
+			.add(Translation.localize("waila." + Soulus.MODID + ":summoner.summon_percentage", summonPercentage));
 
 		if (CONFIG.soulbookUses != null && CONFIG.soulbookUses > 0) {
 			int summonsRemaining = (int) Math.ceil(te.getSoulbookUses() / CONFIG.soulbookUses * 100);
 			currentTooltip
-				.add(LangHelper.localize("waila." + Soulus.MODID + ":summoner.summons_remaining", summonsRemaining));
+				.add(Translation.localize("waila." + Soulus.MODID + ":summoner.summons_remaining", summonsRemaining));
 		}
 
 	}
@@ -548,7 +548,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	@Override
 	protected List<String> onWailaTooltipMore (IBlockState blockState, SummonerTileEntity te, EntityPlayer player) {
 		String variant = blockState.getValue(VARIANT).getName();
-		return Collections.singletonList(LangHelper.localize("tooltip." + Soulus.MODID + ":summoner.style." + variant));
+		return Collections.singletonList(Translation.localize("tooltip." + Soulus.MODID + ":summoner.style." + variant));
 	}
 
 	@Override

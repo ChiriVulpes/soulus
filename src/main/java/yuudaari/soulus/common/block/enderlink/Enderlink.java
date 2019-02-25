@@ -28,7 +28,7 @@ import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigEnderlink;
 import yuudaari.soulus.common.item.OrbMurky;
-import yuudaari.soulus.common.util.LangHelper;
+import yuudaari.soulus.common.util.Translation;
 import yuudaari.soulus.common.util.Material;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -259,7 +259,7 @@ public class Enderlink extends UpgradeableBlock<EnderlinkTileEntity> {
 	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, EnderlinkTileEntity te, EntityPlayer player) {
 		if (te == null) return;
 
-		currentTooltip.add(LangHelper.localize("waila.soulus:misc.color." + te.color.getDyeColorName()));
+		currentTooltip.add(Translation.localize("waila.soulus:misc.color." + te.color.getDyeColorName()));
 	}
 
 }

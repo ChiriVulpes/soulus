@@ -35,7 +35,7 @@ import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.ModItems;
 import yuudaari.soulus.common.util.IBlock;
 import yuudaari.soulus.common.util.JSON;
-import yuudaari.soulus.common.util.LangHelper;
+import yuudaari.soulus.common.util.Translation;
 import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.serializer.Serializer;
 
@@ -103,8 +103,8 @@ public class Exporter {
 			if (Minecraft.getSystemTime() - lastUpdate > 33) {
 				Renderer.tearDownRenderState();
 
-				final String rendering = LangHelper.localize("gui.rendering", itemsToExport.size(), modid);
-				final String progress = LangHelper.localize("gui.progress", exportCount, itemsToExport.size(), itemsToExport.size() - exportCount);
+				final String rendering = Translation.localize("gui.rendering", itemsToExport.size(), modid);
+				final String progress = Translation.localize("gui.progress", exportCount, itemsToExport.size(), itemsToExport.size() - exportCount);
 				GuiExporterLoading.renderLoadingScreen(rendering, progress, stack, (float) exportCount / itemsToExport.size());
 
 				lastUpdate = Minecraft.getSystemTime();
@@ -120,15 +120,15 @@ public class Exporter {
 
 		// specify in the GUI whether the rendering was cancelled or succeeded
 		if (exportCount < itemsToExport.size()) {
-			final String cancelled = LangHelper.localize("gui.renderCancelled");
-			final String progress = LangHelper.localize("gui.progress", exportCount, itemsToExport.size(), itemsToExport.size() - exportCount);
+			final String cancelled = Translation.localize("gui.renderCancelled");
+			final String progress = Translation.localize("gui.progress", exportCount, itemsToExport.size(), itemsToExport.size() - exportCount);
 			result.add(cancelled);
 			result.add(progress);
 
 			GuiExporterLoading.renderLoadingScreen(cancelled, progress, null, (float) exportCount / itemsToExport.size());
 
 		} else {
-			final String rendered = LangHelper.localize("gui.rendered", exportCount);
+			final String rendered = Translation.localize("gui.rendered", exportCount);
 			result.add(rendered);
 
 			GuiExporterLoading.renderLoadingScreen(rendered, "", null, 1);

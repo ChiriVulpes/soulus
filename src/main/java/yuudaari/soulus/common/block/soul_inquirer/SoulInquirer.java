@@ -33,7 +33,7 @@ import yuudaari.soulus.common.item.CrystalBlood;
 import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.item.Soulbook;
 import yuudaari.soulus.common.util.EssenceType;
-import yuudaari.soulus.common.util.LangHelper;
+import yuudaari.soulus.common.util.Translation;
 import yuudaari.soulus.common.util.Material;
 import java.util.Collections;
 import java.util.List;
@@ -206,14 +206,14 @@ public class SoulInquirer extends UpgradeableBlock<SoulInquirerTileEntity> {
 			String essenceType = EssenceType.getEssenceType(stack);
 			ConfigEssence config = CONFIG_ESSENCES.get(essenceType);
 			if (essenceType == null || config == null)
-				return LangHelper.localize(this.getUnlocalizedName() + ".unfocused.name").trim();
+				return Translation.localize(this.getUnlocalizedName() + ".unfocused.name").trim();
 
 			String alignment = config.name;
 			if (alignment == null) {
-				alignment = LangHelper.localizeEntity(essenceType);
+				alignment = Translation.localizeEntity(essenceType);
 			}
 
-			return LangHelper.localize(this.getUnlocalizedName() + ".focused.name", alignment).trim();
+			return Translation.localize(this.getUnlocalizedName() + ".focused.name", alignment).trim();
 		}
 	}
 
@@ -342,11 +342,11 @@ public class SoulInquirer extends UpgradeableBlock<SoulInquirerTileEntity> {
 
 		if (upgradeCount == 0) {
 			final String detection = te.soulInquiry() > 0 ? "something" : "nothing";
-			currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":soul_inquirer.detecting_" + detection));
+			currentTooltip.add(Translation.localize("waila." + Soulus.MODID + ":soul_inquirer.detecting_" + detection));
 		} else {
-			currentTooltip.add(LangHelper
-				.localize("waila." + Soulus.MODID + ":soul_inquirer.detecting", Math
-					.min(15, te.soulInquiry()), upgradeCount * 16 - 1));
+			currentTooltip.add(new Translation("waila." + Soulus.MODID + ":soul_inquirer.detecting")
+				.addArgs(Math.min(15, te.soulInquiry()), upgradeCount * 16 - 1)
+				.get());
 		}
 	}
 

@@ -26,7 +26,7 @@ import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.item.ConfigSoulCatalyst;
 import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
 import yuudaari.soulus.common.util.Colour;
-import yuudaari.soulus.common.util.LangHelper;
+import yuudaari.soulus.common.util.Translation;
 import yuudaari.soulus.common.util.ModItem;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -224,8 +224,9 @@ public class SoulCatalyst extends ModItem implements IHasComposerCellInfo, IFill
 	public void addImportantInformation (List<String> tooltip, ItemStack stack) {
 		int containedEssence = OrbMurky.getContainedEssence(stack);
 		if (containedEssence < CONFIG.requiredEssence) {
-			tooltip.add(LangHelper
-				.localize("tooltip." + Soulus.MODID + ":soul_catalyst.contained_essence", containedEssence, CONFIG.requiredEssence));
+			tooltip.add(new Translation("tooltip." + Soulus.MODID + ":soul_catalyst.contained_essence")
+				.addArgs(containedEssence, CONFIG.requiredEssence)
+				.get());
 		}
 	}
 

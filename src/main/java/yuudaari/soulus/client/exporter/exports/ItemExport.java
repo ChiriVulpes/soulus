@@ -4,7 +4,7 @@ import java.util.List;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import yuudaari.soulus.common.util.LangHelper;
+import yuudaari.soulus.common.util.Translation;
 import yuudaari.soulus.common.util.ModItem;
 import yuudaari.soulus.common.util.serializer.CollectionSerializer;
 import yuudaari.soulus.common.util.serializer.Serializable;
@@ -28,7 +28,7 @@ public class ItemExport {
 			registryName = ((ModItem) item).getDescriptionRegistryName();
 		}
 
-		this.description = LangHelper.localize("jei.description." + (registryName == null ? this.registryName : registryName));
+		this.description = Translation.localize("jei.description." + (registryName == null ? this.registryName : registryName));
 	}
 
 	@Serializable

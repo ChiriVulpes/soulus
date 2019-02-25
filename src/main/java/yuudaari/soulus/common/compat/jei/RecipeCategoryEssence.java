@@ -20,7 +20,7 @@ import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.item.Essence;
 import yuudaari.soulus.common.misc.BoneChunks;
 import yuudaari.soulus.common.util.EssenceType;
-import yuudaari.soulus.common.util.LangHelper;
+import yuudaari.soulus.common.util.Translation;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -53,7 +53,7 @@ public class RecipeCategoryEssence implements IRecipeCategory<IRecipeWrapper> {
 
 	@Override
 	public String getTitle () {
-		return LangHelper.localize("jei.recipe." + getUid() + ".name");
+		return Translation.localize("jei.recipe." + getUid() + ".name");
 	}
 
 	@Override
@@ -100,7 +100,7 @@ public class RecipeCategoryEssence implements IRecipeCategory<IRecipeWrapper> {
 				double dropWeight = essence.bones.dropWeight;
 
 				double dropChance = dropWeight / BoneChunks.getChanceTotal(essence.bones.type) * 100;
-				tooltip.add(0, LangHelper.localize("jei.recipe." + Soulus.MODID + ":essence.tooltip_chance", //
+				tooltip.add(0, Translation.localize("jei.recipe." + Soulus.MODID + ":essence.tooltip_chance", //
 					new DecimalFormat("#.##").format(dropChance)));
 			}
 		});

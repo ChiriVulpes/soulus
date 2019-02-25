@@ -31,7 +31,7 @@ import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSkewer;
 import yuudaari.soulus.common.item.CrystalBlood;
 import yuudaari.soulus.common.item.SoulCatalyst;
-import yuudaari.soulus.common.util.LangHelper;
+import yuudaari.soulus.common.util.Translation;
 import yuudaari.soulus.common.util.Material;
 import java.util.List;
 
@@ -356,8 +356,9 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		double sidePadding = 0.2;
 		return result
 			.contract(facing.getFrontOffsetX() == 1 ? topPadding : sidePadding * 2, facing
-				.getFrontOffsetY() == 1 ? topPadding : sidePadding * 2, facing
-					.getFrontOffsetZ() == 1 ? topPadding : sidePadding * 2)
+				.getFrontOffsetY() == 1 ? topPadding : sidePadding
+					* 2, facing
+						.getFrontOffsetZ() == 1 ? topPadding : sidePadding * 2)
 			.offset(facing.getFrontOffsetX() == 1 ? 0 : sidePadding, facing
 				.getFrontOffsetY() == 1 ? 0 : sidePadding, facing.getFrontOffsetZ() == 1 ? 0 : sidePadding);
 	}
@@ -369,12 +370,13 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	@Override
 	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, SkewerTileEntity te, EntityPlayer player) {
 
-		currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + (blockState
+		currentTooltip.add(Translation.localize("waila." + Soulus.MODID + (blockState
 			.getValue(Skewer.EXTENDED) ? ":skewer.extended" : ":skewer.not_extended")));
 
 		if (te.upgrades.get(Upgrade.CRYSTAL_BLOOD) == 1) {
-			currentTooltip.add(LangHelper
-				.localize("waila." + Soulus.MODID + ":skewer.crystal_blood_stored_blood", te.crystalBloodContainedBlood, CrystalBlood.CONFIG.requiredBlood));
+			currentTooltip.add(new Translation("waila." + Soulus.MODID + ":skewer.crystal_blood_stored_blood")
+				.addArgs(te.crystalBloodContainedBlood, CrystalBlood.CONFIG.requiredBlood)
+				.get());
 		}
 	}
 

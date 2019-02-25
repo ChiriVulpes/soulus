@@ -33,7 +33,7 @@ import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
 import yuudaari.soulus.common.util.Colour;
 import yuudaari.soulus.common.util.EssenceType;
-import yuudaari.soulus.common.util.LangHelper;
+import yuudaari.soulus.common.util.Translation;
 import yuudaari.soulus.common.util.ModItem;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -191,14 +191,14 @@ public class Soulbook extends ModItem implements IHasComposerCellInfo, IFillable
 		String essenceType = EssenceType.getEssenceType(stack);
 		ConfigEssence config = CONFIG.get(essenceType);
 		if (essenceType == null || config == null)
-			return LangHelper.localize(this.getUnlocalizedName() + ".unfocused.name").trim();
+			return Translation.localize(this.getUnlocalizedName() + ".unfocused.name").trim();
 
 		String alignment = config.name;
 		if (alignment == null) {
-			alignment = LangHelper.localizeEntity(essenceType);
+			alignment = Translation.localizeEntity(essenceType);
 		}
 
-		return LangHelper.localize(this.getUnlocalizedName() + ".focused.name", alignment).trim();
+		return Translation.localize(this.getUnlocalizedName() + ".focused.name", alignment).trim();
 	}
 
 	@Override
@@ -290,8 +290,9 @@ public class Soulbook extends ModItem implements IHasComposerCellInfo, IFillable
 		if (mobTarget != null) {
 			int requiredEssence = CONFIG.getSoulbookQuantity(mobTarget);
 			if (containedEssence < requiredEssence) {
-				tooltip.add(LangHelper
-					.localize("tooltip." + Soulus.MODID + ":soulbook.contained_essence", containedEssence, requiredEssence));
+				tooltip.add(new Translation("tooltip." + Soulus.MODID + ":soulbook.contained_essence")
+					.addArgs(containedEssence, requiredEssence)
+					.get());
 			}
 		}
 	}

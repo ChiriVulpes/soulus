@@ -32,7 +32,7 @@ import yuudaari.soulus.common.misc.ModDamageSource;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.client.CrystalBloodHitEntity;
 import yuudaari.soulus.common.util.Colour;
-import yuudaari.soulus.common.util.LangHelper;
+import yuudaari.soulus.common.util.Translation;
 import yuudaari.soulus.common.util.ModPotionEffect;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -237,8 +237,9 @@ public class CrystalBlood extends SummonerUpgrade {
 	public void addInformation (ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		int containedBlood = CrystalBlood.getContainedBlood(stack);
 		if (containedBlood < CONFIG.requiredBlood) {
-			tooltip.add(LangHelper
-				.localize("tooltip." + Soulus.MODID + ":crystal_blood.contained_blood", containedBlood, CONFIG.requiredBlood));
+			tooltip.add(new Translation("tooltip." + Soulus.MODID + ":crystal_blood.contained_blood")
+				.addArgs(containedBlood, CONFIG.requiredBlood)
+				.get());
 		}
 	}
 }

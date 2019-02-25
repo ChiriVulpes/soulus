@@ -24,7 +24,7 @@ import scala.Tuple3;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.advancement.Advancements;
-import yuudaari.soulus.common.util.LangHelper;
+import yuudaari.soulus.common.util.Translation;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.ModBlock;
 import javax.annotation.Nullable;
@@ -379,9 +379,9 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 			if (more != null) currentTooltip.addAll(more);
 		} else if (upgrades.size() + moreSize > 0) {
 			if (moreSize > 0) {
-				currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":upgradeable_block.show_more"));
+				currentTooltip.add(Translation.localize("waila." + Soulus.MODID + ":upgradeable_block.show_more"));
 			} else {
-				currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":upgradeable_block.show_upgrades"));
+				currentTooltip.add(Translation.localize("waila." + Soulus.MODID + ":upgradeable_block.show_upgrades"));
 			}
 		}
 	}
@@ -416,7 +416,7 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 
 		if (upgrade.isSecret() && upgradeCount == 0) return null;
 
-		return LangHelper.localize("waila." + getRegistryName() + ".upgrades_" + upgradeName, //
+		return Translation.localize("waila." + getRegistryName() + ".upgrades_" + upgradeName, //
 			upgradeCount, upgrade.getMaxQuantity());
 	}
 

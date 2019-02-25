@@ -22,7 +22,7 @@ import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSoulTotem;
 import yuudaari.soulus.common.item.SoulCatalyst;
-import yuudaari.soulus.common.util.LangHelper;
+import yuudaari.soulus.common.util.Translation;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.StructureMap;
 import yuudaari.soulus.common.util.StructureMap.BlockValidator;
@@ -227,7 +227,7 @@ public class SoulTotem extends UpgradeableBlock<SoulTotemTileEntity> {
 	@Override
 	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, SoulTotemTileEntity te, EntityPlayer player) {
 
-		currentTooltip.add(LangHelper.localize("waila." + Soulus.MODID + ":soul_totem.fuel_percentage", (int) Math
+		currentTooltip.add(Translation.localize("waila." + Soulus.MODID + ":soul_totem.fuel_percentage", (int) Math
 			.ceil(te.getFuelPercent() * 100)));
 	}
 }
