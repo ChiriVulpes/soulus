@@ -175,7 +175,7 @@ public class Config {
 
 			final JsonObject baseProfile = getConfigFileJson(filename, true);
 
-			final JsonElement tweaks = json.get("tweaks");
+			final JsonElement tweaks = json == null ? null : json.get("tweaks");
 			final boolean hasTweaks = tweaks != null && tweaks.isJsonArray();
 
 			if (includeOverrides && hasTweaks) {
