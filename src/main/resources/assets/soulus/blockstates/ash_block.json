@@ -1,5 +1,5 @@
 {
-    "variants": {
-        "normal": { "model": "soulus:ash_block" }
-    }
+	"variants": {
+		"normal": { "model": "soulus:ash_block" }
+	}
 }

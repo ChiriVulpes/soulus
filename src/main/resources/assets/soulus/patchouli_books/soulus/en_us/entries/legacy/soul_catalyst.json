@@ -1,8 +1,8 @@
 {
-    "name": "Soul Catalyst",
-    "icon": "soulus:soul_catalyst{essence_quantity:256}",
+	"name": "Soul Catalyst",
+	"icon": "soulus:soul_catalyst{essence_quantity:256}",
 	"advancement": "soulus:niobium",
-    "category": "legacy",
+	"category": "legacy",
 	"sortnum": 10502,
 	"pages": [
 		{

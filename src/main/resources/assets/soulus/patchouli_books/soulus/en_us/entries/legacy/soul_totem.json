@@ -1,8 +1,8 @@
 {
-    "name": "The Soul Totem",
-    "icon": "soulus:soul_totem",
+	"name": "The Soul Totem",
+	"icon": "soulus:soul_totem",
 	"advancement": "soulus:soul_catalyst",
-    "category": "legacy",
+	"category": "legacy",
 	"sortnum": 10503,
 	"pages": [
 		{

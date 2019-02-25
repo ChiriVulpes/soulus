@@ -1,8 +1,8 @@
 {
-    "name": "The Summoner",
+	"name": "The Summoner",
 	"icon": "soulus:summoner",
 	"advancement": "soulus:dust_ender",
-    "category": "summoning",
+	"category": "summoning",
 	"sortnum": 10202,
 	"pages": [
 		{

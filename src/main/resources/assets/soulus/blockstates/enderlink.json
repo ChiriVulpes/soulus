@@ -1,10 +1,10 @@
 {
-    "variants": {
-        "facing=up": { "model": "soulus:enderlink" },
-        "facing=down": { "model": "soulus:enderlink", "x": 180 },
-        "facing=north": { "model": "soulus:enderlink", "x": 90 },
-        "facing=south": { "model": "soulus:enderlink", "x": 90, "y": 180 },
-        "facing=west": { "model": "soulus:enderlink", "x": 90, "y": 270 },
-        "facing=east": { "model": "soulus:enderlink", "x": 90, "y": 90 }
-    }
+	"variants": {
+		"facing=up": { "model": "soulus:enderlink" },
+		"facing=down": { "model": "soulus:enderlink", "x": 180 },
+		"facing=north": { "model": "soulus:enderlink", "x": 90 },
+		"facing=south": { "model": "soulus:enderlink", "x": 90, "y": 180 },
+		"facing=west": { "model": "soulus:enderlink", "x": 90, "y": 270 },
+		"facing=east": { "model": "soulus:enderlink", "x": 90, "y": 90 }
+	}
 }

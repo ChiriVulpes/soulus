@@ -1,8 +1,8 @@
 {
-    "name": "Summoner: Quantity",
-    "icon": "soulus:crystal_blood{contained_blood:1000}",
+	"name": "Summoner: Quantity",
+	"icon": "soulus:crystal_blood{contained_blood:1000}",
 	"advancement": "soulus:summoner",
-    "category": "summoning",
+	"category": "summoning",
 	"sortnum": 10204,
 	"pages": [
 		{

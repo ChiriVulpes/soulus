@@ -5,14 +5,14 @@ import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
 
 public class BoneChunkEnder extends BoneChunk {
 
-    public BoneChunkEnder () {
-        super("bone_chunk_ender");
-        glint = true;
-        removeOreDict("boneChunk");
-    }
+	public BoneChunkEnder () {
+		super("bone_chunk_ender");
+		glint = true;
+		removeOreDict("boneChunk");
+	}
 
-    @Override
-    public void onRegisterDescription (JeiDescriptionRegistry registry) {
-        registry.add(Ingredient.fromItem(this), getRegistryName());
-    }
+	@Override
+	public void onRegisterDescription (JeiDescriptionRegistry registry) {
+		registry.add(Ingredient.fromItem(this), getRegistryName());
+	}
 }

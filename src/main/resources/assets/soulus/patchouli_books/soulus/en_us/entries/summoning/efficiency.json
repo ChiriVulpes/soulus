@@ -1,8 +1,8 @@
 {
-    "name": "Summoner: Efficiency",
+	"name": "Summoner: Efficiency",
 	"icon": "soulus:gear_niobium",
 	"advancement": "soulus:niobium",
-    "category": "summoning",
+	"category": "summoning",
 	"sortnum": 10206,
 	"pages": [
 		{

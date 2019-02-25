@@ -5,13 +5,13 @@ import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
 
 public class BoneChunkNether extends BoneChunk {
 
-    public BoneChunkNether () {
-        super("bone_chunk_nether");
-        removeOreDict("boneChunk");
-    }
+	public BoneChunkNether () {
+		super("bone_chunk_nether");
+		removeOreDict("boneChunk");
+	}
 
-    @Override
-    public void onRegisterDescription (JeiDescriptionRegistry registry) {
-        registry.add(Ingredient.fromItem(this), getRegistryName());
-    }
+	@Override
+	public void onRegisterDescription (JeiDescriptionRegistry registry) {
+		registry.add(Ingredient.fromItem(this), getRegistryName());
+	}
 }

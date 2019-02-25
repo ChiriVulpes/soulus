@@ -1,8 +1,8 @@
 {
-    "name": "Niobium",
-    "icon": "soulus:ingot_niobium",
+	"name": "Niobium",
+	"icon": "soulus:ingot_niobium",
 	"advancement": "soulus:crystal_dark",
-    "category": "legacy",
+	"category": "legacy",
 	"sortnum": 10501,
 	"pages": [
 		{

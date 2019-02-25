@@ -1,6 +1,6 @@
 {
-    "parent": "minecraft:block/cross",
-    "textures": {
-        "cross": "soulus:blocks/ash"
-    }
+	"parent": "minecraft:block/cross",
+	"textures": {
+		"cross": "soulus:blocks/ash"
+	}
 }

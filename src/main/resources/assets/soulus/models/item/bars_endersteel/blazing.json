@@ -1,6 +1,6 @@
 {
-    "parent": "item/generated",
-    "textures": {
-        "layer0": "soulus:blocks/summoner/blazing"
-    }
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "soulus:blocks/summoner/blazing"
+	}
 }

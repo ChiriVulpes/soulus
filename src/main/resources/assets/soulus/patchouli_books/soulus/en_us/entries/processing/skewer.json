@@ -1,8 +1,8 @@
 {
-    "name": "The Skewer",
-    "icon": "soulus:skewer",
+	"name": "The Skewer",
+	"icon": "soulus:skewer",
 	"advancement": "soulus:dust_ender",
-    "category": "processing",
+	"category": "processing",
 	"sortnum": 10301,
 	"pages": [
 		{

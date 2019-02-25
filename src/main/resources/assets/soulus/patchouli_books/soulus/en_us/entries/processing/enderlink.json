@@ -1,8 +1,8 @@
 {
-    "name": "The Enderlink",
-    "icon": "soulus:enderlink",
+	"name": "The Enderlink",
+	"icon": "soulus:enderlink",
 	"advancement": "soulus:crystal_dark",
-    "category": "processing",
+	"category": "processing",
 	"sortnum": 10304,
 	"pages": [
 		{

@@ -1,8 +1,8 @@
 {
-    "name": "Summoner: Speed",
-    "icon": "soulus:gear_oscillating",
+	"name": "Summoner: Speed",
+	"icon": "soulus:gear_oscillating",
 	"advancement": "soulus:summoner",
-    "category": "summoning",
+	"category": "summoning",
 	"sortnum": 10203,
 	"pages": [
 		{

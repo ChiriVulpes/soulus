@@ -1,6 +1,6 @@
 {
-    "parent": "minecraft:item/generated",
-    "textures": {
-        "layer0": "soulus:items/bone_scale"
-    }
+	"parent": "minecraft:item/generated",
+	"textures": {
+		"layer0": "soulus:items/bone_scale"
+	}
 }

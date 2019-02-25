@@ -1,5 +1,5 @@
 {
-    "variants": {
-        "normal": { "model": "soulus:unloader" }
-    }
+	"variants": {
+		"normal": { "model": "soulus:unloader" }
+	}
 }

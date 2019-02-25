@@ -1,8 +1,8 @@
 {
 	"name": "Skewer: Human",
 	"advancement": "soulus:soul_catalyst_fill",
-    "icon": "soulus:soul_catalyst{essence_quantity:256}",
-    "category": "processing",
+	"icon": "soulus:soul_catalyst{essence_quantity:256}",
+	"category": "processing",
 	"sortnum": 10303,
 	"pages": [
 		{

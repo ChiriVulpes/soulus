@@ -1,8 +1,8 @@
 {
-    "name": "Summoner: Range",
-    "icon": "soulus:orb_murky{essence_quantity:128}",
+	"name": "Summoner: Range",
+	"icon": "soulus:orb_murky{essence_quantity:128}",
 	"advancement": "soulus:summoner",
-    "category": "summoning",
+	"category": "summoning",
 	"sortnum": 10205,
 	"pages": [
 		{
