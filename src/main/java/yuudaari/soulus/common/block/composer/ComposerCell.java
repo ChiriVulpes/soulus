@@ -1,5 +1,6 @@
 package yuudaari.soulus.common.block.composer;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
@@ -182,6 +183,12 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	/////////////////////////////////////////
 	// Events
 	//
+
+	@Override
+	public void neighborChanged (final IBlockState state, final World world, final BlockPos pos, final Block blockIn, final BlockPos fromPos) {
+		final ComposerCellTileEntity te = (ComposerCellTileEntity) world.getTileEntity(pos);
+		if (te != null) te.shouldCheckSignal = true;
+	}
 
 	@Override
 	public boolean canActivateWithStack (ItemStack stack, World world, BlockPos pos) {

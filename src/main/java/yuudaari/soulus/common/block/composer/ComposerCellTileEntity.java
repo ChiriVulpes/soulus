@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.ModBlocks;
 import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigComposerCell;
@@ -46,6 +47,9 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 		return oldState.getBlock() != newState.getBlock();
 	}
 
+	public boolean shouldCheckSignal = true;
+	private boolean lastSignalIn = false;
+
 	@Override
 	public void update () {
 		changeComposerCooldown--;
@@ -54,7 +58,24 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 		prevItemRotation = itemRotation;
 		itemRotation = itemRotation + 0.05F + diff * 0.8;
 
-		if (!world.isRemote && storedQuantity < CONFIG.maxQuantity) pullItems();
+		if (!world.isRemote && storedQuantity < CONFIG.maxQuantity)
+			pullItems();
+
+		if (!shouldCheckSignal || world.isRemote)
+			return;
+
+		shouldCheckSignal = false;
+
+		final boolean signalIn = world.isBlockIndirectlyGettingPowered(pos) > 0;
+		if (signalIn && !lastSignalIn && storedItem != null) {
+			UpgradeableBlockTileEntity.dispenseItem(storedItem.copy(), world, pos, EnumFacing.DOWN);
+			storedQuantity--;
+			if (storedQuantity == 0) storedItem = null;
+			onChangeItem();
+			blockUpdate();
+		}
+
+		lastSignalIn = signalIn;
 	}
 
 	public void onChangeItem () {
