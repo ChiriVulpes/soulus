@@ -1,5 +1,6 @@
 package yuudaari.soulus.common.block.skewer;
 
+import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -16,8 +17,12 @@ import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -31,9 +36,8 @@ import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSkewer;
 import yuudaari.soulus.common.item.CrystalBlood;
 import yuudaari.soulus.common.item.SoulCatalyst;
-import yuudaari.soulus.common.util.Translation;
 import yuudaari.soulus.common.util.Material;
-import java.util.List;
+import yuudaari.soulus.common.util.Translation;
 
 @ConfigInjected(Soulus.MODID)
 public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
@@ -293,11 +297,12 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 
 			if (entityBox.intersects(box)) {
 				if (facing == EnumFacing.UP) {
-					if (entityBox.intersects(getVerticalCollisionBoxBottom(facing, pos)) && //
-						entityBox.intersects(getVerticalCollisionBoxTop(facing, pos))) {
+					if (entityBox.intersects(getUpwardsCollisionBoxBottom(facing, pos)) && //
+						entityBox.intersects(getUpwardsCollisionBoxTop(facing, pos))) {
 
 						collidingBoxes.add(box);
 					}
+
 				} else if (facing.getAxis() != Axis.Y) {
 					if (entityBox.intersects(getHorizontalCollisionBoxTop(facing, pos)) || //
 						entityBox.intersects(getHorizontalCollisionBoxSideLeft(facing, pos)) ||  //
@@ -307,60 +312,76 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 					}
 				}
 			}
-
-
-
 		}
 	}
 
-	public AxisAlignedBB getHorizontalCollisionBoxTop (EnumFacing facing, BlockPos pos) {
+	public static AxisAlignedBB getSpikeHitbox (final EnumFacing facing, final BlockPos pos) {
+		final AxisAlignedBB result = new AxisAlignedBB(pos.offset(facing));
+		final double topPadding = 0.3;
+		final double sidePadding = 0.2;
+		return result
+			.contract( //
+				facing.getFrontOffsetX() == 1 ? topPadding : sidePadding * 2, //
+				facing.getFrontOffsetY() == 1 ? topPadding : sidePadding * 2, //
+				facing.getFrontOffsetZ() == 1 ? topPadding : sidePadding * 2)
+			.offset( //
+				facing.getFrontOffsetX() == 1 ? 0 : sidePadding, // 
+				facing.getFrontOffsetY() == 1 ? 0 : sidePadding, //
+				facing.getFrontOffsetZ() == 1 ? 0 : sidePadding);
+	}
+
+	private AxisAlignedBB getHorizontalCollisionBoxTop (final EnumFacing facing, final BlockPos pos) {
 		return contract(contract( //
 			new AxisAlignedBB(pos.offset(facing).up(2)), //
 			EnumFacing.UP, 0.5), //
 			EnumFacing.DOWN, 0.25);
 	}
 
-	public AxisAlignedBB getHorizontalCollisionBoxSideLeft (EnumFacing facing, BlockPos pos) {
+	private AxisAlignedBB getHorizontalCollisionBoxSideLeft (final EnumFacing facing, final BlockPos pos) {
 		EnumFacing side = facing.rotateYCCW();
 		return contract(new AxisAlignedBB(pos.offset(facing).offset(side)), side.getOpposite(), 0.4);
 	}
 
-	public AxisAlignedBB getHorizontalCollisionBoxSideRight (EnumFacing facing, BlockPos pos) {
+	private AxisAlignedBB getHorizontalCollisionBoxSideRight (final EnumFacing facing, final BlockPos pos) {
 		EnumFacing side = facing.rotateY();
 		return contract(new AxisAlignedBB(pos.offset(facing).offset(side)), side.getOpposite(), 0.4);
 	}
 
-	public AxisAlignedBB getVerticalCollisionBoxBottom (EnumFacing facing, BlockPos pos) {
+	private AxisAlignedBB getUpwardsCollisionBoxBottom (final EnumFacing facing, final BlockPos pos) {
 		return contract(getSpikeHitbox(facing, pos), facing, 0.69);
 	}
 
-	public AxisAlignedBB getVerticalCollisionBoxTop (EnumFacing facing, BlockPos pos) {
-		return offset(getVerticalCollisionBoxBottom(facing, pos), facing, 0.69);
+	private AxisAlignedBB getUpwardsCollisionBoxTop (final EnumFacing facing, final BlockPos pos) {
+		return offset(getUpwardsCollisionBoxBottom(facing, pos), facing, 0.69);
 	}
 
-	public AxisAlignedBB offset (AxisAlignedBB box, EnumFacing facing, double n) {
+	// private AxisAlignedBB getDownwardsCollisionBoxBottom (final EnumFacing facing, final BlockPos pos) {
+	// 	return contract(getSpikeHitbox(facing, pos), facing, 0.69);
+	// }
+
+	// private AxisAlignedBB getDownwardsCollisionBoxTop (final EnumFacing facing, final BlockPos pos) {
+	// 	return offset(getDownwardsCollisionBoxBottom(facing, pos), facing, 1);
+	// }
+
+	// private AxisAlignedBB getDownwardsCollisionBoxInner (final EnumFacing facing, final BlockPos pos) {
+	// 	return contract(getSpikeHitbox(facing, pos), facing, 0.4);
+	// }
+
+	// private AxisAlignedBB[] getDownwardsCollisionBoxesOuter (final EnumFacing facing, final BlockPos pos) {
+	// 	return new AxisAlignedBB[] {
+	// 		(offset(contract(getSpikeHitbox(facing, pos), facing, 0.4), EnumFacing.EAST, 1)),
+	// 		(offset(contract(getSpikeHitbox(facing, pos), facing, 0.4), EnumFacing.WEST, 1)),
+	// 		(offset(contract(getSpikeHitbox(facing, pos), facing, 0.4), EnumFacing.NORTH, 1)),
+	// 		(offset(contract(getSpikeHitbox(facing, pos), facing, 0.4), EnumFacing.SOUTH, 1)),
+	// 	};
+	// }
+
+	private AxisAlignedBB offset (final AxisAlignedBB box, final EnumFacing facing, final double n) {
 		return box.offset(facing.getFrontOffsetX() * n, facing.getFrontOffsetY() * n, facing.getFrontOffsetZ() * n);
 	}
 
-	public AxisAlignedBB expand (AxisAlignedBB box, EnumFacing facing, double n) {
-		return box.expand(facing.getFrontOffsetX() * n, facing.getFrontOffsetY() * n, facing.getFrontOffsetZ() * n);
-	}
-
-	public AxisAlignedBB contract (AxisAlignedBB box, EnumFacing facing, double n) {
+	private AxisAlignedBB contract (final AxisAlignedBB box, final EnumFacing facing, final double n) {
 		return box.contract(facing.getFrontOffsetX() * n, facing.getFrontOffsetY() * n, facing.getFrontOffsetZ() * n);
-	}
-
-	public static AxisAlignedBB getSpikeHitbox (EnumFacing facing, BlockPos pos) {
-		AxisAlignedBB result = new AxisAlignedBB(pos.offset(facing));
-		double topPadding = 0.3;
-		double sidePadding = 0.2;
-		return result
-			.contract(facing.getFrontOffsetX() == 1 ? topPadding : sidePadding * 2, facing
-				.getFrontOffsetY() == 1 ? topPadding : sidePadding
-					* 2, facing
-						.getFrontOffsetZ() == 1 ? topPadding : sidePadding * 2)
-			.offset(facing.getFrontOffsetX() == 1 ? 0 : sidePadding, facing
-				.getFrontOffsetY() == 1 ? 0 : sidePadding, facing.getFrontOffsetZ() == 1 ? 0 : sidePadding);
 	}
 
 	/////////////////////////////////////////

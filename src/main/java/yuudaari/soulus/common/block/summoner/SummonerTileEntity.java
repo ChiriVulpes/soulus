@@ -123,8 +123,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 			// normal upgrades
 			int countUpgrades = upgrades.get(Upgrade.COUNT);
 			spawnCount = new Range(CONFIG.nonUpgradedCount.min + countUpgrades * CONFIG.upgradeCountEffectiveness.min, CONFIG.nonUpgradedCount.max + countUpgrades * CONFIG.upgradeCountEffectiveness.max);
-			spawningRadius = (int) Math
-				.floor(CONFIG.nonUpgradedSpawningRadius + countUpgrades * CONFIG.upgradeCountRadiusEffectiveness);
+			spawningRadius = (int) Math.floor(CONFIG.nonUpgradedSpawningRadius + countUpgrades * CONFIG.upgradeCountRadiusEffectiveness);
 
 			int delayUpgrades = upgrades.get(Upgrade.DELAY);
 			spawnDelay = new Range(CONFIG.nonUpgradedDelay.min / (1 + delayUpgrades * CONFIG.upgradeDelayEffectiveness.min), CONFIG.nonUpgradedDelay.max / (1 + delayUpgrades * CONFIG.upgradeDelayEffectiveness.max));
@@ -491,11 +490,13 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 			double d0 = rand.nextGaussian() * 0.02D;
 			double d1 = rand.nextGaussian() * 0.02D;
 			double d2 = rand.nextGaussian() * 0.02D;
-			worldServer.spawnParticle(EnumParticleTypes.DRAGON_BREATH, entity.posX + (double) (rand
-				.nextFloat() * entity.width * 2.0F) - (double) entity.width - d0 * 10.0D, entity.posY + (double) (rand
-					.nextFloat() * entity.height) - d1 * 10.0D, entity.posZ + (double) (rand
-						.nextFloat() * entity.width * 2.0F) - (double) entity.width - d2 * 10.0D, 1, d0, d1, d2, Math
-							.sqrt(d0 * d0 + d1 * d1 + d2 * d2));
+			worldServer.spawnParticle(EnumParticleTypes.DRAGON_BREATH, //
+				entity.posX + (double) (rand.nextFloat() * entity.width * 2.0F) - (double) entity.width - d0 * 10.0D, // 
+				entity.posY + (double) (rand.nextFloat() * entity.height) - d1 * 10.0D, //
+				entity.posZ + (double) (rand.nextFloat() * entity.width * 2.0F) - (double) entity.width - d2 * 10.0D, //
+				1, //
+				d0, d1, d2, // 
+				Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2));
 
 			double d3 = (pos.getX() + rand.nextFloat());
 			double d4 = (pos.getY() + rand.nextFloat());
@@ -503,8 +504,11 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 			double d3o = (pos.getX() - d3 - 0.5F) / 20;
 			double d4o = (pos.getY() - d4) / 20;
 			double d5o = (pos.getZ() - d5 - 0.5F) / 20;
-			worldServer.spawnParticle(EnumParticleTypes.DRAGON_BREATH, d3, d4, d5, 1, d3o, d4o, d5o, Math
-				.sqrt(d3o * d3o + d4o * d4o + d5o * d5o) * 2);
+			worldServer.spawnParticle(EnumParticleTypes.DRAGON_BREATH, //
+				d3, d4, d5, // 
+				1, //
+				d3o, d4o, d5o, //
+				Math.sqrt(d3o * d3o + d4o * d4o + d5o * d5o) * 2);
 		}
 	}
 
