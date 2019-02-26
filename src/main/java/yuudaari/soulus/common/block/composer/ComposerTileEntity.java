@@ -169,7 +169,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		final Map<String, EntityLivingBase> consumableEntities = new HashMap<>();
 
 		final EnumFacing facing = world.getBlockState(pos).getValue(Composer.FACING).getOpposite();
-		final AxisAlignedBB activationBox = new AxisAlignedBB(pos.offset(facing, 2)).grow(activatingRange);
+		final AxisAlignedBB activationBox = new AxisAlignedBB(pos.offset(facing, 3)).grow(activatingRange);
 
 		for (final EntityLivingBase entity : world.getEntitiesWithinAABB(EntityLivingBase.class, activationBox)) {
 
