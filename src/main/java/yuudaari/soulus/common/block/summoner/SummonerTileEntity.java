@@ -26,7 +26,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import scala.Tuple2;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.advancement.Advancements;
 import yuudaari.soulus.common.block.soul_totem.SoulTotemTileEntity;
 import yuudaari.soulus.common.block.summoner.Summoner.Upgrade;
@@ -49,7 +49,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 	@Override
 	public Summoner getBlock () {
-		return ModBlocks.SUMMONER;
+		return BlockRegistry.SUMMONER;
 	}
 
 	/* OTHER */

@@ -4,8 +4,8 @@ import java.util.List;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.Translation;
-import yuudaari.soulus.common.util.ModItem;
 import yuudaari.soulus.common.util.serializer.CollectionSerializer;
 import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
@@ -24,8 +24,8 @@ public class ItemExport {
 		this.stacks = stacks;
 
 		String registryName = null;
-		if (item instanceof ModItem) {
-			registryName = ((ModItem) item).getDescriptionRegistryName();
+		if (item instanceof Registration.Item) {
+			registryName = ((Registration.Item) item).getDescriptionRegistryName();
 		}
 
 		this.description = Translation.localize("jei.description." + (registryName == null ? this.registryName : registryName));

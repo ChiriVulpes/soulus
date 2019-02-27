@@ -230,6 +230,7 @@ jei.description.soulus:bone_chunk=A chunk of bone from a creature past. There ma
 jei.description.soulus:bone_chunk_ender=A chunk of bone from an alien creature past. There may still be the magic of life inside this piece of history, but, regardless, it seems to be vibrating. One can only imagine all of the uses for this.
 jei.description.soulus:bone_chunk_nether=A chunk of bone from a netherworld creature past. There may still be the magic of life inside this piece of history. As strange as it sounds, the chunk seems to be emanating malice.
 jei.description.soulus:bone=Part of the skeleton of a creature. 
+jei.description.soulus:bone_scale=Part of the skeleton of an oceanic creature.
 jei.description.soulus:bone_ender=Part of the skeleton of an alien creature.
 jei.description.soulus:bone_nether=Part of the skeleton of a netherworld creature.
 jei.description.soulus:bone_meal_nether=The remains of a netherworld creature, crushed into a fine powder. Whether or not one believed in true evil before is irrelevant; for now it is certain to exist, in a small pile in the palm of the hand.

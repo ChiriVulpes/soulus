@@ -6,7 +6,7 @@ import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.misc.ConfigBarkFromLogs;
@@ -24,7 +24,7 @@ public class BarkFromLogs {
 				if (event.getWorld().rand.nextFloat() < CONFIG.barkChance) {
 					List<ItemStack> drops = event.getDrops();
 					drops.clear();
-					drops.add(ModItems.BARK.getItemStack(8));
+					drops.add(ItemRegistry.BARK.getItemStack(8));
 				}
 			}
 		}

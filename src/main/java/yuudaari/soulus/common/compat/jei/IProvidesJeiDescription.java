@@ -1,6 +1,4 @@
-package yuudaari.soulus.common.util;
-
-import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
+package yuudaari.soulus.common.compat.jei;
 
 public interface IProvidesJeiDescription {
 

@@ -8,6 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.item.Soulbook;
+import yuudaari.soulus.common.registration.BlockRegistry;
+import yuudaari.soulus.common.registration.ItemRegistry;
 
 public final class CreativeTab extends CreativeTabs {
 
@@ -20,7 +22,7 @@ public final class CreativeTab extends CreativeTabs {
 	@Nonnull
 	@Override
 	public ItemStack getTabIconItem () {
-		ItemStack soulbook = ModItems.SOULBOOK.getItemStack();
+		ItemStack soulbook = ItemRegistry.SOULBOOK.getItemStack();
 		Soulbook.setContainedEssence(soulbook, 1);
 		return soulbook;
 	}
@@ -34,12 +36,13 @@ public final class CreativeTab extends CreativeTabs {
 		});
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	private int getSortValue (ItemStack stack) {
 		final Item item = stack.getItem();
 		if (item instanceof ItemBlock) {
-			return ModBlocks.blocks.indexOf((Object) ((ItemBlock) item).getBlock());
+			return BlockRegistry.blocks.indexOf((Object) ((ItemBlock) item).getBlock());
 		}
 
-		return ModBlocks.blocks.size() + ModItems.items.indexOf(item);
+		return BlockRegistry.blocks.size() + ItemRegistry.items.indexOf(item);
 	}
 }

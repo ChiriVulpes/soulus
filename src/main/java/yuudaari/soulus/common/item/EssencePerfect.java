@@ -27,12 +27,12 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
-import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
+import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.EssenceType;
-import yuudaari.soulus.common.util.ModItem;
 
-public class EssencePerfect extends ModItem {
+public class EssencePerfect extends Registration.Item {
 
 	@Nullable
 	public static String[] getEssenceTypes (final ItemStack stack) {
@@ -80,7 +80,7 @@ public class EssencePerfect extends ModItem {
 		}
 
 		public EssencePerfectRecipe (final ResourceLocation name) {
-			super(new ResourceLocation(""), ingredients(), ModItems.ESSENCE_PERFECT.getItemStack());
+			super(new ResourceLocation(""), ingredients(), ItemRegistry.ESSENCE_PERFECT.getItemStack());
 			setRegistryName(name);
 		}
 
@@ -101,7 +101,7 @@ public class EssencePerfect extends ModItem {
 			for (int i = 0; i < inventorySize; i++) {
 				final ItemStack stack = inv.getStackInSlot(i);
 				final Item stackItem = stack.getItem();
-				if (stack == null || stackItem != ModItems.ESSENCE)
+				if (stack == null || stackItem != ItemRegistry.ESSENCE)
 					return null;
 
 				essenceTypes.add(EssenceType.getEssenceType(stack));
@@ -110,7 +110,7 @@ public class EssencePerfect extends ModItem {
 			if (essenceTypes.size() < 9)
 				return null;
 
-			final ItemStack result = new ItemStack(ModItems.ESSENCE_PERFECT);
+			final ItemStack result = new ItemStack(ItemRegistry.ESSENCE_PERFECT);
 			result.setCount(1);
 			setEssenceTypes(result, essenceTypes.toArray(new String[0]));
 
@@ -122,12 +122,12 @@ public class EssencePerfect extends ModItem {
 
 		private static NonNullList<Ingredient> ingredients (final int size) {
 			final List<Ingredient> ingredients = new ArrayList<>();
-			ingredients.addAll(Collections.nCopies(size * size, Ingredient.fromItem(ModItems.ESSENCE_PERFECT)));
+			ingredients.addAll(Collections.nCopies(size * size, Ingredient.fromItem(ItemRegistry.ESSENCE_PERFECT)));
 			return NonNullList.from(Ingredient.EMPTY, ingredients.toArray(new Ingredient[0]));
 		}
 
 		public EssencePerfectCombinationRecipe (final ResourceLocation name, final int size) {
-			super(new ResourceLocation(""), ingredients(size), ModItems.ESSENCE_PERFECT.getItemStack(size * size));
+			super(new ResourceLocation(""), ingredients(size), ItemRegistry.ESSENCE_PERFECT.getItemStack(size * size));
 			setRegistryName(name + "_combination");
 		}
 
@@ -149,7 +149,7 @@ public class EssencePerfect extends ModItem {
 				if (stack == null || stackItem == Items.AIR)
 					continue;
 
-				if (stackItem != ModItems.ESSENCE_PERFECT)
+				if (stackItem != ItemRegistry.ESSENCE_PERFECT)
 					return null;
 
 				quantity++;
@@ -157,7 +157,7 @@ public class EssencePerfect extends ModItem {
 				essenceTypes.addAll(Lists.newArrayList(getEssenceTypes(stack)));
 			}
 
-			final ItemStack result = new ItemStack(ModItems.ESSENCE_PERFECT);
+			final ItemStack result = new ItemStack(ItemRegistry.ESSENCE_PERFECT);
 			result.setCount(quantity);
 			setEssenceTypes(result, essenceTypes.toArray(new String[0]));
 

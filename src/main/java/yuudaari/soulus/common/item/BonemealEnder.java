@@ -8,7 +8,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.registration.BlockRegistry;
 
 public class BonemealEnder extends Bonemeal {
 
@@ -26,9 +26,9 @@ public class BonemealEnder extends Bonemeal {
 
 		if (player.canPlayerEdit(blockpos, facing, itemstack) && //
 			world.mayPlace(world.getBlockState(blockpos).getBlock(), blockpos, false, facing, (Entity) null) && //
-			ModBlocks.DUST_ENDER.canPlaceBlockAt(world, blockpos)) {
+			BlockRegistry.DUST_ENDER.canPlaceBlockAt(world, blockpos)) {
 
-			world.setBlockState(blockpos, ModBlocks.DUST_ENDER.getDefaultState());
+			world.setBlockState(blockpos, BlockRegistry.DUST_ENDER.getDefaultState());
 
 			itemstack.shrink(1);
 			return EnumActionResult.SUCCESS;

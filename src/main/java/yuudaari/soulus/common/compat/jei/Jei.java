@@ -1,4 +1,4 @@
-package yuudaari.soulus.common.compat;
+package yuudaari.soulus.common.compat.jei;
 
 import java.util.List;
 import java.util.Random;
@@ -29,8 +29,8 @@ import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.config.misc.ConfigModSupport;
 import yuudaari.soulus.common.item.Essence;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.ModBlocks;
-import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.registration.BlockRegistry;
+import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.recipe.composer.RecipeComposerShaped;
 import yuudaari.soulus.common.recipe.composer.RecipeComposerShapeless;
 
@@ -43,7 +43,7 @@ public class Jei implements IModPlugin {
 
 	@Override
 	public void registerItemSubtypes (ISubtypeRegistry subtypeRegistry) {
-		subtypeRegistry.registerSubtypeInterpreter(ModItems.ESSENCE, new SubtypeInterpreterEssence());
+		subtypeRegistry.registerSubtypeInterpreter(ItemRegistry.ESSENCE, new SubtypeInterpreterEssence());
 	}
 
 	@Override
@@ -83,7 +83,7 @@ public class Jei implements IModPlugin {
 	 */
 	@SuppressWarnings("deprecation")
 	private void registerComposer (IModRegistry registry) {
-		registry.addRecipeCatalyst(ModBlocks.COMPOSER.getItemStack(), RecipeCategoryComposer.UID);
+		registry.addRecipeCatalyst(BlockRegistry.COMPOSER.getItemStack(), RecipeCategoryComposer.UID);
 
 		registry.handleRecipes(RecipeComposerShaped.class, RecipeWrapperComposer::new, RecipeCategoryComposer.UID);
 		registry.handleRecipes(RecipeComposerShapeless.class, RecipeWrapperComposer::new, RecipeCategoryComposer.UID);
@@ -104,8 +104,8 @@ public class Jei implements IModPlugin {
 	private void registerDescriptions (IModRegistry registry) {
 		JeiDescriptionRegistry descriptionRegistry = new JeiDescriptionRegistry();
 
-		ModItems.registerDescriptions(descriptionRegistry);
-		ModBlocks.registerDescriptions(descriptionRegistry);
+		ItemRegistry.registerDescriptions(descriptionRegistry);
+		BlockRegistry.registerDescriptions(descriptionRegistry);
 
 		for (Tuple2<List<ItemStack>, String> description : descriptionRegistry.ingredients) {
 			registry.addIngredientInfo(description._1(), ItemStack.class, "jei.description." + description._2());

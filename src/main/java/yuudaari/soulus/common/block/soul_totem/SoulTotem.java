@@ -14,8 +14,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.ModBlocks;
-import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.registration.BlockRegistry;
+import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.config.ConfigInjected;
@@ -36,8 +36,8 @@ public class SoulTotem extends UpgradeableBlock<SoulTotemTileEntity> {
 	//
 
 	public static enum Upgrade implements IUpgrade {
-		SOUL_CATALYST (0, "soul_catalyst", ModItems.SOUL_CATALYST.getItemStack()),
-		EFFICIENCY (1, "efficiency", ModItems.GEAR_NIOBIUM.getItemStack());
+		SOUL_CATALYST (0, "soul_catalyst", ItemRegistry.SOUL_CATALYST.getItemStack()),
+		EFFICIENCY (1, "efficiency", ItemRegistry.GEAR_NIOBIUM.getItemStack());
 
 		private final int index;
 		private final String name;
@@ -124,7 +124,7 @@ public class SoulTotem extends UpgradeableBlock<SoulTotemTileEntity> {
 
 	@Override
 	public UpgradeableBlock<SoulTotemTileEntity> getInstance () {
-		return ModBlocks.SOUL_TOTEM;
+		return BlockRegistry.SOUL_TOTEM;
 	}
 
 	@Override
@@ -181,7 +181,7 @@ public class SoulTotem extends UpgradeableBlock<SoulTotemTileEntity> {
 	public StructureMap structure = new StructureMap();
 	{
 		// BlockValidator bars = BlockValidator.byBlock(ModBlocks.BARS_ENDERSTEEL);
-		BlockValidator niobium = BlockValidator.byBlock(ModBlocks.BLOCK_NIOBIUM);
+		BlockValidator niobium = BlockValidator.byBlock(BlockRegistry.BLOCK_NIOBIUM);
 
 		// layer -1
 		structure.addBlock(-1, -1, -1, niobium);

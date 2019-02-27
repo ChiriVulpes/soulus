@@ -14,14 +14,14 @@ import yuudaari.soulus.common.config.item.ConfigCrystalDark;
 import yuudaari.soulus.common.misc.ModDamageSource;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.client.CrystalDarkPrick;
-import yuudaari.soulus.common.util.ModItem;
+import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.ModPotionEffect;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @ConfigInjected(Soulus.MODID)
-public class CrystalDark extends ModItem {
+public class CrystalDark extends Registration.Item {
 
 	@Inject public static ConfigCrystalDark CONFIG;
 

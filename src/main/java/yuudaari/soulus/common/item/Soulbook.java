@@ -1,5 +1,10 @@
 package yuudaari.soulus.common.item;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityList;
@@ -21,7 +26,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.block.composer.ComposerCell.IHasComposerCellInfo;
 import yuudaari.soulus.common.block.composer.IFillableWithEssence;
 import yuudaari.soulus.common.block.summoner.Summoner;
@@ -31,18 +36,13 @@ import yuudaari.soulus.common.config.essence.ConfigColor;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
+import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.Colour;
 import yuudaari.soulus.common.util.EssenceType;
 import yuudaari.soulus.common.util.Translation;
-import yuudaari.soulus.common.util.ModItem;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 @ConfigInjected(Soulus.MODID)
-public class Soulbook extends ModItem implements IHasComposerCellInfo, IFillableWithEssence {
+public class Soulbook extends Registration.Item implements IHasComposerCellInfo, IFillableWithEssence {
 
 	@Inject public static ConfigEssences CONFIG;
 
@@ -55,7 +55,7 @@ public class Soulbook extends ModItem implements IHasComposerCellInfo, IFillable
 	}
 
 	public static ItemStack getStack (String essenceType, int essenceAmount) {
-		ItemStack stack = new ItemStack(ModItems.SOULBOOK, 1);
+		ItemStack stack = new ItemStack(ItemRegistry.SOULBOOK, 1);
 		EssenceType.setEssenceType(stack, essenceType);
 		setContainedEssence(stack, essenceAmount);
 		return stack;
@@ -75,7 +75,7 @@ public class Soulbook extends ModItem implements IHasComposerCellInfo, IFillable
 			List<Ingredient> ingredients = new ArrayList<>();
 
 			ingredients.addAll(Collections.nCopies(size * size - 1, IngredientPotentialEssence.getInstanceNoAsh()));
-			ingredients.add(Ingredient.fromItem(ModItems.SOULBOOK));
+			ingredients.add(Ingredient.fromItem(ItemRegistry.SOULBOOK));
 
 			return NonNullList.from(Ingredient.EMPTY, ingredients.toArray(new Ingredient[0]));
 		}
@@ -105,7 +105,7 @@ public class Soulbook extends ModItem implements IHasComposerCellInfo, IFillable
 				Item stackItem = stack.getItem();
 				if (stack == null || stackItem == Items.AIR)
 					continue;
-				if (stackItem == ModItems.SOULBOOK) {
+				if (stackItem == ItemRegistry.SOULBOOK) {
 					if (soulbook != null)
 						return null;
 					String itemTarget = EssenceType.getEssenceType(stack);
@@ -117,7 +117,7 @@ public class Soulbook extends ModItem implements IHasComposerCellInfo, IFillable
 					containedEssence = getContainedEssence(stack);
 					soulbook = stack;
 					continue;
-				} else if (stackItem == ModItems.ESSENCE) {
+				} else if (stackItem == ItemRegistry.ESSENCE) {
 					String itemTarget = EssenceType.getEssenceType(stack);
 					if (itemTarget == null || (essenceType != null && !itemTarget.equals(essenceType)))
 						return null;
@@ -139,7 +139,8 @@ public class Soulbook extends ModItem implements IHasComposerCellInfo, IFillable
 	}
 
 	public Soulbook () {
-		super("soulbook", 1);
+		super("soulbook");
+		setMaxStackSize(1);
 		setHasDescription();
 
 		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {

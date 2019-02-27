@@ -25,7 +25,7 @@ import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSkewer;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.advancement.Advancements;
 import yuudaari.soulus.common.block.skewer.Skewer.Upgrade;
 import yuudaari.soulus.common.item.CrystalBlood;
@@ -46,7 +46,7 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 
 	@Override
 	public Skewer getBlock () {
-		return ModBlocks.SKEWER;
+		return BlockRegistry.SKEWER;
 	}
 
 	@Override

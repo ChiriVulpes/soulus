@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.client.util.ParticleType;
-import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.item.ConfigBonemealNether;
@@ -47,7 +47,7 @@ public class BonemealNether extends Bonemeal {
 					world.setBlockState(pos.up(), Blocks.AIR.getDefaultState());
 			}
 
-			world.setBlockState(pos, ModBlocks.ASH.getDefaultState(), 3);
+			world.setBlockState(pos, BlockRegistry.ASH.getDefaultState(), 3);
 
 			ItemStack stack = player.getHeldItem(hand);
 			stack.shrink(1);

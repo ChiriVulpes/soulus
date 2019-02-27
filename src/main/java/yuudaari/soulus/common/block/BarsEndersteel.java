@@ -14,7 +14,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
@@ -32,12 +31,12 @@ import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSummoner;
+import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.Translation;
 import yuudaari.soulus.common.util.Material;
-import yuudaari.soulus.common.util.ModBlockPane;
 
 @ConfigInjected(Soulus.MODID)
-public class BarsEndersteel extends ModBlockPane {
+public class BarsEndersteel extends Registration.BlockPane {
 
 	@Inject public static ConfigSummoner CONFIG;
 
@@ -85,8 +84,8 @@ public class BarsEndersteel extends ModBlockPane {
 	}
 
 	@Override
-	protected ItemBlock createItemBlock () {
-		return (ItemBlock) new ItemBlock(this) {
+	public Registration.ItemBlock createItemBlock () {
+		return new Registration.ItemBlock(this) {
 
 			@Override
 			public int getMetadata (int damage) {
@@ -101,8 +100,7 @@ public class BarsEndersteel extends ModBlockPane {
 					.getName()));
 			}
 		}
-			.setHasSubtypes(true)
-			.setRegistryName(getRegistryName());
+			.setHasSubtypes(true);
 	}
 
 	@Override

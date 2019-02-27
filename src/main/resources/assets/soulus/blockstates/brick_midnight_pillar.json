@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"facing=up": { "model": "soulus:midnight/pillar" },
+		"facing=down": { "model": "soulus:midnight/pillar", "x": 180 },
+		"facing=north": { "model": "soulus:midnight/pillar", "x": 90 },
+		"facing=south": { "model": "soulus:midnight/pillar", "x": 90, "y": 180 },
+		"facing=west": { "model": "soulus:midnight/pillar", "x": 90, "y": 270 },
+		"facing=east": { "model": "soulus:midnight/pillar", "x": 90, "y": 90 }
+	}
+}

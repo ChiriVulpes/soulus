@@ -14,7 +14,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.block.soul_inquirer.SoulInquirer.Upgrade;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.config.ConfigInjected;
@@ -30,7 +30,7 @@ public class SoulInquirerTileEntity extends UpgradeableBlockTileEntity implement
 
 	@Override
 	public SoulInquirer getBlock () {
-		return ModBlocks.SOUL_INQUIRER;
+		return BlockRegistry.SOUL_INQUIRER;
 	}
 
 	/* OTHER */

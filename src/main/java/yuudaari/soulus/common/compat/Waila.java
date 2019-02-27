@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.util.IBlock;
+import yuudaari.soulus.common.registration.IBlockRegistration;
 
 @WailaPlugin(Soulus.MODID)
 public class Waila implements IWailaPlugin, IWailaDataProvider {
@@ -25,8 +25,8 @@ public class Waila implements IWailaPlugin, IWailaDataProvider {
 	public List<String> getWailaBody (ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
 
 		Block block = accessor.getBlock();
-		if (block != null && block instanceof IBlock) {
-			return ((IBlock) block).getWailaTooltip(currenttip, new IBlock.DataAccessorWaila(accessor));
+		if (block != null && block instanceof IBlockRegistration) {
+			return ((IBlockRegistration) block).getWailaTooltip(currenttip, new IBlockRegistration.DataAccessorWaila(accessor));
 		}
 
 		return currenttip;
@@ -38,8 +38,8 @@ public class Waila implements IWailaPlugin, IWailaDataProvider {
 		ItemStack result = null;
 
 		Block block = accessor.getBlock();
-		if (block != null && block instanceof IBlock) {
-			result = ((IBlock) block).getWailaStack(new IBlock.DataAccessorWaila(accessor));
+		if (block != null && block instanceof IBlockRegistration) {
+			result = ((IBlockRegistration) block).getWailaStack(new IBlockRegistration.DataAccessorWaila(accessor));
 		}
 
 		return result == null ? new ItemStack(block, 1, accessor.getMetadata()) : result;

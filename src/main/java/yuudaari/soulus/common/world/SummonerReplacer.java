@@ -19,7 +19,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.block.summoner.Summoner;
 import yuudaari.soulus.common.block.summoner.SummonerTileEntity;
 import yuudaari.soulus.common.block.summoner.Summoner.Upgrade;
@@ -81,7 +81,7 @@ public class SummonerReplacer {
 
 				// Logger.info("endersteel type " + endersteelType);
 
-				world.setBlockState(pos, ModBlocks.SUMMONER.getDefaultState()
+				world.setBlockState(pos, BlockRegistry.SUMMONER.getDefaultState()
 					.withProperty(Summoner.VARIANT, replacement.type)
 					.withProperty(Summoner.HAS_SOULBOOK, replacement.midnightJewel), 7);
 

@@ -19,8 +19,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.ModBlocks;
-import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.registration.BlockRegistry;
+import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.block.DustEnderBlock;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
@@ -73,7 +73,7 @@ public class Enderlink extends UpgradeableBlock<EnderlinkTileEntity> {
 	//
 
 	public static enum Upgrade implements IUpgrade {
-		RANGE (2, "range", ModItems.ORB_MURKY.getItemStack());
+		RANGE (2, "range", ItemRegistry.ORB_MURKY.getItemStack());
 
 		private final int index;
 		private final String name;
@@ -163,7 +163,7 @@ public class Enderlink extends UpgradeableBlock<EnderlinkTileEntity> {
 
 	@Override
 	public UpgradeableBlock<EnderlinkTileEntity> getInstance () {
-		return ModBlocks.ENDERLINK;
+		return BlockRegistry.ENDERLINK;
 	}
 
 	@Override

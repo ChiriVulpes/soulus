@@ -14,10 +14,10 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
+import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.Material;
-import yuudaari.soulus.common.util.ModBlock;
 
-public class Unloader extends ModBlock {
+public class Unloader extends Registration.Block {
 
 	public Unloader () {
 		super("unloader", new Material(MapColor.STONE));

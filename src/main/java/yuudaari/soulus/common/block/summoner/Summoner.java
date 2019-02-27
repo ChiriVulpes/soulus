@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nullable;
-import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
@@ -18,7 +17,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemMultiTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
@@ -37,8 +35,8 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.CreativeTab;
-import yuudaari.soulus.common.ModBlocks;
-import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.registration.BlockRegistry;
+import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.advancement.Advancements;
 import yuudaari.soulus.common.block.EndersteelType;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
@@ -51,9 +49,10 @@ import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.item.CrystalBlood;
 import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.item.Soulbook;
+import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.EssenceType;
-import yuudaari.soulus.common.util.Translation;
 import yuudaari.soulus.common.util.Material;
+import yuudaari.soulus.common.util.Translation;
 
 @ConfigInjected(Soulus.MODID)
 public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
@@ -63,12 +62,12 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	//
 
 	public static enum Upgrade implements IUpgrade {
-		COUNT (0, "count", ModItems.CRYSTAL_BLOOD.getItemStack()),
+		COUNT (0, "count", ItemRegistry.CRYSTAL_BLOOD.getItemStack()),
 		DELAY (1, "delay",
-			ModItems.GEAR_OSCILLATING.getItemStack()),
-		RANGE (2, "range", ModItems.ORB_MURKY.getItemStack()),
-		EFFICIENCY (3, "efficiency", ModItems.GEAR_NIOBIUM.getItemStack()),
-		CRYSTAL_DARK (4, "crystal_dark", ModItems.CRYSTAL_DARK.getItemStack());
+			ItemRegistry.GEAR_OSCILLATING.getItemStack()),
+		RANGE (2, "range", ItemRegistry.ORB_MURKY.getItemStack()),
+		EFFICIENCY (3, "efficiency", ItemRegistry.GEAR_NIOBIUM.getItemStack()),
+		CRYSTAL_DARK (4, "crystal_dark", ItemRegistry.CRYSTAL_DARK.getItemStack());
 
 		private final int index;
 		private final String name;
@@ -190,12 +189,12 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 	@Override
 	public UpgradeableBlock<SummonerTileEntity> getInstance () {
-		return ModBlocks.SUMMONER;
+		return BlockRegistry.SUMMONER;
 	}
 
 	@Override
 	public boolean canActivateWithStack (ItemStack stack, World world, BlockPos pos) {
-		return super.canActivateWithStack(stack, world, pos) || stack.getItem() == ModItems.ESSENCE_PERFECT;
+		return super.canActivateWithStack(stack, world, pos) || stack.getItem() == ItemRegistry.ESSENCE_PERFECT;
 	}
 
 	@Override
@@ -275,52 +274,43 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	// Item
 	//
 
-	public static class SummonerItemBlock extends ItemMultiTexture {
+	@Override
+	public ItemBlock createItemBlock () {
+		return new Registration.ItemMultiTexture(this, i -> "summoner_" + EndersteelType.byMetadata(i.getItemDamage()).getName()) {
 
-		public SummonerItemBlock (Block b) {
-			super(b, b, i -> "summoner_" + EndersteelType.byMetadata(i.getItemDamage()).getName());
-			setRegistryName(Soulus.MODID + ":summoner");
-			setHasSubtypes(true);
-		}
-
-		@Override
-		public int getMetadata (int damage) {
-			return damage;
-		}
-
-		@Override
-		public String getItemStackDisplayName (ItemStack stack) {
-			String essenceType = EssenceType.getEssenceType(stack);
-			ConfigEssence config = CONFIG_ESSENCES.get(essenceType);
-			if (essenceType == null || config == null)
-				return Translation.localize(this.getUnlocalizedName() + ".unfocused.name").trim();
-
-			String alignment = config.name;
-			if (alignment == null) {
-				alignment = Translation.localizeEntity(essenceType);
+			@Override
+			public int getMetadata (int damage) {
+				return damage;
 			}
 
-			return Translation.localize(this.getUnlocalizedName() + ".focused.name", alignment).trim();
+			@Override
+			public String getItemStackDisplayName (ItemStack stack) {
+				String essenceType = EssenceType.getEssenceType(stack);
+				ConfigEssence config = CONFIG_ESSENCES.get(essenceType);
+				if (essenceType == null || config == null)
+					return Translation.localize(this.getUnlocalizedName() + ".unfocused.name").trim();
+
+				String alignment = config.name;
+				if (alignment == null) {
+					alignment = Translation.localizeEntity(essenceType);
+				}
+
+				return Translation.localize(this.getUnlocalizedName() + ".focused.name", alignment).trim();
+			}
+
+			@SideOnly(Side.CLIENT)
+			@Override
+			public void addInformation (ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+				tooltip.add(Translation.localize("tooltip." + Soulus.MODID + ":summoner.style." + EndersteelType
+					.byMetadata(stack.getItemDamage() / 2)
+					.getName()));
+			}
 		}
-
-		@SideOnly(Side.CLIENT)
-		@Override
-		public void addInformation (ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-			tooltip.add(Translation.localize("tooltip." + Soulus.MODID + ":summoner.style." + EndersteelType
-				.byMetadata(stack.getItemDamage() / 2)
-				.getName()));
-		}
-	}
-
-	private final SummonerItemBlock ITEM = new SummonerItemBlock(this);
-
-	@Override
-	public ItemBlock getItemBlock () {
-		return ITEM;
+			.setHasSubtypes(true);
 	}
 
 	public ItemStack getItemStack (SummonerTileEntity te, int count, int metadata) {
-		ItemStack itemStack = new ItemStack(ITEM, count, metadata);
+		ItemStack itemStack = new ItemStack(getItemBlock(), count, metadata);
 
 		itemStack.setTagCompound(te.writeToNBT(new NBTTagCompound()));
 
@@ -355,7 +345,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 		registry.registerAll(CONFIG.styleItems.entrySet()
 			.stream()
-			.map(item -> new ShapedOreRecipe(null, getStackFromEndersteelType(item.getValue()), "BBB", "BeB", "BBB", 'B', ModBlocks.BARS_ENDERSTEEL.getStackFromEndersteelType(item.getValue()), 'e', ModItems.BONEMEAL_ENDER)
+			.map(item -> new ShapedOreRecipe(null, getStackFromEndersteelType(item.getValue()), "BBB", "BeB", "BBB", 'B', BlockRegistry.BARS_ENDERSTEEL.getStackFromEndersteelType(item.getValue()), 'e', ItemRegistry.BONEMEAL_ENDER)
 				.setRegistryName(getRegistryName() + "_" + item.getValue().getName().toLowerCase()))
 			.toArray(ShapedOreRecipe[]::new));
 	}
@@ -441,7 +431,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		}
 
 		// try to insert a soulbook
-		if (item == ModItems.SOULBOOK) {
+		if (item == ItemRegistry.SOULBOOK) {
 			if (((CONFIG.soulbookUses == null || CONFIG.soulbookUses <= 0) && !Soulbook.isFilled(stack)) || Soulbook
 				.getContainedEssence(stack) < CONFIG.soulbookEssenceRequiredToInsert * CONFIG_ESSENCES
 					.getSoulbookQuantity(EssenceType.getEssenceType(stack)))
@@ -481,7 +471,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		if (!state.getValue(HAS_SOULBOOK))
 			return false;
 
-		if (item == ModItems.ESSENCE_PERFECT) {
+		if (item == ItemRegistry.ESSENCE_PERFECT) {
 			final SummonerTileEntity te = (SummonerTileEntity) world.getTileEntity(pos);
 			return te.insertPerfectEssence(stack, player.isSneaking());
 		}

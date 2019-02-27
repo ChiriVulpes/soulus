@@ -27,21 +27,21 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import scala.Tuple2;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.CreativeTab;
-import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.block.enderlink.Enderlink;
 import yuudaari.soulus.common.block.enderlink.EnderlinkTileEntity;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigEnderlink;
+import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.Translation;
 import yuudaari.soulus.common.util.Material;
-import yuudaari.soulus.common.util.ModBlock;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 @ConfigInjected(Soulus.MODID)
-public class DustEnderBlock extends ModBlock {
+public class DustEnderBlock extends Registration.Block {
 
 	@SubscribeEvent
 	public static final void rightClickBlock (PlayerInteractEvent.RightClickBlock event) {
@@ -169,12 +169,12 @@ public class DustEnderBlock extends ModBlock {
 
 	@Override
 	public Item getItemDropped (IBlockState state, Random rand, int fortune) {
-		return ModItems.BONEMEAL_ENDER;
+		return ItemRegistry.BONEMEAL_ENDER;
 	}
 
 	@Override
 	public ItemStack getPickBlock (IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-		return ModItems.BONEMEAL_ENDER.getItemStack();
+		return ItemRegistry.BONEMEAL_ENDER.getItemStack();
 	}
 
 	/////////////////////////////////////////

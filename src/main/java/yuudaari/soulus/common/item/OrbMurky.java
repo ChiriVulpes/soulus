@@ -17,13 +17,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.block.composer.ComposerCell.IHasComposerCellInfo;
 import yuudaari.soulus.common.block.composer.IFillableWithEssence;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.item.ConfigOrbMurky;
 import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
+import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.Translation;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -33,7 +34,7 @@ import java.util.Collections;
 import java.util.List;
 
 @ConfigInjected(Soulus.MODID)
-public class OrbMurky extends SummonerUpgrade implements IHasComposerCellInfo, IFillableWithEssence {
+public class OrbMurky extends Registration.Item implements IHasComposerCellInfo, IFillableWithEssence {
 
 	@Inject public static ConfigOrbMurky CONFIG;
 
@@ -44,13 +45,13 @@ public class OrbMurky extends SummonerUpgrade implements IHasComposerCellInfo, I
 			List<Ingredient> ingredients = new ArrayList<>();
 
 			ingredients.addAll(Collections.nCopies(size * size - 1, IngredientPotentialEssence.getInstance()));
-			ingredients.add(Ingredient.fromItem(ModItems.ORB_MURKY));
+			ingredients.add(Ingredient.fromItem(ItemRegistry.ORB_MURKY));
 
 			return NonNullList.from(Ingredient.EMPTY, ingredients.toArray(new Ingredient[0]));
 		}
 
 		public OrbMurkyFillRecipe (ResourceLocation name, int size) {
-			super(new ResourceLocation(""), getIngredients(size), ModItems.ORB_MURKY.getFilledStack());
+			super(new ResourceLocation(""), getIngredients(size), ItemRegistry.ORB_MURKY.getFilledStack());
 			setRegistryName(name + "" + size);
 		}
 
@@ -73,13 +74,13 @@ public class OrbMurky extends SummonerUpgrade implements IHasComposerCellInfo, I
 				Item stackItem = stack.getItem();
 				if (stack == null || stackItem == Items.AIR)
 					continue;
-				if (stackItem == ModItems.ORB_MURKY) {
+				if (stackItem == ItemRegistry.ORB_MURKY) {
 					if (orb != null)
 						return null;
 					containedEssence = getContainedEssence(stack);
 					orb = stack;
 					continue;
-				} else if (stackItem == ModItems.ESSENCE || stackItem == ModItems.ASH) {
+				} else if (stackItem == ItemRegistry.ESSENCE || stackItem == ItemRegistry.ASH) {
 					essenceCount++;
 					continue;
 				}
@@ -113,7 +114,6 @@ public class OrbMurky extends SummonerUpgrade implements IHasComposerCellInfo, I
 		return getContainedEssence(stack) == CONFIG.requiredEssence ? 16 : 1;
 	}
 
-	@Override
 	public ItemStack getFilledStack () {
 		return getStack(CONFIG.requiredEssence);
 	}

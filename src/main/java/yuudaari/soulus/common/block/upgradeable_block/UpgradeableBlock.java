@@ -24,16 +24,16 @@ import scala.Tuple3;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.advancement.Advancements;
+import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.Translation;
 import yuudaari.soulus.common.util.Material;
-import yuudaari.soulus.common.util.ModBlock;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Soulus.MODID)
-public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockTileEntity> extends ModBlock {
+public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockTileEntity> extends Registration.Block {
 
 	/////////////////////////////////////////
 	// Upgrades

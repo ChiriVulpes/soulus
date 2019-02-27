@@ -10,7 +10,7 @@ import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.client.util.ParticleType;
-import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.advancement.Advancements;
 import yuudaari.soulus.common.block.soul_totem.SoulTotem.Upgrade;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
@@ -36,7 +36,7 @@ public class SoulTotemTileEntity extends UpgradeableBlockTileEntity {
 
 	@Override
 	public SoulTotem getBlock () {
-		return ModBlocks.SOUL_TOTEM;
+		return BlockRegistry.SOUL_TOTEM;
 	}
 
 	@Override

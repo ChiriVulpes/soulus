@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.IIngredientFactory;
 import net.minecraftforge.common.crafting.JsonContext;
-import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.item.OrbMurky;
 
 public class IngredientOrbMurky extends Ingredient {
@@ -13,7 +13,7 @@ public class IngredientOrbMurky extends Ingredient {
 	public static IngredientOrbMurky INSTANCE = new IngredientOrbMurky();
 
 	public IngredientOrbMurky () {
-		super(ModItems.ORB_MURKY.getFilledStack());
+		super(ItemRegistry.ORB_MURKY.getFilledStack());
 	}
 
 	@Override

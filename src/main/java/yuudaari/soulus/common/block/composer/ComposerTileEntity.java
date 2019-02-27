@@ -39,7 +39,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.client.util.ParticleType;
-import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.advancement.Advancements;
 import yuudaari.soulus.common.block.composer.Composer.Upgrade;
 import yuudaari.soulus.common.block.composer.ComposerCell.CellState;
@@ -71,7 +71,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 	@Override
 	public Composer getBlock () {
-		return ModBlocks.COMPOSER;
+		return BlockRegistry.COMPOSER;
 	}
 
 	@Override
@@ -324,7 +324,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		getBlock().structure.loopBlocks(world, pos, direction, (BlockPos cellPos, BlockValidator validator) -> {
 			IBlockState cellState = world.getBlockState(cellPos);
 
-			if (cellState.getBlock() == ModBlocks.COMPOSER_CELL) {
+			if (cellState.getBlock() == BlockRegistry.COMPOSER_CELL) {
 				ComposerCellTileEntity ccte = (ComposerCellTileEntity) world.getTileEntity(cellPos);
 				cellState = cellState.withProperty(ComposerCell.CELL_STATE, CellState.DISCONNECTED);
 				world.setBlockState(cellPos, cellState, 3);
@@ -361,7 +361,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		getBlock().structure.loopBlocks(world, pos, direction, (BlockPos cellPos, BlockValidator validator) -> {
 			IBlockState cellBlockState = world.getBlockState(cellPos);
 
-			if (cellBlockState.getBlock() == ModBlocks.COMPOSER_CELL) {
+			if (cellBlockState.getBlock() == BlockRegistry.COMPOSER_CELL) {
 				ComposerCellTileEntity ccte = (ComposerCellTileEntity) world.getTileEntity(cellPos);
 				CellState cellState = cellPos.equals(center) ? CellState.CONNECTED_CENTER : CellState.CONNECTED_EDGE;
 				world.setBlockState(cellPos, cellBlockState.withProperty(ComposerCell.CELL_STATE, cellState), 3);

@@ -1,4 +1,4 @@
-package yuudaari.soulus.common;
+package yuudaari.soulus.common.registration;
 
 import java.util.List;
 import com.google.common.collect.Lists;
@@ -32,12 +32,10 @@ import yuudaari.soulus.common.block.skewer.Skewer;
 import yuudaari.soulus.common.block.soul_inquirer.SoulInquirer;
 import yuudaari.soulus.common.block.soul_totem.SoulTotem;
 import yuudaari.soulus.common.block.summoner.Summoner;
-import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
-import yuudaari.soulus.common.util.IBlock;
-import yuudaari.soulus.common.util.IModThing;
-import yuudaari.soulus.common.util.IProvidesJeiDescription;
+import yuudaari.soulus.common.compat.jei.JeiDescriptionRegistry;
+import yuudaari.soulus.common.registration.IBlockRegistration;
 
-public class ModBlocks {
+public class BlockRegistry {
 
 	public static final AshBlock ASH = new AshBlock();
 	public static final BarsEndersteel BARS_ENDERSTEEL = new BarsEndersteel();
@@ -68,7 +66,7 @@ public class ModBlocks {
 	public static final SoulTotem SOUL_TOTEM = new SoulTotem();
 	public static final SoulInquirer SOUL_INQUIRER = new SoulInquirer();
 
-	public static List<IBlock> blocks = Lists.newArrayList(new IBlock[] {
+	public static List<IBlockRegistration> blocks = Lists.newArrayList(new IBlockRegistration[] {
 		DUST_ENDER,
 
 		FOSSIL_DIRT,
@@ -116,13 +114,13 @@ public class ModBlocks {
 	});
 
 	public static void registerBlocks (IForgeRegistry<Block> registry) {
-		for (IBlock block : blocks) {
+		for (IBlockRegistration block : blocks) {
 			registry.register((Block) block);
 		}
 	}
 
 	public static void registerItems (IForgeRegistry<Item> registry) {
-		for (IBlock block : blocks) {
+		for (IBlockRegistration block : blocks) {
 			if (block.hasItem()) {
 				for (ItemBlock item : block.getItemBlocks()) {
 					registry.register(item);
@@ -141,7 +139,7 @@ public class ModBlocks {
 
 	@SideOnly(Side.CLIENT)
 	public static void registerModels () {
-		for (IBlock block : blocks) {
+		for (IBlockRegistration block : blocks) {
 			if (block.hasItem()) {
 				block.registerItemModel();
 			}
@@ -149,16 +147,14 @@ public class ModBlocks {
 	}
 
 	public static void registerRecipes (IForgeRegistry<IRecipe> registry) {
-		for (IBlock block : blocks) {
-			if (block instanceof IModThing)
-				((IModThing) block).onRegisterRecipes(registry);
+		for (IBlockRegistration block : blocks) {
+			block.onRegisterRecipes(registry);
 		}
 	}
 
 	public static void registerDescriptions (JeiDescriptionRegistry registry) {
-		for (IBlock block : blocks) {
-			if (block instanceof IProvidesJeiDescription)
-				((IProvidesJeiDescription) block).onRegisterDescription(registry);
+		for (IBlockRegistration block : blocks) {
+			block.onRegisterDescription(registry);
 		}
 	}
 }

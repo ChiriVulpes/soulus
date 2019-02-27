@@ -1,5 +1,11 @@
 package yuudaari.soulus.common.item;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
@@ -18,25 +24,19 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.block.composer.ComposerCell.IHasComposerCellInfo;
 import yuudaari.soulus.common.block.composer.IFillableWithEssence;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.item.ConfigSoulCatalyst;
 import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
+import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.Colour;
 import yuudaari.soulus.common.util.Translation;
-import yuudaari.soulus.common.util.ModItem;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 @ConfigInjected(Soulus.MODID)
-public class SoulCatalyst extends ModItem implements IHasComposerCellInfo, IFillableWithEssence {
+public class SoulCatalyst extends Registration.Item implements IHasComposerCellInfo, IFillableWithEssence {
 
 	@Inject public static ConfigSoulCatalyst CONFIG;
 
@@ -47,13 +47,13 @@ public class SoulCatalyst extends ModItem implements IHasComposerCellInfo, IFill
 			List<Ingredient> ingredients = new ArrayList<>();
 
 			ingredients.addAll(Collections.nCopies(size * size - 1, IngredientPotentialEssence.getInstance()));
-			ingredients.add(Ingredient.fromItem(ModItems.SOUL_CATALYST));
+			ingredients.add(Ingredient.fromItem(ItemRegistry.SOUL_CATALYST));
 
 			return NonNullList.from(Ingredient.EMPTY, ingredients.toArray(new Ingredient[0]));
 		}
 
 		public SoulCatalystFillRecipe (ResourceLocation name, int size) {
-			super(new ResourceLocation(""), getIngredients(size), ModItems.SOUL_CATALYST.getFilledStack());
+			super(new ResourceLocation(""), getIngredients(size), ItemRegistry.SOUL_CATALYST.getFilledStack());
 			setRegistryName(name + "" + size);
 		}
 
@@ -76,13 +76,13 @@ public class SoulCatalyst extends ModItem implements IHasComposerCellInfo, IFill
 				Item stackItem = stack.getItem();
 				if (stack == null || stackItem == Items.AIR)
 					continue;
-				if (stackItem == ModItems.SOUL_CATALYST) {
+				if (stackItem == ItemRegistry.SOUL_CATALYST) {
 					if (catalyst != null)
 						return null;
 					containedEssence = getContainedEssence(stack);
 					catalyst = stack;
 					continue;
-				} else if (stackItem == ModItems.ESSENCE || stackItem == ModItems.ASH) {
+				} else if (stackItem == ItemRegistry.ESSENCE || stackItem == ItemRegistry.ASH) {
 					essenceCount++;
 					continue;
 				}

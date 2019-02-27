@@ -11,20 +11,20 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.ModItems;
-import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
+import yuudaari.soulus.common.registration.ItemRegistry;
+import yuudaari.soulus.common.compat.jei.JeiDescriptionRegistry;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.essence.ConfigColor;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
+import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.EssenceType;
 import yuudaari.soulus.common.util.Translation;
-import yuudaari.soulus.common.util.ModItem;
 
 @ConfigInjected(Soulus.MODID)
-public class Essence extends ModItem {
+public class Essence extends Registration.Item {
 
 	@Inject public static ConfigEssences CONFIG;
 
@@ -33,7 +33,7 @@ public class Essence extends ModItem {
 	}
 
 	public static ItemStack getStack (String essenceType, Integer count) {
-		ItemStack stack = new ItemStack(ModItems.ESSENCE, count);
+		ItemStack stack = new ItemStack(ItemRegistry.ESSENCE, count);
 		EssenceType.setEssenceType(stack, essenceType);
 		return stack;
 	}

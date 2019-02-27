@@ -23,7 +23,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import scala.Tuple2;
-import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.advancement.Advancements;
 import yuudaari.soulus.common.block.enderlink.Enderlink.Upgrade;
 import yuudaari.soulus.common.config.ConfigInjected;
@@ -45,7 +45,7 @@ public class EnderlinkTileEntity extends UpgradeableBlockTileEntity implements I
 
 	@Override
 	public Enderlink getBlock () {
-		return ModBlocks.ENDERLINK;
+		return BlockRegistry.ENDERLINK;
 	}
 
 	private int range;

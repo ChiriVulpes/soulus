@@ -1,9 +1,9 @@
 package yuudaari.soulus.common.item;
 
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.util.ModItem;
+import yuudaari.soulus.common.registration.Registration;
 
-public class BoneChunk extends ModItem {
+public class BoneChunk extends Registration.Item {
 
 	public BoneChunk (String name) {
 		super(name);

@@ -1,6 +1,7 @@
 package yuudaari.soulus.common.block.soul_inquirer;
 
-import net.minecraft.block.Block;
+import java.util.Collections;
+import java.util.List;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
@@ -11,7 +12,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -21,8 +21,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.ModBlocks;
-import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.registration.BlockRegistry;
+import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.config.ConfigInjected;
@@ -32,11 +32,11 @@ import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.item.CrystalBlood;
 import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.item.Soulbook;
+import yuudaari.soulus.common.registration.Registration;
+import yuudaari.soulus.common.registration.Registration.ItemBlock;
 import yuudaari.soulus.common.util.EssenceType;
-import yuudaari.soulus.common.util.Translation;
 import yuudaari.soulus.common.util.Material;
-import java.util.Collections;
-import java.util.List;
+import yuudaari.soulus.common.util.Translation;
 
 @ConfigInjected(Soulus.MODID)
 public class SoulInquirer extends UpgradeableBlock<SoulInquirerTileEntity> {
@@ -46,8 +46,8 @@ public class SoulInquirer extends UpgradeableBlock<SoulInquirerTileEntity> {
 	//
 
 	public static enum Upgrade implements IUpgrade {
-		RANGE (0, "range", ModItems.ORB_MURKY.getItemStack()),
-		COUNT (1, "count", ModItems.CRYSTAL_BLOOD.getItemStack());
+		RANGE (0, "range", ItemRegistry.ORB_MURKY.getItemStack()),
+		COUNT (1, "count", ItemRegistry.CRYSTAL_BLOOD.getItemStack());
 
 		private final int index;
 		private final String name;
@@ -140,7 +140,7 @@ public class SoulInquirer extends UpgradeableBlock<SoulInquirerTileEntity> {
 
 	@Override
 	public UpgradeableBlock<SoulInquirerTileEntity> getInstance () {
-		return ModBlocks.SOUL_INQUIRER;
+		return BlockRegistry.SOUL_INQUIRER;
 	}
 
 	@Override
@@ -194,38 +194,29 @@ public class SoulInquirer extends UpgradeableBlock<SoulInquirerTileEntity> {
 	// Item
 	//
 
-	public static class SoulInquirerItemBlock extends ItemBlock {
-
-		public SoulInquirerItemBlock (Block b) {
-			super(b);
-			setRegistryName(Soulus.MODID + ":soul_inquirer");
-		}
-
-		@Override
-		public String getItemStackDisplayName (ItemStack stack) {
-			String essenceType = EssenceType.getEssenceType(stack);
-			ConfigEssence config = CONFIG_ESSENCES.get(essenceType);
-			if (essenceType == null || config == null)
-				return Translation.localize(this.getUnlocalizedName() + ".unfocused.name").trim();
-
-			String alignment = config.name;
-			if (alignment == null) {
-				alignment = Translation.localizeEntity(essenceType);
-			}
-
-			return Translation.localize(this.getUnlocalizedName() + ".focused.name", alignment).trim();
-		}
-	}
-
-	private final SoulInquirerItemBlock ITEM = new SoulInquirerItemBlock(this);
-
 	@Override
-	public ItemBlock getItemBlock () {
-		return ITEM;
+	public ItemBlock createItemBlock () {
+		return new Registration.ItemBlock(this) {
+
+			@Override
+			public String getItemStackDisplayName (ItemStack stack) {
+				String essenceType = EssenceType.getEssenceType(stack);
+				ConfigEssence config = CONFIG_ESSENCES.get(essenceType);
+				if (essenceType == null || config == null)
+					return Translation.localize(this.getUnlocalizedName() + ".unfocused.name").trim();
+
+				String alignment = config.name;
+				if (alignment == null) {
+					alignment = Translation.localizeEntity(essenceType);
+				}
+
+				return Translation.localize(this.getUnlocalizedName() + ".focused.name", alignment).trim();
+			}
+		};
 	}
 
 	public ItemStack getItemStack (SoulInquirerTileEntity te, int count, int metadata) {
-		ItemStack itemStack = new ItemStack(ITEM, count, metadata);
+		ItemStack itemStack = new ItemStack(getItemBlock(), count, metadata);
 
 		if (te != null) {
 			itemStack.setTagCompound(te.writeToNBT(new NBTTagCompound()));
@@ -299,7 +290,7 @@ public class SoulInquirer extends UpgradeableBlock<SoulInquirerTileEntity> {
 
 
 		// try to insert a soulbook
-		if (item == ModItems.SOULBOOK) {
+		if (item == ItemRegistry.SOULBOOK) {
 			if (!Soulbook.isFilled(stack))
 				return false;
 

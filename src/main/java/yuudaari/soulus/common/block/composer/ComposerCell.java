@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.config.ConfigInjected;
@@ -100,7 +100,7 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 
 	@Override
 	public UpgradeableBlock<ComposerCellTileEntity> getInstance () {
-		return ModBlocks.COMPOSER_CELL;
+		return BlockRegistry.COMPOSER_CELL;
 	}
 
 	@Override

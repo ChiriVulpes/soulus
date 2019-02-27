@@ -27,8 +27,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.ModBlocks;
-import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.registration.BlockRegistry;
+import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.config.ConfigInjected;
@@ -47,12 +47,12 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	//
 
 	public static enum Upgrade implements IUpgrade {
-		CRYSTAL_BLOOD (0, "crystal_blood", ModItems.CRYSTAL_BLOOD.getItemStack()),
+		CRYSTAL_BLOOD (0, "crystal_blood", ItemRegistry.CRYSTAL_BLOOD.getItemStack()),
 		DAMAGE (1, "damage", new ItemStack(Items.QUARTZ)),
 		POISON (2, "poison", new ItemStack(Items.SPIDER_EYE)),
 		POWER (3, "power", new ItemStack(Blocks.REDSTONE_TORCH)),
-		TETHER (4, "tether", ModItems.ASH.getItemStack()),
-		PLAYER (5, "player", ModItems.SOUL_CATALYST.getItemStack());
+		TETHER (4, "tether", ItemRegistry.ASH.getItemStack()),
+		PLAYER (5, "player", ItemRegistry.SOUL_CATALYST.getItemStack());
 		// LOOTING (6, "looting", new ItemStack(Items.DYE, 1, 4));
 
 		private final int index;
@@ -175,7 +175,7 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 
 	@Override
 	public UpgradeableBlock<SkewerTileEntity> getInstance () {
-		return ModBlocks.SKEWER;
+		return BlockRegistry.SKEWER;
 	}
 
 	@Override

@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.client.util.ParticleType;
-import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.advancement.Advancements;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
@@ -31,6 +31,7 @@ import yuudaari.soulus.common.config.item.ConfigCrystalBlood;
 import yuudaari.soulus.common.misc.ModDamageSource;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.client.CrystalBloodHitEntity;
+import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.Colour;
 import yuudaari.soulus.common.util.Translation;
 import yuudaari.soulus.common.util.ModPotionEffect;
@@ -41,7 +42,7 @@ import java.util.List;
 import java.util.Random;
 
 @ConfigInjected(Soulus.MODID)
-public class CrystalBlood extends SummonerUpgrade {
+public class CrystalBlood extends Registration.Item {
 
 	@Inject public static ConfigCrystalBlood CONFIG;
 
@@ -67,7 +68,6 @@ public class CrystalBlood extends SummonerUpgrade {
 		return getContainedBlood(stack) >= CONFIG.requiredBlood ? 16 : 1;
 	}
 
-	@Override
 	public ItemStack getFilledStack () {
 		return getStack(CONFIG.requiredBlood);
 	}
@@ -118,7 +118,7 @@ public class CrystalBlood extends SummonerUpgrade {
 
 			if (player instanceof FakePlayer) {
 				heldItem.setCount(0);
-				EntityItem dropEntity = new EntityItem(player.world, player.posX, player.posY, player.posZ, ModItems.CRYSTAL_BLOOD_BROKEN
+				EntityItem dropEntity = new EntityItem(player.world, player.posX, player.posY, player.posZ, ItemRegistry.CRYSTAL_BLOOD_BROKEN
 					.getItemStack());
 				dropEntity.setNoPickupDelay();
 				player.world.spawnEntity(dropEntity);

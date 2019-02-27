@@ -5,13 +5,13 @@ import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.item.ConfigSledgehammer;
-import yuudaari.soulus.common.util.ModItem;
+import yuudaari.soulus.common.registration.Registration;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
 
 @ConfigInjected(Soulus.MODID)
-public class Sledgehammer extends ModItem {
+public class Sledgehammer extends Registration.Item {
 
 	@Inject public static ConfigSledgehammer CONFIG;
 

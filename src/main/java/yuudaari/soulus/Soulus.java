@@ -31,9 +31,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.client.ModRenderers;
-import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.ModGenerators;
-import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.advancement.Advancements;
 import yuudaari.soulus.common.compat.ExNihiloCreatioRecipes;
 import yuudaari.soulus.common.compat.GameStages;
@@ -220,30 +220,30 @@ public class Soulus {
 
 	@SubscribeEvent
 	public static void registerBlocks (RegistryEvent.Register<Block> event) {
-		ModBlocks.registerBlocks(event.getRegistry());
+		BlockRegistry.registerBlocks(event.getRegistry());
 	}
 
 	@SubscribeEvent
 	public static void registerItems (RegistryEvent.Register<Item> event) {
 		IForgeRegistry<Item> registry = event.getRegistry();
 
-		ModItems.registerItems(registry);
-		ModBlocks.registerItems(registry);
+		ItemRegistry.registerItems(registry);
+		BlockRegistry.registerItems(registry);
 	}
 
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public static void registerModels (ModelRegistryEvent event) {
-		ModItems.registerModels();
-		ModBlocks.registerModels();
+		ItemRegistry.registerModels();
+		BlockRegistry.registerModels();
 	}
 
 	@SubscribeEvent
 	public static void registerRecipes (RegistryEvent.Register<IRecipe> event) {
 		IForgeRegistry<IRecipe> registry = event.getRegistry();
 
-		ModItems.registerRecipes(registry);
-		ModBlocks.registerRecipes(registry);
+		ItemRegistry.registerRecipes(registry);
+		BlockRegistry.registerRecipes(registry);
 	}
 
 	@EventHandler

@@ -1,4 +1,4 @@
-package yuudaari.soulus.common.compat;
+package yuudaari.soulus.common.compat.jei;
 
 import java.util.ArrayList;
 import java.util.Arrays;

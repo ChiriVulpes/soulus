@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.util.IBlock;
+import yuudaari.soulus.common.registration.IBlockRegistration;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -40,10 +40,10 @@ public class TheOneProbe {
 
 				@Override
 				public boolean overrideStandardInfo (ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockstate, IProbeHitData data) {
-					if (!(blockstate.getBlock() instanceof IBlock)) return false;
+					if (!(blockstate.getBlock() instanceof IBlockRegistration)) return false;
 
-					IBlock block = (IBlock) blockstate.getBlock();
-					IBlock.DataAccessorTOP accessor = new IBlock.DataAccessorTOP(player, data);
+					IBlockRegistration block = (IBlockRegistration) blockstate.getBlock();
+					IBlockRegistration.DataAccessorTOP accessor = new IBlockRegistration.DataAccessorTOP(player, data);
 
 					ItemStack stack = block.getWailaStack(accessor);
 					if (stack == null) return false;
@@ -75,9 +75,9 @@ public class TheOneProbe {
 				@Override
 				public void addProbeInfo (ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
 
-					if (blockState.getBlock() instanceof IBlock) {
-						IBlock block = (IBlock) blockState.getBlock();
-						IBlock.DataAccessorTOP accessor = new IBlock.DataAccessorTOP(player, data);
+					if (blockState.getBlock() instanceof IBlockRegistration) {
+						IBlockRegistration block = (IBlockRegistration) blockState.getBlock();
+						IBlockRegistration.DataAccessorTOP accessor = new IBlockRegistration.DataAccessorTOP(player, data);
 
 						List<String> currentTooltip = new ArrayList<>();
 						currentTooltip = block.getWailaTooltip(currentTooltip, accessor);

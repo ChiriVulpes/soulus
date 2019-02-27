@@ -15,10 +15,10 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import yuudaari.soulus.common.CreativeTab;
-import yuudaari.soulus.common.ModItems;
-import yuudaari.soulus.common.util.ModBlock;
+import yuudaari.soulus.common.registration.ItemRegistry;
+import yuudaari.soulus.common.registration.Registration;
 
-public class AshBlock extends ModBlock {
+public class AshBlock extends Registration.Block {
 
 	protected static final AxisAlignedBB ASH_AABB = new AxisAlignedBB(0.20000001192092896D, 0.0D, 0.20000001192092896D, 0.799999988079071D, 0.31250001192092896D, 0.799999988079071D);
 
@@ -55,7 +55,7 @@ public class AshBlock extends ModBlock {
 
 	@Override
 	public void getDrops (NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		drops.add(ModItems.ASH.getItemStack(2));
+		drops.add(ItemRegistry.ASH.getItemStack(2));
 	}
 
 	@Override
@@ -82,6 +82,6 @@ public class AshBlock extends ModBlock {
 
 	@Override
 	public ItemStack getWailaStack (IDataAccessor accessor) {
-		return ModItems.ASH.getItemStack();
+		return ItemRegistry.ASH.getItemStack();
 	}
 }

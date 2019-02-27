@@ -12,7 +12,7 @@ import mezz.jei.api.recipe.wrapper.ICustomCraftingRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.bones.ConfigBoneTypes;
@@ -92,7 +92,7 @@ public class RecipeCategoryEssence implements IRecipeCategory<IRecipeWrapper> {
 		craftingGridHelper.setInputs(guiItemStacks, outputs, 9, 4);
 
 		guiItemStacks.addTooltipCallback( (slotIndex, input, ingredient, tooltip) -> {
-			if (ingredient.getItem() == ModItems.ESSENCE) {
+			if (ingredient.getItem() == ItemRegistry.ESSENCE) {
 				ConfigEssence essence = Essence.CONFIG.get(EssenceType.getEssenceType(ingredient));
 
 				if (essence.bones == null) return;

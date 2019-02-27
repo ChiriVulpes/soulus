@@ -31,9 +31,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import scala.Tuple2;
 import yuudaari.soulus.client.exporter.exports.*;
 import yuudaari.soulus.common.CreativeTab;
-import yuudaari.soulus.common.ModBlocks;
-import yuudaari.soulus.common.ModItems;
-import yuudaari.soulus.common.util.IBlock;
+import yuudaari.soulus.common.registration.BlockRegistry;
+import yuudaari.soulus.common.registration.ItemRegistry;
+import yuudaari.soulus.common.registration.IBlockRegistration;
+import yuudaari.soulus.common.registration.IItemRegistration;
 import yuudaari.soulus.common.util.JSON;
 import yuudaari.soulus.common.util.Translation;
 import yuudaari.soulus.common.util.Logger;
@@ -197,14 +198,14 @@ public class Exporter {
 		final StackMap items = new StackMap();
 
 		// add mod blocks to item map
-		for (final IBlock block : ModBlocks.blocks) {
+		for (final IBlockRegistration block : BlockRegistry.blocks) {
 			final NonNullList<ItemStack> tabList = NonNullList.create();
 			block.getSubBlocks(CreativeTab.INSTANCE, tabList);
 			items.add(tabList);
 		}
 
 		// add mod items to item map
-		for (final Item item : ModItems.items) {
+		for (final IItemRegistration item : ItemRegistry.items) {
 			final NonNullList<ItemStack> tabList = NonNullList.create();
 			item.getSubItems(CreativeTab.INSTANCE, tabList);
 			items.add(tabList);

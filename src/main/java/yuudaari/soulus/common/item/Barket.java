@@ -34,13 +34,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.CreativeTab;
-import yuudaari.soulus.common.ModItems;
-import yuudaari.soulus.common.compat.JeiDescriptionRegistry;
-import yuudaari.soulus.common.util.IModThing;
+import yuudaari.soulus.common.registration.ItemRegistry;
+import yuudaari.soulus.common.registration.IItemRegistration;
 import yuudaari.soulus.common.util.Translation;
 
-public class Barket extends UniversalBucket implements IModThing {
+public class Barket extends UniversalBucket implements IItemRegistration {
 
 
 	public static class BarketRepairRecipe extends RecipeRepairItem {
@@ -53,7 +51,7 @@ public class Barket extends UniversalBucket implements IModThing {
 				final ItemStack stack = inv.getStackInSlot(i);
 				if (stack.isEmpty()) continue;
 
-				if (stack.getItem() != ModItems.BARKET || stack.getCount() != 1 || ++count > 2) return false;
+				if (stack.getItem() != ItemRegistry.BARKET || stack.getCount() != 1 || ++count > 2) return false;
 			}
 
 			return true;
@@ -61,9 +59,9 @@ public class Barket extends UniversalBucket implements IModThing {
 
 		@Override
 		public ItemStack getCraftingResult (final InventoryCrafting inv) {
-			ModItems.BARKET.repairable = true;
+			ItemRegistry.BARKET.repairable = true;
 			final ItemStack result = super.getCraftingResult(inv);
-			ModItems.BARKET.repairable = false;
+			ItemRegistry.BARKET.repairable = false;
 			return result;
 		}
 
@@ -80,16 +78,15 @@ public class Barket extends UniversalBucket implements IModThing {
 
 	public Barket () {
 		super(1000, ItemStack.EMPTY, true);
-		setCreativeTab(CreativeTab.INSTANCE);
-		setRegistryName(Soulus.MODID + ":" + getName());
-		setUnlocalizedName(getRegistryName().toString());
+		setName("barket");
+		setHasDescription();
 		setMaxDamage(maxDamage);
 	}
 
 	@Override
 	public void onRegisterRecipes (final IForgeRegistry<IRecipe> registry) {
 		registry.register(new BarketRepairRecipe()
-			.setRegistryName(Soulus.MODID + ":" + getName() + "_repair"));
+			.setRegistryName(Soulus.MODID + ":barket_repair"));
 	}
 
 	@Override
@@ -103,11 +100,6 @@ public class Barket extends UniversalBucket implements IModThing {
 	@Override
 	public int getItemBurnTime (final ItemStack itemStack) {
 		return getFluid(itemStack) == null ? 120 : 0;
-	}
-
-	@Override
-	public String getName () {
-		return "barket";
 	}
 
 	@Override
@@ -249,10 +241,5 @@ public class Barket extends UniversalBucket implements IModThing {
 		public boolean canFillFluidType (final FluidStack fluid) {
 			return fluid.getFluid() == FluidRegistry.WATER;
 		}
-	}
-
-	@Override
-	public void onRegisterDescription (final JeiDescriptionRegistry registry) {
-		registry.add(this);
 	}
 }

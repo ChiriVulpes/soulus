@@ -8,7 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import yuudaari.soulus.common.ModBlocks;
+import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.block.comparator_interactive_block.ComparatorInteractiveBlock;
 import yuudaari.soulus.common.block.comparator_interactive_block.ComparatorInteractiveBlockTileEntity;
 import yuudaari.soulus.common.block.soul_totem.SoulTotem;
@@ -32,26 +32,26 @@ public class BlockNiobium extends ComparatorInteractiveBlock {
 		 * The following code is to assure that when connected to a soul totem, the soul totem has collision detection
 		 * on the corners
 		 */
-		IBlockState connectedTotem = ModBlocks.SOUL_TOTEM.getDefaultState().withProperty(SoulTotem.CONNECTED, true);
+		IBlockState connectedTotem = BlockRegistry.SOUL_TOTEM.getDefaultState().withProperty(SoulTotem.CONNECTED, true);
 
 		BlockPos totemPos = pos.add(-1, 1, -1);
 		if (world.getBlockState(totemPos).equals(connectedTotem))
-			ModBlocks.SOUL_TOTEM
+			BlockRegistry.SOUL_TOTEM
 				.addCollisionBoxToList(connectedTotem, world, totemPos, entityBox, collidingBoxes, entityIn, isActualState);
 
 		totemPos = pos.add(1, 1, -1);
 		if (world.getBlockState(totemPos).equals(connectedTotem))
-			ModBlocks.SOUL_TOTEM
+			BlockRegistry.SOUL_TOTEM
 				.addCollisionBoxToList(connectedTotem, world, totemPos, entityBox, collidingBoxes, entityIn, isActualState);
 
 		totemPos = pos.add(-1, 1, 1);
 		if (world.getBlockState(totemPos).equals(connectedTotem))
-			ModBlocks.SOUL_TOTEM
+			BlockRegistry.SOUL_TOTEM
 				.addCollisionBoxToList(connectedTotem, world, totemPos, entityBox, collidingBoxes, entityIn, isActualState);
 
 		totemPos = pos.add(1, 1, 1);
 		if (world.getBlockState(totemPos).equals(connectedTotem))
-			ModBlocks.SOUL_TOTEM
+			BlockRegistry.SOUL_TOTEM
 				.addCollisionBoxToList(connectedTotem, world, totemPos, entityBox, collidingBoxes, entityIn, isActualState);
 	}
 

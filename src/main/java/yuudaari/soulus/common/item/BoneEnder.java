@@ -1,12 +1,12 @@
 package yuudaari.soulus.common.item;
 
-import yuudaari.soulus.common.util.ModItem;
+import yuudaari.soulus.common.registration.Registration;
 
-public class BoneEnder extends ModItem {
+public class BoneEnder extends Registration.Item {
 
 	public BoneEnder () {
 		super("bone_ender");
-		glint = true;
+		setHasGlint();
 		setHasDescription();
 	}
 }

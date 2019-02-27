@@ -6,10 +6,10 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.Material;
-import yuudaari.soulus.common.util.ModBlock;
 
-public abstract class ComparatorInteractiveBlock extends ModBlock {
+public abstract class ComparatorInteractiveBlock extends Registration.Block {
 
 	public static final PropertyBool HAS_COMPARATOR = PropertyBool.create("has_comparator");
 

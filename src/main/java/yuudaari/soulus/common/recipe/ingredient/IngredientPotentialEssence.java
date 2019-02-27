@@ -9,7 +9,7 @@ import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.crafting.IIngredientFactory;
 import net.minecraftforge.common.crafting.JsonContext;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
@@ -39,7 +39,7 @@ public class IngredientPotentialEssence extends Ingredient {
 
 		if (!justEssence) {
 			stacks.add(ItemStack.EMPTY);
-			stacks.add(ModItems.ASH.getItemStack());
+			stacks.add(ItemRegistry.ASH.getItemStack());
 		}
 
 		for (ConfigEssence essenceConfig : CONFIG.essences) {
@@ -67,8 +67,8 @@ public class IngredientPotentialEssence extends Ingredient {
 	@Override
 	public boolean apply (ItemStack input) {
 		return (allowEmpty && (input == null || input.isEmpty())) || //
-			input.getItem() == ModItems.ESSENCE || // 
-			(allowAsh && input.getItem() == ModItems.ASH);
+			input.getItem() == ItemRegistry.ESSENCE || // 
+			(allowAsh && input.getItem() == ItemRegistry.ASH);
 	}
 
 	@Override

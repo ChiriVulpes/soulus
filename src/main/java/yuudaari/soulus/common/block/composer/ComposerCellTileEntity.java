@@ -13,8 +13,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.ModBlocks;
-import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.registration.BlockRegistry;
+import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
@@ -39,7 +39,7 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 
 	@Override
 	public ComposerCell getBlock () {
-		return ModBlocks.COMPOSER_CELL;
+		return BlockRegistry.COMPOSER_CELL;
 	}
 
 	@Override
@@ -135,7 +135,7 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 
 		} else if (composerLocation == null && //
 			currentStack.getItem() instanceof IFillableWithEssence && storedQuantity == 1 && //
-			(stack.getItem() == ModItems.ESSENCE || stack.getItem() == ModItems.ASH)) {
+			(stack.getItem() == ItemRegistry.ESSENCE || stack.getItem() == ItemRegistry.ASH)) {
 
 			final IFillableWithEssence fillable = (IFillableWithEssence) currentStack.getItem();
 			final int insertQuantity = fillable.fill(currentStack, stack, requestedQuantity);

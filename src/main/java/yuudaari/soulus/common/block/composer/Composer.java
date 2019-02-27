@@ -20,8 +20,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.ModBlocks;
-import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.registration.BlockRegistry;
+import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.config.ConfigInjected;
@@ -43,9 +43,9 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	//
 
 	public static enum Upgrade implements IUpgrade {
-		RANGE (0, "range", ModItems.ORB_MURKY.getItemStack()), //
-		DELAY (1, "delay", ModItems.GEAR_OSCILLATING.getItemStack()), //
-		EFFICIENCY (2, "efficiency", ModItems.GEAR_NIOBIUM.getItemStack());
+		RANGE (0, "range", ItemRegistry.ORB_MURKY.getItemStack()), //
+		DELAY (1, "delay", ItemRegistry.GEAR_OSCILLATING.getItemStack()), //
+		EFFICIENCY (2, "efficiency", ItemRegistry.GEAR_NIOBIUM.getItemStack());
 
 		private final int index;
 		private final String name;
@@ -137,7 +137,7 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 
 	@Override
 	public UpgradeableBlock<ComposerTileEntity> getInstance () {
-		return ModBlocks.COMPOSER;
+		return BlockRegistry.COMPOSER;
 	}
 
 
@@ -195,7 +195,7 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 			structure.loopBlocks(world, pos, state.getValue(FACING), (BlockPos pos2, BlockValidator validator) -> {
 				IBlockState currentState = world.getBlockState(pos2);
 
-				if (currentState.getBlock() == ModBlocks.COMPOSER_CELL) {
+				if (currentState.getBlock() == BlockRegistry.COMPOSER_CELL) {
 					world.setBlockState(pos2, currentState
 						.withProperty(ComposerCell.CELL_STATE, ComposerCell.CellState.DISCONNECTED), 3);
 
@@ -269,9 +269,9 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 
 	public StructureMap structure = new StructureMap();
 	{
-		BlockValidator bars = BlockValidator.byBlock(ModBlocks.BARS_ENDERSTEEL);
+		BlockValidator bars = BlockValidator.byBlock(BlockRegistry.BARS_ENDERSTEEL);
 		BlockValidator cell = (pos, world, checkPos, state) -> {
-			if (state.getBlock() != ModBlocks.COMPOSER_CELL)
+			if (state.getBlock() != BlockRegistry.COMPOSER_CELL)
 				return false;
 			ComposerCellTileEntity te = (ComposerCellTileEntity) world.getTileEntity(checkPos);
 			boolean result = te == null || (te.composerLocation == null && te.changeComposerCooldown < 0) || pos
@@ -279,7 +279,7 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 			return result;
 		};
 		BlockValidator obsidian = BlockValidator.byBlock(Blocks.OBSIDIAN);
-		BlockValidator endersteel = BlockValidator.byBlock(ModBlocks.BLOCK_ENDERSTEEL);
+		BlockValidator endersteel = BlockValidator.byBlock(BlockRegistry.BLOCK_ENDERSTEEL);
 
 		// layer 1
 		structure.addBlock(-2, 0, -5, obsidian);

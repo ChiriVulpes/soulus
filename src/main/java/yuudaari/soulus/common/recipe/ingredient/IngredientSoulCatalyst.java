@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.IIngredientFactory;
 import net.minecraftforge.common.crafting.JsonContext;
-import yuudaari.soulus.common.ModItems;
+import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.item.SoulCatalyst;
 
 public class IngredientSoulCatalyst extends Ingredient {
@@ -13,7 +13,7 @@ public class IngredientSoulCatalyst extends Ingredient {
 	public static IngredientSoulCatalyst INSTANCE = new IngredientSoulCatalyst();
 
 	public IngredientSoulCatalyst () {
-		super(ModItems.SOUL_CATALYST.getFilledStack());
+		super(ItemRegistry.SOUL_CATALYST.getFilledStack());
 	}
 
 	@Override
