@@ -3,6 +3,7 @@ package yuudaari.soulus.common.registration;
 import java.util.List;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.crafting.IRecipe;
@@ -34,6 +35,7 @@ import yuudaari.soulus.common.block.soul_totem.SoulTotem;
 import yuudaari.soulus.common.block.summoner.Summoner;
 import yuudaari.soulus.common.compat.jei.JeiDescriptionRegistry;
 import yuudaari.soulus.common.registration.IBlockRegistration;
+import yuudaari.soulus.common.util.Material;
 
 public class BlockRegistry {
 
@@ -65,6 +67,8 @@ public class BlockRegistry {
 	public static final Unloader UNLOADER = new Unloader();
 	public static final SoulTotem SOUL_TOTEM = new SoulTotem();
 	public static final SoulInquirer SOUL_INQUIRER = new SoulInquirer();
+	public static final Registration.Block MIDNIGHT_BRICKS = new Registration.Block("midnight_bricks", new Material(MapColor.BLACK)).setHasItem();
+	public static final Registration.BlockPillar MIDNIGHT_PILLAR = new Registration.BlockPillar("midnight_pillar", new Material(MapColor.BLACK)).setHasItem();
 
 	public static List<IBlockRegistration> blocks = Lists.newArrayList(new IBlockRegistration[] {
 		DUST_ENDER,
@@ -96,6 +100,9 @@ public class BlockRegistry {
 		BLOCK_ENDERSTEEL,
 		BLOCK_ENDERSTEEL_DARK,
 		BLOCK_NIOBIUM,
+
+		MIDNIGHT_BRICKS,
+		MIDNIGHT_PILLAR,
 
 		SKEWER,
 

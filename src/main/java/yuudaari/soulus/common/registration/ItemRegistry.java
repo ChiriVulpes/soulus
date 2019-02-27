@@ -69,6 +69,7 @@ public class ItemRegistry {
 	public static Soulbook SOULBOOK = new Soulbook();
 	public static OrbMurky ORB_MURKY = new OrbMurky();
 	public static SoulCatalyst SOUL_CATALYST = new SoulCatalyst();
+	public static DustMidnight DUST_MIDNIGHT = new DustMidnight();
 	// @formatter:on
 
 	public static List<IItemRegistration> items = Lists.newArrayList(new IItemRegistration[] {
@@ -112,6 +113,7 @@ public class ItemRegistry {
 		DUST_ENDER_IRON,
 		ASH,
 		DUST_ENDER_IRON_ASHEN,
+		DUST_MIDNIGHT,
 		DUST_NIOBIUM,
 
 		INGOT_ENDERSTEEL,

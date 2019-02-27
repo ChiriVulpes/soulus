@@ -1,11 +1,11 @@
 {
 	"parent": "minecraft:block/block",
 	"textures": {
-		"top": "soulus:blocks/soul_totem/soul_totem_top",
-		"side": "soulus:blocks/soul_totem/soul_totem_side",
-		"bottom": "soulus:blocks/soul_totem/soul_totem_bottom",
-		"cage_top": "soulus:blocks/soul_totem/soul_totem_cage_top",
-		"particle": "soulus:blocks/soul_totem/soul_totem_side"
+		"top": "soulus:blocks/soul_totem/top",
+		"side": "soulus:blocks/soul_totem/side",
+		"bottom": "soulus:blocks/soul_totem/bottom",
+		"cage_top": "soulus:blocks/soul_totem/cage_top",
+		"particle": "soulus:blocks/soul_totem/side"
 	},
 	"elements": [
 		{   "from": [ 0, 0, 0 ],

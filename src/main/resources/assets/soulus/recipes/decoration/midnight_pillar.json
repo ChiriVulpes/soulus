@@ -1,0 +1,16 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"b",
+		"b"
+	],
+	"key": {
+		"b": {
+			"item": "soulus:midnight_bricks"
+		}
+	},
+	"result": {
+		"item": "soulus:midnight_pillar",
+		"count": 2
+	}
+}

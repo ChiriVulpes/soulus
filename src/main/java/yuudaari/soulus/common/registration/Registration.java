@@ -24,6 +24,48 @@ public class Registration {
 			return this;
 		}
 
+		@Override
+		public Block setHasItem () {
+			return (Block) IBlockRegistration.super.setHasItem();
+		}
+
+		@SuppressWarnings("deprecation")
+		@Override
+		public BlockRenderLayer getBlockLayer () {
+			final Material material = getMaterial(null);
+			if (material.isOpaque())
+				return BlockRenderLayer.SOLID;
+			else if (material.blocksLight())
+				return BlockRenderLayer.TRANSLUCENT;
+			else
+				return BlockRenderLayer.CUTOUT;
+		}
+
+		@SuppressWarnings("deprecation")
+		@Override
+		public boolean isOpaqueCube (final IBlockState state) {
+			final Material material = getMaterial(null);
+			return material.isOpaque() && material.blocksLight();
+		}
+	}
+
+	public static class BlockPillar extends net.minecraft.block.BlockRotatedPillar implements IBlockRegistration {
+
+		public BlockPillar (final String name, final Material material) {
+			super(material);
+			setName(name);
+		}
+
+		@Override
+		public BlockPillar getBlock () {
+			return this;
+		}
+
+		@Override
+		public BlockPillar setHasItem () {
+			return (BlockPillar) IBlockRegistration.super.setHasItem();
+		}
+
 		@SuppressWarnings("deprecation")
 		@Override
 		public BlockRenderLayer getBlockLayer () {
@@ -54,6 +96,11 @@ public class Registration {
 		@Override
 		public BlockPane getBlock () {
 			return this;
+		}
+
+		@Override
+		public BlockPane setHasItem () {
+			return (BlockPane) IBlockRegistration.super.setHasItem();
 		}
 	}
 

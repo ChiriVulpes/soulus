@@ -60,6 +60,7 @@ item.soulus:orb_murky.filled.name=Murky Orb
 item.soulus:soul_catalyst.name=Soul Catalyst
 item.soulus:soul_catalyst.filled.name=Soul Catalyst
 item.soulus:crystal_dark.name=Midnight Jewel
+item.soulus:dust_midnight.name=Stardust
 
 item.soulus:sledgehammer.name=Sledgehammer
 item.soulus:barket.name=Barket
@@ -97,6 +98,9 @@ tile.soulus:ash_block.name=Ash
 tile.soulus:block_endersteel.name=Block of Endersteel
 tile.soulus:block_endersteel_dark.name=Block of Dark Endersteel
 tile.soulus:block_niobium.name=Block of Niobium
+
+tile.soulus:midnight_bricks.name=Stardust Bricks
+tile.soulus:midnight_pillar.name=Stardust Brick Pillar
 
 tile.soulus:bars_endersteel.name=Endersteel Bars
 
@@ -268,6 +272,7 @@ jei.description.soulus:skewer=A block that, when powered by redstone, will exten
 jei.description.soulus:summoner=A machine created from the remains of alien creatures and metal, which summons a creature from a Soulbook. With this, life may soon return to the world.
 jei.description.soulus:unloader=A block with a hole in the bottom. Not useful for storing things, as they will simply fall out.
 jei.description.soulus:crystal_dark=A crystal forged from fire, covered in the blood of many. Looking at the crystal is like looking into a void. Holding the crystal for an extended period of time is painful.
+jei.description.soulus:dust_midnight=A sparkly crystalline dust which emanates darkness.
 jei.description.soulus:dust_niobium=Metal forged from the souls of many, crushed into a fine powder.
 jei.description.soulus:nugget_niobium=A shard metal forged from the souls of many.
 jei.description.soulus:ingot_niobium=An ingot of metal, forged from souls too numerous to count. It emanates sadness.

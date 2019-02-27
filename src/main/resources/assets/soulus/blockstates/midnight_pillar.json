@@ -1,0 +1,8 @@
+{
+	"variants": {
+        "axis=y":  { "model": "soulus:midnight/pillar" },
+        "axis=z":   { "model": "soulus:midnight/pillar", "x": 90 },
+        "axis=x":   { "model": "soulus:midnight/pillar", "x": 90, "y": 90 },
+        "axis=none": { "model": "soulus:midnight/pillar" }
+	}
+}

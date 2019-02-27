@@ -2,20 +2,20 @@
 	"type": "soulus:composer_shaped",
 	"time": 512,
 	"pattern": [
-		"eee",
-		"eme",
-		"eee"
+		"ppp",
+		"pmp",
+		"ppp"
 	],
 	"key": {
+		"p": {
+			"item": "minecraft:purpur_block"
+		},
 		"m": {
 			"item": "soulus:dust_midnight"
-		},
-		"e": {
-			"item": "soulus:ingot_endersteel"
 		}
 	},
 	"result": {
-		"item": "soulus:ingot_niobium",
-		"count": 12
+		"item": "soulus:midnight_bricks",
+		"count": 8
 	}
 }

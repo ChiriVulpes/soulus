@@ -14,10 +14,10 @@
 		},
 		"p": [
 			{
-				"item": "minecraft:purpur_block"
+				"item": "soulus:midnight_bricks"
 			},
 			{
-				"item": "minecraft:purpur_pillar"
+				"item": "soulus:midnight_pillar"
 			}
 		]
 	},
