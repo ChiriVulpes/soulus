@@ -35,7 +35,6 @@ import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.ModGenerators;
 import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.advancement.Advancements;
-import yuudaari.soulus.common.compat.ExNihiloCreatioRecipes;
 import yuudaari.soulus.common.compat.GameStages;
 import yuudaari.soulus.common.compat.crafttweaker.ZenComposer;
 import yuudaari.soulus.common.compat.top.TheOneProbe;
@@ -203,9 +202,6 @@ public class Soulus {
 		}
 
 		SoulsPacketHandler.register();
-		if (Loader.isModLoaded("exnihilocreatio")) {
-			ExNihiloCreatioRecipes.init();
-		}
 
 		if (Loader.isModLoaded("crafttweaker")) {
 			ZenComposer.apply();

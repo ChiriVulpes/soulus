@@ -51,7 +51,7 @@ minecraft {
 }
 
 repositories {
-    // Ex Nihilo Creatio & CraftTweaker
+    // CraftTweaker
     maven {
         url "http://maven.blamejared.com"
     }
@@ -98,9 +98,7 @@ dependencies {
     deobfProvided "CraftTweaker2:CraftTweaker2-API:4.1.0.387"
     deobfProvided "CraftTweaker2:ZenScript:4.1.0.387"
     
-    deobfProvided "exnihilocreatio:exnihilocreatio:1.12-0.1.5.9"
-    
-    deobfProvided "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.19-11:api"
+    deobfProvided "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.28-17"
     
     compileOnly "vazkii.patchouli:Patchouli:1.0-10.45"
     
