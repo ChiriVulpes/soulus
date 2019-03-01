@@ -40,6 +40,7 @@ import yuudaari.soulus.common.compat.crafttweaker.ZenComposer;
 import yuudaari.soulus.common.compat.top.TheOneProbe;
 import yuudaari.soulus.common.config.Config;
 import yuudaari.soulus.common.misc.BoneChunks;
+import yuudaari.soulus.common.misc.MidnightDraught;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.client.SendConfig;
 import yuudaari.soulus.common.util.DebugHelper;
@@ -185,13 +186,16 @@ public class Soulus {
 
 	@EventHandler
 	public void init (FMLInitializationEvent event) {
-
 		for (InitEventHandler handler : initHandlers) {
 			handler.handle(event);
 		}
+
+		MidnightDraught.register();
+
 		if (event.getSide() == Side.CLIENT) {
 			ModRenderers.init();
 		}
+
 		ModGenerators.init();
 	}
 

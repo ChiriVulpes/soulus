@@ -70,6 +70,11 @@ item.soulus:soulbook.name=Soulbook
 item.soulus:soulbook.unfocused.name=Soulbook
 item.soulus:soulbook.focused.name=Soulbook of %1$s
 
+potion.effect.soulus:sleepy=Midnight Draught
+splash_potion.effect.soulus:sleepy=Splash of Slumber
+tipped_arrow.effect.soulus:sleepy=Arrow of Slumber
+lingering_potion.effect.soulus:sleepy=Lingering Scent of Night
+potion.effect.soulus:sleepy.name=Sleepiness
 
 item.soulus:essence.unfocused.name=Unfocused Essence
 item.soulus:essence.focused.name=%1$s Essence

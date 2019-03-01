@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.item.Soulbook;
+import yuudaari.soulus.common.misc.MidnightDraught;
 import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.registration.ItemRegistry;
 
@@ -30,6 +31,8 @@ public final class CreativeTab extends CreativeTabs {
 	@Override
 	public void displayAllRelevantItems (NonNullList<ItemStack> list) {
 		super.displayAllRelevantItems(list);
+
+		list.add(MidnightDraught.getItemStack());
 
 		list.sort( (item1, item2) -> {
 			return getSortValue(item1) - getSortValue(item2);

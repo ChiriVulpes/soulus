@@ -139,7 +139,7 @@ public class ItemRegistry {
 		ESSENCE_PERFECT,
 		ESSENCE,
 
-		SOULBOOK
+		SOULBOOK,
 	});
 
 	public static void registerItems (IForgeRegistry<net.minecraft.item.Item> registry) {
