@@ -39,7 +39,7 @@ public class MidnightDraught {
 			player.world.setWorldTime(23500L);
 
 		// if they're starting to sleep in the beginning of the day, allow them to sleep the whole day
-		else if (startSleepingTime > 23500L && startSleepingTime < 6000L)
+		else if ((startSleepingTime > 23500L || startSleepingTime > 0) && startSleepingTime < 6000L)
 			player.world.setWorldTime(13000L);
 
 		// if it's any other time, just add 8000 ticks
