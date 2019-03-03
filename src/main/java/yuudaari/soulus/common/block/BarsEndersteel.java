@@ -123,14 +123,18 @@ public class BarsEndersteel extends Registration.BlockPane {
 				recipe.add(ForgeRegistries.ITEMS.getValue(new ResourceLocation(item.getKey())));
 				recipe.addAll(Collections.nCopies(8, getIngredientFromStacksOfOtherEndersteelTypes(item.getValue())));
 
-				return new ShapelessOreRecipe(null, getStackFromEndersteelType(item.getValue()), recipe.toArray(new Object[0]))
+				return new ShapelessOreRecipe(null, getStackFromEndersteelType(item.getValue(), 8), recipe.toArray(new Object[0]))
 					.setRegistryName(getRegistryName() + "_" + item.getValue().getName().toLowerCase());
 			})
 			.toArray(ShapelessOreRecipe[]::new));
 	}
 
 	public ItemStack getStackFromEndersteelType (final EndersteelType type) {
-		return getItemStack(1, getMetaFromState(getDefaultState().withProperty(VARIANT, type)));
+		return getStackFromEndersteelType(type, 1);
+	}
+
+	public ItemStack getStackFromEndersteelType (final EndersteelType type, final int count) {
+		return getItemStack(count, getMetaFromState(getDefaultState().withProperty(VARIANT, type)));
 	}
 
 	private Ingredient getIngredientFromStacksOfOtherEndersteelTypes (final EndersteelType type) {
