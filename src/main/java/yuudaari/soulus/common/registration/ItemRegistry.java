@@ -56,8 +56,8 @@ public class ItemRegistry {
 	public static GearBone GEAR_BONE_FROZEN = new GearBone("gear_bone_frozen");
 	public static GearBone GEAR_BONE_FUNGAL = new GearBone("gear_bone_fungal");
 	public static GearBone GEAR_BONE_NETHER = new GearBone("gear_bone_nether");
-	public static Item GEAR_OSCILLATING = new Item("gear_oscillating").setHasGlint().setHasDescription().setMaxStackSize(16);
-	public static Item GEAR_NIOBIUM = new Item("gear_niobium").setHasGlint().setHasDescription().setMaxStackSize(16);
+	public static GearOscillating GEAR_OSCILLATING = new GearOscillating();
+	public static GearNiobium GEAR_NIOBIUM = new GearNiobium();
 	public static Glue GLUE = new Glue();
 	public static Item INGOT_ENDERSTEEL = new Item("ingot_endersteel").setHasDescription();
 	public static Item INGOT_ENDERSTEEL_DARK = new Item("ingot_endersteel_dark").setHasDescription();

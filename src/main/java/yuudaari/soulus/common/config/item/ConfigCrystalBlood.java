@@ -9,7 +9,11 @@ import yuudaari.soulus.common.util.serializer.Serialized;
 
 @ConfigFile(file = "item/crystal_blood", id = Soulus.MODID)
 @Serializable
-public class ConfigCrystalBlood {
+public class ConfigCrystalBlood extends ConfigItem {
+
+	{
+		stackSize = 16;
+	}
 
 	// CLIENT
 	@Serialized @ClientField public int particleCount = 50;

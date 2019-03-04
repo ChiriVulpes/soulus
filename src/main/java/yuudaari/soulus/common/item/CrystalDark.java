@@ -27,8 +27,9 @@ public class CrystalDark extends Registration.Item {
 
 	public CrystalDark () {
 		super("crystal_dark");
-		setMaxStackSize(16);
 		setHasDescription();
+
+		Soulus.onConfigReload( () -> setMaxStackSize(CONFIG.stackSize));
 	}
 
 	@Override

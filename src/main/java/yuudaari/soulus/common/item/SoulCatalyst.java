@@ -123,7 +123,7 @@ public class SoulCatalyst extends Registration.Item implements IHasComposerCellI
 	@Override
 	public int getItemStackLimit (ItemStack stack) {
 		// if it's full, allow them to be stacked
-		return getContainedEssence(stack) == CONFIG.requiredEssence ? 16 : 1;
+		return getContainedEssence(stack) == CONFIG.requiredEssence ? CONFIG.stackSize : 1;
 	}
 
 	public ItemStack getFilledStack () {

@@ -51,6 +51,7 @@ public class CrystalBlood extends Registration.Item {
 
 	public CrystalBlood () {
 		super("crystal_blood");
+		setHasDescription();
 
 		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
 			registerColorHandler( (ItemStack stack, int tintIndex) -> {
@@ -58,14 +59,12 @@ public class CrystalBlood extends Registration.Item {
 				return Colour.mix(colourEmpty, colourFilled, percentage).get();
 			});
 		}
-
-		setHasDescription();
 	}
 
 	@Override
 	public int getItemStackLimit (ItemStack stack) {
 		// if it's full, allow them to be stacked
-		return getContainedBlood(stack) >= CONFIG.requiredBlood ? 16 : 1;
+		return getContainedBlood(stack) >= CONFIG.requiredBlood ? CONFIG.stackSize : 1;
 	}
 
 	public ItemStack getFilledStack () {

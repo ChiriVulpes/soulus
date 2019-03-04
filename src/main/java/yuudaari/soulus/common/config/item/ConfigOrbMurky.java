@@ -7,7 +7,11 @@ import yuudaari.soulus.common.util.serializer.Serialized;
 
 @ConfigFile(file = "item/orb_murky", id = Soulus.MODID)
 @Serializable
-public class ConfigOrbMurky {
+public class ConfigOrbMurky extends ConfigItem {
+
+	{
+		stackSize = 16;
+	}
 
 	@Serialized public int requiredEssence = 128;
 }
