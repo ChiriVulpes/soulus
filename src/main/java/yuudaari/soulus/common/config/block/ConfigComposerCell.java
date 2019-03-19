@@ -10,4 +10,5 @@ import yuudaari.soulus.Soulus;
 public class ConfigComposerCell {
 
 	@Serialized public int maxQuantity = 64;
+	@Serialized public boolean allowSneakRightClickStackInsertion = true;
 }
