@@ -11,6 +11,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionType;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.event.entity.player.SleepingLocationCheckEvent;
@@ -30,27 +31,35 @@ public class MidnightDraught {
 
 	@SubscribeEvent
 	public static void onTryWakeUp (final PlayerWakeUpEvent event) {
-		final EntityPlayer player = event.getEntityPlayer();
-		if (player.world.isRemote || startSleepingTime == -1 || player.sleepTimer < 99 || !player.isPotionActive(PotionSleepy.INSTANCE))
+		final World world = event.getEntityPlayer().world;
+		if (world.isRemote || startSleepingTime == -1)
 			return;
+
+		for (final EntityPlayer player : event.getEntityPlayer().world.playerEntities) {
+			if (player.sleepTimer < 99 || !player.isPotionActive(PotionSleepy.INSTANCE)) {
+				return;
+			}
+		}
 
 		// if they're starting to sleep in the beginning of the night, allow them to sleep the whole night
 		if (startSleepingTime > 12500L && startSleepingTime < 19000L)
-			player.world.setWorldTime(23500L);
+			world.setWorldTime(23500L);
 
 		// if they're starting to sleep in the beginning of the day, allow them to sleep the whole day
 		else if ((startSleepingTime > 23500L || startSleepingTime > 0) && startSleepingTime < 6000L)
-			player.world.setWorldTime(13000L);
+			world.setWorldTime(13000L);
 
 		// if it's any other time, just add 8000 ticks
 		else
-			player.world.setWorldTime((startSleepingTime + 8000L) % 24000L);
+			world.setWorldTime((startSleepingTime + 8000L) % 24000L);
 
 		startSleepingTime = -1;
 
-		player.removePotionEffect(PotionSleepy.INSTANCE);
-		player.removePotionEffect(Potion.REGISTRY.getObject(new ResourceLocation("blindness")));
-		player.removePotionEffect(Potion.REGISTRY.getObject(new ResourceLocation("slowness")));
+		for (final EntityPlayer player : event.getEntityPlayer().world.playerEntities) {
+			player.removePotionEffect(PotionSleepy.INSTANCE);
+			player.removePotionEffect(Potion.REGISTRY.getObject(new ResourceLocation("blindness")));
+			player.removePotionEffect(Potion.REGISTRY.getObject(new ResourceLocation("slowness")));
+		}
 	}
 
 	@SubscribeEvent
