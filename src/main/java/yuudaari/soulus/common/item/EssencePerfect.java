@@ -86,7 +86,7 @@ public class EssencePerfect extends Registration.Item {
 
 		@Override
 		public boolean matches (final InventoryCrafting inv, final World worldIn) {
-			return getCraftingResult(inv) != null;
+			return !getCraftingResult(inv).isEmpty();
 		}
 
 		@Override
@@ -96,19 +96,19 @@ public class EssencePerfect extends Registration.Item {
 			final int inventorySize = inv.getSizeInventory();
 
 			if (inventorySize < 9)
-				return null;
+				return ItemStack.EMPTY;
 
 			for (int i = 0; i < inventorySize; i++) {
 				final ItemStack stack = inv.getStackInSlot(i);
 				final Item stackItem = stack.getItem();
 				if (stack == null || stackItem != ItemRegistry.ESSENCE)
-					return null;
+					return ItemStack.EMPTY;
 
 				essenceTypes.add(EssenceType.getEssenceType(stack));
 			}
 
 			if (essenceTypes.size() < 9)
-				return null;
+				return ItemStack.EMPTY;
 
 			final ItemStack result = new ItemStack(ItemRegistry.ESSENCE_PERFECT);
 			result.setCount(1);
@@ -133,7 +133,7 @@ public class EssencePerfect extends Registration.Item {
 
 		@Override
 		public boolean matches (final InventoryCrafting inv, final World worldIn) {
-			return getCraftingResult(inv) != null;
+			return !getCraftingResult(inv).isEmpty();
 		}
 
 		@Override
@@ -150,7 +150,7 @@ public class EssencePerfect extends Registration.Item {
 					continue;
 
 				if (stackItem != ItemRegistry.ESSENCE_PERFECT)
-					return null;
+					return ItemStack.EMPTY;
 
 				quantity++;
 
