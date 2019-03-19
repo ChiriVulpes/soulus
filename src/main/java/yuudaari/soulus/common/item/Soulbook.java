@@ -8,7 +8,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityList;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,7 +25,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.block.composer.ComposerCell.IHasComposerCellInfo;
 import yuudaari.soulus.common.block.composer.IFillableWithEssence;
 import yuudaari.soulus.common.block.summoner.Summoner;
@@ -36,6 +34,7 @@ import yuudaari.soulus.common.config.essence.ConfigColor;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
+import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.Colour;
 import yuudaari.soulus.common.util.EssenceType;
@@ -88,53 +87,63 @@ public class Soulbook extends Registration.Item implements IHasComposerCellInfo,
 		@ParametersAreNonnullByDefault
 		@Override
 		public boolean matches (InventoryCrafting inv, World worldIn) {
-			return getCraftingResult(inv) != null;
+			return !getCraftingResult(inv).isEmpty();
 		}
 
 		@ParametersAreNonnullByDefault
-		@Nullable
 		@Override
 		public ItemStack getCraftingResult (InventoryCrafting inv) {
 			int essenceCount = 0;
 			ItemStack soulbook = null;
 			String essenceType = null;
 			int containedEssence = 0;
-			int inventorySize = inv.getSizeInventory();
+
+			final int inventorySize = inv.getSizeInventory();
 			for (int i = 0; i < inventorySize; i++) {
-				ItemStack stack = inv.getStackInSlot(i);
-				Item stackItem = stack.getItem();
-				if (stack == null || stackItem == Items.AIR)
+
+				final ItemStack stack = inv.getStackInSlot(i);
+				final Item stackItem = stack.getItem();
+
+				if (stack == null || stack.isEmpty())
 					continue;
+
 				if (stackItem == ItemRegistry.SOULBOOK) {
 					if (soulbook != null)
-						return null;
+						return ItemStack.EMPTY;
+
 					String itemTarget = EssenceType.getEssenceType(stack);
 					if (itemTarget != null) {
 						if (essenceType != null && !itemTarget.equals(essenceType))
-							return null;
+							return ItemStack.EMPTY;
+
 						essenceType = itemTarget;
 					}
+
 					containedEssence = getContainedEssence(stack);
 					soulbook = stack;
 					continue;
+
 				} else if (stackItem == ItemRegistry.ESSENCE) {
 					String itemTarget = EssenceType.getEssenceType(stack);
 					if (itemTarget == null || (essenceType != null && !itemTarget.equals(essenceType)))
-						return null;
+						return ItemStack.EMPTY;
+
 					essenceType = itemTarget;
 					essenceCount++;
 					continue;
 				}
-				return null;
+
+				return ItemStack.EMPTY;
 			}
-			if (soulbook != null && essenceCount > 0 && containedEssence + essenceCount <= CONFIG
-				.getSoulbookQuantity(essenceType)) {
+
+			if (soulbook != null && essenceCount > 0 && containedEssence + essenceCount <= CONFIG.getSoulbookQuantity(essenceType)) {
 				ItemStack newStack = soulbook.copy();
 				EssenceType.setEssenceType(newStack, essenceType);
 				setContainedEssence(newStack, containedEssence + essenceCount);
 				return newStack;
 			}
-			return null;
+
+			return ItemStack.EMPTY;
 		}
 	}
 
