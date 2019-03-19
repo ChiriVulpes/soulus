@@ -29,6 +29,11 @@ public class Registration {
 			return (Block) IBlockRegistration.super.setHasItem();
 		}
 
+		@Override
+		public Block setHasDescription () {
+			return (Block) IBlockRegistration.super.setHasDescription();
+		}
+
 		@SuppressWarnings("deprecation")
 		@Override
 		public BlockRenderLayer getBlockLayer () {
@@ -64,6 +69,11 @@ public class Registration {
 		@Override
 		public BlockPillar setHasItem () {
 			return (BlockPillar) IBlockRegistration.super.setHasItem();
+		}
+
+		@Override
+		public BlockPillar setHasDescription () {
+			return (BlockPillar) IBlockRegistration.super.setHasDescription();
 		}
 
 		@SuppressWarnings("deprecation")
