@@ -65,8 +65,10 @@ public class MidnightDraught {
 	@SubscribeEvent
 	public static void onSleepTimeCheck (final SleepingTimeCheckEvent event) {
 		final EntityPlayer player = event.getEntityPlayer();
-		event.setResult(player.isPotionActive(PotionSleepy.INSTANCE) ? Event.Result.ALLOW : Event.Result.DENY);
-		startSleepingTime = player.world.getWorldTime() % 24000L;
+		if (player.isPotionActive(PotionSleepy.INSTANCE)) {
+			event.setResult(Event.Result.ALLOW);
+			startSleepingTime = player.world.getWorldTime() % 24000L;
+		}
 	}
 
 	@SubscribeEvent
