@@ -19,7 +19,7 @@
 				"items": [
 					{
 						"item": "soulus:soulbook",
-						"nbt": "{\"essence_quantity\":16}"
+						"nbt": "{\"essence_quantity\":32}"
 					}
 				]
 			}
