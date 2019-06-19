@@ -19,7 +19,7 @@
 				"items": [
 					{
 						"item": "soulus:orb_murky",
-						"nbt": "{\"essence_quantity\":128}"
+						"nbt": "{\"essence_quantity\":32}"
 					}
 				]
 			}
