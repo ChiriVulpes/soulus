@@ -13,27 +13,28 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import yuudaari.soulus.Soulus;
+import yuudaari.soulus.common.advancement.Advancements;
+import yuudaari.soulus.common.block.skewer.Skewer.Upgrade;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock.IUpgrade;
+import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSkewer;
-import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
-import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.registration.BlockRegistry;
-import yuudaari.soulus.common.advancement.Advancements;
-import yuudaari.soulus.common.block.skewer.Skewer.Upgrade;
 import yuudaari.soulus.common.item.CrystalBlood;
 import yuudaari.soulus.common.misc.ModDamageSource;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.client.TetherEntity;
+import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.util.ModPotionEffect;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 @Mod.EventBusSubscriber
 @ConfigInjected(Soulus.MODID)
@@ -109,8 +110,10 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 					entity.attackEntityFrom(getDamageSource(), damage);
 					entity.hurtResistantTime = rtime;
 
-					if (entity.getHealth() <= 0 && this.getOwner() != null) {
-						Advancements.SKEWER_KILL.trigger(this.getOwner(), EntityList.getKey(entity).toString());
+					final EntityPlayer owner = this.getOwner();
+					final ResourceLocation entityName = EntityList.getKey(entity);
+					if (entity.getHealth() <= 0 && owner != null && entityName != null) {
+						Advancements.SKEWER_KILL.trigger(owner, entityName.toString());
 					}
 
 					if (upgrades.get(Upgrade.POISON) > 0 && world.rand.nextFloat() < CONFIG.poisonChance
