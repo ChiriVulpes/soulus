@@ -432,9 +432,16 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 		// try to insert a soulbook
 		if (item == ItemRegistry.SOULBOOK) {
-			if (((CONFIG.soulbookUses == null || CONFIG.soulbookUses <= 0) && !Soulbook.isFilled(stack)) || Soulbook
-				.getContainedEssence(stack) < CONFIG.soulbookEssenceRequiredToInsert * CONFIG_ESSENCES
-					.getSoulbookQuantity(EssenceType.getEssenceType(stack)))
+			final String essenceType = EssenceType.getEssenceType(stack);
+			if (essenceType == null)
+				return false;
+
+			// if the contained essence is less than the essence required to insert the soulbook (required % of the soulbook quantity of the essence type)
+			if (Soulbook.getContainedEssence(stack) < CONFIG.soulbookEssenceRequiredToInsert * CONFIG_ESSENCES.getSoulbookQuantity(essenceType))
+				return false;
+
+			// if the soulbook isn't filled and the soulbook is in "lasts forever" mode, it needs to be completely filled before it can be inserted
+			if (!Soulbook.isFilled(stack) && (CONFIG.soulbookUses == null || CONFIG.soulbookUses <= 0))
 				return false;
 
 			if (!state.getValue(HAS_SOULBOOK)) {
