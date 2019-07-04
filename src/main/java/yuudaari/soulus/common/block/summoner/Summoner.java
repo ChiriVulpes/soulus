@@ -487,6 +487,11 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		return super.onActivateInsert(world, pos, player, stack);
 	}
 
+	@Override
+	protected ItemStack getSilkTouchDrop (IBlockState state) {
+		return ItemStack.EMPTY;
+	}
+
 	public ItemStack getSoulbook (SummonerTileEntity te) {
 		String essenceType = te.getEssenceType();
 
