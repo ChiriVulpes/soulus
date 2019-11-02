@@ -62,6 +62,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	//
 
 	public static enum Upgrade implements IUpgrade {
+
 		COUNT (0, "count", ItemRegistry.CRYSTAL_BLOOD.getItemStack()),
 		DELAY (1, "delay",
 			ItemRegistry.GEAR_OSCILLATING.getItemStack()),
@@ -480,7 +481,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 		if (item == ItemRegistry.ESSENCE_PERFECT) {
 			final SummonerTileEntity te = (SummonerTileEntity) world.getTileEntity(pos);
-			return te.insertPerfectEssence(stack, player.isSneaking());
+			return te.insertPerfectEssence(stack, player);
 		}
 
 		// trying to insert the upgrades

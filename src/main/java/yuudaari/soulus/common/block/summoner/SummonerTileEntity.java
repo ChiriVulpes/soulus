@@ -251,14 +251,14 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 	private int timeTillNextMajorUpdate = 0;
 
-	public boolean insertPerfectEssence (final ItemStack stack, final boolean all) {
+	public boolean insertPerfectEssence (final ItemStack stack, final EntityPlayer player) {
 		final String essenceType = getEssenceType();
 		final String[] perfectEssenceTypes = EssencePerfect.getEssenceTypes(stack);
 
 		if (!Arrays.stream(perfectEssenceTypes).anyMatch(essenceType::equalsIgnoreCase))
 			return false;
 
-		final int count = all ? stack.getCount() : 1;
+		final int count = player.isSneaking() ? stack.getCount() : 1;
 
 		for (int i = 0; i < count; i++) {
 			boost += CONFIG.perfectEssenceBoost * spawnDelay.get(world.rand);
@@ -267,7 +267,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		blockUpdate();
 		timeTillNextMajorUpdate = 0;
 
-		stack.shrink(count);
+		if (!player.isCreative()) stack.shrink(count);
 		return true;
 	}
 
