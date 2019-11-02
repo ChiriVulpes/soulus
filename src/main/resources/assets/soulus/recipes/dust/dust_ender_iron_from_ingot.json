@@ -1,14 +1,8 @@
 {
-	"type": "minecraft:crafting_shapeless",
-	"ingredients": [
-		{
-			"item": "soulus:ingot_endersteel"
-		},
-		{
-			"item": "soulus:sledgehammer",
-			"data": 32767
-		}
-	],
+	"type": "soulus:sledgehammer",
+	"input": {
+		"item": "soulus:ingot_endersteel"
+	},
 	"result": {
 		"item": "soulus:dust_ender_iron"
 	}

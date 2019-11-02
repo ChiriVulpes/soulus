@@ -15,9 +15,11 @@ import net.minecraftforge.common.crafting.IRecipeFactory;
 import net.minecraftforge.common.crafting.IShapedRecipe;
 import net.minecraftforge.common.crafting.CraftingHelper.ShapedPrimer;
 import net.minecraftforge.common.crafting.JsonContext;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -25,8 +27,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IRecipeWrapper;
 
-public class RecipeShaped extends Recipe implements IShapedRecipe {
+public class RecipeShaped extends Recipe implements IShapedRecipe, IRecipeWrapper {
 
 	// Added in for future ease of change, but hard coded for now.
 	public static final int MAX_CRAFT_GRID_WIDTH = 3;
@@ -68,6 +72,14 @@ public class RecipeShaped extends Recipe implements IShapedRecipe {
 	@Override
 	public int getRecipeHeight () {
 		return height;
+	}
+
+	@Override
+	public void getIngredients (final IIngredients ingredients) {
+		ingredients.setInputLists(ItemStack.class, input.stream()
+			.map(ing -> Arrays.asList(ing.getMatchingStacks()))
+			.collect(Collectors.toList()));
+		ingredients.setOutput(ItemStack.class, output);
 	}
 
 	/**

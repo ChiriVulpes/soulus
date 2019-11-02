@@ -1,15 +1,9 @@
 {
-	"type": "minecraft:crafting_shapeless",
-	"ingredients": [
-		{
-			"type": "forge:ore_dict",
-			"ore": "boneChunk"
-		},
-		{
-			"item": "soulus:sledgehammer",
-			"data": 32767
-		}
-	],
+	"type": "soulus:sledgehammer",
+	"input": {
+		"type": "forge:ore_dict",
+		"ore": "boneChunk"
+	},
 	"result": {
 		"item": "minecraft:dye",
 		"data": 15

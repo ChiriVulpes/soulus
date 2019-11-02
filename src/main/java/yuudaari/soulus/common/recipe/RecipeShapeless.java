@@ -1,6 +1,8 @@
 package yuudaari.soulus.common.recipe;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.stream.Collectors;
 import net.minecraft.block.Block;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
@@ -18,8 +20,10 @@ import javax.annotation.Nonnull;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IRecipeWrapper;
 
-public class RecipeShapeless extends Recipe {
+public class RecipeShapeless extends Recipe implements IRecipeWrapper {
 
 	@Nonnull protected ItemStack output = ItemStack.EMPTY;
 	protected NonNullList<Ingredient> input = NonNullList.create();
@@ -69,6 +73,14 @@ public class RecipeShapeless extends Recipe {
 	@Nonnull
 	public ItemStack getCraftingResult (@Nonnull InventoryCrafting var1) {
 		return output.copy();
+	}
+
+	@Override
+	public void getIngredients (final IIngredients ingredients) {
+		ingredients.setInputLists(ItemStack.class, input.stream()
+			.map(ing -> Arrays.asList(ing.getMatchingStacks()))
+			.collect(Collectors.toList()));
+		ingredients.setOutput(ItemStack.class, output);
 	}
 
 	/**

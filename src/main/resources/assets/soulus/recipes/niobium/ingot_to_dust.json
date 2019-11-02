@@ -1,14 +1,8 @@
 {
-	"type": "minecraft:crafting_shapeless",
-	"ingredients": [
-		{
-			"item": "soulus:ingot_niobium"
-		},
-		{
-			"item": "soulus:sledgehammer",
-			"data": 32767
-		}
-	],
+	"type": "soulus:sledgehammer",
+	"input": {
+		"item": "soulus:ingot_niobium"
+	},
 	"result": {
 		"item": "soulus:dust_niobium"
 	}

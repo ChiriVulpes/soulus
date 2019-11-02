@@ -1,14 +1,8 @@
 {
-	"type": "minecraft:crafting_shapeless",
-	"ingredients": [
-		{
-			"item": "soulus:bone_chunk_nether"
-		},
-		{
-			"item": "soulus:sledgehammer",
-			"data": 32767
-		}
-	],
+	"type": "soulus:sledgehammer",
+	"input": {
+		"item": "soulus:bone_chunk_nether"
+	},
 	"result": {
 		"item": "soulus:bone_meal_nether"
 	}

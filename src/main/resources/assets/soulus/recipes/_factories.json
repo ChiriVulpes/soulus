@@ -4,7 +4,8 @@
 		"crafting_shapeless": "yuudaari.soulus.common.recipe.RecipeShapeless$Factory",
 		"composer_shaped": "yuudaari.soulus.common.recipe.composer.RecipeComposerShaped$Factory",
 		"composer_shapeless": "yuudaari.soulus.common.recipe.composer.RecipeComposerShapeless$Factory",
-		"furnace": "yuudaari.soulus.common.recipe.RecipeFurnace$Factory"
+		"furnace": "yuudaari.soulus.common.recipe.RecipeFurnace$Factory",
+		"sledgehammer": "yuudaari.soulus.common.recipe.RecipeSledgehammer$Factory"
 	},
 	"ingredients": {
 		"potential_essence": "yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence$Factory",

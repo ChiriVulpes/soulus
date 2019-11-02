@@ -9,7 +9,8 @@ public abstract class Recipe implements IRecipe {
 	protected ResourceLocation name;
 	protected ResourceLocation group;
 
-	public Recipe () {}
+	public Recipe () {
+	}
 
 	public Recipe (ResourceLocation name) {
 		setRegistryName(name, false);
