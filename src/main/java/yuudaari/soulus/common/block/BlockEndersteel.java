@@ -16,6 +16,7 @@ public class BlockEndersteel extends ComparatorInteractiveBlock {
 		setResistance(30F);
 		setHarvestLevel("pickaxe", 1);
 		setSoundType(SoundType.METAL);
+		addOreDict("blockSoulusEndersteel");
 	}
 
 	@Override

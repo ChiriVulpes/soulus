@@ -22,6 +22,7 @@ public class BlockNiobium extends ComparatorInteractiveBlock {
 		setResistance(30F);
 		setHarvestLevel("pickaxe", 1);
 		setSoundType(SoundType.METAL);
+		addOreDict("blockSoulusNiobium");
 	}
 
 	@Override
