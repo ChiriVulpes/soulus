@@ -55,8 +55,10 @@ public class Soulbook extends Registration.Item implements IHasComposerCellInfo,
 
 	public static ItemStack getStack (String essenceType, int essenceAmount) {
 		ItemStack stack = new ItemStack(ItemRegistry.SOULBOOK, 1);
-		EssenceType.setEssenceType(stack, essenceType);
-		setContainedEssence(stack, essenceAmount);
+		if (essenceAmount > 0) {
+			EssenceType.setEssenceType(stack, essenceType);
+			setContainedEssence(stack, essenceAmount);
+		}
 		return stack;
 	}
 
