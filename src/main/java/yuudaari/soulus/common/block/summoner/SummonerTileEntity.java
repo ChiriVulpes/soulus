@@ -451,6 +451,10 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 				AnvilChunkLoader.spawnEntity(entity, world);
 
+				final String[] spawnNames = CONFIG_ESSENCES.get(essenceType).spawnNames;
+				if (spawnNames != null && spawnNames.length > 0)
+					entity.setCustomNameTag(spawnNames[world.rand.nextInt(spawnNames.length)]);
+
 				if (isPlayerInRangeForEffects())
 					explosionParticles(entity);
 

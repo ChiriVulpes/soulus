@@ -13,6 +13,7 @@ public class ConfigEssence {
 
 	@Serialized public String essence;
 	@Serialized @NullableField public String name;
+	@Serialized @NullableField public String[] spawnNames;
 	@Serialized @NullableField public ConfigColor colors;
 	@Serialized @NullableField public ConfigCreatureBone bones = null;
 	@Serialized public int soulbookQuantity = 16;
@@ -20,7 +21,8 @@ public class ConfigEssence {
 	@Serialized(LootMapSerializer.class) @NullableField public Map<String, ConfigCreatureLoot> loot;
 
 
-	public ConfigEssence () {}
+	public ConfigEssence () {
+	}
 
 	public ConfigEssence (String essence, @Nullable ConfigCreatureBone bones) {
 		this.essence = essence;
