@@ -36,6 +36,12 @@
 			"type": "shell",
 			"group": "build",
 			"command": "node ./debug.js"
+		},
+		{
+			"label": "Debug Server",
+			"type": "shell",
+			"group": "build",
+			"command": "node ./debug.js -server"
 		}
 	]
 }
