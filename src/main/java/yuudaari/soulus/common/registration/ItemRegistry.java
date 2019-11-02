@@ -40,6 +40,7 @@ public class ItemRegistry {
 	public static Item CRYSTAL_BLOOD_BROKEN = new Item("crystal_blood_broken").setHasDescription();
 	public static CrystalDark CRYSTAL_DARK = new CrystalDark();
 	public static Item DUST_NIOBIUM = new Item("dust_niobium").addOreDict("dustSoulusNiobium").setHasGlint().setHasDescription();
+	public static Item DUST_END_STONE = new Item("dust_end_stone").addOreDict("dustEndStone").setHasDescription();
 	public static Item DUST_ENDER_IRON = new Item("dust_ender_iron").addOreDict("dustSoulusEndersteel").setHasGlint().setHasDescription();
 	public static Item DUST_ENDER_IRON_ASHEN = new Item("dust_ender_iron_ashen").addOreDict("dustSoulusEndersteelDark").setHasDescription();
 	public static Item DUST_IRON = new Item("dust_iron").addOreDict("dustIron").setHasDescription();
@@ -107,6 +108,7 @@ public class ItemRegistry {
 		BONEMEAL_NETHER,
 
 		DUST_WOOD,
+		DUST_END_STONE,
 		DUST_STONE,
 		DUST_IRON,
 		DUST_GOLD,

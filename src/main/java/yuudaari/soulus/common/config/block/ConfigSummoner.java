@@ -64,7 +64,7 @@ public class ConfigSummoner extends ConfigUpgradeableBlock<Summoner> {
 		styleItems.put("soulus:dust_iron", EndersteelType.NORMAL);
 		styleItems.put("soulus:dust_wood", EndersteelType.EARTHY);
 		styleItems.put("soulus:dust_stone", EndersteelType.SPOOKY);
-		styleItems.put("soulus:dust_ender", EndersteelType.ENDER);
+		styleItems.put("soulus:dust_end_stone", EndersteelType.ENDER);
 		styleItems.put("minecraft:blaze_powder", EndersteelType.BLAZING);
 		styleItems.put("soulus:dust_niobium", EndersteelType.SORROW);
 		styleItems.put("soulus:ash", EndersteelType.MADNESS);

@@ -1,0 +1,10 @@
+{
+	"type": "soulus:sledgehammer",
+	"input": {
+		"item": "minecraft:end_stone"
+	},
+	"result": {
+		"item": "soulus:dust_end_stone",
+		"count": 4
+	}
+}
