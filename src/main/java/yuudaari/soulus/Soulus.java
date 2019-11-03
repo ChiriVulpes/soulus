@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipe;
@@ -11,8 +12,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -31,9 +32,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.client.ModRenderers;
-import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.ModGenerators;
-import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.advancement.Advancements;
 import yuudaari.soulus.common.compat.GameStages;
 import yuudaari.soulus.common.compat.crafttweaker.ZenComposer;
@@ -43,12 +42,15 @@ import yuudaari.soulus.common.misc.BoneChunks;
 import yuudaari.soulus.common.misc.MidnightDraught;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.client.SendConfig;
+import yuudaari.soulus.common.registration.BlockRegistry;
+import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.util.DebugHelper;
 import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.server.command.SoulusCommand;
 
 @Mod(modid = Soulus.MODID, name = Soulus.NAME, version = "@VERSION@", acceptedMinecraftVersions = "[1.12.2]", dependencies = "after:crafttweaker")
 @Mod.EventBusSubscriber
+// @ConfigInjected(Soulus.MODID)
 public class Soulus {
 
 	static {
@@ -82,6 +84,7 @@ public class Soulus {
 	public static Config config;
 
 	@Mod.Instance(MODID) public static Soulus INSTANCE;
+	// @Inject public static ConfigModSupport CONFIG_MOD_SUPPORT;
 
 	/* UTILITY */
 
@@ -211,7 +214,7 @@ public class Soulus {
 			ZenComposer.apply();
 		}
 
-		if (Loader.isModLoaded("gamestages")) {
+		if (/*CONFIG_MOD_SUPPORT.gameStages && */Loader.isModLoaded("gamestages")) {
 			MinecraftForge.EVENT_BUS.register(new GameStages());
 		}
 
@@ -254,7 +257,7 @@ public class Soulus {
 	@SideOnly(Side.SERVER)
 	@SubscribeEvent
 	public static void clientConnect (PlayerLoggedInEvent event) {
-		if (!reloadAllIfGameStagesTweaks()) { // if all configs weren't reloaded, we send the configs only to the new player
+		if (!reloadAllIfGameStagesTweaks(null)) { // if all configs weren't reloaded, we send the configs only to the new player
 			SendConfig packet = new SendConfig(Config.INSTANCES.get(Soulus.MODID).SERVER_CONFIGS);
 			SoulsPacketHandler.INSTANCE.sendTo(packet, (EntityPlayerMP) event.player);
 		}
@@ -263,13 +266,15 @@ public class Soulus {
 	@SideOnly(Side.SERVER)
 	@SubscribeEvent
 	public static void clientDisconnect (PlayerLoggedOutEvent event) {
-		reloadAllIfGameStagesTweaks();
+		reloadAllIfGameStagesTweaks(event.player);
 	}
 
-	private static boolean reloadAllIfGameStagesTweaks () {
-		if (Loader.isModLoaded("gamestages") && Config.CONFIGS_HAVE_GAME_STAGES_TWEAKS) {
+	private static boolean reloadAllIfGameStagesTweaks (final EntityPlayer player) {
+		if (/*CONFIG_MOD_SUPPORT.gameStages && */Loader.isModLoaded("gamestages") && Config.CONFIGS_HAVE_GAME_STAGES_TWEAKS) {
 			// game stages tweaks depend on all players, so we have to reload all the configs from scratch
+			if (player != null) GameStages.playersChangingConnectionStatus.add(player);
 			reloadConfigs(true, false);
+			if (player != null) GameStages.playersChangingConnectionStatus.remove(player);
 			return true;
 		}
 

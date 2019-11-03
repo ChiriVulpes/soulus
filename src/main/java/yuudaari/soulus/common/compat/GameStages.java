@@ -1,5 +1,7 @@
 package yuudaari.soulus.common.compat;
 
+import java.util.ArrayList;
+import java.util.List;
 import com.google.common.collect.Streams;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -14,12 +16,17 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import yuudaari.soulus.Soulus;
+import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.util.Logger;
 
+@ConfigInjected(Soulus.MODID)
 public class GameStages {
 
+	// @Inject public static ConfigModSupport CONFIG;
+	public static List<EntityPlayer> playersChangingConnectionStatus = new ArrayList<>();
+
 	public static boolean tweakConditionMatches (final JsonObject condition) {
-		if (!Loader.isModLoaded("gamestages"))
+		if (/*!CONFIG.gameStages || */!Loader.isModLoaded("gamestages"))
 			return false;
 
 		final JsonElement playerJson = condition.get("player");
@@ -44,6 +51,9 @@ public class GameStages {
 		if (playerList == null) return false;
 
 		for (final EntityPlayer player : server.getPlayerList().getPlayers()) {
+			if (playersChangingConnectionStatus.contains(player))
+				continue;
+
 			final boolean stagesMatch = stagesMatch(player, stages);
 
 			if (playerOption.equalsIgnoreCase("all") && !stagesMatch)

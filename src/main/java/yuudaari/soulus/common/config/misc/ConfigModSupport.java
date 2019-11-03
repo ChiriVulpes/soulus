@@ -9,6 +9,8 @@ import yuudaari.soulus.common.util.serializer.Serialized;
 @Serializable
 public class ConfigModSupport {
 
+	// @Serialized public boolean gameStages = true;
+
 	@Serialized public ConfigJEI jei = new ConfigJEI();
 
 	@Serializable
@@ -16,7 +18,8 @@ public class ConfigModSupport {
 
 		@Serialized public boolean showNormalRecipesInComposerTab = false;
 
-		public ConfigJEI () {}
+		public ConfigJEI () {
+		}
 	}
 
 }
