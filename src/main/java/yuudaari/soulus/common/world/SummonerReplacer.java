@@ -15,19 +15,20 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.block.summoner.Summoner;
-import yuudaari.soulus.common.block.summoner.SummonerTileEntity;
 import yuudaari.soulus.common.block.summoner.Summoner.Upgrade;
+import yuudaari.soulus.common.block.summoner.SummonerTileEntity;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
-import yuudaari.soulus.common.config.world.summoner_replacement.ConfigSummonerReplacement;
-import yuudaari.soulus.common.config.world.summoner_replacement.ConfigStructure;
 import yuudaari.soulus.common.config.world.summoner_replacement.ConfigReplacement;
+import yuudaari.soulus.common.config.world.summoner_replacement.ConfigStructure;
+import yuudaari.soulus.common.config.world.summoner_replacement.ConfigSummonerReplacement;
+import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.util.GeneratorName;
 import yuudaari.soulus.common.util.Logger;
 
@@ -37,13 +38,34 @@ public class SummonerReplacer {
 
 	@Inject public static ConfigSummonerReplacement CONFIG;
 
+	private static long lastReplacementTime = 0;
+
+	@SubscribeEvent
+	public static void onTick (TickEvent.PlayerTickEvent event) {
+		final long now = System.currentTimeMillis();
+		if (now - lastReplacementTime > 10000) {
+			lastReplacementTime = now;
+			final int chunkx = (int) (event.player.posX) >> 4;
+			final int chunkz = (int) (event.player.posZ) >> 4;
+			for (int offsetx = -3; offsetx < 3; offsetx++) {
+				for (int offsetz = -3; offsetz < 3; offsetz++) {
+					replaceSummonersInChunk(event.player.world, chunkx + offsetx, chunkz + offsetz, null);
+				}
+			}
+		}
+	}
+
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void populateChunkPost (PopulateChunkEvent.Post event) {
-		World world = event.getWorld();
-		Chunk chunk = world.getChunkFromChunkCoords(event.getChunkX(), event.getChunkZ());
-		IChunkGenerator cg = event.getGenerator();
+		replaceSummonersInChunk(event.getWorld(), event.getChunkX(), event.getChunkZ(), event.getGenerator());
+	}
+
+	private static void replaceSummonersInChunk (World world, int x, int z, IChunkGenerator generator) {
+		Chunk chunk = world.getChunkFromChunkCoords(x, z);
 
 		Map<BlockPos, TileEntity> teMap = chunk.getTileEntityMap();
+		if (teMap.size() == 0)
+			return;
 
 		ConfigStructure defaultStructureConfig = CONFIG.structures.get("*");
 		if (defaultStructureConfig == null)
@@ -54,17 +76,16 @@ public class SummonerReplacer {
 			// Logger.info("found a tile entity " + block.getRegistryName());
 			if (block == Blocks.MOB_SPAWNER) {
 				BlockPos pos = te.getPos();
-				// Logger.info("found a spawner " + pos);
 				ConfigStructure structureConfig = defaultStructureConfig;
 				for (Map.Entry<String, ConfigStructure> structureConfigEntry : CONFIG.structures
 					.entrySet()) {
-					if (cg.isInsideStructure(world, GeneratorName.get(structureConfigEntry.getKey()), pos)) {
+					if (generator != null && generator.isInsideStructure(world, GeneratorName.get(structureConfigEntry.getKey()), pos)) {
 						structureConfig = structureConfigEntry.getValue();
 					}
 				}
 
 				String entityType = getTheIdFromAStupidMobSpawnerTileEntity(te);
-				// Logger.info("entity type " + entityType);
+				// Logger.info("found a " + entityType + " spawner at " + pos.getX() + "," + pos.getY() + "," + pos.getZ());
 
 				ConfigReplacement replacement = structureConfig.replacementsByCreature.get(entityType);
 				if (replacement == null) {
@@ -74,12 +95,13 @@ public class SummonerReplacer {
 						replacement = structureConfig.replacementsByCreature.get("*");
 						if (replacement == null) {
 							// this spawner isn't configured to be replaced
+							// Logger.info("not configured to be replaced");
 							return;
 						}
 					}
 				}
 
-				// Logger.info("endersteel type " + endersteelType);
+				// Logger.info("replacement type " + replacement.type.getName());
 
 				world.setBlockState(pos, BlockRegistry.SUMMONER.getDefaultState()
 					.withProperty(Summoner.VARIANT, replacement.type)

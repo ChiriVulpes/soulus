@@ -11,7 +11,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.common.compat.jei.JeiDescriptionRegistry;
 import yuudaari.soulus.common.item.*;
-import yuudaari.soulus.common.registration.IItemRegistration;
 import yuudaari.soulus.common.registration.Registration.Item;
 
 public class ItemRegistry {
