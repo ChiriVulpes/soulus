@@ -26,6 +26,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import scala.Tuple2;
 import yuudaari.soulus.Soulus;
+import yuudaari.soulus.client.util.ParticleType;
 import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.advancement.Advancements;
 import yuudaari.soulus.common.block.soul_totem.SoulTotemTileEntity;
@@ -374,11 +375,10 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		if (activationAmount <= 0) return;
 
 		if (isPlayerInRangeForEffects()) {
-			double particleCount = CONFIG.particleCountActivated * Math
-				.min(1, activationAmount * activationAmount) * (0.5 + getSpawnPercent() / 2);
+			double particleCount = hasMalice() ? CONFIG.particleCountMidnightJewel : CONFIG.particleCountActivated;
+			particleCount *= Math.min(1, activationAmount * activationAmount) * (0.5 + getSpawnPercent() / 2);
 			if (particleCount < 1) {
 				timeTillParticle += 0.01 + particleCount;
-
 				if (timeTillParticle < 1)
 					return;
 			}
@@ -386,11 +386,21 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 			timeTillParticle = 0;
 
 			for (int i = 0; i < particleCount; i++) {
-				double d3 = (pos.getX() + world.rand.nextFloat());
-				double d4 = (pos.getY() + world.rand.nextFloat());
-				double d5 = (pos.getZ() + world.rand.nextFloat());
-				world.spawnParticle(EnumParticleTypes.PORTAL, d3, d4, d5, (d3 - pos.getX() - 0.5F), -0.3D, (d5 - pos
-					.getZ() - 0.5F));
+				if (hasMalice()) {
+					double ox = world.rand.nextFloat();
+					double oy = world.rand.nextFloat();
+					double oz = world.rand.nextFloat();
+					world.spawnParticle(ParticleType.CRYSTAL_DARK.getId(), false, //
+						pos.getX() + ox, pos.getY() + 0.7 + oy * 0.5, pos.getZ() + oz, //
+						(ox - 0.5) * 0.05, -0.3D, (oz - 0.5) * 0.05);
+
+				} else {
+					double d3 = (pos.getX() + world.rand.nextFloat());
+					double d4 = (pos.getY() + world.rand.nextFloat());
+					double d5 = (pos.getZ() + world.rand.nextFloat());
+					world.spawnParticle(EnumParticleTypes.PORTAL, d3, d4, d5, (d3 - pos.getX() - 0.5F), -0.3D, (d5 - pos
+						.getZ() - 0.5F));
+				}
 			}
 		}
 	}
