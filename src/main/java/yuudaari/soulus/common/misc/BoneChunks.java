@@ -135,6 +135,9 @@ public class BoneChunks {
 					.getFortuneLevel() / 3), fossilConfig.max * (1 + event.getFortuneLevel() / 3))
 						.getInt(event.getWorld().rand);
 				drops.add(CONFIG_BONE_TYPES.get(fossilConfig.type).getChunkStack(count));
+
+				if (event.getWorld().rand.nextDouble() < fossilConfig.fullBoneChance)
+					drops.add(CONFIG_BONE_TYPES.get(fossilConfig.type).getBoneStack());
 			}
 		}
 	}
