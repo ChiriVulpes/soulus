@@ -8,6 +8,7 @@ import mezz.jei.api.IModRegistry;
 import mezz.jei.api.ISubtypeRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
+import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.item.ItemStack;
@@ -31,6 +32,8 @@ import yuudaari.soulus.common.item.Essence;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.registration.ItemRegistry;
+import yuudaari.soulus.common.recipe.RecipeShaped;
+import yuudaari.soulus.common.recipe.RecipeShapeless;
 import yuudaari.soulus.common.recipe.composer.RecipeComposerShaped;
 import yuudaari.soulus.common.recipe.composer.RecipeComposerShapeless;
 
@@ -84,6 +87,9 @@ public class Jei implements IModPlugin {
 	@SuppressWarnings("deprecation")
 	private void registerComposer (IModRegistry registry) {
 		registry.addRecipeCatalyst(BlockRegistry.COMPOSER.getItemStack(), RecipeCategoryComposer.UID);
+
+		registry.handleRecipes(RecipeShaped.class, RecipeWrapperCrafting::new, VanillaRecipeCategoryUid.CRAFTING);
+		registry.handleRecipes(RecipeShapeless.class, RecipeWrapperCrafting::new, VanillaRecipeCategoryUid.CRAFTING);
 
 		registry.handleRecipes(RecipeComposerShaped.class, RecipeWrapperComposer::new, RecipeCategoryComposer.UID);
 		registry.handleRecipes(RecipeComposerShapeless.class, RecipeWrapperComposer::new, RecipeCategoryComposer.UID);
