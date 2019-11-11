@@ -10,7 +10,8 @@ public class Range {
 	@Serialized public Double min;
 	@Serialized public Double max;
 
-	public Range () {}
+	public Range () {
+	}
 
 	public Range (Number min, Number max) {
 		this.min = min.doubleValue();
@@ -31,6 +32,13 @@ public class Range {
 
 	public int getInt (double percent) {
 		return (int) Math.floor(get(percent));
+	}
+
+	@Override
+	public boolean equals (final Object obj) {
+		if (!(obj instanceof Range)) return false;
+		final Range compare = (Range) obj;
+		return Math.abs(min - compare.min) < Math.ulp(1.0) && Math.abs(max - compare.max) < Math.ulp(1.0);
 	}
 
 	@Override

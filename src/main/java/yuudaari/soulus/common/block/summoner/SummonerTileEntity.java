@@ -104,8 +104,32 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		onUpdateUpgrades(false);
 	}
 
+	private boolean setSpawnCount (final Range count) {
+		if (count.equals(spawnCount)) return false;
+		spawnCount = count;
+		return true;
+	}
+
+	private boolean setSpawningRadius (final int radius) {
+		if (spawningRadius == radius) return false;
+		spawningRadius = radius;
+		return true;
+	}
+
+	private boolean setSpawnDelay (final Range delay) {
+		if (delay.equals(spawnDelay)) return false;
+		spawnDelay = delay;
+		return true;
+	}
+
+	private boolean setActivatingRange (final int range) {
+		if (activatingRange == range) return false;
+		activatingRange = range;
+		return true;
+	}
+
 	@Override
-	public void onUpdateUpgrades (boolean readFromNBT) {
+	public void onUpdateUpgrades (final boolean readFromNBT) {
 		if (isInvalid()) {
 			Soulus.removeConfigReloadHandler(this::onUpdateUpgrades);
 			return;
@@ -113,29 +137,35 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 		Soulus.onConfigReload(this::onUpdateUpgrades);
 
+		boolean changed = false;
+
 		if (upgrades.get(Upgrade.CRYSTAL_DARK) > 0) {
 			// dark crystal
-			spawnCount = CONFIG.midnightJewelCount;
-			spawningRadius = CONFIG.midnightJewelSpawningRadius;
-			spawnDelay = CONFIG.midnightJewelDelay;
-			activatingRange = CONFIG.midnightJewelRange;
+			changed = setSpawnCount(CONFIG.midnightJewelCount) || changed;
+			changed = setSpawningRadius(CONFIG.midnightJewelSpawningRadius) || changed;
+			changed = setSpawnDelay(CONFIG.midnightJewelDelay) || changed;
+			changed = setActivatingRange(CONFIG.midnightJewelRange) || changed;
 
 		} else {
 			// normal upgrades
-			int countUpgrades = upgrades.get(Upgrade.COUNT);
-			spawnCount = new Range(CONFIG.nonUpgradedCount.min + countUpgrades * CONFIG.upgradeCountEffectiveness.min, CONFIG.nonUpgradedCount.max + countUpgrades * CONFIG.upgradeCountEffectiveness.max);
-			spawningRadius = (int) Math.floor(CONFIG.nonUpgradedSpawningRadius + countUpgrades * CONFIG.upgradeCountRadiusEffectiveness);
+			final int countUpgrades = upgrades.get(Upgrade.COUNT);
+			final Range newSpawnCount = new Range(CONFIG.nonUpgradedCount.min + countUpgrades * CONFIG.upgradeCountEffectiveness.min, CONFIG.nonUpgradedCount.max + countUpgrades * CONFIG.upgradeCountEffectiveness.max);
+			changed = setSpawnCount(newSpawnCount) || changed;
+			final int newSpawningRadius = (int) Math.floor(CONFIG.nonUpgradedSpawningRadius + countUpgrades * CONFIG.upgradeCountRadiusEffectiveness);
+			changed = setSpawningRadius(newSpawningRadius) || changed;
 
 			int delayUpgrades = upgrades.get(Upgrade.DELAY);
-			spawnDelay = new Range(CONFIG.nonUpgradedDelay.min / (1 + delayUpgrades * CONFIG.upgradeDelayEffectiveness.min), CONFIG.nonUpgradedDelay.max / (1 + delayUpgrades * CONFIG.upgradeDelayEffectiveness.max));
+			final Range newSpawnDelay = new Range(CONFIG.nonUpgradedDelay.min / (1 + delayUpgrades * CONFIG.upgradeDelayEffectiveness.min), CONFIG.nonUpgradedDelay.max / (1 + delayUpgrades * CONFIG.upgradeDelayEffectiveness.max));
+			changed = setSpawnDelay(newSpawnDelay) || changed;
 
-			int rangeUpgrades = upgrades.get(Upgrade.RANGE);
-			activatingRange = CONFIG.nonUpgradedRange + rangeUpgrades * CONFIG.upgradeRangeEffectiveness;
+			final int rangeUpgrades = upgrades.get(Upgrade.RANGE);
+			final int newActivatingRange = CONFIG.nonUpgradedRange + rangeUpgrades * CONFIG.upgradeRangeEffectiveness;
+			changed = setActivatingRange(newActivatingRange) || changed;
 		}
 
 
 		if (world != null && !world.isRemote) {
-			if (!readFromNBT)
+			if (!readFromNBT && changed)
 				resetTimer(false);
 			blockUpdate();
 		}

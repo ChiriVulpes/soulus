@@ -453,6 +453,18 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		onUpdateUpgrades(false);
 	}
 
+	private boolean setDelay (final Range delay) {
+		if (delay.equals(spawnDelay)) return false;
+		spawnDelay = delay;
+		return true;
+	}
+
+	public boolean setActivatingRange (final int range) {
+		if (activatingRange == range) return false;
+		activatingRange = range;
+		return true;
+	}
+
 	@Override
 	public void onUpdateUpgrades (boolean readFromNBT) {
 		if (isInvalid()) {
@@ -462,14 +474,18 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 		Soulus.onConfigReload(this::onUpdateUpgrades);
 
-		int delayUpgrades = upgrades.get(Upgrade.DELAY);
-		spawnDelay = new Range(CONFIG.nonUpgradedDelay.min / (1 + delayUpgrades * CONFIG.upgradeDelayEffectiveness.min), CONFIG.nonUpgradedDelay.max / (1 + delayUpgrades * CONFIG.upgradeDelayEffectiveness.max));
+		boolean changed = false;
 
-		int rangeUpgrades = upgrades.get(Upgrade.RANGE);
-		activatingRange = CONFIG.nonUpgradedRange + rangeUpgrades * CONFIG.upgradeRangeEffectiveness;
+		final int delayUpgrades = upgrades.get(Upgrade.DELAY);
+		final Range newDelay = new Range(CONFIG.nonUpgradedDelay.min / (1 + delayUpgrades * CONFIG.upgradeDelayEffectiveness.min), CONFIG.nonUpgradedDelay.max / (1 + delayUpgrades * CONFIG.upgradeDelayEffectiveness.max));
+		changed = setDelay(newDelay) || changed;
+
+		final int rangeUpgrades = upgrades.get(Upgrade.RANGE);
+		final int newActivatingRange = CONFIG.nonUpgradedRange + rangeUpgrades * CONFIG.upgradeRangeEffectiveness;
+		changed = setActivatingRange(newActivatingRange) || changed;
 
 		if (world != null && !world.isRemote) {
-			if (!readFromNBT)
+			if (!readFromNBT && changed)
 				resetTimer(false);
 			blockUpdate();
 		}
