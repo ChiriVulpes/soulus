@@ -431,6 +431,13 @@ public class Config {
 
 		} catch (final JsonParseException e) {
 			if (warn) Logger.warn("Could not parse the config file: " + e.getMessage());
+
+		} finally {
+			try {
+				reader.close();
+			} catch (final IOException e) {
+				Logger.error("Failed to close config reader");
+			}
 		}
 
 		return null;
