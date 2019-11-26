@@ -53,6 +53,7 @@ public class ConfigFossils {
 		}
 
 		public ConfigFossil (String boneType) {
+			this.type = boneType;
 		}
 
 		public ConfigFossil (String boneType, int min, int max) {

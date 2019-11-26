@@ -32,6 +32,7 @@ import yuudaari.soulus.common.config.item.ConfigBoneChunks;
 import yuudaari.soulus.common.config.misc.ConfigFossils;
 import yuudaari.soulus.common.config.misc.ConfigFossils.ConfigFossil;
 import yuudaari.soulus.common.item.Essence;
+import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.Range;
 
 @Mod.EventBusSubscriber
@@ -131,13 +132,18 @@ public class BoneChunks {
 				List<ItemStack> drops = event.getDrops();
 				drops.clear();
 
-				int count = new Range(fossilConfig.min * (1 + event
-					.getFortuneLevel() / 3), fossilConfig.max * (1 + event.getFortuneLevel() / 3))
-						.getInt(event.getWorld().rand);
-				drops.add(CONFIG_BONE_TYPES.get(fossilConfig.type).getChunkStack(count));
+				final ConfigBoneType boneType = CONFIG_BONE_TYPES.get(fossilConfig.type);
+				if (boneType == null) {
+					Logger.warn("No bone type registered for fossil '" + fossilConfig.type + "'");
 
-				if (event.getWorld().rand.nextDouble() < fossilConfig.fullBoneChance)
-					drops.add(CONFIG_BONE_TYPES.get(fossilConfig.type).getBoneStack());
+				} else {
+					final int min = fossilConfig.min * (1 + event.getFortuneLevel() / 3);
+					final int max = fossilConfig.max * (1 + event.getFortuneLevel() / 3);
+					drops.add(boneType.getChunkStack(new Range(min, max).getInt(event.getWorld().rand)));
+
+					if (event.getWorld().rand.nextDouble() < fossilConfig.fullBoneChance)
+						drops.add(boneType.getBoneStack());
+				}
 			}
 		}
 	}
