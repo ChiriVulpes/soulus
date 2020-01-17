@@ -1,6 +1,8 @@
 package yuudaari.soulus.common.config.essence;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.annotation.Nullable;
 import yuudaari.soulus.common.util.serializer.DefaultMapSerializer;
@@ -50,6 +52,13 @@ public class ConfigEssence {
 	public ConfigEssence setColor (int color1, int color2) {
 		this.colors = new ConfigColor(color1, color2);
 		return this;
+	}
+
+	public List<String> getSpawnableCreatures () {
+		final List<String> spawnableCreatures = this.spawns == null ? new ArrayList<>() : new ArrayList<>(this.spawns.keySet());
+		if (this.spawns == null || !this.spawns.containsKey(this.essence))
+			spawnableCreatures.add(this.essence);
+		return spawnableCreatures;
 	}
 
 	public static class DoubleMapSerializer extends DefaultMapSerializer<Double> {

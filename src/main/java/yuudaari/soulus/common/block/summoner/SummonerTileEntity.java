@@ -39,6 +39,7 @@ import yuudaari.soulus.common.config.block.ConfigSummoner;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.item.EssencePerfect;
+import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.ModPotionEffect;
 import yuudaari.soulus.common.util.Range;
 
@@ -491,7 +492,11 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 				AnvilChunkLoader.spawnEntity(entity, world);
 
-				final String[] spawnNames = CONFIG_ESSENCES.get(essenceType).spawnNames;
+				final ConfigEssence essenceConfig = CONFIG_ESSENCES.get(essenceType);
+				if (essenceConfig == null)
+					Logger.warn("Tried to summon an invalid essence type " + essenceType);
+
+				final String[] spawnNames = essenceConfig == null ? null : essenceConfig.spawnNames;
 				if (spawnNames != null && spawnNames.length > 0)
 					entity.setCustomNameTag(spawnNames[world.rand.nextInt(spawnNames.length)]);
 
