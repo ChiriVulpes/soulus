@@ -15,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
+import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLStateEvent;
@@ -33,7 +34,6 @@ import yuudaari.soulus.common.config.misc.ConfigFossils;
 import yuudaari.soulus.common.config.misc.ConfigFossils.ConfigFossil;
 import yuudaari.soulus.common.item.Essence;
 import yuudaari.soulus.common.util.Logger;
-import yuudaari.soulus.common.util.Range;
 
 @Mod.EventBusSubscriber
 @ConfigInjected(Soulus.MODID)
@@ -123,29 +123,42 @@ public class BoneChunks {
 	}
 
 	@SubscribeEvent
-	public static void onHarvest (HarvestDropsEvent event) {
-		if (event.getHarvester() != null) {
-			String blockId = event.getState().getBlock().getRegistryName().toString();
-			ConfigFossil fossilConfig = CONFIG_FOSSILS.get(blockId);
+	public static void onHarvest (final BreakEvent event) {
+		if (event.getPlayer() == null)
+			return;
 
-			if (fossilConfig != null) {
-				List<ItemStack> drops = event.getDrops();
-				drops.clear();
+		String blockId = event.getState().getBlock().getRegistryName().toString();
+		ConfigFossil fossilConfig = CONFIG_FOSSILS.get(blockId);
 
-				final ConfigBoneType boneType = CONFIG_BONE_TYPES.get(fossilConfig.type);
-				if (boneType == null) {
-					Logger.warn("No bone type registered for fossil '" + fossilConfig.type + "'");
+		if (fossilConfig != null)
+			event.setExpToDrop(fossilConfig.xp.getInt(event.getWorld().rand));
+	}
 
-				} else {
-					final int min = fossilConfig.min * (1 + event.getFortuneLevel() / 3);
-					final int max = fossilConfig.max * (1 + event.getFortuneLevel() / 3);
-					drops.add(boneType.getChunkStack(new Range(min, max).getInt(event.getWorld().rand)));
+	@SubscribeEvent
+	public static void onHarvest (final HarvestDropsEvent event) {
+		if (event.getHarvester() == null)
+			return;
 
-					if (event.getWorld().rand.nextDouble() < fossilConfig.fullBoneChance)
-						drops.add(boneType.getBoneStack());
-				}
-			}
+		String blockId = event.getState().getBlock().getRegistryName().toString();
+		ConfigFossil fossilConfig = CONFIG_FOSSILS.get(blockId);
+
+		if (fossilConfig == null)
+			return;
+
+		List<ItemStack> drops = event.getDrops();
+		drops.clear();
+
+		final ConfigBoneType boneType = CONFIG_BONE_TYPES.get(fossilConfig.type);
+		if (boneType == null) {
+			Logger.warn("No bone type registered for fossil '" + fossilConfig.type + "'");
+			return;
 		}
+
+		final int amt = (int) (fossilConfig.chunks.get(event.getWorld().rand) * (1.0 + event.getFortuneLevel() / 3.0));
+		drops.add(boneType.getChunkStack(amt));
+
+		if (event.getWorld().rand.nextDouble() < fossilConfig.fullBoneChance)
+			drops.add(boneType.getBoneStack());
 	}
 
 	/////////////////////////////////////////
