@@ -31,9 +31,9 @@ public class ItemRegistry {
 	public static BoneEnder BONE_ENDER = new BoneEnder();
 	public static Bone BONE_FROZEN = new Bone("bone_frozen");
 	public static Bone BONE_FUNGAL = new Bone("bone_fungal");
-	public static Item BONE_NETHER = new Item("bone_nether").setHasDescription();
+	public static Item BONE_NETHER = new BoneNether();
 	public static Bone BONE_NORMAL = new Bone("bone_normal");
-	public static Item BONE_SCALE = new Item("bone_scale").setHasDescription();
+	public static Item BONE_SCALE = new BoneScale();
 	public static BonemealEnder BONEMEAL_ENDER = new BonemealEnder();
 	public static BonemealNether BONEMEAL_NETHER = new BonemealNether();
 	public static Item CRYSTAL_BLOOD_BROKEN = new Item("crystal_blood_broken").setHasDescription();

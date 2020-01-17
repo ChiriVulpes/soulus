@@ -25,8 +25,25 @@ public class ConfigBoneTypes {
 		boneTypes.add(new ConfigBoneType("ender", "soulus:bone_ender", "soulus:bone_chunk_ender"));
 	}
 
-	public ConfigBoneType get (String type) {
-		return boneTypes.stream().filter(config -> config.name.equalsIgnoreCase(type)).findFirst().orElse(null);
+	public ConfigBoneType get (final String type) {
+		return boneTypes.stream()
+			.filter(config -> config.name.equalsIgnoreCase(type))
+			.findFirst()
+			.orElse(null);
+	}
+
+	public ConfigBoneType getFromBone (final String bone) {
+		return boneTypes.stream()
+			.filter(config -> config.item_bone.equalsIgnoreCase(bone))
+			.findFirst()
+			.orElse(null);
+	}
+
+	public ConfigBoneType getFromChunk (final String chunk) {
+		return boneTypes.stream()
+			.filter(config -> config.item_chunk.equalsIgnoreCase(chunk))
+			.findFirst()
+			.orElse(null);
 	}
 
 	public static class BoneTypesSerializer extends CollectionSerializer<ConfigBoneType> {

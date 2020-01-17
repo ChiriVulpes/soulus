@@ -137,6 +137,17 @@ death.attack.soulus:skewer=%1$s became a shishkebab
 death.attack.soulus:skewer_player=%1$s became a shishkebab
 
 
+# ACTION BAR MESSAGES
+
+message.actionbar.soulus:feed_wolf_bone.normal=The wolf accepts your meager offering and allows you to live. For now.
+message.actionbar.soulus:feed_wolf_bone.fungal=The wolf eyes you suspiciously for giving it such a moldy old fossil.
+message.actionbar.soulus:feed_wolf_bone.frozen=The bone is too cold for the wolf, and it whines pitifully.
+message.actionbar.soulus:feed_wolf_bone.dry=The wolf does not like sand, coarse and rough and irritating and it gets everywhere.
+message.actionbar.soulus:feed_wolf_bone.scale=The wolf is not a big fan of sushi, but accepts the scale nonetheless.
+message.actionbar.soulus:feed_wolf_bone.nether=The wolf becomes enraged!
+message.actionbar.soulus:feed_wolf_bone.ender=The wolf is very confused and loses all interest in you.
+
+
 # ITEM TOOLTIPS
 
 tooltip.soulus:soulbook.contained_essence=%1$s/%2$s Essence

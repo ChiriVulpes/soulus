@@ -10,8 +10,9 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
+import yuudaari.soulus.common.registration.item.IRightClickableItem;
 
-public interface IItemRegistration extends IRegistration<Item> {
+public interface IItemRegistration extends IRegistration<Item>, IRightClickableItem {
 
 	abstract void getSubItems (final CreativeTabs tab, final NonNullList<ItemStack> items);
 
@@ -26,4 +27,5 @@ public interface IItemRegistration extends IRegistration<Item> {
 			Minecraft.getMinecraft().getItemColors().registerItemColorHandler(itemColor, (Item) this);
 		});
 	}
+
 }

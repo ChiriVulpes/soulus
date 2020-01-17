@@ -7,17 +7,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import yuudaari.soulus.common.registration.Registration;
 
-public class BoneEnder extends Registration.Item implements IBone {
+public class BoneNether extends Registration.Item implements IBone {
 
-	public BoneEnder () {
-		super("bone_ender");
-		setHasGlint();
+	public BoneNether () {
+		super("bone_nether");
 		setHasDescription();
 	}
 
 	@Override
 	public double feedToWolf (final EntityWolf wolf, final ItemStack stack, final EntityPlayer player) {
-		wolf.addPotionEffect(new PotionEffect(MobEffects.LEVITATION, 500));
+		wolf.setAttackTarget(player);
+		if (player.world.rand.nextBoolean())
+			wolf.addPotionEffect(new PotionEffect(MobEffects.WITHER, 1000));
+
 		return 0;
 	}
 }
