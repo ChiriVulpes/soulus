@@ -26,6 +26,8 @@ public class ConfigCrystalBlood extends ConfigItem {
 	@Serialized public int creaturePrickAmount = 1;
 	@Serialized public int creaturePrickWorth = 3;
 	@Serialized public ModPotionEffect[] prickEffects = new ModPotionEffect[] {
-		new ModPotionEffect("hunger", 100), new ModPotionEffect("nausea", 200)
+		new ModPotionEffect("hunger", 100),
+		new ModPotionEffect("nausea", 200),
+		new ModPotionEffect("mining_fatigue", 600).setIsTiered(),
 	};
 }
