@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
@@ -114,6 +115,15 @@ public class BoneChunks {
 						final EntityItem dropEntity = new EntityItem(world, player.posX, player.posY, player.posZ, drop);
 						dropEntity.setNoPickupDelay();
 						world.spawnEntity(dropEntity);
+					}
+
+					for (int i = 0; i < count; i++) {
+						int xpAmount = CONFIG.xp.getInt(world.rand);
+						while (xpAmount > 0) {
+							int splitXp = EntityXPOrb.getXPSplit(xpAmount);
+							xpAmount -= splitXp;
+							player.world.spawnEntity(new EntityXPOrb(player.world, player.posX, player.posY + 0.5D, player.posZ + 0.5D, splitXp));
+						}
 					}
 				}
 
