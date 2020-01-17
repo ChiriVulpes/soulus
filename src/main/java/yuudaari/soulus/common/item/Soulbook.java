@@ -24,6 +24,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
+import scala.Tuple2;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.block.composer.ComposerCell.IHasComposerCellInfo;
 import yuudaari.soulus.common.block.composer.IFillableWithEssence;
@@ -44,6 +45,10 @@ import yuudaari.soulus.common.util.Translation;
 public class Soulbook extends Registration.Item implements IHasComposerCellInfo, IFillableWithEssence {
 
 	@Inject public static ConfigEssences CONFIG;
+
+	public static ItemStack getEmpty () {
+		return getStack(null);
+	}
 
 	public static ItemStack getFilled (String essenceType) {
 		return getStack(essenceType, CONFIG.getSoulbookQuantity(essenceType));
@@ -94,11 +99,20 @@ public class Soulbook extends Registration.Item implements IHasComposerCellInfo,
 
 		@ParametersAreNonnullByDefault
 		@Override
-		public ItemStack getCraftingResult (InventoryCrafting inv) {
+		public ItemStack getCraftingResult (final InventoryCrafting inv) {
+			return process(inv)._2();
+		}
+
+		@Override
+		public NonNullList<ItemStack> getRemainingItems (final InventoryCrafting inv) {
+			return process(inv)._1();
+		}
+
+		public Tuple2<NonNullList<ItemStack>, ItemStack> process (final InventoryCrafting inv) {
+			final NonNullList<ItemStack> ret = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
 			int essenceCount = 0;
-			ItemStack soulbook = null;
 			String essenceType = null;
-			int containedEssence = 0;
+			// int containedEssence = 0;
 
 			final int inventorySize = inv.getSizeInventory();
 			for (int i = 0; i < inventorySize; i++) {
@@ -110,42 +124,62 @@ public class Soulbook extends Registration.Item implements IHasComposerCellInfo,
 					continue;
 
 				if (stackItem == ItemRegistry.SOULBOOK) {
-					if (soulbook != null)
-						return ItemStack.EMPTY;
-
 					String itemTarget = EssenceType.getEssenceType(stack);
 					if (itemTarget != null) {
 						if (essenceType != null && !itemTarget.equals(essenceType))
-							return ItemStack.EMPTY;
+							return new Tuple2<>(ret, ItemStack.EMPTY);
 
 						essenceType = itemTarget;
 					}
 
-					containedEssence = getContainedEssence(stack);
-					soulbook = stack;
+					ret.set(i, Soulbook.getEmpty());
+					essenceCount += getContainedEssence(stack);
+					// containedEssence = getContainedEssence(stack);
+					// soulbook = stack;
 					continue;
 
 				} else if (stackItem == ItemRegistry.ESSENCE) {
 					String itemTarget = EssenceType.getEssenceType(stack);
 					if (itemTarget == null || (essenceType != null && !itemTarget.equals(essenceType)))
-						return ItemStack.EMPTY;
+						return new Tuple2<>(ret, ItemStack.EMPTY);
 
 					essenceType = itemTarget;
 					essenceCount++;
 					continue;
 				}
 
-				return ItemStack.EMPTY;
+				// some other random item, we didn't match
+				return new Tuple2<>(ret, ItemStack.EMPTY);
 			}
 
-			if (soulbook != null && essenceCount > 0 && containedEssence + essenceCount <= CONFIG.getSoulbookQuantity(essenceType)) {
-				ItemStack newStack = soulbook.copy();
-				EssenceType.setEssenceType(newStack, essenceType);
-				setContainedEssence(newStack, containedEssence + essenceCount);
-				return newStack;
+			final int maxEssence = CONFIG.getSoulbookQuantity(essenceType);
+			ItemStack soulbook = null;
+
+			for (int i = 0; i < inventorySize && essenceCount > 0; i++) {
+				final ItemStack itemInSlotToReturn = ret.get(i);
+				if (itemInSlotToReturn.getItem() == ItemRegistry.SOULBOOK) {
+					if (soulbook == null) {
+						soulbook = itemInSlotToReturn;
+						ret.set(i, ItemStack.EMPTY);
+					}
+
+					if (essenceCount >= maxEssence) {
+						setContainedEssence(itemInSlotToReturn, maxEssence);
+						EssenceType.setEssenceType(itemInSlotToReturn, essenceType);
+						essenceCount -= maxEssence;
+
+					} else if (essenceCount > 0) {
+						setContainedEssence(itemInSlotToReturn, essenceCount);
+						EssenceType.setEssenceType(itemInSlotToReturn, essenceType);
+						essenceCount = 0;
+					}
+				}
 			}
 
-			return ItemStack.EMPTY;
+			if (soulbook != null && getContainedEssence(soulbook) > 0)
+				return new Tuple2<>(ret, soulbook);
+
+			return new Tuple2<>(ret, ItemStack.EMPTY);
 		}
 	}
 
