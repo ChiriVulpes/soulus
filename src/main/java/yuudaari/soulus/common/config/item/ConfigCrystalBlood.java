@@ -21,7 +21,7 @@ public class ConfigCrystalBlood extends ConfigItem {
 	// SERVER
 	@Serialized public int requiredBlood = 1000;
 	@Serialized public int prickAmount = 9;
-	@Serialized public int prickWorth = 90;
+	@Serialized public int prickWorth = 45;
 	@Serialized public int creaturePrickRequiredHealth = 9999999;
 	@Serialized public int creaturePrickAmount = 1;
 	@Serialized public int creaturePrickWorth = 3;
