@@ -77,7 +77,8 @@ public abstract class UpgradeableBlockTileEntity extends TileEntity implements I
 		blockUpdate();
 	}
 
-	public void onInsertUpgrade (ItemStack stack, IUpgrade upgrade, int newQuantity) {}
+	public void onInsertUpgrade (ItemStack stack, IUpgrade upgrade, int newQuantity) {
+	}
 
 	public final IUpgrade popLastUpgrade () {
 		return insertionOrder.size() == 0 ? null : insertionOrder.pop();
@@ -157,11 +158,14 @@ public abstract class UpgradeableBlockTileEntity extends TileEntity implements I
 	// Events
 	//
 
-	public void onUpdateUpgrades (boolean readFromNBT) {}
+	public void onUpdateUpgrades (boolean readFromNBT) {
+	}
 
-	public void onReadFromNBT (NBTTagCompound compound) {}
+	public void onReadFromNBT (NBTTagCompound compound) {
+	}
 
-	public void onWriteToNBT (NBTTagCompound compound) {}
+	public void onWriteToNBT (NBTTagCompound compound) {
+	}
 
 	/////////////////////////////////////////
 	// NBT

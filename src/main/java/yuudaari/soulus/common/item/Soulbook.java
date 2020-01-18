@@ -68,9 +68,13 @@ public class Soulbook extends Registration.Item implements IHasComposerCellInfo,
 	}
 
 	public static boolean isFilled (ItemStack stack) {
-		String essenceType = EssenceType.getEssenceType(stack);
+		if (stack.getItem() != ItemRegistry.SOULBOOK)
+			return false;
+
+		final String essenceType = EssenceType.getEssenceType(stack);
 		if (essenceType == null)
 			return false;
+
 		return getContainedEssence(stack) >= CONFIG.getSoulbookQuantity(essenceType);
 	}
 

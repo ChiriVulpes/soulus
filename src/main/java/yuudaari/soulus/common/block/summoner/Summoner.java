@@ -3,6 +3,8 @@ package yuudaari.soulus.common.block.summoner;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -51,6 +53,7 @@ import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.item.Soulbook;
 import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.EssenceType;
+import yuudaari.soulus.common.util.ItemStackMutable;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.Translation;
 
@@ -63,23 +66,22 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 	public static enum Upgrade implements IUpgrade {
 
-		COUNT (0, "count", ItemRegistry.CRYSTAL_BLOOD.getItemStack()),
-		DELAY (1, "delay",
-			ItemRegistry.GEAR_OSCILLATING.getItemStack()),
-		RANGE (2, "range", ItemRegistry.ORB_MURKY.getItemStack()),
-		EFFICIENCY (3, "efficiency", ItemRegistry.GEAR_NIOBIUM.getItemStack()),
-		CRYSTAL_DARK (4, "crystal_dark", ItemRegistry.CRYSTAL_DARK.getItemStack());
+		COUNT (0, "count", ItemRegistry.CRYSTAL_BLOOD),
+		DELAY (1, "delay", ItemRegistry.GEAR_OSCILLATING),
+		RANGE (2, "range", ItemRegistry.ORB_MURKY),
+		EFFICIENCY (3, "efficiency", ItemRegistry.GEAR_NIOBIUM),
+		CRYSTAL_DARK (4, "crystal_dark", ItemRegistry.CRYSTAL_DARK);
 
 		private final int index;
 		private final String name;
-		private final ItemStack stack;
+		private final Item item;
 		// by default all upgrades are capped at 16
 		private int maxQuantity = 16;
 
-		private Upgrade (int index, String name, ItemStack item) {
+		private Upgrade (int index, String name, Item item) {
 			this.index = index;
 			this.name = name;
-			this.stack = item;
+			this.item = item;
 		}
 
 		@Override
@@ -90,6 +92,11 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		@Override
 		public String getName () {
 			return name;
+		}
+
+		@Override
+		public Item getItem () {
+			return item;
 		}
 
 		@Override
@@ -105,14 +112,14 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 		@Override
 		public boolean isItemStack (ItemStack stack) {
-			if (stack.getItem() != this.stack.getItem())
+			if (!IUpgrade.super.isItemStack(stack))
 				return false;
 
-			if (name == "count") {
+			if (name == "count")
 				return CrystalBlood.isFilled(stack);
-			} else if (name == "range") {
+
+			if (name == "range")
 				return OrbMurky.isFilled(stack);
-			}
 
 			return true;
 		}
@@ -121,31 +128,35 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		public boolean isItemStackForTileEntity (ItemStack stack, UpgradeableBlockTileEntity te) {
 			if (te.upgrades.get(Upgrade.CRYSTAL_DARK) > 0)
 				return false;
-			else if (name == "crystal_dark") {
+
+			if (name == "crystal_dark")
 				// a midnight jewel must be inserted into a summoner with no other upgrades
-				for (Upgrade upgrade : Upgrade.values()) {
-					if (te.upgrades.get(upgrade) > 0) return false;
-				}
-			}
+				for (Upgrade upgrade : Upgrade.values())
+				if (te.upgrades.get(upgrade) > 0)
+					return false;
+
 			return IUpgrade.super.isItemStackForTileEntity(stack, te);
 		}
 
 		@Override
 		public ItemStack getItemStackForTileEntity (UpgradeableBlockTileEntity te, int quantity) {
 			SummonerTileEntity ste = (SummonerTileEntity) te;
-			if (name == "crystal_dark" && ste.hasMalice()) return null;
+
+			if (name == "crystal_dark" && ste.hasMalice())
+				return null;
 
 			return IUpgrade.super.getItemStackForTileEntity(te, quantity);
 		}
 
 		@Override
 		public ItemStack getItemStack (int quantity) {
-			ItemStack stack = new ItemStack(this.stack.getItem(), quantity);
-			if (name == "count") {
+			ItemStack stack = IUpgrade.super.getItemStack(quantity);
+
+			if (name == "count")
 				CrystalBlood.setFilled(stack);
-			} else if (name == "range") {
+
+			if (name == "range")
 				OrbMurky.setFilled(stack);
-			}
 
 			return stack;
 		}
@@ -417,8 +428,52 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		}
 	}
 
+	private boolean soulbookHasEssenceToInsert (final ItemStack stack) {
+		if (!stack.getItem().equals(ItemRegistry.SOULBOOK))
+			return false;
+
+		final String essenceType = EssenceType.getEssenceType(stack);
+		if (essenceType == null)
+			return false;
+
+		// if the contained essence is less than the essence required to insert the soulbook (required % of the soulbook quantity of the essence type)
+		if (Soulbook.getContainedEssence(stack) < CONFIG.soulbookEssenceRequiredToInsert * CONFIG_ESSENCES.getSoulbookQuantity(essenceType))
+			return false;
+
+		// if the soulbook isn't filled and the soulbook is in "lasts forever" mode, it needs to be completely filled before it can be inserted
+		if (!Soulbook.isFilled(stack) && (CONFIG.soulbookUses == null || CONFIG.soulbookUses <= 0))
+			return false;
+
+		return true;
+	}
+
 	@Override
-	public boolean onActivateInsert (World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
+	public Stream<Item> getAcceptedItems () {
+		return Stream.of( //
+			super.getAcceptedItems(), //
+			Stream.of(ItemRegistry.SOULBOOK), //
+			CONFIG.styleItems.keySet().stream().map(id -> Item.getByNameOrId(id)) //
+		)
+			.flatMap(Function.identity());
+	}
+
+	@Override
+	public boolean acceptsItemStack (final ItemStack stack, final World world, final BlockPos pos) {
+		if (super.acceptsItemStack(stack, world, pos))
+			return true;
+
+		if (soulbookHasEssenceToInsert(stack))
+			return true;
+
+		final EndersteelType itemStyle = CONFIG.styleItems.get(stack.getItem().getRegistryName().toString().toLowerCase());
+		if (itemStyle != null)
+			return true;
+
+		return false;
+	}
+
+	@Override
+	public boolean onActivateInsert (final World world, final BlockPos pos, final @Nullable EntityPlayer player, final ItemStackMutable stack) {
 		final Item item = stack.getItem();
 		final IBlockState state = world.getBlockState(pos);
 
@@ -426,23 +481,15 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		final EndersteelType itemStyle = CONFIG.styleItems.get(item.getRegistryName().toString().toLowerCase());
 		if (itemStyle != null && state.getValue(VARIANT) != itemStyle) {
 			world.setBlockState(pos, state.withProperty(VARIANT, itemStyle));
-			stack.shrink(1);
-			Advancements.STYLE_SUMMONER.trigger(player, itemStyle.getName());
+			stack.shrink();
+			if (player != null)
+				Advancements.STYLE_SUMMONER.trigger(player, itemStyle.getName());
 			return true;
 		}
 
 		// try to insert a soulbook
 		if (item == ItemRegistry.SOULBOOK) {
-			final String essenceType = EssenceType.getEssenceType(stack);
-			if (essenceType == null)
-				return false;
-
-			// if the contained essence is less than the essence required to insert the soulbook (required % of the soulbook quantity of the essence type)
-			if (Soulbook.getContainedEssence(stack) < CONFIG.soulbookEssenceRequiredToInsert * CONFIG_ESSENCES.getSoulbookQuantity(essenceType))
-				return false;
-
-			// if the soulbook isn't filled and the soulbook is in "lasts forever" mode, it needs to be completely filled before it can be inserted
-			if (!Soulbook.isFilled(stack) && (CONFIG.soulbookUses == null || CONFIG.soulbookUses <= 0))
+			if (!soulbookHasEssenceToInsert(stack.getImmutable()))
 				return false;
 
 			if (!state.getValue(HAS_SOULBOOK)) {
@@ -452,25 +499,30 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 			SummonerTileEntity te = (SummonerTileEntity) world.getTileEntity(pos);
 
+			final ItemStack insertSoulbook = stack.getImmutable();
+			stack.shrink(1);
+
 			// there was already a tile entity here, with an essence type
 			// that means there's a soulbook inside, so return it
 			String oldEssenceType = te.getEssenceType();
 			if (oldEssenceType != null) {
-				returnItemsToPlayer(world, Collections.singletonList(getSoulbook(te)), player);
+				final ItemStack returnSoulbook = getSoulbook(te);
+				if (player == null)
+					stack.replace(returnSoulbook);
+				else
+					returnItemsToPlayer(world, Collections.singletonList(returnSoulbook), player);
 			}
 
-			String newEssenceType = EssenceType.getEssenceType(stack);
+			String newEssenceType = EssenceType.getEssenceType(insertSoulbook);
 			te.setEssenceType(newEssenceType);
 
 			if (CONFIG.soulbookUses != null && CONFIG.soulbookUses > 0) {
-				te.setSoulbookUses((float) (Soulbook.getContainedEssence(stack) / (double) CONFIG_ESSENCES
+				te.setSoulbookUses((float) (Soulbook.getContainedEssence(insertSoulbook) / (double) CONFIG_ESSENCES
 					.getSoulbookQuantity(newEssenceType) * CONFIG.soulbookUses));
 			} else
 				te.setSoulbookUses(null);
 
 			te.reset();
-
-			stack.shrink(1);
 
 			return true;
 		}
@@ -481,7 +533,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 		if (item == ItemRegistry.ESSENCE_PERFECT) {
 			final SummonerTileEntity te = (SummonerTileEntity) world.getTileEntity(pos);
-			return te.insertPerfectEssence(stack, player);
+			return te.insertPerfectEssence(stack.getImmutable(), player);
 		}
 
 		// trying to insert the upgrades

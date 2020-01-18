@@ -7,6 +7,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -24,16 +25,19 @@ import scala.Tuple3;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.advancement.Advancements;
+import yuudaari.soulus.common.misc.DispenserBehaviorUpgrade.IInsertsItemStacks;
 import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.Translation;
+import yuudaari.soulus.common.util.ItemStackMutable;
 import yuudaari.soulus.common.util.Material;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Mod.EventBusSubscriber(modid = Soulus.MODID)
-public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockTileEntity> extends Registration.Block {
+public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockTileEntity> extends Registration.Block implements IInsertsItemStacks {
 
 	/////////////////////////////////////////
 	// Upgrades
@@ -44,7 +48,11 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 
 		public String getName ();
 
-		public ItemStack getItemStack (int quantity);
+		public Item getItem ();
+
+		public default ItemStack getItemStack (int quantity) {
+			return new ItemStack(getItem(), quantity);
+		}
 
 		@Nullable
 		public default ItemStack getItemStackForTileEntity (UpgradeableBlockTileEntity te, int quantity) {
@@ -66,7 +74,9 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 			}
 		}
 
-		public boolean isItemStack (ItemStack stack);
+		public default boolean isItemStack (ItemStack stack) {
+			return stack.getItem() == this.getItem();
+		}
 
 		public default boolean isItemStackForTileEntity (ItemStack stack, UpgradeableBlockTileEntity te) {
 			return isItemStack(stack);
@@ -155,17 +165,17 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 		if (!world.isRemote) {
 			ItemStack heldStack = player.getHeldItem(hand);
 
-			if (!canActivateTileEntity((TileEntityClass) world.getTileEntity(pos))) return false;
+			if (!canActivateTileEntity((TileEntityClass) world.getTileEntity(pos)))
+				return false;
 
 			if (heldStack.isEmpty()) {
-				if (player.isSneaking()) {
+				if (player.isSneaking())
 					return onActivateEmptyHandSneaking(world, pos, player);
-				} else {
-					return onActivateEmptyHand(world, pos, player);
-				}
-			} else {
-				return onActivateInsert(world, pos, player, heldStack);
+
+				return onActivateEmptyHand(world, pos, player);
 			}
+
+			return onActivateInsert(world, pos, player, new ItemStackMutable(heldStack));
 		}
 
 		return true;
@@ -186,11 +196,11 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 		return true;
 	}
 
-	public boolean onActivateEmptyHand (World world, BlockPos pos, EntityPlayer player) {
+	public boolean onActivateEmptyHand (final World world, final BlockPos pos, final EntityPlayer player) {
 		return onActivateReturnLastUpgrade(world, pos, player);
 	}
 
-	public final boolean onActivateReturnLastUpgrade (World world, BlockPos pos, EntityPlayer player) {
+	public final boolean onActivateReturnLastUpgrade (final World world, final BlockPos pos, final EntityPlayer player) {
 		TileEntity te = world.getTileEntity(pos);
 		if (te == null || !(te instanceof UpgradeableBlockTileEntity))
 			return false;
@@ -212,26 +222,39 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 		return true;
 	}
 
-	public boolean onActivateInsert (World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
+	@Override
+	public Stream<Item> getAcceptedItems () {
+		return Arrays.stream(this.getUpgrades())
+			.map(upgrade -> upgrade.getItem());
+	}
+
+	@Override
+	public boolean acceptsItemStack (final ItemStack stack, final World world, final BlockPos pos) {
+		return isUpgradeItem(stack, world, pos) != null;
+	}
+
+	@Override
+	public boolean onActivateInsert (final World world, final BlockPos pos, final @Nullable EntityPlayer player, final ItemStackMutable stack) {
 		return onActivateInsertUpgrade(world, pos, player, stack);
 	}
 
-	public final boolean onActivateInsertUpgrade (World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
+	public final boolean onActivateInsertUpgrade (final World world, final BlockPos pos, final @Nullable EntityPlayer player, final ItemStackMutable stack) {
 		TileEntity te = world.getTileEntity(pos);
 		if (te == null || !(te instanceof UpgradeableBlockTileEntity))
 			return false;
 
 		UpgradeableBlockTileEntity ute = (UpgradeableBlockTileEntity) te;
 
-		IUpgrade upgrade = ute.getUpgradeForItem(stack);
+		IUpgrade upgrade = ute.getUpgradeForItem(stack.getImmutable());
 		if (upgrade == null)
 			return false;
 
-		int insertQuantity = player.isSneaking() ? stack.getCount() : 1;
-		ute.insertUpgrade(player.isCreative() ? stack.copy() : stack, upgrade, insertQuantity);
+		int insertQuantity = player != null && player.isSneaking() ? stack.getCount() : 1;
+		ute.insertUpgrade(player != null && player.isCreative() ? stack.copy() : stack.getImmutable(), upgrade, insertQuantity);
 
 		boolean isFilled = ute.upgrades.get(upgrade) == upgrade.getMaxQuantity();
-		Advancements.UPGRADE.trigger(player, new Tuple3<>(this, upgrade, isFilled));
+		if (player != null)
+			Advancements.UPGRADE.trigger(player, new Tuple3<>(this, upgrade, isFilled));
 
 		return true;
 	}

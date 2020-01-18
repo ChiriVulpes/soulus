@@ -29,9 +29,11 @@ import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigComposerCell;
 import yuudaari.soulus.common.util.Translation;
+import yuudaari.soulus.common.util.ItemStackMutable;
 import yuudaari.soulus.common.util.Material;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Nullable;
 
 @ConfigInjected(Soulus.MODID)
 public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
@@ -56,6 +58,7 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	//
 
 	public static enum CellState implements IStringSerializable {
+
 		DISCONNECTED ("disconnected"),
 		CONNECTED_CENTER ("connected_center"),
 		CONNECTED_EDGE ("connected_edge");
@@ -201,13 +204,13 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	}
 
 	@Override
-	public boolean onActivateInsert (World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
+	public boolean onActivateInsert (final World world, final BlockPos pos, final @Nullable EntityPlayer player, final ItemStackMutable stack) {
 		ComposerCellTileEntity te = (ComposerCellTileEntity) world.getTileEntity(pos);
 
-		if (player.isSneaking() && !CONFIG.allowSneakRightClickStackInsertion)
+		if (player != null && player.isSneaking() && !CONFIG.allowSneakRightClickStackInsertion)
 			return false;
 
-		return te.tryInsert(stack, player.isSneaking() ? stack.getCount() : 1);
+		return te.tryInsert(stack.getImmutable(), player != null && player.isSneaking() ? stack.getCount() : 1);
 	}
 
 	@Override

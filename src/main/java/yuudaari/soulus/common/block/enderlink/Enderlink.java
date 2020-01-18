@@ -29,12 +29,16 @@ import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigEnderlink;
 import yuudaari.soulus.common.item.OrbMurky;
 import yuudaari.soulus.common.util.Translation;
+import yuudaari.soulus.common.util.ItemStackMutable;
 import yuudaari.soulus.common.util.Material;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Stream;
+import javax.annotation.Nullable;
 
 @ConfigInjected(Soulus.MODID)
 public class Enderlink extends UpgradeableBlock<EnderlinkTileEntity> {
@@ -73,18 +77,19 @@ public class Enderlink extends UpgradeableBlock<EnderlinkTileEntity> {
 	//
 
 	public static enum Upgrade implements IUpgrade {
-		RANGE (2, "range", ItemRegistry.ORB_MURKY.getItemStack());
+
+		RANGE (2, "range", ItemRegistry.ORB_MURKY);
 
 		private final int index;
 		private final String name;
-		private final ItemStack stack;
+		private final Item item;
 		// by default all upgrades are capped at 16
 		private int maxQuantity = 16;
 
-		private Upgrade (int index, String name, ItemStack item) {
+		private Upgrade (int index, String name, Item item) {
 			this.index = index;
 			this.name = name;
-			this.stack = item;
+			this.item = item;
 		}
 
 		@Override
@@ -95,6 +100,11 @@ public class Enderlink extends UpgradeableBlock<EnderlinkTileEntity> {
 		@Override
 		public String getName () {
 			return name;
+		}
+
+		@Override
+		public Item getItem () {
+			return item;
 		}
 
 		@Override
@@ -110,22 +120,21 @@ public class Enderlink extends UpgradeableBlock<EnderlinkTileEntity> {
 
 		@Override
 		public boolean isItemStack (ItemStack stack) {
-			if (stack.getItem() != this.stack.getItem())
+			if (!IUpgrade.super.isItemStack(stack))
 				return false;
 
-			if (name == "range") {
+			if (name == "range")
 				return OrbMurky.isFilled(stack);
-			}
 
 			return true;
 		}
 
 		@Override
 		public ItemStack getItemStack (int quantity) {
-			ItemStack stack = new ItemStack(this.stack.getItem(), quantity);
-			if (name == "range") {
+			final ItemStack stack = IUpgrade.super.getItemStack(quantity);
+
+			if (name == "range")
 				OrbMurky.setFilled(stack);
-			}
 
 			return stack;
 		}
@@ -237,7 +246,21 @@ public class Enderlink extends UpgradeableBlock<EnderlinkTileEntity> {
 	}
 
 	@Override
-	public boolean onActivateInsert (World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
+	public Stream<Item> getAcceptedItems () {
+		return Stream.of( //
+			super.getAcceptedItems(), //
+			Stream.of(Items.DYE) //
+		)
+			.flatMap(Function.identity());
+	}
+
+	@Override
+	public boolean acceptsItemStack (ItemStack stack, World world, BlockPos pos) {
+		return stack.getItem().equals(Items.DYE) || super.acceptsItemStack(stack, world, pos);
+	}
+
+	@Override
+	public boolean onActivateInsert (final World world, final BlockPos pos, final @Nullable EntityPlayer player, final ItemStackMutable stack) {
 		Item item = stack.getItem();
 		EnderlinkTileEntity te = (EnderlinkTileEntity) world.getTileEntity(pos);
 

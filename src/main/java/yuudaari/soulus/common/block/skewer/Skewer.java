@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -47,23 +48,24 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	//
 
 	public static enum Upgrade implements IUpgrade {
-		CRYSTAL_BLOOD (0, "crystal_blood", ItemRegistry.CRYSTAL_BLOOD.getItemStack()),
-		DAMAGE (1, "damage", new ItemStack(Items.QUARTZ)),
-		POISON (2, "poison", new ItemStack(Items.SPIDER_EYE)),
-		POWER (3, "power", new ItemStack(Blocks.REDSTONE_TORCH)),
-		TETHER (4, "tether", ItemRegistry.ASH.getItemStack()),
-		PLAYER (5, "player", ItemRegistry.SOUL_CATALYST.getItemStack());
+
+		CRYSTAL_BLOOD (0, "crystal_blood", ItemRegistry.CRYSTAL_BLOOD),
+		DAMAGE (1, "damage", Items.QUARTZ),
+		POISON (2, "poison", Items.SPIDER_EYE),
+		POWER (3, "power", Item.getItemFromBlock(Blocks.REDSTONE_TORCH)),
+		TETHER (4, "tether", ItemRegistry.ASH),
+		PLAYER (5, "player", ItemRegistry.SOUL_CATALYST);
 		// LOOTING (6, "looting", new ItemStack(Items.DYE, 1, 4));
 
 		private final int index;
 		private final String name;
-		private final ItemStack stack;
+		private final Item item;
 		private Integer maxQuantity;
 
-		private Upgrade (int index, String name, ItemStack item) {
+		private Upgrade (final int index, final String name, final Item item) {
 			this.index = index;
 			this.name = name;
-			this.stack = item;
+			this.item = item;
 		}
 
 		@Override
@@ -77,22 +79,35 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		}
 
 		@Override
+		public Item getItem () {
+			return item;
+		}
+
+		@Override
 		public int getMaxQuantity () {
 			if (maxQuantity == null) {
-				if (name.equals("crystal_blood"))
-					return 1;
-				if (name.equals("damage"))
-					return 64;
-				if (name.equals("poison"))
-					return 16;
-				if (name.equals("power"))
-					return 1;
-				if (name.equals("tether"))
-					return 16;
-				if (name.equals("player"))
-					return 1;
-				if (name.equals("looting"))
-					return 64;
+				switch (name) {
+					case "crystal_blood":
+						return 1;
+
+					case "damage":
+						return 64;
+
+					case "poison":
+						return 16;
+
+					case "power":
+						return 1;
+
+					case "tether":
+						return 16;
+
+					case "player":
+						return 1;
+
+					case "looting":
+						return 64;
+				}
 			}
 
 			return maxQuantity;
@@ -110,12 +125,13 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 
 		@Override
 		public boolean isItemStack (ItemStack stack) {
-			if (stack.getItem() != this.stack.getItem())
+			if (!IUpgrade.super.isItemStack(stack))
 				return false;
 
 			if (name == "crystal_blood")
 				return !CrystalBlood.isFilled(stack);
-			else if (name == "player")
+
+			if (name == "player")
 				return SoulCatalyst.isFilled(stack);
 
 			return true;
@@ -123,7 +139,7 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 
 		@Override
 		public ItemStack getItemStack (int quantity) {
-			ItemStack stack = new ItemStack(this.stack.getItem(), quantity);
+			final ItemStack stack = IUpgrade.super.getItemStack(quantity);
 
 			if (name == "player")
 				SoulCatalyst.setFilled(stack);

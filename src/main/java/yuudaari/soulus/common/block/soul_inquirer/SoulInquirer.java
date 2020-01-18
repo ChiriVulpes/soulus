@@ -2,6 +2,9 @@ package yuudaari.soulus.common.block.soul_inquirer;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Stream;
+import javax.annotation.Nullable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
@@ -35,6 +38,7 @@ import yuudaari.soulus.common.item.Soulbook;
 import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.registration.Registration.ItemBlock;
 import yuudaari.soulus.common.util.EssenceType;
+import yuudaari.soulus.common.util.ItemStackMutable;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.Translation;
 
@@ -46,19 +50,20 @@ public class SoulInquirer extends UpgradeableBlock<SoulInquirerTileEntity> {
 	//
 
 	public static enum Upgrade implements IUpgrade {
-		RANGE (0, "range", ItemRegistry.ORB_MURKY.getItemStack()),
-		COUNT (1, "count", ItemRegistry.CRYSTAL_BLOOD.getItemStack());
+
+		RANGE (0, "range", ItemRegistry.ORB_MURKY),
+		COUNT (1, "count", ItemRegistry.CRYSTAL_BLOOD);
 
 		private final int index;
 		private final String name;
-		private final ItemStack stack;
+		private final Item item;
 		// by default all upgrades are capped at 16
 		private int maxQuantity = 16;
 
-		private Upgrade (int index, String name, ItemStack item) {
+		private Upgrade (int index, String name, Item item) {
 			this.index = index;
 			this.name = name;
-			this.stack = item;
+			this.item = item;
 		}
 
 		@Override
@@ -69,6 +74,11 @@ public class SoulInquirer extends UpgradeableBlock<SoulInquirerTileEntity> {
 		@Override
 		public String getName () {
 			return name;
+		}
+
+		@Override
+		public Item getItem () {
+			return item;
 		}
 
 		@Override
@@ -84,27 +94,27 @@ public class SoulInquirer extends UpgradeableBlock<SoulInquirerTileEntity> {
 
 		@Override
 		public boolean isItemStack (ItemStack stack) {
-			if (stack.getItem() != this.stack.getItem())
+			if (!IUpgrade.super.isItemStack(stack))
 				return false;
 
-			if (name == "count") {
+			if (name == "count")
 				return CrystalBlood.isFilled(stack);
-			} else if (name == "range") {
+
+			if (name == "range")
 				return OrbMurky.isFilled(stack);
-			}
 
 			return true;
 		}
 
 		@Override
 		public ItemStack getItemStack (int quantity) {
-			ItemStack stack = new ItemStack(this.stack.getItem(), quantity);
+			ItemStack stack = IUpgrade.super.getItemStack(quantity);
 
-			if (name == "count") {
+			if (name == "count")
 				CrystalBlood.setFilled(stack);
-			} else if (name == "range") {
+
+			if (name == "range")
 				OrbMurky.setFilled(stack);
-			}
 
 			return stack;
 		}
@@ -284,14 +294,28 @@ public class SoulInquirer extends UpgradeableBlock<SoulInquirerTileEntity> {
 	}
 
 	@Override
-	public boolean onActivateInsert (World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
+	public Stream<Item> getAcceptedItems () {
+		return Stream.of( //
+			super.getAcceptedItems(),  //
+			Stream.of(ItemRegistry.SOULBOOK) //
+		)
+			.flatMap(Function.identity());
+	}
+
+	@Override
+	public boolean acceptsItemStack (final ItemStack stack, final World world, final BlockPos pos) {
+		return super.acceptsItemStack(stack, world, pos) || Soulbook.isFilled(stack);
+	}
+
+	@Override
+	public boolean onActivateInsert (final World world, final BlockPos pos, final @Nullable EntityPlayer player, final ItemStackMutable stack) {
 		Item item = stack.getItem();
 		IBlockState state = world.getBlockState(pos);
 
 
 		// try to insert a soulbook
 		if (item == ItemRegistry.SOULBOOK) {
-			if (!Soulbook.isFilled(stack))
+			if (!Soulbook.isFilled(stack.getImmutable()))
 				return false;
 
 			if (!state.getValue(HAS_SOULBOOK)) {
@@ -307,7 +331,7 @@ public class SoulInquirer extends UpgradeableBlock<SoulInquirerTileEntity> {
 				returnItemsToPlayer(world, Collections.singletonList(Soulbook.getFilled(te.getEssenceType())), player);
 			}
 
-			String newEssenceType = EssenceType.getEssenceType(stack);
+			String newEssenceType = EssenceType.getEssenceType(stack.getImmutable());
 			te.setEssenceType(newEssenceType);
 
 			te.reset();

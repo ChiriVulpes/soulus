@@ -1,6 +1,7 @@
 package yuudaari.soulus.common.registration;
 
 import java.util.List;
+import java.util.stream.Stream;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
@@ -33,6 +34,7 @@ import yuudaari.soulus.common.block.skewer.Skewer;
 import yuudaari.soulus.common.block.soul_inquirer.SoulInquirer;
 import yuudaari.soulus.common.block.soul_totem.SoulTotem;
 import yuudaari.soulus.common.block.summoner.Summoner;
+import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
 import yuudaari.soulus.common.compat.jei.JeiDescriptionRegistry;
 import yuudaari.soulus.common.registration.IBlockRegistration;
 import yuudaari.soulus.common.util.Material;
@@ -119,6 +121,16 @@ public class BlockRegistry {
 
 		SOUL_TOTEM
 	});
+
+	public static Stream<UpgradeableBlock<?>> getUpgradeableBlocks () {
+		return BlockRegistry.blocks.stream()
+			.filter(block -> (block instanceof UpgradeableBlock))
+			.map(block -> (UpgradeableBlock<?>) block);
+	}
+
+	////////////////////////////////////
+	// Registration
+	//
 
 	public static void registerBlocks (IForgeRegistry<Block> registry) {
 		for (IBlockRegistration block : blocks) {

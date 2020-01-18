@@ -11,6 +11,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
@@ -43,19 +44,20 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	//
 
 	public static enum Upgrade implements IUpgrade {
-		RANGE (0, "range", ItemRegistry.ORB_MURKY.getItemStack()), //
-		DELAY (1, "delay", ItemRegistry.GEAR_OSCILLATING.getItemStack()), //
-		EFFICIENCY (2, "efficiency", ItemRegistry.GEAR_NIOBIUM.getItemStack());
+
+		RANGE (0, "range", ItemRegistry.ORB_MURKY), //
+		DELAY (1, "delay", ItemRegistry.GEAR_OSCILLATING), //
+		EFFICIENCY (2, "efficiency", ItemRegistry.GEAR_NIOBIUM);
 
 		private final int index;
 		private final String name;
-		private final ItemStack stack;
+		private final Item item;
 		private Integer maxQuantity;
 
-		private Upgrade (int index, String name, ItemStack item) {
+		private Upgrade (int index, String name, Item item) {
 			this.index = index;
 			this.name = name;
-			this.stack = item;
+			this.item = item;
 		}
 
 		@Override
@@ -66,6 +68,11 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 		@Override
 		public String getName () {
 			return name;
+		}
+
+		@Override
+		public Item getItem () {
+			return item;
 		}
 
 		@Override
@@ -85,7 +92,7 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 
 		@Override
 		public boolean isItemStack (ItemStack stack) {
-			if (stack.getItem() != this.stack.getItem())
+			if (!IUpgrade.super.isItemStack(stack))
 				return false;
 
 			if (name == "range")
@@ -96,7 +103,7 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 
 		@Override
 		public ItemStack getItemStack (int quantity) {
-			ItemStack stack = new ItemStack(this.stack.getItem(), quantity);
+			final ItemStack stack = IUpgrade.super.getItemStack(quantity);
 
 			if (name == "range")
 				OrbMurky.setFilled(stack);

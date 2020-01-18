@@ -9,6 +9,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -36,18 +37,19 @@ public class SoulTotem extends UpgradeableBlock<SoulTotemTileEntity> {
 	//
 
 	public static enum Upgrade implements IUpgrade {
-		SOUL_CATALYST (0, "soul_catalyst", ItemRegistry.SOUL_CATALYST.getItemStack()),
-		EFFICIENCY (1, "efficiency", ItemRegistry.GEAR_NIOBIUM.getItemStack());
+
+		SOUL_CATALYST (0, "soul_catalyst", ItemRegistry.SOUL_CATALYST),
+		EFFICIENCY (1, "efficiency", ItemRegistry.GEAR_NIOBIUM);
 
 		private final int index;
 		private final String name;
-		private final ItemStack stack;
+		private final Item item;
 		private Integer maxQuantity;
 
-		private Upgrade (int index, String name, ItemStack item) {
+		private Upgrade (int index, String name, Item item) {
 			this.index = index;
 			this.name = name;
-			this.stack = item;
+			this.item = item;
 		}
 
 		@Override
@@ -61,10 +63,16 @@ public class SoulTotem extends UpgradeableBlock<SoulTotemTileEntity> {
 		}
 
 		@Override
+		public Item getItem () {
+			return item;
+		}
+
+		@Override
 		public int getMaxQuantity () {
 			if (maxQuantity == null) {
 				if (name.equals("soul_catalyst"))
 					return 1;
+
 				if (name.equals("efficiency"))
 					return 16;
 			}
@@ -79,7 +87,7 @@ public class SoulTotem extends UpgradeableBlock<SoulTotemTileEntity> {
 
 		@Override
 		public boolean isItemStack (ItemStack stack) {
-			if (stack.getItem() != this.stack.getItem())
+			if (!IUpgrade.super.isItemStack(stack))
 				return false;
 
 			if (name.equals("soul_catalyst"))
@@ -90,7 +98,7 @@ public class SoulTotem extends UpgradeableBlock<SoulTotemTileEntity> {
 
 		@Override
 		public ItemStack getItemStack (int quantity) {
-			ItemStack stack = new ItemStack(this.stack.getItem(), quantity);
+			ItemStack stack = IUpgrade.super.getItemStack(quantity);
 
 			if (name.equals("soul_catalyst"))
 				SoulCatalyst.setFilled(stack);

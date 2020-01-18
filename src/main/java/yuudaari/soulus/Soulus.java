@@ -39,6 +39,7 @@ import yuudaari.soulus.common.compat.crafttweaker.ZenComposer;
 import yuudaari.soulus.common.compat.top.TheOneProbe;
 import yuudaari.soulus.common.config.Config;
 import yuudaari.soulus.common.misc.BoneChunks;
+import yuudaari.soulus.common.misc.DispenserBehaviorUpgrade;
 import yuudaari.soulus.common.misc.MidnightDraught;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.client.SendConfig;
@@ -219,6 +220,7 @@ public class Soulus {
 		}
 
 		BoneChunks.registerEssenceDrops(event);
+		DispenserBehaviorUpgrade.register();
 	}
 
 	@SubscribeEvent
