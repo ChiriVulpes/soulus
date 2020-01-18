@@ -72,6 +72,13 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 		return owner == null ? null : world.getPlayerEntityByUUID(owner);
 	}
 
+	public int getSignalStrength () {
+		if (upgrades.get(Upgrade.CRYSTAL_BLOOD) > 0)
+			return (int) (crystalBloodContainedBlood / (double) CrystalBlood.CONFIG.requiredBlood * 15);
+
+		return 0;
+	}
+
 	/////////////////////////////////////////
 	// Config
 	//

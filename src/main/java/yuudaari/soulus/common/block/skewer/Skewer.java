@@ -199,6 +199,17 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
 
+	@Override
+	public boolean hasComparatorInputOverride (IBlockState state) {
+		return true;
+	}
+
+	@Override
+	public int getComparatorInputOverride (final IBlockState state, final World world, final BlockPos pos) {
+		SkewerTileEntity te = (SkewerTileEntity) world.getTileEntity(pos);
+		return te == null ? 0 : te.getSignalStrength();
+	}
+
 	/////////////////////////////////////////
 	// Events
 	//
