@@ -119,6 +119,11 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		}
 
 		@Override
+		public boolean canSwitchOut () {
+			return name.equals("crystal_blood");
+		}
+
+		@Override
 		public void setMaxQuantity (int quantity) {
 			maxQuantity = quantity;
 		}

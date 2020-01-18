@@ -33,6 +33,7 @@ import yuudaari.soulus.common.util.Material;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -85,6 +86,10 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 		public int getMaxQuantity ();
 
 		public void setMaxQuantity (int quantity);
+
+		public default boolean canSwitchOut () {
+			return false;
+		}
 
 		public default boolean canOverrideMaxQuantity () {
 			return true;
@@ -250,7 +255,14 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 			return false;
 
 		int insertQuantity = player != null && player.isSneaking() ? stack.getCount() : 1;
-		ute.insertUpgrade(player != null && player.isCreative() ? stack.copy() : stack.getImmutable(), upgrade, insertQuantity);
+
+		final ItemStack result = ute.insertUpgrade(player != null && player.isCreative() ? stack.copy() : stack.getImmutable(), upgrade, insertQuantity);
+		if (!result.isEmpty()) {
+			if (player == null)
+				stack.replace(result);
+			else
+				returnItemsToPlayer(world, Collections.singletonList(result), player);
+		}
 
 		boolean isFilled = ute.upgrades.get(upgrade) == upgrade.getMaxQuantity();
 		if (player != null)

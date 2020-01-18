@@ -55,17 +55,23 @@ public abstract class UpgradeableBlockTileEntity extends TileEntity implements I
 		return null;
 	}
 
-	public final void insertUpgrade (ItemStack stack, IUpgrade upgrade, int quantity) {
+	public final ItemStack insertUpgrade (ItemStack stack, IUpgrade upgrade, int quantity) {
+		ItemStack result = ItemStack.EMPTY;
+
 		this.insertionOrder.remove(upgrade);
 		this.insertionOrder.push(upgrade);
 
 		int currentQuantity = upgrades.get(upgrade);
 		int maxQuantity = upgrade.getMaxQuantity();
 		int insertQuantity = Math.min(quantity, maxQuantity - currentQuantity);
+		int newQuantity = currentQuantity + insertQuantity;
+
+		if (maxQuantity == 1 && currentQuantity == 1 && quantity == 1 && upgrade.canSwitchOut()) {
+			result = upgrade.getItemStackForTileEntity(this, 1);
+			insertQuantity = newQuantity = 1;
+		}
 
 		if (insertQuantity > 0) {
-			int newQuantity = currentQuantity + insertQuantity;
-
 			upgrades.put(upgrade, newQuantity);
 			onInsertUpgrade(stack, upgrade, newQuantity);
 
@@ -75,6 +81,8 @@ public abstract class UpgradeableBlockTileEntity extends TileEntity implements I
 		}
 
 		blockUpdate();
+
+		return result;
 	}
 
 	public void onInsertUpgrade (ItemStack stack, IUpgrade upgrade, int newQuantity) {
