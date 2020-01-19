@@ -100,7 +100,7 @@ public class BoneChunks {
 		final String itemName = heldItem.getItem().getRegistryName().toString();
 
 		for (final ConfigBoneType boneType : CONFIG_BONE_TYPES.boneTypes) {
-			if (boneType.item_chunk.equalsIgnoreCase(itemName)) {
+			if (boneType.itemChunk.equalsIgnoreCase(itemName)) {
 
 				final World world = event.getWorld();
 				final EntityPlayer player = event.getEntityPlayer();

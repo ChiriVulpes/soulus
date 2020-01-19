@@ -16,13 +16,13 @@ public class ConfigBoneTypes {
 	{
 		boneTypes = new ArrayList<>();
 
-		boneTypes.add(new ConfigBoneType("normal", "soulus:bone_normal", "soulus:bone_chunk_normal"));
-		boneTypes.add(new ConfigBoneType("dry", "soulus:bone_dry", "soulus:bone_chunk_dry"));
-		boneTypes.add(new ConfigBoneType("fungal", "soulus:bone_fungal", "soulus:bone_chunk_fungal"));
-		boneTypes.add(new ConfigBoneType("frozen", "soulus:bone_frozen", "soulus:bone_chunk_frozen"));
-		boneTypes.add(new ConfigBoneType("scale", "soulus:bone_scale", "soulus:bone_chunk_scale"));
-		boneTypes.add(new ConfigBoneType("nether", "soulus:bone_nether", "soulus:bone_chunk_nether"));
-		boneTypes.add(new ConfigBoneType("ender", "soulus:bone_ender", "soulus:bone_chunk_ender"));
+		boneTypes.add(new ConfigBoneType("normal", "soulus:bone_normal", "soulus:bone_chunk_normal", 1.0 / 3.0));
+		boneTypes.add(new ConfigBoneType("dry", "soulus:bone_dry", "soulus:bone_chunk_dry", 1.0 / 12.0));
+		boneTypes.add(new ConfigBoneType("fungal", "soulus:bone_fungal", "soulus:bone_chunk_fungal", 1.0 / 12.0));
+		boneTypes.add(new ConfigBoneType("frozen", "soulus:bone_frozen", "soulus:bone_chunk_frozen", 1.0 / 12.0));
+		boneTypes.add(new ConfigBoneType("scale", "soulus:bone_scale", "soulus:bone_chunk_scale", 1.0 / 12.0));
+		boneTypes.add(new ConfigBoneType("nether", "soulus:bone_nether", "soulus:bone_chunk_nether", 0.0));
+		boneTypes.add(new ConfigBoneType("ender", "soulus:bone_ender", "soulus:bone_chunk_ender", 0.0));
 	}
 
 	public ConfigBoneType get (final String type) {
@@ -34,14 +34,14 @@ public class ConfigBoneTypes {
 
 	public ConfigBoneType getFromBone (final String bone) {
 		return boneTypes.stream()
-			.filter(config -> config.item_bone.equalsIgnoreCase(bone))
+			.filter(config -> config.itemBone.equalsIgnoreCase(bone))
 			.findFirst()
 			.orElse(null);
 	}
 
 	public ConfigBoneType getFromChunk (final String chunk) {
 		return boneTypes.stream()
-			.filter(config -> config.item_chunk.equalsIgnoreCase(chunk))
+			.filter(config -> config.itemChunk.equalsIgnoreCase(chunk))
 			.findFirst()
 			.orElse(null);
 	}

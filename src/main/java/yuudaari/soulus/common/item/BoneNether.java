@@ -15,11 +15,9 @@ public class BoneNether extends Registration.Item implements IBone {
 	}
 
 	@Override
-	public double feedToWolf (final EntityWolf wolf, final ItemStack stack, final EntityPlayer player) {
+	public void feedToWolf (final EntityWolf wolf, final ItemStack stack, final EntityPlayer player) {
 		wolf.setAttackTarget(player);
 		if (player.world.rand.nextBoolean())
 			wolf.addPotionEffect(new PotionEffect(MobEffects.WITHER, 1000));
-
-		return 0;
 	}
 }

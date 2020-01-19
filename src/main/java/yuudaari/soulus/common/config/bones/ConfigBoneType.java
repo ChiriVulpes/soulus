@@ -10,31 +10,34 @@ import yuudaari.soulus.common.util.serializer.Serialized;
 public class ConfigBoneType {
 
 	@Serialized public String name;
-	@Serialized public String item_bone;
-	@Serialized public String item_chunk;
+	@Serialized public String itemBone;
+	@Serialized public String itemChunk;
+	@Serialized public double tameChance;
 
-	public ConfigBoneType () {}
+	public ConfigBoneType () {
+	}
 
-	public ConfigBoneType (String name, String item_bone, String item_chunk) {
+	public ConfigBoneType (final String name, final String itemBone, final String itemChunk, final double tameChance) {
 		this.name = name.toUpperCase();
-		this.item_bone = item_bone;
-		this.item_chunk = item_chunk;
+		this.itemBone = itemBone;
+		this.itemChunk = itemChunk;
+		this.tameChance = tameChance;
 	}
 
 	public ItemStack getBoneStack () {
-		return new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(item_bone)));
+		return new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(itemBone)));
 	}
 
 	public ItemStack getChunkStack () {
-		return new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(item_chunk)));
+		return new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(itemChunk)));
 	}
 
-	public ItemStack getBoneStack (int amount) {
-		return new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(item_bone)), amount);
+	public ItemStack getBoneStack (final int amount) {
+		return new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(itemBone)), amount);
 	}
 
-	public ItemStack getChunkStack (int amount) {
-		return new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(item_chunk)), amount);
+	public ItemStack getChunkStack (final int amount) {
+		return new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(itemChunk)), amount);
 	}
 
 }

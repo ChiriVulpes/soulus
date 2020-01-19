@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.SPacketTitle;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.config.Config;
@@ -14,6 +15,8 @@ import yuudaari.soulus.common.config.bones.ConfigBoneTypes;
 import yuudaari.soulus.common.registration.item.IRightClickableItem;
 
 public interface IBone extends IRightClickableItem {
+
+	ResourceLocation getRegistryName ();
 
 	default void onRightClickEntity (final Entity entity, final ItemStack stack, final EntityPlayer player) {
 		if (!(entity instanceof EntityWolf))
@@ -29,9 +32,11 @@ public interface IBone extends IRightClickableItem {
 		if (player.world.isRemote)
 			return;
 
-		final double tameChance = feedToWolf(wolf, stack, player);
+		feedToWolf(wolf, stack, player);
+		final ConfigBoneType CONFIG = Config.get(Soulus.MODID, ConfigBoneTypes.class)
+			.getFromBone(getRegistryName().toString());
 
-		if (player.world.rand.nextDouble() < tameChance && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(wolf, player)) {
+		if (player.world.rand.nextDouble() < CONFIG.tameChance && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(wolf, player)) {
 			wolf.setTamedBy(player);
 			wolf.navigator.clearPath();
 			wolf.setAttackTarget(null);
@@ -51,5 +56,6 @@ public interface IBone extends IRightClickableItem {
 		}
 	}
 
-	abstract double feedToWolf (final EntityWolf wolf, final ItemStack stack, final EntityPlayer player);
+	default void feedToWolf (final EntityWolf wolf, final ItemStack stack, final EntityPlayer player) {
+	}
 }
