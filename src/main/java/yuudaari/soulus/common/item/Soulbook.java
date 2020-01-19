@@ -8,6 +8,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -40,6 +41,7 @@ import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.Colour;
 import yuudaari.soulus.common.util.EssenceType;
 import yuudaari.soulus.common.util.Translation;
+import yuudaari.soulus.common.util.XP;
 
 @ConfigInjected(Soulus.MODID)
 public class Soulbook extends Registration.Item implements IHasComposerCellInfo, IFillableWithEssence {
@@ -225,6 +227,17 @@ public class Soulbook extends Registration.Item implements IHasComposerCellInfo,
 				return Colour.mix(defaultColour, color, percent).get();
 			});
 		}
+	}
+
+	@Override
+	public void onCreated (final ItemStack stack, final World world, final EntityPlayer player) {
+		if (player == null || !isFilled(stack))
+			return;
+
+		final String essenceType = EssenceType.getEssenceType(stack);
+
+		for (int i = 0; i < stack.getCount(); i++)
+			XP.grant(player, CONFIG.getSoulbookXP(essenceType).getInt(world.rand));
 	}
 
 	@Override

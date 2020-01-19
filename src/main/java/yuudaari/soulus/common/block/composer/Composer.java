@@ -192,21 +192,21 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 	}
 
 	@Override
-	public void onBlockDestroy (World world, BlockPos pos, int fortune, EntityPlayer player) {
-		super.onBlockDestroy(world, pos, fortune, player);
+	public List<ItemStack> onBlockDestroy (final World world, final BlockPos pos, final int fortune, final EntityPlayer player) {
+		final List<ItemStack> drops = super.onBlockDestroy(world, pos, fortune, player);
 
-		IBlockState state = world.getBlockState(pos);
+		final IBlockState state = world.getBlockState(pos);
 
 		if (state.getValue(CONNECTED)) {
 
 			structure.loopBlocks(world, pos, state.getValue(FACING), (BlockPos pos2, BlockValidator validator) -> {
-				IBlockState currentState = world.getBlockState(pos2);
+				final IBlockState currentState = world.getBlockState(pos2);
 
 				if (currentState.getBlock() == BlockRegistry.COMPOSER_CELL) {
 					world.setBlockState(pos2, currentState
 						.withProperty(ComposerCell.CELL_STATE, ComposerCell.CellState.DISCONNECTED), 3);
 
-					ComposerCellTileEntity ccte = (ComposerCellTileEntity) world.getTileEntity(pos2);
+					final ComposerCellTileEntity ccte = (ComposerCellTileEntity) world.getTileEntity(pos2);
 					ccte.composerLocation = null;
 					ccte.blockUpdate();
 				}
@@ -215,6 +215,8 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 			});
 
 		}
+
+		return drops;
 	}
 
 	@Override

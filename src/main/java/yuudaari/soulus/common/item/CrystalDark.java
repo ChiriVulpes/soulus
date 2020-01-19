@@ -16,6 +16,7 @@ import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.client.CrystalDarkPrick;
 import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.ModPotionEffect;
+import yuudaari.soulus.common.util.XP;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -31,6 +32,20 @@ public class CrystalDark extends Registration.Item {
 
 		Soulus.onConfigReload( () -> setMaxStackSize(CONFIG.stackSize));
 	}
+
+	/**
+	 * This won't ever be called by Soulus, but a modpack might add a crafting recipe for them, so we give them XP the same as
+	 * any other upgrade.
+	 */
+	@Override
+	public void onCreated (final ItemStack stack, final World world, final EntityPlayer player) {
+		if (player == null)
+			return;
+
+		for (int i = 0; i < stack.getCount(); i++)
+			XP.grant(player, CONFIG.xp.getInt(world.rand));
+	}
+
 
 	@Override
 	public void onUpdate (ItemStack stack, World world, Entity entityIn, int itemSlot, boolean isSelected) {

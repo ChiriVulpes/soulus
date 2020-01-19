@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.config.ConfigFile;
+import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.common.util.serializer.CollectionSerializer;
 import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
@@ -81,13 +82,21 @@ public class ConfigEssences {
 		// @formatter:on
 	}
 
-	public ConfigEssence get (String type) {
-		return essences.stream().filter(config -> config.essence.equalsIgnoreCase(type)).findFirst().orElse(null);
+	public ConfigEssence get (final String type) {
+		return essences.stream()
+			.filter(config -> config.essence.equalsIgnoreCase(type))
+			.findFirst()
+			.orElse(null);
 	}
 
-	public int getSoulbookQuantity (String essenceType) {
-		ConfigEssence config = get(essenceType);
+	public int getSoulbookQuantity (final String essenceType) {
+		final ConfigEssence config = get(essenceType);
 		return config != null ? config.soulbookQuantity : essenceType == "unfocused" ? 1 : -1;
+	}
+
+	public Range getSoulbookXP (final String essenceType) {
+		final ConfigEssence config = get(essenceType);
+		return config != null ? config.soulbookFillXp : new Range(0, 0);
 	}
 
 	public static class EssencesSerializer extends CollectionSerializer<ConfigEssence> {

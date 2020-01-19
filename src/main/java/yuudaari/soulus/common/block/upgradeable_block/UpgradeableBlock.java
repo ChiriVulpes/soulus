@@ -1,5 +1,11 @@
 package yuudaari.soulus.common.block.upgradeable_block;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Stream;
+import javax.annotation.Nullable;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -21,21 +27,15 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
-import scala.Tuple3;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import scala.Tuple3;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.advancement.Advancements;
 import yuudaari.soulus.common.misc.DispenserBehaviorUpgrade.IInsertsItemStacks;
 import yuudaari.soulus.common.registration.Registration;
-import yuudaari.soulus.common.util.Translation;
 import yuudaari.soulus.common.util.ItemStackMutable;
 import yuudaari.soulus.common.util.Material;
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Stream;
+import yuudaari.soulus.common.util.Translation;
 
 @Mod.EventBusSubscriber(modid = Soulus.MODID)
 public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockTileEntity> extends Registration.Block implements IInsertsItemStacks {
@@ -154,14 +154,14 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 		onBlockDestroy(world, pos, 0, null);
 	}
 
-	public final void onBlockDestroy (World world, BlockPos pos, @Nullable EntityPlayer player) {
-		onBlockDestroy(world, pos, 0, player);
+	public final List<ItemStack> onBlockDestroy (World world, BlockPos pos, @Nullable EntityPlayer player) {
+		return onBlockDestroy(world, pos, 0, player);
 	}
 
-	public void onBlockDestroy (World world, BlockPos pos, int fortune, @Nullable EntityPlayer player) {
-		List<ItemStack> drops = getDropsForBreak(world, pos, world.getBlockState(pos), fortune, player.isCreative());
-
+	public List<ItemStack> onBlockDestroy (World world, BlockPos pos, int fortune, @Nullable EntityPlayer player) {
+		final List<ItemStack> drops = getDropsForBreak(world, pos, world.getBlockState(pos), fortune, player.isCreative());
 		dropItems(world, drops, pos);
+		return drops;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -186,17 +186,15 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 		return true;
 	}
 
-	public boolean onActivateEmptyHandSneaking (World world, BlockPos pos, EntityPlayer player) {
-		List<ItemStack> drops = getDropsForEmpty(world, pos, world.getBlockState(pos));
+	public boolean onActivateEmptyHandSneaking (final World world, final BlockPos pos, final EntityPlayer player) {
+		final List<ItemStack> drops = getDropsForEmpty(world, pos, world.getBlockState(pos));
 
+		onReturningUpgradesToPlayer(world, pos, player, drops);
 		returnItemsToPlayer(world, drops, player);
 
-		TileEntity te = world.getTileEntity(pos);
-		if (te != null && te instanceof UpgradeableBlockTileEntity) {
-			UpgradeableBlockTileEntity ute = (UpgradeableBlockTileEntity) te;
-
-			ute.clear();
-		}
+		final TileEntity te = world.getTileEntity(pos);
+		if (te != null && te instanceof UpgradeableBlockTileEntity)
+			((UpgradeableBlockTileEntity) te).clear();
 
 		return true;
 	}
@@ -222,9 +220,13 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 		List<ItemStack> toReturn = new ArrayList<>();
 		upgrade.addItemStackToList(ute, toReturn, count);
 
+		onReturningUpgradesToPlayer(world, pos, player, toReturn);
 		returnItemsToPlayer(world, toReturn, player);
 
 		return true;
+	}
+
+	public void onReturningUpgradesToPlayer (final World world, final BlockPos pos, final EntityPlayer player, final List<ItemStack> returning) {
 	}
 
 	@Override
@@ -257,16 +259,29 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 		int insertQuantity = player != null && player.isSneaking() ? stack.getCount() : 1;
 
 		final ItemStack result = ute.insertUpgrade(player != null && player.isCreative() ? stack.copy() : stack.getImmutable(), upgrade, insertQuantity);
-		if (!result.isEmpty()) {
-			if (player == null)
-				stack.replace(result);
-			else
-				returnItemsToPlayer(world, Collections.singletonList(result), player);
-		}
+		returnPreviousStackAfterInsert(world, pos, player, stack, result);
 
 		boolean isFilled = ute.upgrades.get(upgrade) == upgrade.getMaxQuantity();
 		if (player != null)
 			Advancements.UPGRADE.trigger(player, new Tuple3<>(this, upgrade, isFilled));
+
+		return true;
+	}
+
+	/**
+	 * Note: The default functionality replaces the stack if the player is null (IE the upgrade was replaced by a dispenser) 
+	 * and returns the items to the player if otherwise.
+	 * @param slot The inserted upgrade stack which can be replaced with the result stack
+	 * @param result The resulting stack (what was returned after inserting the upgrade stack)
+	 */
+	public boolean returnPreviousStackAfterInsert (final World world, final BlockPos pos, final EntityPlayer player, final ItemStackMutable slot, final ItemStack result) {
+		if (result.isEmpty())
+			return false;
+
+		if (player == null)
+			slot.replace(result);
+		else
+			returnItemsToPlayer(world, Collections.singletonList(result), player);
 
 		return true;
 	}

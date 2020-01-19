@@ -1,5 +1,8 @@
 package yuudaari.soulus.common.block.composer;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -22,18 +25,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigComposerCell;
-import yuudaari.soulus.common.util.Translation;
+import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.util.ItemStackMutable;
 import yuudaari.soulus.common.util.Material;
-import java.util.ArrayList;
-import java.util.List;
-import javax.annotation.Nullable;
+import yuudaari.soulus.common.util.Translation;
 
 @ConfigInjected(Soulus.MODID)
 public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
@@ -224,6 +224,7 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 		List<ItemStack> toReturn = new ArrayList<>();
 		addItemStackToList(te.storedItem, toReturn, te.storedQuantity);
 
+		onReturningUpgradesToPlayer(world, pos, player, toReturn);
 		returnItemsToPlayer(world, toReturn, player);
 		te.storedItem = null;
 		te.storedQuantity = 0;
@@ -232,6 +233,16 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 		te.blockUpdate();
 
 		return true;
+	}
+
+	@Override
+	public void onReturningUpgradesToPlayer (final World world, final BlockPos pos, final EntityPlayer player, final List<ItemStack> returning) {
+		super.onReturningUpgradesToPlayer(world, pos, player, returning);
+
+		// need some way to tell if the xp has already been granted for this item
+		// for (final ItemStack stack : returning)
+		// 	if (stack.getCount() == 1 && SoulCatalyst.isFilled(stack) || OrbMurky.isFilled(stack))
+		// 		stack.getItem().onCreated(stack, world, player);
 	}
 
 	@Override

@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -33,6 +34,7 @@ import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.Colour;
 import yuudaari.soulus.common.util.Translation;
+import yuudaari.soulus.common.util.XP;
 
 @ConfigInjected(Soulus.MODID)
 public class SoulCatalyst extends Registration.Item implements IHasComposerCellInfo, IFillableWithEssence {
@@ -128,6 +130,15 @@ public class SoulCatalyst extends Registration.Item implements IHasComposerCellI
 	}
 
 	@Override
+	public void onCreated (final ItemStack stack, final World world, final EntityPlayer player) {
+		if (player == null || !isFilled(stack))
+			return;
+
+		for (int i = 0; i < stack.getCount(); i++)
+			XP.grant(player, CONFIG.xp.getInt(world.rand));
+	}
+
+	@Override
 	public int getItemStackLimit (ItemStack stack) {
 		// if it's full, allow them to be stacked
 		return getContainedEssence(stack) == CONFIG.requiredEssence ? CONFIG.stackSize : 1;
@@ -197,7 +208,7 @@ public class SoulCatalyst extends Registration.Item implements IHasComposerCellI
 	}
 
 	public static boolean isFilled (ItemStack stack) {
-		return getContainedEssence(stack) >= CONFIG.requiredEssence;
+		return stack.getItem() == ItemRegistry.SOUL_CATALYST && getContainedEssence(stack) >= CONFIG.requiredEssence;
 	}
 
 	public static ItemStack setContainedEssence (ItemStack stack, int count) {

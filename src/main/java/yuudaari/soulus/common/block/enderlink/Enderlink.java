@@ -230,19 +230,18 @@ public class Enderlink extends UpgradeableBlock<EnderlinkTileEntity> {
 	}
 
 	@Override
-	public void onBlockDestroy (World world, BlockPos pos, int fortune, EntityPlayer player) {
-		long cp = getChunkPosition(pos);
+	public List<ItemStack> onBlockDestroy (final World world, final BlockPos pos, final int fortune, final EntityPlayer player) {
+		final long cp = getChunkPosition(pos);
 
-		Set<BlockPos> enderlinks = ENDERLINKS.get(cp);
+		final Set<BlockPos> enderlinks = ENDERLINKS.get(cp);
 		if (enderlinks != null) {
 			enderlinks.remove(pos);
 
-			if (enderlinks.size() == 0) {
+			if (enderlinks.size() == 0)
 				ENDERLINKS.remove(cp);
-			}
 		}
 
-		super.onBlockDestroy(world, pos, fortune, player);
+		return super.onBlockDestroy(world, pos, fortune, player);
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.config.ClientField;
 import yuudaari.soulus.common.config.ConfigFile;
 import yuudaari.soulus.common.util.ModPotionEffect;
+import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
 
@@ -19,6 +20,7 @@ public class ConfigCrystalDark extends ConfigItem {
 	@Serialized @ClientField public int particleCount = 50;
 
 	// SERVER
+	@Serialized public Range xp = new Range(8, 10);
 	@Serialized public float prickChance = 0.001f;
 	@Serialized public int prickAmount = 1;
 	@Serialized public ModPotionEffect[] prickEffects = new ModPotionEffect[] {

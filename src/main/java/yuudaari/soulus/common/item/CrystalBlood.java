@@ -34,6 +34,7 @@ import yuudaari.soulus.common.network.packet.client.CrystalBloodHitEntity;
 import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.Colour;
 import yuudaari.soulus.common.util.Translation;
+import yuudaari.soulus.common.util.XP;
 import yuudaari.soulus.common.util.ModPotionEffect;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -126,6 +127,8 @@ public class CrystalBlood extends Registration.Item {
 				if (!worldIn.isRemote) {
 					setContainedBlood(heldItem, containedBlood + CONFIG.prickWorth);
 					player.attackEntityFrom(ModDamageSource.CRYSTAL_BLOOD, CONFIG.prickAmount);
+					if (isFilled(heldItem))
+						onCreated(heldItem, player.world, player);
 
 					Advancements.CRYSTAL_BLOOD_PRICK.trigger(player, null);
 
@@ -151,8 +154,19 @@ public class CrystalBlood extends Registration.Item {
 			int blood = getContainedBlood(stack);
 			setContainedBlood(stack, blood + CONFIG.creaturePrickWorth);
 			CrystalBlood.bloodParticles(target);
+			if (isFilled(stack))
+				onCreated(stack, attacker.world, attacker instanceof EntityPlayer ? (EntityPlayer) attacker : null);
 		}
 		return true;
+	}
+
+	@Override
+	public void onCreated (final ItemStack stack, final World world, final EntityPlayer player) {
+		if (player == null || !isFilled(stack))
+			return;
+
+		for (int i = 0; i < stack.getCount(); i++)
+			XP.grant(player, CONFIG.xp.getInt(world.rand));
 	}
 
 	@Override
@@ -190,7 +204,7 @@ public class CrystalBlood extends Registration.Item {
 			tag = new NBTTagCompound();
 			stack.setTagCompound(tag);
 		}
-		tag.setInteger("contained_blood", count);
+		tag.setInteger("contained_blood", Math.min(count, CONFIG.requiredBlood));
 		return stack;
 	}
 

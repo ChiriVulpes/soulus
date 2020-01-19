@@ -2,6 +2,7 @@ package yuudaari.soulus.common.config.item;
 
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.config.ConfigFile;
+import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
 
@@ -14,4 +15,5 @@ public class ConfigSoulCatalyst extends ConfigItem {
 	}
 
 	@Serialized public int requiredEssence = 256;
+	@Serialized public Range xp = new Range(10, 20);
 }

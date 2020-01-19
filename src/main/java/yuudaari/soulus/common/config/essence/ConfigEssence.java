@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Nullable;
+import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.common.util.serializer.DefaultMapSerializer;
 import yuudaari.soulus.common.util.serializer.NullableField;
 import yuudaari.soulus.common.util.serializer.Serializable;
@@ -19,6 +20,7 @@ public class ConfigEssence {
 	@Serialized @NullableField public ConfigColor colors;
 	@Serialized @NullableField public ConfigCreatureBone bones = null;
 	@Serialized public int soulbookQuantity = 16;
+	@Serialized public Range soulbookFillXp = new Range(3, 5);
 	@Serialized(DoubleMapSerializer.class) @NullableField public Map<String, Double> spawns;
 	@Serialized(LootMapSerializer.class) @NullableField public Map<String, ConfigCreatureLoot> loot;
 

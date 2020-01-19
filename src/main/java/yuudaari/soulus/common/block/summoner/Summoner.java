@@ -405,17 +405,13 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 	}
 
 	@Override
-	public void onBlockDestroy (World world, BlockPos pos, int fortune, EntityPlayer player) {
-		TileEntity te = world.getTileEntity(pos);
+	public List<ItemStack> onBlockDestroy (final World world, final BlockPos pos, final int fortune, final EntityPlayer player) {
+		final TileEntity te = world.getTileEntity(pos);
 
-		if (te != null && te instanceof SummonerTileEntity) {
-			SummonerTileEntity ste = (SummonerTileEntity) te;
-			if (ste.hasMalice()) {
-				Advancements.BREAK_SUMMONER_MALICE.trigger(player, null);
-			}
-		}
+		if (te != null && te instanceof SummonerTileEntity && ((SummonerTileEntity) te).hasMalice())
+			Advancements.BREAK_SUMMONER_MALICE.trigger(player, null);
 
-		super.onBlockDestroy(world, pos, fortune, player);
+		return super.onBlockDestroy(world, pos, fortune, player);
 	}
 
 	@Override
@@ -505,13 +501,8 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 			// there was already a tile entity here, with an essence type
 			// that means there's a soulbook inside, so return it
 			String oldEssenceType = te.getEssenceType();
-			if (oldEssenceType != null) {
-				final ItemStack returnSoulbook = getSoulbook(te);
-				if (player == null)
-					stack.replace(returnSoulbook);
-				else
-					returnItemsToPlayer(world, Collections.singletonList(returnSoulbook), player);
-			}
+			if (oldEssenceType != null)
+				returnPreviousStackAfterInsert(world, pos, player, stack, getSoulbook(te));
 
 			String newEssenceType = EssenceType.getEssenceType(insertSoulbook);
 			te.setEssenceType(newEssenceType);

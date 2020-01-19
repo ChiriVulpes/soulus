@@ -28,8 +28,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.registration.BlockRegistry;
-import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.config.ConfigInjected;
@@ -37,6 +35,9 @@ import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSkewer;
 import yuudaari.soulus.common.item.CrystalBlood;
 import yuudaari.soulus.common.item.SoulCatalyst;
+import yuudaari.soulus.common.registration.BlockRegistry;
+import yuudaari.soulus.common.registration.ItemRegistry;
+import yuudaari.soulus.common.util.ItemStackMutable;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.Translation;
 
@@ -220,6 +221,17 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	//
 
 	@Override
+	public List<ItemStack> onBlockDestroy (final World world, final BlockPos pos, final int fortune, final EntityPlayer player) {
+		final List<ItemStack> drops = super.onBlockDestroy(world, pos, fortune, player);
+
+		final ItemStack bloodCrystal = drops.stream().filter(CrystalBlood::isFilled).findFirst().orElse(ItemStack.EMPTY);
+		if (!world.isRemote && !bloodCrystal.isEmpty())
+			bloodCrystal.getItem().onCreated(bloodCrystal, world, player);
+
+		return drops;
+	}
+
+	@Override
 	public void onBlockPlacedBy (World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		SkewerTileEntity te = (SkewerTileEntity) world.getTileEntity(pos);
 		if (te == null) return;
@@ -262,6 +274,24 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 				.nextFloat() * 0.25F + 0.6F);
 
 		}
+	}
+
+	@Override
+	public boolean returnPreviousStackAfterInsert (final World world, final BlockPos pos, final EntityPlayer player, final ItemStackMutable slot, final ItemStack result) {
+		if (!super.returnPreviousStackAfterInsert(world, pos, player, slot, result))
+			return false;
+
+		if (CrystalBlood.isFilled(result))
+			result.getItem().onCreated(result, world, player);
+
+		return true;
+	}
+
+	@Override
+	public void onReturningUpgradesToPlayer (final World world, final BlockPos pos, final EntityPlayer player, final List<ItemStack> returning) {
+		for (final ItemStack stack : returning)
+			if (CrystalBlood.isFilled(stack))
+				stack.getItem().onCreated(stack, world, player);
 	}
 
 	/////////////////////////////////////////
