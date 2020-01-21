@@ -19,6 +19,7 @@ public class ConfigEssence {
 	@Serialized @NullableField public String[] spawnNames;
 	@Serialized @NullableField public ConfigColor colors;
 	@Serialized @NullableField public ConfigCreatureBone bones = null;
+	@Serialized public double soulbookUsesMultiplier = 1;
 	@Serialized public int soulbookQuantity = 16;
 	@Serialized public Range soulbookFillXp = new Range(3, 5);
 	@Serialized(DoubleMapSerializer.class) @NullableField public Map<String, Double> spawns;
@@ -53,6 +54,11 @@ public class ConfigEssence {
 
 	public ConfigEssence setColor (int color1, int color2) {
 		this.colors = new ConfigColor(color1, color2);
+		return this;
+	}
+
+	public ConfigEssence setSoulbookUsesMultiplier (final double multiplier) {
+		this.soulbookUsesMultiplier = multiplier;
 		return this;
 	}
 

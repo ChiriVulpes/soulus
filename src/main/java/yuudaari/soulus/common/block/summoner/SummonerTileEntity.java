@@ -69,12 +69,16 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 	public float getSoulbookUses () {
 		if (soulbookUses == null && CONFIG.soulbookUses != null && CONFIG.soulbookUses > 0)
-			soulbookUses = (float) (int) CONFIG.soulbookUses;
+			setSoulbookUses((float) 1);
 		return soulbookUses;
 	}
 
 	public void setSoulbookUses (Float val) {
-		soulbookUses = val;
+		soulbookUses = val == null ? null : Math.max(val, CONFIG.soulbookUses) * (float) CONFIG_ESSENCES.getSoulbookUsesMultiplier(essenceType);
+	}
+
+	public double getMaxSoulbookUses () {
+		return CONFIG.soulbookUses * CONFIG_ESSENCES.getSoulbookUsesMultiplier(essenceType);
 	}
 
 	private int spawningRadius;

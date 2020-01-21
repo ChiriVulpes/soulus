@@ -75,9 +75,9 @@ public class ConfigEssences {
 		essences.add(new ConfigEssence("NONE", new ConfigCreatureBone("ENDER", 20)));
 		
 		// no bone type
-		essences.add(new ConfigEssence("minecraft:slime", null));
-		essences.add(new ConfigEssence("minecraft:villager_golem", null).setColor(0xD1CBC8, 0x6A914B));
-		essences.add(new ConfigEssence("minecraft:magma_cube", null));
+		essences.add(new ConfigEssence("minecraft:slime", null).setSoulbookUsesMultiplier(0.8));
+		essences.add(new ConfigEssence("minecraft:villager_golem", null).setColor(0xD1CBC8, 0x6A914B).setSoulbookUsesMultiplier(0.6));
+		essences.add(new ConfigEssence("minecraft:magma_cube", null).setSoulbookUsesMultiplier(0.6));
 		
 		// @formatter:on
 	}
@@ -97,6 +97,11 @@ public class ConfigEssences {
 	public Range getSoulbookXP (final String essenceType) {
 		final ConfigEssence config = get(essenceType);
 		return config != null ? config.soulbookFillXp : new Range(0, 0);
+	}
+
+	public double getSoulbookUsesMultiplier (final String essenceType) {
+		final ConfigEssence config = get(essenceType);
+		return config != null ? config.soulbookUsesMultiplier : 1;
 	}
 
 	public static class EssencesSerializer extends CollectionSerializer<ConfigEssence> {
