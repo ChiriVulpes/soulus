@@ -11,7 +11,8 @@ import yuudaari.soulus.common.util.serializer.Serialized;
 @Serializable
 public class ConfigBoneChunks {
 
-	@Serialized @ClientField public int particleCount = 3;
+	@Serialized @ClientField public double particleCount = 3;
+	@Serialized @ClientField public int particleCountMax = 3 * 16;
 	@Serialized public boolean sneakToMarrowFullStack = false;
 	@Serialized public Range xp = new Range(-8, 4);
 }

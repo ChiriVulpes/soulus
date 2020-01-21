@@ -16,7 +16,6 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
@@ -173,8 +172,8 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 				if (boneType != null) {
 					// auto-marrow	
 
-					final Collection<ItemStack> results = BoneChunks.getMarrowingDrops(world.rand, boneType.name, stack.getCount());
-					stack.shrink(stack.getCount());
+					final int count = stack.getCount();
+					final Collection<ItemStack> results = BoneChunks.getMarrowingDrops(world.rand, boneType.name, count);
 
 					for (final ItemStack resultStack : results)
 						dispenseItem(resultStack, world, pos, EnumFacing.DOWN);
@@ -182,8 +181,9 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 					world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_GRAVEL_HIT, SoundCategory.BLOCKS, 0.5F + 0.5F * (float) world.rand
 						.nextInt(2), (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F + 1.0F);
 
-					SoulsPacketHandler.INSTANCE
-						.sendToAllAround(new ComposerCellMarrow(this, boneChunk), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 128));
+					marrowParticles(world, pos, Item.getIdFromItem(boneChunk), count);
+
+					stack.shrink(count);
 				}
 			}
 		}
@@ -278,9 +278,19 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 		return storedItem;
 	}
 
+	public static void marrowParticles (final World world, final BlockPos pos, final int boneChunk, final int count) {
+		if (world.isRemote) {
+			marrowParticles(world, pos, boneChunk, count, true);
+		} else {
+			SoulsPacketHandler.INSTANCE
+				.sendToAllAround(new ComposerCellMarrow(pos, boneChunk, count), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 128));
+		}
+	}
+
 	@SideOnly(Side.CLIENT)
-	public static void marrowParticles (final World world, final BlockPos pos, final int chunk) {
-		for (int i = 0; i < CONFIG_BONE_CHUNKS.particleCount; ++i) {
+	private static void marrowParticles (final World world, final BlockPos pos, final int chunk, final int count, final boolean clientside) {
+		final double particleCount = Math.min(CONFIG_BONE_CHUNKS.particleCount * count, CONFIG_BONE_CHUNKS.particleCountMax);
+		for (int i = 0; i < particleCount; ++i) {
 			// Vec3d v = new Vec3d(((double) world.rand.nextFloat() - 0.5D) * 0.1D, Math.random() * 0.1D + 0.1D, 0.0D);
 			// v = v.rotatePitch(-player.rotationPitch * 0.017453292F);
 			// v = v.rotateYaw(-player.rotationYaw * 0.017453292F);
@@ -290,7 +300,7 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 			// v2 = v2.rotateYaw(-player.rotationYaw * 0.017453292F);
 			// v2 = v2.addVector();
 
-			world.spawnParticle(EnumParticleTypes.ITEM_CRACK, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, 0, 0, 0, chunk);
+			world.spawnParticle(EnumParticleTypes.ITEM_CRACK, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5, (Math.random() - 0.5) * 0.3, Math.random() * 0.15, (Math.random() - 0.5) * 0.3, chunk);
 		}
 	}
 }

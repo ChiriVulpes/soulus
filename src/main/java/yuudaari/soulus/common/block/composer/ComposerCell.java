@@ -278,6 +278,9 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	@Override
 	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, ComposerCellTileEntity te, EntityPlayer player) {
 
+		if (te.isMarrowingMode())
+			currentTooltip.add(Translation.localize("waila." + Soulus.MODID + ":composer_cell.marrowing_mode"));
+
 		// currentTooltip.add(Translation.localize("waila." + Soulus.MODID + ":composer_cell.slot", te.slot));
 
 		if (te.storedQuantity == 0) {
@@ -294,9 +297,6 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 			((IHasComposerCellInfo) storedItem.getItem())
 				.addComposerCellInfo(currentTooltip, storedItem, te.storedQuantity);
 		}
-
-		if (te.isMarrowingMode())
-			currentTooltip.add(Translation.localize("waila." + Soulus.MODID + ":composer_cell.marrowing_mode"));
 	}
 
 	// this has to stay clientside, TooltipFlags doesn't exist on the server

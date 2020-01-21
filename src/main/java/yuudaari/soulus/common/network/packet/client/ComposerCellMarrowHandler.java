@@ -1,6 +1,6 @@
 package yuudaari.soulus.common.network.packet.client;
 
-import net.minecraftforge.common.DimensionManager;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -13,7 +13,7 @@ public class ComposerCellMarrowHandler implements IMessageHandler<ComposerCellMa
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IMessage onMessage (ComposerCellMarrow message, MessageContext ctx) {
-		ComposerCellTileEntity.marrowParticles(DimensionManager.getWorld(message.dimension), message.pos, message.chunkId);
+		ComposerCellTileEntity.marrowParticles(Minecraft.getMinecraft().world, message.pos, message.chunkId, message.count);
 		return null;
 	}
 }

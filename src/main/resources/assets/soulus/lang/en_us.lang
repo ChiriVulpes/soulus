@@ -202,7 +202,7 @@ waila.soulus:composer.required_creatures=Required Consumption:
 waila.soulus:composer.required_creature=§8%1$s: §c%2$s
 waila.soulus:composer.no_recipe=§8No Valid Recipe
 waila.soulus:composer_cell.no_items=§8Contains No Items
-waila.soulus:composer_cell.marrowing_mode=§8Right click with bone chunks to marrow
+waila.soulus:composer_cell.marrowing_mode=§oRight click with bone chunks to marrow
 waila.soulus:composer_cell.contained_item=%1$s/%2$s §6%3$s
 waila.soulus:composer_cell.slot=Slot %1$s
 
