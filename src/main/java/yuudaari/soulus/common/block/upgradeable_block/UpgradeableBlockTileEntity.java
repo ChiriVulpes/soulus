@@ -130,36 +130,34 @@ public abstract class UpgradeableBlockTileEntity extends TileEntity implements I
 		return result;
 	}
 
-	public static void dispenseItem (ItemStack stack, World world, BlockPos pos, EnumFacing facing) {
-		if (!stack.isEmpty()) {
-			IInventory facingInventory = getFacingInventory(world, pos, facing);
+	public static void dispenseItem (final ItemStack stack, final World world, final BlockPos pos, final EnumFacing facing) {
+		if (stack.isEmpty())
+			return;
 
-			if (facingInventory != null) {
-				insertItem(stack, facing, facingInventory);
-				return;
-			}
+		final IInventory facingInventory = getFacingInventory(world, pos, facing);
 
-			double d0 = pos.getX() + 0.5 + facing.getFrontOffsetX() / 1.5;
-			double d1 = pos.getY() + 0.5 + facing.getFrontOffsetY() / 1.5;
-			double d2 = pos.getZ() + 0.5 + facing.getFrontOffsetZ() / 1.5;
+		if (facingInventory != null)
+			insertItem(stack, facing, facingInventory);
 
-			if (facing.getAxis() == EnumFacing.Axis.Y) {
-				d1 = d1 - 0.125D;
-			} else {
-				d1 = d1 - 0.15625D;
-			}
+		if (stack.isEmpty())
+			return;
 
-			EntityItem itemEntity = new EntityItem(world, d0, d1, d2, stack);
-			double d3 = world.rand.nextDouble() * 0.1D + 0.2D;
-			itemEntity.motionX = facing.getFrontOffsetX() * d3;
-			itemEntity.motionY = facing.getFrontOffsetY() * d3;
-			itemEntity.motionZ = facing.getFrontOffsetZ() * d3;
-			double speed = 1.5;
-			itemEntity.motionX += world.rand.nextGaussian() * 0.0075D * speed;
-			itemEntity.motionY += world.rand.nextGaussian() * 0.0075D * speed;
-			itemEntity.motionZ += world.rand.nextGaussian() * 0.0075D * speed;
-			world.spawnEntity(itemEntity);
-		}
+		final double d0 = pos.getX() + 0.5 + facing.getFrontOffsetX() / 1.5;
+		double d1 = pos.getY() + 0.5 + facing.getFrontOffsetY() / 1.5;
+		final double d2 = pos.getZ() + 0.5 + facing.getFrontOffsetZ() / 1.5;
+
+		d1 = d1 - (facing.getAxis() == EnumFacing.Axis.Y ? 0.125D : 0.15625D);
+
+		final EntityItem itemEntity = new EntityItem(world, d0, d1, d2, stack);
+		final double d3 = world.rand.nextDouble() * 0.1D + 0.2D;
+		itemEntity.motionX = facing.getFrontOffsetX() * d3;
+		itemEntity.motionY = facing.getFrontOffsetY() * d3;
+		itemEntity.motionZ = facing.getFrontOffsetZ() * d3;
+		final double speed = 1.5;
+		itemEntity.motionX += world.rand.nextGaussian() * 0.0075D * speed;
+		itemEntity.motionY += world.rand.nextGaussian() * 0.0075D * speed;
+		itemEntity.motionZ += world.rand.nextGaussian() * 0.0075D * speed;
+		world.spawnEntity(itemEntity);
 	}
 
 	/////////////////////////////////////////
