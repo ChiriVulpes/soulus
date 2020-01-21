@@ -17,6 +17,7 @@ public class Registration {
 		public Block (final String name, final Material material) {
 			super(material);
 			setName(name);
+			initialize();
 		}
 
 		@Override
@@ -59,6 +60,7 @@ public class Registration {
 		public BlockPillar (final String name, final Material material) {
 			super(material);
 			setName(name);
+			initialize();
 		}
 
 		@Override
@@ -101,6 +103,7 @@ public class Registration {
 		public BlockPane (final String name, final Material material) {
 			super(material, true);
 			setName(name);
+			initialize();
 		}
 
 		@Override
@@ -119,6 +122,7 @@ public class Registration {
 		public ItemBlock (final IBlockRegistration block) {
 			super(block.getBlock());
 			setRegistryName(block.getRegistryName());
+			initialize();
 		}
 
 		@Override
@@ -132,6 +136,7 @@ public class Registration {
 		public ItemMultiTexture (final Block block, final ItemMultiTexture.Mapper mapper) {
 			super(block, block, mapper);
 			setRegistryName(block.getRegistryName());
+			initialize();
 		}
 
 		@Override
@@ -145,6 +150,7 @@ public class Registration {
 		public Item (final String name) {
 			super();
 			setName(name);
+			initialize();
 		}
 
 		////////////////////////////////////
@@ -215,6 +221,7 @@ public class Registration {
 			foodConfigGetter = configGetter;
 
 			Soulus.onConfigReload(this::onConfigReload);
+			initialize();
 		}
 
 		private void onConfigReload () {

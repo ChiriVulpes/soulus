@@ -4,9 +4,11 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockDoublePlant;
-import net.minecraft.block.IGrowable;
 import net.minecraft.block.BlockDoublePlant.EnumBlockHalf;
+import net.minecraft.block.BlockReed;
+import net.minecraft.block.IGrowable;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -19,10 +21,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.client.util.ParticleType;
-import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.item.ConfigBonemealNether;
+import yuudaari.soulus.common.registration.BlockRegistry;
 
 @ConfigInjected(Soulus.MODID)
 public class BonemealNether extends Bonemeal {
@@ -35,31 +37,37 @@ public class BonemealNether extends Bonemeal {
 
 	@Override
 	public EnumActionResult onItemUse (EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		return bonemealBlock(world, pos, player.getHeldItem(hand)) ? EnumActionResult.SUCCESS : EnumActionResult.PASS;
+	}
 
-		IBlockState state = world.getBlockState(pos);
-		Block block = state.getBlock();
+	@Override
+	public boolean onDispense (final IBlockSource source, final ItemStack stack, final BlockPos targetPos) {
+		return bonemealBlock(source.getWorld(), targetPos, stack);
+	}
 
-		if ((block instanceof IGrowable || block instanceof BlockBush) && !state.isFullBlock()) {
-			if (block instanceof BlockDoublePlant) {
-				if (state.getValue(BlockDoublePlant.HALF) == EnumBlockHalf.UPPER)
-					world.setBlockState(pos.down(), Blocks.AIR.getDefaultState());
-				else
-					world.setBlockState(pos.up(), Blocks.AIR.getDefaultState());
-			}
+	private static boolean bonemealBlock (final World world, final BlockPos pos, final ItemStack stack) {
+		final IBlockState state = world.getBlockState(pos);
+		final Block block = state.getBlock();
 
-			world.setBlockState(pos, BlockRegistry.ASH.getDefaultState(), 3);
+		if (state.isFullBlock())
+			return true;
 
-			ItemStack stack = player.getHeldItem(hand);
-			stack.shrink(1);
+		if (!(block instanceof IGrowable) && !(block instanceof BlockBush) && !(block instanceof BlockReed))
+			return true;
 
-			if (world.isRemote) {
-				particles(world, pos);
-			}
+		if (block instanceof BlockDoublePlant)
+			world.setBlockState(state.getValue(BlockDoublePlant.HALF) == EnumBlockHalf.UPPER ? pos.down() : pos.up(), Blocks.AIR.getDefaultState());
 
-			return EnumActionResult.SUCCESS;
-		}
+		IBlockState newState = BlockRegistry.ASH.getDefaultState();
+		world.setBlockState(pos, newState, 3);
+		BlockRegistry.ASH.neighborChanged(state, world, pos, BlockRegistry.ASH, pos);
 
-		return EnumActionResult.PASS;
+		stack.shrink(1);
+
+		if (world.isRemote)
+			particles(world, pos);
+
+		return false;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -76,4 +84,5 @@ public class BonemealNether extends Bonemeal {
 			world.spawnParticle(ParticleType.BONEMEAL_NETHER.getId(), false, x + 0.5F, y, z + 0.5F, xv, yv, zv, 1);
 		}
 	}
+
 }

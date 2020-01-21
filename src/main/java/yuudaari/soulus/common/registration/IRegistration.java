@@ -6,13 +6,16 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDispenser;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -22,9 +25,20 @@ import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.compat.jei.IProvidesJeiDescription;
 import yuudaari.soulus.common.compat.jei.JeiDescriptionRegistry;
+import yuudaari.soulus.common.registration.item.DispenserBehavior;
+import yuudaari.soulus.common.registration.item.DispenserBehavior.IDispense;
 
 @SuppressWarnings("unchecked")
-public interface IRegistration<T extends IForgeRegistryEntry<T>> extends IProvidesJeiDescription, IForgeRegistryEntry<T> {
+public interface IRegistration<T extends IForgeRegistryEntry<T>> extends IProvidesJeiDescription, IForgeRegistryEntry<T>, IDispense {
+
+	default void initialize () {
+		try {
+			if (this.getClass().getMethod("onDispense", IBlockSource.class, ItemStack.class, BlockPos.class).getDeclaringClass() != IRegistration.class) {
+				BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(getItem(), new DispenserBehavior(this));
+			}
+		} catch (final NoSuchMethodException e) {
+		}
+	}
 
 	////////////////////////////////////
 	// Misc
@@ -169,5 +183,12 @@ public interface IRegistration<T extends IForgeRegistryEntry<T>> extends IProvid
 	default void registerModels () {
 		ModelLoader.setCustomModelResourceLocation((Item) this, 0, new ModelResourceLocation(((Item) this)
 			.getRegistryName(), "inventory"));
+	}
+
+	/**
+	 * @return Whether to dispense the item.
+	 */
+	default boolean onDispense (final IBlockSource source, final ItemStack stack, final BlockPos targetPos) {
+		return true;
 	}
 }

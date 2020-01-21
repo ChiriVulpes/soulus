@@ -60,9 +60,8 @@ public class AshBlock extends Registration.Block {
 
 	@Override
 	public void neighborChanged (IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos) {
-		if (!world.getBlockState(pos.down()).isFullBlock()) {
+		if (!world.getBlockState(pos.down()).isFullBlock())
 			world.destroyBlock(pos, true);
-		}
 	}
 
 	@Override

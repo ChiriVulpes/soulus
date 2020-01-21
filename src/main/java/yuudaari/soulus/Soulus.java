@@ -38,6 +38,7 @@ import yuudaari.soulus.common.compat.GameStages;
 import yuudaari.soulus.common.compat.crafttweaker.ZenComposer;
 import yuudaari.soulus.common.compat.top.TheOneProbe;
 import yuudaari.soulus.common.config.Config;
+import yuudaari.soulus.common.item.BonemealNether;
 import yuudaari.soulus.common.misc.BoneChunks;
 import yuudaari.soulus.common.misc.DispenserBehaviorUpgrade;
 import yuudaari.soulus.common.misc.MidnightDraught;
