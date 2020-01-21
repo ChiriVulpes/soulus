@@ -159,7 +159,7 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 	}
 
 	public List<ItemStack> onBlockDestroy (World world, BlockPos pos, int fortune, @Nullable EntityPlayer player) {
-		final List<ItemStack> drops = getDropsForBreak(world, pos, world.getBlockState(pos), fortune, player.isCreative());
+		final List<ItemStack> drops = getDropsForBreak(world, pos, world.getBlockState(pos), fortune, player != null && player.isCreative());
 		dropItems(world, drops, pos);
 		return drops;
 	}
