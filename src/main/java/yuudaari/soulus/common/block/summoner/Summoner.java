@@ -567,13 +567,11 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		if (te.upgrades.get(Upgrade.CRYSTAL_DARK) > 0) return;
 
 		int summonPercentage = (int) Math.floor(te.getSpawnPercent() * 100);
-		currentTooltip
-			.add(Translation.localize("waila." + Soulus.MODID + ":summoner.summon_percentage", summonPercentage));
+		currentTooltip.add(Translation.localize("waila." + Soulus.MODID + ":summoner.summon_percentage", summonPercentage));
 
 		if (CONFIG.soulbookUses != null && CONFIG.soulbookUses > 0) {
-			int summonsRemaining = (int) Math.ceil(te.getSoulbookUses() / CONFIG.soulbookUses * 100);
-			currentTooltip
-				.add(Translation.localize("waila." + Soulus.MODID + ":summoner.summons_remaining", summonsRemaining));
+			int summonsRemaining = Math.max(0, (int) Math.ceil(te.getSoulbookUses() / CONFIG.soulbookUses * 100));
+			currentTooltip.add(Translation.localize("waila." + Soulus.MODID + ":summoner.summons_remaining", summonsRemaining));
 		}
 
 	}
