@@ -2,6 +2,7 @@ package yuudaari.soulus.common.block.composer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -305,10 +306,13 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	@Override
 	protected List<String> onWailaTooltipMore (IBlockState blockState, ComposerCellTileEntity te, EntityPlayer player) {
 		ItemStack storedItem = te.getStoredItem();
-		if (storedItem != null) {
-			return storedItem.getTooltip(player, TooltipFlags.ADVANCED);
-		}
-		return null;
+		if (storedItem == null)
+			return null;
+
+		return storedItem.getTooltip(player, TooltipFlags.ADVANCED)
+			.stream()
+			.map(tooltipLine -> tooltipLine.length() > 0 ? "   " + tooltipLine : tooltipLine)
+			.collect(Collectors.toList());
 	}
 
 	public static interface IHasComposerCellInfo {
