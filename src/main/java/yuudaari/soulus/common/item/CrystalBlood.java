@@ -1,5 +1,10 @@
 package yuudaari.soulus.common.item;
 
+import java.util.List;
+import java.util.Random;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -23,7 +28,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.client.util.ParticleType;
-import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.advancement.Advancements;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
@@ -31,16 +35,12 @@ import yuudaari.soulus.common.config.item.ConfigCrystalBlood;
 import yuudaari.soulus.common.misc.ModDamageSource;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.client.CrystalBloodHitEntity;
+import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.Colour;
+import yuudaari.soulus.common.util.ModPotionEffect;
 import yuudaari.soulus.common.util.Translation;
 import yuudaari.soulus.common.util.XP;
-import yuudaari.soulus.common.util.ModPotionEffect;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.List;
-import java.util.Random;
 
 @ConfigInjected(Soulus.MODID)
 public class CrystalBlood extends Registration.Item {
@@ -107,6 +107,10 @@ public class CrystalBlood extends Registration.Item {
 		return 1 - Math.min(CONFIG.requiredBlood, getContainedBlood(stack)) / (double) CONFIG.requiredBlood;
 	}
 
+	////////////////////////////////////
+	// Events
+	//
+
 	@ParametersAreNonnullByDefault
 	@Nonnull
 	@Override
@@ -168,6 +172,10 @@ public class CrystalBlood extends Registration.Item {
 		for (int i = 0; i < stack.getCount(); i++)
 			XP.grant(player, CONFIG.xp.getInt(world.rand));
 	}
+
+	////////////////////////////////////
+	// Misc
+	//
 
 	@Override
 	public Multimap<String, AttributeModifier> getAttributeModifiers (EntityEquipmentSlot equipmentSlot, ItemStack stack) {

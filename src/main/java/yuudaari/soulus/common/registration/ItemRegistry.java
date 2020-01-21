@@ -47,7 +47,7 @@ public class ItemRegistry {
 	public static Item DUST_STONE = new Item("dust_stone").addOreDict("dustStone").setHasDescription();
 	public static Item DUST_WOOD = new Item("dust_wood").addOreDict("dustWood").setHasDescription();
 	public static Item EMERALD_BURNT = new Item("emerald_burnt").setHasDescription();
-	public static Item EMERALD_COATED = new Item("emerald_coated").setHasDescription();
+	public static Item EMERALD_COATED = new EmeraldBloody();
 	public static Essence ESSENCE = new Essence();
 	public static EssencePerfect ESSENCE_PERFECT = new EssencePerfect();
 	public static GearBone GEAR_BONE = new GearBone("gear_bone");
