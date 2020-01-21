@@ -571,7 +571,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		currentTooltip.add(Translation.localize("waila." + Soulus.MODID + ":summoner.summon_percentage", summonPercentage));
 
 		if (CONFIG.soulbookUses != null && CONFIG.soulbookUses > 0) {
-			int summonsRemaining = Math.max(100, Math.max(0, (int) Math.ceil(te.getSoulbookUses() / te.getMaxSoulbookUses() * 100)));
+			int summonsRemaining = Math.min(100, Math.max(0, (int) Math.ceil(te.getSoulbookUses() / te.getMaxSoulbookUses() * 100)));
 			currentTooltip.add(Translation.localize("waila." + Soulus.MODID + ":summoner.summons_remaining", summonsRemaining));
 		}
 

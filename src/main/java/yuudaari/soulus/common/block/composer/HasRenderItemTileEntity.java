@@ -20,4 +20,9 @@ public abstract class HasRenderItemTileEntity extends UpgradeableBlockTileEntity
 	public boolean shouldComplexRotate () {
 		return false;
 	}
+
+	@SideOnly(Side.CLIENT)
+	public boolean isMarrowingMode () {
+		return false;
+	}
 }

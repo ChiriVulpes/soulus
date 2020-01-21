@@ -1,24 +1,39 @@
 package yuudaari.soulus.common.block.composer;
 
+import java.util.Collection;
 import java.util.List;
 import javax.annotation.Nullable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.registration.BlockRegistry;
-import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigComposerCell;
+import yuudaari.soulus.common.config.bones.ConfigBoneType;
+import yuudaari.soulus.common.config.bones.ConfigBoneTypes;
+import yuudaari.soulus.common.config.item.ConfigBoneChunks;
+import yuudaari.soulus.common.misc.BoneChunks;
+import yuudaari.soulus.common.network.SoulsPacketHandler;
+import yuudaari.soulus.common.network.packet.client.ComposerCellMarrow;
+import yuudaari.soulus.common.registration.BlockRegistry;
+import yuudaari.soulus.common.registration.ItemRegistry;
 
 @ConfigInjected(Soulus.MODID)
 public class ComposerCellTileEntity extends HasRenderItemTileEntity {
@@ -28,6 +43,8 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 	//
 
 	@Inject public static ConfigComposerCell CONFIG;
+	@Inject public static ConfigBoneTypes CONFIG_BONE_TYPES;
+	@Inject public static ConfigBoneChunks CONFIG_BONE_CHUNKS;
 
 	public ChangeItemHandler changeItemHandler;
 	public BlockPos composerLocation;
@@ -40,6 +57,11 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 	@Override
 	public ComposerCell getBlock () {
 		return BlockRegistry.COMPOSER_CELL;
+	}
+
+	@Override
+	public boolean isMarrowingMode () {
+		return storedItem.getItem() == ItemRegistry.GEAR_OSCILLATING && storedQuantity == 1 && composerLocation == null;
 	}
 
 	@Override
@@ -133,15 +155,36 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 
 			return true;
 
-		} else if (composerLocation == null && //
-			currentStack.getItem() instanceof IFillableWithEssence && storedQuantity == 1 && //
-			(stack.getItem() == ItemRegistry.ESSENCE || stack.getItem() == ItemRegistry.ASH)) {
+		} else if (composerLocation == null) {
+			if (currentStack.getItem() instanceof IFillableWithEssence && storedQuantity == 1 //
+				&& (stack.getItem() == ItemRegistry.ESSENCE || stack.getItem() == ItemRegistry.ASH)) {
+				// auto-fill items with essence or ash
 
-			final IFillableWithEssence fillable = (IFillableWithEssence) currentStack.getItem();
-			final int insertQuantity = fillable.fill(currentStack, stack, requestedQuantity);
-			if (insertQuantity > 0) {
-				stack.shrink(insertQuantity);
-				blockUpdate();
+				final IFillableWithEssence fillable = (IFillableWithEssence) currentStack.getItem();
+				final int insertQuantity = fillable.fill(currentStack, stack, requestedQuantity);
+				if (insertQuantity > 0) {
+					stack.shrink(insertQuantity);
+					blockUpdate();
+				}
+
+			} else if (currentStack.getItem() == ItemRegistry.GEAR_OSCILLATING) {
+				final Item boneChunk = stack.getItem();
+				final ConfigBoneType boneType = CONFIG_BONE_TYPES.getFromChunk(boneChunk.getRegistryName().toString());
+				if (boneType != null) {
+					// auto-marrow	
+
+					final Collection<ItemStack> results = BoneChunks.getMarrowingDrops(world.rand, boneType.name, stack.getCount());
+					stack.shrink(stack.getCount());
+
+					for (final ItemStack resultStack : results)
+						dispenseItem(resultStack, world, pos, EnumFacing.DOWN);
+
+					world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_GRAVEL_HIT, SoundCategory.BLOCKS, 0.5F + 0.5F * (float) world.rand
+						.nextInt(2), (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F + 1.0F);
+
+					SoulsPacketHandler.INSTANCE
+						.sendToAllAround(new ComposerCellMarrow(this, boneChunk), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 128));
+				}
 			}
 		}
 
@@ -233,5 +276,21 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 	@Nullable
 	public ItemStack getStoredItem () {
 		return storedItem;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static void marrowParticles (final World world, final BlockPos pos, final int chunk) {
+		for (int i = 0; i < CONFIG_BONE_CHUNKS.particleCount; ++i) {
+			// Vec3d v = new Vec3d(((double) world.rand.nextFloat() - 0.5D) * 0.1D, Math.random() * 0.1D + 0.1D, 0.0D);
+			// v = v.rotatePitch(-player.rotationPitch * 0.017453292F);
+			// v = v.rotateYaw(-player.rotationYaw * 0.017453292F);
+			// final double d0 = (double) (-world.rand.nextFloat()) * 0.6D - 0.3D;
+			// Vec3d v2 = new Vec3d(((double) world.rand.nextFloat() - 0.5D) * 0.3D, d0, 0.6D);
+			// v2 = v2.rotatePitch(-player.rotationPitch * 0.017453292F);
+			// v2 = v2.rotateYaw(-player.rotationYaw * 0.017453292F);
+			// v2 = v2.addVector();
+
+			world.spawnParticle(EnumParticleTypes.ITEM_CRACK, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, 0, 0, 0, chunk);
+		}
 	}
 }

@@ -294,6 +294,9 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 			((IHasComposerCellInfo) storedItem.getItem())
 				.addComposerCellInfo(currentTooltip, storedItem, te.storedQuantity);
 		}
+
+		if (te.isMarrowingMode())
+			currentTooltip.add(Translation.localize("waila." + Soulus.MODID + ":composer_cell.marrowing_mode"));
 	}
 
 	// this has to stay clientside, TooltipFlags doesn't exist on the server

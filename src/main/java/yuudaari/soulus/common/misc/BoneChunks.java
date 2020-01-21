@@ -110,7 +110,7 @@ public class BoneChunks {
 				final int count = player.isSneaking() && CONFIG.sneakToMarrowFullStack ? heldItem.getCount() : 1;
 
 				if (!world.isRemote) {
-					final Collection<ItemStack> drops = getDrops(world.rand, boneType.name, count);
+					final Collection<ItemStack> drops = getMarrowingDrops(world.rand, boneType.name, count);
 					for (final ItemStack drop : drops) {
 						final EntityItem dropEntity = new EntityItem(world, player.posX, player.posY, player.posZ, drop);
 						dropEntity.setNoPickupDelay();
@@ -169,7 +169,7 @@ public class BoneChunks {
 	// Util
 	//
 
-	private static Collection<ItemStack> getDrops (final Random rand, final String boneType, final int count) {
+	public static Collection<ItemStack> getMarrowingDrops (final Random rand, final String boneType, final int count) {
 		final Map<String, ItemStack> result = new HashMap<>();
 
 		final Tuple2<Double, Map<String, Double>> dropMap = BoneChunks.drops.get(boneType.toLowerCase());
@@ -195,12 +195,12 @@ public class BoneChunks {
 		return result.values();
 	}
 
-	private static void particles (World world, EntityPlayer player, Item item) {
+	public static void particles (final World world, final EntityPlayer player, final Item item) {
 		for (int i = 0; i < CONFIG.particleCount; ++i) {
 			Vec3d v = new Vec3d(((double) world.rand.nextFloat() - 0.5D) * 0.1D, Math.random() * 0.1D + 0.1D, 0.0D);
 			v = v.rotatePitch(-player.rotationPitch * 0.017453292F);
 			v = v.rotateYaw(-player.rotationYaw * 0.017453292F);
-			double d0 = (double) (-world.rand.nextFloat()) * 0.6D - 0.3D;
+			final double d0 = (double) (-world.rand.nextFloat()) * 0.6D - 0.3D;
 			Vec3d v2 = new Vec3d(((double) world.rand.nextFloat() - 0.5D) * 0.3D, d0, 0.6D);
 			v2 = v2.rotatePitch(-player.rotationPitch * 0.017453292F);
 			v2 = v2.rotateYaw(-player.rotationYaw * 0.017453292F);

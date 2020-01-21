@@ -1,15 +1,16 @@
 package yuudaari.soulus.client.render;
 
-import yuudaari.soulus.client.util.TileEntityRenderer;
-import yuudaari.soulus.common.block.composer.HasRenderItemTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import yuudaari.soulus.client.util.TileEntityRenderer;
+import yuudaari.soulus.common.block.composer.HasRenderItemTileEntity;
 
 @SideOnly(Side.CLIENT)
 public class ComposerRenderer<T extends HasRenderItemTileEntity> extends TileEntityRenderer<T> {
@@ -41,11 +42,16 @@ public class ComposerRenderer<T extends HasRenderItemTileEntity> extends TileEnt
 
 		GlStateManager.translate(.5, 1.25, .5);
 
-		float rotate = (float) (te
-			.getPrevItemRotation() + (te.getItemRotation() - te.getPrevItemRotation()) * partialTicks);
+		float rotate = (float) (te.getPrevItemRotation() + (te.getItemRotation() - te.getPrevItemRotation()) * partialTicks);
 		GlStateManager.translate(0, Math.sin(rotate / 5) / 20, 0);
 
 		GlStateManager.rotate(rotate * 10.0F, 0.0F, 1.0F, 0.0F);
+
+		if (te.isMarrowingMode()) {
+			final Vec3d spin = rotate(new Vec3d(0, 0, 1), 10, 0, 0);
+			GlStateManager.rotate(rotate * 50.0F, (float) spin.x, (float) spin.y, (float) spin.z);
+		}
+
 		if (te.shouldComplexRotate()) {
 			GlStateManager.rotate(rotate * 4.0F, 0.0F, 0.0F, 1.0F);
 			GlStateManager.rotate(rotate * 0.5F, 1.0F, 0.0F, 0.0F);
@@ -59,5 +65,34 @@ public class ComposerRenderer<T extends HasRenderItemTileEntity> extends TileEnt
 
 		GlStateManager.popMatrix();
 		GlStateManager.popAttrib();
+	}
+
+	public Vec3d rotate (Vec3d vec, float yaw, float pitch, float roll) {
+		double cosa = Math.cos(yaw);
+		double cosb = Math.cos(pitch);
+		double cosc = Math.cos(roll);
+		double sina = Math.sin(yaw);
+		double sinb = Math.sin(pitch);
+		double sinc = Math.sin(roll);
+
+		double Axx = cosa * cosb;
+		double Axy = cosa * sinb * sinc - sina * cosc;
+		double Axz = cosa * sinb * cosc + sina * sinc;
+
+		double Ayx = sina * cosb;
+		double Ayy = sina * sinb * sinc + cosa * cosc;
+		double Ayz = sina * sinb * cosc - cosa * sinc;
+
+		double Azx = -sinb;
+		double Azy = cosb * sinc;
+		double Azz = cosb * cosc;
+
+		double px = vec.x;
+		double py = vec.y;
+		double pz = vec.z;
+		double x = Axx * px + Axy * py + Axz * pz;
+		double y = Ayx * px + Ayy * py + Ayz * pz;
+		double z = Azx * px + Azy * py + Azz * pz;
+		return new Vec3d(x, y, z);
 	}
 }

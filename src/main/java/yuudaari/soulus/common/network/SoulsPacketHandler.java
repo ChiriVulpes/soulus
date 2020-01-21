@@ -18,5 +18,6 @@ public class SoulsPacketHandler {
 		INSTANCE.registerMessage(CrystalDarkPrickHandler.class, CrystalDarkPrick.class, 3, Side.CLIENT);
 		INSTANCE.registerMessage(TetherEntityHandler.class, TetherEntity.class, 4, Side.CLIENT);
 		INSTANCE.registerMessage(SendConfig.Handler.class, SendConfig.class, 5, Side.CLIENT);
+		INSTANCE.registerMessage(ComposerCellMarrowHandler.class, ComposerCellMarrow.class, 6, Side.CLIENT);
 	}
 }
