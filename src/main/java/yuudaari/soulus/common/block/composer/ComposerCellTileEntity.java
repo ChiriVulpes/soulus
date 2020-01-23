@@ -60,7 +60,7 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 
 	@Override
 	public boolean isMarrowingMode () {
-		return storedItem.getItem() == ItemRegistry.GEAR_OSCILLATING && storedQuantity == 1 && composerLocation == null;
+		return storedItem != null && storedItem.getItem() == ItemRegistry.GEAR_OSCILLATING && storedQuantity == 1 && composerLocation == null;
 	}
 
 	@Override

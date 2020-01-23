@@ -294,10 +294,9 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 			.get());
 
 		ItemStack storedItem = te.getStoredItem();
-		if (!player.isSneaking() && storedItem != null && storedItem.getItem() instanceof IHasComposerCellInfo) {
+		if (!player.isSneaking() && storedItem != null && storedItem.getItem() instanceof IHasComposerCellInfo)
 			((IHasComposerCellInfo) storedItem.getItem())
 				.addComposerCellInfo(currentTooltip, storedItem, te.storedQuantity);
-		}
 	}
 
 	// this has to stay clientside, TooltipFlags doesn't exist on the server
