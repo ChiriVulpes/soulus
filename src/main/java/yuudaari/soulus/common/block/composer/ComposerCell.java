@@ -23,6 +23,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
@@ -206,7 +207,7 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 
 	@Override
 	public boolean onActivateInsert (final World world, final BlockPos pos, final @Nullable EntityPlayer player, final ItemStackMutable stack) {
-		ComposerCellTileEntity te = (ComposerCellTileEntity) world.getTileEntity(pos);
+		final ComposerCellTileEntity te = (ComposerCellTileEntity) world.getTileEntity(pos);
 
 		if (player != null && player.isSneaking() && !CONFIG.allowSneakRightClickStackInsertion)
 			return false;
@@ -215,20 +216,15 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	}
 
 	@Override
-	public boolean onActivateEmptyHand (World world, BlockPos pos, EntityPlayer player) {
-		ComposerCellTileEntity te = (ComposerCellTileEntity) world.getTileEntity(pos);
+	public boolean onActivateEmptyHand (final World world, final BlockPos pos, final EntityPlayer player) {
+		final ComposerCellTileEntity te = (ComposerCellTileEntity) world.getTileEntity(pos);
 
-		if (te.storedItem == null) {
+		final List<ItemStack> extracted = new ArrayList<>();
+		if (!te.tryExtract(extracted))
 			return false;
-		}
 
-		List<ItemStack> toReturn = new ArrayList<>();
-		addItemStackToList(te.storedItem, toReturn, te.storedQuantity);
-
-		onReturningUpgradesToPlayer(world, pos, player, toReturn);
-		returnItemsToPlayer(world, toReturn, player);
-		te.storedItem = null;
-		te.storedQuantity = 0;
+		onReturningUpgradesToPlayer(world, pos, player, extracted);
+		returnItemsToPlayer(world, extracted, player);
 
 		te.onChangeItem();
 		te.blockUpdate();
@@ -251,25 +247,9 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 		return onActivateEmptyHand(world, pos, player);
 	}
 
-	public void addItemStackToList (ItemStack item, List<ItemStack> list, int quantity) {
-		int maxStackSize = item.getMaxStackSize();
-		while (quantity > 0) {
-			int stackSize = Math.min(maxStackSize, quantity);
-			ItemStack stack = item.copy();
-			stack.setCount(stackSize);
-			list.add(stack);
-			quantity -= maxStackSize;
-		}
-	}
-
 	@Override
-	public void addOtherDropStacksToList (List<ItemStack> list, World world, BlockPos pos, IBlockState state) {
-		ComposerCellTileEntity te = (ComposerCellTileEntity) world.getTileEntity(pos);
-
-		if (te.storedItem == null)
-			return;
-
-		addItemStackToList(te.storedItem, list, te.storedQuantity);
+	public void addOtherDropStacksToList (final List<ItemStack> list, final World world, final BlockPos pos, final IBlockState state) {
+		((ComposerCellTileEntity) world.getTileEntity(pos)).tryExtract(list);
 	}
 
 	/////////////////////////////////////////
@@ -277,10 +257,7 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	//
 
 	@Override
-	protected void onWailaTooltipHeader (List<String> currentTooltip, IBlockState blockState, ComposerCellTileEntity te, EntityPlayer player) {
-
-		if (te.isMarrowingMode())
-			currentTooltip.add(Translation.localize("waila." + Soulus.MODID + ":composer_cell.marrowing_mode"));
+	protected void onWailaTooltipHeader (final List<String> currentTooltip, final IBlockState blockState, final ComposerCellTileEntity te, final EntityPlayer player) {
 
 		// currentTooltip.add(Translation.localize("waila." + Soulus.MODID + ":composer_cell.slot", te.slot));
 
@@ -289,33 +266,41 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 			return;
 		}
 
-		currentTooltip.add(new Translation("waila." + Soulus.MODID + ":composer_cell.contained_item")
-			.addArgs(te.storedQuantity, CONFIG.maxQuantity, te.storedItem.getDisplayName())
-			.get());
-
-		ItemStack storedItem = te.getStoredItem();
-		if (!player.isSneaking() && storedItem != null && storedItem.getItem() instanceof IHasComposerCellInfo)
-			((IHasComposerCellInfo) storedItem.getItem())
-				.addComposerCellInfo(currentTooltip, storedItem, te.storedQuantity);
+		te.onWailaTooltipHeader(currentTooltip, player);
 	}
 
-	// this has to stay clientside, TooltipFlags doesn't exist on the server
-	// solution, don't use TOP, cuz it retarded. who came up with the idea of having server-side tooltips.
-	@SideOnly(Side.CLIENT)
 	@Override
 	protected List<String> onWailaTooltipMore (IBlockState blockState, ComposerCellTileEntity te, EntityPlayer player) {
-		ItemStack storedItem = te.getStoredItem();
-		if (storedItem == null)
-			return null;
+		final List<String> currentTooltip = new ArrayList<>();
 
-		return storedItem.getTooltip(player, TooltipFlags.ADVANCED)
-			.stream()
-			.map(tooltipLine -> tooltipLine.length() > 0 ? "   " + tooltipLine : tooltipLine)
-			.collect(Collectors.toList());
+		final ItemStack storedItem = te.getStoredItem();
+		if (storedItem != null && te.shouldShowItemInTooltip(true))
+			currentTooltip.addAll(cellProxy.getStackTooltip(storedItem, player));
+
+		te.onWailaTooltipMore(currentTooltip, player);
+
+		return currentTooltip;
 	}
 
-	public static interface IHasComposerCellInfo {
+	@SidedProxy(modId = Soulus.MODID, serverSide = "yuudaari.soulus.common.block.composer.ComposerCell$CommonProxy", clientSide = "yuudaari.soulus.common.block.composer.ComposerCell$ClientProxy") //
+	public static CommonProxy cellProxy;
 
-		abstract void addComposerCellInfo (List<String> currentTooltip, ItemStack stack, int stackSize);
+	@SideOnly(Side.CLIENT)
+	public static class ClientProxy extends CommonProxy {
+
+		@Override
+		public List<String> getStackTooltip (final ItemStack stack, final EntityPlayer player) {
+			return stack.getTooltip(player, TooltipFlags.ADVANCED)
+				.stream()
+				.map(tooltipLine -> tooltipLine.length() > 0 ? "   " + tooltipLine : tooltipLine)
+				.collect(Collectors.toList());
+		}
+	}
+
+	public static class CommonProxy {
+
+		public List<String> getStackTooltip (final ItemStack stack, final EntityPlayer player) {
+			return new ArrayList<>();
+		}
 	}
 }

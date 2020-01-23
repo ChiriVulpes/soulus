@@ -24,7 +24,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.block.composer.ComposerCell.IHasComposerCellInfo;
+import yuudaari.soulus.common.block.composer.ComposerCellTileEntity.IHasComposerCellInfo;
 import yuudaari.soulus.common.block.composer.IFillableWithEssence;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;

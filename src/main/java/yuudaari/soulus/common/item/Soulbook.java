@@ -27,7 +27,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
 import scala.Tuple2;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.block.composer.ComposerCell.IHasComposerCellInfo;
+import yuudaari.soulus.common.block.composer.ComposerCellTileEntity.IHasComposerCellInfo;
 import yuudaari.soulus.common.block.composer.IFillableWithEssence;
 import yuudaari.soulus.common.block.summoner.Summoner;
 import yuudaari.soulus.common.config.ConfigInjected;

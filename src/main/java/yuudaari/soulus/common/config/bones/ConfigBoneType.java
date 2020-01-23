@@ -24,20 +24,36 @@ public class ConfigBoneType {
 		this.tameChance = tameChance;
 	}
 
+	////////////////////////////////////
+	// Items
+	//
+
+	public Item getBoneItem () {
+		return Item.REGISTRY.getObject(new ResourceLocation(itemBone));
+	}
+
+	public Item getChunkItem () {
+		return Item.REGISTRY.getObject(new ResourceLocation(itemChunk));
+	}
+
+	////////////////////////////////////
+	// Stacks
+	//
+
 	public ItemStack getBoneStack () {
-		return new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(itemBone)));
+		return new ItemStack(getBoneItem());
 	}
 
 	public ItemStack getChunkStack () {
-		return new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(itemChunk)));
+		return new ItemStack(getChunkItem());
 	}
 
 	public ItemStack getBoneStack (final int amount) {
-		return new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(itemBone)), amount);
+		return new ItemStack(getBoneItem(), amount);
 	}
 
 	public ItemStack getChunkStack (final int amount) {
-		return new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(itemChunk)), amount);
+		return new ItemStack(getChunkItem(), amount);
 	}
 
 }
