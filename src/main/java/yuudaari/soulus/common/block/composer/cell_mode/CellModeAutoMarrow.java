@@ -181,6 +181,13 @@ public class CellModeAutoMarrow extends ComposerCellTileEntity.Mode {
 	////////////////////////////////////
 	// Rendering
 	//
+	
+	private static final Range SPIN_SPEED = new Range(10, 160);
+	
+	@Override
+	public double getSpinSpeed () {
+		return SPIN_SPEED.get(cell.storedQuantity / (double) CONFIG.autoMarrowMaxOscillatingGears);
+	}
 
 	public static void marrowParticles (final World world, final BlockPos pos, final int boneChunk, final int count) {
 		if (world.isRemote) {

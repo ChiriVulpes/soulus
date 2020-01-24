@@ -22,7 +22,7 @@ public abstract class HasRenderItemTileEntity extends UpgradeableBlockTileEntity
 	}
 
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSpin () {
-		return false;
+	public double getSpinSpeed () {
+		return 0;
 	}
 }

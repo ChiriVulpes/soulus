@@ -47,9 +47,11 @@ public class ComposerRenderer<T extends HasRenderItemTileEntity> extends TileEnt
 
 		GlStateManager.rotate(rotate * 10.0F, 0.0F, 1.0F, 0.0F);
 
-		if (te.shouldSpin()) {
+		final double spinSpeed = te.getSpinSpeed();
+
+		if (spinSpeed > 0) {
 			final Vec3d spin = rotate(new Vec3d(0, 0, 1), 10, 0, 0);
-			GlStateManager.rotate(rotate * 50.0F, (float) spin.x, (float) spin.y, (float) spin.z);
+			GlStateManager.rotate(rotate * (float) spinSpeed, (float) spin.x, (float) spin.y, (float) spin.z);
 		}
 
 		if (te.shouldComplexRotate()) {

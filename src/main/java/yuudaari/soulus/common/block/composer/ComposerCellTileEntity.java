@@ -252,6 +252,10 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 		public boolean allowRenderingExtraItemDetailsInTooltip () {
 			return true;
 		}
+
+		public double getSpinSpeed () {
+			return 0;
+		}
 	}
 
 
@@ -357,8 +361,13 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 	}
 
 	@Override
-	public boolean shouldSpin () {
-		return isModeActive(CellModeAutoMarrow.class);
+	public double getSpinSpeed () {
+		return MODES.values()
+			.stream()
+			.filter(mode -> mode.isActive())
+			.map(mode -> mode.getSpinSpeed())
+			.max(Double::compare)
+			.orElse(0.0);
 	}
 
 
