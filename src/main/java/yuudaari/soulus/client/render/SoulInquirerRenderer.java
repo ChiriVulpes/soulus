@@ -62,7 +62,7 @@ public class SoulInquirerRenderer extends TileEntityRenderer<SoulInquirerTileEnt
 			f /= f1;
 		}
 
-		GlStateManager.translate(0.0F, 0.7F, 0.0F);
+		GlStateManager.translate(0.0F, 0.8F, 0.0F);
 		float rotate = (float) (prevMobRotation + (mobRotation - prevMobRotation) * partialTicks);
 		GlStateManager.rotate(rotate * 10.0F, 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotate(rotate * 4.0F, 0.0F, 0.0F, 1.0F);
