@@ -17,7 +17,7 @@
 		},
 		{
 			"type": "text",
-			"text": "The enderlink is not the fastest means of transport, by far. It's rather inconsistent in operation and inconvenient to set up. However, it's perfect for quickly moving many things in a wide area to a tiny space. Are you picking up what I'm putting down?$(p)Also, note, you can recolor the enderlink and the ender dust; the enderlink will only teleport things on dust of the same alignment."
+			"text": "The enderlink is not the fastest means of transport, by far. It's rather inconsistent in operation and inconvenient to set up. However, it's perfect for quickly moving many things in a wide area to a tiny space. Are you picking up what I'm putting down? (Maybe not, but the enderlink definitely is.)$(p)Also, note, you can recolor the enderlink and the ender dust; the enderlink will only teleport things on dust of the same alignment."
 		},
 		{
 			"type": "relations",
