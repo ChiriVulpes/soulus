@@ -25,7 +25,7 @@
 				"processing/tether",
 				"processing/human"
 			],
-			"text": "$(l:exploiting/ash)The next section of this guide will be on putting summoned creatures to use.$()"
+			"text": "$(l:processing/soul_inquirer)Next up is detecting whether creatures of a type are present.$()"
 		}
 	]
 }

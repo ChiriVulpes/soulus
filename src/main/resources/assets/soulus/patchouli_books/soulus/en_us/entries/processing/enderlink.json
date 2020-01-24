@@ -3,7 +3,7 @@
 	"icon": "soulus:enderlink",
 	"advancement": "soulus:crystal_dark",
 	"category": "processing",
-	"sortnum": 10304,
+	"sortnum": 10307,
 	"pages": [
 		{
 			"type": "text",
