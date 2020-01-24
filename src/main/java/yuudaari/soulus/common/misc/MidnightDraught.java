@@ -24,7 +24,7 @@ import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.util.Translation;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = Soulus.MODID)
 public class MidnightDraught {
 
 	private static long startSleepingTime = -1;

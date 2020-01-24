@@ -36,7 +36,7 @@ import yuudaari.soulus.common.item.Essence;
 import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.XP;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = Soulus.MODID)
 @ConfigInjected(Soulus.MODID)
 public class BoneChunks {
 

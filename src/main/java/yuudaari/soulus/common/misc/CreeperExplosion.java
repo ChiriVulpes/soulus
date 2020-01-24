@@ -7,8 +7,9 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import yuudaari.soulus.Soulus;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = Soulus.MODID)
 public class CreeperExplosion {
 
 	@SubscribeEvent

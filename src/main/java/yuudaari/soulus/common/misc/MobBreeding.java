@@ -12,7 +12,7 @@ import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.misc.ConfigBreeding;
 
 @ConfigInjected(Soulus.MODID)
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = Soulus.MODID)
 public class MobBreeding {
 
 	@Inject public static ConfigBreeding CONFIG;

@@ -34,7 +34,7 @@ import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.util.Range;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = Soulus.MODID)
 @ConfigInjected(Soulus.MODID)
 public class BoneDrops {
 

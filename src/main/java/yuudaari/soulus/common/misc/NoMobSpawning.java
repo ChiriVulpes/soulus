@@ -26,7 +26,7 @@ import yuudaari.soulus.common.config.creature.ConfigCreatureDimension;
 import yuudaari.soulus.common.config.creature.ConfigCreatures;
 import yuudaari.soulus.common.config.misc.ConfigMobSpawnItems;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = Soulus.MODID)
 @ConfigInjected(Soulus.MODID)
 public class NoMobSpawning {
 

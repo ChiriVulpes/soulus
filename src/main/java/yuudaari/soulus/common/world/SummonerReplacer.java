@@ -35,7 +35,7 @@ import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.util.GeneratorName;
 import yuudaari.soulus.common.util.Logger;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = Soulus.MODID)
 @ConfigInjected(Soulus.MODID)
 public class SummonerReplacer {
 

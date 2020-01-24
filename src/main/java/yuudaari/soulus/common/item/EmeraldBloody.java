@@ -13,7 +13,7 @@ import yuudaari.soulus.common.config.item.ConfigEmeraldBloody;
 import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.registration.Registration;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = Soulus.MODID)
 @ConfigInjected(Soulus.MODID)
 public class EmeraldBloody extends Registration.Item {
 

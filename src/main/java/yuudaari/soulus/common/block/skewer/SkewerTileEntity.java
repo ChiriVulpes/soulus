@@ -36,7 +36,7 @@ import yuudaari.soulus.common.network.packet.client.TetherEntity;
 import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.util.ModPotionEffect;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = Soulus.MODID)
 @ConfigInjected(Soulus.MODID)
 public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 

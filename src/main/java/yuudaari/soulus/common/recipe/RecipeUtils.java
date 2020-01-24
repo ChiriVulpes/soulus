@@ -19,7 +19,7 @@ import net.minecraftforge.registries.IForgeRegistryModifiable;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.recipe.composer.IRecipeComposer;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = Soulus.MODID)
 public class RecipeUtils {
 
 	public static ItemStack getOutput (JsonElement resultProperty, JsonContext context) {
