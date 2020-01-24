@@ -1,20 +1,25 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"pattern": [
+		" e ",
 		"oGo",
-		"srs"
+		"sbs"
 	],
 	"key": {
 		"s": {
 			"type": "forge:ore_dict",
 			"ore": "cobblestone"
 		},
-		"r": {
+		"e": {
 			"type": "forge:ore_dict",
-			"ore": "dustRedstone"
+			"ore": "dustEnder"
+		},
+		"b": {
+			"item": "minecraft:observer"
 		},
 		"G": {
-			"item": "soulus:gear_oscillating"
+			"type": "forge:ore_dict",
+			"ore": "gearBone"
 		},
 		"o": {
 			"item": "minecraft:obsidian"
