@@ -3,6 +3,7 @@ package yuudaari.soulus.common.block.composer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -71,6 +72,26 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 	public boolean shouldRefresh (World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
 		return oldState.getBlock() != newState.getBlock();
 	}
+
+
+	////////////////////////////////////
+	// Owner
+	//
+
+	private @Nullable UUID owner;
+
+	public void setOwner (EntityPlayer owner) {
+		this.owner = owner.getUniqueID();
+	}
+
+	public @Nullable EntityPlayer getOwner () {
+		return owner == null ? null : world.getPlayerEntityByUUID(owner);
+	}
+
+
+	////////////////////////////////////
+	// Main
+	//
 
 	public boolean shouldCheckSignal = true;
 	private boolean lastSignalIn = false;
@@ -323,6 +344,9 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 
 		for (final Mode mode : MODES.values())
 			mode.onWriteToNBT(compound);
+
+		if (owner != null)
+			compound.setString("owner", owner.toString());
 	}
 
 	@Override
@@ -340,6 +364,9 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 
 		for (final Mode mode : MODES.values())
 			mode.onReadFromNBT(compound);
+
+		final String ownerString = compound.getString("owner");
+		owner = ownerString == "" ? null : UUID.fromString(ownerString);
 	}
 
 	/////////////////////////////////////////

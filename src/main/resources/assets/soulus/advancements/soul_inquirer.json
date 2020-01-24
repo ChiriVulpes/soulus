@@ -1,0 +1,26 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:soul_inquirer"
+		},
+		"title": {
+			"translate": "advancement.soulus:soul_inquirer.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:soul_inquirer.description"
+		}
+	},
+	"parent": "soulus:soulbook_fill",
+	"criteria": {
+		"craft": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "soulus:soul_inquirer"
+					}
+				]
+			}
+		}
+	}
+}

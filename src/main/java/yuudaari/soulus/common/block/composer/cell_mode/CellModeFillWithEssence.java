@@ -1,6 +1,7 @@
 package yuudaari.soulus.common.block.composer.cell_mode;
 
 import net.minecraft.item.ItemStack;
+import yuudaari.soulus.common.advancement.Advancements;
 import yuudaari.soulus.common.block.composer.ComposerCellTileEntity;
 import yuudaari.soulus.common.block.composer.IFillableWithEssence;
 import yuudaari.soulus.common.registration.ItemRegistry;
@@ -28,11 +29,14 @@ public class CellModeFillWithEssence extends ComposerCellTileEntity.Mode {
 			return false;
 
 		final IFillableWithEssence fillable = (IFillableWithEssence) cell.storedItem.getItem();
-		final int insertQuantity = fillable.fill(cell.storedItem, stack, requestedQuantity);
+		final int insertQuantity = fillable.fillWithEssence(cell.storedItem, stack, requestedQuantity);
 		if (insertQuantity > 0) {
 			stack.shrink(insertQuantity);
 			cell.blockUpdate();
 		}
+
+		if (fillable.isFilledWithEssence(cell.storedItem))
+			Advancements.COMPOSER_CELL_AUTO_FILL_TRIGGER.trigger(cell.getOwner(), null);
 
 		return true;
 	}

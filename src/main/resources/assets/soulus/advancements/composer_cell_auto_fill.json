@@ -1,0 +1,19 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:composer_cell"
+		},
+		"title": {
+			"translate": "advancement.soulus:composer_cell_auto_fill.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:composer_cell_auto_fill.description"
+		}
+	},
+	"parent": "soulus:composer_cell_auto_marrow",
+	"criteria": {
+		"auto_fill": {
+			"trigger": "soulus:composer_cell_auto_fill"
+		}
+	}
+}

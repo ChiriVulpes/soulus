@@ -17,6 +17,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
+import yuudaari.soulus.common.advancement.Advancements;
 import yuudaari.soulus.common.block.composer.ComposerCellTileEntity;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
 import yuudaari.soulus.common.config.ConfigInjected;
@@ -157,6 +158,8 @@ public class CellModeAutoMarrow extends ComposerCellTileEntity.Mode {
 
 		// update tooltip
 		cell.blockUpdate();
+
+		Advancements.COMPOSER_CELL_AUTO_MARROW_TRIGGER.trigger(cell.getOwner(), null);
 	}
 
 

@@ -4,7 +4,9 @@ import net.minecraft.item.ItemStack;
 
 public interface IFillableWithEssence {
 
-	public int fill (ItemStack currentStack, ItemStack fillWith, int quantity);
+	public int fillWithEssence (final ItemStack currentStack, final ItemStack fillWith, final int quantity);
 
-	public float getFillPercentage (ItemStack stack);
+	public float getEssenceFillPercentage (final ItemStack stack);
+
+	public boolean isFilledWithEssence (final ItemStack stack);
 }

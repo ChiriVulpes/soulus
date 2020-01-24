@@ -27,6 +27,8 @@ public class Advancements {
 	public static TeleportTrigger TELEPORT;
 	public static StyleSummonerTrigger STYLE_SUMMONER;
 	public static ConstructTrigger CONSTRUCT;
+	public static ComposerCellAutoMarrowTrigger COMPOSER_CELL_AUTO_MARROW_TRIGGER;
+	public static ComposerCellAutoFillTrigger COMPOSER_CELL_AUTO_FILL_TRIGGER;
 
 	public static void registerTriggers () {
 		CriteriaTriggers.register(BREAK_BLOCK = new BreakBlockTrigger());
@@ -39,6 +41,8 @@ public class Advancements {
 		CriteriaTriggers.register(TELEPORT = new TeleportTrigger());
 		CriteriaTriggers.register(STYLE_SUMMONER = new StyleSummonerTrigger());
 		CriteriaTriggers.register(CONSTRUCT = new ConstructTrigger());
+		CriteriaTriggers.register(COMPOSER_CELL_AUTO_MARROW_TRIGGER = new ComposerCellAutoMarrowTrigger());
+		CriteriaTriggers.register(COMPOSER_CELL_AUTO_FILL_TRIGGER = new ComposerCellAutoFillTrigger());
 	}
 
 	@SubscribeEvent
@@ -48,6 +52,10 @@ public class Advancements {
 			BREAK_BLOCK.trigger((EntityPlayerMP) player, event.getState());
 		}
 	}
+
+	/**
+	 * The following is unused related to a failed experiment as seen in AdvancementRegistrar.java
+	 */
 
 	// public static Advancement SUMMON_ALL_CREATURES;
 

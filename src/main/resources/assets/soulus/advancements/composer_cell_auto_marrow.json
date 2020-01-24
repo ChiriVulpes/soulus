@@ -1,0 +1,19 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:composer_cell"
+		},
+		"title": {
+			"translate": "advancement.soulus:composer_cell_auto_marrow.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:composer_cell_auto_marrow.description"
+		}
+	},
+	"parent": "soulus:endersteel_dark",
+	"criteria": {
+		"auto_marrow": {
+			"trigger": "soulus:composer_cell_auto_marrow"
+		}
+	}
+}

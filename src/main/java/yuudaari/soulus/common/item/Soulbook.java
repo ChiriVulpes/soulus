@@ -283,32 +283,43 @@ public class Soulbook extends Registration.Item implements IHasComposerCellInfo,
 	}
 
 	@Override
-	public int fill (ItemStack currentStack, ItemStack fillWith, int quantity) {
-		int currentEssence = getContainedEssence(currentStack);
+	public int fillWithEssence (final ItemStack currentStack, final ItemStack fillWith, final int quantity) {
+		final int currentEssence = getContainedEssence(currentStack);
 		String essenceType = EssenceType.getEssenceType(currentStack);
-		String fillWithEssenceType = EssenceType.getEssenceType(fillWith);
+		final String fillWithEssenceType = EssenceType.getEssenceType(fillWith);
 
 		if (fillWithEssenceType == null || //
 			(essenceType != null && !essenceType.equals(fillWithEssenceType)))
 			return 0;
 
-		if (essenceType == null) EssenceType.setEssenceType(currentStack, essenceType = fillWithEssenceType);
+		if (essenceType == null)
+			EssenceType.setEssenceType(currentStack, essenceType = fillWithEssenceType);
 
-		int requiredEssence = CONFIG.getSoulbookQuantity(essenceType);
-		int insertQuantity = Math.max(0, Math.min(quantity, requiredEssence - currentEssence));
+		final int requiredEssence = CONFIG.getSoulbookQuantity(essenceType);
+		final int insertQuantity = Math.max(0, Math.min(quantity, requiredEssence - currentEssence));
 
-		if (insertQuantity > 0) setContainedEssence(currentStack, currentEssence + insertQuantity);
+		if (insertQuantity > 0)
+			setContainedEssence(currentStack, currentEssence + insertQuantity);
 
 		return insertQuantity;
 	}
 
 	@Override
-	public float getFillPercentage (ItemStack stack) {
-		String essenceType = EssenceType.getEssenceType(stack);
-		if (essenceType == null) return 0;
-		int requiredEssence = CONFIG.getSoulbookQuantity(essenceType);
-		if (requiredEssence < 0) return 0;
+	public float getEssenceFillPercentage (final ItemStack stack) {
+		final String essenceType = EssenceType.getEssenceType(stack);
+		if (essenceType == null)
+			return 0;
+
+		final int requiredEssence = CONFIG.getSoulbookQuantity(essenceType);
+		if (requiredEssence < 0)
+			return 0;
+
 		return getContainedEssence(stack) / (float) requiredEssence;
+	}
+
+	@Override
+	public boolean isFilledWithEssence (final ItemStack stack) {
+		return isFilled(stack);
 	}
 
 	public static int getContainedEssence (ItemStack stack) {

@@ -1,0 +1,37 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:soul_inquirer"
+		},
+		"title": {
+			"translate": "advancement.soulus:soul_inquirer_upgrade_max.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:soul_inquirer_upgrade_max.description"
+		},
+		"frame": "challenge",
+		"hidden": true
+	},
+	"parent": "soulus:soul_inquirer",
+	"criteria": {
+		"count": {
+			"trigger": "soulus:upgrade",
+			"conditions": {
+				"block": "soulus:soul_inquirer",
+				"upgrade": "count",
+				"filled": true
+			}
+		},
+		"range": {
+			"trigger": "soulus:upgrade",
+			"conditions": {
+				"block": "soulus:soul_inquirer",
+				"upgrade": "range",
+				"filled": true
+			}
+		}
+	},
+	"rewards": {
+		"experience": 100
+	}
+}

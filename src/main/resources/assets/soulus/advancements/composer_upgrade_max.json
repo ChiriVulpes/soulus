@@ -1,0 +1,45 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:composer"
+		},
+		"title": {
+			"translate": "advancement.soulus:composer_upgrade_max.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:composer_upgrade_max.description"
+		},
+		"frame": "challenge",
+		"hidden": true
+	},
+	"parent": "soulus:compose",
+	"criteria": {
+		"delay": {
+			"trigger": "soulus:upgrade",
+			"conditions": {
+				"block": "soulus:composer",
+				"upgrade": "delay",
+				"filled": true
+			}
+		},
+		"range": {
+			"trigger": "soulus:upgrade",
+			"conditions": {
+				"block": "soulus:composer",
+				"upgrade": "range",
+				"filled": true
+			}
+		},
+		"efficiency": {
+			"trigger": "soulus:upgrade",
+			"conditions": {
+				"block": "soulus:composer",
+				"upgrade": "efficiency",
+				"filled": true
+			}
+		}
+	},
+	"rewards": {
+		"experience": 300
+	}
+}

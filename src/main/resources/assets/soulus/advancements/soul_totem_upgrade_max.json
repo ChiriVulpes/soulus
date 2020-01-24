@@ -1,0 +1,29 @@
+{
+	"display": {
+		"icon": {
+			"item": "soulus:soul_totem"
+		},
+		"title": {
+			"translate": "advancement.soulus:soul_totem_upgrade_max.title"
+		},
+		"description": {
+			"translate": "advancement.soulus:soul_totem_upgrade_max.description"
+		},
+		"frame": "challenge",
+		"hidden": true
+	},
+	"parent": "soulus:soul_totem",
+	"criteria": {
+		"efficiency": {
+			"trigger": "soulus:upgrade",
+			"conditions": {
+				"block": "soulus:soul_totem",
+				"upgrade": "efficiency",
+				"filled": true
+			}
+		}
+	},
+	"rewards": {
+		"experience": 200
+	}
+}

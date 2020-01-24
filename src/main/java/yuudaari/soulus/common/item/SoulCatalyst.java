@@ -160,18 +160,24 @@ public class SoulCatalyst extends Registration.Item implements IHasComposerCellI
 	}
 
 	@Override
-	public int fill (ItemStack currentStack, ItemStack fillWith, int quantity) {
-		int currentEssence = getContainedEssence(currentStack);
-		int insertQuantity = Math.max(0, Math.min(quantity, CONFIG.requiredEssence - currentEssence));
+	public int fillWithEssence (final ItemStack currentStack, final ItemStack fillWith, final int quantity) {
+		final int currentEssence = getContainedEssence(currentStack);
+		final int insertQuantity = Math.max(0, Math.min(quantity, CONFIG.requiredEssence - currentEssence));
 
-		if (insertQuantity > 0) setContainedEssence(currentStack, currentEssence + insertQuantity);
+		if (insertQuantity > 0)
+			setContainedEssence(currentStack, currentEssence + insertQuantity);
 
 		return insertQuantity;
 	}
 
 	@Override
-	public float getFillPercentage (ItemStack stack) {
+	public float getEssenceFillPercentage (final ItemStack stack) {
 		return getContainedEssence(stack) / (float) CONFIG.requiredEssence;
+	}
+
+	@Override
+	public boolean isFilledWithEssence (final ItemStack stack) {
+		return isFilled(stack);
 	}
 
 	@Override

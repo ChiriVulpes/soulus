@@ -308,7 +308,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 			if (isConnected) {
 				connectCells(direction, state);
-				Advancements.CONSTRUCT.trigger(this.getOwner(), this.getBlock());
+				Advancements.CONSTRUCT.trigger(getOwner(), getBlock());
 			} else {
 				disconnectCells(currentDirection);
 			}

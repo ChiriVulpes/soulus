@@ -4,20 +4,22 @@
 			"item": "soulus:enderlink"
 		},
 		"title": {
-			"translate": "advancement.soulus:teleport_multiple.title"
+			"translate": "advancement.soulus:enderlink_upgrade_max.title"
 		},
 		"description": {
-			"translate": "advancement.soulus:teleport_multiple.description"
+			"translate": "advancement.soulus:enderlink_upgrade_max.description"
 		},
 		"frame": "challenge",
 		"hidden": true
 	},
 	"parent": "soulus:teleport",
 	"criteria": {
-		"teleport_ten_times": {
-			"trigger": "soulus:teleport",
+		"range": {
+			"trigger": "soulus:upgrade",
 			"conditions": {
-				"teleports": 10
+				"block": "soulus:enderlink",
+				"upgrade": "range",
+				"filled": true
 			}
 		}
 	},
