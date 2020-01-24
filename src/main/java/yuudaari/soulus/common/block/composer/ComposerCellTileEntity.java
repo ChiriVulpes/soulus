@@ -154,14 +154,18 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 		if (storedItem != null && storedItem.isEmpty())
 			storedItem = null;
 
-		// first check if any active mode disallows inserting this item
-		for (final Mode mode : MODES.values())
-			if (mode.isActive() && !mode.allowInsertForOtherMode(stack))
-				return false;
+		final int maxQuantityAllowed = MODES.values()
+			.stream()
+			.filter(mode -> mode.isActive())
+			.map(mode -> mode.getMaxContainedQuantityForOtherModes(stack))
+			.min(Integer::compare)
+			.orElse(Integer.MAX_VALUE);
+
+		final int maxInsertAllowed = maxQuantityAllowed - storedQuantity;
 
 		// insert the item!
 		for (final Mode mode : MODES.values())
-			if (mode.isActive() && mode.tryInsert(stack, requestedQuantity))
+			if (mode.isActive() && mode.tryInsert(stack, Math.min(requestedQuantity, maxInsertAllowed)))
 				return true;
 
 		return false;
@@ -218,8 +222,8 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 			return false;
 		}
 
-		public boolean allowInsertForOtherMode (final ItemStack stack) {
-			return true;
+		public int getMaxContainedQuantityForOtherModes (final ItemStack stack) {
+			return Integer.MAX_VALUE;
 		}
 
 		public boolean tryExtract (final List<ItemStack> extracted) {

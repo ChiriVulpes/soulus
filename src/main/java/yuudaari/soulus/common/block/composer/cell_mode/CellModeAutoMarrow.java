@@ -30,6 +30,7 @@ import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.client.ComposerCellMarrow;
 import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.util.Translation;
+import yuudaari.soulus.common.util.Range;
 
 /**
  * Auto-marrow
@@ -68,8 +69,11 @@ public class CellModeAutoMarrow extends ComposerCellTileEntity.Mode {
 	}
 
 	@Override
-	public boolean allowInsertForOtherMode (final ItemStack stack) {
-		return !isLockingStoredItem();
+	public int getMaxContainedQuantityForOtherModes (final ItemStack stack) {
+		if (!isLockingStoredItem())
+			return super.getMaxContainedQuantityForOtherModes(stack);
+
+		return CONFIG.autoMarrowMaxOscillatingGears;
 	}
 
 	@Override
