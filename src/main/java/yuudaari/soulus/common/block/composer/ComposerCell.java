@@ -243,7 +243,8 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 
 	@Override
 	public void addOtherDropStacksToList (final List<ItemStack> list, final World world, final BlockPos pos, final IBlockState state) {
-		((ComposerCellTileEntity) world.getTileEntity(pos)).tryExtract(list);
+		while (((ComposerCellTileEntity) world.getTileEntity(pos)).tryExtract(list))
+			;
 	}
 
 	/////////////////////////////////////////

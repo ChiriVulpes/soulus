@@ -177,7 +177,7 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 	}
 
 	public boolean tryExtract (final List<ItemStack> extracted) {
-		if (!isStoredItemLockedInside()) {
+		if (!isStoredItemLockedInside() && storedItem != null && storedQuantity > 0) {
 			addItemStackToList(storedItem, extracted, storedQuantity);
 			storedItem = null;
 			storedQuantity = 0;

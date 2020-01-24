@@ -106,6 +106,8 @@ public class CellModeAutoMarrow extends ComposerCellTileEntity.Mode {
 			return false;
 
 		ComposerCellTileEntity.addItemStackToList(getChunkStack(), extracted, storedChunkQuantity);
+		storedChunkQuantity = 0;
+		storedChunkType = null;
 		return true;
 	}
 
