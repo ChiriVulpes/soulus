@@ -2,7 +2,6 @@ package yuudaari.soulus.common.block.composer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -12,7 +11,6 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.util.ITooltipFlag.TooltipFlags;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -23,9 +21,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlockTileEntity;
@@ -35,7 +30,6 @@ import yuudaari.soulus.common.config.block.ConfigComposerCell;
 import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.util.ItemStackMutable;
 import yuudaari.soulus.common.util.Material;
-import yuudaari.soulus.common.util.Translation;
 
 @ConfigInjected(Soulus.MODID)
 public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
@@ -258,49 +252,13 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 
 	@Override
 	protected void onWailaTooltipHeader (final List<String> currentTooltip, final IBlockState blockState, final ComposerCellTileEntity te, final EntityPlayer player) {
-
-		// currentTooltip.add(Translation.localize("waila." + Soulus.MODID + ":composer_cell.slot", te.slot));
-
-		if (te.storedQuantity == 0) {
-			currentTooltip.add(Translation.localize("waila." + Soulus.MODID + ":composer_cell.no_items"));
-			return;
-		}
-
 		te.onWailaTooltipHeader(currentTooltip, player);
 	}
 
 	@Override
-	protected List<String> onWailaTooltipMore (IBlockState blockState, ComposerCellTileEntity te, EntityPlayer player) {
+	protected List<String> onWailaTooltipMore (final IBlockState blockState, final ComposerCellTileEntity te, final EntityPlayer player) {
 		final List<String> currentTooltip = new ArrayList<>();
-
-		final ItemStack storedItem = te.getStoredItem();
-		if (storedItem != null && te.shouldShowItemInTooltip(true))
-			currentTooltip.addAll(cellProxy.getStackTooltip(storedItem, player));
-
 		te.onWailaTooltipMore(currentTooltip, player);
-
 		return currentTooltip;
-	}
-
-	@SidedProxy(modId = Soulus.MODID, serverSide = "yuudaari.soulus.common.block.composer.ComposerCell$CommonProxy", clientSide = "yuudaari.soulus.common.block.composer.ComposerCell$ClientProxy") //
-	public static CommonProxy cellProxy;
-
-	@SideOnly(Side.CLIENT)
-	public static class ClientProxy extends CommonProxy {
-
-		@Override
-		public List<String> getStackTooltip (final ItemStack stack, final EntityPlayer player) {
-			return stack.getTooltip(player, TooltipFlags.ADVANCED)
-				.stream()
-				.map(tooltipLine -> tooltipLine.length() > 0 ? "   " + tooltipLine : tooltipLine)
-				.collect(Collectors.toList());
-		}
-	}
-
-	public static class CommonProxy {
-
-		public List<String> getStackTooltip (final ItemStack stack, final EntityPlayer player) {
-			return new ArrayList<>();
-		}
 	}
 }

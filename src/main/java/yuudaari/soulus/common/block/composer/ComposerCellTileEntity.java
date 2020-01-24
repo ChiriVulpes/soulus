@@ -1,5 +1,6 @@
 package yuudaari.soulus.common.block.composer;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -7,6 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag.TooltipFlags;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -17,6 +19,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.block.composer.cell_mode.CellModeAutoMarrow;
 import yuudaari.soulus.common.block.composer.cell_mode.CellModeFillWithEssence;
@@ -372,33 +377,42 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 
 
 	////////////////////////////////////
-	// Waila
+	// Tooltip Events
 	//
 
 	public void onWailaTooltipHeader (final List<String> currentTooltip, final EntityPlayer player) {
-		currentTooltip.add(new Translation("waila." + Soulus.MODID + ":composer_cell.contained_item")
-			.addArgs(storedQuantity, CONFIG.maxQuantity, storedItem.getDisplayName())
-			.get());
+		// currentTooltip.add(Translation.localize("waila." + Soulus.MODID + ":composer_cell.slot", slot));
 
-		if (!player.isSneaking() && storedItem != null && storedItem.getItem() instanceof IHasComposerCellInfo && shouldShowItemInTooltip(false))
-			((IHasComposerCellInfo) storedItem.getItem())
-				.addComposerCellInfo(currentTooltip, storedItem, storedQuantity);
+		if (storedItem == null || storedQuantity == 0)
+			currentTooltip.add(Translation.localize("waila." + Soulus.MODID + ":composer_cell.no_items"));
+
+		else if (shouldShowItemInTooltip(false)) {
+			currentTooltip.add(new Translation("waila." + Soulus.MODID + ":composer_cell.contained_item")
+				.addArgs(storedQuantity, CONFIG.maxQuantity, storedItem.getDisplayName())
+				.get());
+
+			if (!player.isSneaking() && storedItem.getItem() instanceof IHasComposerCellInfo)
+				((IHasComposerCellInfo) storedItem.getItem())
+					.addComposerCellInfo(currentTooltip, storedItem, storedQuantity);
+		}
 
 		for (final Mode mode : MODES.values())
 			if (mode.isActive())
 				mode.onWailaTooltipHeader(currentTooltip, player);
 	}
 
-	public static interface IHasComposerCellInfo {
-
-		abstract void addComposerCellInfo (List<String> currentTooltip, ItemStack stack, int stackSize);
-	}
-
 	public void onWailaTooltipMore (final List<String> currentTooltip, final EntityPlayer player) {
+		if (storedItem != null && shouldShowItemInTooltip(true))
+			currentTooltip.addAll(cellProxy.getStackTooltip(storedItem, player));
+
 		for (final Mode mode : MODES.values())
 			if (mode.isActive())
 				mode.onWailaTooltipMore(currentTooltip, player);
 	}
+
+	////////////////////////////////////
+	// Tooltip Util
+	//
 
 	public boolean shouldShowItemInTooltip (final boolean isExtra) {
 		return MODES.values()
@@ -407,5 +421,32 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 			.allMatch(mode -> !mode.isActive() //
 				|| (mode.allowRenderingItemInTooltip() //
 					&& (isExtra == false || mode.allowRenderingExtraItemDetailsInTooltip())));
+	}
+
+	@SidedProxy(modId = Soulus.MODID, serverSide = "yuudaari.soulus.common.block.composer.ComposerCellTileEntity$CommonProxy", clientSide = "yuudaari.soulus.common.block.composer.ComposerCellTileEntity$ClientProxy") //
+	public static CommonProxy cellProxy;
+
+	@SideOnly(Side.CLIENT)
+	public static class ClientProxy extends CommonProxy {
+
+		@Override
+		public List<String> getStackTooltip (final ItemStack stack, final EntityPlayer player) {
+			return stack.getTooltip(player, TooltipFlags.ADVANCED)
+				.stream()
+				.map(tooltipLine -> tooltipLine.length() > 0 ? "   " + tooltipLine : tooltipLine)
+				.collect(Collectors.toList());
+		}
+	}
+
+	public static class CommonProxy {
+
+		public List<String> getStackTooltip (final ItemStack stack, final EntityPlayer player) {
+			return new ArrayList<>();
+		}
+	}
+
+	public static interface IHasComposerCellInfo {
+
+		abstract void addComposerCellInfo (List<String> currentTooltip, ItemStack stack, int stackSize);
 	}
 }

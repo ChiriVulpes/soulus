@@ -181,9 +181,9 @@ public class CellModeAutoMarrow extends ComposerCellTileEntity.Mode {
 	////////////////////////////////////
 	// Rendering
 	//
-	
+
 	private static final Range SPIN_SPEED = new Range(10, 160);
-	
+
 	@Override
 	public double getSpinSpeed () {
 		return SPIN_SPEED.get(cell.storedQuantity / (double) CONFIG.autoMarrowMaxOscillatingGears);
@@ -221,6 +221,10 @@ public class CellModeAutoMarrow extends ComposerCellTileEntity.Mode {
 
 	@Override
 	public void onWailaTooltipHeader (final List<String> currentTooltip, final EntityPlayer player) {
+		currentTooltip.add(new Translation("waila." + Soulus.MODID + ":composer_cell.auto_marrow_contained_gears")
+			.addArgs(cell.storedQuantity, CONFIG.autoMarrowMaxOscillatingGears, ItemRegistry.GEAR_OSCILLATING.getItemStack().getDisplayName())
+			.get());
+
 		if (storedChunkType == null || storedChunkQuantity <= 0)
 			currentTooltip.add(Translation.localize("waila." + Soulus.MODID + ":composer_cell.auto_marrow"));
 		else
@@ -230,7 +234,7 @@ public class CellModeAutoMarrow extends ComposerCellTileEntity.Mode {
 	}
 
 	@Override
-	public boolean allowRenderingExtraItemDetailsInTooltip () {
+	public boolean allowRenderingItemInTooltip () {
 		return false;
 	}
 }
