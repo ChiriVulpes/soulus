@@ -123,7 +123,9 @@ public class CellModeAutoMarrow extends ComposerCellTileEntity.Mode {
 		if (boneType == null)
 			return;
 
-		marrowParticles(world, pos, Item.getIdFromItem(boneType.getChunkItem()), 1);
+		final int particleTime = (int) ((1 - cell.storedQuantity / (double) CONFIG.autoMarrowMaxOscillatingGears) * 8);
+		if (particleTime == 0 || ticks % particleTime == 0)
+			marrowParticles(world, pos, Item.getIdFromItem(boneType.getChunkItem()), 1);
 
 		final double autoMarrowChunksPerTick = CONFIG.autoMarrowTicksPerChunkPerOscillatingGear.get(cell.storedQuantity / (double) CONFIG.autoMarrowMaxOscillatingGears);
 
