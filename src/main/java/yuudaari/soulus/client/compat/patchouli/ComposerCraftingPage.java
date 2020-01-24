@@ -74,17 +74,25 @@ public class ComposerCraftingPage implements IComponentProcessor {
 		switch (key) {
 			case "output":
 				return PatchouliAPI.instance.serializeItemStack(recipe.getRecipeOutput());
+
 			case "time": {
-				String timeString = "" + (recipe instanceof IRecipeComposer ? ((IRecipeComposer) recipe).getTime() : 1);
+				if (!(recipe instanceof IRecipeComposer))
+					return "";
+
+				String timeString = "" + ((IRecipeComposer) recipe).getTime();
 				if (timeString.endsWith(".0"))
 					timeString = timeString.substring(0, timeString.length() - 2);
+
 				timeString = Translation.localize("patchouli.recipe.soulus:composer.recipe_time", timeString);
 				return timeString;
 			}
+
 			case "name":
 				return recipe != recipe2 || title2 == null ? title : title2;
+
 			case "text":
 				return text;
+
 			default:
 				return null;
 		}

@@ -10,8 +10,8 @@
 			"text": "Turns out that all it took to create the next container was to use composition to combine some ender dust and a midnight jewel. Not only did they stick together, they created something more. The $(item)Soul Catalyst$() is like a midnight jewel but with tentacles of darkness. That is, until it's filled with more essence."
 		},
 		{
-			"type": "crafting",
-			"recipe": "soulus:soul_catalyst2",
+			"type": "crafting_composer",
+			"recipe": "soulus:composer/soul_catalyst",
 			"recipe2": "soulus:soul_catalyst3"
 		},
 		{
