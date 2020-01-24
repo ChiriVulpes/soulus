@@ -87,7 +87,7 @@ public class CellModeAutoMarrow extends ComposerCellTileEntity.Mode {
 
 		storedChunkType = boneType.name;
 
-		final int count = Math.min(stack.getCount(), CONFIG.autoMarrowMaxChunkBuffer - storedChunkQuantity);
+		final int count = Math.min(requestedQuantity, CONFIG.autoMarrowMaxChunkBuffer - storedChunkQuantity);
 		storedChunkQuantity += count;
 		stack.shrink(count);
 
