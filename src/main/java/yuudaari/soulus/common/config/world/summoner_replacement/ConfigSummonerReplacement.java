@@ -30,7 +30,8 @@ public class ConfigSummonerReplacement {
 
 	@Serialized(value = Serializer.class, topLevel = true) public Map<String, ConfigStructure> structures = new HashMap<>();
 
-	public ConfigSummonerReplacement () {}
+	public ConfigSummonerReplacement () {
+	}
 
 	public ConfigSummonerReplacement (ConfigStructure config) {
 		structures.put("*", config);
@@ -64,7 +65,7 @@ public class ConfigSummonerReplacement {
 		return this;
 	}
 
-	public static class Serializer extends DefaultMapSerializer<ConfigStructure> {
+	public static class Serializer extends DefaultMapSerializer.OfStringKeys<ConfigStructure> {
 
 		@Override
 		public Class<ConfigStructure> getValueClass () {

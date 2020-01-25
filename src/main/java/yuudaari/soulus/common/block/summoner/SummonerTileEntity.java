@@ -39,6 +39,7 @@ import yuudaari.soulus.common.config.block.ConfigSummoner;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.item.EssencePerfect;
+import yuudaari.soulus.common.misc.SpawnType;
 import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.ModPotionEffect;
 import yuudaari.soulus.common.util.Range;
@@ -476,23 +477,21 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 				}
 
 				// custom data so we know the mob was spawned by souls
-				NBTTagCompound entityData = entity.getEntityData();
-				entityData.setByte("soulus:spawn_whitelisted", (byte) 2);
+				final SpawnType spawnType = hasMalice() ? SpawnType.SUMMONED_MALICE : SpawnType.SUMMONED;
+				spawnType.apply(entity);
 
-				entity
-					.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, world.rand.nextFloat() * 360.0F, 0.0F);
+				entity.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, world.rand.nextFloat() * 360.0F, 0.0F);
 
-
-				ModPotionEffect[] potionEffects = CONFIG.stylePotionEffects
+				final ModPotionEffect[] potionEffects = CONFIG.stylePotionEffects
 					.get(world.getBlockState(pos).getValue(Summoner.VARIANT));
-				if (potionEffects != null) for (ModPotionEffect effect : potionEffects) {
-					effect.apply(entity);
-				}
 
-				LivingSpawnEvent.SpecialSpawn specialSpawn = new LivingSpawnEvent.SpecialSpawn(entity, world, (float) entity.posX, (float) entity.posY, (float) entity.posZ, null);
-				if (!MinecraftForge.EVENT_BUS.post(specialSpawn)) {
+				if (potionEffects != null)
+					for (final ModPotionEffect effect : potionEffects)
+					effect.apply(entity);
+
+				final LivingSpawnEvent.SpecialSpawn specialSpawn = new LivingSpawnEvent.SpecialSpawn(entity, world, (float) entity.posX, (float) entity.posY, (float) entity.posZ, null);
+				if (!MinecraftForge.EVENT_BUS.post(specialSpawn))
 					entity.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(entity)), null);
-				}
 
 				AnvilChunkLoader.spawnEntity(entity, world);
 

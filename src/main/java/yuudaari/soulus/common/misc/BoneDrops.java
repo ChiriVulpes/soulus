@@ -10,15 +10,15 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
@@ -30,8 +30,8 @@ import yuudaari.soulus.common.config.creature.ConfigCreatureDimension;
 import yuudaari.soulus.common.config.creature.ConfigCreatureDrops;
 import yuudaari.soulus.common.config.creature.ConfigCreatures;
 import yuudaari.soulus.common.config.essence.ConfigCreatureLoot;
-import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
+import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.util.Range;
 
 @Mod.EventBusSubscriber(modid = Soulus.MODID)
@@ -59,15 +59,14 @@ public class BoneDrops {
 			// Logger.info("added bone drops");
 			BoneDrops.addBoneDrops(entity, entityName, drops);
 
-			boolean wasSummoned = entity.getEntityData().getByte("soulus:spawn_whitelisted") == (byte) 2;
-			// we explicitly whitelist slimes that have persistence as it's likely they were from a summoned slime
-			if (!wasSummoned && ((EntityLiving) entity).isNoDespawnRequired() && entity instanceof EntitySlime)
-				wasSummoned = true;
+			SpawnType spawnType = SpawnType.get(entity);
 
-			String spawnType = wasSummoned ? "summoned" : "spawned";
+			// we explicitly whitelist slimes that have persistence as it's likely they were from a summoned slime
+			if (spawnType == null && ((EntityLiving) entity).isNoDespawnRequired() && entity instanceof EntitySlime)
+				spawnType = SpawnType.SUMMONED;
 
 			ConfigCreatureDrops dropConfig = config.drops.get(spawnType);
-			ConfigCreatureDrops dropConfigAll = config.drops.get("all");
+			ConfigCreatureDrops dropConfigAll = config.drops.get(SpawnType.ALL);
 
 			if (dropConfig == null && dropConfigAll == null) {
 				return;
@@ -193,31 +192,29 @@ public class BoneDrops {
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public static void onMobXp (LivingExperienceDropEvent event) {
+	public static void onMobXp (final LivingExperienceDropEvent event) {
 
 		// first we check if we should even try to do drops
-		EntityLivingBase entity = event.getEntityLiving();
+		final EntityLivingBase entity = event.getEntityLiving();
 		if (entity == null || !(entity instanceof EntityLiving)) return;
 
 		// then we check if there's a config for this entity
-		ConfigCreature config = getCreatureConfig(entity);
+		final ConfigCreature config = getCreatureConfig(entity);
 		if (config == null) return;
 
-		boolean wasSummoned = entity.getEntityData().getByte("soulus:spawn_whitelisted") == (byte) 2;
-		String spawnType = wasSummoned ? "summoned" : "spawned";
+		SpawnType spawnType = SpawnType.get(entity);
 
-		ConfigCreatureDrops dropConfig = config.drops.get(spawnType);
-		ConfigCreatureDrops dropConfigAll = config.drops.get("all");
+		final ConfigCreatureDrops dropConfig = config.drops.get(spawnType);
+		final ConfigCreatureDrops dropConfigAll = config.drops.get(SpawnType.ALL);
 
 		// then we check if drops are configured for this entity
 		if (dropConfig == null && dropConfigAll == null) return;
 
-		boolean dc = dropConfig != null;
-		boolean dca = dropConfigAll != null;
+		final boolean dc = dropConfig != null;
+		final boolean dca = dropConfigAll != null;
 
 		// check if it's configured not to have xp in this situation
-		if (!(dc ? dropConfig.hasXp : dca ? dropConfigAll.hasXp : true)) {
+		if (!(dc ? dropConfig.hasXp : dca ? dropConfigAll.hasXp : true))
 			event.setCanceled(true);
-		}
 	}
 }

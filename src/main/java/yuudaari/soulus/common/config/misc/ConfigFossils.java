@@ -34,7 +34,7 @@ public class ConfigFossils {
 		return fossils.get(id);
 	}
 
-	public static class ConfigFossilSerializer extends DefaultMapSerializer<ConfigFossil> {
+	public static class ConfigFossilSerializer extends DefaultMapSerializer.OfStringKeys<ConfigFossil> {
 
 		@Override
 		public Class<ConfigFossil> getValueClass () {

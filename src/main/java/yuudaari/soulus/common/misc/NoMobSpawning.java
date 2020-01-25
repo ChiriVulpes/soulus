@@ -5,7 +5,6 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
@@ -37,21 +36,22 @@ public class NoMobSpawning {
 	public static void onMobJoinWorld (EntityJoinWorldEvent event) {
 
 		// first we check if we should even try to cancel the spawn
-		Entity entity = event.getEntity();
+		final Entity entity = event.getEntity();
 		if (entity == null || !(entity instanceof EntityLiving) || event.getWorld().isRemote)
 			return;
 
 		if (wasSpawnedFromItem(event))
 			return;
 
+		final EntityLiving living = (EntityLiving) entity;
+
 		// then we check if the creature has already been whitelisted
-		NBTTagCompound entityData = entity.getEntityData();
-		if (entityData.hasKey("soulus:spawn_whitelisted", 1))
+		if (SpawnType.get(living) != null)
 			return;
 
 		// we explicitly whitelist slimes that have persistence as it's likely they were from a summoned slime
-		if (((EntityLiving) entity).isNoDespawnRequired() && entity instanceof EntitySlime) {
-			approveSpawn(entity);
+		if (living.isNoDespawnRequired() && living instanceof EntitySlime) {
+			SpawnType.SPAWNED.apply(living);
 			return;
 		}
 
@@ -62,13 +62,13 @@ public class NoMobSpawning {
 		if (dimensionConfig == null) {
 			dimensionConfig = CONFIG.dimensionConfigs.get("*");
 			if (dimensionConfig == null) {
-				approveSpawn(entity);
+				SpawnType.SPAWNED.apply(living);
 				return;
 			}
 		}
 
 		// then we get the biome config for this potential spawn
-		BlockPos pos = entity.getPosition();
+		BlockPos pos = living.getPosition();
 		Biome biome = event.getWorld().getBiome(pos);
 		//Logger.info(biome.getRegistryName().toString());
 		ConfigCreatureBiome biomeConfig = dimensionConfig.biomeConfigs.get(biome.getRegistryName().toString());
@@ -77,14 +77,14 @@ public class NoMobSpawning {
 			if (biomeConfig == null) {
 				biomeConfig = dimensionConfig.biomeConfigs.get("*");
 				if (biomeConfig == null) {
-					approveSpawn(entity);
+					SpawnType.SPAWNED.apply(living);
 					return;
 				}
 			}
 		}
 
 		// then we get the creature config for this potential spawn
-		String entityName = EntityList.getKey(entity).toString();
+		String entityName = EntityList.getKey(living).toString();
 		//Logger.info(entityName);
 		ConfigCreature creatureConfig = biomeConfig.creatureConfigs.get(entityName);
 		if (creatureConfig == null) {
@@ -93,7 +93,7 @@ public class NoMobSpawning {
 			if (creatureConfig == null) {
 				creatureConfig = biomeConfig.creatureConfigs.get("*");
 				if (creatureConfig == null) {
-					approveSpawn(entity);
+					SpawnType.SPAWNED.apply(living);
 					return;
 				}
 			}
@@ -101,7 +101,7 @@ public class NoMobSpawning {
 
 		// if we have 100% spawn chance, don't attempt to cancel
 		if (creatureConfig.spawnChance == 1) {
-			approveSpawn(entity);
+			SpawnType.SPAWNED.apply(living);
 			return;
 		}
 
@@ -109,10 +109,6 @@ public class NoMobSpawning {
 		if (creatureConfig.spawnChance == 0 || event.getWorld().rand.nextDouble() >= creatureConfig.spawnChance) {
 			event.setCanceled(true);
 		}
-	}
-
-	public static void approveSpawn (Entity entity) {
-		entity.getEntityData().setByte("soulus:spawn_whitelisted", (byte) 1);
 	}
 
 	////////////////////////////////////

@@ -115,10 +115,10 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 			if (!IUpgrade.super.isItemStack(stack))
 				return false;
 
-			if (name == "count")
+			if (this == Upgrade.COUNT)
 				return CrystalBlood.isFilled(stack);
 
-			if (name == "range")
+			if (this == Upgrade.RANGE)
 				return OrbMurky.isFilled(stack);
 
 			return true;
@@ -129,7 +129,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 			if (te.upgrades.get(Upgrade.CRYSTAL_DARK) > 0)
 				return false;
 
-			if (name == "crystal_dark")
+			if (this == Upgrade.CRYSTAL_DARK)
 				// a midnight jewel must be inserted into a summoner with no other upgrades
 				for (Upgrade upgrade : Upgrade.values())
 				if (te.upgrades.get(upgrade) > 0)
@@ -142,7 +142,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		public ItemStack getItemStackForTileEntity (UpgradeableBlockTileEntity te, int quantity) {
 			SummonerTileEntity ste = (SummonerTileEntity) te;
 
-			if (name == "crystal_dark" && ste.hasMalice())
+			if (this == Upgrade.CRYSTAL_DARK && ste.hasMalice())
 				return null;
 
 			return IUpgrade.super.getItemStackForTileEntity(te, quantity);
@@ -152,10 +152,10 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		public ItemStack getItemStack (int quantity) {
 			ItemStack stack = IUpgrade.super.getItemStack(quantity);
 
-			if (name == "count")
+			if (this == Upgrade.COUNT)
 				CrystalBlood.setFilled(stack);
 
-			if (name == "range")
+			if (this == Upgrade.RANGE)
 				OrbMurky.setFilled(stack);
 
 			return stack;
@@ -163,7 +163,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 
 		@Override
 		public boolean isSecret () {
-			return name == "crystal_dark";
+			return this == Upgrade.CRYSTAL_DARK;
 		}
 	}
 

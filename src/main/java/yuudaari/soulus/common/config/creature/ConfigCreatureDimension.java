@@ -13,7 +13,8 @@ public class ConfigCreatureDimension {
 	public String dimensionId;
 	@Serialized(value = BiomeMapSerializer.class, topLevel = true) public Map<String, ConfigCreatureBiome> biomeConfigs = new HashMap<>();
 
-	public ConfigCreatureDimension () {}
+	public ConfigCreatureDimension () {
+	}
 
 	public ConfigCreatureDimension (final String biome, final ConfigCreatureBiome config) {
 		biomeConfigs.put(biome, config);
@@ -27,7 +28,7 @@ public class ConfigCreatureDimension {
 		}
 	}
 
-	public static class BiomeMapSerializer extends DefaultMapSerializer<ConfigCreatureBiome> {
+	public static class BiomeMapSerializer extends DefaultMapSerializer.OfStringKeys<ConfigCreatureBiome> {
 
 		@Override
 		public Class<ConfigCreatureBiome> getValueClass () {

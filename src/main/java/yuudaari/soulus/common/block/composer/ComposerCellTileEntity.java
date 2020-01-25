@@ -366,7 +366,7 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 			mode.onReadFromNBT(compound);
 
 		final String ownerString = compound.getString("owner");
-		owner = ownerString == "" ? null : UUID.fromString(ownerString);
+		owner = ownerString.equals("") ? null : UUID.fromString(ownerString);
 	}
 
 	/////////////////////////////////////////

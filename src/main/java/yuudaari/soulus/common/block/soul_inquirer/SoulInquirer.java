@@ -97,10 +97,10 @@ public class SoulInquirer extends UpgradeableBlock<SoulInquirerTileEntity> {
 			if (!IUpgrade.super.isItemStack(stack))
 				return false;
 
-			if (name == "count")
+			if (this == Upgrade.COUNT)
 				return CrystalBlood.isFilled(stack);
 
-			if (name == "range")
+			if (this == Upgrade.RANGE)
 				return OrbMurky.isFilled(stack);
 
 			return true;
@@ -110,10 +110,10 @@ public class SoulInquirer extends UpgradeableBlock<SoulInquirerTileEntity> {
 		public ItemStack getItemStack (int quantity) {
 			ItemStack stack = IUpgrade.super.getItemStack(quantity);
 
-			if (name == "count")
+			if (this == Upgrade.COUNT)
 				CrystalBlood.setFilled(stack);
 
-			if (name == "range")
+			if (this == Upgrade.RANGE)
 				OrbMurky.setFilled(stack);
 
 			return stack;

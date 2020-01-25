@@ -69,7 +69,7 @@ public class ConfigEssence {
 		return spawnableCreatures;
 	}
 
-	public static class DoubleMapSerializer extends DefaultMapSerializer<Double> {
+	public static class DoubleMapSerializer extends DefaultMapSerializer.OfStringKeys<Double> {
 
 		@Override
 		public Class<Double> getValueClass () {
@@ -77,7 +77,7 @@ public class ConfigEssence {
 		}
 	}
 
-	public static class LootMapSerializer extends DefaultMapSerializer<ConfigCreatureLoot> {
+	public static class LootMapSerializer extends DefaultMapSerializer.OfStringKeys<ConfigCreatureLoot> {
 
 		@Override
 		public Class<ConfigCreatureLoot> getValueClass () {

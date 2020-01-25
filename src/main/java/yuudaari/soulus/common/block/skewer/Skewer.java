@@ -134,10 +134,10 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 			if (!IUpgrade.super.isItemStack(stack))
 				return false;
 
-			if (name == "crystal_blood")
+			if (this == Upgrade.CRYSTAL_BLOOD)
 				return !CrystalBlood.isFilled(stack);
 
-			if (name == "player")
+			if (this == Upgrade.PLAYER)
 				return SoulCatalyst.isFilled(stack);
 
 			return true;
@@ -147,7 +147,7 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		public ItemStack getItemStack (int quantity) {
 			final ItemStack stack = IUpgrade.super.getItemStack(quantity);
 
-			if (name == "player")
+			if (this == Upgrade.PLAYER)
 				SoulCatalyst.setFilled(stack);
 
 			return stack;
@@ -157,7 +157,7 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		public ItemStack getItemStackForTileEntity (UpgradeableBlockTileEntity te, int quantity) {
 			ItemStack stack = getItemStack(quantity);
 
-			if (name == "crystal_blood") {
+			if (this == Upgrade.CRYSTAL_BLOOD) {
 				SkewerTileEntity ste = (SkewerTileEntity) te;
 				CrystalBlood.setContainedBlood(stack, Math
 					.min(CrystalBlood.CONFIG.requiredBlood, ste.crystalBloodContainedBlood));

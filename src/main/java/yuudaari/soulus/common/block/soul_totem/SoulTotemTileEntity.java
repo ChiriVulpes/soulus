@@ -197,7 +197,7 @@ public class SoulTotemTileEntity extends UpgradeableBlockTileEntity {
 		isActive = compound.getBoolean("active");
 		kickstartCost = compound.getByte("kickstart_cost");
 		final String ownerString = compound.getString("owner");
-		owner = ownerString == "" ? null : UUID.fromString(ownerString);
+		owner = ownerString.equals("") ? null : UUID.fromString(ownerString);
 	}
 
 	@Override

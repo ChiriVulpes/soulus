@@ -95,7 +95,7 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 			if (!IUpgrade.super.isItemStack(stack))
 				return false;
 
-			if (name == "range")
+			if (this == Upgrade.RANGE)
 				return OrbMurky.isFilled(stack);
 
 			return true;
@@ -105,7 +105,7 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 		public ItemStack getItemStack (int quantity) {
 			final ItemStack stack = IUpgrade.super.getItemStack(quantity);
 
-			if (name == "range")
+			if (this == Upgrade.RANGE)
 				OrbMurky.setFilled(stack);
 
 			return stack;

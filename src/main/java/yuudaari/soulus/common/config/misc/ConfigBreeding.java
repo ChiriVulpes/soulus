@@ -43,7 +43,7 @@ public class ConfigBreeding {
 		return breeding.getOrDefault("*", 1.0);
 	}
 
-	public static class ConfigBreedingMapSerializer extends DefaultMapSerializer<Double> {
+	public static class ConfigBreedingMapSerializer extends DefaultMapSerializer.OfStringKeys<Double> {
 
 		@Override
 		public Class<Double> getValueClass () {

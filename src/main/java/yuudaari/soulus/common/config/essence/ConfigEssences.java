@@ -97,7 +97,7 @@ public class ConfigEssences {
 
 	public int getSoulbookQuantity (final String essenceType) {
 		final ConfigEssence config = get(essenceType);
-		return config != null ? config.soulbookQuantity : essenceType == "unfocused" ? 1 : -1;
+		return config != null ? config.soulbookQuantity : essenceType.equals("unfocused") ? 1 : -1;
 	}
 
 	public Range getSoulbookXP (final String essenceType) {

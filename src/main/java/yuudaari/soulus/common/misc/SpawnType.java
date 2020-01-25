@@ -1,0 +1,56 @@
+package yuudaari.soulus.common.misc;
+
+import java.util.Arrays;
+import net.minecraft.entity.EntityLivingBase;
+
+public enum SpawnType {
+
+	ALL ((byte) 0, "all"),
+	SPAWNED ((byte) 1, "spawned"),
+	SUMMONED ((byte) 2, "summoned"),
+	SUMMONED_MALICE ((byte) 3, "summoned_malice");
+
+	private static final String SPAWN_TYPE_KEY = "soulus:spawn_whitelisted";
+
+	public static SpawnType get (final EntityLivingBase entity) {
+		final byte spawnType = entity.getEntityData().getByte(SPAWN_TYPE_KEY);
+		if (spawnType == 0)
+			return null;
+
+		return Arrays.stream(SpawnType.values())
+			.filter(type -> type.id == spawnType)
+			.findFirst()
+			.orElse(null);
+	}
+
+	public static SpawnType fromName (final String name) {
+		return Arrays.stream(SpawnType.values())
+			.filter(type -> type.name.equals(name))
+			.findFirst()
+			.orElse(null);
+	}
+
+	private byte id;
+	private String name;
+
+	private SpawnType (final byte id, final String name) {
+		this.id = id;
+		this.name = name;
+	}
+
+	public byte getId () {
+		return id;
+	}
+
+	public String getName () {
+		return name;
+	}
+
+	public void apply (final EntityLivingBase entity) {
+		entity.getEntityData().setByte(SPAWN_TYPE_KEY, (byte) id);
+	}
+
+	public boolean matches (final EntityLivingBase entity) {
+		return this == SpawnType.ALL || this == get(entity);
+	}
+}

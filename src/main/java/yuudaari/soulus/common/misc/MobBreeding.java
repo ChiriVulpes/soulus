@@ -18,16 +18,16 @@ public class MobBreeding {
 	@Inject public static ConfigBreeding CONFIG;
 
 	@SubscribeEvent
-	public static void babyEntitySpawn (BabyEntitySpawnEvent event) {
-		EntityAgeable entity = event.getChild();
-		String entityName = EntityList.getKey(entity).toString();
-		double chance = CONFIG.getChance(entityName);
+	public static void babyEntitySpawn (final BabyEntitySpawnEvent event) {
+		final EntityAgeable entity = event.getChild();
+		final String entityName = EntityList.getKey(entity).toString();
+		final double chance = CONFIG.getChance(entityName);
 
 		if (new Random().nextDouble() > chance) {
 			event.setCanceled(true);
-
-		} else {
-			NoMobSpawning.approveSpawn(entity);
+			return;
 		}
+
+		SpawnType.SPAWNED.apply(entity);
 	}
 }

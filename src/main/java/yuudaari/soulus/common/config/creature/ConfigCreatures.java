@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.config.ConfigFile;
 import yuudaari.soulus.common.config.ConfigProfile;
+import yuudaari.soulus.common.misc.SpawnType;
 import yuudaari.soulus.common.util.serializer.DefaultMapSerializer;
 import yuudaari.soulus.common.util.serializer.Serializable;
 import yuudaari.soulus.common.util.serializer.Serialized;
@@ -16,87 +17,88 @@ public class ConfigCreatures {
 
 	@ConfigProfile public static ConfigCreatures noCreaturesNoDrops = new ConfigCreatures()
 		.addCreatureConfig("minecraft:*", new ConfigCreature(0.0)
-			.setWhitelistedDrops("summoned", "*"))
+			.setWhitelistedDrops(SpawnType.SUMMONED, "*")
+			.setBlacklistedDrops(SpawnType.SUMMONED_MALICE, "*"))
 		.addCreatureConfig("minecraft:skeleton", new ConfigCreature(0.0)
-			.setBlacklistedDrops("all", "minecraft:bone")
-			.setBlacklistedDrops("spawned", "*"))
+			.setBlacklistedDrops(SpawnType.ALL, "minecraft:bone")
+			.setBlacklistedDrops(SpawnType.SPAWNED, "*"))
 		.addCreatureConfig("minecraft:wither_skeleton", new ConfigCreature(0.0)
-			.setBlacklistedDrops("all", "minecraft:bone")
-			.setBlacklistedDrops("spawned", "*"))
+			.setBlacklistedDrops(SpawnType.ALL, "minecraft:bone")
+			.setBlacklistedDrops(SpawnType.SPAWNED, "*"))
 		.addCreatureConfig("minecraft:stray", new ConfigCreature(0.0)
-			.setBlacklistedDrops("all", "minecraft:bone")
-			.setBlacklistedDrops("spawned", "*"))
+			.setBlacklistedDrops(SpawnType.ALL, "minecraft:bone")
+			.setBlacklistedDrops(SpawnType.SPAWNED, "*"))
 		.addCreatureConfig("minecraft:wither", new ConfigCreature(1.0)
-			.setWhitelistedDrops("all", "*"))
+			.setWhitelistedDrops(SpawnType.ALL, "*"))
 		.addCreatureConfig("minecraft:ender_dragon", new ConfigCreature(1.0)
-			.setWhitelistedDrops("all", "*"));
+			.setWhitelistedDrops(SpawnType.ALL, "*"));
 
 	@ConfigProfile public static ConfigCreatures noCreaturesYesDrops = new ConfigCreatures()
 		.addCreatureConfig("minecraft:*", new ConfigCreature(0.0)
-			.setWhitelistedDrops("all", "*"))
+			.setWhitelistedDrops(SpawnType.ALL, "*"))
 		.addCreatureConfig("minecraft:skeleton", new ConfigCreature(0.0)
-			.setBlacklistedDrops("all", "minecraft:bone"))
+			.setBlacklistedDrops(SpawnType.ALL, "minecraft:bone"))
 		.addCreatureConfig("minecraft:wither_skeleton", new ConfigCreature(0.0)
-			.setBlacklistedDrops("all", "minecraft:bone"))
+			.setBlacklistedDrops(SpawnType.ALL, "minecraft:bone"))
 		.addCreatureConfig("minecraft:stray", new ConfigCreature(0.0)
-			.setBlacklistedDrops("all", "minecraft:bone"))
+			.setBlacklistedDrops(SpawnType.ALL, "minecraft:bone"))
 		.addCreatureConfig("minecraft:wither", new ConfigCreature(1.0))
 		.addCreatureConfig("minecraft:ender_dragon", new ConfigCreature(1.0));
 
 	@ConfigProfile public static ConfigCreatures noCreaturesNoDropsAllMods = new ConfigCreatures()
 		.addCreatureConfig("*", new ConfigCreature(0.0)
-			.setWhitelistedDrops("summoned", "*"))
+			.setWhitelistedDrops(SpawnType.SUMMONED, "*"))
 		.addCreatureConfig("minecraft:skeleton", new ConfigCreature(0.0)
-			.setBlacklistedDrops("all", "minecraft:bone")
-			.setBlacklistedDrops("spawned", "*"))
+			.setBlacklistedDrops(SpawnType.ALL, "minecraft:bone")
+			.setBlacklistedDrops(SpawnType.SPAWNED, "*"))
 		.addCreatureConfig("minecraft:wither_skeleton", new ConfigCreature(0.0)
-			.setBlacklistedDrops("all", "minecraft:bone")
-			.setBlacklistedDrops("spawned", "*"))
+			.setBlacklistedDrops(SpawnType.ALL, "minecraft:bone")
+			.setBlacklistedDrops(SpawnType.SPAWNED, "*"))
 		.addCreatureConfig("minecraft:stray", new ConfigCreature(0.0)
-			.setBlacklistedDrops("all", "minecraft:bone")
-			.setBlacklistedDrops("spawned", "*"))
+			.setBlacklistedDrops(SpawnType.ALL, "minecraft:bone")
+			.setBlacklistedDrops(SpawnType.SPAWNED, "*"))
 		.addCreatureConfig("minecraft:wither", new ConfigCreature(1.0)
-			.setWhitelistedDrops("all", "*"))
+			.setWhitelistedDrops(SpawnType.ALL, "*"))
 		.addCreatureConfig("minecraft:ender_dragon", new ConfigCreature(1.0)
-			.setWhitelistedDrops("all", "*"));
+			.setWhitelistedDrops(SpawnType.ALL, "*"));
 
 	@ConfigProfile public static ConfigCreatures yesCreaturesNoDrops = new ConfigCreatures()
 		.addCreatureConfig("minecraft:*", new ConfigCreature(1.0)
-			.setBlacklistedDrops("spawned", "*"))
+			.setBlacklistedDrops(SpawnType.SPAWNED, "*"))
 		.addCreatureConfig("minecraft:skeleton", new ConfigCreature(1.0)
-			.setBlacklistedDrops("summoned", "minecraft:bone"))
+			.setBlacklistedDrops(SpawnType.SUMMONED, "minecraft:bone"))
 		.addCreatureConfig("minecraft:wither_skeleton", new ConfigCreature(1.0)
-			.setBlacklistedDrops("summoned", "minecraft:bone"))
+			.setBlacklistedDrops(SpawnType.SUMMONED, "minecraft:bone"))
 		.addCreatureConfig("minecraft:stray", new ConfigCreature(1.0)
-			.setBlacklistedDrops("summoned", "minecraft:bone"))
+			.setBlacklistedDrops(SpawnType.SUMMONED, "minecraft:bone"))
 		.addCreatureConfig("minecraft:wither", new ConfigCreature(1.0)
-			.setWhitelistedDrops("all", "*"))
+			.setWhitelistedDrops(SpawnType.ALL, "*"))
 		.addCreatureConfig("minecraft:ender_dragon", new ConfigCreature(1.0)
-			.setWhitelistedDrops("all", "*"));
+			.setWhitelistedDrops(SpawnType.ALL, "*"));
 
 	@ConfigProfile public static ConfigCreatures yesCreaturesNoDropsAllMods = new ConfigCreatures()
 		.addCreatureConfig("*", new ConfigCreature(1.0)
-			.setBlacklistedDrops("spawned", "*"))
+			.setBlacklistedDrops(SpawnType.SPAWNED, "*"))
 		.addCreatureConfig("minecraft:skeleton", new ConfigCreature(1.0)
-			.setBlacklistedDrops("summoned", "minecraft:bone"))
+			.setBlacklistedDrops(SpawnType.SUMMONED, "minecraft:bone"))
 		.addCreatureConfig("minecraft:wither_skeleton", new ConfigCreature(1.0)
-			.setBlacklistedDrops("summoned", "minecraft:bone"))
+			.setBlacklistedDrops(SpawnType.SUMMONED, "minecraft:bone"))
 		.addCreatureConfig("minecraft:stray", new ConfigCreature(1.0)
-			.setBlacklistedDrops("summoned", "minecraft:bone"))
+			.setBlacklistedDrops(SpawnType.SUMMONED, "minecraft:bone"))
 		.addCreatureConfig("minecraft:wither", new ConfigCreature(1.0)
-			.setWhitelistedDrops("all", "*"))
+			.setWhitelistedDrops(SpawnType.ALL, "*"))
 		.addCreatureConfig("minecraft:ender_dragon", new ConfigCreature(1.0)
-			.setWhitelistedDrops("all", "*"));
+			.setWhitelistedDrops(SpawnType.ALL, "*"));
 
 	@ConfigProfile public static ConfigCreatures yesCreaturesYesDrops = new ConfigCreatures()
 		.addCreatureConfig("*", new ConfigCreature(1.0)
-			.setWhitelistedDrops("all", "*"))
+			.setWhitelistedDrops(SpawnType.ALL, "*"))
 		.addCreatureConfig("minecraft:skeleton", new ConfigCreature(1.0)
-			.setBlacklistedDrops("all", "minecraft:bone"))
+			.setBlacklistedDrops(SpawnType.ALL, "minecraft:bone"))
 		.addCreatureConfig("minecraft:wither_skeleton", new ConfigCreature(1.0)
-			.setBlacklistedDrops("all", "minecraft:bone"))
+			.setBlacklistedDrops(SpawnType.ALL, "minecraft:bone"))
 		.addCreatureConfig("minecraft:stray", new ConfigCreature(1.0)
-			.setBlacklistedDrops("all", "minecraft:bone"));
+			.setBlacklistedDrops(SpawnType.ALL, "minecraft:bone"));
 
 
 
@@ -134,7 +136,7 @@ public class ConfigCreatures {
 		return dimensionConfig.biomeConfigs.get(biome);
 	}
 
-	public static class DimensionMapSerializer extends DefaultMapSerializer<ConfigCreatureDimension> {
+	public static class DimensionMapSerializer extends DefaultMapSerializer.OfStringKeys<ConfigCreatureDimension> {
 
 		@Override
 		public Class<ConfigCreatureDimension> getValueClass () {

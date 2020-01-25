@@ -12,7 +12,8 @@ public class ConfigStructure {
 
 	@Serialized(value = Serializer.class, topLevel = true) public Map<String, ConfigReplacement> replacementsByCreature = new HashMap<>();
 
-	public ConfigStructure () {}
+	public ConfigStructure () {
+	}
 
 	public ConfigStructure (ConfigReplacement defaultReplacement) {
 		addReplacement("*", defaultReplacement);
@@ -27,7 +28,7 @@ public class ConfigStructure {
 		return this;
 	}
 
-	public static class Serializer extends DefaultMapSerializer<ConfigReplacement> {
+	public static class Serializer extends DefaultMapSerializer.OfStringKeys<ConfigReplacement> {
 
 		@Override
 		public Class<ConfigReplacement> getValueClass () {

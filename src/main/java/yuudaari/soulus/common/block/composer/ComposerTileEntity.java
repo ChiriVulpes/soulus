@@ -538,7 +538,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		poofChance = compound.getFloat("poof_chance");
 
 		final String ownerString = compound.getString("owner");
-		owner = ownerString == "" ? null : UUID.fromString(ownerString);
+		owner = ownerString.equals("") ? null : UUID.fromString(ownerString);
 
 		NBTTagCompound cellTag = compound.getCompoundTag("cell_map");
 		for (Integer slot = 0; slot < 9; slot++) {
