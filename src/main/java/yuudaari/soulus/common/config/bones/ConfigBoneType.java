@@ -12,16 +12,16 @@ public class ConfigBoneType {
 	@Serialized public String name;
 	@Serialized public String itemBone;
 	@Serialized public String itemChunk;
-	@Serialized public double tameChance;
+	@Serialized public double wolfTameChance;
 
 	public ConfigBoneType () {
 	}
 
-	public ConfigBoneType (final String name, final String itemBone, final String itemChunk, final double tameChance) {
+	public ConfigBoneType (final String name, final String itemBone, final String itemChunk, final double wolfTameChance) {
 		this.name = name.toUpperCase();
 		this.itemBone = itemBone;
 		this.itemChunk = itemChunk;
-		this.tameChance = tameChance;
+		this.wolfTameChance = wolfTameChance;
 	}
 
 	////////////////////////////////////

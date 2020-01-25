@@ -36,7 +36,7 @@ public interface IBone extends IRightClickableItem {
 		final ConfigBoneType CONFIG = Config.get(Soulus.MODID, ConfigBoneTypes.class)
 			.getFromBone(getRegistryName().toString());
 
-		if (player.world.rand.nextDouble() < CONFIG.tameChance && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(wolf, player)) {
+		if (player.world.rand.nextDouble() < CONFIG.wolfTameChance && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(wolf, player)) {
 			wolf.setTamedBy(player);
 			wolf.navigator.clearPath();
 			wolf.setAttackTarget(null);
