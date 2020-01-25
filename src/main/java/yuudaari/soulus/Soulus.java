@@ -47,9 +47,10 @@ import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.util.DebugHelper;
 import yuudaari.soulus.common.util.Logger;
+import yuudaari.soulus.common.util.Regex;
 import yuudaari.soulus.server.command.SoulusCommand;
 
-@Mod(modid = Soulus.MODID, name = Soulus.NAME, version = "@VERSION@", acceptedMinecraftVersions = "[1.12.2]", dependencies = "after:crafttweaker")
+@Mod(modid = Soulus.MODID, name = Soulus.NAME, version = Soulus.VERSION, acceptedMinecraftVersions = "[1.12.2]", dependencies = "after:crafttweaker")
 @Mod.EventBusSubscriber
 // @ConfigInjected(Soulus.MODID)
 public class Soulus {
@@ -82,6 +83,8 @@ public class Soulus {
 
 	public static final String NAME = "Soulus";
 	public static final String MODID = "soulus";
+	public static final String VERSION = "@VERSION@";
+	public static final String VERSION_BASE = Regex.firstMatch(VERSION, "\\d+\\.\\d+(?=\\.\\d+-\\w{7})");
 	public static Config config;
 
 	@Mod.Instance(MODID) public static Soulus INSTANCE;
@@ -171,7 +174,7 @@ public class Soulus {
 			TheOneProbe.register();
 		}
 
-		final String configPath = event.getModConfigurationDirectory().getAbsolutePath() + "/soulus/";
+		final String configPath = event.getModConfigurationDirectory().getAbsolutePath() + "/soulus/" + VERSION_BASE + ".x/";
 		config = new Config(event.getAsmData(), configPath, Soulus.MODID);
 
 		reloadConfigs(false, true);
