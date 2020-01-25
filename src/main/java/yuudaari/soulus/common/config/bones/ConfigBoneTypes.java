@@ -2,6 +2,7 @@ package yuudaari.soulus.common.config.bones;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.item.Item;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.config.ConfigFile;
 import yuudaari.soulus.common.util.serializer.CollectionSerializer;
@@ -21,8 +22,8 @@ public class ConfigBoneTypes {
 		boneTypes.add(new ConfigBoneType("fungal", "soulus:bone_fungal", "soulus:bone_chunk_fungal", 1.0 / 12.0));
 		boneTypes.add(new ConfigBoneType("frozen", "soulus:bone_frozen", "soulus:bone_chunk_frozen", 1.0 / 12.0));
 		boneTypes.add(new ConfigBoneType("scale", "soulus:bone_scale", "soulus:bone_chunk_scale", 1.0 / 12.0));
-		boneTypes.add(new ConfigBoneType("nether", "soulus:bone_nether", "soulus:bone_chunk_nether", 0.0));
-		boneTypes.add(new ConfigBoneType("ender", "soulus:bone_ender", "soulus:bone_chunk_ender", 0.0));
+		boneTypes.add(new ConfigBoneType("nether", "soulus:bone_nether", "soulus:bone_chunk_nether", 0.0).setCannotBeMarrowedManually());
+		boneTypes.add(new ConfigBoneType("ender", "soulus:bone_ender", "soulus:bone_chunk_ender", 0.0).setCannotBeMarrowedManually());
 	}
 
 	public ConfigBoneType get (final String type) {
@@ -30,6 +31,14 @@ public class ConfigBoneTypes {
 			.filter(config -> config.name.equalsIgnoreCase(type))
 			.findFirst()
 			.orElse(null);
+	}
+
+	public ConfigBoneType getFromBone (final Item bone) {
+		return getFromBone(bone.getRegistryName().toString());
+	}
+
+	public ConfigBoneType getFromChunk (final Item chunk) {
+		return getFromChunk(chunk.getRegistryName().toString());
 	}
 
 	public ConfigBoneType getFromBone (final String bone) {

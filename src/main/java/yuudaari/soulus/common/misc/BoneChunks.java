@@ -96,34 +96,37 @@ public class BoneChunks {
 
 	@SubscribeEvent
 	public static void onRightClick (final RightClickItem event) {
-		final ItemStack heldItem = event.getItemStack();
-		final String itemName = heldItem.getItem().getRegistryName().toString();
+		final ItemStack stack = event.getItemStack();
 
-		for (final ConfigBoneType boneType : CONFIG_BONE_TYPES.boneTypes) {
-			if (boneType.itemChunk.equalsIgnoreCase(itemName)) {
+		final ConfigBoneType config = CONFIG_BONE_TYPES.getFromChunk(stack.getItem());
+		if (config == null)
+			return;
 
-				final World world = event.getWorld();
-				final EntityPlayer player = event.getEntityPlayer();
+		if (!config.canBeMarrowedManually)
+			return;
 
-				particles(world, player, heldItem.getItem());
+		final World world = event.getWorld();
+		final EntityPlayer player = event.getEntityPlayer();
 
-				final int count = player.isSneaking() && CONFIG.sneakToMarrowFullStack ? heldItem.getCount() : 1;
+		particles(world, player, stack.getItem());
 
-				if (!world.isRemote) {
-					final Collection<ItemStack> drops = getMarrowingDrops(world.rand, boneType.name, count);
-					for (final ItemStack drop : drops) {
-						final EntityItem dropEntity = new EntityItem(world, player.posX, player.posY, player.posZ, drop);
-						dropEntity.setNoPickupDelay();
-						world.spawnEntity(dropEntity);
-					}
+		final int count = player.isSneaking() && CONFIG.sneakToMarrowFullStack ? stack.getCount() : 1;
 
-					for (int i = 0; i < count; i++)
-						XP.grant(player, CONFIG.xp.getInt(world.rand));
-				}
+		stack.shrink(count);
 
-				heldItem.shrink(count);
-			}
+		if (world.isRemote)
+			// (the rest is serverside stuff)
+			return;
+
+		final Collection<ItemStack> drops = getMarrowingDrops(world.rand, config.name, count);
+		for (final ItemStack drop : drops) {
+			final EntityItem dropEntity = new EntityItem(world, player.posX, player.posY, player.posZ, drop);
+			dropEntity.setNoPickupDelay();
+			world.spawnEntity(dropEntity);
 		}
+
+		for (int i = 0; i < count; i++)
+			XP.grant(player, CONFIG.xp.getInt(world.rand));
 	}
 
 	@SubscribeEvent

@@ -13,6 +13,7 @@ public class ConfigBoneType {
 	@Serialized public String itemBone;
 	@Serialized public String itemChunk;
 	@Serialized public double wolfTameChance;
+	@Serialized public boolean canBeMarrowedManually = true;
 
 	public ConfigBoneType () {
 	}
@@ -22,6 +23,11 @@ public class ConfigBoneType {
 		this.itemBone = itemBone;
 		this.itemChunk = itemChunk;
 		this.wolfTameChance = wolfTameChance;
+	}
+
+	public ConfigBoneType setCannotBeMarrowedManually () {
+		canBeMarrowedManually = false;
+		return this;
 	}
 
 	////////////////////////////////////
