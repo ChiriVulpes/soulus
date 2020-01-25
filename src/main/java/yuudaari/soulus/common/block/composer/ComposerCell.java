@@ -214,10 +214,14 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 	public boolean onActivateInsert (final World world, final BlockPos pos, final @Nullable EntityPlayer player, final ItemStackMutable stack) {
 		final ComposerCellTileEntity te = (ComposerCellTileEntity) world.getTileEntity(pos);
 
-		if (player != null && player.isSneaking() && !CONFIG.allowSneakRightClickStackInsertion)
+		final boolean sneaking = player != null && player.isSneaking();
+		if (sneaking && !CONFIG.allowSneakRightClickStackInsertion)
 			return false;
 
-		return te.tryInsert(stack.getImmutable(), player != null && player.isSneaking() ? stack.getCount() : 1);
+		if (sneaking && stack.getItem() == BlockRegistry.COMPOSER_CELL.getItem())
+			return false;
+
+		return te.tryInsert(stack.getImmutable(), sneaking ? stack.getCount() : 1);
 	}
 
 	@Override
