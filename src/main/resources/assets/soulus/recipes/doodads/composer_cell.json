@@ -21,6 +21,7 @@
 		}
 	},
 	"result": {
-		"item": "soulus:composer_cell"
+		"item": "soulus:composer_cell",
+		"count": 4
 	}
 }
