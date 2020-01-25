@@ -1,7 +1,12 @@
-const exec = require("child_process").exec;
+const childProcess = require("child_process");
+const fs = require("fs");
 
-exec(`@echo off & start gradlew ${process.argv.includes("-server") ? "runServer" : "runClient"} --debug-jvm & timeout 20 & exit`);
+childProcess.exec(`@echo off & start /WAIT debug.bat ${process.argv.includes("-server") ? "runServer" : "runClient"}`);
 
-setTimeout(() => {
-	process.exit();
-}, 20 * 1000);
+fs.writeFileSync("compile_log.txt", "");
+
+setInterval(() => {
+	const fileText = fs.readFileSync("compile_log.txt", "utf16le");
+	if (fileText.includes("Listening for transport dt_socket at address"))
+		process.exit();
+}, 200);

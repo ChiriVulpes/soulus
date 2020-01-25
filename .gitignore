@@ -8,3 +8,4 @@ run/
 .project
 reset.bat
 *.iml
+compile_log.txt
