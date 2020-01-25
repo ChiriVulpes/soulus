@@ -205,10 +205,10 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 		return true;
 	}
 
-	@Override
-	public boolean canActivateTileEntity (final ComposerCellTileEntity te) {
-		return te.storedQuantity < CONFIG.maxQuantity;
-	}
+	// @Override
+	// public boolean canActivateTileEntity (final ComposerCellTileEntity te) {
+	// 	return te.storedQuantity < CONFIG.maxQuantity;
+	// }
 
 	@Override
 	public boolean onActivateInsert (final World world, final BlockPos pos, final @Nullable EntityPlayer player, final ItemStackMutable stack) {
