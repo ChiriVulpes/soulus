@@ -17,6 +17,25 @@ public class Logger {
 
 	public static final Stack<String> scopes = new Stack<>();
 
+	private static final String MAGIC_DISABLED = "<disabled>";
+
+	private static boolean enabled = true;
+
+	public static void disable () {
+		scopes.push(MAGIC_DISABLED);
+		enabled = false;
+	}
+
+	public static void enable () {
+		if (scopes.peek() == MAGIC_DISABLED)
+			scopes.pop();
+		enabled = !scopes.contains(MAGIC_DISABLED);
+	}
+
+	public static boolean enabled () {
+		return enabled;
+	}
+
 	private static String getScopes () {
 		return scopes.size() == 0 ? "" : "[" + String.join(" | ", scopes) + "] ";
 	}
@@ -28,36 +47,45 @@ public class Logger {
 	}
 
 	public static void info (String message) {
-		LOGGER.info(getScopes() + message);
+		if (enabled())
+			LOGGER.info(getScopes() + message);
 	}
 
 	public static void info (String scope, String message) {
 		scopes.push(scope);
-		LOGGER.info(getScopes() + message);
+		if (enabled())
+			LOGGER.info(getScopes() + message);
 		scopes.pop();
 	}
 
 	public static void warn (String message) {
-		LOGGER.warn(getScopes() + message);
+		if (enabled())
+			LOGGER.warn(getScopes() + message);
 	}
 
 	public static void warn (String scope, String message) {
 		scopes.push(scope);
-		LOGGER.warn(getScopes() + message);
+		if (enabled())
+			LOGGER.warn(getScopes() + message);
 		scopes.pop();
 	}
 
 	public static void error (String message) {
-		LOGGER.error(getScopes() + message);
+		if (enabled())
+			LOGGER.error(getScopes() + message);
 	}
 
 	public static void error (String scope, String message) {
 		scopes.push(scope);
-		LOGGER.error(getScopes() + message);
+		if (enabled())
+			LOGGER.error(getScopes() + message);
 		scopes.pop();
 	}
 
 	public static void error (Exception e) {
+		if (!enabled())
+			return;
+
 		StringWriter writer = new StringWriter();
 		PrintWriter printWriter = new PrintWriter(writer);
 		e.printStackTrace(printWriter);

@@ -194,8 +194,10 @@ public class Config {
 
 		Logger.scopes.push(filename);
 
-		if (json == null)
-			Logger.warn("Not a valid Json Object");
+		if (json == null) {
+			Logger.warn("Either invalid or nonexistant JSON file, regenerating");
+			Logger.disable();
+		}
 
 		for (final Map.Entry<Class<?>, Object> deserializationEntry : toDeserialize.entrySet()) {
 			final Class<?> configClass = deserializationEntry.getKey();
@@ -211,6 +213,7 @@ public class Config {
 			deserializationEntry.setValue(deserialized);
 		}
 
+		Logger.enable();
 		Logger.scopes.pop();
 	}
 
