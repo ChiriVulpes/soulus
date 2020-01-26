@@ -199,6 +199,7 @@ waila.soulus:composer.upgrades_delay=%1$s/%2$s §3Oscillating Gears §8(Speed)
 waila.soulus:composer.upgrades_efficiency=%1$s/%2$s §9Niobium Gears §8(Efficiency)
 waila.soulus:composer.craft_percentage=§a%1$s%% §8composed
 waila.soulus:composer.required_creatures=Required Consumption:
+waila.soulus:composer.required_creatures_count=Required Consumption: §c%1$s
 waila.soulus:composer.required_creature=§8%1$s: §c%2$s
 waila.soulus:composer.no_recipe=§8No Valid Recipe
 waila.soulus:composer_cell.no_items=§8Contains No Items

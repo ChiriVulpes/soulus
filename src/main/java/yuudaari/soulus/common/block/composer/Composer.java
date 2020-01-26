@@ -33,6 +33,7 @@ import yuudaari.soulus.common.util.Translation;
 import yuudaari.soulus.common.util.Material;
 import yuudaari.soulus.common.util.StructureMap;
 import yuudaari.soulus.common.util.StructureMap.BlockValidator;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -383,19 +384,29 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 			tooltip.add(new Translation("waila." + Soulus.MODID + ":composer.activation")
 				.get((int) Math.floor(te.getActivationAmount())));
 
-			if (te.hasValidRecipe() && te.remainingMobs.size() > 0) {
-				tooltip.add(Translation.localize("waila." + Soulus.MODID + ":composer.required_creatures"));
-				te.remainingMobs.entrySet()
-					.stream()
-					.map(requiredMob -> new Translation("waila." + Soulus.MODID + ":composer.required_creature")
-						.get(Translation.localizeEntity(requiredMob.getKey()), requiredMob.getValue()))
-					.forEach(tooltip::add);
-			}
+			if (te.hasValidRecipe() && te.remainingMobs.size() > 0 && !player.isSneaking())
+				tooltip.add(Translation.localize("waila." + Soulus.MODID + ":composer.required_creatures_count", te.remainingMobs.size()));
 
 			// currentTooltip.add("Poof chance: " + te.getPoofChance()); // Only render for debugging
 		} else {
 			tooltip.add(Translation.localize("waila." + Soulus.MODID + ":composer.no_recipe"));
 		}
 
+	}
+
+	@Override
+	protected List<String> onWailaTooltipMorePreUpgrades (final IBlockState blockState, final ComposerTileEntity te, final EntityPlayer player) {
+		final List<String> tooltip = new ArrayList<>();
+
+		if (te.hasValidRecipe() && te.remainingMobs.size() > 0) {
+			tooltip.add(Translation.localize("waila." + Soulus.MODID + ":composer.required_creatures"));
+			te.remainingMobs.entrySet()
+				.stream()
+				.map(requiredMob -> "   " + new Translation("waila." + Soulus.MODID + ":composer.required_creature")
+					.get(Translation.localizeEntity(requiredMob.getKey()), requiredMob.getValue()))
+				.forEach(tooltip::add);
+		}
+
+		return tooltip;
 	}
 }

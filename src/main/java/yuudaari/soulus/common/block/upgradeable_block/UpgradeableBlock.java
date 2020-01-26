@@ -420,11 +420,13 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 	}
 
 	private final void onWailaTooltipBody (List<String> currentTooltip, IBlockState blockState, TileEntityClass te, EntityPlayer player) {
+		List<String> morePreUpgrades = onWailaTooltipMorePreUpgrades(blockState, te, player);
 		List<String> upgrades = onWailaTooltipShowUpgrades(te);
 		List<String> more = onWailaTooltipMore(blockState, te, player);
-		int moreSize = more == null ? 0 : more.size();
+		int moreSize = (more == null ? 0 : more.size()) + (morePreUpgrades == null ? 0 : morePreUpgrades.size());
 
 		if (player.isSneaking() || upgrades.size() + moreSize < 2 || shouldWailaTooltipShowAll(blockState, te)) {
+			if (morePreUpgrades != null) currentTooltip.addAll(morePreUpgrades);
 			currentTooltip.addAll(upgrades);
 			if (more != null) currentTooltip.addAll(more);
 		} else if (upgrades.size() + moreSize > 0) {
@@ -468,6 +470,11 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 
 		return Translation.localize("waila." + getRegistryName() + ".upgrades_" + upgradeName, //
 			upgradeCount, upgrade.getMaxQuantity());
+	}
+
+	@Nullable
+	protected List<String> onWailaTooltipMorePreUpgrades (IBlockState blockState, TileEntityClass te, EntityPlayer player) {
+		return null;
 	}
 
 	@Nullable
