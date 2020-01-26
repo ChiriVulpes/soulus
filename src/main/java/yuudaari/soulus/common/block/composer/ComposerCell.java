@@ -218,7 +218,7 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 		if (sneaking && !CONFIG.allowSneakRightClickStackInsertion)
 			return false;
 
-		if (sneaking && stack.getItem() == BlockRegistry.COMPOSER_CELL.getItem())
+		if (sneaking && (stack.getItem() == BlockRegistry.COMPOSER_CELL.getItem() || stack.getItem() == BlockRegistry.COMPOSER.getItem()))
 			return false;
 
 		return te.tryInsert(stack.getImmutable(), sneaking ? stack.getCount() : 1);
