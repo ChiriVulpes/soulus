@@ -40,14 +40,17 @@ public class NoMobSpawning {
 		if (entity == null || !(entity instanceof EntityLiving) || event.getWorld().isRemote)
 			return;
 
-		if (wasSpawnedFromItem(event))
-			return;
-
 		final EntityLiving living = (EntityLiving) entity;
 
 		// then we check if the creature has already been whitelisted
 		if (SpawnType.get(living) != null)
 			return;
+
+		// we check if the creature was spawned by an egg or morb or whatever
+		if (wasSpawnedFromItem(event)) {
+			SpawnType.SPAWNED_FROM_EGG.apply(living);
+			return;
+		}
 
 		// we explicitly whitelist slimes that have persistence as it's likely they were from a summoned slime
 		if (living.isNoDespawnRequired() && living instanceof EntitySlime) {

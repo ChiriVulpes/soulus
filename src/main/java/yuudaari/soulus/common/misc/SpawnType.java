@@ -8,7 +8,8 @@ public enum SpawnType {
 	ALL ((byte) 0, "all"),
 	SPAWNED ((byte) 1, "spawned"),
 	SUMMONED ((byte) 2, "summoned"),
-	SUMMONED_MALICE ((byte) 3, "summoned_malice");
+	SUMMONED_MALICE ((byte) 3, "summoned_malice"),
+	SPAWNED_FROM_EGG ((byte) 4, "spawned_from_egg");
 
 	private static final String SPAWN_TYPE_KEY = "soulus:spawn_whitelisted";
 
