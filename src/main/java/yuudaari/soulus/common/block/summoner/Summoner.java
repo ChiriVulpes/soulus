@@ -162,7 +162,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		}
 
 		@Override
-		public boolean isSecret () {
+		public boolean isSecret (final UpgradeableBlockTileEntity te) {
 			return this == Upgrade.CRYSTAL_DARK;
 		}
 	}

@@ -16,7 +16,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -30,10 +29,10 @@ import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSkewer;
 import yuudaari.soulus.common.item.CrystalBlood;
-import yuudaari.soulus.common.misc.ModDamageSource;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.client.TetherEntity;
 import yuudaari.soulus.common.registration.BlockRegistry;
+import yuudaari.soulus.common.registration.damage_source.SkewerDamageSource;
 import yuudaari.soulus.common.util.ModPotionEffect;
 
 @Mod.EventBusSubscriber(modid = Soulus.MODID)
@@ -55,13 +54,13 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 		return oldState.getBlock() != newState.getBlock();
 	}
 
-	private DamageSource getDamageSource () {
-		if (!world.isRemote && upgrades.get(Upgrade.PLAYER) > 0) {
-			return ModDamageSource.getSkewerPlayer((WorldServer) world);
+	private SkewerDamageSource damageSource = null;
 
-		} else {
-			return ModDamageSource.SKEWER;
-		}
+	private DamageSource getDamageSource () {
+		if (damageSource == null)
+			damageSource = new SkewerDamageSource(this);
+
+		return damageSource;
 	}
 
 	public void setOwner (EntityPlayer owner) {
@@ -180,11 +179,21 @@ public class SkewerTileEntity extends UpgradeableBlockTileEntity {
 	public int removeUpgrade (IUpgrade upgrade) {
 		int result = super.removeUpgrade(upgrade);
 
-		if (upgrade == Upgrade.POWER && result > 0) {
+		if (upgrade == Upgrade.POWER && result > 0)
 			getBlock().updateExtendedState(world.getBlockState(pos), world, pos);
-		}
 
 		return result;
+	}
+
+	public int getLootingLevel () {
+		int resultLevel = 0;
+
+		final double lootingPercentage = upgrades.get(Upgrade.LOOTING) / (double) Upgrade.LOOTING.getMaxQuantity();
+		for (int i = 0; i < CONFIG.maxLootingLevel; i++)
+			if (world.rand.nextDouble() < lootingPercentage)
+				resultLevel++;
+
+		return resultLevel;
 	}
 
 	@SubscribeEvent

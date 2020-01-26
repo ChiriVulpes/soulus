@@ -55,8 +55,8 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		POISON (2, "poison", Items.SPIDER_EYE),
 		POWER (3, "power", Item.getItemFromBlock(Blocks.REDSTONE_TORCH)),
 		TETHER (4, "tether", ItemRegistry.ASH),
-		PLAYER (5, "player", ItemRegistry.SOUL_CATALYST);
-		// LOOTING (6, "looting", new ItemStack(Items.DYE, 1, 4));
+		PLAYER (5, "player", ItemRegistry.SOUL_CATALYST),
+		LOOTING (6, "looting", Items.EXPERIENCE_BOTTLE);
 
 		private final int index;
 		private final String name;
@@ -144,6 +144,17 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		}
 
 		@Override
+		public boolean isItemStackForTileEntity (final ItemStack stack, final UpgradeableBlockTileEntity te) {
+			if (!IUpgrade.super.isItemStackForTileEntity(stack, te))
+				return false;
+
+			if (this == Upgrade.LOOTING)
+				return te.upgrades.get(Upgrade.PLAYER) > 0;
+
+			return true;
+		}
+
+		@Override
 		public ItemStack getItemStack (int quantity) {
 			final ItemStack stack = IUpgrade.super.getItemStack(quantity);
 
@@ -164,6 +175,12 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 			}
 
 			return stack;
+		}
+
+		@Override
+		public boolean isSecret (final UpgradeableBlockTileEntity te) {
+			final SkewerTileEntity ste = (SkewerTileEntity) te;
+			return this == Upgrade.LOOTING && ste.upgrades.get(Upgrade.PLAYER) <= 0;
 		}
 	}
 
@@ -292,6 +309,10 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		for (final ItemStack stack : returning)
 			if (CrystalBlood.isFilled(stack))
 				stack.getItem().onCreated(stack, world, player);
+
+		final SkewerTileEntity ste = (SkewerTileEntity) world.getTileEntity(pos);
+		if (ste.upgrades.get(Upgrade.LOOTING) > 0 && ste.upgrades.get(Upgrade.PLAYER) <= 0)
+			Upgrade.LOOTING.addItemStackToList(ste, returning, ste.removeUpgrade(Upgrade.LOOTING));
 	}
 
 	/////////////////////////////////////////

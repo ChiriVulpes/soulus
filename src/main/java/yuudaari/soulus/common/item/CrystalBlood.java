@@ -32,9 +32,9 @@ import yuudaari.soulus.common.advancement.Advancements;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.item.ConfigCrystalBlood;
-import yuudaari.soulus.common.misc.ModDamageSource;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.client.CrystalBloodHitEntity;
+import yuudaari.soulus.common.registration.DamageSourceRegistry;
 import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.Colour;
@@ -130,7 +130,7 @@ public class CrystalBlood extends Registration.Item {
 			} else {
 				if (!worldIn.isRemote) {
 					setContainedBlood(heldItem, containedBlood + CONFIG.prickWorth);
-					player.attackEntityFrom(ModDamageSource.CRYSTAL_BLOOD, CONFIG.prickAmount);
+					player.attackEntityFrom(DamageSourceRegistry.CRYSTAL_BLOOD, CONFIG.prickAmount);
 					if (isFilled(heldItem))
 						onCreated(heldItem, player.world, player);
 
@@ -154,7 +154,7 @@ public class CrystalBlood extends Registration.Item {
 	@Override
 	public boolean hitEntity (ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 		if (target.getHealth() <= CONFIG.creaturePrickRequiredHealth) {
-			target.attackEntityFrom(ModDamageSource.CRYSTAL_BLOOD, CONFIG.creaturePrickAmount);
+			target.attackEntityFrom(DamageSourceRegistry.CRYSTAL_BLOOD, CONFIG.creaturePrickAmount);
 			int blood = getContainedBlood(stack);
 			setContainedBlood(stack, blood + CONFIG.creaturePrickWorth);
 			CrystalBlood.bloodParticles(target);

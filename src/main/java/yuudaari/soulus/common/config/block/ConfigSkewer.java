@@ -23,6 +23,7 @@ public class ConfigSkewer extends ConfigUpgradeableBlock<Skewer> {
 	@Serialized public int bloodPerDamage = 1;
 	@Serialized public float chanceForBloodPerHit = 0.5f;
 	@Serialized public int ticksBetweenDamage = 15;
+	@Serialized public int maxLootingLevel = 3;
 	@Serialized public Range tetherChance = new Range(0.2, 1);
 	@Serialized public Range poisonChance = new Range(0.2, 1);
 	@Serialized public ModPotionEffect[] poisonEffects = new ModPotionEffect[] {

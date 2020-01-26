@@ -134,7 +134,6 @@ tile.soulus:soul_totem.name=Soul Totem
 death.attack.soulus:crystal_blood=%1$s sacrificed themselves to a Blood Crystal
 death.attack.soulus:crystal_dark=%1$s was consumed by a Midnight Crystal
 death.attack.soulus:skewer=%1$s became a shishkebab
-death.attack.soulus:skewer_player=%1$s became a shishkebab
 
 
 # ACTION BAR MESSAGES
@@ -178,6 +177,7 @@ waila.soulus:skewer.upgrades_poison=%1$s/%2$s §2Spider Eyes §8(Poison)
 waila.soulus:skewer.upgrades_power=%1$s/%2$s §cRedstone Torch §8(Power)
 waila.soulus:skewer.upgrades_player=%1$s/%2$s §6Soul Catalyst §8(Player)
 waila.soulus:skewer.upgrades_tether=%1$s/%2$s §7Ash §8(Tether)
+waila.soulus:skewer.upgrades_looting=%1$s/%2$s §3Bottles o' Enchanting §8(Looting)
 
 waila.soulus:summoner.summon_percentage=§a%1$s%% §8summoned
 waila.soulus:summoner.summons_remaining=%1$s%% §8souls remaining

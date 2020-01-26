@@ -95,7 +95,7 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 			return true;
 		}
 
-		public default boolean isSecret () {
+		public default boolean isSecret (final UpgradeableBlockTileEntity te) {
 			return false;
 		}
 	}
@@ -460,11 +460,11 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 	}
 
 	@Nullable
-	protected String getWailaTooltipUpgrade (IUpgrade upgrade, TileEntityClass te) {
-		String upgradeName = upgrade.getName().toLowerCase();
-		int upgradeCount = te.upgrades.get(upgrade);
+	protected String getWailaTooltipUpgrade (final IUpgrade upgrade, final TileEntityClass te) {
+		final String upgradeName = upgrade.getName().toLowerCase();
+		final int upgradeCount = te.upgrades.get(upgrade);
 
-		if (upgrade.isSecret() && upgradeCount == 0) return null;
+		if (upgrade.isSecret(te) && upgradeCount == 0) return null;
 
 		return Translation.localize("waila." + getRegistryName() + ".upgrades_" + upgradeName, //
 			upgradeCount, upgrade.getMaxQuantity());

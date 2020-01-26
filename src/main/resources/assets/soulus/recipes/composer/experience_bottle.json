@@ -1,0 +1,27 @@
+{
+	"type": "soulus:composer_shaped",
+	"time": 32,
+	"pattern": [
+		"lll",
+		"lbl",
+		"lll"
+	],
+	"key": {
+		"b": {
+			"item": "minecraft:glass_bottle"
+		},
+		"l": {
+			"item": "minecraft:dye",
+			"data": 4
+		}
+	},
+	"mobs_required": {
+		"minecraft:villager": 1,
+		"minecraft:witch": 1,
+		"minecraft:snowman": 1,
+		"minecraft:villager_golem": 1
+	},
+	"result": {
+		"item": "minecraft:experience_bottle"
+	}
+}

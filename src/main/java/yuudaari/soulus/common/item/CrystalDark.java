@@ -11,9 +11,9 @@ import yuudaari.soulus.client.util.ParticleType;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.item.ConfigCrystalDark;
-import yuudaari.soulus.common.misc.ModDamageSource;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.client.CrystalDarkPrick;
+import yuudaari.soulus.common.registration.DamageSourceRegistry;
 import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.ModPotionEffect;
 import yuudaari.soulus.common.util.XP;
@@ -61,7 +61,7 @@ public class CrystalDark extends Registration.Item {
 
 				if (world.rand.nextFloat() <= CONFIG.prickChance) {
 					if (CONFIG.prickAmount > 0) {
-						entity.attackEntityFrom(ModDamageSource.CRYSTAL_DARK, CONFIG.prickAmount);
+						entity.attackEntityFrom(DamageSourceRegistry.CRYSTAL_DARK, CONFIG.prickAmount);
 					}
 
 					for (ModPotionEffect effect : CONFIG.prickEffects)
