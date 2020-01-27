@@ -176,7 +176,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 			final boolean whitelistAll = mobWhitelist == null ? false : mobWhitelist.contains("*");
 			final boolean blacklistAll = mobBlacklist == null ? false : mobBlacklist.contains("*");
 
-			if (!(entity instanceof EntityPlayer)) {
+			if (!(entity instanceof EntityPlayer) && entity.isEntityAlive()) {
 				final ResourceLocation entityType = EntityList.getKey(entity);
 				if (consumableEntities.containsKey(entityType.toString()))
 					continue;
