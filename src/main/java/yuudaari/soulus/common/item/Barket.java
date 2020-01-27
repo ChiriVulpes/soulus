@@ -1,9 +1,16 @@
 package yuudaari.soulus.common.item;
 
 import javax.annotation.Nullable;
+import com.mojang.authlib.GameProfile;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockDispenser;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
+import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,21 +19,28 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.RecipeRepairItem;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntityDispenser;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStackSimple;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -34,8 +48,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.registration.IItemRegistration;
+import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.util.Translation;
 
 public class Barket extends UniversalBucket implements IItemRegistration {
@@ -81,6 +95,9 @@ public class Barket extends UniversalBucket implements IItemRegistration {
 		setName("barket");
 		setHasDescription();
 		setMaxDamage(maxDamage);
+
+		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.registryObjects.remove(this);
+		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, new DispenseBehavior());
 	}
 
 	@Override
@@ -153,20 +170,28 @@ public class Barket extends UniversalBucket implements IItemRegistration {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick (final World world, final EntityPlayer player, final EnumHand hand) {
+
 		final ItemStack heldItem = player.getHeldItem(hand);
 		final FluidStack fluidStack = getFluid(heldItem);
 
+		ActionResult<ItemStack> result = null;
+
 		// If the bucket is full, call the super method to try and empty it
-		if (fluidStack != null) {
-			return super.onItemRightClick(world, player, hand);
-		}
+		if (fluidStack != null)
+			result = super.onItemRightClick(world, player, hand);
+
+		// we break the barket if it's being right clicked by a fake player
+		if (player instanceof FakePlayer)
+			heldItem.damageItem(getMaxDamage(heldItem) + 1, player);
+
+		if (result != null)
+			return result;
 
 		// If the bucket is empty, try and fill it
 		final RayTraceResult target = this.rayTrace(world, player, true);
 
-		if (target == null || target.typeOfHit != RayTraceResult.Type.BLOCK) {
+		if (target == null || target.typeOfHit != RayTraceResult.Type.BLOCK)
 			return new ActionResult<>(EnumActionResult.PASS, heldItem);
-		}
 
 		final BlockPos pos = target.getBlockPos();
 
@@ -240,6 +265,95 @@ public class Barket extends UniversalBucket implements IItemRegistration {
 		@Override
 		public boolean canFillFluidType (final FluidStack fluid) {
 			return fluid.getFluid() == FluidRegistry.WATER;
+		}
+	}
+
+	/**
+	 * Fills or drains a fluid container item using a Dispenser.
+	 */
+	public class DispenseBehavior extends BehaviorDefaultDispenseItem {
+
+		private FakePlayer FAKE_PLAYER = null;
+
+		private FakePlayer getFakePlayer (final WorldServer world) {
+			if (FAKE_PLAYER == null)
+				FAKE_PLAYER = new FakePlayer(world, new GameProfile(null, Soulus.MODID + ":barket_dispense_behavior"));
+
+			return FAKE_PLAYER;
+		}
+
+		public DispenseBehavior () {
+		}
+
+		/**
+		 * Dispense the specified stack, play the dispense sound and spawn particles.
+		 */
+		@Override
+		public ItemStack dispenseStack (final IBlockSource source, ItemStack stack) {
+			final boolean containedFluid = FluidUtil.getFluidContained(stack) != null;
+			if (containedFluid)
+				stack = dumpContainer(source, stack);
+
+			final boolean hasFluidInFront = hasFluidInFront(source, stack);
+			final World world = source.getWorld();
+			if (!world.isRemote && (containedFluid || hasFluidInFront))
+				stack.damageItem(getMaxDamage(stack) + 1, getFakePlayer((WorldServer) world));
+
+			if (!containedFluid && !hasFluidInFront)
+				super.dispenseStack(source, stack);
+
+			return stack;
+		}
+
+		/**
+		 * Checks if fluid in front of a Dispenser.
+		 */
+		private boolean hasFluidInFront (final IBlockSource source, final ItemStack stack) {
+			World world = source.getWorld();
+			EnumFacing dispenserFacing = source.getBlockState().getValue(BlockDispenser.FACING);
+			BlockPos blockpos = source.getBlockPos().offset(dispenserFacing);
+
+			IBlockState state = world.getBlockState(blockpos);
+			Block block = state.getBlock();
+			if (block instanceof IFluidBlock || block instanceof BlockLiquid) {
+				IFluidHandler targetFluidHandler = FluidUtil.getFluidHandler(world, blockpos, dispenserFacing.getOpposite());
+				if (targetFluidHandler != null) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		/**
+		 * Drains a filled container and places the fluid in front of the Dispenser.
+		 */
+		private ItemStack dumpContainer (final IBlockSource source, final ItemStack stack) {
+			ItemStack singleStack = stack.copy();
+			singleStack.setCount(1);
+			IFluidHandlerItem fluidHandler = FluidUtil.getFluidHandler(singleStack);
+			if (fluidHandler == null)
+				return super.dispenseStack(source, stack);
+
+			FluidStack fluidStack = fluidHandler.drain(Fluid.BUCKET_VOLUME, false);
+			EnumFacing dispenserFacing = source.getBlockState().getValue(BlockDispenser.FACING);
+			BlockPos blockpos = source.getBlockPos().offset(dispenserFacing);
+			FluidActionResult result = fluidStack != null ? FluidUtil.tryPlaceFluid(null, source.getWorld(), blockpos, stack, fluidStack) : FluidActionResult.FAILURE;
+
+			if (!result.isSuccess())
+				return dispense(source, stack);
+
+			ItemStack drainedStack = result.getResult();
+
+			if (drainedStack.getCount() == 1)
+				return drainedStack;
+
+			if (!drainedStack.isEmpty() && ((TileEntityDispenser) source.getBlockTileEntity()).addItemStack(drainedStack) < 0)
+				dispense(source, drainedStack);
+
+			ItemStack stackCopy = drainedStack.copy();
+			stackCopy.shrink(1);
+			return stackCopy;
 		}
 	}
 }
