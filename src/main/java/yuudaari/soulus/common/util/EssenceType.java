@@ -29,4 +29,14 @@ public class EssenceType {
 		tag.setString("essence_type", essenceType);
 		return stack;
 	}
+
+	public static String localize (final String essenceType) {
+		final String localizationKey = "misc.essence_type." + essenceType + ".name";
+
+		String localization = Translation.localize(localizationKey);
+		if (localization.equalsIgnoreCase(localizationKey))
+			localization = Translation.localizeEntity(essenceType);
+
+		return localization;
+	}
 }

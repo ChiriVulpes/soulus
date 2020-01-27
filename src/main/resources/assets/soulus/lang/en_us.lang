@@ -1,5 +1,9 @@
 itemGroup.soulus=Soulus
 
+# ESSENCE TYPES
+
+misc.essence_type.minecraft:vindication_illager.name=Illager
+
 
 # ITEMS
 

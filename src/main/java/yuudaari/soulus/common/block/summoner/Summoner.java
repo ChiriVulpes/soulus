@@ -303,9 +303,8 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 					return Translation.localize(this.getUnlocalizedName() + ".unfocused.name").trim();
 
 				String alignment = config.name;
-				if (alignment == null) {
-					alignment = Translation.localizeEntity(essenceType);
-				}
+				if (alignment == null)
+					alignment = EssenceType.localize(essenceType);
 
 				return Translation.localize(this.getUnlocalizedName() + ".focused.name", alignment).trim();
 			}
