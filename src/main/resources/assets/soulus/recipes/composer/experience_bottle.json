@@ -22,6 +22,7 @@
 		"minecraft:villager_golem": 1
 	},
 	"result": {
-		"item": "minecraft:experience_bottle"
+		"item": "minecraft:experience_bottle",
+		"count": 4
 	}
 }
