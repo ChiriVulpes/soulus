@@ -6,14 +6,14 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import yuudaari.soulus.common.block.composer.cell_mode.CellModeAutoMarrow;
+import yuudaari.soulus.common.block.composer.ComposerCellTileEntity;
 
-public class ComposerCellMarrowHandler implements IMessageHandler<ComposerCellMarrow, IMessage> {
+public class ComposerCellItemParticlesHandler implements IMessageHandler<ComposerCellItemParticles, IMessage> {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IMessage onMessage (ComposerCellMarrow message, MessageContext ctx) {
-		CellModeAutoMarrow.marrowParticles(Minecraft.getMinecraft().world, message.pos, message.chunkId, message.count);
+	public IMessage onMessage (ComposerCellItemParticles message, MessageContext ctx) {
+		ComposerCellTileEntity.itemParticles(Minecraft.getMinecraft().world, message.pos, message.chunkId, message.count);
 		return null;
 	}
 }

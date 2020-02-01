@@ -25,4 +25,9 @@ public abstract class HasRenderItemTileEntity extends UpgradeableBlockTileEntity
 	public double getSpinSpeed () {
 		return 0;
 	}
+
+	@SideOnly(Side.CLIENT)
+	public double getSwingSpeed () {
+		return 0;
+	}
 }

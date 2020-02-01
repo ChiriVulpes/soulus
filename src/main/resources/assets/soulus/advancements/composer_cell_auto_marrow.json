@@ -14,6 +14,9 @@
 	"criteria": {
 		"auto_marrow": {
 			"trigger": "soulus:composer_cell_auto_marrow"
+		},
+		"auto_hammer": {
+			"trigger": "soulus:composer_cell_auto_hammer"
 		}
 	}
 }

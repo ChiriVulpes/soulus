@@ -14,6 +14,9 @@ public class Sledgehammer extends Registration.Item {
 
 	public static enum Type {
 
+		/**
+		 * Order by tier
+		 */
 		NORMAL (null),
 		ENDERSTEEL ("endersteel"),
 		ENDERSTEEL_DARK ("endersteel_dark"),
@@ -25,6 +28,8 @@ public class Sledgehammer extends Registration.Item {
 			registryName = "sledgehammer" + (name == null || name.length() == 0 ? "" : "_" + name);
 		}
 
+		public boolean isMaxTier () {
+			return ordinal() >= values().length - 1;
 		}
 	}
 

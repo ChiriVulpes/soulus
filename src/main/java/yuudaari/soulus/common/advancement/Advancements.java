@@ -28,6 +28,7 @@ public class Advancements {
 	public static StyleSummonerTrigger STYLE_SUMMONER;
 	public static ConstructTrigger CONSTRUCT;
 	public static ComposerCellAutoMarrowTrigger COMPOSER_CELL_AUTO_MARROW_TRIGGER;
+	public static ComposerCellAutoHammerTrigger COMPOSER_CELL_AUTO_HAMMER_TRIGGER;
 	public static ComposerCellAutoFillTrigger COMPOSER_CELL_AUTO_FILL_TRIGGER;
 
 	public static void registerTriggers () {
@@ -42,6 +43,7 @@ public class Advancements {
 		CriteriaTriggers.register(STYLE_SUMMONER = new StyleSummonerTrigger());
 		CriteriaTriggers.register(CONSTRUCT = new ConstructTrigger());
 		CriteriaTriggers.register(COMPOSER_CELL_AUTO_MARROW_TRIGGER = new ComposerCellAutoMarrowTrigger());
+		CriteriaTriggers.register(COMPOSER_CELL_AUTO_HAMMER_TRIGGER = new ComposerCellAutoHammerTrigger());
 		CriteriaTriggers.register(COMPOSER_CELL_AUTO_FILL_TRIGGER = new ComposerCellAutoFillTrigger());
 	}
 

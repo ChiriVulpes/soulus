@@ -4,9 +4,9 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
-public class ComposerCellMarrow implements IMessage {
+public class ComposerCellItemParticles implements IMessage {
 
-	public ComposerCellMarrow () {
+	public ComposerCellItemParticles () {
 	}
 
 	// public int dimension;
@@ -14,7 +14,7 @@ public class ComposerCellMarrow implements IMessage {
 	public int chunkId;
 	public int count;
 
-	public ComposerCellMarrow (/*final World world,*/ final BlockPos pos, final int chunkId, final int count) {
+	public ComposerCellItemParticles (/*final World world,*/ final BlockPos pos, final int chunkId, final int count) {
 		// dimension = world.provider.getDimension();
 		this.pos = pos;
 		this.chunkId = chunkId;

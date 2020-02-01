@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -24,15 +25,19 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
+import yuudaari.soulus.common.block.composer.cell_mode.CellModeAutoHammer;
 import yuudaari.soulus.common.block.composer.cell_mode.CellModeAutoMarrow;
 import yuudaari.soulus.common.block.composer.cell_mode.CellModeFillWithEssence;
 import yuudaari.soulus.common.block.composer.cell_mode.CellModeNormal;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigComposerCell;
+import yuudaari.soulus.common.network.SoulsPacketHandler;
+import yuudaari.soulus.common.network.packet.client.ComposerCellItemParticles;
 import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.util.Classes;
 import yuudaari.soulus.common.util.Translation;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 @ConfigInjected(Soulus.MODID)
 public class ComposerCellTileEntity extends HasRenderItemTileEntity {
@@ -221,7 +226,7 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 	// Modes of Operation
 	//
 
-	private final Map<Class<? extends Mode>, Mode> MODES = Stream.<Class<? extends Mode>>of(CellModeNormal.class, CellModeFillWithEssence.class, CellModeAutoMarrow.class)
+	private final Map<Class<? extends Mode>, Mode> MODES = Stream.<Class<? extends Mode>>of(CellModeNormal.class, CellModeFillWithEssence.class, CellModeAutoMarrow.class, CellModeAutoHammer.class)
 		.collect(Collectors.toMap(Function.identity(), mode -> {
 			final Mode instance = Classes.instantiate(mode);
 			instance.cell = this;
@@ -286,6 +291,10 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 		public double getSpinSpeed () {
 			return 0;
 		}
+
+		public double getSwingSpeed () {
+			return 0;
+		}
 	}
 
 
@@ -314,7 +323,11 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 				.contract(0, 0.8, 0), EntitySelectors.IS_ALIVE);
 	}
 
+	/**
+	 * Note: The quantity added to the list is <code>quantity * item.getCount()</code>
+	 */
 	public static void addItemStackToList (final ItemStack item, final List<ItemStack> list, int quantity) {
+		quantity = quantity * item.getCount();
 		final int maxStackSize = item.getMaxStackSize();
 		while (quantity > 0) {
 			final int stackSize = Math.min(maxStackSize, quantity);
@@ -400,10 +413,44 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 	public double getSpinSpeed () {
 		return MODES.values()
 			.stream()
-			.filter(mode -> mode.isActive())
-			.map(mode -> mode.getSpinSpeed())
+			.filter(Mode::isActive)
+			.map(Mode::getSpinSpeed)
 			.max(Double::compare)
 			.orElse(0.0);
+	}
+
+	@Override
+	public double getSwingSpeed () {
+		return MODES.values()
+			.stream()
+			.filter(Mode::isActive)
+			.map(Mode::getSwingSpeed)
+			.max(Double::compare)
+			.orElse(0.0);
+	}
+
+	public static void itemParticles (final World world, final BlockPos pos, final int boneChunk, final int count) {
+		if (world.isRemote)
+			itemParticles(world, pos, boneChunk, count, true);
+		else
+			SoulsPacketHandler.INSTANCE
+				.sendToAllAround(new ComposerCellItemParticles(pos, boneChunk, count), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 128));
+	}
+
+	@SideOnly(Side.CLIENT)
+	private static void itemParticles (final World world, final BlockPos pos, final int chunk, final int count, final boolean clientside) {
+		final double particleCount = Math.min(CONFIG.particleCount * count, CONFIG.particleCountMax);
+		for (int i = 0; i < particleCount; ++i) {
+			final double x = pos.getX() + 0.5;
+			final double y = pos.getY() + 1.2;
+			final double z = pos.getZ() + 0.5;
+
+			final double vx = (Math.random() - 0.5) * 0.3;
+			final double vy = Math.random() * 0.15;
+			final double vz = (Math.random() - 0.5) * 0.3;
+
+			world.spawnParticle(EnumParticleTypes.ITEM_CRACK, x, y, z, vx, vy, vz, chunk);
+		}
 	}
 
 
