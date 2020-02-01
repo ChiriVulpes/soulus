@@ -19,21 +19,19 @@ public class Sledgehammer extends Registration.Item {
 		ENDERSTEEL_DARK ("endersteel_dark"),
 		NIOBIUM ("niobium");
 
-		private final String registryName;
+		public final String registryName;
 
 		private Type (final String name) {
-			registryName = "sledgehammer" + (name.length() == 0 || name == null ? "" : "_" + name);
+			registryName = "sledgehammer" + (name == null || name.length() == 0 ? "" : "_" + name);
 		}
 
-		public String getRegistryName () {
-			return registryName;
 		}
 	}
 
 	public final Type type;
 
 	public Sledgehammer (final Type type) {
-		super(type.getRegistryName());
+		super(type.registryName);
 		this.type = type;
 		setMaxStackSize(1);
 		setMaxDamage(256);
