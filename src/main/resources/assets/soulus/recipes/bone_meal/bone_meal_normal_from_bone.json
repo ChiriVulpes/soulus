@@ -1,9 +1,14 @@
 {
 	"type": "soulus:sledgehammer",
-	"input": {
-		"type": "forge:ore_dict",
-		"ore": "bone"
-	},
+	"input": [
+		{
+			"type": "forge:ore_dict",
+			"ore": "bone"
+		},
+		{
+			"item": "soulus:bone_scale"
+		}
+	],
 	"result": {
 		"item": "minecraft:dye",
 		"data": 15,

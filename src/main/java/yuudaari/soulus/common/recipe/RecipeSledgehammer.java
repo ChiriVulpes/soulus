@@ -1,7 +1,6 @@
 package yuudaari.soulus.common.recipe;
 
 import java.util.Random;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -19,11 +18,17 @@ import yuudaari.soulus.common.registration.ItemRegistry;
 public class RecipeSledgehammer extends RecipeShapeless {
 
 	private final Random random = new Random();
+	private final Ingredient input;
 
 	public RecipeSledgehammer (final ResourceLocation group, final Ingredient input, final ItemStack output) {
 		super(group, output, input, Ingredient.fromItems(ItemRegistry.items.stream()
 			.filter(item -> item instanceof Sledgehammer)
 			.toArray(Sledgehammer[]::new)));
+		this.input = input;
+	}
+
+	public Ingredient getInput () {
+		return input;
 	}
 
 	@Override
@@ -31,7 +36,7 @@ public class RecipeSledgehammer extends RecipeShapeless {
 		final NonNullList<ItemStack> ret = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
 		for (int i = 0; i < ret.size(); i++) {
 			final ItemStack stack = inv.getStackInSlot(i);
-			if (stack.getItem() == ItemRegistry.SLEDGEHAMMER) {
+			if (stack.getItem() instanceof Sledgehammer) {
 				if (!stack.attemptDamageItem(1, random, null)) {
 					ItemStack newStack = new ItemStack(stack.getItem());
 					newStack.setItemDamage(stack.getItemDamage());
@@ -49,8 +54,7 @@ public class RecipeSledgehammer extends RecipeShapeless {
 			final String group = JsonUtils.getString(json, "group", "");
 			final String override = JsonUtils.getString(json, "override", "");
 
-			final JsonElement ele = JsonUtils.getJsonObject(json, "input");
-			final Ingredient ing = CraftingHelper.getIngredient(ele, context);
+			final Ingredient ing = CraftingHelper.getIngredient(json.get("input"), context);
 
 			final ItemStack itemstack = CraftingHelper.getItemStack(JsonUtils.getJsonObject(json, "result"), context);
 			final RecipeShapeless result = new RecipeSledgehammer(group.isEmpty() ? null : new ResourceLocation(group), ing, itemstack);
