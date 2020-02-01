@@ -1,0 +1,20 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"EsE",
+		" s ",
+		" s "
+	],
+	"key": {
+		"D": {
+			"item": "soulus:ingot_endersteel"
+		},
+		"s": {
+			"type": "forge:ore_dict",
+			"ore": "stickWood"
+		}
+	},
+	"result": {
+		"item": "soulus:sledgehammer_endersteel"
+	}
+}

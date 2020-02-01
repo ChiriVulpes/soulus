@@ -1,0 +1,10 @@
+{
+	"type": "soulus:sledgehammer",
+	"input": {
+		"item": "soulus:bone_ender"
+	},
+	"result": {
+		"item": "soulus:dust_ender",
+		"count": 3
+	}
+}

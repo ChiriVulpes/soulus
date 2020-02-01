@@ -68,6 +68,10 @@ item.soulus:crystal_dark.name=Midnight Jewel
 item.soulus:dust_midnight.name=Stardust
 
 item.soulus:sledgehammer.name=Sledgehammer
+item.soulus:sledgehammer_endersteel.name=Endersteel Sledgehammer
+item.soulus:sledgehammer_endersteel_dark.name=Dark Endersteel Sledgehammer
+item.soulus:sledgehammer_niobium.name=Niobium Sledgehammer
+
 item.soulus:barket.name=Barket
 item.soulus:barket_filled.name=Barket of Water
 

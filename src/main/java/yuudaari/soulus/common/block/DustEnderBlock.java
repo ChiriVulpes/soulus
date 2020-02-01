@@ -60,7 +60,7 @@ public class DustEnderBlock extends Registration.Block {
 	public DustEnderBlock () {
 		super("dust_ender_block", Material.CIRCUITS);
 		setDefaultState(getDefaultState().withProperty(COLOR, EnumDyeColor.LIGHT_BLUE));
-		addOreDict("dustEnder", "bonemeal");
+		addOreDict("dustEnder", "bonemealSoulus");
 		setSoundType(SoundType.STONE);
 	}
 

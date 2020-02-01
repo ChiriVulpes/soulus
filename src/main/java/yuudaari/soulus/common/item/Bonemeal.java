@@ -6,7 +6,7 @@ public class Bonemeal extends Registration.Item {
 
 	public Bonemeal (String name) {
 		super(name);
-		addOreDict("bonemeal");
+		addOreDict("bonemealSoulus");
 		setHasDescription();
 	}
 }

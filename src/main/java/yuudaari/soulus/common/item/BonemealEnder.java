@@ -16,7 +16,6 @@ public class BonemealEnder extends Bonemeal {
 		super("dust_ender");
 		setHasGlint();
 		addOreDict("dustEnder");
-		addOreDict("bonemeal");
 	}
 
 	public EnumActionResult onItemUse (EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {

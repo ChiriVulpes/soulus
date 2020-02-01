@@ -1,0 +1,20 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"DsD",
+		" s ",
+		" s "
+	],
+	"key": {
+		"D": {
+			"item": "soulus:ingot_endersteel_dark"
+		},
+		"s": {
+			"type": "forge:ore_dict",
+			"ore": "stickWood"
+		}
+	},
+	"result": {
+		"item": "soulus:sledgehammer_endersteel_dark"
+	}
+}

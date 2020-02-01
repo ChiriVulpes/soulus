@@ -13,6 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IRecipeFactory;
 import net.minecraftforge.common.crafting.JsonContext;
+import yuudaari.soulus.common.item.Sledgehammer;
 import yuudaari.soulus.common.registration.ItemRegistry;
 
 public class RecipeSledgehammer extends RecipeShapeless {
@@ -20,7 +21,9 @@ public class RecipeSledgehammer extends RecipeShapeless {
 	private final Random random = new Random();
 
 	public RecipeSledgehammer (final ResourceLocation group, final Ingredient input, final ItemStack output) {
-		super(group, output, input, ItemRegistry.SLEDGEHAMMER);
+		super(group, output, input, Ingredient.fromItems(ItemRegistry.items.stream()
+			.filter(item -> item instanceof Sledgehammer)
+			.toArray(Sledgehammer[]::new)));
 	}
 
 	@Override

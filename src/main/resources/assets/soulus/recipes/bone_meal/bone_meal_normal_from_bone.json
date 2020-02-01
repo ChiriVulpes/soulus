@@ -1,0 +1,12 @@
+{
+	"type": "soulus:sledgehammer",
+	"input": {
+		"type": "forge:ore_dict",
+		"ore": "bone"
+	},
+	"result": {
+		"item": "minecraft:dye",
+		"data": 15,
+		"count": 3
+	}
+}

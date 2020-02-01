@@ -65,7 +65,10 @@ public class ItemRegistry {
 	public static Item NUGGET_ENDERSTEEL = new Item("nugget_endersteel").addOreDict("nuggetSoulusEndersteel").setHasGlint().setHasDescription();
 	public static Item NUGGET_ENDERSTEEL_DARK = new Item("nugget_endersteel_dark").addOreDict("nuggetSoulusEndersteelDark").setHasDescription();
 	public static Item NUGGET_NIOBIUM = new Item("nugget_niobium").addOreDict("nuggetSoulusNiobium").setHasGlint().setHasDescription();
-	public static Sledgehammer SLEDGEHAMMER = new Sledgehammer();
+	public static Sledgehammer SLEDGEHAMMER = new Sledgehammer(Sledgehammer.Type.NORMAL);
+	public static Sledgehammer SLEDGEHAMMER_ENDERSTEEL = new Sledgehammer(Sledgehammer.Type.ENDERSTEEL);
+	public static Sledgehammer SLEDGEHAMMER_ENDERSTEEL_DARK = new Sledgehammer(Sledgehammer.Type.ENDERSTEEL_DARK);
+	public static Sledgehammer SLEDGEHAMMER_NIOBIUM = new Sledgehammer(Sledgehammer.Type.NIOBIUM);
 	public static Soulbook SOULBOOK = new Soulbook();
 	public static OrbMurky ORB_MURKY = new OrbMurky();
 	public static SoulCatalyst SOUL_CATALYST = new SoulCatalyst();
@@ -78,7 +81,11 @@ public class ItemRegistry {
 		GLUE,
 
 		BARKET,
+
 		SLEDGEHAMMER,
+		SLEDGEHAMMER_ENDERSTEEL,
+		SLEDGEHAMMER_ENDERSTEEL_DARK,
+		SLEDGEHAMMER_NIOBIUM,
 
 		BONE_NORMAL,
 		BONE_DRY,
@@ -151,7 +158,7 @@ public class ItemRegistry {
 			}
 		}
 
-		OreDictionary.registerOre("bonemeal", new ItemStack(Items.DYE, 1, 15));
+		OreDictionary.registerOre("bonemealSoulus", new ItemStack(Items.DYE, 1, 15));
 	}
 
 	@SideOnly(Side.CLIENT)

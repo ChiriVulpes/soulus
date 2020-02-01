@@ -1,0 +1,6 @@
+{
+	"parent": "minecraft:item/handheld",
+	"textures": {
+		"layer0": "soulus:items/sledgehammer_niobium"
+	}
+}
