@@ -1,0 +1,24 @@
+{
+	"type": "soulus:composer_shaped",
+	"time": 8,
+	"pattern": [
+		"ddd",
+		"dDd",
+		"ddd"
+	],
+	"key": {
+		"D": {
+			"item": "minecraft:dye",
+			"data": 11
+		},
+		"d": {
+			"type": "forge:ore_dict",
+			"ore": "dye"
+		}
+	},
+	"result": {
+		"item": "minecraft:dye",
+		"data": 11,
+		"count": 8
+	}
+}
