@@ -180,19 +180,23 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 		if (storedItem != null && storedItem.isEmpty())
 			storedItem = null;
 
-		final int maxQuantityAllowed = MODES.values()
-			.stream()
-			.filter(mode -> mode.isActive())
-			.map(mode -> mode.getMaxContainedQuantityForOtherModes(stack))
-			.min(Integer::compare)
-			.orElse(Integer.MAX_VALUE);
-
-		final int maxInsertAllowed = maxQuantityAllowed - storedQuantity;
-
 		// insert the item!
-		for (final Mode mode : MODES.values())
-			if (mode.isActive() && mode.tryInsert(stack, Math.min(requestedQuantity, maxInsertAllowed)))
+		for (final Mode mode : MODES.values()) {
+			if (!mode.isActive())
+				continue;
+
+			final int maxQuantityAllowed = MODES.values()
+				.stream()
+				.filter(m -> m != mode && m.isActive())
+				.map(m -> m.getMaxContainedQuantityForOtherModes(stack))
+				.min(Integer::compare)
+				.orElse(Integer.MAX_VALUE);
+
+			final int maxInsertAllowed = maxQuantityAllowed - storedQuantity;
+
+			if (mode.tryInsert(stack, Math.min(requestedQuantity, maxInsertAllowed)))
 				return true;
+		}
 
 		return false;
 	}
