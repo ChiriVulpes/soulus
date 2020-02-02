@@ -92,11 +92,9 @@ public class Essence extends Registration.Item {
 	public void getSubItems (CreativeTabs tab, NonNullList<ItemStack> items) {
 		if (!this.isInCreativeTab(tab)) return;
 
-		for (ConfigEssence essence : CONFIG.essences) {
-			if (essence.essence.equals("NONE")) continue;
-
-			items.add(getStack(essence.essence));
-		}
+		CONFIG.getEssenceTypes()
+			.map(Essence::getStack)
+			.forEach(items::add);
 	}
 
 	@Override

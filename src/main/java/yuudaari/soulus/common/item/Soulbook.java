@@ -346,11 +346,9 @@ public class Soulbook extends Registration.Item implements IHasComposerCellInfo,
 		if (!this.isInCreativeTab(tab)) return;
 
 		items.add(getItemStack());
-		for (ConfigEssence essence : CONFIG.essences) {
-			if (essence.essence.equals("NONE")) continue;
-
-			items.add(getStack(essence.essence, essence.soulbookQuantity));
-		}
+		CONFIG.getEssenceTypes()
+			.map(Soulbook::getFilled)
+			.forEach(items::add);
 	}
 
 	@SideOnly(Side.CLIENT)
