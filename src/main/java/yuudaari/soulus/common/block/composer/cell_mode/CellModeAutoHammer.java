@@ -175,9 +175,21 @@ public class CellModeAutoHammer extends ComposerCellTileEntity.Mode {
 			return;
 
 		final int hammerQuantity = (int) Math.min(ticks / autoHammerPerTick, storedInputQuantity);
+		storedInputQuantity -= hammerQuantity;
 
 		final List<ItemStack> outputs = new ArrayList<>();
 		ComposerCellTileEntity.addItemStackToList(recipe.getRecipeOutput(), outputs, hammerQuantity);
+
+		if (cell.storedItem.attemptDamageItem(hammerQuantity, world.rand, null)) {
+			cell.storedQuantity--;
+			if (cell.storedQuantity <= 0) {
+				cell.storedItem = null;
+				cell.onChangeItem();
+				cell.blockUpdate();
+				ComposerCellTileEntity.addItemStackToList(storedInputType, outputs, storedInputQuantity);
+				storedInputQuantity = 0;
+			}
+		}
 
 		ticks = 0;
 
@@ -189,7 +201,6 @@ public class CellModeAutoHammer extends ComposerCellTileEntity.Mode {
 
 		ComposerCellTileEntity.itemParticles(world, pos, Item.getIdFromItem(storedInputType.getItem()), hammerQuantity);
 
-		storedInputQuantity -= hammerQuantity;
 		if (storedInputQuantity <= 0)
 			storedInputType = null;
 
@@ -252,6 +263,11 @@ public class CellModeAutoHammer extends ComposerCellTileEntity.Mode {
 		else
 			currentTooltip.add(new Translation("waila." + Soulus.MODID + ":composer_cell.auto_hammer_contained_items")
 				.addArgs(storedInputQuantity, CONFIG.autoHammerMaxItemBuffer, storedInputType.getDisplayName())
+				.get());
+
+		if (cell.storedItem.getItemDamage() > 0)
+			currentTooltip.add(new Translation("waila." + Soulus.MODID + ":composer_cell.auto_hammer_durability")
+				.addArgs(cell.storedItem.getMaxDamage() - cell.storedItem.getItemDamage(), cell.storedItem.getMaxDamage())
 				.get());
 	}
 

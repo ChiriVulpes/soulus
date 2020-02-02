@@ -1,6 +1,7 @@
 package yuudaari.soulus.common.registration;
 
 import java.util.List;
+import java.util.Map;
 import com.google.common.collect.Lists;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumRarity;
@@ -154,12 +155,11 @@ public class ItemRegistry {
 	public static void registerItems (IForgeRegistry<net.minecraft.item.Item> registry) {
 		for (IItemRegistration item : items) {
 			registry.register(item.getItem());
-			for (String dict : item.getOreDicts()) {
-				OreDictionary.registerOre(dict, item.getItem());
-			}
+			for (final Map.Entry<String, ItemStack> dict : item.getOreDicts().entrySet())
+				OreDictionary.registerOre(dict.getKey(), dict.getValue());
 		}
 
-		OreDictionary.registerOre("bonemealSoulus", new ItemStack(Items.DYE, 1, 15));
+		OreDictionary.registerOre(Bonemeal.ORE_DICT, new ItemStack(Items.DYE, 1, 15));
 	}
 
 	@SideOnly(Side.CLIENT)

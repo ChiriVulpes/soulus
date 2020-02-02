@@ -1,6 +1,5 @@
 package yuudaari.soulus.common.registration;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -72,36 +71,42 @@ public interface IRegistration<T extends IForgeRegistryEntry<T>> extends IProvid
 	//
 
 	// I would make this private if I could
-	public static final Map<IRegistration<?>, Set<String>> ORE_DICTS = new HashMap<>();
+	public static final Map<IRegistration<?>, Map<String, ItemStack>> ORE_DICTS = new HashMap<>();
 
 	default T addOreDict (final String... dictionaries) {
-		Set<String> oreDicts = ORE_DICTS.get(this);
+		return addOreDict(getItemStack(), dictionaries);
+	}
+
+	default T addOreDict (final ItemStack stack, final String... dictionaries) {
+		Map<String, ItemStack> oreDicts = ORE_DICTS.get(this);
 		if (oreDicts == null) {
-			oreDicts = new HashSet<>();
+			oreDicts = new HashMap<>();
 			ORE_DICTS.put(this, oreDicts);
 		}
 
-		Arrays.stream(dictionaries).forEach(oreDicts::add);
+		for (final String dictionary : dictionaries)
+			oreDicts.put(dictionary, stack);
 
 		return (T) this;
 	}
 
 	default T removeOreDict (final String... dictionaries) {
-		Set<String> oreDicts = ORE_DICTS.get(this);
+		Map<String, ItemStack> oreDicts = ORE_DICTS.get(this);
 		if (oreDicts == null) {
-			oreDicts = new HashSet<>();
+			oreDicts = new HashMap<>();
 			ORE_DICTS.put(this, oreDicts);
 		}
 
-		Arrays.stream(dictionaries).forEach(oreDicts::remove);
+		for (final String dictionary : dictionaries)
+			oreDicts.remove(dictionary);
 
 		return (T) this;
 	}
 
-	default Set<String> getOreDicts () {
-		Set<String> oreDicts = ORE_DICTS.get(this);
+	default Map<String, ItemStack> getOreDicts () {
+		Map<String, ItemStack> oreDicts = ORE_DICTS.get(this);
 		if (oreDicts == null) {
-			oreDicts = new HashSet<>();
+			oreDicts = new HashMap<>();
 			ORE_DICTS.put(this, oreDicts);
 		}
 

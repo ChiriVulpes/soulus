@@ -9,8 +9,8 @@ import yuudaari.soulus.common.util.serializer.Serialized;
 @Serializable
 public class ConfigSledgehammer {
 
-	@Serialized public int durability = 256;
-	@Serialized public int durabilityEndersteel = 2048;
-	@Serialized public int durabilityEndersteelDark = 4096;
+	@Serialized public int durability = 255;
+	@Serialized public int durabilityEndersteel = 2047;
+	@Serialized public int durabilityEndersteelDark = 4095;
 	@Serialized public int durabilityNiobium = -1;
 }

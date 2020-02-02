@@ -12,8 +12,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IRecipeFactory;
 import net.minecraftforge.common.crafting.JsonContext;
+import net.minecraftforge.oredict.OreIngredient;
 import yuudaari.soulus.common.item.Sledgehammer;
-import yuudaari.soulus.common.registration.ItemRegistry;
 
 public class RecipeSledgehammer extends RecipeShapeless {
 
@@ -21,9 +21,11 @@ public class RecipeSledgehammer extends RecipeShapeless {
 	private final Ingredient input;
 
 	public RecipeSledgehammer (final ResourceLocation group, final Ingredient input, final ItemStack output) {
-		super(group, output, input, Ingredient.fromItems(ItemRegistry.items.stream()
-			.filter(item -> item instanceof Sledgehammer)
-			.toArray(Sledgehammer[]::new)));
+		super(group, output, input, new OreIngredient(Sledgehammer.ORE_DICT));
+		// Ingredient.fromItems(ItemRegistry.items.stream()
+		// 	.filter(item -> item instanceof Sledgehammer)
+		// 	.map(item -> ((Sledgehammer) item).is)
+		// 	.toArray(Sledgehammer[]::new)));
 		this.input = input;
 	}
 

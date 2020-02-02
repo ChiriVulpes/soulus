@@ -1,6 +1,7 @@
 package yuudaari.soulus.common.registration;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
@@ -8,6 +9,7 @@ import net.minecraft.block.material.MapColor;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -143,9 +145,8 @@ public class BlockRegistry {
 			if (block.hasItem()) {
 				for (ItemBlock item : block.getItemBlocks()) {
 					registry.register(item);
-					for (String dict : block.getOreDicts()) {
-						OreDictionary.registerOre(dict, item);
-					}
+					for (final Map.Entry<String, ItemStack> dict : block.getOreDicts().entrySet())
+						OreDictionary.registerOre(dict.getKey(), dict.getValue());
 				}
 			}
 

@@ -2,6 +2,7 @@ package yuudaari.soulus.common.item;
 
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
@@ -12,6 +13,8 @@ import yuudaari.soulus.common.registration.Registration;
 public class Sledgehammer extends Registration.Item {
 
 	@Inject public static ConfigSledgehammer CONFIG;
+
+	public static String ORE_DICT = "sledgehammerSoulus";
 
 	public static enum Type {
 
@@ -45,6 +48,9 @@ public class Sledgehammer extends Registration.Item {
 		setMaxStackSize(1);
 		setMaxDamage(256);
 		setHasDescription();
+		final ItemStack stack = getItemStack();
+		stack.setItemDamage(OreDictionary.WILDCARD_VALUE);
+		addOreDict(stack, ORE_DICT);
 	}
 
 	@Override

@@ -228,6 +228,7 @@ waila.soulus:composer_cell.auto_hammer=§8§oInsert items to crush
 waila.soulus:composer_cell.auto_hammer_contained_items=Items: %1$s/%2$s §6%3$s
 waila.soulus:composer_cell.auto_hammer_tier_n=Tier %1$s
 waila.soulus:composer_cell.auto_hammer_tier_max=Max Tier
+waila.soulus:composer_cell.auto_hammer_durability=§8Durability: §c%1$s/%2$s
 
 waila.soulus:enderlink.upgrades_range=%1$s/%2$s §6Murky Orbs §8(Range)
 waila.soulus:misc.color.black=Color: §0Black
