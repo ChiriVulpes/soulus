@@ -131,7 +131,7 @@ public abstract class UpgradeableBlockTileEntity extends TileEntity implements I
 	}
 
 	public static void dispenseItem (final ItemStack stack, final World world, final BlockPos pos, final EnumFacing facing) {
-		if (stack.isEmpty())
+		if (stack.isEmpty() || world.isRemote)
 			return;
 
 		final IInventory facingInventory = getFacingInventory(world, pos, facing);
