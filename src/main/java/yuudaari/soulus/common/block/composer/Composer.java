@@ -11,6 +11,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -176,6 +177,11 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 			return face.rotateAround(Axis.X).getOpposite();
 
 		return face;
+	}
+
+	@Override
+	public EnumRarity getRarity (final ItemStack stack) {
+		return EnumRarity.RARE;
 	}
 
 	////////////////////////////////////

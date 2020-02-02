@@ -14,6 +14,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -177,6 +178,11 @@ public class SoulInquirer extends UpgradeableBlock<SoulInquirerTileEntity> {
 	public int getComparatorInputOverride (IBlockState state, World world, BlockPos pos) {
 		SoulInquirerTileEntity te = (SoulInquirerTileEntity) world.getTileEntity(pos);
 		return te == null ? 0 : te.getSignalStrength();
+	}
+
+	@Override
+	public EnumRarity getRarity (final ItemStack stack) {
+		return EnumRarity.UNCOMMON;
 	}
 
 	/////////////////////////////////////////

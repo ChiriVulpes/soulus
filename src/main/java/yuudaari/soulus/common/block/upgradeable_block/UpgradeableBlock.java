@@ -180,7 +180,12 @@ public abstract class UpgradeableBlock<TileEntityClass extends UpgradeableBlockT
 				return onActivateEmptyHand(world, pos, player);
 			}
 
-			return onActivateInsert(world, pos, player, new ItemStackMutable(heldStack));
+			final ItemStackMutable mutableStack = new ItemStackMutable(heldStack);
+			final boolean result = onActivateInsert(world, pos, player, mutableStack);
+			if (mutableStack.getImmutable() != heldStack)
+				returnItemsToPlayer(world, Collections.singletonList(mutableStack.getImmutable()), player);
+
+			return result;
 		}
 
 		return true;

@@ -5,13 +5,15 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.EnumRarity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.block.comparator_interactive_block.ComparatorInteractiveBlock;
 import yuudaari.soulus.common.block.comparator_interactive_block.ComparatorInteractiveBlockTileEntity;
 import yuudaari.soulus.common.block.soul_totem.SoulTotem;
+import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.util.Material;
 
 public class BlockNiobium extends ComparatorInteractiveBlock {
@@ -23,6 +25,11 @@ public class BlockNiobium extends ComparatorInteractiveBlock {
 		setHarvestLevel("pickaxe", 1);
 		setSoundType(SoundType.METAL);
 		addOreDict("blockSoulusNiobium");
+	}
+
+	@Override
+	public EnumRarity getRarity (final ItemStack stack) {
+		return EnumRarity.EPIC;
 	}
 
 	@Override

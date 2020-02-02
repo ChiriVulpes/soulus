@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -293,6 +294,11 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 			@Override
 			public int getMetadata (int damage) {
 				return damage;
+			}
+
+			@Override
+			public EnumRarity getRarity (final ItemStack stack) {
+				return EnumRarity.RARE;
 			}
 
 			@Override

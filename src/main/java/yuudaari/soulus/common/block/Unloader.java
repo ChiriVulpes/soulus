@@ -4,6 +4,7 @@ import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -26,6 +27,11 @@ public class Unloader extends Registration.Block {
 		setSoundType(SoundType.STONE);
 		setHardness(3F);
 		setHasDescription();
+	}
+
+	@Override
+	public EnumRarity getRarity (final ItemStack stack) {
+		return EnumRarity.UNCOMMON;
 	}
 
 	@Override

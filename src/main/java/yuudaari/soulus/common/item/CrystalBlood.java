@@ -14,6 +14,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
@@ -84,9 +85,13 @@ public class CrystalBlood extends Registration.Item {
 	}
 
 	@Override
-	public boolean hasEffect (ItemStack stack) {
-		int containedBlood = getContainedBlood(stack);
-		return containedBlood >= CONFIG.requiredBlood;
+	public EnumRarity getRarity (final ItemStack stack) {
+		return isFilled(stack) ? EnumRarity.RARE : EnumRarity.UNCOMMON;
+	}
+
+	@Override
+	public boolean hasEffect (final ItemStack stack) {
+		return isFilled(stack);
 	}
 
 	@Nonnull

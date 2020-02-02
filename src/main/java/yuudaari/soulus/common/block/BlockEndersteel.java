@@ -3,6 +3,8 @@ package yuudaari.soulus.common.block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.EnumRarity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import yuudaari.soulus.common.block.comparator_interactive_block.ComparatorInteractiveBlock;
 import yuudaari.soulus.common.block.comparator_interactive_block.ComparatorInteractiveBlockTileEntity;
@@ -17,6 +19,11 @@ public class BlockEndersteel extends ComparatorInteractiveBlock {
 		setHarvestLevel("pickaxe", 1);
 		setSoundType(SoundType.METAL);
 		addOreDict("blockSoulusEndersteel");
+	}
+
+	@Override
+	public EnumRarity getRarity (final ItemStack stack) {
+		return EnumRarity.UNCOMMON;
 	}
 
 	@Override

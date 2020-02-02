@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -231,6 +232,11 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 	public int getComparatorInputOverride (final IBlockState state, final World world, final BlockPos pos) {
 		SkewerTileEntity te = (SkewerTileEntity) world.getTileEntity(pos);
 		return te == null ? 0 : te.getSignalStrength();
+	}
+
+	@Override
+	public EnumRarity getRarity (final ItemStack stack) {
+		return EnumRarity.UNCOMMON;
 	}
 
 	/////////////////////////////////////////

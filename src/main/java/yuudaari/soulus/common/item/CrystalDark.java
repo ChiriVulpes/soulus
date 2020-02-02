@@ -4,6 +4,7 @@ import java.util.Random;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import yuudaari.soulus.Soulus;
@@ -31,6 +32,11 @@ public class CrystalDark extends Registration.Item {
 		setHasDescription();
 
 		Soulus.onConfigReload( () -> setMaxStackSize(CONFIG.stackSize));
+	}
+
+	@Override
+	public EnumRarity getRarity (ItemStack stack) {
+		return EnumRarity.RARE;
 	}
 
 	/**

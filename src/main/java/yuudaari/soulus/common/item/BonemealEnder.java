@@ -2,6 +2,7 @@ package yuudaari.soulus.common.item;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -16,6 +17,11 @@ public class BonemealEnder extends Bonemeal {
 		super("dust_ender");
 		setHasGlint();
 		addOreDict("dustEnder");
+	}
+
+	@Override
+	public EnumRarity getRarity (ItemStack stack) {
+		return EnumRarity.UNCOMMON;
 	}
 
 	public EnumActionResult onItemUse (EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {

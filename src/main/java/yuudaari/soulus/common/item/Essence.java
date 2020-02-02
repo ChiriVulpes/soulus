@@ -2,6 +2,7 @@ package yuudaari.soulus.common.item;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityList;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -71,6 +72,11 @@ public class Essence extends Registration.Item {
 				return getColor(essenceType, tintIndex);
 			});
 		}
+	}
+
+	@Override
+	public EnumRarity getRarity (ItemStack stack) {
+		return EnumRarity.UNCOMMON;
 	}
 
 	@SideOnly(Side.CLIENT)

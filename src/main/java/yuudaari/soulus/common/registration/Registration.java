@@ -3,6 +3,7 @@ package yuudaari.soulus.common.registration;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.world.World;
@@ -53,6 +54,22 @@ public class Registration {
 			final Material material = getMaterial(null);
 			return material.isOpaque() && material.blocksLight();
 		}
+
+		////////////////////////////////////
+		// Rarity
+		//
+
+		private EnumRarity rarity = null;
+
+		public Block setRarity (final EnumRarity rarity) {
+			this.rarity = rarity;
+			return this;
+		}
+
+		@Override
+		public EnumRarity getRarity (final ItemStack stack) {
+			return rarity == null ? IBlockRegistration.super.getRarity(stack) : rarity;
+		}
 	}
 
 	public static class BlockPillar extends net.minecraft.block.BlockRotatedPillar implements IBlockRegistration {
@@ -96,6 +113,22 @@ public class Registration {
 			final Material material = getMaterial(null);
 			return material.isOpaque() && material.blocksLight();
 		}
+
+		////////////////////////////////////
+		// Rarity
+		//
+
+		private EnumRarity rarity = null;
+
+		public BlockPillar setRarity (final EnumRarity rarity) {
+			this.rarity = rarity;
+			return this;
+		}
+
+		@Override
+		public EnumRarity getRarity (final ItemStack stack) {
+			return rarity == null ? IBlockRegistration.super.getRarity(stack) : rarity;
+		}
 	}
 
 	public static class BlockPane extends net.minecraft.block.BlockPane implements IBlockRegistration {
@@ -126,8 +159,20 @@ public class Registration {
 		}
 
 		@Override
-		public ItemBlock setHasSubtypes (boolean hasSubtypes) {
+		public ItemBlock setHasSubtypes (final boolean hasSubtypes) {
 			return (ItemBlock) super.setHasSubtypes(hasSubtypes);
+		}
+
+		@Override
+		public EnumRarity getRarity (final ItemStack stack) {
+			if (getBlock() instanceof IBlockRegistration) {
+				final IBlockRegistration block = (IBlockRegistration) getBlock();
+				final EnumRarity rarity = block.getRarity(stack);
+				if (rarity != null)
+					return rarity;
+			}
+
+			return super.getRarity(stack);
 		}
 	}
 
@@ -167,6 +212,22 @@ public class Registration {
 		@Override
 		public boolean hasEffect (final ItemStack stack) {
 			return glint;
+		}
+
+		////////////////////////////////////
+		// Rarity
+		//
+
+		private EnumRarity rarity = null;
+
+		public Item setRarity (final EnumRarity rarity) {
+			this.rarity = rarity;
+			return this;
+		}
+
+		@Override
+		public EnumRarity getRarity (final ItemStack stack) {
+			return rarity == null ? super.getRarity(stack) : rarity;
 		}
 
 		////////////////////////////////////

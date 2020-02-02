@@ -11,6 +11,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -81,6 +82,10 @@ public interface IBlockRegistration extends IRegistration<Block> {
 		final NonNullList<ItemStack> items = NonNullList.create();
 		getSubBlocks(CreativeTab.INSTANCE, items);
 		return items;
+	}
+
+	default EnumRarity getRarity (final ItemStack rarity) {
+		return EnumRarity.COMMON;
 	}
 
 	////////////////////////////////////

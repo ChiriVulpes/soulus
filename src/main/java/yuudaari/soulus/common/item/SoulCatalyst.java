@@ -10,6 +10,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -181,8 +182,13 @@ public class SoulCatalyst extends Registration.Item implements IHasComposerCellI
 	}
 
 	@Override
-	public boolean hasEffect (ItemStack stack) {
-		return getContainedEssence(stack) == CONFIG.requiredEssence;
+	public boolean hasEffect (final ItemStack stack) {
+		return isFilled(stack);
+	}
+
+	@Override
+	public EnumRarity getRarity (ItemStack stack) {
+		return isFilled(stack) ? EnumRarity.EPIC : EnumRarity.RARE;
 	}
 
 	@Nonnull

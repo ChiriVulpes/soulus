@@ -1,5 +1,6 @@
 package yuudaari.soulus.common.item;
 
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.config.ConfigInjected;
@@ -17,20 +18,23 @@ public class Sledgehammer extends Registration.Item {
 		/**
 		 * Order by tier
 		 */
-		NORMAL (null),
-		ENDERSTEEL ("endersteel"),
-		ENDERSTEEL_DARK ("endersteel_dark"),
-		NIOBIUM ("niobium");
+		NORMAL (null, EnumRarity.COMMON),
+		ENDERSTEEL ("endersteel", EnumRarity.UNCOMMON),
+		ENDERSTEEL_DARK ("endersteel_dark", EnumRarity.RARE),
+		NIOBIUM ("niobium", EnumRarity.EPIC);
 
 		public final String registryName;
+		public final EnumRarity rarity;
 
-		private Type (final String name) {
+		private Type (final String name, final EnumRarity rarity) {
 			registryName = "sledgehammer" + (name == null || name.length() == 0 ? "" : "_" + name);
+			this.rarity = rarity;
 		}
 
 		public boolean isMaxTier () {
 			return ordinal() >= values().length - 1;
 		}
+
 	}
 
 	public final Type type;
@@ -55,5 +59,10 @@ public class Sledgehammer extends Registration.Item {
 			default:
 				return CONFIG.durability;
 		}
+	}
+
+	@Override
+	public EnumRarity getRarity (ItemStack stack) {
+		return type.rarity;
 	}
 }

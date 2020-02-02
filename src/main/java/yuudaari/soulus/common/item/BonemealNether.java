@@ -11,6 +11,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -33,6 +34,11 @@ public class BonemealNether extends Bonemeal {
 
 	public BonemealNether () {
 		super("bone_meal_nether");
+	}
+
+	@Override
+	public EnumRarity getRarity (ItemStack stack) {
+		return EnumRarity.UNCOMMON;
 	}
 
 	@Override

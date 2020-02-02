@@ -10,6 +10,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -229,6 +230,11 @@ public class Soulbook extends Registration.Item implements IHasComposerCellInfo,
 				return Colour.mix(defaultColour, color, percent).get();
 			});
 		}
+	}
+
+	@Override
+	public EnumRarity getRarity (final ItemStack stack) {
+		return isFilled(stack) ? EnumRarity.UNCOMMON : super.getRarity(stack);
 	}
 
 	@Override

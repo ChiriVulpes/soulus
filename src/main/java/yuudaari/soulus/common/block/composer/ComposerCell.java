@@ -14,6 +14,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -143,6 +144,11 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 		}
 
 		return 1 + (int) Math.floor(14 * (te.storedQuantity / (float) CONFIG.maxQuantity));
+	}
+
+	@Override
+	public EnumRarity getRarity (final ItemStack stack) {
+		return EnumRarity.RARE;
 	}
 
 	/////////////////////////////////////////

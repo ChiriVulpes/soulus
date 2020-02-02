@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.crafting.IRecipe;
@@ -69,8 +70,8 @@ public class BlockRegistry {
 	public static final Unloader UNLOADER = new Unloader();
 	public static final SoulTotem SOUL_TOTEM = new SoulTotem();
 	public static final SoulInquirer SOUL_INQUIRER = new SoulInquirer();
-	public static final Registration.Block MIDNIGHT_BRICKS = new Registration.Block("midnight_bricks", new Material(MapColor.BLACK)).setHasItem().setHasDescription();
-	public static final Registration.BlockPillar MIDNIGHT_PILLAR = new Registration.BlockPillar("midnight_pillar", new Material(MapColor.BLACK)).setHasItem().setHasDescription();
+	public static final Registration.Block MIDNIGHT_BRICKS = new Registration.Block("midnight_bricks", new Material(MapColor.BLACK)).setHasItem().setHasDescription().setRarity(EnumRarity.RARE);
+	public static final Registration.BlockPillar MIDNIGHT_PILLAR = new Registration.BlockPillar("midnight_pillar", new Material(MapColor.BLACK)).setHasItem().setHasDescription().setRarity(EnumRarity.RARE);
 
 	public static List<IBlockRegistration> blocks = Lists.newArrayList(new IBlockRegistration[] {
 		DUST_ENDER,
