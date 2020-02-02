@@ -88,6 +88,7 @@ potion.effect.soulus:sleepy.name=Sleepiness
 item.soulus:essence.unfocused.name=Unfocused Essence
 item.soulus:essence.focused.name=%1$s Essence
 item.soulus:essence_perfect.name=Existential Essence
+item.soulus:essence_perfect.complete.name=Quintessential Essence
 
 
 # BLOCKS
@@ -169,6 +170,12 @@ tooltip.soulus:summoner.style.ender=§8Style: §2Ender
 tooltip.soulus:summoner.style.blazing=§8Style: §cBlazing
 tooltip.soulus:summoner.style.sorrow=§8Style: §3Sorrow
 tooltip.soulus:summoner.style.madness=§8Style: §8Madness
+
+tooltip.soulus:essence_perfect.alignments_count=Alignments: §3%1$s/%2$s
+tooltip.soulus:essence_perfect.sneak_to_show_more=§8§oSneak to show alignments
+tooltip.soulus:essence_perfect.alignments=Alignments: §3
+tooltip.soulus:essence_perfect.alignments_joining=§8, §3
+tooltip.soulus:essence_perfect.alignments_joining_last=§8, and §3
 
 
 # WORLD TOOLTIPS

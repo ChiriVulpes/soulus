@@ -6,13 +6,15 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Streams;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityList;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -25,14 +27,24 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
-import yuudaari.soulus.common.registration.ItemRegistry;
+import yuudaari.soulus.Soulus;
+import yuudaari.soulus.client.util.Sneak;
+import yuudaari.soulus.common.config.ConfigInjected;
+import yuudaari.soulus.common.config.ConfigInjected.Inject;
+import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
+import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.EssenceType;
+import yuudaari.soulus.common.util.Translation;
 
+@ConfigInjected(Soulus.MODID)
 public class EssencePerfect extends Registration.Item {
+
+	@Inject public static ConfigEssences CONFIG;
 
 	@Nullable
 	public static String[] getEssenceTypes (final ItemStack stack) {
@@ -43,21 +55,34 @@ public class EssencePerfect extends Registration.Item {
 		final NBTTagList list = tag.getTagList("essence_types", 8);
 		return Streams.stream(list)
 			.map(strTag -> ((NBTTagString) strTag).getString())
+			.distinct()
 			.toArray(String[]::new);
 	}
 
 	public static ItemStack setEssenceTypes (final ItemStack stack, final ResourceLocation... essenceTypes) {
 		return setEssenceTypes(stack, Arrays.stream(essenceTypes)
 			.map(rl -> rl.toString())
+			.distinct()
 			.toArray(String[]::new));
+	}
+
+	public static boolean isPerfect (final ItemStack stack) {
+		final List<String> essenceTypesInStack = Arrays.stream(getEssenceTypes(stack))
+			.sorted()
+			.collect(Collectors.toList());
+		final List<String> essenceTypes = CONFIG.getEssenceTypes()
+			.sorted()
+			.collect(Collectors.toList());
+		return essenceTypes.equals(essenceTypesInStack);
 	}
 
 	public static ItemStack setEssenceTypes (final ItemStack stack, final String... essenceTypes) {
 
 		final NBTTagList essenceTypesTag = new NBTTagList();
-		for (final String essenceType : essenceTypes) {
-			essenceTypesTag.appendTag(new NBTTagString(essenceType));
-		}
+		Arrays.stream(essenceTypes)
+			.distinct()
+			.map(NBTTagString::new)
+			.forEach(essenceTypesTag::appendTag);
 
 		NBTTagCompound tag = stack.getTagCompound();
 		if (tag == null) {
@@ -188,9 +213,25 @@ public class EssencePerfect extends Registration.Item {
 		if (!this.isInCreativeTab(tab)) return;
 
 		final ItemStack result = getItemStack();
-		setEssenceTypes(result, EntityList.ENTITY_EGGS.keySet().toArray(new ResourceLocation[0]));
+		setEssenceTypes(result, CONFIG.getEssenceTypes().toArray(String[]::new));
 		items.add(result);
 	}
+
+	@Override
+	public String getUnlocalizedNameInefficiently (final ItemStack stack) {
+		String result = super.getUnlocalizedNameInefficiently(stack);
+		return isPerfect(stack) ? result + ".complete" : result;
+	}
+
+	@Override
+	public EnumRarity getRarity (final ItemStack stack) {
+		return isPerfect(stack) ? EnumRarity.EPIC : super.getRarity(stack);
+	}
+
+	// @Override
+	// public boolean hasEffect (final ItemStack stack) {
+	// 	return isPerfect(stack);
+	// }
 
 	@Override
 	public void onRegisterRecipes (final IForgeRegistry<IRecipe> registry) {
@@ -198,5 +239,28 @@ public class EssencePerfect extends Registration.Item {
 			new EssencePerfectRecipe(getRegistryName()), //
 			new EssencePerfectCombinationRecipe(getRegistryName(), 2), //
 			new EssencePerfectCombinationRecipe(getRegistryName(), 3));
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void addInformation (final ItemStack stack, final World world, final List<String> tooltip, final ITooltipFlag flagIn) {
+		final String registryName = getRegistryName().toString();
+		final String[] essenceTypes = getEssenceTypes(stack);
+
+		if (essenceTypes.length < 3 || Sneak.isSneaking()) {
+			final StringBuilder builder = new StringBuilder(Translation.localize("tooltip." + registryName + ".alignments"));
+			for (int i = 0; i < essenceTypes.length; i++) {
+				builder.append(EssenceType.localize(essenceTypes[i]));
+				if (i != essenceTypes.length - 1)
+					builder.append(Translation.localize("tooltip." + registryName + (i == essenceTypes.length - 2 ? ".alignments_joining_last" : ".alignments_joining")));
+			}
+
+			tooltip.add(builder.toString());
+
+		} else {
+			tooltip.add(new Translation("tooltip." + registryName + ".alignments_count")
+				.get(essenceTypes.length, CONFIG.getEssenceTypes().count()));
+			tooltip.add(Translation.localize("tooltip." + registryName + ".sneak_to_show_more"));
+		}
 	}
 }

@@ -2,6 +2,11 @@ package yuudaari.soulus.common.config.essence;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.config.ConfigFile;
 import yuudaari.soulus.common.util.Range;
@@ -86,6 +91,22 @@ public class ConfigEssences {
 		essences.add(new ConfigEssence("minecraft:villager_golem", null).setColor(0xD1CBC8, 0x6A914B).setSoulbookUsesMultiplier(0.6));
 		essences.add(new ConfigEssence("minecraft:magma_cube", null).setSoulbookUsesMultiplier(0.6));
 
+	}
+
+	public Stream<String> getEssenceTypes () {
+		return getEssences()
+			.map(essence -> essence.essence);
+	}
+
+	public Stream<ConfigEssence> getEssences () {
+		return essences.stream()
+			.filter(essence -> !essence.essence.equalsIgnoreCase("none"))
+			.filter(distinctByKey(essence -> essence.essence));
+	}
+
+	private static <T> Predicate<T> distinctByKey (Function<? super T, ?> keyExtractor) {
+		final Set<Object> seen = ConcurrentHashMap.newKeySet();
+		return t -> seen.add(keyExtractor.apply(t));
 	}
 
 	public ConfigEssence get (final String type) {
