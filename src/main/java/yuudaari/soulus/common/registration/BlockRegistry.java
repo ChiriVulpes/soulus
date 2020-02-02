@@ -111,13 +111,12 @@ public class BlockRegistry {
 		UNLOADER,
 
 		SUMMONER,
+		SOUL_INQUIRER,
 
-		COMPOSER,
 		COMPOSER_CELL,
+		COMPOSER,
 
 		ENDERLINK,
-
-		SOUL_INQUIRER,
 
 		SOUL_TOTEM
 	});
