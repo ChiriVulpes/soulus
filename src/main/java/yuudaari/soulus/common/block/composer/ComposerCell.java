@@ -227,7 +227,7 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 		if (sneaking && (stack.getItem() == BlockRegistry.COMPOSER_CELL.getItem() || stack.getItem() == BlockRegistry.COMPOSER.getItem()))
 			return false;
 
-		return te.tryInsert(stack.getImmutable(), sneaking ? stack.getCount() : 1);
+		return te.tryInsert(stack, sneaking ? stack.getCount() : 1, false);
 	}
 
 	@Override

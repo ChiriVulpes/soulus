@@ -1,11 +1,11 @@
 package yuudaari.soulus.common.block.composer.cell_mode;
 
-import net.minecraft.item.ItemStack;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.block.composer.ComposerCellTileEntity;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigComposerCell;
+import yuudaari.soulus.common.util.ItemStackMutable;
 
 @ConfigInjected(Soulus.MODID)
 public class CellModeNormal extends ComposerCellTileEntity.Mode {
@@ -23,8 +23,8 @@ public class CellModeNormal extends ComposerCellTileEntity.Mode {
 	}
 
 	@Override
-	public boolean tryInsert (final ItemStack stack, final int requestedQuantity) {
-		if (cell.storedItem != null && !ComposerCellTileEntity.areItemStacksEqual(stack, cell.storedItem))
+	public boolean tryInsert (final ItemStackMutable stack, final int requestedQuantity, final boolean isPulling) {
+		if (cell.storedItem != null && !ComposerCellTileEntity.areItemStacksEqual(stack.getImmutable(), cell.storedItem))
 			return false;
 
 		final int canStillBeInsertedQuantity = CONFIG.maxQuantity - (cell.storedItem == null ? 0 : cell.storedQuantity);

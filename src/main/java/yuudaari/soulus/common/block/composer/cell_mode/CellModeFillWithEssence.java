@@ -1,10 +1,10 @@
 package yuudaari.soulus.common.block.composer.cell_mode;
 
-import net.minecraft.item.ItemStack;
 import yuudaari.soulus.common.advancement.Advancements;
 import yuudaari.soulus.common.block.composer.ComposerCellTileEntity;
 import yuudaari.soulus.common.block.composer.IFillableWithEssence;
 import yuudaari.soulus.common.registration.ItemRegistry;
+import yuudaari.soulus.common.util.ItemStackMutable;
 
 /**
  * Auto-fills items with essence or ash
@@ -24,12 +24,12 @@ public class CellModeFillWithEssence extends ComposerCellTileEntity.Mode {
 	}
 
 	@Override
-	public boolean tryInsert (final ItemStack stack, final int requestedQuantity) {
+	public boolean tryInsert (final ItemStackMutable stack, final int requestedQuantity, final boolean isPulling) {
 		if (stack.getItem() != ItemRegistry.ESSENCE && stack.getItem() != ItemRegistry.ASH)
 			return false;
 
 		final IFillableWithEssence fillable = (IFillableWithEssence) cell.storedItem.getItem();
-		final int insertQuantity = fillable.fillWithEssence(cell.storedItem, stack, requestedQuantity);
+		final int insertQuantity = fillable.fillWithEssence(cell.storedItem, stack.getImmutable(), requestedQuantity);
 		if (insertQuantity > 0) {
 			stack.shrink(insertQuantity);
 			cell.blockUpdate();

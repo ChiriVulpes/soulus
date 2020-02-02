@@ -23,6 +23,7 @@ import yuudaari.soulus.common.config.block.ConfigComposerCell;
 import yuudaari.soulus.common.config.bones.ConfigBoneTypes;
 import yuudaari.soulus.common.item.Sledgehammer;
 import yuudaari.soulus.common.recipe.RecipeSledgehammer;
+import yuudaari.soulus.common.util.ItemStackMutable;
 import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.common.util.Translation;
 
@@ -93,12 +94,27 @@ public class CellModeAutoHammer extends ComposerCellTileEntity.Mode {
 	}
 
 	@Override
-	public boolean tryInsert (final ItemStack stack, final int requestedQuantity) {
-		if (storedInputType != null && !ComposerCellTileEntity.areItemStacksEqual(stack, storedInputType))
+	public boolean tryInsert (final ItemStackMutable stack, final int requestedQuantity, final boolean isPulling) {
+		if (!isPulling && stack.getItem() instanceof Sledgehammer) {
+			final ItemStack replaceStack = cell.storedItem.copy();
+			replaceStack.setCount(cell.storedQuantity);
+
+			cell.storedItem = stack.getImmutable().copy();
+			cell.storedQuantity = stack.getCount();
+			cell.onChangeItem();
+			cell.blockUpdate();
+
+			stack.getImmutable().shrink(requestedQuantity);
+
+			stack.replace(replaceStack);
+			return true;
+		}
+
+		if (storedInputType != null && !ComposerCellTileEntity.areItemStacksEqual(stack.getImmutable(), storedInputType))
 			return false;
 
 		if (storedInputType == null)
-			recipe = getRecipe(stack);
+			recipe = getRecipe(stack.getImmutable());
 
 		if (recipe == null)
 			return false;

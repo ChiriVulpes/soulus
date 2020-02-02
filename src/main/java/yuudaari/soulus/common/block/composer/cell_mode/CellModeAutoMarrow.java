@@ -23,6 +23,7 @@ import yuudaari.soulus.common.config.bones.ConfigBoneType;
 import yuudaari.soulus.common.config.bones.ConfigBoneTypes;
 import yuudaari.soulus.common.misc.BoneChunks;
 import yuudaari.soulus.common.registration.ItemRegistry;
+import yuudaari.soulus.common.util.ItemStackMutable;
 import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.common.util.Translation;
 
@@ -70,7 +71,7 @@ public class CellModeAutoMarrow extends ComposerCellTileEntity.Mode {
 	}
 
 	@Override
-	public boolean tryInsert (final ItemStack stack, final int requestedQuantity) {
+	public boolean tryInsert (final ItemStackMutable stack, final int requestedQuantity, final boolean isPulling) {
 		final Item boneChunk = stack.getItem();
 		final ConfigBoneType boneType = CONFIG_BONE_TYPES.getFromChunk(boneChunk.getRegistryName().toString());
 		if (boneType == null)

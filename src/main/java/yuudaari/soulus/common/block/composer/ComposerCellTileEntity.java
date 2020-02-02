@@ -36,6 +36,7 @@ import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.client.ComposerCellItemParticles;
 import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.util.Classes;
+import yuudaari.soulus.common.util.ItemStackMutable;
 import yuudaari.soulus.common.util.Translation;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
@@ -171,14 +172,14 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 				continue;
 
 			final ItemStack stack = item.getItem();
-			if (tryInsert(stack, stack.getCount()))
+			if (tryInsert(new ItemStackMutable(stack), stack.getCount(), true))
 				return true;
 		}
 
 		return false;
 	}
 
-	public boolean tryInsert (final ItemStack stack, final int requestedQuantity) {
+	public boolean tryInsert (final ItemStackMutable stack, final int requestedQuantity, final boolean isPulling) {
 		if (stack == null || stack.isEmpty())
 			return false;
 
@@ -193,13 +194,13 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 			final int maxQuantityAllowed = MODES.values()
 				.stream()
 				.filter(m -> m != mode && m.isActive())
-				.map(m -> m.getMaxContainedQuantityForOtherModes(stack))
+				.map(m -> m.getMaxContainedQuantityForOtherModes(stack.getImmutable()))
 				.min(Integer::compare)
 				.orElse(Integer.MAX_VALUE);
 
 			final int maxInsertAllowed = maxQuantityAllowed - storedQuantity;
 
-			if (mode.tryInsert(stack, Math.min(requestedQuantity, maxInsertAllowed)))
+			if (mode.tryInsert(stack, Math.min(requestedQuantity, maxInsertAllowed), isPulling))
 				return true;
 		}
 
@@ -253,7 +254,7 @@ public class ComposerCellTileEntity extends HasRenderItemTileEntity {
 			return false;
 		}
 
-		public boolean tryInsert (final ItemStack stack, final int requestedQuantity) {
+		public boolean tryInsert (final ItemStackMutable stack, final int requestedQuantity, final boolean isPulling) {
 			return false;
 		}
 
