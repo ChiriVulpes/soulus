@@ -11,6 +11,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
@@ -174,6 +175,9 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		for (final EntityLivingBase entity : world.getEntitiesWithinAABB(EntityLivingBase.class, activationBox)) {
 
 			if (!CONFIG.consumeNamedCreatures && entity.hasCustomName())
+				continue;
+
+			if (!CONFIG.consumeTamedCreatures && entity instanceof EntityTameable && ((EntityTameable) entity).isTamed())
 				continue;
 
 			final boolean whitelistAll = mobWhitelist == null ? false : mobWhitelist.contains("*");
