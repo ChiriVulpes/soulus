@@ -1,7 +1,6 @@
 package yuudaari.soulus.common.registration;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
@@ -9,7 +8,6 @@ import net.minecraft.block.material.MapColor;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -39,7 +37,6 @@ import yuudaari.soulus.common.block.soul_totem.SoulTotem;
 import yuudaari.soulus.common.block.summoner.Summoner;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
 import yuudaari.soulus.common.compat.jei.JeiDescriptionRegistry;
-import yuudaari.soulus.common.registration.IBlockRegistration;
 import yuudaari.soulus.common.util.Material;
 
 public class BlockRegistry {
@@ -145,8 +142,8 @@ public class BlockRegistry {
 			if (block.hasItem()) {
 				for (ItemBlock item : block.getItemBlocks()) {
 					registry.register(item);
-					for (final Map.Entry<String, ItemStack> dict : block.getOreDicts().entrySet())
-						OreDictionary.registerOre(dict.getKey(), dict.getValue());
+					block.getOreDicts()
+						.forEach(dict -> OreDictionary.registerOre(dict.getKey(), dict.getValue()));
 				}
 			}
 

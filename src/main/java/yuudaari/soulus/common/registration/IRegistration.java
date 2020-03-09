@@ -1,9 +1,11 @@
 package yuudaari.soulus.common.registration;
 
+import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -74,7 +76,7 @@ public interface IRegistration<T extends IForgeRegistryEntry<T>> extends IProvid
 	public static final Map<IRegistration<?>, Map<String, ItemStack>> ORE_DICTS = new HashMap<>();
 
 	default T addOreDict (final String... dictionaries) {
-		return addOreDict(getItemStack(), dictionaries);
+		return addOreDict(ItemStack.EMPTY, dictionaries);
 	}
 
 	default T addOreDict (final ItemStack stack, final String... dictionaries) {
@@ -103,14 +105,18 @@ public interface IRegistration<T extends IForgeRegistryEntry<T>> extends IProvid
 		return (T) this;
 	}
 
-	default Map<String, ItemStack> getOreDicts () {
+	default Stream<Map.Entry<String, ItemStack>> getOreDicts () {
 		Map<String, ItemStack> oreDicts = ORE_DICTS.get(this);
 		if (oreDicts == null) {
 			oreDicts = new HashMap<>();
 			ORE_DICTS.put(this, oreDicts);
 		}
 
-		return oreDicts;
+		return oreDicts.entrySet()
+			.stream()
+			.map(entry -> new AbstractMap.SimpleEntry<>(entry.getKey(),
+				// if the item stack registered for this ore dictionary is empty, we use this registration's default item stack
+				entry.getValue().isEmpty() ? getItemStack() : entry.getValue()));
 	}
 
 	////////////////////////////////////

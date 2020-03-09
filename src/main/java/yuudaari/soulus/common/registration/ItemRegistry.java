@@ -1,7 +1,6 @@
 package yuudaari.soulus.common.registration;
 
 import java.util.List;
-import java.util.Map;
 import com.google.common.collect.Lists;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumRarity;
@@ -12,7 +11,31 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.common.compat.jei.JeiDescriptionRegistry;
-import yuudaari.soulus.common.item.*;
+import yuudaari.soulus.common.item.Barket;
+import yuudaari.soulus.common.item.Bone;
+import yuudaari.soulus.common.item.BoneChunk;
+import yuudaari.soulus.common.item.BoneChunkEnder;
+import yuudaari.soulus.common.item.BoneChunkNether;
+import yuudaari.soulus.common.item.BoneEnder;
+import yuudaari.soulus.common.item.BoneNether;
+import yuudaari.soulus.common.item.BoneScale;
+import yuudaari.soulus.common.item.Bonemeal;
+import yuudaari.soulus.common.item.BonemealEnder;
+import yuudaari.soulus.common.item.BonemealNether;
+import yuudaari.soulus.common.item.CrystalBlood;
+import yuudaari.soulus.common.item.CrystalDark;
+import yuudaari.soulus.common.item.DustMidnight;
+import yuudaari.soulus.common.item.EmeraldBloody;
+import yuudaari.soulus.common.item.Essence;
+import yuudaari.soulus.common.item.EssencePerfect;
+import yuudaari.soulus.common.item.GearBone;
+import yuudaari.soulus.common.item.GearNiobium;
+import yuudaari.soulus.common.item.GearOscillating;
+import yuudaari.soulus.common.item.Glue;
+import yuudaari.soulus.common.item.OrbMurky;
+import yuudaari.soulus.common.item.Sledgehammer;
+import yuudaari.soulus.common.item.SoulCatalyst;
+import yuudaari.soulus.common.item.Soulbook;
 import yuudaari.soulus.common.registration.Registration.Item;
 
 public class ItemRegistry {
@@ -155,8 +178,8 @@ public class ItemRegistry {
 	public static void registerItems (IForgeRegistry<net.minecraft.item.Item> registry) {
 		for (IItemRegistration item : items) {
 			registry.register(item.getItem());
-			for (final Map.Entry<String, ItemStack> dict : item.getOreDicts().entrySet())
-				OreDictionary.registerOre(dict.getKey(), dict.getValue());
+			item.getOreDicts()
+				.forEach(dict -> OreDictionary.registerOre(dict.getKey(), dict.getValue()));
 		}
 
 		OreDictionary.registerOre(Bonemeal.ORE_DICT, new ItemStack(Items.DYE, 1, 15));
