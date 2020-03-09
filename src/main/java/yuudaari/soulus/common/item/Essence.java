@@ -1,5 +1,7 @@
 package yuudaari.soulus.common.item;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.EnumRarity;
@@ -16,6 +18,7 @@ import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.compat.jei.JeiDescriptionRegistry;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
+import yuudaari.soulus.common.config.bones.ConfigBoneType;
 import yuudaari.soulus.common.config.essence.ConfigColor;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
@@ -29,33 +32,42 @@ public class Essence extends Registration.Item {
 
 	@Inject public static ConfigEssences CONFIG;
 
-	public static ItemStack getStack (String essenceType) {
+	public static ItemStack getStack (final String essenceType) {
 		return getStack(essenceType, 1);
 	}
 
-	public static ItemStack getStack (String essenceType, Integer count) {
-		ItemStack stack = new ItemStack(ItemRegistry.ESSENCE, count);
+	public static ItemStack getStack (final String essenceType, final Integer count) {
+		final ItemStack stack = new ItemStack(ItemRegistry.ESSENCE, count);
 		EssenceType.setEssenceType(stack, essenceType);
 		return stack;
+	}
+
+	public static List<ItemStack> getStacksFromBoneType (final ConfigBoneType boneType) {
+		return Essence.CONFIG.essences.stream()
+			.filter(e -> e.bones != null && e.bones.type.equalsIgnoreCase(boneType.name) && !e.essence.equals("NONE"))
+			.sorted( (e1, e2) -> (int) Math.signum(e2.bones.dropWeight - e1.bones.dropWeight))
+			.map(e -> Essence.getStack(e.essence))
+			.collect(Collectors.toList());
 	}
 
 	public static int getColor (final String essenceType, final int index) {
 		if (essenceType == null)
 			return -1;
 
-		EntityEntry entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(essenceType));
+		final EntityEntry entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(essenceType));
 		if (entry == null)
 			return -1;
 
-		ConfigEssence essenceConfig = CONFIG.get(essenceType);
+		final ConfigEssence essenceConfig = CONFIG.get(essenceType);
 		if (essenceConfig == null)
 			return -1;
 
 		ConfigColor colors = essenceConfig.colors;
 		if (colors == null) {
-			EntityList.EntityEggInfo eggInfo = entry.getEgg();
+			final EntityList.EntityEggInfo eggInfo = entry.getEgg();
 			if (eggInfo == null)
 				return -1;
+
 			colors = new ConfigColor(eggInfo);
 		}
 

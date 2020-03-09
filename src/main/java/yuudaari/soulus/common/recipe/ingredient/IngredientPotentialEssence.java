@@ -23,6 +23,7 @@ public class IngredientPotentialEssence extends Ingredient {
 
 	private static IngredientPotentialEssence INSTANCE = null;
 	private static IngredientPotentialEssence INSTANCE_NO_ASH = null;
+	private static IngredientPotentialEssence INSTANCE_REQUIRED = null;
 
 	public static IngredientPotentialEssence getInstance () {
 		if (INSTANCE == null) INSTANCE = new IngredientPotentialEssence();
@@ -32,6 +33,11 @@ public class IngredientPotentialEssence extends Ingredient {
 	public static IngredientPotentialEssence getInstanceNoAsh () {
 		if (INSTANCE_NO_ASH == null) INSTANCE_NO_ASH = new IngredientPotentialEssence(false, true);
 		return INSTANCE_NO_ASH;
+	}
+
+	public static IngredientPotentialEssence getInstanceRequired () {
+		if (INSTANCE_REQUIRED == null) INSTANCE_REQUIRED = new IngredientPotentialEssence(false, false);
+		return INSTANCE_REQUIRED;
 	}
 
 	public static ItemStack[] getMatchingStacks1 (boolean justEssence) {

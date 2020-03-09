@@ -91,10 +91,10 @@ public class RecipeWrapperComposer implements IRecipeWrapper {
 
 	@Override
 	public List<String> getTooltipStrings (int mouseX, int mouseY) {
-		if (getTimeRegion().isPosWithin(new Vec2i(mouseX, mouseY)))
+		if (getTimeRegion().isPosWithin(mouseX, mouseY))
 			return Collections.singletonList(Translation.localize("jei.recipe.soulus:composer.recipe_time_tooltip"));
 
-		if (requiredMobs != null && requiredMobs.size() > 0 && getMobsRegion().isPosWithin(new Vec2i(mouseX, mouseY)))
+		if (requiredMobs != null && requiredMobs.size() > 0 && getMobsRegion().isPosWithin(mouseX, mouseY))
 			return requiredMobs.entrySet()
 				.stream()
 				.map(requiredMob -> new Translation("waila.soulus:composer.required_creature")

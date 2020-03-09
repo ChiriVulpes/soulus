@@ -1,7 +1,6 @@
 package yuudaari.soulus.common.compat.jei;
 
 import java.util.List;
-import java.util.Random;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
@@ -9,18 +8,14 @@ import mezz.jei.api.ISubtypeRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import scala.Tuple2;
-import yuudaari.soulus.common.compat.jei.RecipeCategoryComposer;
-import yuudaari.soulus.common.compat.jei.RecipeCategoryEssence;
-import yuudaari.soulus.common.compat.jei.RecipeWrapperComposer;
-import yuudaari.soulus.common.compat.jei.RecipeWrapperEssence;
-import yuudaari.soulus.common.compat.jei.SubtypeInterpreterEssence;
+import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.bones.ConfigBoneType;
@@ -29,13 +24,13 @@ import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.config.misc.ConfigModSupport;
 import yuudaari.soulus.common.item.Essence;
-import yuudaari.soulus.Soulus;
-import yuudaari.soulus.common.registration.BlockRegistry;
-import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.recipe.RecipeShaped;
 import yuudaari.soulus.common.recipe.RecipeShapeless;
 import yuudaari.soulus.common.recipe.composer.RecipeComposerShaped;
 import yuudaari.soulus.common.recipe.composer.RecipeComposerShapeless;
+import yuudaari.soulus.common.registration.BlockRegistry;
+import yuudaari.soulus.common.registration.ItemRegistry;
+import yuudaari.soulus.common.util.EssenceType;
 
 @JEIPlugin
 @ConfigInjected(Soulus.MODID)
@@ -46,14 +41,14 @@ public class Jei implements IModPlugin {
 
 	@Override
 	public void registerItemSubtypes (ISubtypeRegistry subtypeRegistry) {
-		subtypeRegistry.registerSubtypeInterpreter(ItemRegistry.ESSENCE, new SubtypeInterpreterEssence());
+		subtypeRegistry.registerSubtypeInterpreter(ItemRegistry.ESSENCE, EssenceType::getEssenceType);
 	}
 
 	@Override
 	public void registerCategories (IRecipeCategoryRegistration registry) {
 		IGuiHelper helper = registry.getJeiHelpers().getGuiHelper();
 		registry.addRecipeCategories(new RecipeCategoryComposer(helper));
-		registry.addRecipeCategories(new RecipeCategoryEssence(helper));
+		registry.addRecipeCategories(new RecipeCategoryMarrow(helper));
 	}
 
 	@Override
@@ -68,17 +63,13 @@ public class Jei implements IModPlugin {
 		// there are no essences to drop
 		if (essences.essences.size() == 0) return;
 
-		// make the icon a random essence
-		ConfigEssence essence = null;
-		for (int i = 0; i < 100; i++) {
-			essence = essences.essences.get(new Random().nextInt(essences.essences.size()));
-			if (!essence.essence.equals("NONE")) break;
-		}
-		registry.addRecipeCatalyst(Essence.getStack(essence.essence), RecipeCategoryEssence.UID);
+		for (final ConfigEssence essence : essences.essences)
+			if (!essence.essence.equals("NONE") && essence.bones != null)
+				registry.addRecipeCatalyst(Essence.getStack(essence.essence), RecipeCategoryMarrow.UID);
 
-		registry.handleRecipes(ConfigBoneType.class, RecipeWrapperEssence::new, RecipeCategoryEssence.UID);
+		registry.handleRecipes(ConfigBoneType.class, boneType -> new RecipeWrapperMarrow(boneType, registry.getJeiHelpers().getGuiHelper()), RecipeCategoryMarrow.UID);
 
-		registry.addRecipes(CONFIG_BONE_TYPES.boneTypes, RecipeCategoryEssence.UID);
+		registry.addRecipes(CONFIG_BONE_TYPES.boneTypes, RecipeCategoryMarrow.UID);
 	}
 
 	/**

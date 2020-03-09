@@ -263,6 +263,7 @@ jei.recipe.soulus:composer.mobs_required=Consumes
 jei.recipe.soulus:composer.required_creature=§8%1$s: §r%2$s
 
 jei.recipe.soulus:essence.name=Marrowing
+jei.recipe.soulus:essence.requires_machine_marrowing_tooltip=§5Requires Machine Marrowing §8(in §bComposer Cell§8)
 
 jei.recipe.soulus:essence.tooltip_chance=§2§n%1$s%% Drop Chance 
 
