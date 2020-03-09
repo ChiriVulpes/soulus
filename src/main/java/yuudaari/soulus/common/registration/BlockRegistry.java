@@ -70,8 +70,8 @@ public class BlockRegistry {
 	public static final Unloader UNLOADER = new Unloader();
 	public static final SoulTotem SOUL_TOTEM = new SoulTotem();
 	public static final SoulInquirer SOUL_INQUIRER = new SoulInquirer();
-	public static final Registration.Block MIDNIGHT_BRICKS = new Registration.Block("midnight_bricks", new Material(MapColor.BLACK)).setHasItem().setHasDescription().setRarity(EnumRarity.RARE);
-	public static final Registration.BlockPillar MIDNIGHT_PILLAR = new Registration.BlockPillar("midnight_pillar", new Material(MapColor.BLACK)).setHasItem().setHasDescription().setRarity(EnumRarity.RARE);
+	public static final Registration.Block MIDNIGHT_BRICKS = new Registration.Block("midnight_bricks", new Material(MapColor.BLACK)).setHasItem().setHasDescription().setRarity(EnumRarity.RARE).setHardness(1.5F).setResistance(10.0F).setTool(Tool.PICK, 1);
+	public static final Registration.BlockPillar MIDNIGHT_PILLAR = new Registration.BlockPillar("midnight_pillar", new Material(MapColor.BLACK)).setHasItem().setHasDescription().setRarity(EnumRarity.RARE).setHardness(1.5F).setResistance(10.0F).setTool(Tool.PICK, 1);
 
 	public static List<IBlockRegistration<?>> blocks = Lists.newArrayList(new IBlockRegistration[] {
 		DUST_ENDER,
