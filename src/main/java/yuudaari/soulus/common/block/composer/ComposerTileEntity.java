@@ -173,6 +173,9 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 		for (final EntityLivingBase entity : world.getEntitiesWithinAABB(EntityLivingBase.class, activationBox)) {
 
+			if (!CONFIG.consumeNamedCreatures && entity.hasCustomName())
+				continue;
+
 			final boolean whitelistAll = mobWhitelist == null ? false : mobWhitelist.contains("*");
 			final boolean blacklistAll = mobBlacklist == null ? false : mobBlacklist.contains("*");
 
