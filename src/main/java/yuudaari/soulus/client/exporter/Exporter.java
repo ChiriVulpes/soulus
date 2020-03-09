@@ -198,7 +198,7 @@ public class Exporter {
 		final StackMap items = new StackMap();
 
 		// add mod blocks to item map
-		for (final IBlockRegistration block : BlockRegistry.blocks) {
+		for (final IBlockRegistration<?> block : BlockRegistry.blocks) {
 			final NonNullList<ItemStack> tabList = NonNullList.create();
 			block.getSubBlocks(CreativeTab.INSTANCE, tabList);
 			items.add(tabList);
