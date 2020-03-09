@@ -265,10 +265,15 @@ public class CellModeAutoHammer extends ComposerCellTileEntity.Mode {
 				.addArgs(storedInputQuantity, CONFIG.autoHammerMaxItemBuffer, storedInputType.getDisplayName())
 				.get());
 
-		if (cell.storedItem.getItemDamage() > 0)
-			currentTooltip.add(new Translation("waila." + Soulus.MODID + ":composer_cell.auto_hammer_durability")
+		final int damage = cell.storedItem.getItemDamage();
+		if (damage > 0) {
+			final int maxDamage = cell.storedItem.getMaxDamage();
+			final double damageFraction = damage / (double) maxDamage;
+			final String durabilityLevel = damageFraction < 0.25 ? "high" : damageFraction < 0.5 ? "med" : damageFraction < 0.75 ? "low" : "warn";
+			currentTooltip.add(new Translation("waila." + Soulus.MODID + ":composer_cell.auto_hammer_durability_" + durabilityLevel)
 				.addArgs(cell.storedItem.getMaxDamage() - cell.storedItem.getItemDamage(), cell.storedItem.getMaxDamage())
 				.get());
+		}
 	}
 
 	@Override
