@@ -15,7 +15,7 @@ public class FossilGravel extends Registration.Block {
 		super(name, new Material(MapColor.STONE).setToolNotRequired());
 		setHasItem();
 		setHardness(0.6F);
-		setHarvestLevel("shovel", 0);
+		setTool(Tool.SHOVEL, 0);
 		setSoundType(SoundType.GROUND);
 	}
 }

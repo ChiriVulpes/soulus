@@ -13,7 +13,7 @@ import yuudaari.soulus.common.util.ModPotionEffect;
 
 public class Registration {
 
-	public static class Block extends net.minecraft.block.Block implements IBlockRegistration {
+	public static class Block extends net.minecraft.block.Block implements IBlockRegistration<Block> {
 
 		public Block (final String name, final Material material) {
 			super(material);
@@ -70,9 +70,21 @@ public class Registration {
 		public EnumRarity getRarity (final ItemStack stack) {
 			return rarity == null ? IBlockRegistration.super.getRarity(stack) : rarity;
 		}
+
+		@Override
+		public Block setHardness (float hardness) {
+			super.setHardness(hardness);
+			return this;
+		}
+
+		@Override
+		public Block setResistance (float resistance) {
+			super.setResistance(resistance);
+			return this;
+		}
 	}
 
-	public static class BlockPillar extends net.minecraft.block.BlockRotatedPillar implements IBlockRegistration {
+	public static class BlockPillar extends net.minecraft.block.BlockRotatedPillar implements IBlockRegistration<BlockPillar> {
 
 		public BlockPillar (final String name, final Material material) {
 			super(material);
@@ -129,9 +141,21 @@ public class Registration {
 		public EnumRarity getRarity (final ItemStack stack) {
 			return rarity == null ? IBlockRegistration.super.getRarity(stack) : rarity;
 		}
+
+		@Override
+		public BlockPillar setHardness (float hardness) {
+			super.setHardness(hardness);
+			return this;
+		}
+
+		@Override
+		public BlockPillar setResistance (float resistance) {
+			super.setResistance(resistance);
+			return this;
+		}
 	}
 
-	public static class BlockPane extends net.minecraft.block.BlockPane implements IBlockRegistration {
+	public static class BlockPane extends net.minecraft.block.BlockPane implements IBlockRegistration<BlockPane> {
 
 		public BlockPane (final String name, final Material material) {
 			super(material, true);
@@ -148,11 +172,28 @@ public class Registration {
 		public BlockPane setHasItem () {
 			return (BlockPane) IBlockRegistration.super.setHasItem();
 		}
+
+		@Override
+		public BlockPane setHardness (float hardness) {
+			super.setHardness(hardness);
+			return this;
+		}
+
+		@Override
+		public BlockPane setResistance (float resistance) {
+			super.setResistance(resistance);
+			return this;
+		}
+
+		public BlockPane setTool (Tool tool, int level) {
+			setHarvestLevel(tool.id, level);
+			return this;
+		}
 	}
 
 	public static class ItemBlock extends net.minecraft.item.ItemBlock implements IItemRegistration {
 
-		public ItemBlock (final IBlockRegistration block) {
+		public ItemBlock (final IBlockRegistration<?> block) {
 			super(block.getBlock());
 			setRegistryName(block.getRegistryName());
 			initialize();
@@ -166,7 +207,7 @@ public class Registration {
 		@Override
 		public EnumRarity getRarity (final ItemStack stack) {
 			if (getBlock() instanceof IBlockRegistration) {
-				final IBlockRegistration block = (IBlockRegistration) getBlock();
+				final IBlockRegistration<?> block = (IBlockRegistration<?>) getBlock();
 				final EnumRarity rarity = block.getRarity(stack);
 				if (rarity != null)
 					return rarity;

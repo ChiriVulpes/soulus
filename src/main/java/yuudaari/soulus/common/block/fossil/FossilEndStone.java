@@ -16,7 +16,7 @@ public class FossilEndStone extends Registration.Block {
 		setHasItem();
 		setHardness(3.0F);
 		setResistance(15.0F);
-		setHarvestLevel("pickaxe", 1);
+		setTool(Tool.PICK, 1);
 		setSoundType(SoundType.STONE);
 	}
 }

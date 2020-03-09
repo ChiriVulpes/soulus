@@ -42,7 +42,7 @@ public class TheOneProbe {
 				public boolean overrideStandardInfo (ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockstate, IProbeHitData data) {
 					if (!(blockstate.getBlock() instanceof IBlockRegistration)) return false;
 
-					IBlockRegistration block = (IBlockRegistration) blockstate.getBlock();
+					IBlockRegistration<?> block = (IBlockRegistration<?>) blockstate.getBlock();
 					IBlockRegistration.DataAccessorTOP accessor = new IBlockRegistration.DataAccessorTOP(player, data);
 
 					ItemStack stack = block.getWailaStack(accessor);
@@ -76,7 +76,7 @@ public class TheOneProbe {
 				public void addProbeInfo (ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
 
 					if (blockState.getBlock() instanceof IBlockRegistration) {
-						IBlockRegistration block = (IBlockRegistration) blockState.getBlock();
+						IBlockRegistration<?> block = (IBlockRegistration<?>) blockState.getBlock();
 						IBlockRegistration.DataAccessorTOP accessor = new IBlockRegistration.DataAccessorTOP(player, data);
 
 						List<String> currentTooltip = new ArrayList<>();

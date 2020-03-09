@@ -47,7 +47,7 @@ public class BarsEndersteel extends Registration.BlockPane {
 		setHasItem();
 		setHardness(5F);
 		setResistance(30F);
-		setHarvestLevel("pickaxe", 1);
+		setTool(Tool.PICK, 1);
 		setSoundType(SoundType.METAL);
 		setDefaultState(getDefaultState().withProperty(VARIANT, EndersteelType.NORMAL));
 		setHasDescription();

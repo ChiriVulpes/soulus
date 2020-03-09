@@ -92,7 +92,7 @@ public class ComposerCell extends UpgradeableBlock<ComposerCellTileEntity> {
 		setHasItem();
 		setHardness(5F);
 		setResistance(30F);
-		setHarvestLevel("pickaxe", 1);
+		setTool(Tool.PICK, 1);
 		setSoundType(SoundType.METAL);
 		disableStats();
 		setDefaultState(getDefaultState().withProperty(CELL_STATE, CellState.DISCONNECTED));

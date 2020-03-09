@@ -15,7 +15,7 @@ public class FossilNetherrack extends Registration.Block {
 		super(name, new Material(MapColor.NETHERRACK));
 		setHasItem();
 		setHardness(0.4F);
-		setHarvestLevel("pickaxe", 0);
+		setTool(Tool.PICK, 0);
 		setSoundType(SoundType.STONE);
 	}
 }

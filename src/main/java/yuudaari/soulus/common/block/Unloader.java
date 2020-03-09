@@ -23,7 +23,7 @@ public class Unloader extends Registration.Block {
 	public Unloader () {
 		super("unloader", new Material(MapColor.STONE));
 		setHasItem();
-		setHarvestLevel("pickaxe", 1);
+		setTool(Tool.PICK, 1);
 		setSoundType(SoundType.STONE);
 		setHardness(3F);
 		setHasDescription();

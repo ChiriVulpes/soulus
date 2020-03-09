@@ -22,7 +22,7 @@ public class BlockNiobium extends ComparatorInteractiveBlock {
 		super("block_niobium", new Material(MapColor.BLUE));
 		setHardness(5F);
 		setResistance(30F);
-		setHarvestLevel("pickaxe", 1);
+		setTool(Tool.PICK, 1);
 		setSoundType(SoundType.METAL);
 		addOreDict("blockSoulusNiobium");
 	}

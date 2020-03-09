@@ -16,7 +16,7 @@ public class BlockEndersteel extends ComparatorInteractiveBlock {
 		super("block_endersteel", new Material(MapColor.GRASS));
 		setHardness(5F);
 		setResistance(30F);
-		setHarvestLevel("pickaxe", 1);
+		setTool(Tool.PICK, 1);
 		setSoundType(SoundType.METAL);
 		addOreDict("blockSoulusEndersteel");
 	}

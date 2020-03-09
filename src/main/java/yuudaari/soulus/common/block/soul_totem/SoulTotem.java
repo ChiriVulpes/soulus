@@ -124,7 +124,7 @@ public class SoulTotem extends UpgradeableBlock<SoulTotemTileEntity> {
 		setHasItem();
 		setHardness(5F);
 		setResistance(30F);
-		setHarvestLevel("pickaxe", 1);
+		setTool(Tool.PICK, 1);
 		setSoundType(SoundType.METAL);
 		disableStats();
 		setHasDescription();

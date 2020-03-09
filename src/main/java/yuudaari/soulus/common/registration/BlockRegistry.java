@@ -37,6 +37,7 @@ import yuudaari.soulus.common.block.soul_totem.SoulTotem;
 import yuudaari.soulus.common.block.summoner.Summoner;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
 import yuudaari.soulus.common.compat.jei.JeiDescriptionRegistry;
+import yuudaari.soulus.common.registration.IBlockRegistration.Tool;
 import yuudaari.soulus.common.util.Material;
 
 public class BlockRegistry {
@@ -72,7 +73,7 @@ public class BlockRegistry {
 	public static final Registration.Block MIDNIGHT_BRICKS = new Registration.Block("midnight_bricks", new Material(MapColor.BLACK)).setHasItem().setHasDescription().setRarity(EnumRarity.RARE);
 	public static final Registration.BlockPillar MIDNIGHT_PILLAR = new Registration.BlockPillar("midnight_pillar", new Material(MapColor.BLACK)).setHasItem().setHasDescription().setRarity(EnumRarity.RARE);
 
-	public static List<IBlockRegistration> blocks = Lists.newArrayList(new IBlockRegistration[] {
+	public static List<IBlockRegistration<?>> blocks = Lists.newArrayList(new IBlockRegistration[] {
 		DUST_ENDER,
 
 		FOSSIL_DIRT,
@@ -132,13 +133,12 @@ public class BlockRegistry {
 	//
 
 	public static void registerBlocks (IForgeRegistry<Block> registry) {
-		for (IBlockRegistration block : blocks) {
+		for (IBlockRegistration<?> block : blocks)
 			registry.register((Block) block);
-		}
 	}
 
 	public static void registerItems (IForgeRegistry<Item> registry) {
-		for (IBlockRegistration block : blocks) {
+		for (IBlockRegistration<?> block : blocks) {
 			if (block.hasItem()) {
 				for (ItemBlock item : block.getItemBlocks()) {
 					registry.register(item);
@@ -156,22 +156,18 @@ public class BlockRegistry {
 
 	@SideOnly(Side.CLIENT)
 	public static void registerModels () {
-		for (IBlockRegistration block : blocks) {
-			if (block.hasItem()) {
+		for (IBlockRegistration<?> block : blocks)
+			if (block.hasItem())
 				block.registerItemModel();
-			}
-		}
 	}
 
 	public static void registerRecipes (IForgeRegistry<IRecipe> registry) {
-		for (IBlockRegistration block : blocks) {
+		for (IBlockRegistration<?> block : blocks)
 			block.onRegisterRecipes(registry);
-		}
 	}
 
 	public static void registerDescriptions (JeiDescriptionRegistry registry) {
-		for (IBlockRegistration block : blocks) {
+		for (IBlockRegistration<?> block : blocks)
 			block.onRegisterDescription(registry);
-		}
 	}
 }

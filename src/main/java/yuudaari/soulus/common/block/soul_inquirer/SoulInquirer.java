@@ -141,7 +141,7 @@ public class SoulInquirer extends UpgradeableBlock<SoulInquirerTileEntity> {
 	public SoulInquirer () {
 		super("soul_inquirer", new Material(MapColor.STONE).setTransparent());
 		setHasItem();
-		setHarvestLevel("pickaxe", 1);
+		setTool(Tool.PICK, 1);
 		setSoundType(SoundType.STONE);
 		setHardness(3F);
 		disableStats();

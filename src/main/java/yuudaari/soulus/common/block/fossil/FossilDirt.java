@@ -16,7 +16,7 @@ public class FossilDirt extends Registration.Block {
 		setHasItem();
 		setHardness(0.5F);
 		setResistance(2.5F);
-		setHarvestLevel("shovel", 0);
+		setTool(Tool.SHOVEL, 0);
 		setSoundType(SoundType.GROUND);
 	}
 }

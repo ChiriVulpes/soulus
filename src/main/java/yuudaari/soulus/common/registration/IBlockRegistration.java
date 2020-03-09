@@ -24,7 +24,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.common.CreativeTab;
 import yuudaari.soulus.common.compat.WailaProviders;
 
-public interface IBlockRegistration extends IRegistration<Block> {
+public interface IBlockRegistration<B extends IBlockRegistration<B>> extends IRegistration<Block> {
 
 	abstract Block getBlock ();
 
@@ -33,7 +33,7 @@ public interface IBlockRegistration extends IRegistration<Block> {
 	//
 
 	// I would make this private if I could
-	public static final Map<IBlockRegistration, ItemBlock> BLOCKS_WITH_ITEMS = new HashMap<>();
+	public static final Map<IBlockRegistration<?>, ItemBlock> BLOCKS_WITH_ITEMS = new HashMap<>();
 
 	default boolean hasItem () {
 		return BLOCKS_WITH_ITEMS.containsKey(this);
@@ -44,9 +44,10 @@ public interface IBlockRegistration extends IRegistration<Block> {
 		return getItemBlock();
 	}
 
-	default IBlockRegistration setHasItem () {
+	@SuppressWarnings("unchecked")
+	default B setHasItem () {
 		BLOCKS_WITH_ITEMS.put(this, null);
-		return this;
+		return (B) this;
 	}
 
 	default ItemBlock getItemBlock () {
@@ -172,5 +173,30 @@ public interface IBlockRegistration extends IRegistration<Block> {
 			return PLAYER.getEntityWorld().getBlockState(DATA.getPos());
 		}
 	}
+
+	public static enum Tool {
+
+		PICK ("pickaxe"),
+		AXE ("axe"),
+		SHOVEL ("shovel");
+
+		public final String id;
+
+		private Tool (String id) {
+			this.id = id;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	default B setTool (Tool tool, int level) {
+		setHarvestLevel(tool.id, level);
+		return (B) this;
+	}
+
+	////////////////////////////////////
+	// Required stuff from vanilla block class
+	//
+
+	public abstract void setHarvestLevel (String toolClass, int level);
 
 }

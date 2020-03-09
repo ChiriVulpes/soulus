@@ -26,7 +26,7 @@ public class Waila implements IWailaPlugin, IWailaDataProvider {
 
 		Block block = accessor.getBlock();
 		if (block != null && block instanceof IBlockRegistration) {
-			return ((IBlockRegistration) block).getWailaTooltip(currenttip, new IBlockRegistration.DataAccessorWaila(accessor));
+			return ((IBlockRegistration<?>) block).getWailaTooltip(currenttip, new IBlockRegistration.DataAccessorWaila(accessor));
 		}
 
 		return currenttip;
@@ -39,7 +39,7 @@ public class Waila implements IWailaPlugin, IWailaDataProvider {
 
 		Block block = accessor.getBlock();
 		if (block != null && block instanceof IBlockRegistration) {
-			result = ((IBlockRegistration) block).getWailaStack(new IBlockRegistration.DataAccessorWaila(accessor));
+			result = ((IBlockRegistration<?>) block).getWailaStack(new IBlockRegistration.DataAccessorWaila(accessor));
 		}
 
 		return result == null ? new ItemStack(block, 1, accessor.getMetadata()) : result;

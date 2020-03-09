@@ -15,7 +15,7 @@ public class FossilSandRed extends Registration.Block {
 		super(name, new Material(MapColor.RED).setToolNotRequired());
 		setHasItem();
 		setHardness(0.5F);
-		setHarvestLevel("shovel", 0);
+		setTool(Tool.SHOVEL, 0);
 		setSoundType(SoundType.SAND);
 	}
 }

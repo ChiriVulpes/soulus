@@ -207,7 +207,7 @@ public class Skewer extends UpgradeableBlock<SkewerTileEntity> {
 		super("skewer", new Material(MapColor.GRAY));
 		setHasItem();
 		setDefaultState(getDefaultState().withProperty(EXTENDED, false).withProperty(FACING, EnumFacing.NORTH));
-		setHarvestLevel("pickaxe", 1);
+		setTool(Tool.PICK, 1);
 		setSoundType(SoundType.STONE);
 		setHardness(3F);
 		setHasDescription();

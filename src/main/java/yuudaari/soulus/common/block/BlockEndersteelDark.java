@@ -18,7 +18,7 @@ public class BlockEndersteelDark extends ComparatorInteractiveBlock {
 		super("block_endersteel_dark", new Material(MapColor.BLACK));
 		setHardness(5F);
 		setResistance(30F);
-		setHarvestLevel("pickaxe", 1);
+		setTool(Tool.PICK, 1);
 		setSoundType(SoundType.METAL);
 		addOreDict("blockSoulusEndersteelDark");
 	}
