@@ -1,5 +1,6 @@
 package yuudaari.soulus.common.util;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -8,6 +9,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 
 public class Translation {
+
+	private static final DecimalFormat format = new DecimalFormat("#.#");
+
+	public static String formatPercentage (double num) {
+		return format.format(num * 100);
+	}
 
 	public static String localize (String path, Object... params) {
 		return new TextComponentTranslation(path, params).getUnformattedComponentText();

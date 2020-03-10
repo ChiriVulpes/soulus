@@ -27,7 +27,6 @@ import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import scala.Tuple2;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.client.util.ParticleType;
-import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.advancement.Advancements;
 import yuudaari.soulus.common.block.soul_totem.SoulTotemTileEntity;
 import yuudaari.soulus.common.block.summoner.Summoner.Upgrade;
@@ -38,8 +37,9 @@ import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSummoner;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
-import yuudaari.soulus.common.item.EssencePerfect;
+import yuudaari.soulus.common.item.EssencePerfect.EssenceAlignment;
 import yuudaari.soulus.common.misc.SpawnType;
+import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.ModPotionEffect;
 import yuudaari.soulus.common.util.Range;
@@ -290,7 +290,8 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 	public boolean insertPerfectEssence (final ItemStack stack, final EntityPlayer player) {
 		final String essenceType = getEssenceType();
-		final String[] perfectEssenceTypes = EssencePerfect.getEssenceTypes(stack);
+		final EssenceAlignment alignment = new EssenceAlignment(stack);
+		final String[] perfectEssenceTypes = alignment.getEssenceTypes().toArray(String[]::new);
 
 		if (!Arrays.stream(perfectEssenceTypes).anyMatch(essenceType::equalsIgnoreCase))
 			return false;
@@ -298,7 +299,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		final int count = player.isSneaking() ? stack.getCount() : 1;
 
 		for (int i = 0; i < count; i++)
-			boost += (CONFIG.perfectEssenceBoostBase + CONFIG.perfectEssenceBoostMultiplier * perfectEssenceTypes.length) //
+			boost += (CONFIG.perfectEssenceBoostBase + CONFIG.perfectEssenceBoostMultiplier * perfectEssenceTypes.length * alignment.getAlignment(essenceType)) //
 				* spawnDelay.get(world.rand);
 
 		blockUpdate();

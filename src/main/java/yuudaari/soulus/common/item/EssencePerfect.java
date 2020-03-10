@@ -1,14 +1,12 @@
 package yuudaari.soulus.common.item;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.stream.Collectors;
-import javax.annotation.Nullable;
-import com.google.common.collect.Streams;
+import java.util.stream.Stream;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.inventory.InventoryCrafting;
@@ -17,9 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -38,6 +34,8 @@ import yuudaari.soulus.common.recipe.ingredient.IngredientEssence.AllowedStack;
 import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.EssenceType;
+import yuudaari.soulus.common.util.NBTHelper;
+import yuudaari.soulus.common.util.NBTHelper.Tag;
 import yuudaari.soulus.common.util.Translation;
 
 @ConfigInjected(Soulus.MODID)
@@ -45,53 +43,81 @@ public class EssencePerfect extends Registration.Item {
 
 	@Inject public static ConfigEssences CONFIG;
 
-	@Nullable
-	public static String[] getEssenceTypes (final ItemStack stack) {
-		final NBTTagCompound tag = stack.getTagCompound();
-		if (tag == null || !tag.hasKey("essence_types", 9))
-			return new String[0];
+	public static class EssenceAlignment {
 
-		final NBTTagList list = tag.getTagList("essence_types", 8);
-		return Streams.stream(list)
-			.map(strTag -> ((NBTTagString) strTag).getString())
-			.distinct()
-			.toArray(String[]::new);
-	}
+		private final NBTHelper alignment;
+		private int total = -1;
 
-	public static ItemStack setEssenceTypes (final ItemStack stack, final ResourceLocation... essenceTypes) {
-		return setEssenceTypes(stack, Arrays.stream(essenceTypes)
-			.map(rl -> rl.toString())
-			.distinct()
-			.toArray(String[]::new));
+		public EssenceAlignment () {
+			alignment = new NBTHelper();
+		}
+
+		public EssenceAlignment (final ItemStack stack) {
+			final NBTHelper stackNBT = new NBTHelper(stack);
+			alignment = stackNBT.computeObject("essence_alignment", __ -> new NBTHelper());
+
+			final String[] essenceTypes = stackNBT.getStringArray("essence_types");
+			if (essenceTypes.length > 0) {
+				for (final String essenceType : essenceTypes)
+					add(essenceType, 1);
+				stackNBT.remove("essence_types");
+			}
+		}
+
+		private int getTotal () {
+			if (total < 0)
+				total = alignment.valueStream(Tag.INT)
+					.collect(Collectors.summingInt(value -> ((NBTTagInt) value).getInt()));
+			return total;
+		}
+
+		public double getAlignment (final String essenceType) {
+			return alignment.getInteger(essenceType, 0) / (double) getTotal();
+		}
+
+		public int getRawAlignment (final String essenceType) {
+			return alignment.getInteger(essenceType, 0);
+		}
+
+		public void add (final String essenceType, final int amount) {
+			alignment.setInteger(essenceType, alignment.getInteger(essenceType, 0) + amount);
+			if (total > -1)
+				total += amount;
+		}
+
+		public void add (final EssenceAlignment alignments) {
+			alignments.getEssenceTypes()
+				.forEach(essenceType -> add(essenceType, alignments.getRawAlignment(essenceType)));
+		}
+
+		public Stream<String> getEssenceTypes () {
+			return alignment.keyStream(Tag.INT);
+		}
+
+		public Stream<Map.Entry<String, Double>> getAlignments () {
+			return getEssenceTypes()
+				.map(essenceType -> new AbstractMap.SimpleEntry<>(essenceType, this.getAlignment(essenceType)));
+		}
+
+		public Stream<Map.Entry<String, Integer>> getRawAlignments () {
+			return getEssenceTypes()
+				.map(essenceType -> new AbstractMap.SimpleEntry<>(essenceType, this.getRawAlignment(essenceType)));
+		}
+
+		public void applyTo (final ItemStack stack) {
+			new NBTHelper(stack)
+				.setObject("essence_alignment", alignment);
+		}
 	}
 
 	public static boolean isPerfect (final ItemStack stack) {
-		final List<String> essenceTypesInStack = Arrays.stream(getEssenceTypes(stack))
+		final List<String> essenceTypesInStack = new EssenceAlignment(stack).getEssenceTypes()
 			.sorted()
 			.collect(Collectors.toList());
 		final List<String> essenceTypes = CONFIG.getEssenceTypes()
 			.sorted()
 			.collect(Collectors.toList());
 		return essenceTypes.equals(essenceTypesInStack);
-	}
-
-	public static ItemStack setEssenceTypes (final ItemStack stack, final String... essenceTypes) {
-
-		final NBTTagList essenceTypesTag = new NBTTagList();
-		Arrays.stream(essenceTypes)
-			.distinct()
-			.map(NBTTagString::new)
-			.forEach(essenceTypesTag::appendTag);
-
-		NBTTagCompound tag = stack.getTagCompound();
-		if (tag == null) {
-			tag = new NBTTagCompound();
-			stack.setTagCompound(tag);
-		}
-
-		tag.setTag("essence_types", essenceTypesTag);
-
-		return stack;
 	}
 
 
@@ -116,7 +142,7 @@ public class EssencePerfect extends Registration.Item {
 		@Override
 		public ItemStack getCraftingResult (final InventoryCrafting inv) {
 
-			final Set<String> essenceTypes = new HashSet<>();
+			final EssenceAlignment alignment = new EssenceAlignment();
 			final int inventorySize = inv.getSizeInventory();
 			int count = 0;
 
@@ -128,11 +154,12 @@ public class EssencePerfect extends Registration.Item {
 					// empty slot, let's look at next
 					continue;
 
-				if (stackItem == ItemRegistry.ESSENCE)
-					essenceTypes.add(EssenceType.getEssenceType(stack));
+				if (stackItem == ItemRegistry.ESSENCE) {
+					final String essenceType = EssenceType.getEssenceType(stack);
+					alignment.add(essenceType, 1);
 
-				else if (stackItem == ItemRegistry.ESSENCE_PERFECT)
-					Collections.addAll(essenceTypes, getEssenceTypes(stack));
+				} else if (stackItem == ItemRegistry.ESSENCE_PERFECT)
+					alignment.add(new EssenceAlignment(stack));
 
 				else
 					// some other random item
@@ -141,11 +168,12 @@ public class EssencePerfect extends Registration.Item {
 				count++;
 			}
 
-			if (count < 2 || essenceTypes.size() < 2)
+			final String[] essenceTypes = alignment.getEssenceTypes().toArray(String[]::new);
+			if (count < 2 || essenceTypes.length < 2)
 				// existential essence requires at least 2 essence types
 				return ItemStack.EMPTY;
 
-			return ItemRegistry.ESSENCE_PERFECT.getItemStack(count, essenceTypes.toArray(new String[0]));
+			return ItemRegistry.ESSENCE_PERFECT.getItemStack(count, alignment);
 		}
 	}
 
@@ -156,7 +184,7 @@ public class EssencePerfect extends Registration.Item {
 
 		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
 			registerColorHandler( (final ItemStack stack, final int tintIndex) -> {
-				final String[] essenceTypes = getEssenceTypes(stack);
+				final String[] essenceTypes = new EssenceAlignment(stack).getEssenceTypes().toArray(String[]::new);
 				if (essenceTypes.length == 0)
 					return -1;
 
@@ -170,7 +198,16 @@ public class EssencePerfect extends Registration.Item {
 	public ItemStack getItemStack (final int count, final String... essenceTypes) {
 		final ItemStack result = new ItemStack(ItemRegistry.ESSENCE_PERFECT);
 		result.setCount(count);
-		setEssenceTypes(result, essenceTypes);
+		final EssenceAlignment alignment = new EssenceAlignment(result);
+		for (final String essenceType : essenceTypes)
+			alignment.add(essenceType, 1);
+		return result;
+	}
+
+	public ItemStack getItemStack (final int count, final EssenceAlignment alignment) {
+		final ItemStack result = new ItemStack(ItemRegistry.ESSENCE_PERFECT);
+		result.setCount(count);
+		alignment.applyTo(result);
 		return result;
 	}
 
@@ -179,9 +216,7 @@ public class EssencePerfect extends Registration.Item {
 	}
 
 	public ItemStack getPerfectStack (final int count) {
-		final ItemStack stack = getItemStack(count);
-		setEssenceTypes(stack, CONFIG.getEssenceTypes().toArray(String[]::new));
-		return stack;
+		return getItemStack(count, CONFIG.getEssenceTypes().toArray(String[]::new));
 	}
 
 	@Override
@@ -216,21 +251,27 @@ public class EssencePerfect extends Registration.Item {
 	@Override
 	public void addInformation (final ItemStack stack, final World world, final List<String> tooltip, final ITooltipFlag flagIn) {
 		final String registryName = getRegistryName().toString();
-		final String[] essenceTypes = getEssenceTypes(stack);
+		final List<Map.Entry<String, Double>> essenceTypes = new EssenceAlignment(stack)
+			.getAlignments()
+			.sorted( (a, b) -> ((int) ((b.getValue() - a.getValue()) * 10000)) + a.getKey().compareTo(b.getKey()))
+			.collect(Collectors.toList());
 
-		if (essenceTypes.length < 3 || Sneak.isSneaking()) {
+		final int totalEssenceTypes = essenceTypes.size();
+		if (totalEssenceTypes < 3 || Sneak.isSneaking()) {
 			final StringBuilder builder = new StringBuilder(Translation.localize("tooltip." + registryName + ".alignments"));
-			for (int i = 0; i < essenceTypes.length; i++) {
-				builder.append(EssenceType.localize(essenceTypes[i]));
-				if (i != essenceTypes.length - 1)
-					builder.append(Translation.localize("tooltip." + registryName + (i == essenceTypes.length - 2 ? ".alignments_joining_last" : ".alignments_joining")));
+			for (int i = 0; i < totalEssenceTypes; i++) {
+				final Map.Entry<String, Double> entry = essenceTypes.get(i);
+				builder.append(EssenceType.localize(entry.getKey()));
+				builder.append(Translation.localize("tooltip." + registryName + ".alignment_percentage", Translation.formatPercentage(entry.getValue())));
+				if (i != totalEssenceTypes - 1)
+					builder.append(Translation.localize("tooltip." + registryName + (i == totalEssenceTypes - 2 ? ".alignments_joining_last" : ".alignments_joining")));
 			}
 
 			tooltip.add(builder.toString());
 
 		} else {
 			tooltip.add(new Translation("tooltip." + registryName + ".alignments_count")
-				.get(essenceTypes.length, CONFIG.getEssenceTypes().count()));
+				.get(totalEssenceTypes, CONFIG.getEssenceTypes().count()));
 			tooltip.add(Translation.localize("tooltip." + registryName + ".sneak_to_show_more"));
 		}
 	}

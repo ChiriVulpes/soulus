@@ -1,6 +1,5 @@
 package yuudaari.soulus.common.compat.jei;
 
-import java.text.DecimalFormat;
 import java.util.List;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.ICraftingGridHelper;
@@ -105,9 +104,9 @@ public class RecipeCategoryMarrow implements IRecipeCategory<IRecipeWrapper> {
 
 				double dropWeight = essence.bones.dropWeight;
 
-				double dropChance = dropWeight / BoneChunks.getChanceTotal(essence.bones.type) * 100;
+				double dropChance = dropWeight / BoneChunks.getChanceTotal(essence.bones.type);
 				tooltip.add(0, Translation.localize("jei.recipe." + Soulus.MODID + ":essence.tooltip_chance", //
-					new DecimalFormat("#.##").format(dropChance)));
+					Translation.formatPercentage(dropChance)));
 			}
 		});
 	}
