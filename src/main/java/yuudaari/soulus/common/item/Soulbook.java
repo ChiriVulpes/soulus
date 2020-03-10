@@ -36,7 +36,8 @@ import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.essence.ConfigColor;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
-import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
+import yuudaari.soulus.common.recipe.ingredient.IngredientEssence;
+import yuudaari.soulus.common.recipe.ingredient.IngredientEssence.AllowedStack;
 import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.Colour;
@@ -87,7 +88,7 @@ public class Soulbook extends Registration.Item implements IHasComposerCellInfo,
 
 			List<Ingredient> ingredients = new ArrayList<>();
 
-			ingredients.addAll(Collections.nCopies(size * size - 1, IngredientPotentialEssence.getInstanceNoAsh()));
+			ingredients.addAll(Collections.nCopies(size * size - 1, IngredientEssence.getInstance(AllowedStack.EMPTY)));
 			ingredients.add(Ingredient.fromItem(ItemRegistry.SOULBOOK));
 
 			return NonNullList.from(Ingredient.EMPTY, ingredients.toArray(new Ingredient[0]));

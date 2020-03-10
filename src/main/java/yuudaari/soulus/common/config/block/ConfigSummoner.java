@@ -36,7 +36,8 @@ public class ConfigSummoner extends ConfigUpgradeableBlock<Summoner> {
 	@Serialized @ClientField public double particleCountMidnightJewel = 5;
 
 	// SERVER
-	@Serialized public double perfectEssenceBoost = 0.015;
+	@Serialized public double perfectEssenceBoostBase = 0.0005;
+	@Serialized public double perfectEssenceBoostMultiplier = 0.0001;
 	@Serialized public double perfectEssenceBoostDecay = 0.7;
 	// count
 	@Serialized public int nonUpgradedSpawningRadius = 4;

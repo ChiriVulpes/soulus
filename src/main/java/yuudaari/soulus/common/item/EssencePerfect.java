@@ -8,11 +8,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Streams;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
@@ -35,7 +33,8 @@ import yuudaari.soulus.client.util.Sneak;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
-import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
+import yuudaari.soulus.common.recipe.ingredient.IngredientEssence;
+import yuudaari.soulus.common.recipe.ingredient.IngredientEssence.AllowedStack;
 import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.EssenceType;
@@ -100,7 +99,7 @@ public class EssencePerfect extends Registration.Item {
 
 		private static NonNullList<Ingredient> ingredients () {
 			final List<Ingredient> ingredients = new ArrayList<>();
-			ingredients.addAll(Collections.nCopies(3 * 3, IngredientPotentialEssence.getInstance()));
+			ingredients.addAll(Collections.nCopies(3 * 3, IngredientEssence.getInstance(AllowedStack.EMPTY, AllowedStack.ESSENCE_PERFECT)));
 			return NonNullList.from(Ingredient.EMPTY, ingredients.toArray(new Ingredient[0]));
 		}
 
@@ -119,74 +118,34 @@ public class EssencePerfect extends Registration.Item {
 
 			final Set<String> essenceTypes = new HashSet<>();
 			final int inventorySize = inv.getSizeInventory();
-
-			if (inventorySize < 9)
-				return ItemStack.EMPTY;
+			int count = 0;
 
 			for (int i = 0; i < inventorySize; i++) {
 				final ItemStack stack = inv.getStackInSlot(i);
 				final Item stackItem = stack.getItem();
-				if (stack == null || stackItem != ItemRegistry.ESSENCE)
-					return ItemStack.EMPTY;
 
-				essenceTypes.add(EssenceType.getEssenceType(stack));
-			}
-
-			if (essenceTypes.size() < 9)
-				return ItemStack.EMPTY;
-
-			final ItemStack result = new ItemStack(ItemRegistry.ESSENCE_PERFECT);
-			result.setCount(1);
-			setEssenceTypes(result, essenceTypes.toArray(new String[0]));
-
-			return result;
-		}
-	}
-
-	public static class EssencePerfectCombinationRecipe extends ShapelessOreRecipe {
-
-		private static NonNullList<Ingredient> ingredients (final int size) {
-			final List<Ingredient> ingredients = new ArrayList<>();
-			ingredients.addAll(Collections.nCopies(size * size, Ingredient.fromItem(ItemRegistry.ESSENCE_PERFECT)));
-			return NonNullList.from(Ingredient.EMPTY, ingredients.toArray(new Ingredient[0]));
-		}
-
-		public EssencePerfectCombinationRecipe (final ResourceLocation name, final int size) {
-			super(new ResourceLocation(""), ingredients(size), ItemRegistry.ESSENCE_PERFECT.getItemStack(size * size));
-			setRegistryName(name + "_combination");
-		}
-
-		@Override
-		public boolean matches (final InventoryCrafting inv, final World worldIn) {
-			return !getCraftingResult(inv).isEmpty();
-		}
-
-		@Override
-		public ItemStack getCraftingResult (final InventoryCrafting inv) {
-
-			final Set<String> essenceTypes = new HashSet<>();
-			final int inventorySize = inv.getSizeInventory();
-			int quantity = 0;
-
-			for (int i = 0; i < inventorySize; i++) {
-				final ItemStack stack = inv.getStackInSlot(i);
-				final Item stackItem = stack.getItem();
-				if (stack == null || stackItem == Items.AIR)
+				if (stack == null || stack.isEmpty())
+					// empty slot, let's look at next
 					continue;
 
-				if (stackItem != ItemRegistry.ESSENCE_PERFECT)
+				if (stackItem == ItemRegistry.ESSENCE)
+					essenceTypes.add(EssenceType.getEssenceType(stack));
+
+				else if (stackItem == ItemRegistry.ESSENCE_PERFECT)
+					Collections.addAll(essenceTypes, getEssenceTypes(stack));
+
+				else
+					// some other random item
 					return ItemStack.EMPTY;
 
-				quantity++;
-
-				essenceTypes.addAll(Lists.newArrayList(getEssenceTypes(stack)));
+				count++;
 			}
 
-			final ItemStack result = new ItemStack(ItemRegistry.ESSENCE_PERFECT);
-			result.setCount(quantity);
-			setEssenceTypes(result, essenceTypes.toArray(new String[0]));
+			if (count < 2 || essenceTypes.size() < 2)
+				// existential essence requires at least 2 essence types
+				return ItemStack.EMPTY;
 
-			return result;
+			return ItemRegistry.ESSENCE_PERFECT.getItemStack(count, essenceTypes.toArray(new String[0]));
 		}
 	}
 
@@ -208,13 +167,27 @@ public class EssencePerfect extends Registration.Item {
 		}
 	}
 
+	public ItemStack getItemStack (final int count, final String... essenceTypes) {
+		final ItemStack result = new ItemStack(ItemRegistry.ESSENCE_PERFECT);
+		result.setCount(count);
+		setEssenceTypes(result, essenceTypes);
+		return result;
+	}
+
+	public ItemStack getPerfectStack () {
+		return getPerfectStack(1);
+	}
+
+	public ItemStack getPerfectStack (final int count) {
+		final ItemStack stack = getItemStack(count);
+		setEssenceTypes(stack, CONFIG.getEssenceTypes().toArray(String[]::new));
+		return stack;
+	}
+
 	@Override
 	public void getSubItems (final CreativeTabs tab, final NonNullList<ItemStack> items) {
 		if (!this.isInCreativeTab(tab)) return;
-
-		final ItemStack result = getItemStack();
-		setEssenceTypes(result, CONFIG.getEssenceTypes().toArray(String[]::new));
-		items.add(result);
+		items.add(getPerfectStack(1));
 	}
 
 	@Override
@@ -225,9 +198,10 @@ public class EssencePerfect extends Registration.Item {
 
 	@Override
 	public EnumRarity getRarity (final ItemStack stack) {
-		return isPerfect(stack) ? EnumRarity.EPIC : super.getRarity(stack);
+		return isPerfect(stack) ? EnumRarity.EPIC : EnumRarity.UNCOMMON;
 	}
 
+	// can't add glint due to a bug
 	// @Override
 	// public boolean hasEffect (final ItemStack stack) {
 	// 	return isPerfect(stack);
@@ -235,10 +209,7 @@ public class EssencePerfect extends Registration.Item {
 
 	@Override
 	public void onRegisterRecipes (final IForgeRegistry<IRecipe> registry) {
-		registry.registerAll(//
-			new EssencePerfectRecipe(getRegistryName()), //
-			new EssencePerfectCombinationRecipe(getRegistryName(), 2), //
-			new EssencePerfectCombinationRecipe(getRegistryName(), 3));
+		registry.register(new EssencePerfectRecipe(getRegistryName()));
 	}
 
 	@SideOnly(Side.CLIENT)

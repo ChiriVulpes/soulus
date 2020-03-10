@@ -5,9 +5,7 @@
 			"item": "minecraft:book"
 		},
 		{
-			"type": "soulus:potential_essence",
-			"allow_ash": false,
-			"allow_empty": false
+			"type": "soulus:essence"
 		}
 	],
 	"result": {

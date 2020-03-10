@@ -22,7 +22,7 @@ import yuudaari.soulus.common.config.bones.ConfigBoneType;
 import yuudaari.soulus.common.config.essence.ConfigColor;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
-import yuudaari.soulus.common.recipe.ingredient.IngredientPotentialEssence;
+import yuudaari.soulus.common.recipe.ingredient.IngredientEssence;
 import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.EssenceType;
 import yuudaari.soulus.common.util.Translation;
@@ -117,6 +117,6 @@ public class Essence extends Registration.Item {
 
 	@Override
 	public void onRegisterDescription (JeiDescriptionRegistry registry) {
-		registry.add(new IngredientPotentialEssence(false, false), getRegistryName());
+		registry.add(IngredientEssence.getInstance(), getRegistryName());
 	}
 }

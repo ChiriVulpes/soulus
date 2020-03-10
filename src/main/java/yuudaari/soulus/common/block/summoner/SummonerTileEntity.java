@@ -297,9 +297,9 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 		final int count = player.isSneaking() ? stack.getCount() : 1;
 
-		for (int i = 0; i < count; i++) {
-			boost += CONFIG.perfectEssenceBoost * spawnDelay.get(world.rand);
-		}
+		for (int i = 0; i < count; i++)
+			boost += (CONFIG.perfectEssenceBoostBase + CONFIG.perfectEssenceBoostMultiplier * perfectEssenceTypes.length) //
+				* spawnDelay.get(world.rand);
 
 		blockUpdate();
 		timeTillNextMajorUpdate = 0;
