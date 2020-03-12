@@ -5,7 +5,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
+import com.google.common.util.concurrent.AtomicDouble;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -87,6 +89,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	private Range spawnDelay;
 	private Range spawnCount;
 	private boolean usedPlayer = false;
+	private boolean hadInitialSpawn = false;
 
 	private int signalStrength;
 
@@ -179,7 +182,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	}
 
 	private ConfigEssence spawnMobConfig;
-	private int spawnMobChanceTotal;
+	private double spawnMobChanceTotal;
 	public String lastRenderedEssenceType;
 
 	public String getEssenceType () {
@@ -194,13 +197,10 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	private void resetEssenceType () {
 		spawnMobConfig = CONFIG_ESSENCES.get(essenceType);
 
-		spawnMobChanceTotal = 0;
-
-		if (spawnMobConfig != null && spawnMobConfig.spawns != null) {
-			for (double dropChance : spawnMobConfig.spawns.values()) {
-				spawnMobChanceTotal += dropChance;
-			}
-		}
+		final Map<String, Double> spawnChances = spawnMobConfig == null ? null //
+			: hasMalice() && spawnMobConfig.spawnsMalice != null ? spawnMobConfig.spawnsMalice : spawnMobConfig.spawns;
+		spawnMobChanceTotal = spawnChances == null ? 0 //
+			: (int) (double) spawnChances.values().stream().collect(Collectors.summingDouble(Double::doubleValue));
 	}
 
 	public int getSignalStrength () {
@@ -215,16 +215,17 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	}
 
 	private String getSpawnMob () {
-		if (spawnMobChanceTotal > 0 && spawnMobConfig != null) {
-			int choice = new Random().nextInt(spawnMobChanceTotal);
-			for (Map.Entry<String, Double> spawnConfig : spawnMobConfig.spawns.entrySet()) {
-				choice -= spawnConfig.getValue();
-				if (choice < 0) {
-					return spawnConfig.getKey();
-				}
-			}
-		}
-		return essenceType;
+		if (spawnMobChanceTotal <= 0 || spawnMobConfig == null)
+			return essenceType;
+
+		final AtomicDouble choice = new AtomicDouble(new Random().nextDouble() * spawnMobChanceTotal);
+		final Map<String, Double> spawnChances = hasMalice() && spawnMobConfig.spawnsMalice != null ? spawnMobConfig.spawnsMalice : spawnMobConfig.spawns;
+		return spawnChances == null ? essenceType : spawnChances.entrySet()
+			.stream()
+			.filter(spawnConfig -> choice.addAndGet((int) -spawnConfig.getValue()) < 0)
+			.findFirst()
+			.map(Map.Entry::getKey)
+			.orElse(essenceType);
 	}
 
 	/**
@@ -335,7 +336,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 		timeTillSpawn -= activationAmount;
 
-		if (timeTillSpawn <= 0) {
+		if (timeTillSpawn <= 0 || (!hadInitialSpawn && hasMalice() && isPlayerInRange(8))) {
 			resetTimer();
 			if (!world.isRemote)
 				spawn();
@@ -371,10 +372,11 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		soulbookUses = compound.getFloat("soulbook_uses");
 		if (soulbookUses == -101 || CONFIG.soulbookUses == null || CONFIG.soulbookUses <= 0)
 			soulbookUses = null;
+		malice = compound.getBoolean("malice");
 		resetEssenceType();
 		timeTillSpawn = compound.getFloat("delay");
 		lastTimeTillSpawn = compound.getFloat("delay_last");
-		malice = compound.getBoolean("malice");
+		hadInitialSpawn = compound.getBoolean("had_initial_spawn");
 		usedPlayer = compound.getBoolean("used_player");
 		boost = compound.getFloat("boost");
 
@@ -396,12 +398,13 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 		compound.setFloat("delay", timeTillSpawn);
 		compound.setFloat("delay_last", lastTimeTillSpawn);
 		compound.setBoolean("malice", malice);
+		compound.setBoolean("had_initial_spawn", hadInitialSpawn);
 		compound.setBoolean("used_player", usedPlayer);
 		compound.setFloat("boost", boost);
 	}
 
-	private boolean isPlayerInRangeForEffects () {
-		return world.isAnyPlayerWithinRangeAt(pos.getX(), pos.getY(), pos.getZ(), 64);
+	private boolean isPlayerInRange (int range) {
+		return world.isAnyPlayerWithinRangeAt(pos.getX(), pos.getY(), pos.getZ(), range);
 	}
 
 	private void updateRenderer (double activationAmount) {
@@ -411,7 +414,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 		if (activationAmount <= 0) return;
 
-		if (isPlayerInRangeForEffects()) {
+		if (isPlayerInRange(64)) {
 			double particleCount = hasMalice() ? CONFIG.particleCountMidnightJewel : CONFIG.particleCountActivated;
 			particleCount *= Math.min(1, activationAmount * activationAmount) * (0.5 + getSpawnPercent() / 2);
 			if (particleCount < 1) {
@@ -465,8 +468,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 					.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1).grow(spawningRadius);
 
 				// check if there's too many entities in the spawning area
-				if (world.getEntitiesWithinAABB(entity.getClass(), boundingBox)
-					.size() >= Math.pow(spawningRadius * 2, 2) / 8) {
+				if (world.getEntitiesWithinAABB(entity.getClass(), boundingBox).size() >= Math.pow(spawningRadius * 2, 2) / 8) {
 					// we can return here because this check won't change next loop
 					break MainSpawningLoop;
 				}
@@ -504,7 +506,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 				if (spawnNames != null && spawnNames.length > 0)
 					entity.setCustomNameTag(spawnNames[world.rand.nextInt(spawnNames.length)]);
 
-				if (isPlayerInRangeForEffects())
+				if (isPlayerInRange(64))
 					explosionParticles(entity);
 
 				spawned++;
@@ -530,6 +532,9 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 		// reset whether a player was used for this spawn
 		usedPlayer = false;
+
+		if (spawned > 0)
+			hadInitialSpawn = true;
 
 		return spawned;
 	}

@@ -30,7 +30,7 @@ public class ConfigEssences {
 		essences.add(new ConfigEssence("minecraft:rabbit", new ConfigCreatureBone("NORMAL", 4)).addLoot(1, 1, 0.1));
 		essences.add(new ConfigEssence("minecraft:sheep", new ConfigCreatureBone("NORMAL", 6)).addLoot(1, 2, 0.4));
 		essences.add(new ConfigEssence("minecraft:skeleton", new ConfigCreatureBone("NORMAL", 3)).addLoot(1, 2, 0.7));
-		essences.add(new ConfigEssence("minecraft:spider", new ConfigCreatureBone("NORMAL", 5)).addSpawnChance("minecraft:spider", 100).addSpawnChance("minecraft:cave_spider", 10));
+		essences.add(new ConfigEssence("minecraft:spider", new ConfigCreatureBone("NORMAL", 5)).addSpawnChance("minecraft:spider", 100).addSpawnChance("minecraft:cave_spider", 10).addSpawnChanceMalice("minecraft:cave_spider", 1));
 		essences.add(new ConfigEssence("minecraft:villager", new ConfigCreatureBone("NORMAL", 1)).addLoot(1, 2, 0.6));
 		essences.add(new ConfigEssence("minecraft:horse", new ConfigCreatureBone("NORMAL", 1)).addLoot(1, 3, 0.6));
 		essences.add(new ConfigEssence("NONE", new ConfigCreatureBone("NORMAL", 5)));

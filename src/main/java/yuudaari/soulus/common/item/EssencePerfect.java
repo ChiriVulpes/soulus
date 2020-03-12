@@ -34,8 +34,9 @@ import yuudaari.soulus.common.recipe.ingredient.IngredientEssence.AllowedStack;
 import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.EssenceType;
-import yuudaari.soulus.common.util.NBTHelper;
-import yuudaari.soulus.common.util.NBTHelper.Tag;
+import yuudaari.soulus.common.util.nbt.NBTHelper;
+import yuudaari.soulus.common.util.nbt.NBTObject;
+import yuudaari.soulus.common.util.nbt.NBTType;
 import yuudaari.soulus.common.util.Translation;
 
 @ConfigInjected(Soulus.MODID)
@@ -45,16 +46,16 @@ public class EssencePerfect extends Registration.Item {
 
 	public static class EssenceAlignment {
 
-		private final NBTHelper alignment;
+		private final NBTObject alignment;
 		private int total = -1;
 
 		public EssenceAlignment () {
-			alignment = new NBTHelper();
+			alignment = new NBTObject();
 		}
 
 		public EssenceAlignment (final ItemStack stack) {
-			final NBTHelper stackNBT = new NBTHelper(stack);
-			alignment = stackNBT.computeObject("essence_alignment", __ -> new NBTHelper());
+			final NBTObject stackNBT = NBTHelper.get(stack);
+			alignment = stackNBT.computeObject("essence_alignment", __ -> new NBTObject());
 
 			final String[] essenceTypes = stackNBT.getStringArray("essence_types");
 			if (essenceTypes.length > 0) {
@@ -66,7 +67,7 @@ public class EssencePerfect extends Registration.Item {
 
 		private int getTotal () {
 			if (total < 0)
-				total = alignment.valueStream(Tag.INT)
+				total = alignment.valueStream(NBTType.INT)
 					.collect(Collectors.summingInt(value -> ((NBTTagInt) value).getInt()));
 			return total;
 		}
@@ -91,7 +92,7 @@ public class EssencePerfect extends Registration.Item {
 		}
 
 		public Stream<String> getEssenceTypes () {
-			return alignment.keyStream(Tag.INT);
+			return alignment.keyStream(NBTType.INT);
 		}
 
 		public Stream<Map.Entry<String, Double>> getAlignments () {
@@ -105,7 +106,7 @@ public class EssencePerfect extends Registration.Item {
 		}
 
 		public void applyTo (final ItemStack stack) {
-			new NBTHelper(stack)
+			NBTHelper.get(stack)
 				.setObject("essence_alignment", alignment);
 		}
 	}

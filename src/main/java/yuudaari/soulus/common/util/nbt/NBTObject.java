@@ -1,53 +1,26 @@
-package yuudaari.soulus.common.util;
+package yuudaari.soulus.common.util.nbt;
 
 import java.util.AbstractMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 import org.apache.commons.lang3.ArrayUtils;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 
-public class NBTHelper {
+public class NBTObject extends NBTHelper {
 
-	public NBTTagCompound nbt;
+	public final NBTTagCompound nbt;
 
-	public static enum Tag {
-		END,
-		BYTE,
-		SHORT,
-		INT,
-		LONG,
-		FLOAT,
-		DOUBLE,
-		BYTE_ARRAY,
-		STRING,
-		LIST,
-		COMPOUND,
-		INT_ARRAY;
-	}
-
-	public NBTHelper () {
+	public NBTObject () {
 		nbt = new NBTTagCompound();
 	}
 
-	public NBTHelper (final NBTTagCompound nbt) {
+	public NBTObject (final NBTTagCompound nbt) {
 		this.nbt = nbt;
-	}
-
-	public NBTHelper (final ItemStack stack) {
-		this(stack, true);
-	}
-
-	public NBTHelper (final ItemStack stack, final boolean createIfNotExist) {
-		nbt = stack.getTagCompound();
-		if (nbt == null && createIfNotExist)
-			stack.setTagCompound(nbt = new NBTTagCompound());
 	}
 
 
@@ -59,56 +32,56 @@ public class NBTHelper {
 		return nbt.hasKey(key);
 	}
 
-	public boolean has (final String key, final Tag tagType) {
+	public boolean has (final String key, final NBTType tagType) {
 		return nbt.hasKey(key, tagType.ordinal());
 	}
 
 	public boolean hasByte (final String key) {
-		return has(key, Tag.BYTE);
+		return has(key, NBTType.BYTE);
 	}
 
 	public boolean hasShort (final String key) {
-		return has(key, Tag.SHORT);
+		return has(key, NBTType.SHORT);
 	}
 
 	public boolean hasInteger (final String key) {
-		return has(key, Tag.INT);
+		return has(key, NBTType.INT);
 	}
 
 	public boolean hasLong (final String key) {
-		return has(key, Tag.LONG);
+		return has(key, NBTType.LONG);
 	}
 
 	public boolean hasFloat (final String key) {
-		return has(key, Tag.FLOAT);
+		return has(key, NBTType.FLOAT);
 	}
 
 	public boolean hasDouble (final String key) {
-		return has(key, Tag.DOUBLE);
+		return has(key, NBTType.DOUBLE);
 	}
 
 	public boolean hasByteArray (final String key) {
-		return has(key, Tag.BYTE_ARRAY);
+		return has(key, NBTType.BYTE_ARRAY);
 	}
 
 	public boolean hasString (final String key) {
-		return has(key, Tag.STRING);
+		return has(key, NBTType.STRING);
 	}
 
 	public boolean hasList (final String key) {
-		return has(key, Tag.LIST);
+		return has(key, NBTType.LIST);
 	}
 
-	public boolean hasList (final String key, final Tag type) {
-		return has(key, Tag.LIST) && getList(key).getTagType() == type.ordinal();
+	public boolean hasList (final String key, final NBTType type) {
+		return has(key, NBTType.LIST) && getList(key).getListType() == type;
 	}
 
 	public boolean hasObject (final String key) {
-		return has(key, Tag.COMPOUND);
+		return has(key, NBTType.COMPOUND);
 	}
 
 	public boolean hasIntArray (final String key) {
-		return has(key, Tag.INT_ARRAY);
+		return has(key, NBTType.INT_ARRAY);
 	}
 
 
@@ -124,7 +97,7 @@ public class NBTHelper {
 		return getKeys().stream();
 	}
 
-	public Stream<String> keyStream (final Tag type) {
+	public Stream<String> keyStream (final NBTType type) {
 		return keyStream()
 			.filter(key -> has(key, type));
 	}
@@ -133,7 +106,7 @@ public class NBTHelper {
 		return getKeys().stream().map(key -> new AbstractMap.SimpleEntry<>(key, get(key)));
 	}
 
-	public Stream<Map.Entry<String, NBTBase>> entryStream (final Tag type) {
+	public Stream<Map.Entry<String, NBTBase>> entryStream (final NBTType type) {
 		return entryStream()
 			.filter(entry -> entry.getValue().getId() == type.ordinal());
 	}
@@ -142,7 +115,7 @@ public class NBTHelper {
 		return getKeys().stream().map(this::get);
 	}
 
-	public Stream<NBTBase> valueStream (final Tag type) {
+	public Stream<NBTBase> valueStream (final NBTType type) {
 		return valueStream()
 			.filter(value -> value.getId() == type.ordinal());
 	}
@@ -161,7 +134,7 @@ public class NBTHelper {
 	}
 
 	public byte getByte (final String key, final byte orElse) {
-		return has(key, Tag.BYTE) ? nbt.getByte(key) : orElse;
+		return has(key, NBTType.BYTE) ? nbt.getByte(key) : orElse;
 	}
 
 	public short getShort (final String key) {
@@ -169,7 +142,7 @@ public class NBTHelper {
 	}
 
 	public short getShort (final String key, final short orElse) {
-		return has(key, Tag.SHORT) ? nbt.getShort(key) : orElse;
+		return has(key, NBTType.SHORT) ? nbt.getShort(key) : orElse;
 	}
 
 	public int getInteger (final String key) {
@@ -177,7 +150,7 @@ public class NBTHelper {
 	}
 
 	public int getInteger (final String key, final int orElse) {
-		return has(key, Tag.INT) ? nbt.getInteger(key) : orElse;
+		return has(key, NBTType.INT) ? nbt.getInteger(key) : orElse;
 	}
 
 	public long getLong (String key) {
@@ -185,7 +158,7 @@ public class NBTHelper {
 	}
 
 	public long getLong (final String key, final long orElse) {
-		return has(key, Tag.LONG) ? nbt.getLong(key) : orElse;
+		return has(key, NBTType.LONG) ? nbt.getLong(key) : orElse;
 	}
 
 	public float getFloat (String key) {
@@ -193,7 +166,7 @@ public class NBTHelper {
 	}
 
 	public float getFloat (final String key, final float orElse) {
-		return has(key, Tag.FLOAT) ? nbt.getFloat(key) : orElse;
+		return has(key, NBTType.FLOAT) ? nbt.getFloat(key) : orElse;
 	}
 
 	public double getDouble (String key) {
@@ -201,7 +174,7 @@ public class NBTHelper {
 	}
 
 	public double getDouble (final String key, final double orElse) {
-		return has(key, Tag.DOUBLE) ? nbt.getDouble(key) : orElse;
+		return has(key, NBTType.DOUBLE) ? nbt.getDouble(key) : orElse;
 	}
 
 	public byte[] getByteArray (String key) {
@@ -209,7 +182,7 @@ public class NBTHelper {
 	}
 
 	public byte[] getByteArray (final String key, final byte[] orElse) {
-		return has(key, Tag.BYTE_ARRAY) ? nbt.getByteArray(key) : orElse;
+		return has(key, NBTType.BYTE_ARRAY) ? nbt.getByteArray(key) : orElse;
 	}
 
 	public String getString (String key) {
@@ -217,41 +190,42 @@ public class NBTHelper {
 	}
 
 	public String getString (final String key, final String orElse) {
-		return has(key, Tag.STRING) ? nbt.getString(key) : orElse;
+		return has(key, NBTType.STRING) ? nbt.getString(key) : orElse;
 	}
 
 	public String[] getStringArray (String key) {
-		if (!hasList(key, Tag.STRING))
+		if (!hasList(key, NBTType.STRING))
 			return new String[0];
 
-		return StreamSupport.stream(getList(key).spliterator(), false)
-			.map(str -> ((NBTTagString) str).getString())
+		return this.<NBTPrimitive<String>>getList(key)
+			.stream()
+			.map(NBTPrimitive::get)
 			.toArray(String[]::new);
 	}
 
 	public String[] getStringArray (final String key, final String[] orElse) {
-		return hasList(key, Tag.STRING) ? getStringArray(key) : orElse;
+		return hasList(key, NBTType.STRING) ? getStringArray(key) : orElse;
 	}
 
-	public NBTTagList getList (final String key) {
-		return (NBTTagList) nbt.getTag(key);
+	public <T extends NBTHelper> NBTList<T> getList (final String key) {
+		return new NBTList<T>((NBTTagList) nbt.getTag(key));
 	}
 
-	public NBTTagList getList (final String key, final NBTTagList orElse) {
-		return has(key, Tag.LIST) ? getList(key) : orElse;
+	public <T extends NBTHelper> NBTList<T> getList (final String key, final NBTList<T> orElse) {
+		return has(key, NBTType.LIST) ? getList(key) : orElse;
 	}
 
-	public NBTTagList getList (final String key, final int type, final NBTTagList orElse) {
-		final NBTTagList result = has(key, Tag.LIST) ? getList(key) : orElse;
-		return result.getTagType() == type ? result : orElse;
+	public <T extends NBTHelper> NBTList<T> getList (final String key, final int type, final NBTList<T> orElse) {
+		final NBTList<T> result = has(key, NBTType.LIST) ? this.<T>getList(key) : orElse;
+		return result.getListType().is(type) ? result : orElse;
 	}
 
-	public NBTHelper getObject (final String key) {
-		return new NBTHelper(nbt.getCompoundTag(key));
+	public NBTObject getObject (final String key) {
+		return new NBTObject(nbt.getCompoundTag(key));
 	}
 
-	public NBTHelper getObject (final String key, final NBTHelper orElse) {
-		return has(key, Tag.COMPOUND) ? new NBTHelper(nbt.getCompoundTag(key)) : orElse;
+	public NBTObject getObject (final String key, final NBTObject orElse) {
+		return has(key, NBTType.COMPOUND) ? new NBTObject(nbt.getCompoundTag(key)) : orElse;
 	}
 
 	public int[] getIntArray (final String key) {
@@ -259,7 +233,7 @@ public class NBTHelper {
 	}
 
 	public int[] getIntArray (final String key, final int[] orElse) {
-		return has(key, Tag.INT_ARRAY) ? nbt.getIntArray(key) : orElse;
+		return has(key, NBTType.INT_ARRAY) ? nbt.getIntArray(key) : orElse;
 	}
 
 
@@ -267,82 +241,82 @@ public class NBTHelper {
 	// Set
 	//
 
-	public NBTHelper setTag (final String key, final NBTBase value) {
+	public NBTObject setTag (final String key, final NBTBase value) {
 		nbt.setTag(key, value);
 		return this;
 	}
 
-	public NBTHelper setObject (final String key, final NBTHelper value) {
+	public NBTObject setObject (final String key, final NBTObject value) {
 		nbt.setTag(key, value.nbt);
 		return this;
 	}
 
-	public NBTHelper setByte (final String key, final byte value) {
+	public NBTObject setByte (final String key, final byte value) {
 		nbt.setByte(key, value);
 		return this;
 	}
 
-	public NBTHelper setByte (final String key, final int value) {
+	public NBTObject setByte (final String key, final int value) {
 		return setByte(key, (byte) value);
 	}
 
-	public NBTHelper setShort (final String key, final short value) {
+	public NBTObject setShort (final String key, final short value) {
 		nbt.setShort(key, value);
 		return this;
 	}
 
-	public NBTHelper setShort (final String key, final int value) {
+	public NBTObject setShort (final String key, final int value) {
 		return setShort(key, (short) value);
 	}
 
-	public NBTHelper setInteger (final String key, final int value) {
+	public NBTObject setInteger (final String key, final int value) {
 		nbt.setInteger(key, value);
 		return this;
 	}
 
-	public NBTHelper setLong (final String key, final long value) {
+	public NBTObject setLong (final String key, final long value) {
 		nbt.setLong(key, value);
 		return this;
 	}
 
-	public NBTHelper setLong (final String key, final int value) {
+	public NBTObject setLong (final String key, final int value) {
 		return setLong(key, (long) value);
 	}
 
-	public NBTHelper setFloat (final String key, final float value) {
+	public NBTObject setFloat (final String key, final float value) {
 		nbt.setFloat(key, value);
 		return this;
 	}
 
-	public NBTHelper setFloat (final String key, final int value) {
+	public NBTObject setFloat (final String key, final int value) {
 		return setFloat(key, (float) value);
 	}
 
-	public NBTHelper setDouble (final String key, final double value) {
+	public NBTObject setDouble (final String key, final double value) {
 		nbt.setDouble(key, value);
 		return this;
 	}
 
-	public NBTHelper setDouble (final String key, final int value) {
+	public NBTObject setDouble (final String key, final int value) {
 		return setDouble(key, (double) value);
 	}
 
-	public NBTHelper setString (final String key, final String value) {
+	public NBTObject setString (final String key, final String value) {
 		nbt.setString(key, value);
 		return this;
 	}
 
-	public NBTHelper setByteArray (final String key, final byte[] value) {
+	public NBTObject setByteArray (final String key, final byte[] value) {
 		nbt.setByteArray(key, value);
 		return this;
 	}
 
-	public NBTHelper setIntArray (final String key, final int[] value) {
+	public NBTObject setIntArray (final String key, final int[] value) {
 		nbt.setIntArray(key, value);
 		return this;
 	}
 
-	public NBTHelper setStringArray (final String key, final String[] value) {
+	public NBTObject setStringArray (final String key, final String[] value) {
 		final NBTTagList list = new NBTTagList();
 		for (final String s : value)
 			list.appendTag(new NBTTagString(s));
@@ -351,7 +325,7 @@ public class NBTHelper {
 		return this;
 	}
 
-	public NBTHelper setBoolean (final String key, final boolean value) {
+	public NBTObject setBoolean (final String key, final boolean value) {
 		setByte(key, (byte) (value ? 1 : 0));
 		return this;
 	}
@@ -361,65 +335,65 @@ public class NBTHelper {
 	// Remove
 	//
 
-	public NBTHelper remove (final String key) {
+	public NBTObject remove (final String key) {
 		nbt.removeTag(key);
 		return this;
 	}
 
-	public NBTHelper remove (final String key, final Tag type) {
+	public NBTObject remove (final String key, final NBTType type) {
 		if (has(key, type))
 			nbt.removeTag(key);
 		return this;
 	}
 
-	public NBTHelper removeByte (final String key) {
-		return remove(key, Tag.BYTE);
+	public NBTObject removeByte (final String key) {
+		return remove(key, NBTType.BYTE);
 	}
 
-	public NBTHelper removeShort (final String key) {
-		return remove(key, Tag.SHORT);
+	public NBTObject removeShort (final String key) {
+		return remove(key, NBTType.SHORT);
 	}
 
-	public NBTHelper removeInteger (final String key) {
-		return remove(key, Tag.INT);
+	public NBTObject removeInteger (final String key) {
+		return remove(key, NBTType.INT);
 	}
 
-	public NBTHelper removeLong (final String key) {
-		return remove(key, Tag.LONG);
+	public NBTObject removeLong (final String key) {
+		return remove(key, NBTType.LONG);
 	}
 
-	public NBTHelper removeFloat (final String key) {
-		return remove(key, Tag.FLOAT);
+	public NBTObject removeFloat (final String key) {
+		return remove(key, NBTType.FLOAT);
 	}
 
-	public NBTHelper removeDouble (final String key) {
-		return remove(key, Tag.DOUBLE);
+	public NBTObject removeDouble (final String key) {
+		return remove(key, NBTType.DOUBLE);
 	}
 
-	public NBTHelper removeByteArray (final String key) {
-		return remove(key, Tag.BYTE_ARRAY);
+	public NBTObject removeByteArray (final String key) {
+		return remove(key, NBTType.BYTE_ARRAY);
 	}
 
-	public NBTHelper removeString (final String key) {
-		return remove(key, Tag.STRING);
+	public NBTObject removeString (final String key) {
+		return remove(key, NBTType.STRING);
 	}
 
-	public NBTHelper removeList (final String key) {
-		return remove(key, Tag.LIST);
+	public NBTObject removeList (final String key) {
+		return remove(key, NBTType.LIST);
 	}
 
-	public NBTHelper removeList (final String key, final Tag type) {
-		if (has(key, Tag.LIST) && getList(key).getTagType() == type.ordinal())
+	public NBTObject removeList (final String key, final NBTType type) {
+		if (has(key, NBTType.LIST) && getList(key).is(type))
 			remove(key);
 		return this;
 	}
 
-	public NBTHelper removeObject (final String key) {
-		return remove(key, Tag.COMPOUND);
+	public NBTObject removeObject (final String key) {
+		return remove(key, NBTType.COMPOUND);
 	}
 
-	public NBTHelper removeIntArray (final String key) {
-		return remove(key, Tag.INT_ARRAY);
+	public NBTObject removeIntArray (final String key) {
+		return remove(key, NBTType.INT_ARRAY);
 	}
 
 
@@ -428,7 +402,7 @@ public class NBTHelper {
 	//
 
 	public byte computeByte (final String key, final Function<String, Byte> computer) {
-		if (has(key, Tag.BYTE))
+		if (has(key, NBTType.BYTE))
 			return getByte(key);
 
 		final byte result = computer.apply(key);
@@ -437,7 +411,7 @@ public class NBTHelper {
 	}
 
 	public short computeShort (final String key, final Function<String, Short> computer) {
-		if (has(key, Tag.SHORT))
+		if (has(key, NBTType.SHORT))
 			return getShort(key);
 
 		final short result = computer.apply(key);
@@ -446,7 +420,7 @@ public class NBTHelper {
 	}
 
 	public int computeINT (final String key, final Function<String, Integer> computer) {
-		if (has(key, Tag.INT))
+		if (has(key, NBTType.INT))
 			return getInteger(key);
 
 		final int result = computer.apply(key);
@@ -455,7 +429,7 @@ public class NBTHelper {
 	}
 
 	public long computeLong (final String key, final Function<String, Long> computer) {
-		if (has(key, Tag.LONG))
+		if (has(key, NBTType.LONG))
 			return getLong(key);
 
 		final long result = computer.apply(key);
@@ -464,7 +438,7 @@ public class NBTHelper {
 	}
 
 	public float computeFloat (final String key, final Function<String, Float> computer) {
-		if (has(key, Tag.FLOAT))
+		if (has(key, NBTType.FLOAT))
 			return getFloat(key);
 
 		final float result = computer.apply(key);
@@ -473,7 +447,7 @@ public class NBTHelper {
 	}
 
 	public double computeDouble (final String key, final Function<String, Double> computer) {
-		if (has(key, Tag.DOUBLE))
+		if (has(key, NBTType.DOUBLE))
 			return getDouble(key);
 
 		final double result = computer.apply(key);
@@ -482,7 +456,7 @@ public class NBTHelper {
 	}
 
 	public byte[] computeByteArray (final String key, final Function<String, Byte[]> computer) {
-		if (has(key, Tag.BYTE_ARRAY))
+		if (has(key, NBTType.BYTE_ARRAY))
 			return getByteArray(key);
 
 		final byte[] result = ArrayUtils.toPrimitive(computer.apply(key));
@@ -491,7 +465,7 @@ public class NBTHelper {
 	}
 
 	public String computeString (final String key, final Function<String, String> computer) {
-		if (has(key, Tag.STRING))
+		if (has(key, NBTType.STRING))
 			return getString(key);
 
 		final String result = computer.apply(key);
@@ -500,9 +474,9 @@ public class NBTHelper {
 	}
 
 	public String[] computeStringArray (final String key, final Function<String, String[]> computer) {
-		if (hasList(key, Tag.STRING))
-			return StreamSupport.stream(getList(key).spliterator(), false)
-				.map(str -> ((NBTTagString) str).getString())
+		if (hasList(key, NBTType.STRING))
+			return this.<NBTPrimitive<String>>getList(key)
+				.streamPrimitives()
 				.toArray(String[]::new);
 
 		final String[] result = computer.apply(key);
@@ -510,26 +484,26 @@ public class NBTHelper {
 		return result;
 	}
 
-	public NBTTagList computeList (final String key, final Function<String, NBTTagList> computer) {
-		if (has(key, Tag.LIST))
-			return getList(key);
+	public <T extends NBTHelper> NBTList<T> computeList (final String key, final Function<String, NBTList<T>> computer) {
+		if (has(key, NBTType.LIST))
+			return this.<T>getList(key);
 
-		final NBTTagList result = computer.apply(key);
-		setTag(key, result);
+		final NBTList<T> result = computer.apply(key);
+		setTag(key, result.nbt);
 		return result;
 	}
 
-	public NBTHelper computeObject (final String key, final Function<String, NBTHelper> computer) {
-		if (has(key, Tag.COMPOUND))
+	public NBTObject computeObject (final String key, final Function<String, NBTObject> computer) {
+		if (has(key, NBTType.COMPOUND))
 			return getObject(key);
 
-		final NBTHelper result = computer.apply(key);
+		final NBTObject result = computer.apply(key);
 		setObject(key, result);
 		return result;
 	}
 
 	public int[] computeIntArray (final String key, final Function<String, Integer[]> computer) {
-		if (has(key, Tag.INT_ARRAY))
+		if (has(key, NBTType.INT_ARRAY))
 			return getIntArray(key);
 
 		final int[] result = ArrayUtils.toPrimitive(computer.apply(key));
@@ -543,12 +517,12 @@ public class NBTHelper {
 	// Add all
 	//
 
-	public NBTHelper addAll (final NBTTagCompound nbt) {
+	public NBTObject addAll (final NBTTagCompound nbt) {
 		if (nbt == null)
 			return this;
 
 		for (final String key : nbt.getKeySet()) {
-			final Tag tagType = Tag.values()[nbt.getTagId(key)];
+			final NBTType tagType = NBTType.get(nbt.getTagId(key));
 
 			switch (tagType) {
 				case BYTE:
@@ -590,7 +564,7 @@ public class NBTHelper {
 		return this;
 	}
 
-	public NBTHelper addAll (final NBTHelper builder) {
+	public NBTObject addAll (final NBTObject builder) {
 		if (builder == null) return this;
 		return addAll(builder.nbt);
 	}

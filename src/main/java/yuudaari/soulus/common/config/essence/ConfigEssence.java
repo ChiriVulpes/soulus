@@ -1,9 +1,9 @@
 package yuudaari.soulus.common.config.essence;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import javax.annotation.Nullable;
 import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.common.util.serializer.DefaultMapSerializer;
@@ -23,20 +23,27 @@ public class ConfigEssence {
 	@Serialized public int soulbookQuantity = 16;
 	@Serialized public Range soulbookFillXp = new Range(3, 5);
 	@Serialized(DoubleMapSerializer.class) @NullableField public Map<String, Double> spawns;
+	@Serialized(DoubleMapSerializer.class) @NullableField public Map<String, Double> spawnsMalice;
 	@Serialized(LootMapSerializer.class) @NullableField public Map<String, ConfigCreatureLoot> loot;
 
 
 	public ConfigEssence () {
 	}
 
-	public ConfigEssence (String essence, @Nullable ConfigCreatureBone bones) {
+	public ConfigEssence (final String essence, final @Nullable ConfigCreatureBone bones) {
 		this.essence = essence;
 		this.bones = bones;
 	}
 
-	public ConfigEssence addSpawnChance (String entity, double chance) {
+	public ConfigEssence addSpawnChance (final String entity, final double chance) {
 		if (spawns == null) spawns = new HashMap<>();
 		spawns.put(entity, chance);
+		return this;
+	}
+
+	public ConfigEssence addSpawnChanceMalice (final String entity, final double chance) {
+		if (spawnsMalice == null) spawnsMalice = new HashMap<>();
+		spawnsMalice.put(entity, chance);
 		return this;
 	}
 
@@ -62,10 +69,19 @@ public class ConfigEssence {
 		return this;
 	}
 
-	public List<String> getSpawnableCreatures () {
-		final List<String> spawnableCreatures = this.spawns == null ? new ArrayList<>() : new ArrayList<>(this.spawns.keySet());
-		if (this.spawns == null || !this.spawns.containsKey(this.essence))
+	public Set<String> getSpawnableCreatures () {
+		final Set<String> spawnableCreatures = new HashSet<>();
+
+		if (this.spawns != null)
+			spawnableCreatures.addAll(this.spawns.keySet());
+
+		if (this.spawnsMalice != null)
+			spawnableCreatures.addAll(this.spawnsMalice.keySet());
+
+		if (this.spawns == null && this.spawnsMalice == null)
+			// if spawns & malice spawns are both null, this summoner can only spawn the named essence type
 			spawnableCreatures.add(this.essence);
+
 		return spawnableCreatures;
 	}
 

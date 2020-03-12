@@ -5,9 +5,6 @@ import java.util.Map;
 import java.util.Optional;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.ResourceLocation;
@@ -34,6 +31,8 @@ import yuudaari.soulus.common.config.world.summoner_replacement.ConfigSummonerRe
 import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.util.GeneratorName;
 import yuudaari.soulus.common.util.Logger;
+import yuudaari.soulus.common.util.nbt.NBTHelper;
+import yuudaari.soulus.common.util.nbt.NBTObject;
 
 @Mod.EventBusSubscriber(modid = Soulus.MODID)
 @ConfigInjected(Soulus.MODID)
@@ -88,7 +87,7 @@ public class SummonerReplacer {
 					}
 				}
 
-				final String spawnerEntityType = getTheIdFromAStupidMobSpawnerTileEntity(te);
+				final String spawnerEntityType = getSpawnerMob(te);
 
 				// each essence type can spawn multiple creatures, so we need to search for one that can spawn this creature
 				final Optional<ConfigEssence> essenceConfig = CONFIG_ESSENCES.essences.stream()
@@ -137,27 +136,22 @@ public class SummonerReplacer {
 				}
 
 				SummonerTileEntity ste = (SummonerTileEntity) nte;
-				ste.setEssenceType(entityType);
 				ste.upgrades.put(Upgrade.CRYSTAL_DARK, 1);
+				ste.setEssenceType(entityType);
+				ste.onUpdateUpgrades(false);
 			}
 		}
 	}
 
-	public static String getTheIdFromAStupidMobSpawnerTileEntity (TileEntity te) {
+	public static String getSpawnerMob (final TileEntity te) {
 		if (!(te instanceof TileEntityMobSpawner))
 			return null;
 
-		TileEntityMobSpawner mste = (TileEntityMobSpawner) te;
-		NBTTagCompound nbt = new NBTTagCompound();
-		mste.writeToNBT(nbt);
-
-		NBTTagList taglist = nbt.getTagList("SpawnPotentials", 10);
-		NBTBase firstSpawnPotential = taglist.get(0);
-		if (!(firstSpawnPotential instanceof NBTTagCompound))
-			return null;
-
-		NBTTagCompound firstSpawnPotentialTheRealOne = (NBTTagCompound) firstSpawnPotential;
-		NBTTagCompound theActualEntityOhMyGod = firstSpawnPotentialTheRealOne.getCompoundTag("Entity");
-		return theActualEntityOhMyGod.getString("id");
+		return NBTHelper.get(te)
+			.<NBTObject>getList("SpawnPotentials")
+			.stream()
+			.findFirst()
+			.map(spawnPotential -> spawnPotential.getObject("Entity").getString("id"))
+			.orElse(null);
 	}
 }
