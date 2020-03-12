@@ -37,6 +37,7 @@ import yuudaari.soulus.common.util.StructureMap.BlockValidator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @ConfigInjected(Soulus.MODID)
 public class Composer extends UpgradeableBlock<ComposerTileEntity> {
@@ -391,7 +392,8 @@ public class Composer extends UpgradeableBlock<ComposerTileEntity> {
 				.get((int) Math.floor(te.getActivationAmount())));
 
 			if (te.hasValidRecipe() && te.remainingMobs.size() > 0 && !player.isSneaking())
-				tooltip.add(Translation.localize("waila." + Soulus.MODID + ":composer.required_creatures_count", te.remainingMobs.size()));
+				tooltip.add(Translation.localize("waila." + Soulus.MODID + ":composer.required_creatures_count", //
+					te.remainingMobs.values().stream().collect(Collectors.summingInt(Integer::intValue))));
 
 			// currentTooltip.add("Poof chance: " + te.getPoofChance()); // Only render for debugging
 		} else {
