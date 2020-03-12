@@ -143,7 +143,7 @@ public class Summoner extends UpgradeableBlock<SummonerTileEntity> {
 		public ItemStack getItemStackForTileEntity (UpgradeableBlockTileEntity te, int quantity) {
 			SummonerTileEntity ste = (SummonerTileEntity) te;
 
-			if (this == Upgrade.CRYSTAL_DARK && ste.hasMalice())
+			if (this == Upgrade.CRYSTAL_DARK && ste.hasMalice() && !CONFIG.midnightJewelReturnWithMalice)
 				return null;
 
 			return IUpgrade.super.getItemStackForTileEntity(te, quantity);
