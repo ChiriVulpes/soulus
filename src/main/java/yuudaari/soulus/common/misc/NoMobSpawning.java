@@ -23,6 +23,7 @@ import yuudaari.soulus.common.config.creature.ConfigCreature;
 import yuudaari.soulus.common.config.creature.ConfigCreatureBiome;
 import yuudaari.soulus.common.config.creature.ConfigCreatureDimension;
 import yuudaari.soulus.common.config.creature.ConfigCreatures;
+import yuudaari.soulus.common.config.misc.ConfigDespawn;
 import yuudaari.soulus.common.config.misc.ConfigMobSpawnItems;
 
 @Mod.EventBusSubscriber(modid = Soulus.MODID)
@@ -31,6 +32,7 @@ public class NoMobSpawning {
 
 	@Inject public static ConfigCreatures CONFIG;
 	@Inject public static ConfigMobSpawnItems CONFIG_SPAWN_ITEMS;
+	@Inject public static ConfigDespawn CONFIG_DESPAWN;
 
 	@SubscribeEvent
 	public static void onMobJoinWorld (EntityJoinWorldEvent event) {
@@ -49,6 +51,8 @@ public class NoMobSpawning {
 		// we check if the creature was spawned by an egg or morb or whatever
 		if (wasSpawnedFromItem(event)) {
 			SpawnType.SPAWNED_FROM_EGG.apply(living);
+			if (!CONFIG_DESPAWN.despawnMobsFromEggs)
+				living.enablePersistence();
 			return;
 		}
 

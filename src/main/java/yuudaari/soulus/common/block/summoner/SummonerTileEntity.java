@@ -39,6 +39,7 @@ import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigSummoner;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
+import yuudaari.soulus.common.config.misc.ConfigDespawn;
 import yuudaari.soulus.common.item.EssencePerfect.EssenceAlignment;
 import yuudaari.soulus.common.misc.SpawnType;
 import yuudaari.soulus.common.registration.BlockRegistry;
@@ -51,6 +52,7 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 
 	@Inject public static ConfigSummoner CONFIG;
 	@Inject public static ConfigEssences CONFIG_ESSENCES;
+	@Inject public static ConfigDespawn CONFIG_DESPAWN;
 
 	@Override
 	public Summoner getBlock () {
@@ -210,7 +212,6 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	public NBTTagCompound getEntityNbt () {
 		NBTTagCompound result = new NBTTagCompound();
 		result.setString("id", getSpawnMob());
-		result.setByte("PersistenceRequired", (byte) 1);
 		return result;
 	}
 
@@ -482,6 +483,8 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 				// custom data so we know the mob was spawned by souls
 				final SpawnType spawnType = hasMalice() ? SpawnType.SUMMONED_MALICE : SpawnType.SUMMONED;
 				spawnType.apply(entity);
+				if (!CONFIG_DESPAWN.despawnMobsSummoned)
+					entity.enablePersistence();
 
 				entity.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, world.rand.nextFloat() * 360.0F, 0.0F);
 
