@@ -28,6 +28,6 @@ public class MobBreeding {
 			return;
 		}
 
-		SpawnType.SPAWNED.apply(entity);
+		SpawnType.SPAWNED.apply(entity, true);
 	}
 }

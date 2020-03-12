@@ -46,6 +46,7 @@ import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.ModPotionEffect;
 import yuudaari.soulus.common.util.Range;
+import yuudaari.soulus.common.util.nbt.NBTObject;
 
 @ConfigInjected(Soulus.MODID)
 public class SummonerTileEntity extends UpgradeableBlockTileEntity implements ITickable {
@@ -210,9 +211,11 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 	}
 
 	public NBTTagCompound getEntityNbt () {
-		NBTTagCompound result = new NBTTagCompound();
+		NBTObject result = new NBTObject();
 		result.setString("id", getSpawnMob());
-		return result;
+		final SpawnType spawnType = hasMalice() ? SpawnType.SUMMONED_MALICE : SpawnType.SUMMONED;
+		spawnType.apply(result);
+		return result.nbt;
 	}
 
 	private String getSpawnMob () {
@@ -481,8 +484,6 @@ public class SummonerTileEntity extends UpgradeableBlockTileEntity implements IT
 				}
 
 				// custom data so we know the mob was spawned by souls
-				final SpawnType spawnType = hasMalice() ? SpawnType.SUMMONED_MALICE : SpawnType.SUMMONED;
-				spawnType.apply(entity);
 				if (!CONFIG_DESPAWN.despawnMobsSummoned)
 					entity.enablePersistence();
 

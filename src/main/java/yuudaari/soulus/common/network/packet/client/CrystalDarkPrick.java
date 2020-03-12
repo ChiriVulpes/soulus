@@ -1,35 +1,25 @@
 package yuudaari.soulus.common.network.packet.client;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import yuudaari.soulus.common.item.CrystalDark;
 
-public class CrystalDarkPrick implements IMessage {
+public class CrystalDarkPrick extends EntityMessage {
 
-	public CrystalDarkPrick () {}
-
-	private int entityId;
-
-	public CrystalDarkPrick (EntityLivingBase entity) {
-		entityId = entity.getEntityId();
+	public CrystalDarkPrick (final EntityLivingBase entity) {
+		super(entity);
 	}
 
-	@SideOnly(Side.CLIENT)
-	public EntityLivingBase getEntity () {
-		return (EntityLivingBase) Minecraft.getMinecraft().world.getEntityByID(entityId);
-	}
+	public static class Handler extends EntityMessage.Handler<CrystalDarkPrick> {
 
-	@Override
-	public void toBytes (ByteBuf buf) {
-		buf.writeInt(entityId);
-	}
-
-	@Override
-	public void fromBytes (ByteBuf buf) {
-		entityId = buf.readInt();
+		@Override
+		public IMessage onMessage (final CrystalDarkPrick message, final MessageContext ctx) {
+			final EntityLivingBase entity = message.getEntity();
+			if (entity != null)
+				CrystalDark.particles(entity);
+			return null;
+		}
 	}
 
 }

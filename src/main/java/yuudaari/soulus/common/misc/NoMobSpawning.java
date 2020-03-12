@@ -1,5 +1,7 @@
 package yuudaari.soulus.common.misc;
 
+import java.util.HashMap;
+import java.util.Map;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -34,15 +36,32 @@ public class NoMobSpawning {
 	@Inject public static ConfigMobSpawnItems CONFIG_SPAWN_ITEMS;
 	@Inject public static ConfigDespawn CONFIG_DESPAWN;
 
+	private static final Map<Integer, SpawnType> entitiesToSetSpawnTypeOf = new HashMap<>();
+
+	// note: potential memory leak, but probably safe?
+	public static void registerSpawnType (final int entityId, final SpawnType spawnType) {
+		entitiesToSetSpawnTypeOf.put(entityId, spawnType);
+	}
+
 	@SubscribeEvent
 	public static void onMobJoinWorld (EntityJoinWorldEvent event) {
 
 		// first we check if we should even try to cancel the spawn
 		final Entity entity = event.getEntity();
-		if (entity == null || !(entity instanceof EntityLiving) || event.getWorld().isRemote)
+		if (entity == null || !(entity instanceof EntityLiving))
 			return;
 
 		final EntityLiving living = (EntityLiving) entity;
+
+		// if we're a client world, and we've recieved a packet to set the spawn type of this creature, we set it
+		if (event.getWorld().isRemote) {
+			final SpawnType spawnType = entitiesToSetSpawnTypeOf.get(living.getEntityId());
+			if (spawnType != null) {
+				spawnType.apply(living, false);
+				entitiesToSetSpawnTypeOf.remove(living.getEntityId());
+			}
+			return;
+		}
 
 		// then we check if the creature has already been whitelisted
 		if (SpawnType.get(living) != null)
@@ -50,7 +69,7 @@ public class NoMobSpawning {
 
 		// we check if the creature was spawned by an egg or morb or whatever
 		if (wasSpawnedFromItem(event)) {
-			SpawnType.SPAWNED_FROM_EGG.apply(living);
+			SpawnType.SPAWNED_FROM_EGG.apply(living, true);
 			if (!CONFIG_DESPAWN.despawnMobsFromEggs)
 				living.enablePersistence();
 			return;
@@ -58,7 +77,7 @@ public class NoMobSpawning {
 
 		// we explicitly whitelist slimes that have persistence as it's likely they were from a summoned slime
 		if (living.isNoDespawnRequired() && living instanceof EntitySlime) {
-			SpawnType.SPAWNED.apply(living);
+			SpawnType.SPAWNED.apply(living, true);
 			return;
 		}
 
@@ -69,7 +88,7 @@ public class NoMobSpawning {
 		if (dimensionConfig == null) {
 			dimensionConfig = CONFIG.dimensionConfigs.get("*");
 			if (dimensionConfig == null) {
-				SpawnType.SPAWNED.apply(living);
+				SpawnType.SPAWNED.apply(living, true);
 				return;
 			}
 		}
@@ -84,7 +103,7 @@ public class NoMobSpawning {
 			if (biomeConfig == null) {
 				biomeConfig = dimensionConfig.biomeConfigs.get("*");
 				if (biomeConfig == null) {
-					SpawnType.SPAWNED.apply(living);
+					SpawnType.SPAWNED.apply(living, true);
 					return;
 				}
 			}
@@ -100,7 +119,7 @@ public class NoMobSpawning {
 			if (creatureConfig == null) {
 				creatureConfig = biomeConfig.creatureConfigs.get("*");
 				if (creatureConfig == null) {
-					SpawnType.SPAWNED.apply(living);
+					SpawnType.SPAWNED.apply(living, true);
 					return;
 				}
 			}
@@ -108,7 +127,7 @@ public class NoMobSpawning {
 
 		// if we have 100% spawn chance, don't attempt to cancel
 		if (creatureConfig.spawnChance == 1) {
-			SpawnType.SPAWNED.apply(living);
+			SpawnType.SPAWNED.apply(living, true);
 			return;
 		}
 

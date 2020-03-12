@@ -2,6 +2,9 @@ package yuudaari.soulus.common.misc;
 
 import java.util.Arrays;
 import net.minecraft.entity.EntityLivingBase;
+import yuudaari.soulus.common.network.SoulsPacketHandler;
+import yuudaari.soulus.common.network.packet.client.ApplySpawnType;
+import yuudaari.soulus.common.util.nbt.NBTObject;
 
 public enum SpawnType {
 
@@ -47,8 +50,15 @@ public enum SpawnType {
 		return name;
 	}
 
-	public void apply (final EntityLivingBase entity) {
+	public void apply (final NBTObject entityNBT) {
+		entityNBT.computeObject("ForgeData", key -> new NBTObject())
+			.setByte(SPAWN_TYPE_KEY, (byte) id);
+	}
+
+	public void apply (final EntityLivingBase entity, final boolean sync) {
 		entity.getEntityData().setByte(SPAWN_TYPE_KEY, (byte) id);
+		if (sync)
+			SoulsPacketHandler.INSTANCE.sendToAll(new ApplySpawnType(this, entity));
 	}
 
 	public boolean matches (final EntityLivingBase entity) {

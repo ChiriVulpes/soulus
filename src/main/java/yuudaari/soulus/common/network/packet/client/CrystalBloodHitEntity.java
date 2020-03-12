@@ -1,35 +1,25 @@
 package yuudaari.soulus.common.network.packet.client;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import yuudaari.soulus.common.item.CrystalBlood;
 
-public class CrystalBloodHitEntity implements IMessage {
+public class CrystalBloodHitEntity extends EntityMessage {
 
-	public CrystalBloodHitEntity () {}
-
-	private int entityId;
-
-	public CrystalBloodHitEntity (EntityLivingBase entity) {
-		entityId = entity.getEntityId();
+	public CrystalBloodHitEntity (final EntityLivingBase entity) {
+		super(entity);
 	}
 
-	@SideOnly(Side.CLIENT)
-	public EntityLivingBase getEntity () {
-		return (EntityLivingBase) Minecraft.getMinecraft().world.getEntityByID(entityId);
-	}
+	public static class Handler extends EntityMessage.Handler<CrystalBloodHitEntity> {
 
-	@Override
-	public void toBytes (ByteBuf buf) {
-		buf.writeInt(entityId);
-	}
-
-	@Override
-	public void fromBytes (ByteBuf buf) {
-		entityId = buf.readInt();
+		@Override
+		public IMessage onMessage (final CrystalBloodHitEntity message, final MessageContext ctx) {
+			final EntityLivingBase entity = message.getEntity();
+			if (entity != null)
+				CrystalBlood.bloodParticles(entity);
+			return null;
+		}
 	}
 
 }
