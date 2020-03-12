@@ -181,13 +181,22 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 
 		for (final EntityLivingBase entity : world.getEntitiesWithinAABB(EntityLivingBase.class, activationBox)) {
 
-			if (!CONFIG.consumeNamedCreatures && entity.hasCustomName())
+			if (!CONFIG.consume.named && entity.hasCustomName())
 				continue;
 
-			if (!CONFIG.consumeTamedCreatures && entity instanceof EntityTameable && ((EntityTameable) entity).isTamed())
+			if (!CONFIG.consume.tamed && entity instanceof EntityTameable && ((EntityTameable) entity).isTamed())
 				continue;
 
-			if (!CONFIG.consumeCreaturesSpawnedFromEgg && SpawnType.SPAWNED_FROM_EGG.matches(entity))
+			if (!CONFIG.consume.spawnedFromEgg && SpawnType.SPAWNED_FROM_EGG.matches(entity))
+				continue;
+
+			if (!CONFIG.consume.natural && SpawnType.SPAWNED.matches(entity))
+				continue;
+
+			if (!CONFIG.consume.malicious && SpawnType.SUMMONED_MALICE.matches(entity))
+				continue;
+
+			if (!CONFIG.consume.summoned && SpawnType.SUMMONED.matches(entity))
 				continue;
 
 			final boolean whitelistAll = mobWhitelist == null ? false : mobWhitelist.contains("*");
