@@ -287,13 +287,14 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		// Logger.info("time till craft " + timeTillCraft);
 
 		if (timeTillCraft <= 0) {
-			if (hasValidRecipe() && !world.isRemote) {
+			if (hasValidRecipe()) {
 				if (!processRequiredMobs()) {
 					timeTillCraft += 20;
 					return;
 				}
 
-				completeCraft();
+				if (!world.isRemote)
+					completeCraft();
 			}
 
 			resetTimer();
