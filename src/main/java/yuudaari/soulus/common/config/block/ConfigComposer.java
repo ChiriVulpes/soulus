@@ -34,6 +34,7 @@ public class ConfigComposer extends ConfigUpgradeableBlock<Composer> {
 	@Serialized public Range poofChance = new Range(0.005, 0.0005);
 	@Serialized public boolean consumeNamedCreatures = false;
 	@Serialized public boolean consumeTamedCreatures = true;
+	@Serialized public boolean consumeCreaturesSpawnedFromEgg = false;
 	@Serialized(CollectionSerializer.OfStrings.class) @NullableField public Set<String> whitelistedCreatures;
 	@Serialized(CollectionSerializer.OfStrings.class) @NullableField public Set<String> blacklistedCreatures;
 }

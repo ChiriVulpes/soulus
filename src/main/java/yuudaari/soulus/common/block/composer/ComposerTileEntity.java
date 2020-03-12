@@ -1,10 +1,12 @@
 package yuudaari.soulus.common.block.composer;
 
+import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.block.state.IBlockState;
@@ -40,16 +42,18 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import yuudaari.soulus.Soulus;
 import yuudaari.soulus.client.util.ParticleType;
-import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.advancement.Advancements;
 import yuudaari.soulus.common.block.composer.Composer.Upgrade;
 import yuudaari.soulus.common.block.composer.ComposerCell.CellState;
 import yuudaari.soulus.common.config.ConfigInjected;
 import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.block.ConfigComposer;
+import yuudaari.soulus.common.config.essence.ConfigEssences;
+import yuudaari.soulus.common.misc.SpawnType;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.client.MobPoof;
 import yuudaari.soulus.common.recipe.composer.IRecipeComposer;
+import yuudaari.soulus.common.registration.BlockRegistry;
 import yuudaari.soulus.common.util.Range;
 import yuudaari.soulus.common.util.StructureMap.BlockValidator;
 
@@ -69,6 +73,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	public final Map<String, Integer> remainingMobs = new HashMap<>();
 	public Set<String> mobWhitelist = null;
 	public Set<String> mobBlacklist = null;
+	private Map<String, String> spawnableCreaturesToEssenceTypeMap = null;
 
 	@Override
 	public Composer getBlock () {
@@ -114,6 +119,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 	//
 
 	@Inject public static ConfigComposer CONFIG;
+	@Inject public static ConfigEssences CONFIG_ESSENCES;
 
 	/////////////////////////////////////////
 	// Update
@@ -131,6 +137,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		lastTimeTillCraft = timeTillCraft;
 		remainingMobs.clear();
 		remainingMobs.putAll(this.mobsRequired);
+		spawnableCreaturesToEssenceTypeMap = null;
 
 		if (update)
 			blockUpdate();
@@ -180,12 +187,16 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 			if (!CONFIG.consumeTamedCreatures && entity instanceof EntityTameable && ((EntityTameable) entity).isTamed())
 				continue;
 
+			if (!CONFIG.consumeCreaturesSpawnedFromEgg && SpawnType.SPAWNED_FROM_EGG.matches(entity))
+				continue;
+
 			final boolean whitelistAll = mobWhitelist == null ? false : mobWhitelist.contains("*");
 			final boolean blacklistAll = mobBlacklist == null ? false : mobBlacklist.contains("*");
 
 			if (!(entity instanceof EntityPlayer) && entity.isEntityAlive()) {
 				final ResourceLocation entityType = EntityList.getKey(entity);
-				if (consumableEntities.containsKey(entityType.toString()))
+				final String essenceType = getEssenceType(entityType.toString());
+				if (consumableEntities.containsKey(essenceType))
 					continue;
 
 				final int whitelistLevel = (whitelistAll ? 1 : 0) + //
@@ -198,7 +209,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 				if (whitelistLevel < 0)
 					continue;
 
-				consumableEntities.put(entityType.toString(), entity);
+				consumableEntities.put(essenceType, entity);
 			}
 		}
 
@@ -214,15 +225,34 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 			.nextFloat() * 0.25F + 0.6F);
 
 		final String entityType = EntityList.getKey(entity).toString();
-		if (remainingMobs.containsKey(entityType)) {
-			final int count = remainingMobs.get(entityType) - 1;
+		final String essenceType = getEssenceType(entityType);
+		if (remainingMobs.containsKey(essenceType)) {
+			final int count = remainingMobs.get(essenceType) - 1;
 			if (count <= 0)
-				remainingMobs.remove(entityType);
+				remainingMobs.remove(essenceType);
 			else
-				remainingMobs.put(entityType, count);
+				remainingMobs.put(essenceType, count);
 
 			blockUpdate();
 		}
+	}
+
+	private String getEssenceType (final String entityType) {
+		if (spawnableCreaturesToEssenceTypeMap != null)
+			return spawnableCreaturesToEssenceTypeMap.getOrDefault(entityType, null);
+
+		if (remainingMobs.size() == 0)
+			return null;
+
+		spawnableCreaturesToEssenceTypeMap = remainingMobs.keySet()
+			.stream()
+			.flatMap(essence -> CONFIG_ESSENCES.get(essence)
+				.getSpawnableCreatures()
+				.stream()
+				.map(spawnableCreature -> new AbstractMap.SimpleEntry<>(spawnableCreature, essence)))
+			.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+		return getEssenceType(entityType);
 	}
 
 	private int timeTillNextMajorUpdate = 0;
@@ -248,15 +278,13 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		// Logger.info("time till craft " + timeTillCraft);
 
 		if (timeTillCraft <= 0) {
-			if (hasValidRecipe()) {
+			if (hasValidRecipe() && !world.isRemote) {
 				if (!processRequiredMobs()) {
 					timeTillCraft += 20;
 					return;
 				}
 
-				if (!world.isRemote) {
-					completeCraft();
-				}
+				completeCraft();
 			}
 
 			resetTimer();
@@ -558,6 +586,7 @@ public class ComposerTileEntity extends HasRenderItemTileEntity {
 		final NBTTagCompound mobsTag = compound.getCompoundTag("required_mobs");
 		mobsTag.getKeySet()
 			.forEach(key -> remainingMobs.put(key, mobsTag.getInteger(key)));
+		spawnableCreaturesToEssenceTypeMap = null;
 
 		if (compound.hasKey("recipe", 8)) {
 			final IRecipe recipe = ForgeRegistries.RECIPES.getValue(new ResourceLocation(compound.getString("recipe")));
