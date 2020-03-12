@@ -2,15 +2,24 @@ package yuudaari.soulus.common.registration;
 
 import java.util.List;
 import com.google.common.collect.Lists;
+import net.minecraft.entity.EntityList;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
-import yuudaari.soulus.common.compat.jei.JeiDescriptionRegistry;
+import yuudaari.soulus.Soulus;
+import yuudaari.soulus.common.config.ConfigInjected;
+import yuudaari.soulus.common.config.ConfigInjected.Inject;
+import yuudaari.soulus.common.config.essence.ConfigEssences;
 import yuudaari.soulus.common.item.Barket;
 import yuudaari.soulus.common.item.Bone;
 import yuudaari.soulus.common.item.BoneChunk;
@@ -38,9 +47,12 @@ import yuudaari.soulus.common.item.SoulCatalyst;
 import yuudaari.soulus.common.item.Soulbook;
 import yuudaari.soulus.common.registration.Registration.Item;
 
+@Mod.EventBusSubscriber(modid = Soulus.MODID)
+@ConfigInjected(Soulus.MODID)
 public class ItemRegistry {
 
-	// @formatter:off
+	@Inject public static ConfigEssences CONFIG_ESSENCES;
+
 	public static Barket BARKET = new Barket();
 	public static CrystalBlood CRYSTAL_BLOOD = new CrystalBlood();
 	public static Item ASH = new Item("ash").setHasDescription().setRarity(EnumRarity.UNCOMMON);
@@ -98,7 +110,6 @@ public class ItemRegistry {
 	public static OrbMurky ORB_MURKY = new OrbMurky();
 	public static SoulCatalyst SOUL_CATALYST = new SoulCatalyst();
 	public static DustMidnight DUST_MIDNIGHT = new DustMidnight();
-	// @formatter:on
 
 	public static List<IItemRegistration> items = Lists.newArrayList(new IItemRegistration[] {
 
@@ -175,32 +186,30 @@ public class ItemRegistry {
 		SOULBOOK,
 	});
 
-	public static void registerItems (IForgeRegistry<net.minecraft.item.Item> registry) {
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public static void registerModels (ModelRegistryEvent event) {
+		for (IItemRegistration item : items)
+			item.registerModels();
+	}
+
+	@SubscribeEvent
+	public static void registerRecipes (final RegistryEvent.Register<IRecipe> event) {
+		for (IItemRegistration item : items)
+			item.onRegisterRecipes(event.getRegistry());
+	}
+
+	@SubscribeEvent
+	public static void registerItems (final RegistryEvent.Register<net.minecraft.item.Item> event) {
+		final IForgeRegistry<net.minecraft.item.Item> registry = event.getRegistry();
+
 		for (IItemRegistration item : items) {
 			registry.register(item.getItem());
 			item.getOreDicts()
 				.forEach(dict -> OreDictionary.registerOre(dict.getKey(), dict.getValue()));
 		}
 
+		// add bonemeal ore dictionary
 		OreDictionary.registerOre(Bonemeal.ORE_DICT, new ItemStack(Items.DYE, 1, 15));
-	}
-
-	@SideOnly(Side.CLIENT)
-	public static void registerModels () {
-		for (IItemRegistration item : items) {
-			item.registerModels();
-		}
-	}
-
-	public static void registerRecipes (IForgeRegistry<IRecipe> registry) {
-		for (IItemRegistration item : items) {
-			item.onRegisterRecipes(registry);
-		}
-	}
-
-	public static void registerDescriptions (JeiDescriptionRegistry registry) {
-		for (IItemRegistration item : items) {
-			item.onRegisterDescription(registry);
-		}
 	}
 }

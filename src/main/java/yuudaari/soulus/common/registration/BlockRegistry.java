@@ -10,11 +10,16 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.registries.IForgeRegistry;
+import yuudaari.soulus.Soulus;
 import yuudaari.soulus.common.block.AshBlock;
 import yuudaari.soulus.common.block.BarsEndersteel;
 import yuudaari.soulus.common.block.BlockEndersteel;
@@ -36,10 +41,10 @@ import yuudaari.soulus.common.block.soul_inquirer.SoulInquirer;
 import yuudaari.soulus.common.block.soul_totem.SoulTotem;
 import yuudaari.soulus.common.block.summoner.Summoner;
 import yuudaari.soulus.common.block.upgradeable_block.UpgradeableBlock;
-import yuudaari.soulus.common.compat.jei.JeiDescriptionRegistry;
 import yuudaari.soulus.common.registration.IBlockRegistration.Tool;
 import yuudaari.soulus.common.util.Material;
 
+@Mod.EventBusSubscriber(modid = Soulus.MODID)
 public class BlockRegistry {
 
 	public static final AshBlock ASH = new AshBlock();
@@ -132,42 +137,41 @@ public class BlockRegistry {
 	// Registration
 	//
 
-	public static void registerBlocks (IForgeRegistry<Block> registry) {
+	@SubscribeEvent
+	public static void registerBlocks (final RegistryEvent.Register<Block> event) {
 		for (IBlockRegistration<?> block : blocks)
-			registry.register((Block) block);
+			event.getRegistry().register((Block) block);
 	}
 
-	public static void registerItems (IForgeRegistry<Item> registry) {
+	@SubscribeEvent(priority = EventPriority.LOW) // happen after non-block item registration
+	public static void registerItems (final RegistryEvent.Register<Item> event) {
 		for (IBlockRegistration<?> block : blocks) {
 			if (block.hasItem()) {
 				for (ItemBlock item : block.getItemBlocks()) {
-					registry.register(item);
+					event.getRegistry().register(item);
 					block.getOreDicts()
 						.forEach(dict -> OreDictionary.registerOre(dict.getKey(), dict.getValue()));
 				}
 			}
 
+			// why is this in item registration?
 			Class<? extends TileEntity> te = block.getTileEntityClass();
-			if (te != null) {
+			if (te != null)
 				GameRegistry.registerTileEntity(te, block.getRegistryName());
-			}
 		}
 	}
 
+	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
-	public static void registerModels () {
+	public static void registerModels (ModelRegistryEvent event) {
 		for (IBlockRegistration<?> block : blocks)
 			if (block.hasItem())
 				block.registerItemModel();
 	}
 
-	public static void registerRecipes (IForgeRegistry<IRecipe> registry) {
+	@SubscribeEvent
+	public static void registerRecipes (final RegistryEvent.Register<IRecipe> event) {
 		for (IBlockRegistration<?> block : blocks)
-			block.onRegisterRecipes(registry);
-	}
-
-	public static void registerDescriptions (JeiDescriptionRegistry registry) {
-		for (IBlockRegistration<?> block : blocks)
-			block.onRegisterDescription(registry);
+			block.onRegisterRecipes(event.getRegistry());
 	}
 }

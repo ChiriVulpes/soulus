@@ -3,18 +3,13 @@ package yuudaari.soulus;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
@@ -30,7 +25,6 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.registries.IForgeRegistry;
 import yuudaari.soulus.client.ModRenderers;
 import yuudaari.soulus.common.ModGenerators;
 import yuudaari.soulus.common.advancement.Advancements;
@@ -43,8 +37,6 @@ import yuudaari.soulus.common.misc.DispenserBehaviorUpgrade;
 import yuudaari.soulus.common.misc.MidnightDraught;
 import yuudaari.soulus.common.network.SoulsPacketHandler;
 import yuudaari.soulus.common.network.packet.client.SendConfig;
-import yuudaari.soulus.common.registration.BlockRegistry;
-import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.util.DebugHelper;
 import yuudaari.soulus.common.util.Logger;
 import yuudaari.soulus.common.util.Regex;
@@ -224,34 +216,6 @@ public class Soulus {
 
 		BoneChunks.registerEssenceDrops(event);
 		DispenserBehaviorUpgrade.register();
-	}
-
-	@SubscribeEvent
-	public static void registerBlocks (RegistryEvent.Register<Block> event) {
-		BlockRegistry.registerBlocks(event.getRegistry());
-	}
-
-	@SubscribeEvent
-	public static void registerItems (RegistryEvent.Register<Item> event) {
-		IForgeRegistry<Item> registry = event.getRegistry();
-
-		ItemRegistry.registerItems(registry);
-		BlockRegistry.registerItems(registry);
-	}
-
-	@SubscribeEvent
-	@SideOnly(Side.CLIENT)
-	public static void registerModels (ModelRegistryEvent event) {
-		ItemRegistry.registerModels();
-		BlockRegistry.registerModels();
-	}
-
-	@SubscribeEvent
-	public static void registerRecipes (RegistryEvent.Register<IRecipe> event) {
-		IForgeRegistry<IRecipe> registry = event.getRegistry();
-
-		ItemRegistry.registerRecipes(registry);
-		BlockRegistry.registerRecipes(registry);
 	}
 
 	@EventHandler

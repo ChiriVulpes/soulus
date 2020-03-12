@@ -29,6 +29,8 @@ import yuudaari.soulus.common.recipe.RecipeShapeless;
 import yuudaari.soulus.common.recipe.composer.RecipeComposerShaped;
 import yuudaari.soulus.common.recipe.composer.RecipeComposerShapeless;
 import yuudaari.soulus.common.registration.BlockRegistry;
+import yuudaari.soulus.common.registration.IBlockRegistration;
+import yuudaari.soulus.common.registration.IItemRegistration;
 import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.util.EssenceType;
 
@@ -98,15 +100,17 @@ public class Jei implements IModPlugin {
 	/**
 	 * Registers the descriptions for the mod items.
 	 */
-	private void registerDescriptions (IModRegistry registry) {
-		JeiDescriptionRegistry descriptionRegistry = new JeiDescriptionRegistry();
+	private void registerDescriptions (final IModRegistry registry) {
+		final JeiDescriptionRegistry descriptionRegistry = new JeiDescriptionRegistry();
 
-		ItemRegistry.registerDescriptions(descriptionRegistry);
-		BlockRegistry.registerDescriptions(descriptionRegistry);
+		for (final IItemRegistration item : ItemRegistry.items)
+			item.onRegisterDescription(descriptionRegistry);
 
-		for (Tuple2<List<ItemStack>, String> description : descriptionRegistry.ingredients) {
+		for (final IBlockRegistration<?> block : BlockRegistry.blocks)
+			block.onRegisterDescription(descriptionRegistry);
+
+		for (final Tuple2<List<ItemStack>, String> description : descriptionRegistry.ingredients)
 			registry.addIngredientInfo(description._1(), ItemStack.class, "jei.description." + description._2());
-		}
 	}
 
 }
