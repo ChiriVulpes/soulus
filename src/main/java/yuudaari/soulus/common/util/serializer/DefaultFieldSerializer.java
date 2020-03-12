@@ -1,6 +1,11 @@
 package yuudaari.soulus.common.util.serializer;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -30,6 +35,8 @@ public class DefaultFieldSerializer extends FieldSerializer<Object> {
 			// there's a serializer for this class, so try to use it
 			try {
 				serializeClass(serializer, object, (JsonObject) (result = new JsonObject()));
+				runSerializationEventHandlers(Serializable.OnSerialize.class, object, result);
+
 			} catch (Exception e) {
 				Logger.warn("Unable to deserialize class: " + (e.getClass() == Exception.class ? e.getMessage() : e));
 			}
@@ -61,6 +68,8 @@ public class DefaultFieldSerializer extends FieldSerializer<Object> {
 			// there's a deserializer registered for this class, so try to use it
 			try {
 				result = deserializeClass(deserializer, requestedType, element, null);
+				runSerializationEventHandlers(Serializable.OnDeserialize.class, result, element);
+
 			} catch (Exception e) {
 				Logger.warn("Unable to deserialize class: " + (e.getClass() == Exception.class ? e.getMessage() : e));
 			}
@@ -69,6 +78,16 @@ public class DefaultFieldSerializer extends FieldSerializer<Object> {
 		Logger.scopes.pop();
 
 		return result;
+	}
+
+	private void runSerializationEventHandlers (final Class<? extends Annotation> eventAnnotationClass, final Object instance, final JsonElement element) throws Exception {
+		final Stream<Method> methods = Arrays.stream(instance.getClass().getDeclaredMethods())
+			.filter(method -> method.isAnnotationPresent(eventAnnotationClass));
+		for (final Method method : (Iterable<Method>) methods::iterator)
+			if (Modifier.isStatic(method.getModifiers()))
+				method.invoke(null, instance, element);
+			else
+				method.invoke(instance, element);
 	}
 
 	/**
