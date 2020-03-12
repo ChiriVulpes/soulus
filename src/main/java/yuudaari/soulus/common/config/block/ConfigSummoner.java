@@ -56,8 +56,8 @@ public class ConfigSummoner extends ConfigUpgradeableBlock<Summoner> {
 	@Serialized public Range efficiencyUpgradeRange = new Range(1, 0.3);
 	// midnight jewel
 	@Serialized public int midnightJewelRange = 16;
-	@Serialized public Range midnightJewelCount = new Range(2, 4);
-	@Serialized public Range midnightJewelDelay = new Range(500, 1000);
+	@Serialized public Range midnightJewelCount = new Range(2, 6);
+	@Serialized public Range midnightJewelDelay = new Range(300, 700);
 	@Serialized public int midnightJewelSpawningRadius = 4;
 	@Serialized public Range midnightJewelSoulbookEssenceQuantity = new Range(1, 5);
 	// style items
