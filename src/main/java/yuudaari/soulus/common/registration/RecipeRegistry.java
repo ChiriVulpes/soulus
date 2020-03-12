@@ -26,6 +26,10 @@ public class RecipeRegistry {
 
 	@SubscribeEvent(priority = EventPriority.LOW) // run after recipe registration from items and blocks
 	public static void registerRecipes (final RegistryEvent.Register<IRecipe> event) {
+		CONFIG_ESSENCES.getEssenceTypes()
+			.map(SpawnEggRecipe::new)
+			.forEach(event.getRegistry()::register);
+
 		deregisterInvalidComposerRecipes(event);
 	}
 
