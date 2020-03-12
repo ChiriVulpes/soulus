@@ -211,5 +211,10 @@ public class ItemRegistry {
 
 		// add bonemeal ore dictionary
 		OreDictionary.registerOre(Bonemeal.ORE_DICT, new ItemStack(Items.DYE, 1, 15));
+
+		// create eggs for all essence types
+		CONFIG_ESSENCES.getEssences()
+			.filter(essence -> essence.colors != null && !EntityList.ENTITY_EGGS.containsKey(new ResourceLocation(essence.essence)))
+			.forEach(essence -> EntityList.addSpawnInfo(essence.essence, essence.colors.primary, essence.colors.secondary));
 	}
 }
