@@ -25,7 +25,7 @@ import java.util.List;
 
 public class RecipeCategoryComposer implements IRecipeCategory<IRecipeWrapper> {
 
-	public static final String UID = "soulus:composer";
+	public static final String UID = Soulus.getRegistryName("composer").toString();
 
 	private static final int craftOutputSlot = 0;
 	private static final int craftInputSlot1 = 1;

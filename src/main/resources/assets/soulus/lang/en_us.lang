@@ -267,6 +267,9 @@ jei.recipe.soulus:composer.recipe_time_tooltip=Recipe Duration
 jei.recipe.soulus:composer.mobs_required=Consumes
 jei.recipe.soulus:composer.required_creature=§8%1$s: §r%2$s
 
+jei.recipe.soulus:sledgehammer.name=Hammering
+jei.recipe.soulus:sledgehammer.requires_machine_hammering_tooltip=§5Machine Hammering §8(in §bComposer Cell§8)
+
 jei.recipe.soulus:essence.name=Marrowing
 jei.recipe.soulus:essence.requires_machine_marrowing_tooltip=§5Requires Machine Marrowing §8(in §bComposer Cell§8)
 

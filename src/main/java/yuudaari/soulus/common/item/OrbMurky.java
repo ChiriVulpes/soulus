@@ -1,8 +1,8 @@
 package yuudaari.soulus.common.item;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -31,6 +31,7 @@ import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.item.ConfigOrbMurky;
 import yuudaari.soulus.common.recipe.ingredient.IngredientEssence;
 import yuudaari.soulus.common.recipe.ingredient.IngredientEssence.AllowedStack;
+import yuudaari.soulus.common.recipe.ingredient.IngredientNBTSensitive;
 import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.Translation;
@@ -45,10 +46,12 @@ public class OrbMurky extends Registration.Item implements IHasComposerCellInfo,
 
 		public static NonNullList<Ingredient> getIngredients (int size) {
 
-			List<Ingredient> ingredients = new ArrayList<>();
+			final List<Ingredient> ingredients = IntStream.range(0, size * size - 1)
+				.boxed()
+				.map(offset -> IngredientEssence.getInstance(offset, AllowedStack.EMPTY, AllowedStack.ASH, AllowedStack.ESSENCE_PERFECT))
+				.collect(Collectors.toList());
 
-			ingredients.addAll(Collections.nCopies(size * size - 1, IngredientEssence.getInstance(AllowedStack.EMPTY, AllowedStack.ASH, AllowedStack.ESSENCE_PERFECT)));
-			ingredients.add(Ingredient.fromItem(ItemRegistry.ORB_MURKY));
+			ingredients.add(new IngredientNBTSensitive(ItemRegistry.ORB_MURKY.getItemStack()));
 
 			return NonNullList.from(Ingredient.EMPTY, ingredients.toArray(new Ingredient[0]));
 		}

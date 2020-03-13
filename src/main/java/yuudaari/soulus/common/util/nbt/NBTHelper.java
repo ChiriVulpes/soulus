@@ -1,5 +1,6 @@
 package yuudaari.soulus.common.util.nbt;
 
+import java.util.function.Consumer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -47,5 +48,10 @@ public class NBTHelper {
 	@SuppressWarnings("unchecked")
 	public <T> NBTPrimitive<T> getAsPrimitive () {
 		return (NBTPrimitive<T>) this;
+	}
+
+	public static ItemStack apply (final ItemStack stack, final Consumer<NBTObject> nbtApplier) {
+		nbtApplier.accept(get(stack));
+		return stack;
 	}
 }

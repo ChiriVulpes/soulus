@@ -30,7 +30,7 @@ public class RecipeCategoryMarrow implements IRecipeCategory<IRecipeWrapper> {
 
 	@Inject public static ConfigBoneTypes CONFIG;
 
-	public static final String UID = "soulus:essence";
+	public static final String UID = Soulus.getRegistryName("essence").toString();
 
 	private static final int craftInputSlot = 0;
 	private static final int gearSlot = 1;

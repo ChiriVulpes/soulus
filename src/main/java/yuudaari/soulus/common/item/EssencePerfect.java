@@ -1,11 +1,10 @@
 package yuudaari.soulus.common.item;
 
 import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -34,15 +33,19 @@ import yuudaari.soulus.common.recipe.ingredient.IngredientEssence.AllowedStack;
 import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.EssenceType;
+import yuudaari.soulus.common.util.Translation;
 import yuudaari.soulus.common.util.nbt.NBTHelper;
 import yuudaari.soulus.common.util.nbt.NBTObject;
 import yuudaari.soulus.common.util.nbt.NBTType;
-import yuudaari.soulus.common.util.Translation;
 
 @ConfigInjected(Soulus.MODID)
 public class EssencePerfect extends Registration.Item {
 
 	@Inject public static ConfigEssences CONFIG;
+
+	public static EssenceAlignment getAlignment (final ItemStack stack) {
+		return new EssenceAlignment(stack);
+	}
 
 	public static class EssenceAlignment {
 
@@ -125,13 +128,14 @@ public class EssencePerfect extends Registration.Item {
 	public static class EssencePerfectRecipe extends ShapelessOreRecipe {
 
 		private static NonNullList<Ingredient> ingredients () {
-			final List<Ingredient> ingredients = new ArrayList<>();
-			ingredients.addAll(Collections.nCopies(3 * 3, IngredientEssence.getInstance(AllowedStack.EMPTY, AllowedStack.ESSENCE_PERFECT)));
-			return NonNullList.from(Ingredient.EMPTY, ingredients.toArray(new Ingredient[0]));
+			return NonNullList.from(Ingredient.EMPTY, IntStream.range(0, 9)
+				.boxed()
+				.map(offset -> IngredientEssence.getInstance(offset, AllowedStack.EMPTY, AllowedStack.ESSENCE_PERFECT))
+				.toArray(Ingredient[]::new));
 		}
 
 		public EssencePerfectRecipe (final ResourceLocation name) {
-			super(new ResourceLocation(""), ingredients(), ItemRegistry.ESSENCE_PERFECT.getItemStack());
+			super(new ResourceLocation(""), ingredients(), ItemRegistry.ESSENCE_PERFECT.getPerfectStack());
 			setRegistryName(name);
 		}
 

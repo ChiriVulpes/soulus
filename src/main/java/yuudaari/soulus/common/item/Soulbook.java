@@ -3,6 +3,7 @@ package yuudaari.soulus.common.item;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.IntStream;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import net.minecraft.client.util.ITooltipFlag;
@@ -36,8 +37,7 @@ import yuudaari.soulus.common.config.ConfigInjected.Inject;
 import yuudaari.soulus.common.config.essence.ConfigColor;
 import yuudaari.soulus.common.config.essence.ConfigEssence;
 import yuudaari.soulus.common.config.essence.ConfigEssences;
-import yuudaari.soulus.common.recipe.ingredient.IngredientEssence;
-import yuudaari.soulus.common.recipe.ingredient.IngredientEssence.AllowedStack;
+import yuudaari.soulus.common.recipe.ingredient.IngredientNBTSensitive;
 import yuudaari.soulus.common.registration.ItemRegistry;
 import yuudaari.soulus.common.registration.Registration;
 import yuudaari.soulus.common.util.Colour;
@@ -84,19 +84,22 @@ public class Soulbook extends Registration.Item implements IHasComposerCellInfo,
 
 	public static class SoulbookRecipe extends ShapelessOreRecipe {
 
-		public static NonNullList<Ingredient> getIngredients (int size) {
+		public static NonNullList<Ingredient> getIngredients (final String essenceType, final int size) {
 
 			List<Ingredient> ingredients = new ArrayList<>();
 
-			ingredients.addAll(Collections.nCopies(size * size - 1, IngredientEssence.getInstance(AllowedStack.EMPTY)));
-			ingredients.add(Ingredient.fromItem(ItemRegistry.SOULBOOK));
+			ingredients.addAll(Collections.nCopies(size * size - 1, new IngredientNBTSensitive(Essence.getStack(essenceType))));
+			ingredients.add(new IngredientNBTSensitive(ItemRegistry.SOULBOOK.getItemStack()));
 
 			return NonNullList.from(Ingredient.EMPTY, ingredients.toArray(new Ingredient[0]));
 		}
 
-		public SoulbookRecipe (ResourceLocation name, int size) {
-			super(new ResourceLocation(""), getIngredients(size), getFilled("unfocused"));
-			setRegistryName(name + "" + size);
+		public final String essenceType;
+
+		public SoulbookRecipe (final String registryName, final String essenceType, final int size) {
+			super(new ResourceLocation(""), getIngredients(essenceType, size), getFilled(essenceType));
+			setRegistryName(registryName + "_" + essenceType.replace(":", "_") + "_" + size);
+			this.essenceType = essenceType;
 		}
 
 		@ParametersAreNonnullByDefault
@@ -119,7 +122,6 @@ public class Soulbook extends Registration.Item implements IHasComposerCellInfo,
 		public Tuple2<NonNullList<ItemStack>, ItemStack> process (final InventoryCrafting inv) {
 			final NonNullList<ItemStack> ret = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
 			int essenceCount = 0;
-			String essenceType = null;
 			// int containedEssence = 0;
 
 			final int inventorySize = inv.getSizeInventory();
@@ -132,13 +134,8 @@ public class Soulbook extends Registration.Item implements IHasComposerCellInfo,
 					continue;
 
 				if (stackItem == ItemRegistry.SOULBOOK) {
-					String itemTarget = EssenceType.getEssenceType(stack);
-					if (itemTarget != null) {
-						if (essenceType != null && !itemTarget.equals(essenceType))
-							return new Tuple2<>(ret, ItemStack.EMPTY);
-
-						essenceType = itemTarget;
-					}
+					if (!essenceType.equals(EssenceType.getEssenceType(stack)))
+						return new Tuple2<>(ret, ItemStack.EMPTY);
 
 					ret.set(i, Soulbook.getEmpty());
 					essenceCount += getContainedEssence(stack);
@@ -147,11 +144,9 @@ public class Soulbook extends Registration.Item implements IHasComposerCellInfo,
 					continue;
 
 				} else if (stackItem == ItemRegistry.ESSENCE) {
-					String itemTarget = EssenceType.getEssenceType(stack);
-					if (itemTarget == null || (essenceType != null && !itemTarget.equals(essenceType)))
+					if (!essenceType.equals(EssenceType.getEssenceType(stack)))
 						return new Tuple2<>(ret, ItemStack.EMPTY);
 
-					essenceType = itemTarget;
 					essenceCount++;
 					continue;
 				}
@@ -251,10 +246,11 @@ public class Soulbook extends Registration.Item implements IHasComposerCellInfo,
 
 	@Override
 	public void onRegisterRecipes (IForgeRegistry<IRecipe> registry) {
-		registry.registerAll( //
-			new SoulbookRecipe(getRegistryName(), 2), //
-			new SoulbookRecipe(getRegistryName(), 3) //
-		);
+		registry.registerAll(CONFIG.getEssenceTypes()
+			.flatMap(essenceType -> IntStream.range(2, 4)
+				.boxed()
+				.map(size -> new SoulbookRecipe(getRegistryName().toString(), essenceType, size)))
+			.toArray(SoulbookRecipe[]::new));
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -37,15 +37,20 @@ public class IngredientEssence extends Ingredient {
 		}
 	}
 
-	private static Map<Integer, IngredientEssence> INSTANCES = new HashMap<>();
+	private static Map<Integer, Map<Integer, IngredientEssence>> INSTANCES = new HashMap<>();
 
 	public static IngredientEssence getInstance (final AllowedStack... allowedStacks) {
-		final Flags<AllowedStack> flags = Flags.get(allowedStacks);
-		final int id = flags.toInt();
-		return INSTANCES.computeIfAbsent(id, __ -> new IngredientEssence(flags));
+		return getInstance(0, allowedStacks);
 	}
 
-	public static ItemStack[] initMatchingStacks (Flags<AllowedStack> flags) {
+	public static IngredientEssence getInstance (final int offset, final AllowedStack... allowedStacks) {
+		final Flags<AllowedStack> flags = Flags.get(allowedStacks);
+		final int id = flags.toInt();
+		return INSTANCES.computeIfAbsent(id, __ -> new HashMap<>())
+			.computeIfAbsent(offset, __ -> new IngredientEssence(flags, offset));
+	}
+
+	public static ItemStack[] initMatchingStacks (final Flags<AllowedStack> flags, final int offset) {
 		List<ItemStack> stacks = new ArrayList<>();
 
 		flags.map(stack -> stack.stack)
@@ -56,17 +61,23 @@ public class IngredientEssence extends Ingredient {
 			.map(Essence::getStack)
 			.forEach(stacks::add);
 
+		if (offset > 0) {
+			final List<ItemStack> stacksMoving = stacks.subList(0, offset + 1);
+			stacks = stacks.subList(offset + 1, stacks.size());
+			stacks.addAll(stacksMoving);
+		}
+
 		return stacks.toArray(new ItemStack[0]);
 	}
 
 	private final Flags<AllowedStack> flags;
 
 	public IngredientEssence () {
-		this(Flags.get(AllowedStack.EMPTY, AllowedStack.ASH));
+		this(Flags.get(AllowedStack.EMPTY, AllowedStack.ASH), 0);
 	}
 
-	public IngredientEssence (final Flags<AllowedStack> flags) {
-		super(initMatchingStacks(flags));
+	public IngredientEssence (final Flags<AllowedStack> flags, final int offset) {
+		super(initMatchingStacks(flags, offset));
 		this.flags = flags;
 	}
 
