@@ -60,7 +60,6 @@ public class ConfigSummoner extends ConfigUpgradeableBlock<Summoner> {
 	@Serialized public Range midnightJewelDelay = new Range(300, 700);
 	@Serialized public int midnightJewelSpawningRadius = 4;
 	@Serialized public Range midnightJewelSoulbookEssenceQuantity = new Range(1, 5);
-	@Serialized public boolean midnightJewelReturnWithMalice = false;
 	// style items
 	@Serialized(StylerMapSerializer.class) public Map<String, EndersteelType> styleItems = new HashMap<>();
 	{
