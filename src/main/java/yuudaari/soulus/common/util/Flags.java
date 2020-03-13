@@ -15,7 +15,7 @@ public class Flags<E extends Enum<E>> {
 		EnumSet<E> set = EnumSet.noneOf(clz);
 		try {
 			set = Arrays.stream((E[]) clz.getMethod("values").invoke(null))
-				.filter(option -> (option.ordinal() & flags) == option.ordinal())
+				.filter(option -> ((1 << option.ordinal()) & flags) == option.ordinal())
 				.collect(Collectors.toCollection( () -> EnumSet.noneOf(clz)));
 		} catch (final InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
 			Logger.error(e);
@@ -67,7 +67,7 @@ public class Flags<E extends Enum<E>> {
 	public static int toFlags (final Stream<Enum<?>> enumStream) {
 		return enumStream
 			.map(Enum::ordinal)
-			.reduce( (a, b) -> a | b)
+			.reduce( (a, b) -> (1 << a) | (1 << b))
 			.orElse(0);
 	}
 
