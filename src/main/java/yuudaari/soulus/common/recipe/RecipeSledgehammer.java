@@ -12,8 +12,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IRecipeFactory;
 import net.minecraftforge.common.crafting.JsonContext;
-import net.minecraftforge.oredict.OreIngredient;
 import yuudaari.soulus.common.item.Sledgehammer;
+import yuudaari.soulus.common.recipe.ingredient.IngredientSledgehammer;
 
 public class RecipeSledgehammer extends RecipeShapeless {
 
@@ -21,12 +21,16 @@ public class RecipeSledgehammer extends RecipeShapeless {
 	private final Ingredient input;
 
 	public RecipeSledgehammer (final ResourceLocation group, final Ingredient input, final ItemStack output) {
-		super(group, output, input, new OreIngredient(Sledgehammer.ORE_DICT));
-		// Ingredient.fromItems(ItemRegistry.items.stream()
-		// 	.filter(item -> item instanceof Sledgehammer)
-		// 	.map(item -> ((Sledgehammer) item).is)
-		// 	.toArray(Sledgehammer[]::new)));
+		this(group, input, output, 0);
+	}
+
+	public RecipeSledgehammer (final ResourceLocation group, final Ingredient input, final ItemStack output, final int tier) {
+		super(group, output, input, new IngredientSledgehammer(tier));
 		this.input = input;
+	}
+
+	public IngredientSledgehammer getSledgehammer () {
+		return (IngredientSledgehammer) this.getIngredients().get(1);
 	}
 
 	public Ingredient getInput () {
@@ -56,10 +60,12 @@ public class RecipeSledgehammer extends RecipeShapeless {
 			final String group = JsonUtils.getString(json, "group", "");
 			final String override = JsonUtils.getString(json, "override", "");
 
+			final int tier = JsonUtils.getInt(json, "tier", 0);
+
 			final Ingredient ing = CraftingHelper.getIngredient(json.get("input"), context);
 
 			final ItemStack itemstack = CraftingHelper.getItemStack(JsonUtils.getJsonObject(json, "result"), context);
-			final RecipeShapeless result = new RecipeSledgehammer(group.isEmpty() ? null : new ResourceLocation(group), ing, itemstack);
+			final RecipeShapeless result = new RecipeSledgehammer(group.isEmpty() ? null : new ResourceLocation(group), ing, itemstack, tier);
 
 			if (!override.isEmpty())
 				result.setRegistryName(override);

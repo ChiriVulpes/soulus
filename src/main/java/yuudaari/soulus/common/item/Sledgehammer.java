@@ -16,7 +16,7 @@ public class Sledgehammer extends Registration.Item {
 
 	public static String ORE_DICT = "sledgehammerSoulus";
 
-	public static enum Type {
+	public static enum Tier {
 
 		/**
 		 * Order by tier
@@ -29,7 +29,7 @@ public class Sledgehammer extends Registration.Item {
 		public final String registryName;
 		public final EnumRarity rarity;
 
-		private Type (final String name, final EnumRarity rarity) {
+		private Tier (final String name, final EnumRarity rarity) {
 			registryName = "sledgehammer" + (name == null || name.length() == 0 ? "" : "_" + name);
 			this.rarity = rarity;
 		}
@@ -40,11 +40,11 @@ public class Sledgehammer extends Registration.Item {
 
 	}
 
-	public final Type type;
+	public final Tier tier;
 
-	public Sledgehammer (final Type type) {
-		super(type.registryName);
-		this.type = type;
+	public Sledgehammer (final Tier tier) {
+		super(tier.registryName);
+		this.tier = tier;
 		setMaxStackSize(1);
 		setMaxDamage(256);
 		setHasDescription();
@@ -55,7 +55,7 @@ public class Sledgehammer extends Registration.Item {
 
 	@Override
 	public int getMaxDamage (ItemStack stack) {
-		switch (type) {
+		switch (tier) {
 			case ENDERSTEEL:
 				return CONFIG.durabilityEndersteel;
 			case ENDERSTEEL_DARK:
@@ -69,6 +69,6 @@ public class Sledgehammer extends Registration.Item {
 
 	@Override
 	public EnumRarity getRarity (ItemStack stack) {
-		return type.rarity;
+		return tier.rarity;
 	}
 }

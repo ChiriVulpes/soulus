@@ -1,9 +1,6 @@
 {
 	"type": "soulus:sledgehammer",
-	"input": {
-		"item": "soulus:ingot_endersteel_dark"
-	},
-	"result": {
-		"item": "soulus:dust_ender_iron_ashen"
-	}
+	"tier": 2,
+	"input": { "item": "soulus:ingot_endersteel_dark" },
+	"result": { "item": "soulus:dust_ender_iron_ashen" }
 }

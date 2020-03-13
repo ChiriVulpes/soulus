@@ -75,6 +75,7 @@ public class ItemRegistry {
 	public static BonemealNether BONEMEAL_NETHER = new BonemealNether();
 	public static Item CRYSTAL_BLOOD_BROKEN = new Item("crystal_blood_broken").setHasDescription();
 	public static CrystalDark CRYSTAL_DARK = new CrystalDark();
+	public static Item CRYSTAL_DARK_BROKEN = new Item("crystal_dark_broken").setRarity(EnumRarity.UNCOMMON).setHasDescription();
 	public static Item DUST_NIOBIUM = new Item("dust_niobium").addOreDict("dustSoulusNiobium").setHasGlint().setHasDescription().setRarity(EnumRarity.EPIC);
 	public static Item DUST_END_STONE = new Item("dust_end_stone").addOreDict("dustEndStone").setHasDescription();
 	public static Item DUST_ENDER_IRON = new Item("dust_ender_iron").addOreDict("dustSoulusEndersteel").setHasGlint().setHasDescription().setRarity(EnumRarity.UNCOMMON);
@@ -102,10 +103,10 @@ public class ItemRegistry {
 	public static Item NUGGET_ENDERSTEEL = new Item("nugget_endersteel").addOreDict("nuggetSoulusEndersteel").setHasGlint().setHasDescription().setRarity(EnumRarity.UNCOMMON);
 	public static Item NUGGET_ENDERSTEEL_DARK = new Item("nugget_endersteel_dark").addOreDict("nuggetSoulusEndersteelDark").setHasDescription().setRarity(EnumRarity.RARE);
 	public static Item NUGGET_NIOBIUM = new Item("nugget_niobium").addOreDict("nuggetSoulusNiobium").setHasGlint().setHasDescription().setRarity(EnumRarity.EPIC);
-	public static Sledgehammer SLEDGEHAMMER = new Sledgehammer(Sledgehammer.Type.NORMAL);
-	public static Sledgehammer SLEDGEHAMMER_ENDERSTEEL = new Sledgehammer(Sledgehammer.Type.ENDERSTEEL);
-	public static Sledgehammer SLEDGEHAMMER_ENDERSTEEL_DARK = new Sledgehammer(Sledgehammer.Type.ENDERSTEEL_DARK);
-	public static Sledgehammer SLEDGEHAMMER_NIOBIUM = new Sledgehammer(Sledgehammer.Type.NIOBIUM);
+	public static Sledgehammer SLEDGEHAMMER = new Sledgehammer(Sledgehammer.Tier.NORMAL);
+	public static Sledgehammer SLEDGEHAMMER_ENDERSTEEL = new Sledgehammer(Sledgehammer.Tier.ENDERSTEEL);
+	public static Sledgehammer SLEDGEHAMMER_ENDERSTEEL_DARK = new Sledgehammer(Sledgehammer.Tier.ENDERSTEEL_DARK);
+	public static Sledgehammer SLEDGEHAMMER_NIOBIUM = new Sledgehammer(Sledgehammer.Tier.NIOBIUM);
 	public static Soulbook SOULBOOK = new Soulbook();
 	public static OrbMurky ORB_MURKY = new OrbMurky();
 	public static SoulCatalyst SOUL_CATALYST = new SoulCatalyst();
@@ -178,6 +179,8 @@ public class ItemRegistry {
 		ORB_MURKY,
 
 		CRYSTAL_DARK,
+		CRYSTAL_DARK_BROKEN,
+
 		SOUL_CATALYST,
 
 		ESSENCE_PERFECT,

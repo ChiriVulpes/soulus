@@ -1,9 +1,6 @@
 {
 	"type": "soulus:sledgehammer",
-	"input": {
-		"item": "soulus:ingot_niobium"
-	},
-	"result": {
-		"item": "soulus:dust_niobium"
-	}
+	"tier": 3,
+	"input": { "item": "soulus:ingot_niobium" },
+	"result": { "item": "soulus:dust_niobium" }
 }

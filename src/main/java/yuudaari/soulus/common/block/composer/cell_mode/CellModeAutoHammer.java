@@ -63,7 +63,7 @@ public class CellModeAutoHammer extends ComposerCellTileEntity.Mode {
 	}
 
 	private double getHammerSpeed () {
-		switch (getSledgehammer().type) {
+		switch (getSledgehammer().tier) {
 			case ENDERSTEEL:
 				return CONFIG.autoHammerTicksPerHammerEndersteel;
 			case ENDERSTEEL_DARK:
@@ -80,7 +80,7 @@ public class CellModeAutoHammer extends ComposerCellTileEntity.Mode {
 			.stream()
 			.filter(r -> r instanceof RecipeSledgehammer)
 			.map(r -> (RecipeSledgehammer) r)
-			.filter(r -> r.getInput().test(stack))
+			.filter(r -> r.getSledgehammer().test(cell.storedItem) && r.getInput().test(stack))
 			.findFirst()
 			.orElse(null);
 	}
@@ -161,7 +161,7 @@ public class CellModeAutoHammer extends ComposerCellTileEntity.Mode {
 		final World world = cell.getWorld();
 		final BlockPos pos = cell.getPos();
 
-		if (recipe == null || !recipe.getInput().test(storedInputType))
+		if (recipe == null || !recipe.getInput().test(storedInputType) || !recipe.getSledgehammer().test(cell.storedItem))
 			return;
 
 		final double autoHammerPerTick = getHammerSpeed();
@@ -242,7 +242,7 @@ public class CellModeAutoHammer extends ComposerCellTileEntity.Mode {
 
 	@Override
 	public double getSwingSpeed () {
-		return SWING_SPEED.get(getSledgehammer().type.ordinal() / (double) Sledgehammer.Type.values().length);
+		return SWING_SPEED.get(getSledgehammer().tier.ordinal() / (double) Sledgehammer.Tier.values().length);
 	}
 
 
@@ -254,8 +254,8 @@ public class CellModeAutoHammer extends ComposerCellTileEntity.Mode {
 	public void onWailaTooltipHeader (final List<String> currentTooltip, final EntityPlayer player) {
 		currentTooltip.add(new Translation("waila." + Soulus.MODID + ":composer_cell.auto_hammer_contained_hammer")
 			.addArgs(cell.storedItem.getDisplayName())
-			.addArgs(new Translation("waila." + Soulus.MODID + ":composer_cell.auto_hammer_tier_" + (getSledgehammer().type.isMaxTier() ? "max" : "n"))
-				.get(getSledgehammer().type.ordinal() + 1))
+			.addArgs(new Translation("waila." + Soulus.MODID + ":composer_cell.auto_hammer_tier_" + (getSledgehammer().tier.isMaxTier() ? "max" : "n"))
+				.get(getSledgehammer().tier.ordinal() + 1))
 			.get());
 
 		if (storedInputType == null || storedInputQuantity <= 0)

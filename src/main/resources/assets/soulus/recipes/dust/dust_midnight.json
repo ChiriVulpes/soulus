@@ -1,9 +1,9 @@
 {
 	"type": "soulus:sledgehammer",
-	"input": {
-		"item": "soulus:crystal_dark"
-	},
-	"result": {
-		"item": "soulus:dust_midnight"
-	}
+	"tier": 2,
+	"input": [
+		{ "item": "soulus:crystal_dark" },
+		{ "item": "soulus:crystal_dark_broken" }
+	],
+	"result": { "item": "soulus:dust_midnight" }
 }
