@@ -134,7 +134,8 @@ public class Soulbook extends Registration.Item implements IHasComposerCellInfo,
 					continue;
 
 				if (stackItem == ItemRegistry.SOULBOOK) {
-					if (!essenceType.equals(EssenceType.getEssenceType(stack)))
+					final String essenceType = EssenceType.getEssenceType(stack);
+					if (essenceType != null && !essenceType.equals(essenceType))
 						return new Tuple2<>(ret, ItemStack.EMPTY);
 
 					ret.set(i, Soulbook.getEmpty());
@@ -155,34 +156,32 @@ public class Soulbook extends Registration.Item implements IHasComposerCellInfo,
 				return new Tuple2<>(ret, ItemStack.EMPTY);
 			}
 
-			if (essenceType != null) {
-				final int maxEssence = CONFIG.getSoulbookQuantity(essenceType);
-				ItemStack soulbook = null;
+			final int maxEssence = CONFIG.getSoulbookQuantity(essenceType);
+			ItemStack soulbook = null;
 
-				for (int i = 0; i < inventorySize && essenceCount > 0; i++) {
-					final ItemStack itemInSlotToReturn = ret.get(i);
-					if (itemInSlotToReturn.getItem() == ItemRegistry.SOULBOOK) {
-						if (soulbook == null) {
-							soulbook = itemInSlotToReturn;
-							ret.set(i, ItemStack.EMPTY);
-						}
+			for (int i = 0; i < inventorySize && essenceCount > 0; i++) {
+				final ItemStack itemInSlotToReturn = ret.get(i);
+				if (itemInSlotToReturn.getItem() == ItemRegistry.SOULBOOK) {
+					if (soulbook == null) {
+						soulbook = itemInSlotToReturn;
+						ret.set(i, ItemStack.EMPTY);
+					}
 
-						if (essenceCount >= maxEssence) {
-							setContainedEssence(itemInSlotToReturn, maxEssence);
-							EssenceType.setEssenceType(itemInSlotToReturn, essenceType);
-							essenceCount -= maxEssence;
+					if (essenceCount >= maxEssence) {
+						setContainedEssence(itemInSlotToReturn, maxEssence);
+						EssenceType.setEssenceType(itemInSlotToReturn, essenceType);
+						essenceCount -= maxEssence;
 
-						} else if (essenceCount > 0) {
-							setContainedEssence(itemInSlotToReturn, essenceCount);
-							EssenceType.setEssenceType(itemInSlotToReturn, essenceType);
-							essenceCount = 0;
-						}
+					} else if (essenceCount > 0) {
+						setContainedEssence(itemInSlotToReturn, essenceCount);
+						EssenceType.setEssenceType(itemInSlotToReturn, essenceType);
+						essenceCount = 0;
 					}
 				}
-
-				if (soulbook != null && getContainedEssence(soulbook) > 0)
-					return new Tuple2<>(ret, soulbook);
 			}
+
+			if (soulbook != null && getContainedEssence(soulbook) > 0)
+				return new Tuple2<>(ret, soulbook);
 
 			return new Tuple2<>(ret, ItemStack.EMPTY);
 		}
